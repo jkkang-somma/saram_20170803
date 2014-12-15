@@ -1,13 +1,20 @@
 var express = require('express');
 var session= require("express-session");
 var path = require('path');
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var login = require('./routes/login');
+/*var sm = require('./routes/sm');
+
+
+*/
+
+var mysql = require('mysql');
+var myconnection = require('express-myconnection');
 
 var app = express();
 
@@ -23,12 +30,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //session manager setup
-app.use(session({
+
+/*app.use(session({
     secret:"express-saram",
     resave:false,
     saveUninitialized:true
-}));
+}));*/
 
+app.use(
+    myconnection(mysql,{
+        host: 'localhost',
+        user: 'carran',
+        password : '',
+        port : 3306, //port mysql
+        database:'c9'
+    },'request')
+);
+
+//route url
 app.use('/', index);
 app.use('/login', login);
 
