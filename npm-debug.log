@@ -2,84 +2,88 @@
 1 verbose cli [ '/home/ubuntu/.nvm/v0.10.33/bin/node',
 1 verbose cli   '/home/ubuntu/.nvm/v0.10.33/bin/npm',
 1 verbose cli   'install',
-1 verbose cli   'tipJS' ]
+1 verbose cli   'bodyParser' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
-4 verbose readDependencies using package.json deps
-5 verbose cache add [ 'tipJS', null ]
-6 verbose cache add name=undefined spec="tipJS" args=["tipJS",null]
-7 verbose parsed url { protocol: null,
-7 verbose parsed url   slashes: null,
-7 verbose parsed url   auth: null,
-7 verbose parsed url   host: null,
-7 verbose parsed url   port: null,
-7 verbose parsed url   hostname: null,
-7 verbose parsed url   hash: null,
-7 verbose parsed url   search: null,
-7 verbose parsed url   query: null,
-7 verbose parsed url   pathname: 'tipJS',
-7 verbose parsed url   path: 'tipJS',
-7 verbose parsed url   href: 'tipJS' }
-8 silly lockFile 02b22ade-tipJS tipJS
-9 verbose lock tipJS /home/ubuntu/.npm/02b22ade-tipJS.lock
-10 silly lockFile 02b22ade-tipJS tipJS
-11 silly lockFile 02b22ade-tipJS tipJS
-12 verbose addNamed [ 'tipJS', '' ]
-13 verbose addNamed [ null, '*' ]
-14 silly lockFile 44f8ca28-tipJS tipJS@
-15 verbose lock tipJS@ /home/ubuntu/.npm/44f8ca28-tipJS.lock
-16 silly addNameRange { name: 'tipJS', range: '*', hasData: false }
-17 verbose request where is /tipJS
-18 verbose request registry https://registry.npmjs.org/
-19 verbose request id abb51a363cddfabf
-20 verbose url raw /tipJS
-21 verbose url resolving [ 'https://registry.npmjs.org/', './tipJS' ]
-22 verbose url resolved https://registry.npmjs.org/tipJS
-23 verbose request where is https://registry.npmjs.org/tipJS
-24 info trying registry request attempt 1 at 05:05:00
-25 http GET https://registry.npmjs.org/tipJS
-26 http 404 https://registry.npmjs.org/tipJS
-27 verbose headers { date: 'Mon, 15 Dec 2014 05:05:00 GMT',
-27 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-27 verbose headers   'content-type': 'application/json',
-27 verbose headers   'cache-control': 'max-age=0',
-27 verbose headers   'content-length': '52',
-27 verbose headers   'accept-ranges': 'bytes',
-27 verbose headers   via: '1.1 varnish',
-27 verbose headers   'x-served-by': 'cache-hk93-HKG',
-27 verbose headers   'x-cache': 'MISS',
-27 verbose headers   'x-cache-hits': '0',
-27 verbose headers   'x-timer': 'S1418619900.364457,VS0,VE166',
-27 verbose headers   'keep-alive': 'timeout=10, max=50',
-27 verbose headers   connection: 'Keep-Alive' }
-28 silly registry.get cb [ 404,
-28 silly registry.get   { date: 'Mon, 15 Dec 2014 05:05:00 GMT',
-28 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-28 silly registry.get     'content-type': 'application/json',
-28 silly registry.get     'cache-control': 'max-age=0',
-28 silly registry.get     'content-length': '52',
-28 silly registry.get     'accept-ranges': 'bytes',
-28 silly registry.get     via: '1.1 varnish',
-28 silly registry.get     'x-served-by': 'cache-hk93-HKG',
-28 silly registry.get     'x-cache': 'MISS',
-28 silly registry.get     'x-cache-hits': '0',
-28 silly registry.get     'x-timer': 'S1418619900.364457,VS0,VE166',
-28 silly registry.get     'keep-alive': 'timeout=10, max=50',
-28 silly registry.get     connection: 'Keep-Alive' } ]
-29 silly lockFile 44f8ca28-tipJS tipJS@
-30 silly lockFile 44f8ca28-tipJS tipJS@
-31 error 404 404 Not Found: tipJS
-31 error 404
-31 error 404 'tipJS' is not in the npm registry.
-31 error 404 You should bug the author to publish it
-31 error 404 It was specified as a dependency of 'workspace'
-31 error 404
-31 error 404 Note that you can also install from a
-31 error 404 tarball, folder, or http url, or git url.
-32 error System Linux 3.14.13-c9
-33 error command "/home/ubuntu/.nvm/v0.10.33/bin/node" "/home/ubuntu/.nvm/v0.10.33/bin/npm" "install" "tipJS"
-34 error cwd /home/ubuntu/workspace
-35 error node -v v0.10.33
-36 error npm -v 1.4.28
-37 error code E404
-38 verbose exit [ 1, true ]
+4 warn package.json util@0.10.3 util is also the name of a node core module.
+5 warn package.json crypto@0.0.3 crypto is also the name of a node core module.
+6 verbose readDependencies using package.json deps
+7 verbose cache add [ 'bodyParser', null ]
+8 verbose cache add name=undefined spec="bodyParser" args=["bodyParser",null]
+9 verbose parsed url { protocol: null,
+9 verbose parsed url   slashes: null,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: null,
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: null,
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: 'bodyParser',
+9 verbose parsed url   path: 'bodyParser',
+9 verbose parsed url   href: 'bodyParser' }
+10 silly lockFile caa4c3c7-bodyParser bodyParser
+11 verbose lock bodyParser /home/ubuntu/.npm/caa4c3c7-bodyParser.lock
+12 silly lockFile caa4c3c7-bodyParser bodyParser
+13 silly lockFile caa4c3c7-bodyParser bodyParser
+14 verbose addNamed [ 'bodyParser', '' ]
+15 verbose addNamed [ null, '*' ]
+16 silly lockFile e0b6bd45-bodyParser bodyParser@
+17 verbose lock bodyParser@ /home/ubuntu/.npm/e0b6bd45-bodyParser.lock
+18 silly addNameRange { name: 'bodyParser', range: '*', hasData: false }
+19 verbose request where is /bodyParser
+20 verbose request registry https://registry.npmjs.org/
+21 verbose request id d4aca6d6bfafb238
+22 verbose url raw /bodyParser
+23 verbose url resolving [ 'https://registry.npmjs.org/', './bodyParser' ]
+24 verbose url resolved https://registry.npmjs.org/bodyParser
+25 verbose request where is https://registry.npmjs.org/bodyParser
+26 info trying registry request attempt 1 at 07:16:14
+27 http GET https://registry.npmjs.org/bodyParser
+28 http 404 https://registry.npmjs.org/bodyParser
+29 verbose headers { date: 'Wed, 17 Dec 2014 07:16:15 GMT',
+29 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+29 verbose headers   'content-type': 'application/json',
+29 verbose headers   'cache-control': 'max-age=0',
+29 verbose headers   'content-length': '52',
+29 verbose headers   'accept-ranges': 'bytes',
+29 verbose headers   via: '1.1 varnish',
+29 verbose headers   age: '0',
+29 verbose headers   'x-served-by': 'cache-hk91-HKG',
+29 verbose headers   'x-cache': 'MISS',
+29 verbose headers   'x-cache-hits': '0',
+29 verbose headers   'x-timer': 'S1418800574.980459,VS0,VE179',
+29 verbose headers   'keep-alive': 'timeout=10, max=50',
+29 verbose headers   connection: 'Keep-Alive' }
+30 silly registry.get cb [ 404,
+30 silly registry.get   { date: 'Wed, 17 Dec 2014 07:16:15 GMT',
+30 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+30 silly registry.get     'content-type': 'application/json',
+30 silly registry.get     'cache-control': 'max-age=0',
+30 silly registry.get     'content-length': '52',
+30 silly registry.get     'accept-ranges': 'bytes',
+30 silly registry.get     via: '1.1 varnish',
+30 silly registry.get     age: '0',
+30 silly registry.get     'x-served-by': 'cache-hk91-HKG',
+30 silly registry.get     'x-cache': 'MISS',
+30 silly registry.get     'x-cache-hits': '0',
+30 silly registry.get     'x-timer': 'S1418800574.980459,VS0,VE179',
+30 silly registry.get     'keep-alive': 'timeout=10, max=50',
+30 silly registry.get     connection: 'Keep-Alive' } ]
+31 silly lockFile e0b6bd45-bodyParser bodyParser@
+32 silly lockFile e0b6bd45-bodyParser bodyParser@
+33 error 404 404 Not Found: bodyParser
+33 error 404
+33 error 404 'bodyParser' is not in the npm registry.
+33 error 404 You should bug the author to publish it
+33 error 404 It was specified as a dependency of 'workspace'
+33 error 404
+33 error 404 Note that you can also install from a
+33 error 404 tarball, folder, or http url, or git url.
+34 error System Linux 3.14.13-c9
+35 error command "/home/ubuntu/.nvm/v0.10.33/bin/node" "/home/ubuntu/.nvm/v0.10.33/bin/npm" "install" "bodyParser"
+36 error cwd /home/ubuntu/workspace
+37 error node -v v0.10.33
+38 error npm -v 1.4.28
+39 error code E404
+40 verbose exit [ 1, true ]

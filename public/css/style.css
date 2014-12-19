@@ -1,8 +1,5 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow:hidden;
 }
-
-a {
-  color: #00B7FF;
-}
+A:link { text-decoration: none; } A:visited { text-decoration: none; } A:active { text-decoration: none; } A:hover { text-decoration: 
+none; }

@@ -1,0 +1,15 @@
+<querys>
+    <group id="login">
+        
+    </group>
+    
+    <group id="sm">
+        <query id="select_user_all">select * from user_info</query>
+        
+        <query id="select_user">select * from user_info where id='%s'</query>
+        
+        <query id="add_user">insert into user_info(id, name, department, name_commute, join_company) values('%s','%s','%s','%s','%s')</query>
+        
+        <query id="update_password">update user_info set password='%s' where id='%s'</query>
+    </group>
+</querys>
