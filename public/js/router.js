@@ -4,29 +4,52 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  //'views/SaramView',
-  //'views/sm/SecurityView'
-], function($, _, Backbone) {
+  'animator',
+  'views/LoginView',
+  'views/sm/UserListView',
+  'views/sm/AddUserView',
+  
+  'views/SaramView',
+//  'views/sm/SecurityView'
+], function($, _, Backbone,animator, UserListView, AddUserView, SaramView) {
   
   var AppRouter = Backbone.Router.extend({
     routes: {
-      '*actions': 'defaultAction'
+      'usermanager/add' : 'AddUser',
+      'usermanager' : 'UserManager',
+      '*actions' : 'defaultAction'
     }
   });
   
   var initialize = function(){
-    // var app_router = new AppRouter;
     
-    // app_router.on('route:securityManaber', function(){
-    //     var SecurityView = new SecurityView();
-    //     SecurityView.render();
-
-    // });
-    // app_router.on('route:defaultAction', function (actions) {
-    //     var SaramView = new SaramView();
-    //     SaramView.render();
-    // });
+    var dfd = $.Deferred();
+    var mainContainer=$('.mid-container');
+    dfd.resolve("hello world");
+    
+    var app_router = new AppRouter();
+    var currentView;
+    
+    var renderView = function(view){
+      animator.animate(mainContainer, animator.FADE_OUT);
+        if(currentView){
+          currentView.close();
+        }	
+        currentView = new view();
+        currentView.render();
+      animator.animate(mainContainer, animator.FADE_IN);	
+    };
+    
+    app_router.on('route:UserManager', function(){
+      renderView(UserListView);
+    });
+    
+    app_router.on('route:AddUser', function(){
+      renderView(AddUserView);
+    });
+    
     Backbone.history.start();
+    return dfd.promise();
   };
   return { 
     initialize: initialize

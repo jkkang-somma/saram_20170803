@@ -74,6 +74,7 @@
   position:absolute;
   top:0;
   left:0;
+  background:white;
 }
 .loding-text-container {
   width: 100%;
@@ -93,7 +94,7 @@
   width: 500px;
   height: 500px;
   margin: 0 auto;
-  z-index: -999;
+  z-index: 9999;
   text-align: center;
   -webkit-animation: spin 3s ease infinite;
   -moz-animation: spin 3s ease infinite;

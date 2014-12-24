@@ -4,23 +4,38 @@ define([
   'jquery', 
   'underscore', 
   'backbone',
-  'router', 
-  'log4javascript',
-  'views/LodingView'
-], function($, _, Backbone, Router, log4javascript, LodingView){
-    var log = log4javascript.getLogger();
-    var appender=new log4javascript.BrowserConsoleAppender();
-    var layout = new log4javascript.PatternLayout("[%-5p] %m");
-    appender.setLayout(layout)
-    log.addAppender(appender);
-    log.debug("Welcome to Sarams."); 
+  'router',
+  'log',
+  'domReady',
+  'i18n!nls/common',
+  'i18n!nls/error',
+  'loading',
+  'dialog',
+  'views/SaramView',
+  'css!cs/animate.css',
+  'css!cs/style.css'
+], function($, _, Backbone, Router, log, domReady, i18Common, i18Error, loading, Dialog, SaramView){
     
-  var initialize = function(){
-    var lodingView = new LodingView();
-    lodingView.render();
-    Router.initialize();
-  };
-  return { 
-    initialize: initialize
-  };
+    var LOG=log.getLogger("APP");
+    // domReady(function(e){
+        
+    // });
+    LOG.debug("==============================================================================");   
+    LOG.debug("==============================Welcome to Sarams.=============================="); 
+    LOG.debug("==============================================================================");
+    var initialize = function(callBack){
+        Router.initialize().done(function(){
+            LOG.debug("Router initialize");
+            var mainPage= new SaramView({
+                affterInitialize:function(){
+                    callBack();
+                  //  Dialog.error(i18Error.APP_LODING_FAIL);
+                }
+            });
+        });
+    };
+  
+    return { 
+        initialize: initialize
+    };
 });

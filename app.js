@@ -1,5 +1,7 @@
 var express = require('express');
-var session= require("express-session");
+var express_session= require("express-session");
+var SessionStore = require('express-mysql-session');
+
 var path = require('path');
 //var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -8,20 +10,11 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var login = require('./routes/login');
-<<<<<<< HEAD
+var user = require('./routes/user');
+var session = require('./routes/session');
+
+
 //var error = require('./routes/error');
-var sm = require('./routes/sm/sm');
-var am = require('./routes/am/am');
-=======
-/*var sm = require('./routes/sm');
-
-
-*/
-
-var mysql = require('mysql');
-var myconnection = require('express-myconnection');
->>>>>>> 7dfbee738121a6f04d1b44a694d2494dacbc4f5f
-
 var app = express();
 
 // view engine setup
@@ -38,26 +31,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //session manager setup
 
-/*app.use(session({
+/*var sessionStore = new SessionStore({
+    host: 'localhost',
+    user: 'sangheepark',
+    password : '',
+    port : 3306,
+    database:'c9'
+});*/
+
+app.use(express_session({
     secret:"express-saram",
     resave:false,
     loginid:"",
+    //store : sessionStore,
     saveUninitialized:true
-}));*/
+}));
 
-app.use(
-    myconnection(mysql,{
-        host: 'localhost',
-        user: 'carran',
-        password : '',
-        port : 3306, //port mysql
-        database:'c9'
-    },'request')
-);
 
-<<<<<<< HEAD
 app.use(logger('dev'));
-
 // if session hasn`t loginid, redirect login page
 /*app.use(function(req,res,next){
     if(!req.session.loginid && req.originalUrl != "/login"){
@@ -70,27 +61,12 @@ app.use(logger('dev'));
 });
 */
 
-//MySQL Connection Setup
-/*app.use(
-    connection(mysql,{
-        host: 'localhost',
-        user: 'sangheepark',
-        password : '',
-        port : 3306,
-        database:'c9'
-    },'pool')
-);
-*/
-
 
 // route page
-=======
-//route url
->>>>>>> 7dfbee738121a6f04d1b44a694d2494dacbc4f5f
 app.use('/', index);
 app.use('/login', login);
-app.use('/sm', sm);
-app.use('/am', am);
+app.use('/user', user);
+app.use('/session', session);
 //app.use('/error', error);
 
 

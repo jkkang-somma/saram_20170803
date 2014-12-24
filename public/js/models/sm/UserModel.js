@@ -4,11 +4,30 @@ define([
   'backbone'
 ], function($, _,Backbone){
     var UserModel=Backbone.Model.extend({
-        idAttribute:"user_id",
-       // default:{  },
-        initialize:function(){
+        urlRoot: '/user',
+        
+        idAttribute:"id",
+        
+        initialize: function () {
             
-        }    
+        },
+        
+        initPassword: function(data){
+            this.set(data);
+            this.save();
+        },
+    
+        default:{ 
+            password: null, 
+            name: '',
+            name_commute: '',
+            department: '',
+            join_company: null,
+            leave_company: null,
+            privilege : 0
+        },
+        
     });
+    
     return UserModel;
 });

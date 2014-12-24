@@ -4,12 +4,10 @@ define([
   'backbone',
   'models/sm/UserModel'
 ], function($, _, Backbone, UserModel){
-    var UserCollection=Backbone.Collection.extend({
-        url:"sm/userlist",
-        model:UserModel,
-        initialize:function(){
-            
-        }    
+    var UserCollection = Backbone.Collection.extend({
+        model : UserModel,
+        url:'/user'
     });
+    
     return UserCollection;
 });
