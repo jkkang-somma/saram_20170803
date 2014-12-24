@@ -65,20 +65,16 @@ define([
     	
     	commitPassword : function(e){
     	  var data = this.getFormData( this.$el.find('form'));
-    	  console.log(data);
     	  if(data.password1 !== data.password2){
     	    console.log("!!!!!");
     	  }else{
-    	    UserModel.on("sync",function(event,model,res){
-    	      if(res.changedRows > 0){
-    	        window.location.href = '/login';
-    	      }
-    	    });
-    	    UserModel.initPassword({id: data.loginid, password:data.password1});
-    	    
+    	    var user = new UserModel();
+    	    user.initPassword({id: data.loginid, password:data.password1});
+    	    window.location.href = '/login';
     	  }
   	    return false;
     	},
+    	
     	getFormData: function(form) {
   	    form.find(':input:disabled').removeAttr('disabled');
   	    var unindexed_array = form.serializeArray();

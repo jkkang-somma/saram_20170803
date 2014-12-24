@@ -1,57 +1,83 @@
 // Author: sanghee park <novles@naver.com>
 // Create Date: 2014.12.18
+
 define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'animator',
-  'views/LoginView',
-  'views/sm/UserListView',
-  'views/sm/AddUserView',
-  
-  'views/SaramView',
-//  'views/sm/SecurityView'
-], function($, _, Backbone,animator, UserListView, AddUserView, SaramView) {
-  
-  var AppRouter = Backbone.Router.extend({
-    routes: {
-      'usermanager/add' : 'AddUser',
-      'usermanager' : 'UserManager',
-      '*actions' : 'defaultAction'
-    }
-  });
-  
-  var initialize = function(){
-    
-    var dfd = $.Deferred();
-    var mainContainer=$('.mid-container');
-    dfd.resolve("hello world");
-    
-    var app_router = new AppRouter();
-    var currentView;
-    
-    var renderView = function(view){
-      animator.animate(mainContainer, animator.FADE_OUT);
-        if(currentView){
-          currentView.close();
-        }	
-        currentView = new view();
-        currentView.render();
-      animator.animate(mainContainer, animator.FADE_IN);	
-    };
-    
-    app_router.on('route:UserManager', function(){
-      renderView(UserListView);
-    });
-    
-    app_router.on('route:AddUser', function(){
-      renderView(AddUserView);
-    });
-    
-    Backbone.history.start();
-    return dfd.promise();
-  };
-  return { 
-    initialize: initialize
-  };
+	'jquery',
+	'underscore',
+	'backbone',
+	'animator',
+	'core/BaseRouter',
+	'models/sm/SessionModel',
+	'views/LoginView',
+	'views/NavigationView',
+	'views/sm/UserListView',
+	'views/sm/AddUserView',
+], function($, _,  Backbone, animator, BaseRouter, SessionModel, LoginView, NavigationView, UserListView, AddUserView){
+
+	var Router = BaseRouter.extend({
+
+		routes : {
+			'login' : 'showLogin',
+			'usermanager/add' : 'showAddUser',
+		      'usermanager' : 'showUserList',
+		      '*actions' : 'showHome'
+		},
+		
+		before : function(params, next){
+		      // SessionModel.get();
+		      // var path = Backbone.history.location.hash;
+		      
+		      // if(typeof SessionModel.attributes.loginid === 'undefined' ){
+		      //   SessionModel.set('redirectFrom', path)
+		      //   Backbone.history.navigate('login',{trigger : true});
+		      //   window.location.href = "/login";
+		      // }else{
+		      //   return next();
+		      // }
+      		return next();
+		},
+
+		after : function(){
+			//empty
+		},
+
+		changeView : function(view){
+			
+			function setView(view){
+				
+				if(this.currentView){
+					animator.animate(view.$el, animator.FADE_OUT);
+					this.currentView.close();
+				}
+				this.currentView = view;
+				view.render();
+				animator.animate(view.$el, animator.FADE_IN);
+			}
+
+			setView(view);
+		},
+		
+		showAddUser : function(){
+			var addUserView = new AddUserView();
+			this.changeView(addUserView);
+			
+		},
+		showUserList : function(){
+			var userListView = new UserListView();
+			this.changeView(userListView)
+		},
+		showHome : function(){
+			var navigationView= new NavigationView();
+		      navigationView.render();
+		      var userListView = new UserListView();
+			this.changeView(userListView);
+		},
+
+		showLogin : function(){
+			var loginView = new LoginView();
+			loginView.render();
+		},
+	});
+
+	return Router;
 });

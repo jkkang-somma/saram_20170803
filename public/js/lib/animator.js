@@ -13,19 +13,30 @@ define([
         'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp',
         'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp',
         'fadeIn', 'fadeInDown', 'fadeInUp',
-        'fadeOut', 'fadeOutDown', 'fadeOutUp'
+        'fadeOut', 'fadeOutDown', 'fadeOutUp',
+        'animated'
     ];
     var animate=function(el, tag){
         if (Util.isNotNull(tag)) {
             if (Util.inArray(tag, tags)){
-                $(el).removeClass().addClass(tag + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                  $(this).removeClass();
+                var elClassName = $(el).attr('class').split(" ");
+
+                for(var i =0; i< elClassName.length; i++){
+                    var classItem = elClassName[i];
+                    if(Util.inArray(classItem, tags)){
+                        $(el).removeClass(classItem);
+                    };
+                }
+                
+                var animateClass = tag + " animated";
+                $(el).addClass(animateClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', [animateClass], function(event){
+                    $(this).removeClass(event.data[0]);
                 });
             } else {
-                log.debug("No have Animation tag:"+tag);
+                log.debug("No Animation tag:"+tag);
             }
         } else {
-            log.debug("No have Animation tag:"+tag);
+            log.debug("No Animation tag:"+tag);
         }
     }
     return {

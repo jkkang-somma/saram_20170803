@@ -2,11 +2,12 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'core/BaseView',
   'text!templates/adduserTemplate.html',
   'models/sm/UserModel'
   
-], function($, _, Backbone, adduserTemplate, UserModel){
-    var AddUserView = Backbone.View.extend({
+], function($, _, Backbone, BaseView, adduserTemplate, UserModel){
+    var AddUserView = BaseView.extend({
         el:$(".mid-container"),
         
         events:{
@@ -47,11 +48,6 @@ define([
             });
             
             return indexed_array;
-    	},
-    	
-    	close: function(){
-    	    this.undelegateEvents();
-            this.$el.removeData().unbind(); 
     	}
     	
     });

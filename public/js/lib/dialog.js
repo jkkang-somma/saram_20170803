@@ -5,12 +5,13 @@ define([
   'underscore', 
   'backbone',
   'util',
-  'log4javascript',
+  'bootstrap',
   'bootstrap-dialog',
+  'log4javascript',
   'i18n!nls/common',
-  'i18n!nls/error'
-], function($, _, Backbone, Util, log4javascript, BootstrapDialog, i18nCommon){
-    
+  'i18n!nls/error',
+  
+], function($, _, Backbone, Util, Bootstrap, BootstrapDialog, log4javascript, i18nCommon){
     var types = [BootstrapDialog.TYPE_DEFAULT, 
                      BootstrapDialog.TYPE_INFO, 
                      BootstrapDialog.TYPE_PRIMARY, 

@@ -3,9 +3,10 @@ define([
   'underscore',
   'backbone',
   'animator',
+  'core/BaseView',
   'text!templates/navigation.html',
-], function($, _, Backbone, animator, navigation){
-  var NavigationView = Backbone.View.extend({
+], function($, _, Backbone, animator, BaseView, navigation){
+  var NavigationView = BaseView.extend({
     el: $(".top-container"),
   	initialize:function(){
   		_.bindAll(this, 'render');

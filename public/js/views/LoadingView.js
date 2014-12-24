@@ -6,14 +6,15 @@ define([
   //'fittext', 
  // 'lettering', 
   //'textillate', 
-  'text!templates/lodingTemplate.html',
+  'core/BaseView',
+  'text!templates/loadingTemplate.html',
   'text!templates/cubeTemplate.html',
   'css!cs/loding.css',
 ], function($, _,Backbone, log,
 //fittext, lettering, textillate,
-lodingTemplate, cubeTemplate){
+BaseView, loadingTemplate, cubeTemplate){
     var LOG=log.getLogger("LODING");
-    var LodingView = Backbone.View.extend({
+    var LoadingView = BaseView.extend({
         el:$(".loding-container"),
     	initialize:function(){
     		_.bindAll(this, 'render');
@@ -21,8 +22,8 @@ lodingTemplate, cubeTemplate){
     	},
     	render:function(){
     		$(this.el).append(cubeTemplate);
-    		$(this.el).append(lodingTemplate);
-    		var users=this.model.toJSON();
+    		$(this.el).append(loadingTemplate);
+    		//var users=this.model.toJSON();
    // 		for (var i=0; i < users.length; i++){
    // 			$('.loding-msg > .texts').append("<li>"+users[i].name+"님이 출근 하셨습니다.</li>");
    // 		}
@@ -58,5 +59,5 @@ lodingTemplate, cubeTemplate){
 			});
     	}
     });
-    return LodingView;
+    return LoadingView;
 });

@@ -1,6 +1,6 @@
 var express = require('express');
 var express_session= require("express-session");
-var SessionStore = require('express-mysql-session');
+//var SessionStore = require('express-mysql-session');
 
 var path = require('path');
 //var favicon = require('serve-favicon');
