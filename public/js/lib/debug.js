@@ -2,11 +2,9 @@
 // Create Date: 2014.12.18
 define([
   'jquery', 
-  'underscore', 
-  'backbone',
   'util',
   'log4javascript'
-], function($, _, Backbone, Util, log4javascript){
+], function($, Util, log4javascript){
     var DEBUG=0,INFO=1,ERROR=2;
     var app={
         level:DEBUG

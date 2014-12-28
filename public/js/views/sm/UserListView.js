@@ -7,13 +7,10 @@ define([
   'collection/sm/UserCollection'
 ], function($, _,Backbone, BaseView, userlistTemplate, UserCollection){
     var UserListView = BaseView.extend({
-        el:$(".mid-container"),
+        el:$(".main-container"),
         
     	initialize:function(){
-    		_.bindAll(this, 'render');
-    		_.bindAll(this, 'close');
-    		
-    		this.collection = new UserCollection();
+     		this.collection = new UserCollection();
     		
     		$(this.el).html('');
     	    $(this.el).empty();

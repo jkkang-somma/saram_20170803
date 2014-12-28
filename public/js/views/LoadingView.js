@@ -15,7 +15,7 @@ define([
 BaseView, loadingTemplate, cubeTemplate){
     var LOG=log.getLogger("LODING");
     var LoadingView = BaseView.extend({
-        el:$(".loding-container"),
+        el:$(".loading-container"),
     	initialize:function(){
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'close');
@@ -52,11 +52,6 @@ BaseView, loadingTemplate, cubeTemplate){
 			// 	    callback: function () {}	
 			// 	}
 			// });
-    	},
-    	close:function(){
-    		$(this.el).fadeOut( "slow", function() {
-			 	this.remove();
-			});
     	}
     });
     return LoadingView;

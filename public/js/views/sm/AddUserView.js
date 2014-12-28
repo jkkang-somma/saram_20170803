@@ -8,21 +8,13 @@ define([
   
 ], function($, _, Backbone, BaseView, adduserTemplate, UserModel){
     var AddUserView = BaseView.extend({
-        el:$(".mid-container"),
+        el:$(".main-container"),
         
         events:{
     		"click #addUserCommit":"submitAdd"
     	},
     	
     	initialize:function(){
-    		_.bindAll(this, 'render');
-    		_.bindAll(this, 'submitAdd');
-    		_.bindAll(this, 'close');
-    		
-    		
-    		this.model = new UserModel();
-            
-            
     		$(this.el).html('');
     	    $(this.el).empty();
     	},

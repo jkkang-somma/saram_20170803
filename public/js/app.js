@@ -6,28 +6,32 @@ define([
   'backbone',
   'router',
   'log',
+  'bootstrap',
   'dialog',
   'i18n!nls/common',
   'i18n!nls/error',
   'views/LoadingView',
   'css!cs/animate.css',
   'css!cs/style.css'
-], function($, _, Backbone, Router, log, dialog, i18Common, i18Error, LoadingView){
+], function($, _, Backbone, Router, log, Bootstrap, dialog, i18Common, i18Error, LoadingView){
     var LOG=log.getLogger("APP");
-    var loadingView = new LoadingView();
+     var loadingView = new LoadingView();
     
-    var ApplicationModel = Backbone.Model.extend({
+    var App = Backbone.Model.extend({
         start : function(){
+            loadingView.render();
+            
             LOG.debug("==============================================================================");   
             LOG.debug("==============================Welcome to Sarams.=============================="); 
             LOG.debug("==============================================================================");
-            loadingView.render();
             var router = new Router();
-            //dialog.show("test!");
-		    Backbone.history.start();    
+		    Backbone.history.start(/*{pushState: true, root:"/"}*/);
+		    
 		    loadingView.close();
+		    
+		    dialog.show("test!");
         }
     })
     
-    return ApplicationModel;
+    return App;
 });

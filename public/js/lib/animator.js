@@ -13,30 +13,24 @@ define([
         'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp',
         'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp',
         'fadeIn', 'fadeInDown', 'fadeInUp',
-        'fadeOut', 'fadeOutDown', 'fadeOutUp',
-        'animated'
+        'fadeOut', 'fadeOutDown', 'fadeOutUp'
     ];
-    var animate=function(el, tag){
+    var animate= function(el, tag, callback){
         if (Util.isNotNull(tag)) {
             if (Util.inArray(tag, tags)){
-                var elClassName = $(el).attr('class').split(" ");
-
-                for(var i =0; i< elClassName.length; i++){
-                    var classItem = elClassName[i];
-                    if(Util.inArray(classItem, tags)){
-                        $(el).removeClass(classItem);
-                    };
-                }
-                
-                var animateClass = tag + " animated";
-                $(el).addClass(animateClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', [animateClass], function(event){
-                    $(this).removeClass(event.data[0]);
-                });
+                var className = tag + ' animated';
+                $(el).addClass(className).bind(
+                    'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+                    function(event){
+                        console.log(className);
+                        $(this).removeClass(className);
+                    }
+                );
             } else {
-                log.debug("No Animation tag:"+tag);
+                log.debug("No have Animation tag:"+tag);
             }
         } else {
-            log.debug("No Animation tag:"+tag);
+            log.debug("No have Animation tag:"+tag);
         }
     }
     return {

@@ -2,9 +2,7 @@
 // Create Date: 2014.12.18
 define([
   'jquery', 
-  'underscore', 
-  'backbone'
-], function($, _, Backbone){
+], function($){
     var isNull=function(obj){
 		if(obj===""||obj===undefined||obj==="undefined"||obj===null||obj==="null") return true;
 		return false;
@@ -25,10 +23,18 @@ define([
 		}
 		return false;
 	};
+	var split=function(str, token){
+		if(this.isNull(str)){
+			return [];
+		}else{
+			return str.split(token);
+		}
+	};
     return {
         isNull:isNull,
         isNotNull:isNotNull,
         inArray:inArray,
-        inObject:inObject
+        inObject:inObject,
+        split:split
     };
 });

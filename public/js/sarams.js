@@ -5,21 +5,25 @@
 require.config({
    waitSeconds: 2000,
    shim: {
+      'util' : {deps : ['jquery']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
-      'dialog' : {deps : ['jquery','bootstrap', 'bootstrap-dialog']}
+      'log' : {deps : ['jquery', 'util', 'log4javascript']},
+      'animator' : {deps : ['jquery', 'log','util'] }
    },
    paths: {
       jquery: 'tool/jquery.min',
       backbone: 'tool/backbone/backbone-min',
       underscore: 'tool/underscore/underscore-min',
       log4javascript:'tool/log4javascript',
-      bootstrap:'tool/bootstrap/js/bootstrap.min',
-      'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog.min',
+      bootstrap:'tool/bootstrap/js/bootstrap',
+      'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
       dialog:'lib/dialog',
+      animator:'lib/animator',
+      
       log:'lib/debug',
       util:'lib/util',
-      animator:'lib/animator',
+      
       i18n:'tool/i18n-master/i18n',
       fittext:'tool/textillate/jquery.fittext',
       lettering:'tool/textillate/jquery.lettering',

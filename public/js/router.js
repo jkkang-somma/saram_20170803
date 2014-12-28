@@ -19,8 +19,8 @@ define([
 		routes : {
 			'login' : 'showLogin',
 			'usermanager/add' : 'showAddUser',
-		      'usermanager' : 'showUserList',
-		      '*actions' : 'showHome'
+			'usermanager' : 'showUserList',
+			'*actions' : 'showHome'
 		},
 		
 		before : function(params, next){
@@ -30,7 +30,6 @@ define([
 		      // if(typeof SessionModel.attributes.loginid === 'undefined' ){
 		      //   SessionModel.set('redirectFrom', path)
 		      //   Backbone.history.navigate('login',{trigger : true});
-		      //   window.location.href = "/login";
 		      // }else{
 		      //   return next();
 		      // }
@@ -38,38 +37,31 @@ define([
 		},
 
 		after : function(){
-			//empty
+			// empty
 		},
 
 		changeView : function(view){
-			
-			function setView(view){
-				
-				if(this.currentView){
-					animator.animate(view.$el, animator.FADE_OUT);
-					this.currentView.close();
-				}
-				this.currentView = view;
-				view.render();
-				animator.animate(view.$el, animator.FADE_IN);
-			}
+		    if(this.currentView)
+				this.currentView.close();
 
-			setView(view);
+	        this.currentView = view;
+    		view.render();
+    		animator.animate($(view.el), animator.FADE_IN);	
 		},
-		
 		showAddUser : function(){
 			var addUserView = new AddUserView();
 			this.changeView(addUserView);
-			
 		},
+		
 		showUserList : function(){
 			var userListView = new UserListView();
 			this.changeView(userListView)
 		},
+		
 		showHome : function(){
 			var navigationView= new NavigationView();
-		      navigationView.render();
-		      var userListView = new UserListView();
+		    navigationView.render();
+		    var userListView = new UserListView();
 			this.changeView(userListView);
 		},
 

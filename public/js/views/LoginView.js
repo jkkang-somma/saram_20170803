@@ -7,12 +7,10 @@ define([
   'models/sm/UserModel',
   'text!templates/loginTemplate.html',
   'text!templates/initpasswordTemplate.html',
-  'css!tool/bootstrap/css/bootstrap-theme.css',
-  'css!tool/bootstrap/css/bootstrap.min.css'
   ], function($, _,Backbone, log, SessionModel, UserModel, loginTemplate, initpasswordTemplate){
 
     var LoginView = Backbone.View.extend({
-      el:$(".container"),
+      el:$(".loding-container"),
     	
       events:{
     		  "click #loginbtn":"submitLogin",

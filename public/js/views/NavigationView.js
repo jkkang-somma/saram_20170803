@@ -7,7 +7,7 @@ define([
   'text!templates/navigation.html',
 ], function($, _, Backbone, animator, BaseView, navigation){
   var NavigationView = BaseView.extend({
-    el: $(".top-container"),
+    el: $(".nav"),
   	initialize:function(){
   		_.bindAll(this, 'render');
   	},
