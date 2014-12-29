@@ -6,36 +6,32 @@ define([
   'backbone',
   'router',
   'log',
-  'domReady',
+  'bootstrap',
+  'dialog',
   'i18n!nls/common',
   'i18n!nls/error',
-  'loading',
-  'dialog',
-  'views/SaramView',
+  'views/LoadingView',
   'css!cs/animate.css',
   'css!cs/style.css'
-], function($, _, Backbone, Router, log, domReady, i18Common, i18Error, loading, Dialog, SaramView){
-    
+], function($, _, Backbone, Router, log, Bootstrap, dialog, i18Common, i18Error, LoadingView){
     var LOG=log.getLogger("APP");
-    // domReady(function(e){
-        
-    // });
-    LOG.debug("==============================================================================");   
-    LOG.debug("==============================Welcome to Sarams.=============================="); 
-    LOG.debug("==============================================================================");
-    var initialize = function(callBack){
-        Router.initialize().done(function(){
-            LOG.debug("Router initialize");
-            var mainPage= new SaramView({
-                affterInitialize:function(){
-                    callBack();
-                  //  Dialog.error(i18Error.APP_LODING_FAIL);
-                }
-            });
-        });
-    };
-  
-    return { 
-        initialize: initialize
-    };
+     var loadingView = new LoadingView();
+    
+    var App = Backbone.Model.extend({
+        start : function(){
+            loadingView.render();
+            
+            LOG.debug("==============================================================================");   
+            LOG.debug("==============================Welcome to Sarams.=============================="); 
+            LOG.debug("==============================================================================");
+            var router = new Router();
+		    Backbone.history.start(/*{pushState: true, root:"/"}*/);
+		    
+		    loadingView.close();
+		    
+		    dialog.show("test!");
+        }
+    })
+    
+    return App;
 });

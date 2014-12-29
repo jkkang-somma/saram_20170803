@@ -1,6 +1,6 @@
 var express = require('express');
 var express_session= require("express-session");
-var SessionStore = require('express-mysql-session');
+//var SessionStore = require('express-mysql-session');
 
 var path = require('path');
 //var favicon = require('serve-favicon');
@@ -9,7 +9,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var login = require('./routes/login');
 var user = require('./routes/user');
 var session = require('./routes/session');
 
@@ -64,7 +63,6 @@ app.use(logger('dev'));
 
 // route page
 app.use('/', index);
-app.use('/login', login);
 app.use('/user', user);
 app.use('/session', session);
 //app.use('/error', error);

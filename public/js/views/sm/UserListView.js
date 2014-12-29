@@ -2,19 +2,15 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'core/BaseView',
   'text!templates/userlistTemplate.html',
   'collection/sm/UserCollection'
-], function($, _,Backbone, userlistTemplate, UserCollection){
-    var UserListView = Backbone.View.extend({
-        el:$(".mid-container"),
-        events:{
-    		
-    	},
+], function($, _,Backbone, BaseView, userlistTemplate, UserCollection){
+    var UserListView = BaseView.extend({
+        el:$(".main-container"),
+        
     	initialize:function(){
-    		_.bindAll(this, 'render');
-    		_.bindAll(this, 'close');
-    		
-    		this.collection = new UserCollection();
+     		this.collection = new UserCollection();
     		
     		$(this.el).html('');
     	    $(this.el).empty();
@@ -37,11 +33,6 @@ define([
             		}
     		    }   
     		});
-     	},
-     	close:function(){
-     	    this.undelegateEvents();
-            this.$el.removeData().unbind(); 
-            
      	}
     });
     
