@@ -5,7 +5,7 @@ define([
   'text!templates/navigation.html',
 ], function($, _, Backbone, navigation){
   var NavigationView = Backbone.View.extend({
-    el: $(".top-container"),
+    el: $(".side-container"),
   	initialize:function(){
   		_.bindAll(this, 'render');
   	},

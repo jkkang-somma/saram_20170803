@@ -2,11 +2,9 @@
 // Create Date: 2014.12.18
 define([
   'jquery', 
-  'underscore', 
-  'backbone',
   'util',
   'log4javascript'
-], function($, _, Backbone, Util, log4javascript){
+], function($, Util, log4javascript){
     var DEBUG=0,INFO=1,ERROR=2;
     var app={
         level:DEBUG
@@ -27,15 +25,18 @@ define([
     
     var print_r=function(printthis) {
         var output = '';
-    
         if($.isArray(printthis) || typeof(printthis) == 'object') {
-            for(var i in printthis) {
-                output += i + ' : ' + print_r(printthis[i], true) + '\n';
+            for(var name in printthis) {
+                if (Util.isNotNull(output)){
+					output=output+", "+name+":"+printthis[name];
+				} else {
+					output=name+":"+printthis[name];
+				}
             }
         }else {
             output += printthis;
         }
-        return printthis;
+        return output;
     } 
     
     var getLogger=function(module){

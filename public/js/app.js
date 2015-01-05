@@ -4,38 +4,37 @@ define([
   'jquery', 
   'underscore', 
   'backbone',
+  'models/sm/SessionModel',
   'router',
   'log',
-  'domReady',
+  'bootstrap',
+  'dialog',
   'i18n!nls/common',
   'i18n!nls/error',
-  'loading',
-  'dialog',
-  'views/SaramView',
-  'css!cs/animate.css',
-  'css!cs/style.css'
-], function($, _, Backbone, Router, log, domReady, i18Common, i18Error, loading, Dialog, SaramView){
-    
+  'views/LoadingView',
+], function($, _, Backbone, SessionModel, MainRouter, log, Bootstrap, Dialog, i18Common, i18Error, LoadingView){
     var LOG=log.getLogger("APP");
-    // domReady(function(e){
-        
-    // });
-    LOG.debug("==============================================================================");   
-    LOG.debug("==============================Welcome to Sarams.=============================="); 
-    LOG.debug("==============================================================================");
-    var initialize = function(callBack){
-        Router.initialize().done(function(){
-            LOG.debug("Router initialize");
-            var mainPage= new SaramView({
-                affterInitialize:function(){
-                    callBack();
-                  //  Dialog.error(i18Error.APP_LODING_FAIL);
-                }
+    var loadingView;
+    var App = Backbone.Model.extend({
+        start : function(){
+            LOG.debug("==============================================================================");   
+            LOG.debug("==============================Welcome to Sarams.=============================="); 
+            LOG.debug("==============================================================================");
+            
+            SessionModel.getInstance().get().done(function(){// session create
+                var router = new MainRouter({affterCallback:function(){// mainRouter create
+                    loadingView.disable(function(){// loadingView close
+                        Backbone.history.start(/*{pushState: true, root:"/"}*/);
+                    });
+                }});
+            }).fail(function(e){//session create Fail.
+                Dialog.error('Error:001'+e);  
             });
-        });
-    };
-  
-    return { 
-        initialize: initialize
-    };
+        },
+        initialize:function(){
+            loadingView = new LoadingView();
+            loadingView.render();
+        }
+    });
+    return App;
 });

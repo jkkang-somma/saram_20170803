@@ -2,26 +2,19 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'core/BaseView',
   'text!templates/adduserTemplate.html',
   'models/sm/UserModel'
   
-], function($, _, Backbone, adduserTemplate, UserModel){
-    var AddUserView = Backbone.View.extend({
-        el:$(".mid-container"),
+], function($, _, Backbone, BaseView, adduserTemplate, UserModel){
+    var AddUserView = BaseView.extend({
+        el:$(".main-container"),
         
         events:{
     		"click #addUserCommit":"submitAdd"
     	},
     	
     	initialize:function(){
-    		_.bindAll(this, 'render');
-    		_.bindAll(this, 'submitAdd');
-    		_.bindAll(this, 'close');
-    		
-    		
-    		this.model = new UserModel();
-            
-            
     		$(this.el).html('');
     	    $(this.el).empty();
     	},
@@ -47,11 +40,6 @@ define([
             });
             
             return indexed_array;
-    	},
-    	
-    	close: function(){
-    	    this.undelegateEvents();
-            this.$el.removeData().unbind(); 
     	}
     	
     });

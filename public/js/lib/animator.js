@@ -15,12 +15,17 @@ define([
         'fadeIn', 'fadeInDown', 'fadeInUp',
         'fadeOut', 'fadeOutDown', 'fadeOutUp'
     ];
-    var animate=function(el, tag){
+    var animate= function(el, tag, callback){
         if (Util.isNotNull(tag)) {
             if (Util.inArray(tag, tags)){
-                $(el).removeClass().addClass(tag + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                  $(this).removeClass();
-                });
+                var className = tag + ' animated';
+                $(el).addClass(className).bind(
+                    'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+                    function(event){
+                        console.log(className);
+                        $(this).removeClass(className);
+                    }
+                );
             } else {
                 log.debug("No have Animation tag:"+tag);
             }

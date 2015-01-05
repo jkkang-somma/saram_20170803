@@ -7,36 +7,19 @@ define([
   'models/sm/UserModel',
   'text!templates/loginTemplate.html',
   'text!templates/initpasswordTemplate.html',
-  'css!tool/bootstrap/css/bootstrap-theme.css',
-  'css!tool/bootstrap/css/bootstrap.min.css'
   ], function($, _,Backbone, log, SessionModel, UserModel, loginTemplate, initpasswordTemplate){
-
+    var LOG=log.getLogger('LoginView');
     var LoginView = Backbone.View.extend({
-      el:$(".container"),
-    	
       events:{
     		  "click #loginbtn":"submitLogin",
     		  "click #passwordCommit" : "commitPassword"
     	},
     	
     	initialize:function(){
-    	  var that = this;
+    	  var view = this;
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'submitLogin');
     		_.bindAll(this, 'close');
-    		
-    		SessionModel.on('change', function(session){
-    		  if(session.attributes.login){
-    		    window.location.href = '/';
-    		  }else{
-    		    console.log(session.attributes);
-    		    if(session.attributes.init){
-    		      that.render(session.attributes.init);
-    		    }else{
-    		      console.log(session.attributes.msg);
-    		    }
-    		  }
-    		});
     	},
     	
     	render:function(flag){
@@ -47,38 +30,44 @@ define([
       	  this.$el.find("#initIdText").val(flag);
       	  this.$el.find("#initIdText").prop('disabled',true);
     	  }else{
-    	    SessionModel.get();
-      	  if(SessionModel.attributes.login){
-      	    window.location.href = '/';
-      	  }else{
-      		  $(this.el).append(loginTemplate);
-      	  }
+    	   // SessionModel.get();
+      	 // if(SessionModel.attributes.login){
+      	 //   window.location.href = '/';
+      	 // }else{
+      		//   $(this.el).append(loginTemplate);
+      	 // }
+      	 $(this.el).append(loginTemplate);
     	  }
     		
      	},
     	
     	submitLogin : function(e){
     	  var data = this.getFormData( this.$el.find('form'));
-    	  SessionModel.login(data);
+    	  var view= this;
+    	  SessionModel.getInstance()
+    	  .login(data)
+    	  .then(function(obj){
+    	    LOG.debug(obj);
+    	    if (obj.init){
+    	      view.render(true);
+    	    }
+    	    
+    	  });
     	  return false;
     	},
     	
     	commitPassword : function(e){
     	  var data = this.getFormData( this.$el.find('form'));
-    	  console.log(data);
     	  if(data.password1 !== data.password2){
     	    console.log("!!!!!");
     	  }else{
-    	    UserModel.on("sync",function(event,model,res){
-    	      if(res.changedRows > 0){
-    	        window.location.href = '/login';
-    	      }
-    	    });
-    	    UserModel.initPassword({id: data.loginid, password:data.password1});
-    	    
+    	    var user = new UserModel();
+    	    user.initPassword({id: data.loginid, password:data.password1});
+    	    window.location.href = '/login';
     	  }
   	    return false;
     	},
+    	
     	getFormData: function(form) {
   	    form.find(':input:disabled').removeAttr('disabled');
   	    var unindexed_array = form.serializeArray();

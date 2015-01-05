@@ -1,6 +1,6 @@
 var express = require('express');
 var express_session= require("express-session");
-var SessionStore = require('express-mysql-session');
+//var SessionStore = require('express-mysql-session');
 
 var path = require('path');
 //var favicon = require('serve-favicon');
@@ -8,10 +8,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var sessionManager = require('./lib/sessionManager');
 var index = require('./routes/index');
-var login = require('./routes/login');
-var user = require('./routes/user');
-var session = require('./routes/session');
+var user = require('./routes/userRouter');
+var session = require('./routes/sessionRouter');
 
 
 //var error = require('./routes/error');
@@ -41,30 +41,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express_session({
     secret:"express-saram",
-    resave:false,
-    loginid:"",
     //store : sessionStore,
     saveUninitialized:true
 }));
 
+var authError=function(next){
+    var err = new Error('not Authoryty');
+    err.status = 401;
+    next(err);
+}
 
 app.use(logger('dev'));
 // if session hasn`t loginid, redirect login page
-/*app.use(function(req,res,next){
-    if(!req.session.loginid && req.originalUrl != "/login"){
-        res.writeHead(302, {'Location': '/login'});
-        res.end();
+app.use(function(req,res,next){
+    if(req.originalUrl == "/session"||req.originalUrl == "/"){
+        next();
     }else{
-        next();    
+        // Session 객체가 셋팅 되어있지않으면 리다이랙트
+        var reqSession = req.session.Session;
+        if (req.session.Session){
+            // Session 객체가 SessionManager에 등록된 유효한 Session인지 확인 
+            if (sessionManager.hasSession(reqSession.get("id"))){
+                next();
+            } else {
+                authError(next);
+            } 
+        } else {
+            authError(next);
+        }
+        
     }
-    
 });
-*/
+
 
 
 // route page
 app.use('/', index);
-app.use('/login', login);
 app.use('/user', user);
 app.use('/session', session);
 //app.use('/error', error);
@@ -77,23 +89,6 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-
-// error handlers
-
-// development error handler
-// will print stacktrace
-// if (app.get('env') === 'development') {
-//     app.use(function(err, req, res, next) {
-//         res.status(err.status || 500);
-//         res.render('error', {
-//             message: err.message,
-//             error: err
-//         });
-//     });
-// }
-
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -101,7 +96,4 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-
 module.exports = app;
