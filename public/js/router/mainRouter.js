@@ -46,16 +46,17 @@ define([
 		},
 		before : function(url, next){
 			var router=this;
-			var session=SessionModel.getInstance();
+			// var session=SessionModel.getInstance();
 			
-			if(!session.isLogin){
-				if (url==LOGIN){// session이 없을 때 로그인화면으로 전환시 next()를 해줘야지 정상적으로 넘어감. 안그러면 계속 login으로 navigate함.
-					return next();
-				}
-				Backbone.history.navigate(LOGIN, { trigger : true });
-			}else{
-				return next();
-			} 
+			// if(!session.isLogin){
+			// 	if (url==LOGIN){// session이 없을 때 로그인화면으로 전환시 next()를 해줘야지 정상적으로 넘어감. 안그러면 계속 login으로 navigate함.
+			// 		return next();
+			// 	}
+			// 	Backbone.history.navigate(LOGIN, { trigger : true });
+			// }else{
+			// 	return next();
+			// } 
+			return next();
 		},
 		after : function(){
 		},
