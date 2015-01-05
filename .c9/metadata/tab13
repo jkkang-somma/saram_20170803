@@ -1,0 +1,1 @@
+{"filter":false,"title":"DEBUG=*  - Idle","tooltip":"DEBUG=*  - Idle","undoManager":{"mark":0,"position":-1,"stack":[]},"output":{"id":"output363990","width":1610,"height":259,"scrollTop":-1,"config":{"command":"start.js","debug":true,"env":{},"name":"DEBUG=* ","runner":"Node.js (default)"}},"timestamp":1418714220193,"hash":"da39a3ee5e6b4b0d3255bfef95601890afd80709"}

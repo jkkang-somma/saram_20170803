@@ -23,7 +23,15 @@
         "@path": "/.c9/runners",
         "configs": {
             "@inited": "true",
-            "json()": {}
+            "json()": {
+                "DEBUG=* ": {
+                    "command": "start.js",
+                    "debug": true,
+                    "env": {},
+                    "name": "DEBUG=* ",
+                    "runner": "Node.js (default)"
+                }
+            }
         }
     },
     "share": {

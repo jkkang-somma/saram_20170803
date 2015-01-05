@@ -2,8 +2,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'log', 
-  'util',
+  'log',
   //'fittext', 
  // 'lettering', 
   //'textillate', 
@@ -11,7 +10,7 @@ define([
   'text!templates/loadingTemplate.html',
   'text!templates/cubeTemplate.html',
   'css!cs/loding.css',
-], function($, _,Backbone, log, Util,
+], function($, _,Backbone, log,
 //fittext, lettering, textillate,
 BaseView, loadingTemplate, cubeTemplate){
     var LOG=log.getLogger("LODING");
@@ -19,7 +18,7 @@ BaseView, loadingTemplate, cubeTemplate){
         el:$(".loading-container"),
     	initialize:function(){
     		_.bindAll(this, 'render');
-    		_.bindAll(this, 'disable');
+    		_.bindAll(this, 'close');
     	},
     	render:function(){
     		$(this.el).append(cubeTemplate);
@@ -53,15 +52,6 @@ BaseView, loadingTemplate, cubeTemplate){
 			// 	    callback: function () {}	
 			// 	}
 			// });
-    	},
-    	disable:function(callback){
-    		var view=this;
-			$(this.el).fadeOut( 1000, function() {
-    			view.close();
-    			if (Util.isNotNull(callback)&& _.isFunction(callback)){
-    				callback();
-    			}
-			});
     	}
     });
     return LoadingView;
