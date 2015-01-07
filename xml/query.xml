@@ -12,4 +12,46 @@
     <group id="data">
         <query id="select_user_all">select * from members_tbl</query>
     </group>
+    
+    <group id="vacation">
+        <query id="selectVacationsByYear">
+			select 
+				m.id, 
+			    m.name,
+			    (SELECT name FROM dept_code_tbl where code = m.dept_code) dept_name,
+			    m.join_company,
+				t2.year,
+				t2.id,
+				t2.total_day,
+				t2.total_holiday_work_day,
+				t2.total_holiday,
+				t2.used_holiday,
+			    (t2.total_holiday - t2.used_holiday) holiday
+			from
+				members_tbl m
+			    inner join (
+							select
+								v.year,
+								v.id,
+								v.total_day,
+								v.total_holiday_work_day,
+								( IFNULL(v.total_day, 0) + IFNULL(v.total_holiday_work_day, 0) ) total_holiday,
+								IFNULL(s.used_holiday, 0) used_holiday
+							from
+								vacation_tbl v
+								left join (
+											SELECT year, id, sum(day_count)  used_holiday
+											FROM out_office_tbl
+											group by year, id
+											) s
+								on v.id = s.id and v.year = s.year
+							where v.year = '%s'
+			    ) t2
+			    on m.id = t2.id
+        </query>
+        <query id="empty">
+        dd
+        </query>
+        
+    </group>
 </querys>

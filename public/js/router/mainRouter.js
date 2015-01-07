@@ -14,7 +14,8 @@ define([
 	'views/NavigationView',
 	'views/sm/UserListView',
 	'views/sm/AddUserView',
-], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter, LoginView, NavigationView, UserListView, AddUserView){
+	'views/vacation/VacationView'
+], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter, LoginView, NavigationView, UserListView, AddUserView,VacationView){
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
 	var loginContainer='.login-container';
@@ -24,6 +25,7 @@ define([
 			'login' : 'showLogin',
 			'usermanager/add' : 'showAddUser',
 			'usermanager' : 'showUserList',
+			'vacation' : 'showVacation',
 			'*actions' : 'showHome'
 		},
 		initialize:function(option){
@@ -89,6 +91,10 @@ define([
 			var loginView = new LoginView({el:loginContainer});
 			loginView.render();
 		},
+		showVacation : function() {
+			var vacationView = new VacationView();
+			this.changeView(vacationView);
+		}
 	});
 
 	return Router;
