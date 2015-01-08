@@ -72,18 +72,33 @@ define([
             _vacationCollection.fetch({reset : true, data: this.getSearchForm()});
      	},
      	onClickCreateDataBtn : function() {
-     		this.$el.find('#vacationListTable > tbody').html("");
-     		
+     		$.post("/vacation", this.getSearchForm(), function(result) {
+     			console.log(result);
+//     			if (result.length == 0) {
+//     				console.log("자료를 생성해주세요");
+//     			} else {
+//     				
+//     			}     			
+     		})
      	},
-     	onClickSearchBtn : function() {
+     	onClickSearchBtn : function() { 
+     		_vacationCollection.reset();
      		_vacationCollection.fetch({reset : true, data: this.getSearchForm()});
      	},
      	onClickUpdateBtn : function() {
+     		var vacationModel = new VacationModel({
+            	year: "2015", 
+            	id: "100501",
+            	total_day: 16     			
+     		});
+     		
+     		vacationModel.save();
+     		
      		console.log('onClickUpdateBtn');
      	},
-     	onSettingVacation : function(result) {
+     	onSettingVacation : function(result) {     		
      		var tpl = _.template( vacationListTableTrTemplate, {variable: 'data'} )( {searchResult: result.toJSON()} );
-     		this.$el.find('#vacationListTable > tbody').html("").append(tpl);
+     		this.$el.find('#vacationListTable > tbody').html(tpl);
      	},
      	getSearchForm: function() {
      		return {year: this.$el.find("#selectYear").val()};

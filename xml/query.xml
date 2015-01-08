@@ -15,7 +15,7 @@
     
     <group id="vacation">
         <query id="selectVacationsByYear">
-			select 
+			SELECT 
 				m.id, 
 			    m.name,
 			    (SELECT name FROM dept_code_tbl where code = m.dept_code) dept_name,
@@ -23,34 +23,53 @@
 				t2.year,
 				t2.id,
 				t2.total_day,
-				t2.total_holiday_work_day,
-				t2.total_holiday,
 				t2.used_holiday,
-			    (t2.total_holiday - t2.used_holiday) holiday
-			from
+			    (t2.total_day - t2.used_holiday) holiday
+			FROM
 				members_tbl m
-			    inner join (
-							select
+			    INNER JOIN (
+							SELECT
 								v.year,
 								v.id,
 								v.total_day,
-								v.total_holiday_work_day,
-								( IFNULL(v.total_day, 0) + IFNULL(v.total_holiday_work_day, 0) ) total_holiday,
 								IFNULL(s.used_holiday, 0) used_holiday
-							from
+							FROM
 								vacation_tbl v
-								left join (
+								LEFT JOIN (
 											SELECT year, id, sum(day_count)  used_holiday
 											FROM out_office_tbl
-											group by year, id
+											GROUP BY year, id
 											) s
-								on v.id = s.id and v.year = s.year
-							where v.year = '%s'
+								ON v.id = s.id and v.year = s.year
+							WHERE v.year = '%s'
 			    ) t2
-			    on m.id = t2.id
+			    ON m.id = t2.id
+			ORDER BY m.name
         </query>
-        <query id="empty">
-        dd
+        <query id="selectVacatonCount">
+			SELECT count(*) count FROM vacation_tbl WHERE year = '%s'
+        </query>
+        
+        <query id="insertVacation">
+			INSERT INTO vacation_tbl(id, year, total_day)
+			SELECT %s, %s, %s from dual
+			WHERE NOT EXISTS (
+					SELECT id
+					FROM vacation_tbl
+					WHERE 
+						id = %s 
+			        AND 
+			        	year = %s 
+			)
+        </query>
+
+        <query id="updateVacation">
+        	UPDATE 
+        		vacation_tbl 
+        	SET 
+        		total_day = '%s' 
+        	WHERE 
+        		id = '%s' AND year = '%s'
         </query>
         
     </group>
