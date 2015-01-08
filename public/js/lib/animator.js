@@ -22,7 +22,6 @@ define([
                 $(el).addClass(className).bind(
                     'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
                     function(event){
-                        console.log(className);
                         $(this).removeClass(className);
                     }
                 );

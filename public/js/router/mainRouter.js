@@ -10,21 +10,36 @@ define([
 	'log',
 	'models/sm/SessionModel',
 	'core/BaseRouter',
+	'views/DashBoardView',
 	'views/LoginView',
 	'views/NavigationView',
 	'views/sm/UserListView',
 	'views/sm/AddUserView',
-], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter, LoginView, NavigationView, UserListView, AddUserView){
+	'views/am/AddRawDataView',
+	'views/am/HolidayListView',
+	'views/cm/CommuteListView',
+	'views/cm/CreateDataView',
+], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter,
+DashBoardView, LoginView, NavigationView, // Main View
+UserListView, AddUserView,	// 사원관리
+AddRawDataView, HolidayListView, // 근태관리
+CommuteListView,CreateDataView // CM View
+){
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
 	var loginContainer='.login-container';
 	var LOGIN='login';
+	
 	var Router = BaseRouter.extend({
 		routes : {
 			'login' : 'showLogin',
 			'usermanager/add' : 'showAddUser',
 			'usermanager' : 'showUserList',
-			'*actions' : 'showHome'
+			'addrawdata' : 'showAddRawData',
+			'createdata' : 'showCreateData',
+			'holidaymanager' : 'showHolidayManager',
+			'commutemanager' : 'showCommuteManager',
+			'*actions' : 'showHome',
 		},
 		initialize:function(option){
 			var affterCallback,beforeCallback;
@@ -44,7 +59,9 @@ define([
 			} 
 			LOG.debug("Initalize Success");
 		},
+		
 		before : function(url, next){
+			LOG.debug(url);
 			var router=this;
 			// var session=SessionModel.getInstance();
 			
@@ -58,13 +75,17 @@ define([
 			// } 
 			return next();
 		},
+		
 		after : function(){
 		},
+		
 		changeView : function(view){
+			LOG.debug("Initalize changeView");
 		    if(this.currentView)
 				this.currentView.close();
 
 	        this.currentView = view;
+	        view.initialize();
     		view.render();
     		animator.animate($(view.el), animator.FADE_IN);	
 		},
@@ -74,21 +95,41 @@ define([
 		},
 		
 		showUserList : function(){
+			LOG.debug("Initalize showUserList");
 			var userListView = new UserListView();
 			this.changeView(userListView)
 		},
 		
+		showAddRawData : function(){
+			var addRawDataView = new AddRawDataView();
+			this.changeView(addRawDataView);
+		},
+		
+		showCreateData : function(){
+			var createDataView = new CreateDataView();
+			this.changeView(createDataView);
+		},
+		
 		showHome : function(){
-			var navigationView= new NavigationView();
-		    navigationView.render();
-		    var userListView = new UserListView();
-			this.changeView(userListView);
+		    var dashBoardView = new DashBoardView({el:mainContainer});
+		    this.changeView(dashBoardView);
 		},
 
 		showLogin : function(){
 			var loginView = new LoginView({el:loginContainer});
 			loginView.render();
 		},
+		
+		showHolidayManager : function(){
+			var holidayListView = new HolidayListView();
+			this.changeView(holidayListView);
+		},
+		
+		showCommuteManager : function(){
+			var commuteListView = new CommuteListView();
+			this.changeView(commuteListView);
+		},
+		
 	});
 
 	return Router;

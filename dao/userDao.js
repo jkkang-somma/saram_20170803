@@ -13,6 +13,10 @@ UserDao.prototype.selectUserList =  function () {//select user;
     var queryStr = db.getQuery('user', 'selectUserList');
     return db.query(queryStr);
 }
+UserDao.prototype.initPassword =  function (id, password) {
+    var queryStr = util.format(db.getQuery('user', 'initPassword'), password, id);
+    return db.query(queryStr);
+}
 module.exports = new UserDao();
 
 

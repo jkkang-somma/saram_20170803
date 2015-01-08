@@ -23,19 +23,13 @@ define([
     	},
     	
     	render:function(flag){
+    	  $(this.el).html('');
+  	    $(this.el).empty();
     	  if(flag){
-    	    $(this.el).html('');
-    	    $(this.el).empty();
-      	  $(this.el).append(initpasswordTemplate);
+    	    $(this.el).append(initpasswordTemplate);  
       	  this.$el.find("#initIdText").val(flag);
       	  this.$el.find("#initIdText").prop('disabled',true);
     	  }else{
-    	   // SessionModel.get();
-      	 // if(SessionModel.attributes.login){
-      	 //   window.location.href = '/';
-      	 // }else{
-      		//   $(this.el).append(loginTemplate);
-      	 // }
       	 $(this.el).append(loginTemplate);
     	  }
     		
@@ -49,7 +43,7 @@ define([
     	  .then(function(obj){
     	    LOG.debug(obj);
     	    if (obj.init){
-    	      view.render(true);
+    	      view.render(obj.init);
     	    }
     	    
     	  });
@@ -63,7 +57,8 @@ define([
     	  }else{
     	    var user = new UserModel();
     	    user.initPassword({id: data.loginid, password:data.password1});
-    	    window.location.href = '/login';
+    	    var view = this;
+    	    view.render();
     	  }
   	    return false;
     	},

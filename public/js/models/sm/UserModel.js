@@ -24,7 +24,8 @@ define([
             department: '',
             join_company: null,
             leave_company: null,
-            privilege : 0
+            privilege : 0,
+            admin : 0,
         },
         
     });

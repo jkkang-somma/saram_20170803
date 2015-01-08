@@ -3,14 +3,27 @@
 define([
 	'underscore',
 	'backbone',
-	'animator'
-], function(_, Backbone, animator){
+	'animator',
+  	'text!templates/loadingTemplate.html',
+  	'text!templates/cubeTemplate.html',
+], function(_, Backbone, animator, LoadingHTML, CubeHTML){
 
 	var BaseView = Backbone.View.extend({
+		beforeRender:function(){	
+			$(".loading-container").append(CubeHTML);
+    		$(".loading-container").append(LoadingHTML);
+    		$(".loading-container").css({background:"white"});
+    		$(".loading-container").fadeIn();
+		},
+		affterRender:function(){
+			$(".loading-container").fadeOut();
+            $(".loading-container").removeData().unbind(); 
+          	$(".loading-container").html('');	
+		},
 		close : function(){
 			var view=this;
 			view.undelegateEvents();
-            view.$el.removeData().unbind(); 
+            view.$el.removeData();
             view.$el.html('');	
 		}
 	});

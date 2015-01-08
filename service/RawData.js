@@ -1,15 +1,14 @@
-// Author: sanghee park <novles@naver.com>
-// Create Date: 2014.12.18
-// 사용자 Service
+
 var _ = require("underscore"); 
 var debug = require('debug')('User');
 var Schemas = require("../schemas.js");
-var UserDao= require('../dao/userDao.js');
+var RawDataDao= require("../dao/rawDataDao.js");
 
-var User = function (data) {
+var RawData = function (data) {
     var _data=_.initial([]);
-    var schema=new Schemas('user');
+    var schema=new Schemas('rawData');
     _data = schema.get(data);
+    
     var _get = function (fieldName) {
         if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
         if (_.has(_data, fieldName)){
@@ -18,54 +17,15 @@ var User = function (data) {
             return _.noop;
         }
     }
-    var _getUser = function () {//select user;
-        return UserDao.selectIdByUser(_data.id);
+    var _insertRawData = function () {
+        return RawDataDao.insertRawData(_data);
     }
     return {
         get:_get,
-        getUser:_getUser,
-        data:_data
+        data:_data,
+        insertRawData:_insertRawData
     }
 }
 
-//new app 은 싱글톤 아니고 app은 계속 생성
-module.exports = User;
+module.exports = RawData;
 
-
-// exports.getUserList = function(callback, req){
-    
-//     return new Promise(function(){
-        
-//     });
-// };
-
-// exports.getUser = function(callback, id){
-//     // var queryStr = util.format(db.getQuery('user', 'select_user'), id);
-//     // db.query(queryStr, callback);
-// };
-
-// exports.addUser = function(callback, req){
-//     // var param = req.body;
-
-//     // var id = param.id;
-//     // var name = param.name;
-//     // var department = param.department;
-//     // var nameCommute = param.nameCommute;
-//     // var joinDate = param.joinDate;
-    
-//     // var queryStr = util.format(db.getQuery('user', 'add_user') , id, name, department, nameCommute, joinDate);
-    
-//     // db.query(queryStr, callback);
-    
-// };
-
-// exports.changePassword = function(callback, req){
-//     // var param = req.body;
-    
-//     // var id = param.id;
-//     // var password = param.password;
-    
-//     // var queryStr = util.format(db.getQuery('user', 'update_password') , encryptor.encrypte(password), id ); 
-//     // db.query(queryStr, callback);
-
-// };

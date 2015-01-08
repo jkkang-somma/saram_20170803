@@ -7,13 +7,16 @@ var User = require('../service/User.js');
 router.route('/')
 .get(function(req, res){
     // Get user infomation list (GET)
-    var result = User.getUserList();
-    debug(result);
-    res.send(result);    
+    var user = new User();
+    var result = user.getUserList().then(function(result){
+        debug(result);
+        res.send(result);    
+    }) ;
+    
     
 }).post(function(req, res){
-    // // Insert user infomation (PUT)
-    // debug(req.body);
+    // Insert user infomation (PUT)
+    debug(req.body);
     // userService.insertUser(function(result){
     //     res.send(result);
     // }, req);
@@ -29,11 +32,14 @@ router.route('/:user_id')
     // }, req.param.name);
     
 }).put(function(req, res){
-    // // Update user infomation (PUT)
-    // userService.updatePassword(function(result){
-    //     console.log(result);
-    //     res.send(result);
-    // },req)
+    // Update user infomation (PUT)
+    debug(req.body);
+    var user = new User(req.body);
+    
+    var result = user.initPassword();
+    console.log(result);
+    res.send(result);
+    
 });
 
 

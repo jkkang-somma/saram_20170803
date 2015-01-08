@@ -12,7 +12,8 @@ define([
   'i18n!nls/common',
   'i18n!nls/error',
   'views/LoadingView',
-], function($, _, Backbone, SessionModel, MainRouter, log, Bootstrap, Dialog, i18Common, i18Error, LoadingView){
+  'views/NavigationView',
+], function($, _, Backbone, SessionModel, MainRouter, log, Bootstrap, Dialog, i18Common, i18Error, LoadingView, NavigationView){
     var LOG=log.getLogger("APP");
     var loadingView;
     var App = Backbone.Model.extend({
@@ -24,11 +25,13 @@ define([
             SessionModel.getInstance().get().done(function(){// session create
                 var router = new MainRouter({affterCallback:function(){// mainRouter create
                     loadingView.disable(function(){// loadingView close
-                        Backbone.history.start(/*{pushState: true, root:"/"}*/);
+                        var navigationView= new NavigationView();
+            		    navigationView.render();
+                        Backbone.history.start({root:"/"});
                     });
                 }});
             }).fail(function(e){//session create Fail.
-                Dialog.error('Error:001'+e);  
+                Dialog.error('Error:001 ('+e.statusText+')');  
             });
         },
         initialize:function(){

@@ -24,10 +24,15 @@ var User = function (data) {
     var _getUserList = function(){
         return UserDao.selectUserList();
     }
+    
+    var _initPassword = function(){
+        return UserDao.initPassword(_data.id, _data.password);
+    }
     return {
         get:_get,
         getUser:_getUser,
         getUserList:_getUserList,
+        initPassword:_initPassword,
         data:_data
     }
 }
@@ -35,41 +40,3 @@ var User = function (data) {
 //new app 은 싱글톤 아니고 app은 계속 생성
 module.exports = User;
 
-
-// exports.getUserList = function(callback, req){
-    
-//     return new Promise(function(){
-        
-//     });
-// };
-
-// exports.getUser = function(callback, id){
-//     // var queryStr = util.format(db.getQuery('user', 'select_user'), id);
-//     // db.query(queryStr, callback);
-// };
-
-// exports.addUser = function(callback, req){
-//     // var param = req.body;
-
-//     // var id = param.id;
-//     // var name = param.name;
-//     // var department = param.department;
-//     // var nameCommute = param.nameCommute;
-//     // var joinDate = param.joinDate;
-    
-//     // var queryStr = util.format(db.getQuery('user', 'add_user') , id, name, department, nameCommute, joinDate);
-    
-//     // db.query(queryStr, callback);
-    
-// };
-
-// exports.changePassword = function(callback, req){
-//     // var param = req.body;
-    
-//     // var id = param.id;
-//     // var password = param.password;
-    
-//     // var queryStr = util.format(db.getQuery('user', 'update_password') , encryptor.encrypte(password), id ); 
-//     // db.query(queryStr, callback);
-
-// };
