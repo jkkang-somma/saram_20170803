@@ -15,6 +15,7 @@ define([
 	'views/NavigationView',
 	'views/sm/UserListView',
 	'views/sm/AddUserView',
+<<<<<<< HEAD
 	'views/am/AddRawDataView',
 	'views/am/HolidayListView',
 	'views/cm/CommuteListView',
@@ -25,6 +26,10 @@ UserListView, AddUserView,	// 사원관리
 AddRawDataView, HolidayListView, // 근태관리
 CommuteListView,CreateDataView // CM View
 ){
+=======
+	'views/vacation/VacationView'
+], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter, LoginView, NavigationView, UserListView, AddUserView,VacationView){
+>>>>>>> 1cf1b0e9b5bdc2c9af527bfd6dde1cebe6e1b57d
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
 	var loginContainer='.login-container';
@@ -35,11 +40,16 @@ CommuteListView,CreateDataView // CM View
 			'login' : 'showLogin',
 			'usermanager/add' : 'showAddUser',
 			'usermanager' : 'showUserList',
+<<<<<<< HEAD
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
 			'holidaymanager' : 'showHolidayManager',
 			'commutemanager' : 'showCommuteManager',
 			'*actions' : 'showHome',
+=======
+			'vacation' : 'showVacation',
+			'*actions' : 'showHome'
+>>>>>>> 1cf1b0e9b5bdc2c9af527bfd6dde1cebe6e1b57d
 		},
 		initialize:function(option){
 			var affterCallback,beforeCallback;
@@ -119,6 +129,7 @@ CommuteListView,CreateDataView // CM View
 			var loginView = new LoginView({el:loginContainer});
 			loginView.render();
 		},
+<<<<<<< HEAD
 		
 		showHolidayManager : function(){
 			var holidayListView = new HolidayListView();
@@ -130,6 +141,12 @@ CommuteListView,CreateDataView // CM View
 			this.changeView(commuteListView);
 		},
 		
+=======
+		showVacation : function() {
+			var vacationView = new VacationView();
+			this.changeView(vacationView);
+		}
+>>>>>>> 1cf1b0e9b5bdc2c9af527bfd6dde1cebe6e1b57d
 	});
 
 	return Router;

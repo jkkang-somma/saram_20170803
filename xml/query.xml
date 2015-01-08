@@ -13,6 +13,7 @@
         <query id="select_user_all">select * from members_tbl</query>
     </group>
     
+<<<<<<< HEAD
     <group id="rawData">
         <query id="insertRawData">insert into commute_base_tbl(id, name, department, time, type) values('%s','%s','%s','%s','%s')</query>
         <query id="insertRawData2">insert into commute_base_tbl(id, name, department, time, type) values('%s','%s','%s','%s','%s')</query>
@@ -23,5 +24,66 @@
         <query id="selectHolidayList">select * from holiday_tbl where year='%s'</query>
         <query id="insertHoliday">insert into holiday_tbl values('%s', '%s', '%s')</query>
         <query id="deleteHoliday">delete from holiday_tbl where year='%s' and date='%s'</query>
+=======
+    <group id="vacation">
+        <query id="selectVacationsByYear">
+			SELECT 
+				m.id, 
+			    m.name,
+			    (SELECT name FROM dept_code_tbl where code = m.dept_code) dept_name,
+			    m.join_company,
+				t2.year,
+				t2.id,
+				t2.total_day,
+				t2.used_holiday,
+			    (t2.total_day - t2.used_holiday) holiday
+			FROM
+				members_tbl m
+			    INNER JOIN (
+							SELECT
+								v.year,
+								v.id,
+								v.total_day,
+								IFNULL(s.used_holiday, 0) used_holiday
+							FROM
+								vacation_tbl v
+								LEFT JOIN (
+											SELECT year, id, sum(day_count)  used_holiday
+											FROM out_office_tbl
+											GROUP BY year, id
+											) s
+								ON v.id = s.id and v.year = s.year
+							WHERE v.year = '%s'
+			    ) t2
+			    ON m.id = t2.id
+			ORDER BY m.name
+        </query>
+        <query id="selectVacatonCount">
+			SELECT count(*) count FROM vacation_tbl WHERE year = '%s'
+        </query>
+        
+        <query id="insertVacation">
+			INSERT INTO vacation_tbl(id, year, total_day)
+			SELECT %s, %s, %s from dual
+			WHERE NOT EXISTS (
+					SELECT id
+					FROM vacation_tbl
+					WHERE 
+						id = %s 
+			        AND 
+			        	year = %s 
+			)
+        </query>
+
+        <query id="updateVacation">
+        	UPDATE 
+        		vacation_tbl 
+        	SET 
+        		total_day = '%s' 
+        	WHERE 
+        		id = '%s' AND year = '%s'
+        </query>
+        
+>>>>>>> 1cf1b0e9b5bdc2c9af527bfd6dde1cebe6e1b57d
     </group>
 </querys>
