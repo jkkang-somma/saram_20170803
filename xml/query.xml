@@ -1,11 +1,8 @@
 <querys>
     <group id="user">
         <query id="selectUserList">select * from members_tbl</query>
-        
         <query id="selectIdByUser">select * from members_tbl where id='%s'</query>
-        
         <query id="add_user">insert into members_tbl(id, name, department, name_commute, join_company, privilege, admin) values('%s','%s','%s','%s','%s', 0, 0)</query>
-        
         <query id="initPassword">update members_tbl set password='%s' where id='%s'</query>
     </group>
     
@@ -23,7 +20,8 @@
         <query id="selectHolidayList">select * from holiday_tbl where year='%s'</query>
         <query id="insertHoliday">insert into holiday_tbl values('%s', '%s', '%s')</query>
         <query id="deleteHoliday">delete from holiday_tbl where year='%s' and date='%s'</query>
-
+	</group>
+	
     <group id="vacation">
         <query id="selectVacationsByYear">
 			SELECT 
