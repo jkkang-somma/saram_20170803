@@ -51,6 +51,7 @@ define([
 
     		// 테이블 초기화
             _vacationDataTable = this.$el.find("#vacationDataTable").dataTable({
+            	"bPaginate" : false,
      	        "columns" : [
      	            { data : "year", 			"title" : "년", visible: false},
      	            { data : "id", 				"title" : "사번" },
@@ -118,11 +119,11 @@ define([
      		vacationModel.save(data, {
      			success: function(model, response) {
      				if (response.changedRows) {
-     		     		var table = _this.$el.find("#vacationDataTable").DataTable();
-     		     		data.holiday = data.total_day - data.used_holiday;
-     		     		table.row('.selected').data( data );
+//     		     		var table = _this.$el.find("#vacationDataTable").DataTable();
+//     		     		data.holiday = data.total_day - data.used_holiday;
+//     		     		table.row('.selected').data( data );
      		     		_this.$el.find('#vacationInfoModal').modal('hide');
-     		     		//_this.onClickSearchBtn();
+     		     		_this.onClickSearchBtn();
      				} else {
      					alert("해당 데이터가 존재하지 않습니다.");
      				}
