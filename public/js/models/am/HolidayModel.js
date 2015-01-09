@@ -6,7 +6,7 @@ define([
     var HolidayModel=Backbone.Model.extend({
         urlRoot: '/holiday',
         
-        idAttribute:"date",
+        idAttribute:"_date",
         
         initialize: function () {
             
@@ -16,7 +16,8 @@ define([
             year : '',
             date : '',
             memo : '',
-            lunar : '',
+            lunar : false,
+            _3days : false
         },
         
     });

@@ -28,12 +28,16 @@ var User = function (data) {
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
     }
+    var _removeUser=function(){
+        return UserDao.deleteUser(_data.id);
+    }
     return {
         get:_get,
         getUser:_getUser,
         getUserList:_getUserList,
         initPassword:_initPassword,
-        data:_data
+        data:_data,
+        remove:_removeUser
     }
 }
 

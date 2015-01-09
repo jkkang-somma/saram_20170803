@@ -19,6 +19,7 @@ require.config({
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
       'datatables':'tool/datatables/media/js/jquery.dataTables.min',
+      //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
       dialog:'lib/dialog',
       animator:'lib/animator',

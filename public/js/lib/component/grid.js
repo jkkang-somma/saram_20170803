@@ -4,6 +4,7 @@ define([
   'backbone',
   'log',
   'datatables',
+  //'fnFindCellRowIndexes',
   'text!templates/component/grid.html',
   ], function($, _, Backbone, log, Datatables, GridHTML){
     var LOG=log.getLogger('Grid');
@@ -19,6 +20,8 @@ define([
             this.options=options;
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'getSelectItem');
+    		_.bindAll(this, 'removeRow');
+    		
     		this.render();
     	},
     	updateCSS:function(grid){
@@ -55,9 +58,20 @@ define([
                 column_6.visible(true);
         	}
     	},
-    	getSelectItem:function(){
+    	getSelectItem:function(){//선택된 row 가져오기
+    	    if (_.isUndefined(this.DataTableAPI)){
+    	       return _.noop(); 
+    	    }
     	    var selectItem=this.DataTableAPI.row('.selected').data();
-    	    LOG.debug(selectItem);
+    	    return selectItem;
+    	},
+    	removeRow:function(item){//선택된 row 삭제
+    	    this.DataTableAPI.row('.selected').remove().draw( false );
+    	   // if (_.isUndefined(item)){
+        //         this.DataTableAPI.row('.selected').remove().draw( false );
+    	   // } else {
+    	   //     var inde=this.DataTableAPI.fnFindCellRowIndexes( item);
+    	   // }
     	},
     	render:function(){
     	    var grid=this;
@@ -79,6 +93,8 @@ define([
     	    
     	    var _dataTable=$(GridHTML);
      	    var _collection= this.options.collection;
+             	    
+             	    
      	    _collection.fetch({
     		    success : function(data){
     		        var dataArr = [];
@@ -161,8 +177,8 @@ define([
                     //     _dataTable.row('.selected').remove().draw( false );
                     // } );
                     
-                    var column = grid.DataTableAPI.column(0);
-                    column.visible( false);
+                    
+    	            grid.updateCSS(grid);     
     		    }   
     		});
     		$("#"+this.options.el).append(_dataTable);

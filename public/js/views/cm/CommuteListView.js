@@ -13,7 +13,8 @@ define([
     events: {
         "click #btnCommuteSearch": "onClickBtnSearch",
         "click tr": "onClickListRow",
-        "click td.editDateCol": "onClickListDateTime"
+        "click td.editDateCol": "onClickListDateTime",
+        "click #btnCommuteEdit" : "onClickEditPopOpen"
     },
    
   	initialize:function(){
@@ -67,7 +68,13 @@ define([
       console.log(event);
       
       return false;
+    },
+    
+    onClickEditPopOpen : function(event){
+      
+      return false;
     }
+    
   });
   return commuteListView;
 });

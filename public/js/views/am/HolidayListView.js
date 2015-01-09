@@ -5,30 +5,28 @@ define([
   'core/BaseView',
   'grid',
   'schemas',
+  'bootstrap-dialog',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
+  'text!templates/testform.html',
   'collection/am/HolidayCollection',
-], function($, _, Backbone, BaseView, Grid, Schemas, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  HolidayCollection){
-    var userListCount=0;
+], function($, _, Backbone, BaseView, Grid, Schemas, BootstrapDialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  TestForm, HolidayCollection){
+
     var holidays = [
-    	{ date: "01-01", memo : "신정"          },
-    	{ date: "03-01", memo : "삼일절"        },
-    	{ date: "05-05", memo : "어린이날"      },
-    	{ date: "06-06", memo : "현충일"        },
-    	{ date: "08-15", memo : "광복절"		},
-    	{ date: "10-03", memo : "개천절"		},
-    	{ date: "10-09", memo : "한글날"		},
-    	{ date: "12-25", memo : "성탄절"		},
-    	{ date: "12-28", memo : "설연휴",		lunar : true },
-    	{ date: "01-01", memo : "설날",		    lunar : true },
-    	{ date: "01-02", memo : "설연휴",		lunar : true },
-    	{ date: "04-08", memo : "석가탄신일",	lunar : true },
-    	{ date: "08-14", memo : "추석연휴",	    lunar : true },
-    	{ date: "08-15", memo : "추석",		    lunar : true },
-    	{ date: "08-16", memo : "추석연휴",	    lunar : true }
+    	{ date: "01-01", memo : "신정",         lunar : false,  _3days : false},
+    	{ date: "03-01", memo : "삼일절",       lunar : false,  _3days : false},
+    	{ date: "05-05", memo : "어린이날",     lunar : false,  _3days : false},
+    	{ date: "06-06", memo : "현충일",       lunar : false,  _3days : false},
+    	{ date: "08-15", memo : "광복절",		lunar : false,  _3days : false},
+    	{ date: "10-03", memo : "개천절",		lunar : false,  _3days : false},
+    	{ date: "10-09", memo : "한글날",		lunar : false,  _3days : false},
+    	{ date: "12-25", memo : "성탄절",		lunar : false,  _3days : false},
+    	{ date: "01-01", memo : "설날",		    lunar : true,   _3days : true },
+    	{ date: "04-08", memo : "석가탄신일",	lunar : true,   _3days : false},
+    	{ date: "08-15", memo : "추석",		    lunar : true,   _3days : true },
     ];
     
     var HolidayListView = BaseView.extend({
@@ -36,9 +34,8 @@ define([
         
     	initialize:function(){
     	    var holidayCollection= new HolidayCollection();
-    	    var _id="holidayList_"+(userListCount++);
     		this.gridOption = {
-    		    el:_id+"_content",
+    		    el:"holidayList_content",
     		    column:["날짜", "내용"],
     		    dataschema:["date", "memo"],
     		    collection:holidayCollection,
@@ -57,22 +54,14 @@ define([
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
-    	    var _refreshBtn=$(ButtonHTML);
-    	    _refreshBtn.attr("id", "holidayList_refreshBtn");
-            _refreshBtn.addClass(_glyphiconSchema.value("refresh"));
+
+            var _toolBtn=$(ButtonHTML);
+    	    _toolBtn.attr("id", "holidayList_addBtn");
+            _toolBtn.addClass(_glyphiconSchema.value("wrench"));
             
-            var _addBtn=$(ButtonHTML);
-    	    _addBtn.attr("id", "holidayList_addBtn");
-            _addBtn.addClass(_glyphiconSchema.value("add"));
-            
-            var _removeBtn=$(ButtonHTML);
-    	    _removeBtn.attr("id", "holidayList_removeBtn");
-            _removeBtn.addClass(_glyphiconSchema.value("remove"));
             
             var _btnBox=$(RightBoxHTML);
-            _btnBox.append(_addBtn);
-            _btnBox.append(_removeBtn);
-            _btnBox.append(_refreshBtn);
+            _btnBox.append(_toolBtn);
             _head.append(_btnBox);
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
@@ -83,25 +72,45 @@ define([
     	    var _gridSchema=Schemas.getSchema('grid');
     	    
     	    var grid= new Grid(_gridSchema.getDefault(this.gridOption));
-    	    
-    	    _refreshBtn.click(function(){
-               // _view.render();
-               grid.options.collection
+    	
+    	    _toolBtn.click(function(){
+    	        var dialog = new BootstrapDialog({
+    	            title: "휴일 관리",
+                    message: function(dialogRef){
+                        var template = $(TestForm);
+                        var yearCombo = template.find("#yearCombo");
+                        var yearCommit = template.find("#yearCommit");
+                        
+                        yearCommit.click(function(obj){
+                            var year = yearCombo.val();
+                            console.log(year);
+
+                            console.log(grid.options.collection);
+                            for(var key in holidays){
+                                holidays[key].year = year;
+                                grid.options.collection.add(holidays[key]);
+                            }
+                            console.log(grid.options.collection);
+                            
+                            grid.options.collection.save({
+                                success: function(){
+                                    grid.options.collection.reset();
+                                    dialog.close();
+                                }
+                            });
+                            return false;
+                        })
+                
+                        return template;
+                    },
+                    closable: true
+                });
+                dialog.realize();
+                dialog.open();
+                
+
             });
             
-    	    _addBtn.click(function(){
-                for(var key in holidays){
-                    holidays[key].year = "2014";
-                    console.log(holidays[key]);
-                    grid.options.collection.add(holidays[key]);
-                }
-                console.log(grid.options.collection);
-                grid.options.collection.save();
-            });
-            
-            _removeBtn.click(function(){
-               var selectItem=grid.getSelectItem();
-            });
      	}
     });
     

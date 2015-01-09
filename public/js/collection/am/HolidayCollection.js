@@ -12,6 +12,7 @@ define([
         }, 
         save : function(option){
             this.wrapper.saveAll(option);
+            this.wrapper.clear();
         }
 
     });
@@ -21,8 +22,10 @@ define([
         initialize : function(collection){
             this.collection = collection;
         },
+        
         saveAll : function(option){
             var data = this.collection.toJSON();
+            console.log(data);
             this.set({data: data});
             this.save("data", data, option);
         }

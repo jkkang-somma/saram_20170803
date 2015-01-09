@@ -1,21 +1,41 @@
-// Author: sanghee park <novles@naver.com>
-// Create Date: 2014.12.18
-// 사용자 Service
 var _ = require("underscore"); 
 var debug = require('debug')('Holiday');
-var Schemas = require("../schemas.js");
-var HoldiayDao= require('../dao/holidayDao.js');
+var LunarCalendar = require("lunar-calendar");
+var HolidayDao= require('../dao/holidayDao.js');
 
 var Holdiay = function (data) {
+    var _data = data;
+    
+    _data.date = _data.year + "-" + _data.date;
+    
+    if(_data.lunar){
+        //debug("lunarDate : " + _data.date);
+        
+        var date = new Date(_data.date);
+        var solarDate = LunarCalendar.lunarToSolar(date.getFullYear(), date.getMonth()+1, date.getDate());
+        _data.date = solarDate.year + "-"
+        + (solarDate.month <10 ? "0" + solarDate.month : solarDate.month) + "-"
+        + (solarDate.day <10 ? "0" + solarDate.day : solarDate.day)
+        _data.year = "" + solarDate.year;
+    }
+    
+    //debug("solarDate : " + _data.date);
+    
     var _getHolidayList = function () {//select user;
-        return HoldiayDao.selectHolidayList(data.year);
+        debug(_data.year);
+        return HolidayDao.selectHolidayList(_data.year);
+    }
+    
+    var _insertHoliday = function(){
+        return HolidayDao.insertHoliday(_data);
     }
     
     return {
-        getHolidayList:_getHolidayList
+        data : _data,
+        getHolidayList : _getHolidayList,
+        insertHoliday : _insertHoliday 
     }
 }
 
-//new app 은 싱글톤 아니고 app은 계속 생성
 module.exports = Holdiay;
 

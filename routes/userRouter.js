@@ -24,7 +24,7 @@ router.route('/')
 });
 
 
-router.route('/:user_id')
+router.route('/:id')
 .get(function(req, res){
     // // Get user infomation (GET)
     // userService.selectUser(function(result){
@@ -40,6 +40,15 @@ router.route('/:user_id')
     console.log(result);
     res.send(result);
     
+}).delete(function(req, res){
+    var _id=req.param("id");
+    var user = new User({id:_id});
+    res.send({status:true, msg:"Delete User Success.", data:{id:_id}});
+    // user.remove().then(function(){
+    //     res.send({success:true, msg:"Delete User Success."});
+    // }).catch(function(e){
+        
+    // });
 });
 
 

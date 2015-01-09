@@ -40,7 +40,8 @@ define([
         glyphicon:{
             refresh:"glyphicon-refresh",
             add:"glyphicon-plus",
-            remove:"glyphicon-remove"
+            remove:"glyphicon-remove",
+            wrench:"glyphicon-wrench"
         },
         
         //API
@@ -51,6 +52,13 @@ define([
             collection:null,
             dataschema:[],
             buttons:[]
+        },
+        //SERVER response
+        response:{
+            status:true,// 정상:true, 비정상:flase
+            msg:"",
+            reson:null,
+            data:null
         }
     }
     

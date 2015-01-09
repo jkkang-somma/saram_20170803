@@ -4,31 +4,28 @@ define([
   'backbone',
   'core/BaseView',
   'text!templates/adduserTemplate.html',
-  'models/sm/UserModel'
-  
-], function($, _, Backbone, BaseView, adduserTemplate, UserModel){
+  'models/sm/UserModel',
+  'dialog',
+], function($, _, Backbone, BaseView, adduserTemplate, UserModel, Dialog){
     var AddUserView = BaseView.extend({
-        el:$(".main-container"),
-        
-        events:{
-    		"click #addUserCommit":"submitAdd"
-    	},
-    	
     	initialize:function(){
     		$(this.el).html('');
     	    $(this.el).empty();
+    	    _.bindAll(this, "submitAdd");
     	},
-    	
-    	render:function(){
+    	render:function(el){
+    	    if (!_.isUndefined(el)){
+    	        this.el=el;
+    	    }
     		$(this.el).append(adduserTemplate);
-    		
      	},
     	
     	submitAdd : function(e){
-    	    this.model = new UserModel(this.getFormData( this.$el.find('form')));
-    	    this.model.save();
-    	    return false;
-    	    
+    	    var _userModel=new UserModel(this.getFormData( $(this.el).find('form')));
+    	    _userModel.on("invalid", function(model, error) {
+                Dialog.warning(error);  
+            });
+    	    _userModel.save();
     	},
     	
     	getFormData: function(form) {

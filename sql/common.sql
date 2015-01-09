@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `out_office_tbl` (
   CONSTRAINT `fk_out_office_tbl_approval_tbl`
     FOREIGN KEY (`doc_num`)
     REFERENCES `approval_tbl` (`doc_num`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '휴가 / 외근 / 출장 (결재 완료된)  테이블';
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `in_office_tbl` (
   CONSTRAINT `fk_in_office_tbl_approval_tbl1`
     FOREIGN KEY (`doc_num`)
     REFERENCES `approval_tbl` (`doc_num`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '휴일 근무 ( 결재 완료된 테이블 )';
@@ -168,3 +168,11 @@ CREATE TABLE IF NOT EXISTS `change_history_tbl` (
 ENGINE = InnoDB
 COMMENT = 'commute_result_tbl에서 출근.퇴근을 수정할 경우 수정 내용을 기록';
 
+
+CREATE TABLE IF NOT EXISTS `holiday_tbl` (
+  `date` VARCHAR(12) NOT NULL,
+  `memo` VARCHAR(200) NOT NULL,
+  `year` VARCHAR(4) NULL,
+  INDEX `holiday_date_index` (`date` ASC))
+ENGINE = InnoDB
+COMMENT = '토/일을 제외한 휴일 관리';
