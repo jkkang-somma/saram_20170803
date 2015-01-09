@@ -26,6 +26,7 @@ define([
             return this.destroy(); 
         },
         default:{ 
+            id:"",
             password: null, 
             name: '',
             name_commute: '',

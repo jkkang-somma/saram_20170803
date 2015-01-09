@@ -4,7 +4,7 @@ var router = express.Router();
 var User = require('../service/User.js');
 
 
-router.route('/')
+router.route('/list')
 .get(function(req, res){
     // Get user infomation list (GET)
     var user = new User();
@@ -26,8 +26,8 @@ router.route('/')
 
 router.route('/:id')
 .get(function(req, res){
-    // // Get user infomation (GET)
-    // userService.selectUser(function(result){
+    // Get user infomation (GET)
+    // user.selectUser(function(result){
     //     res.send(result);
     // }, req.param.name);
     

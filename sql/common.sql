@@ -12,6 +12,25 @@ CREATE TABLE IF NOT EXISTS `members_tbl` (
 ENGINE = InnoDB
 COMMENT = '사원 테이블';
 
+CREATE TABLE IF NOT EXISTS `dept_code_tbl` (
+  `code` VARCHAR(10) NOT NULL COMMENT '부서 코드',
+  `name` VARCHAR(45) NOT NULL COMMENT '부서 이름',
+  PRIMARY KEY (`code`))
+ENGINE = InnoDB
+COMMENT = '부서 코드 테이블';
+
+INSERT INTO `dept_code_tbl` VALUES 
+  ('0000','임원'),
+  ('0001','무소속'),
+  ('1000','경영지원팀'),
+  ('5100','품질검증1팀'),
+  ('5200','품질검증2팀'),
+  ('5300','품질검증3팀'),
+  ('7100','NMS 개발1팀'),
+  ('7200','NMS 개발2팀'),
+  ('7300','개발품질팀'),
+  ('8100','솔루션개발팀');
+
 CREATE TABLE IF NOT EXISTS `commute_base_tbl` (
   `year` VARCHAR(4) NOT NULL COMMENT '년도',
   `id` VARCHAR(40) NOT NULL COMMENT '사번',
