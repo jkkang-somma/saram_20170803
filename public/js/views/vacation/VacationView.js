@@ -2,54 +2,32 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'util',
   'core/BaseView',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
   'text!templates/vacation/vacationTemplate.html',
-  'text!templates/vacation/vacationListTableTrTemplate.html'
-], function($, _,Backbone, BaseView, 
+  'text!templates/vacation/vacationInfoModalTemplate.html'
+], function($, _,Backbone, Util, BaseView, 
 			VacationModel, 
 			VacationCollection,
 			vacationTemplate,
-			vacationListTableTrTemplate){
-    
-	function _getSample() {
-		var vacationCollection = new VacationCollection();
-		
-		for (var i = 0, len = 10; i <= len; i++) {
-			vacationCollection.add([
-			                {
-			                	year: "2015", 
-			                	id: i,
-			                	department: "부서" + i,
-			                	name : "name" + i,
-			                	total_day: i,
-			                	year_holiday: i,
-			                	total_holiday_work_day: i++,
-			                	used_holiday: 0,
-			                	holiday: 0
-			                }
-			                ]);
-			
-		}
-		
-		return vacationCollection;
-	}
-	
+			vacationInfoModalTemplate){
 	
 	// 검색 조건 년도 
 	function _getFormYears() {
 		var startYear = 2000;
-		var now = new Date().getFullYear();		
+		var endYear= new Date().getFullYear() + 1;
 		var years = [];
 		
-		for (; startYear <= now; now--) {
-			years.push(now);
+		for (; startYear <= endYear; endYear--) {
+			years.push(endYear);
 		}
 		return  years;
 	}
 
     var _vacationCollection = new VacationCollection();
+    var _vacationDataTable = null;
     
 	var VacationView = BaseView.extend({
         el:$(".main-container"),
@@ -58,50 +36,112 @@ define([
     	    $(this.el).empty();
     	    
     	    // event 설정
-    	    this.listenTo(_vacationCollection, 'reset', this.onSettingVacation);
+    	    this.listenTo(_vacationCollection, 'reset', this.onSetVacationDataTable);
     	},
     	events: {
     		'click #btnCreateData' : 'onClickCreateDataBtn',
     		'click #btnSearch' : 'onClickSearchBtn',
-    		'click #btnUpdate' : 'onClickUpdateBtn',
+    		'click #btnUpdate' : 'onOpenVacationInfoModal',
+    		'click #vacationDataTable tbody tr': 'onSelectRow',
+    		'click #vacationInfoModal .btnUpdate': 'onUpdateVacationInfo'
     	},
     	render:function(){
-    		var tpl = _.template( vacationTemplate, {variable: 'data'} )( {formYears: _getFormYears()} );    		    		
-            $(this.el).append(tpl);
-            
-            _vacationCollection.fetch({reset : true, data: this.getSearchForm()});
+    		var tpl = _.template( vacationTemplate, {variable: 'data'} )( {formYears: _getFormYears(), nowYear: new Date().getFullYear()} );
+    		this.$el.append(tpl);
+
+    		// 테이블 초기화
+            _vacationDataTable = this.$el.find("#vacationDataTable").dataTable({
+     	        "columns" : [
+     	            { data : "year", 			"title" : "년", visible: false},
+     	            { data : "id", 				"title" : "사번" },
+     	            { data : "dept_name", 		"title" : "부서" },
+                    { data : "name", 			"title" : "이름" },
+                    { data : "total_day", 		"title" : "연차 휴가" },
+                    { data : "used_holiday", 	"title" : "사용 일수"},
+                    { data : "holiday", 		"title" : "휴가 잔여 일수"}
+     	        ]
+     	    });
+
+            // 데이터 조회
+            this.selectVacations();
      	},
-     	onClickCreateDataBtn : function() {
+     	onClickCreateDataBtn : function() {// 연차 데이터 생성 버튼 
+     		var _this = this;
      		$.post("/vacation", this.getSearchForm(), function(result) {
-     			console.log(result);
-//     			if (result.length == 0) {
-//     				console.log("자료를 생성해주세요");
-//     			} else {
-//     				
-//     			}     			
+     			_this.onClickSearchBtn();
      		})
      	},
-     	onClickSearchBtn : function() { 
+     	onClickSearchBtn : function() {	// 연차 조회 
      		_vacationCollection.reset();
-     		_vacationCollection.fetch({reset : true, data: this.getSearchForm()});
+     		this.selectVacations();
      	},
-     	onClickUpdateBtn : function() {
-     		var vacationModel = new VacationModel({
-            	year: "2015", 
-            	id: "100501",
-            	total_day: 16     			
+     	onOpenVacationInfoModal : function() {	// 연차 수정 팝업 창 
+     		var table = this.$el.find("#vacationDataTable").DataTable();
+     		var selectData = table.row('.selected').data();
+     		
+     		if ( Util.isNotNull(selectData) ) {
+         		var tpl = _.template( vacationInfoModalTemplate, {variable: 'data'} )( selectData );
+         		this.$el.find('#vacationInfoModal #vacationInfoModalCon').empty().append(tpl);
+         		this.$el.find('#vacationInfoModal').modal('show');
+     		} else {
+     			alert("사원을 선택해주세요");
+     		}
+     	},
+     	onSetVacationDataTable : function(result) {	// 연차 테이블 셋팅 
+     		_vacationDataTable.fnClearTable();
+     		if (result.length) {
+     			_vacationDataTable.fnAddData(result.toJSON());
+     			_vacationDataTable.fnDraw();
+     		}
+     	},
+     	onSelectRow : function(evt) {	// 연차 선택
+     		var $currentTarget = $(evt.currentTarget);
+            if ( $currentTarget.hasClass('selected') ) {
+            	$currentTarget.removeClass('selected');
+            }
+            else {
+            	_vacationDataTable.$('tr.selected').removeClass('selected');
+            	$currentTarget.addClass('selected');
+            }
+     	},
+     	onUpdateVacationInfo : function(evt) {	// 연차 수정
+     		var data = Util.getFormJSON( this.$el.find('#vacationInfoModal').find("form") );
+     		var reg = new RegExp('^\\d+$');
+     		
+     		if (!reg.test(data.total_day)) {
+     			alert("숫자만 입력 가능합니다.");
+     			return;
+     		}
+     		
+     		var vacationModel = new VacationModel();
+     		var _this = this;
+     		vacationModel.save(data, {
+     			success: function(model, response) {
+     				if (response.changedRows) {
+     		     		var table = _this.$el.find("#vacationDataTable").DataTable();
+     		     		data.holiday = data.total_day - data.used_holiday;
+     		     		table.row('.selected').data( data );
+     		     		_this.$el.find('#vacationInfoModal').modal('hide');
+     		     		//_this.onClickSearchBtn();
+     				} else {
+     					alert("해당 데이터가 존재하지 않습니다.");
+     				}
+     			}, error : function(model, res){
+     				alert("업데이트가 실패했습니다.");
+     			}
      		});
-     		
-     		vacationModel.save();
-     		
-     		console.log('onClickUpdateBtn');
      	},
-     	onSettingVacation : function(result) {     		
-     		var tpl = _.template( vacationListTableTrTemplate, {variable: 'data'} )( {searchResult: result.toJSON()} );
-     		this.$el.find('#vacationListTable > tbody').html(tpl);
-     	},
-     	getSearchForm: function() {
+     	getSearchForm: function() {	// 검색 조건  
      		return {year: this.$el.find("#selectYear").val()};
+     	},
+     	selectVacations: function() {	// 데이터 조회      		
+     		_vacationCollection.fetch({
+     			reset : true, 
+     			data: this.getSearchForm(),
+     			error : function(result) {
+     				alert("데이터 조회가 실패했습니다.");
+     			}
+     		});     		
      	}
     });
     

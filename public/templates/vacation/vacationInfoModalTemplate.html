@@ -1,0 +1,65 @@
+<div class="modal-dialog modal-sm" style="width: 400px;">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+			<h4 class="modal-title"><%=data.year%>년 연차 </h4>
+		</div>
+		<div class="modal-body">
+			<form id="vacationInfoForm" class="form-horizontal">
+				<input type="hidden" name="year" value="<%=data.year%>">
+				<div class="form-group">
+					<label class="col-sm-6 control-label">사번</label>
+					<div class="col-sm-6">
+						<label name="id" class="control-label"><%=data.id%></label> <input
+							type="hidden" name="id" value="<%=data.id%>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-6 control-label">부서</label>
+					<div class="col-sm-6">
+						<label name="dept_name" class="control-label"><%=data.dept_name%></label>
+						<input type="hidden" name="dept_name" value="<%=data.dept_name%>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-6 control-label">이름</label>
+					<div class="col-sm-6">
+						<label class="control-label"><%=data.name%></label> <input
+							type="hidden" name="name" value="<%=data.name%>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-6 control-label">연차휴가</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="total_day"
+							name="total_day" value="<%=data.total_day%>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-6 control-label">사용 일수</label>
+					<div class="col-sm-6">
+						<label class="control-label"><%=data.used_holiday%></label> <input
+							type="hidden" name="used_holiday" value="<%=data.used_holiday%>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-6 control-label">휴가 잔여 일수</label>
+					<div class="col-sm-6">
+						<label class="control-label"><%=data.holiday%></label> <input
+							type="hidden" name="holiday" value="<%=data.holiday%>">
+					</div>
+				</div>
+			</form>
+
+
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary btnUpdate">수정</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+		</div>
+	</div>
+</div>
+
