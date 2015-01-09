@@ -15,6 +15,7 @@ var user = require('./routes/userRouter');
 var session = require('./routes/sessionRouter');
 var rawData = require('./routes/rawDataRouter');
 var holiday = require('./routes/holidayRouter');
+var vacation = require('./routes/vacationRouter');
 //var error = require('./routes/error');
 
 var app = express();
@@ -88,6 +89,7 @@ app.use('/user', user);
 app.use('/session', session);
 app.use('/rawdata', rawData);
 app.use('/holiday', holiday);
+app.use('/vacation', vacation);
 //app.use('/error', error);
 
 

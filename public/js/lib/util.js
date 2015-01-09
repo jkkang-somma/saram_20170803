@@ -1,8 +1,9 @@
 // Author: sanghee park <novles@naver.com>
 // Create Date: 2014.12.18
 define([
-  'jquery', 
-], function($){
+  'jquery',
+  'underscore'
+], function($, _){
     var isNull=function(obj){
 		if(obj===""||obj===undefined||obj==="undefined"||obj===null||obj==="null") return true;
 		return false;
@@ -30,11 +31,24 @@ define([
 			return str.split(token);
 		}
 	};
+	
+	// form 태그 내 name 별 값을 json 형식으로 반환  
+	var getFormJSON = function($form) {
+ 		var arr = $form.serializeArray();
+ 		var data = _(arr).reduce(function(result, field) {
+ 			result[field.name] = field.value;
+ 			return result;
+ 	    }, {});
+		
+ 		return data;
+	}
+	
     return {
         isNull:isNull,
         isNotNull:isNotNull,
         inArray:inArray,
         inObject:inObject,
-        split:split
+        split:split,
+        getFormJSON: getFormJSON
     };
 });

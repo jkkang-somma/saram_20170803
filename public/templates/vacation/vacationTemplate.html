@@ -1,35 +1,32 @@
 <div class="container">
 	<div class="page-header">
 		<h1>
-			User Manager <small>User List</small>
+			연차 관리 <small>vacation</small>
 		</h1>
 	</div>
 
 	<form class="form-inline">
 		<div class="form-group">
 			<select id="selectYear" class="form-control">
- 				<% _.each(data.formYears, function(year){ %>
- 				<option value="<%=year%>"><%=year%></option>
-		        <% }); %>
+				<%_.each(data.formYears, function(year){ if (year == data.nowYear)
+				{%>
+				<option value="<%=year%>" selected><%=year%></option> <%} else {%>
+				<option value="<%=year%>"><%=year%></option> <%} }); %>
 			</select>
 		</div>
-		<button id="btnCreateData" class="btn btn-default" type="button">자료 생성</button>
+		<button id="btnCreateData" class="btn btn-default" type="button">자료
+			생성</button>
 		<button id="btnSearch" class="btn btn-default" type="button">조회</button>
 		<button id="btnUpdate" class="btn btn-default" type="button">수정</button>
 	</form>
 
-	<table class="table" id="vacationListTable">
-		<thead>
-			<tr>
-				<th>사번</th>
-				<th>부서</th>
-				<th>이름</th>
-				<th>연차 휴가</th>
-				<th>사용 일수</th>
-				<th>휴가 잔여 일수</th>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
+	<table class="table" id="vacationDataTable"></table>
+
+	<!--  수정 팝업 -->
+	<div id="vacationInfoModal" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div id="vacationInfoModalCon"></div>
+	</div>
+	<!-- // 수정 팝업 -->
+
 </div>

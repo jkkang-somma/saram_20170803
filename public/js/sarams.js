@@ -5,7 +5,7 @@
 require.config({
    waitSeconds: 2000,
    shim: {
-      'util' : {deps : ['jquery']},
+      'util' : {deps : ['jquery', 'underscore']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},

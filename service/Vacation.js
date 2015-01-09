@@ -2,7 +2,7 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var _ = require("underscore"); 
-var debug = require('debug')('User');
+var debug = require('debug')('Vacation');
 var Schemas = require("../schemas.js");
 var VacationDao= require('../dao/vacationDao.js');
 var UserDao= require('../dao/userDao.js');
@@ -70,50 +70,31 @@ var Vacation = function() {
 
 	var _getVacation = function(data, callback) {
 		VacationDao.selectVacationsByYear(data.year).then(function(result) {
-			console.log("결과 ");
-			console.log(result);
 			return callback(result);	
 		});
 	};
 
 	var _setVacation = function(data, callback) {
 		UserDao.selectUserList().then(function(result) {			
-//			var obj = {};
-//			for (var i = 0, len = result.length; i < len; i++) {
-//				console.log( result[i].join_company + " :: " + getHoliday(result[i].join_company) );				
-//				obj = {
-//						id : result[i].id,
-//						year : data.year,
-//						total_day : getHoliday(result[i].join_company)
-//				}
-//				VacationDao.insertVacation(obj);
-//			}
-			
-			var objs = [];
-			if (result.length > 0) {
-				for (var i = 0, len = result.length; i < len; i++) {				
-					objs.push({
-							id : result[i].id,
-							year : data.year,
-							total_day : getHoliday(result[i].join_company)
-					});
+			var obj = {};
+			for (var i = 0, len = result.length; i < len; i++) {
+				obj = {
+						id : result[i].id,
+						year : data.year,
+						total_day : getHoliday(result[i].join_company)
 				}
-				VacationDao.insertVacations(objs).then(function(result) {
-					return callback(result);
-				});				
-			} else {
-				callback("success");
+				VacationDao.insertVacation(obj);
 			}
-
+			callback("success");
 		});
 	};
 	
 	var _updateVacation = function(data, callback) {
 		VacationDao.updateVacation(data).then(function(result) {
-			console.log("결과 ");
-			console.log(result);
+			debug("VacationDao.updateVacation 결과");
+			debug(result);
 			return callback(result);	
-		});		
+		});
 	}
 	
 	return {
