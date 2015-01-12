@@ -28,6 +28,7 @@ var UserDao= require('../dao/userDao.js');
  * A : 2  이상인 경우
  *  => 14 + ( A/2 )
  *       A/2의 계산에서 소수점이 나오면 버림한 후 14와 더한다.
+ *       A 값이 3이상일 경우 1을 추가 
  *
  */
 var getHoliday = function(joinDate) {
@@ -62,6 +63,10 @@ var getHoliday = function(joinDate) {
 
 	} else {
 		var tNum = 14 + (diffYear/2);
+		if (diffYear >= 3) {
+			tNum++;
+		}
+		
 		return parseInt(tNum);
 	}
 };
