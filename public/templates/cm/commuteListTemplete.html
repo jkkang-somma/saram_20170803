@@ -10,8 +10,8 @@
 			<label class="control-label">기간</label>
 		</div>
 		<div class="form-group">
-			<input type="date" class="form-control" id="startDate" name="startDate"
-				name="joinDate" />
+			<input type="date" class="form-control" id="startDate"
+				name="startDate" name="joinDate" />
 		</div>
 		~
 		<div class="form-group">
@@ -21,12 +21,30 @@
 		<button id="btnSearch" class="btn btn-default" type="button">조회</button>
 	</form>
 
-	<table class="table" id="commuteManageTbl"></table>
+	<table class="table" id="commuteManageTbl">
+		<tfoot>
+			<tr>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</tfoot>
+	</table>
 
 	<!--  변경 이력  -->
-	<div id="changeHistoryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-		<div id="changeHistoryModalCon"></div>
+	<div id="changeHistoryPopupCon">
 	</div>
+
 	<!-- // 변경 이력  -->
 
 </div>
