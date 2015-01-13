@@ -39,11 +39,10 @@ define([ 'jquery',
      	                     { data : "date", "title" : "일자" },
      	                     { data : "id", "title" : "ID" },
      	                     { data : "name", "title" : "이름"},
-     	                     { data : "change_column", "title" : "변경 필드"},
      	                     { data : "change_before", "title" : "변경 전"},
      	                     { data : "change_after", "title" : "변경 후"},
      	                     { data : "change_date", "title" : "수정 날짜"},
-     	                     { data : "change_id", "title" : "수정 ID"}     	                    
+     	                     { data : "change_name", "title" : "수정자 이름"}     	                    
      	        ]
      	    });
     		

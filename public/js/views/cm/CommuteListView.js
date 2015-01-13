@@ -95,12 +95,15 @@ define([ 'jquery',
      	                     },
      	                     { data : "comment_count", "title" : "Comment",
      	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {     	                    		 
-     	                            $(nTd).html("234242424");
+     	                            $(nTd).html(oData.comment_count + " 건");
      	                        }
      	                     },
      	                     { data : "in_time_change", "title" : "in_time_change", visible: false},
      	                     { data : "out_time_change", "title" : "out_time_change", visible: false}     	                    
-     	        ]
+     	        ],
+     	       "footerCallback": function ( row, data, start, end, display ) {
+     	    	   console.log(data);
+     	       }
      	    });
     		
     		this.$el.find('#startDate').val( _getFormattedDate(new Date()));
