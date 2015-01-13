@@ -43,12 +43,26 @@ define([
  		return data;
 	}
 	
+	var dateToString = function(date){
+		return date.getFullYear() + "-"
+        + (date.getMonth() + 1 <10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-"
+        + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+	}
+	
+	var timeToString = function(date){
+		return (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":"
+        + (date.getMinutes() <10 ? "0" + date.getMinutes() : date.getMinutes()) + ":"
+        + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
+	}
+	
     return {
         isNull:isNull,
         isNotNull:isNotNull,
         inArray:inArray,
         inObject:inObject,
         split:split,
-        getFormJSON: getFormJSON
+        getFormJSON: getFormJSON,
+        dateToString : dateToString,
+        timeToString : timeToString
     };
 });

@@ -24,12 +24,14 @@ var User = function (data) {
     var _getUserList = function(){
         return UserDao.selectUserList();
     }
-    
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
     }
     var _removeUser=function(){
         return UserDao.deleteUser(_data.id);
+    }
+    var _addUser=function(){
+       return UserDao.insertUser(_data); 
     }
     return {
         get:_get,
@@ -37,7 +39,8 @@ var User = function (data) {
         getUserList:_getUserList,
         initPassword:_initPassword,
         data:_data,
-        remove:_removeUser
+        remove:_removeUser,
+        addUser:_addUser
     }
 }
 

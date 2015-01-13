@@ -14,7 +14,7 @@ define([
   'collection/sm/UserCollection',
   'views/sm/AddUserView',
   'models/sm/UserModel',
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog,HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, UserModel){
+], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, UserModel){
     var userListCount=0;
     var UserListView = BaseView.extend({
         el:".main-container",
@@ -24,9 +24,10 @@ define([
     		this.option = {
     		    el:_id+"_content",
     		    column:["사번", "이름", "부서", "name_commute", "입사일", "퇴사일", "권한"],
-    		    dataschema:["id", "name", "department", "name_commute", "join_company", "leave_company", "privilege"],
+    		    dataschema:["id", "name", "dept_name", "name_commute", "join_company", "leave_company", "privilege"],
     		    collection:userCollection,
-    		    buttons:[]
+    		    buttons:[],
+    		    detail:true
     		    //gridOption
     		}
     	},
@@ -52,13 +53,25 @@ define([
             _removeBtn.addClass(_glyphiconSchema.value("remove"));
             
             var _btnBox=$(RightBoxHTML);
+            
+            _btnBox.append(
+                    '<div class="input-group-sm">'+
+                        '<input type="text" class="form-control" placeholder="Search for...">'+
+                        '<span class="input-group-btn">'+
+                            '<button class="btn btn-default btn-sm btn-success" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></button>'+
+                        '</span>'+
+                    '</div>'
+            );
+  
+  
             _btnBox.append(_addshBtn);
             _btnBox.append(_removeBtn);
             _btnBox.append(_refreshBtn);
-            _head.append(_btnBox);
+            //_head.append(_btnBox);
     	    
     	    var _content=$(ContentHTML).attr("id", this.option.el);
     	    _layOut.append(_head);
+    	    _layOut.append(_btnBox);
     	    _layOut.append(_content);
     	    $(this.el).html(_layOut);
 
@@ -69,7 +82,6 @@ define([
                 _view.render();
             });
     	    _addshBtn.click(function(){
-                var selectItem=grid.getSelectItem();
                 var addUserView= new AddUserView();
                 Dialog.show({
                     title:"Registration User", 
@@ -79,7 +91,11 @@ define([
                         label: "Add",
                         cssClass: Dialog.CssClass.SUCCESS,
                         action: function(dialogRef){// 버튼 클릭 이벤트
-                            addUserView.submitAdd()
+                            addUserView.submitAdd().done(function(model){
+                                grid.addRow(model.attributes);
+                                dialogRef.close();
+                                Dialog.show("Complete Add User.");
+                            });//실패 따로 처리안함 add화면에서 처리.
                         }
                     }, {
                         label: 'Close',
@@ -95,6 +111,7 @@ define([
                if (_.isUndefined(selectItem)){
                    Dialog.warning("Plese Select User.");
                } else {
+                   selectItem._id="-1";
                    Dialog.confirm({
                        msg:"Do you want Delete User?",
                        action:function(){

@@ -27,7 +27,23 @@ var Holdiay = function (data) {
     }
     
     var _insertHoliday = function(){
-        return HolidayDao.insertHoliday(_data);
+        if(_data._3days){
+            for(var i = -1; i <= 1; i++){
+                var date = new Date(_data.date);
+                date.setDate(date.getDate() + i);
+                var newData = {
+                    date :date.getFullYear() + "-"
+                        + (date.getMonth()+ 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-"
+                        + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()),
+                    year : "" + date.getFullYear() + "-",
+                    memo : _data.memo
+                };
+                
+                HolidayDao.insertHoliday(newData);
+            }
+        }else{
+            HolidayDao.insertHoliday(_data);
+        }
     }
     
     return {

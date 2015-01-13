@@ -17,13 +17,18 @@ var RawData = function (data) {
             return _.noop;
         }
     }
+    var _selectRawDataList = function(start, end){
+        return RawDataDao.selectRawDataList(start, end);
+    }
     var _insertRawData = function () {
         return RawDataDao.insertRawData(_data);
     }
+    
     return {
         get:_get,
         data:_data,
-        insertRawData:_insertRawData
+        insertRawData:_insertRawData,
+        selectRawDataList:_selectRawDataList
     }
 }
 

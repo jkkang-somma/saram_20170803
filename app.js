@@ -16,7 +16,8 @@ var session = require('./routes/sessionRouter');
 var rawData = require('./routes/rawDataRouter');
 var holiday = require('./routes/holidayRouter');
 var vacation = require('./routes/vacationRouter');
-//var error = require('./routes/error');
+var approval = require('./routes/approvalRouter');
+var code = require('./routes/codeRouter');
 
 var app = express();
 
@@ -82,7 +83,7 @@ app.use(logger('dev'));
 //     }
 // });
 
-
+var debug = require('debug')('APP');
 // route page
 app.use('/', index);
 app.use('/user', user);
@@ -90,21 +91,24 @@ app.use('/session', session);
 app.use('/rawdata', rawData);
 app.use('/holiday', holiday);
 app.use('/vacation', vacation);
-//app.use('/error', error);
+app.use('/approval', approval);
+app.use('/code', code);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+app.use(function(req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
+    var err = new Error('Invalid URL.');
     err.status = 404;
     next(err);
 });
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따로 에러 처리 안되고 쓰로우 되면 여기 탐.
+    debug("Not Catch Error");
     res.status(err.status || 500);
-    res.render('error', {
+    res.send({
         message: err.message,
-        error: {}
+        success: false,
+        err:err
     });
 });
 module.exports = app;

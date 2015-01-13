@@ -5,9 +5,9 @@ body {
     margin:0 auto;
 }
 .head-btn-group{
-    position: absolute;
-    top: 50%;
-    right: 0;
+    padding: 10px;
+    padding-bottom: 5px;
+    float:right;
 }
 .head-btn-group span{
     padding-left:10px;
@@ -50,6 +50,9 @@ td.details-control {
 }
 tr.shown td.details-control {
     background: url('img/details_close.png') no-repeat center center;
+}
+table.dataTable .subTable {
+    width: 100%;
 }
 
 

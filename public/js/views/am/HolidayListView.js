@@ -3,7 +3,7 @@ define([
   'underscore',
   'backbone',
   'core/BaseView',
-  'grid',
+  'gridtemp',
   'schemas',
   'bootstrap-dialog',
   'text!templates/default/head.html',
@@ -11,9 +11,11 @@ define([
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'text!templates/testform.html',
-  'collection/am/HolidayCollection',
-], function($, _, Backbone, BaseView, Grid, Schemas, BootstrapDialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  TestForm, HolidayCollection){
+  'text!templates/holiday/holidaytoolsTemplate.html',
+  'collection/common/HolidayCollection',
+  'models/common/HolidayModel',
+  'bootstrap-datepicker'
+], function($, _, Backbone, BaseView, Grid, Schemas, BootstrapDialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  HolidaytoolsTemplate, HolidayCollection, HolidayModel, datepicker){
 
     var holidays = [
     	{ date: "01-01", memo : "신정",         lunar : false,  _3days : false},
@@ -33,18 +35,88 @@ define([
         el:".main-container",
         
     	initialize:function(){
-    	    var holidayCollection= new HolidayCollection();
+    	    this.holidayCollection = new HolidayCollection();
+    	    
     		this.gridOption = {
     		    el:"holidayList_content",
+    		    id:"holidayListTable",
     		    column:["날짜", "내용"],
     		    dataschema:["date", "memo"],
-    		    collection:holidayCollection,
+    		    collection:this.holidayCollection,
+    		    detail: false,
     		    buttons:[]
     		}
+    		
+            this.dialogInit();
     	},
     	
+    	events:{
+    	    "click #holidayListToolBtn" : "showHolidayTools"
+    	},
+    	dialogInit: function(){
+    	    var that = this;
+    	    this.dialog = new BootstrapDialog({
+                title: "휴일 관리",
+                message: function(dialogRef){
+                    var template = $(HolidaytoolsTemplate);
+                    
+                    template.find("#yearCommit").click(function(obj){
+                        var year = dialogRef.getModalBody().find("#yearCombo").val();
+                        var newHolidayCollection = new HolidayCollection();
+                        
+                        for(var key in holidays){
+                            holidays[key].year = year;
+                            newHolidayCollection.add(holidays[key]);
+                        }
+                        
+                        newHolidayCollection.save({
+                            success : function(){
+                                that.grid.render();
+                                dialogRef.close();
+                            }
+                        });
+                        return false;
+                    });
+                    
+                    var datepicker = template.find("#holidayDatepicker");
+                    datepicker.datepicker({
+                        format: "yyyy/mm/dd",
+                        language: "kr",
+                        todayHighlight: true
+                    });
+                    
+                    template.find("#addHolidayCommit").click(function(obj){
+                        var date = datepicker.datepicker("getDate");
+                        var month = date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1;
+                        var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                        var memo = dialogRef.getModalBody().find("#holidayMemo").val();
+                        
+                        var holidayModel = new HolidayModel();
+                        
+                        var modelOption = { date: month+"-"+day , memo : memo, year: date.getFullYear()};
+                        
+                        holidayModel.save(modelOption, {
+                            success : function(){
+                                that.grid.render();
+                                dialogRef.close();
+                            }
+                        });
+
+                        return false;
+                    });
+            
+                    return template;
+                },
+                closable: true
+            });
+    	},
+    	showHolidayTools: function(){
+            this.dialog.realize();
+            this.dialog.open();
+    	},
+
     	render:function(){
-    	    var _view=this;
+    	    //var _view=this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _glyphiconSchema=Schemas.getSchema('glyphicon');
     	    var _headTemp=_.template(HeadHTML);
@@ -54,9 +126,8 @@ define([
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
-
             var _toolBtn=$(ButtonHTML);
-    	    _toolBtn.attr("id", "holidayList_addBtn");
+    	    _toolBtn.attr("id", "holidayListToolBtn");
             _toolBtn.addClass(_glyphiconSchema.value("wrench"));
             
             
@@ -71,46 +142,10 @@ define([
 
     	    var _gridSchema=Schemas.getSchema('grid');
     	    
-    	    var grid= new Grid(_gridSchema.getDefault(this.gridOption));
-    	
-    	    _toolBtn.click(function(){
-    	        var dialog = new BootstrapDialog({
-    	            title: "휴일 관리",
-                    message: function(dialogRef){
-                        var template = $(TestForm);
-                        var yearCombo = template.find("#yearCombo");
-                        var yearCommit = template.find("#yearCommit");
-                        
-                        yearCommit.click(function(obj){
-                            var year = yearCombo.val();
-                            console.log(year);
-
-                            console.log(grid.options.collection);
-                            for(var key in holidays){
-                                holidays[key].year = year;
-                                grid.options.collection.add(holidays[key]);
-                            }
-                            console.log(grid.options.collection);
-                            
-                            grid.options.collection.save({
-                                success: function(){
-                                    grid.options.collection.reset();
-                                    dialog.close();
-                                }
-                            });
-                            return false;
-                        })
-                
-                        return template;
-                    },
-                    closable: true
-                });
-                dialog.realize();
-                dialog.open();
-                
-
-            });
+    	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             
+            this.grid.render();
+
      	}
     });
     

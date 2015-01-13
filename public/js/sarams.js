@@ -8,6 +8,7 @@ require.config({
       'util' : {deps : ['jquery', 'underscore']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
+      'bootstrap-datepicker': { deps: ['jquery','bootstrap']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
    },
@@ -18,6 +19,7 @@ require.config({
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
+      'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
       'datatables':'tool/datatables/media/js/jquery.dataTables.min',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
@@ -31,6 +33,7 @@ require.config({
       
       monthpicker:'lib/component/monthpicker',
       grid:'lib/component/grid',
+      gridtemp:'lib/component/gridtemp',
       schemas:'lib/schemas',
       
       i18n:'tool/i18n-master/i18n',

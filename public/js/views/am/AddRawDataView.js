@@ -6,12 +6,13 @@ define([
   'dialog',
   'datatables',
   'csvParser',
+  'util',
   'core/BaseView',
   'text!templates/addrawdataTemplate.html',
   'models/am/RawDataModel',
   'collection/sm/UserCollection',
   'collection/am/RawDataCollection',
-], function($, _, Backbone, Bootstrap, Dialog, Datatables, csvParser, BaseView, addrawdataTemplate,
+], function($, _, Backbone, Bootstrap, Dialog, Datatables, csvParser, Util, BaseView, addrawdataTemplate,
 RawDataModel, UserCollection, RawDataCollection){
     var UserListView = BaseView.extend({
         el:$(".main-container"),
@@ -68,13 +69,17 @@ RawDataModel, UserCollection, RawDataCollection){
                             }
                             
                             var id = that.userCollection.where({name_commute:item[1]});
-
+                            
+                            var resultDate = new Date(item[2]);
+                            
                             if(id.length == 1){ // 등록된 이름인 경우
                                 that.rawDataCollection.add(new RawDataModel({
                                     id : id[0].attributes.id,
                                     name : item[1],
                                     department : item[0],
-                                    time: item[2],
+                                    time: Util.timeToString(resultDate),
+                                    date: Util.dateToString(resultDate),
+                                    year: resultDate.getFullYear(),
                                     type: item[3]
                                 }));
                             }else{ // 등록되지 않은 이름인경우 (사번이 없는경우)
@@ -83,7 +88,9 @@ RawDataModel, UserCollection, RawDataCollection){
                                         id : "-",
                                         name : item[1],
                                         department : item[0],
-                                        time: item[2],
+                                        time: Util.timeToString(resultDate),
+                                        date: Util.dateToString(resultDate),
+                                        year: resultDate.getFullYear(),
                                         type: item[3]
                                     })); 
                                     errCount++;    
@@ -127,6 +134,7 @@ RawDataModel, UserCollection, RawDataCollection){
      	            { data : "id", "title" : "id" },
                     { data : "name", "title" : "name" },
                     { data : "department", "title" : "department" },
+                    { data : "date", "title" : "date"},
                     { data : "time", "title" : "time"},
                     { data : "type", "title" : "type"}
      	        ]

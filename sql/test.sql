@@ -17,9 +17,9 @@ INSERT INTO approval_tbl
 INSERT INTO `out_office_tbl` 
   (`year`, `date`, `id`, `office_code`, `day_count`, `memo`, `doc_num`) 
 VALUES 
-  ('2014', '11-10', '100501', 'V01', 1.0, '', '2014-10-30-01');
+  ('2014', '2014-11-10', '100501', 'V01', 1.0, '', '2014-10-30-01');
   
 INSERT INTO `out_office_tbl` 
   (`year`, `date`, `id`, `office_code`, `day_count`, `memo`, `doc_num`) 
 VALUES 
-  ('2014', '11-11', '100501', 'V01', 1.0, '', '2014-10-30-01');
+  ('2014', '2014-11-11', '100501', 'V01', 1.0, '', '2014-10-30-01');

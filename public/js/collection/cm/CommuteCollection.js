@@ -6,7 +6,7 @@ define([
 ], function($, _, Backbone, commuteModel){
     var commuteCollection = Backbone.Collection.extend({
         model : commuteModel,
-        url:'/commute'
+        url:'/bulk'
     });
     
     return commuteCollection;
