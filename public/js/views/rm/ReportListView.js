@@ -85,6 +85,7 @@ define([
     
     setDatePickerPop : function(){
       var pickerView = $(this.el).find(".openDatePicker");
+      pickerView.attr('readonly', true);
       pickerView.datepicker({
           format: "yyyy/mm/dd",
           language: "kr",

@@ -14123,8 +14123,7 @@
 	
 							switch ( button ) {
 								case 'ellipsis':
-									container.append('<button type="button" class="btn btn-default btn-sm btn-success">'+
-  													'<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>'+
+									container.append('<button type="button" class="btn btn-default btn-sm btn-success">...'+
 												 '</button>');
 									break;
 	
