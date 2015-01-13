@@ -9,7 +9,7 @@ define([
         idAttribute:"id",
         initialize: function () {
         },
-        default:{
+        defaults:{
         	year: "",		// 휴가 사용 년도 
         	id: "",			// 사번
         	dept_name: "",	// 부서
