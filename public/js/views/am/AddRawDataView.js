@@ -6,17 +6,18 @@ define([
   'dialog',
   'datatables',
   'csvParser',
+  'util',
   'core/BaseView',
   'text!templates/addrawdataTemplate.html',
   'models/am/RawDataModel',
   'collection/sm/UserCollection',
   'collection/am/RawDataCollection',
-], function($, _, Backbone, Bootstrap, Dialog, Datatables, csvParser, BaseView, addrawdataTemplate,
+], function($, _, Backbone, Bootstrap, Dialog, Datatables, csvParser, Util, BaseView, addrawdataTemplate,
 RawDataModel, UserCollection, RawDataCollection){
     var UserListView = BaseView.extend({
         el:$(".main-container"),
         
-    	initialize: function(){
+    	initialize:function(){
     		$(this.el).html('');
     	    $(this.el).empty();
     	    
@@ -31,17 +32,17 @@ RawDataModel, UserCollection, RawDataCollection){
     	    'click #commitRawData' : 'commitRawData'
     	},
     	
-    	render: function(){
+    	render:function(){
             $(this.el).append(addrawdataTemplate);
             this.renderTable();
      	},
      	
-     	displayErrDiv: function(option){
+     	displayErrDiv:function(option){
      	    $(this.el).find("#rawDataErr").css("display",option);                    
      	},
      	
-     	disableCommitBtn: function(option){
-            if (option == "disabled")
+     	disableCommitBtn:function(option){
+            if(option == "disabled")
                 $(this.el).find("#commitRawData").attr("disabled", "disabled");
             else
                 $(this.el).find("#commitRawData").removeAttr("disabled");
@@ -50,8 +51,8 @@ RawDataModel, UserCollection, RawDataCollection){
      	analyzeFile : function(){
             var selectedFiles = $('input[id="inputRawDataFile"]')[0].files;
             
-            if (selectedFiles.length > 0){
-                if (window.File && window.FileList && window.FileReader){
+            if(selectedFiles.length > 0){
+                if(window.File && window.FileList && window.FileReader){
                     var that = this;
                     this.displayErrDiv("none") ;
                     var file = selectedFiles[0];
@@ -60,42 +61,51 @@ RawDataModel, UserCollection, RawDataCollection){
                     csvReader.addEventListener("load",function(event){
                         var result = csvParser.csvToArr(event.target.result, ",");
                         var errCount = 0;
-                        for (var i = 1; i < result.length; i++){  // 제목줄을 빼기 위해서 1부터 시작
+                        for(var i = 1; i < result.length; i++){ // 제목줄을 빼기 위해서 1부터 시작
                             var item = result[i];
                             
-                            if (item.length != 4)
+                            if(item.length != 4){
                                 continue;
+                            }
                             
                             var id = that.userCollection.where({name_commute:item[1]});
-
-                            if (id.length == 1) { // 등록된 이름인 경우
+                            
+                            var resultDate = new Date(item[2]);
+                            
+                            if(id.length == 1){ // 등록된 이름인 경우
                                 that.rawDataCollection.add(new RawDataModel({
                                     id : id[0].attributes.id,
                                     name : item[1],
                                     department : item[0],
-                                    time: item[2],
+                                    time: Util.timeToString(resultDate),
+                                    date: Util.dateToString(resultDate),
+                                    year: resultDate.getFullYear(),
                                     type: item[3]
                                 }));
-                            } else { // 등록되지 않은 이름인경우 (사번이 없는경우)
-                                if (item[1] != "청소용 출입") { // 청소 아저씨 제외하고 id에 '-' 넣어서 결과 출력
+                            }else{ // 등록되지 않은 이름인경우 (사번이 없는경우)
+                                if(item[1] != "청소용 출입"){ // 청소 아저씨 제외하고 id에 '-' 넣어서 결과 출력
                                     that.rawDataCollection.add(new RawDataModel({
                                         id : "-",
                                         name : item[1],
                                         department : item[0],
-                                        time: item[2],
+                                        time: Util.timeToString(resultDate),
+                                        date: Util.dateToString(resultDate),
+                                        year: resultDate.getFullYear(),
                                         type: item[3]
                                     })); 
                                     errCount++;    
                                 }
+                                
                             }
                         }
                         
-                        if (errCount > 0) { // 사번이 없는 데이터가 있을경우 갯수를 표시한다.
+                        if(errCount > 0){ // 사번이 없는 데이터가 있을경우 갯수를 표시한다.
                             $(that.el).find("#rawDataErr").find("span").text(errCount);
                             that.displayErrDiv("block");
-                        } else {
+                        }else{
                             that.disableCommitBtn("enabled");
                         }
+                        
                         that.renderTable();
                     });
                     
@@ -104,10 +114,9 @@ RawDataModel, UserCollection, RawDataCollection){
                 } else{
                     console.log("Your browser does not support File API");
                 }
-            } else{
+            }else{
                 this.rawDataCollection.reset();
                 this.renderTable();
-                
                 this.displayErrDiv("none") ;
                 this.disableCommitBtn("disabled");
             }
@@ -115,7 +124,7 @@ RawDataModel, UserCollection, RawDataCollection){
      	},
      	
      	renderTable : function(){
-     	    if( $.fn.DataTable.isDataTable( $(this.el).find("#rawDataTable") ) )
+     	    if($.fn.DataTable.isDataTable($(this.el).find("#rawDataTable")))
      	        $(this.el).find("#rawDataTable").parent().replaceWith("<table id='rawDataTable'></table>");
      	    
      	    
@@ -125,25 +134,20 @@ RawDataModel, UserCollection, RawDataCollection){
      	            { data : "id", "title" : "id" },
                     { data : "name", "title" : "name" },
                     { data : "department", "title" : "department" },
+                    { data : "date", "title" : "date"},
                     { data : "time", "title" : "time"},
                     { data : "type", "title" : "type"}
      	        ]
-     	    });
+     	    })
      	    return this;
      	},
      	
      	commitRawData : function(){
-     	    this.rawDataCollection.save({
-     	        success : function(dest, response){
-     	            dest.collection.reset();
-     	            Dialog.info("데이터 전송 성공! (" + response.msg+ ")");
-     	        }
-     	    });
+     	    this.rawDataCollection.save();
      	    this.disableCommitBtn("disabled");
             return false;
      	}
      	
     });
-    
     return UserListView;
 });

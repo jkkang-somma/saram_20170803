@@ -3,51 +3,120 @@ define([
   'underscore',
   'backbone',
   'core/BaseView',
-  'grid',
+  'gridtemp',
   'schemas',
+  'bootstrap-dialog',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'collection/am/HolidayCollection',
-], function($, _, Backbone, BaseView, Grid, Schemas, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  HolidayCollection){
-    var userListCount=0;
+  'text!templates/holiday/holidaytoolsTemplate.html',
+  'collection/common/HolidayCollection',
+  'models/common/HolidayModel',
+  'bootstrap-datepicker'
+], function($, _, Backbone, BaseView, Grid, Schemas, BootstrapDialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  HolidaytoolsTemplate, HolidayCollection, HolidayModel, datepicker){
+
     var holidays = [
-    	{ date: "01-01", memo : "신정"          },
-    	{ date: "03-01", memo : "삼일절"        },
-    	{ date: "05-05", memo : "어린이날"      },
-    	{ date: "06-06", memo : "현충일"        },
-    	{ date: "08-15", memo : "광복절"		},
-    	{ date: "10-03", memo : "개천절"		},
-    	{ date: "10-09", memo : "한글날"		},
-    	{ date: "12-25", memo : "성탄절"		},
-    	{ date: "12-28", memo : "설연휴",		lunar : true },
-    	{ date: "01-01", memo : "설날",		    lunar : true },
-    	{ date: "01-02", memo : "설연휴",		lunar : true },
-    	{ date: "04-08", memo : "석가탄신일",	lunar : true },
-    	{ date: "08-14", memo : "추석연휴",	    lunar : true },
-    	{ date: "08-15", memo : "추석",		    lunar : true },
-    	{ date: "08-16", memo : "추석연휴",	    lunar : true }
+    	{ date: "01-01", memo : "신정",         lunar : false,  _3days : false},
+    	{ date: "03-01", memo : "삼일절",       lunar : false,  _3days : false},
+    	{ date: "05-05", memo : "어린이날",     lunar : false,  _3days : false},
+    	{ date: "06-06", memo : "현충일",       lunar : false,  _3days : false},
+    	{ date: "08-15", memo : "광복절",		lunar : false,  _3days : false},
+    	{ date: "10-03", memo : "개천절",		lunar : false,  _3days : false},
+    	{ date: "10-09", memo : "한글날",		lunar : false,  _3days : false},
+    	{ date: "12-25", memo : "성탄절",		lunar : false,  _3days : false},
+    	{ date: "01-01", memo : "설날",		    lunar : true,   _3days : true },
+    	{ date: "04-08", memo : "석가탄신일",	lunar : true,   _3days : false},
+    	{ date: "08-15", memo : "추석",		    lunar : true,   _3days : true },
     ];
     
     var HolidayListView = BaseView.extend({
         el:".main-container",
         
     	initialize:function(){
-    	    var holidayCollection= new HolidayCollection();
-    	    var _id="holidayList_"+(userListCount++);
+    	    this.holidayCollection = new HolidayCollection();
+    	    
     		this.gridOption = {
-    		    el:_id+"_content",
+    		    el:"holidayList_content",
+    		    id:"holidayListTable",
     		    column:["날짜", "내용"],
     		    dataschema:["date", "memo"],
-    		    collection:holidayCollection,
+    		    collection:this.holidayCollection,
+    		    detail: false,
     		    buttons:[]
     		}
+    		
+            this.dialogInit();
     	},
     	
+    	events:{
+    	    "click #holidayListToolBtn" : "showHolidayTools"
+    	},
+    	dialogInit: function(){
+    	    var that = this;
+    	    this.dialog = new BootstrapDialog({
+                title: "휴일 관리",
+                message: function(dialogRef){
+                    var template = $(HolidaytoolsTemplate);
+                    
+                    template.find("#yearCommit").click(function(obj){
+                        var year = dialogRef.getModalBody().find("#yearCombo").val();
+                        var newHolidayCollection = new HolidayCollection();
+                        
+                        for(var key in holidays){
+                            holidays[key].year = year;
+                            newHolidayCollection.add(holidays[key]);
+                        }
+                        
+                        newHolidayCollection.save({
+                            success : function(){
+                                that.grid.render();
+                                dialogRef.close();
+                            }
+                        });
+                        return false;
+                    });
+                    
+                    var datepicker = template.find("#holidayDatepicker");
+                    datepicker.datepicker({
+                        format: "yyyy/mm/dd",
+                        language: "kr",
+                        todayHighlight: true
+                    });
+                    
+                    template.find("#addHolidayCommit").click(function(obj){
+                        var date = datepicker.datepicker("getDate");
+                        var month = date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1;
+                        var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                        var memo = dialogRef.getModalBody().find("#holidayMemo").val();
+                        
+                        var holidayModel = new HolidayModel();
+                        
+                        var modelOption = { date: month+"-"+day , memo : memo, year: date.getFullYear()};
+                        
+                        holidayModel.save(modelOption, {
+                            success : function(){
+                                that.grid.render();
+                                dialogRef.close();
+                            }
+                        });
+
+                        return false;
+                    });
+            
+                    return template;
+                },
+                closable: true
+            });
+    	},
+    	showHolidayTools: function(){
+            this.dialog.realize();
+            this.dialog.open();
+    	},
+
     	render:function(){
-    	    var _view=this;
+    	    //var _view=this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _glyphiconSchema=Schemas.getSchema('glyphicon');
     	    var _headTemp=_.template(HeadHTML);
@@ -57,22 +126,13 @@ define([
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
-    	    var _refreshBtn=$(ButtonHTML);
-    	    _refreshBtn.attr("id", "holidayList_refreshBtn");
-            _refreshBtn.addClass(_glyphiconSchema.value("refresh"));
+            var _toolBtn=$(ButtonHTML);
+    	    _toolBtn.attr("id", "holidayListToolBtn");
+            _toolBtn.addClass(_glyphiconSchema.value("wrench"));
             
-            var _addBtn=$(ButtonHTML);
-    	    _addBtn.attr("id", "holidayList_addBtn");
-            _addBtn.addClass(_glyphiconSchema.value("add"));
-            
-            var _removeBtn=$(ButtonHTML);
-    	    _removeBtn.attr("id", "holidayList_removeBtn");
-            _removeBtn.addClass(_glyphiconSchema.value("remove"));
             
             var _btnBox=$(RightBoxHTML);
-            _btnBox.append(_addBtn);
-            _btnBox.append(_removeBtn);
-            _btnBox.append(_refreshBtn);
+            _btnBox.append(_toolBtn);
             _head.append(_btnBox);
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
@@ -82,26 +142,10 @@ define([
 
     	    var _gridSchema=Schemas.getSchema('grid');
     	    
-    	    var grid= new Grid(_gridSchema.getDefault(this.gridOption));
-    	    
-    	    _refreshBtn.click(function(){
-               // _view.render();
-               grid.options.collection
-            });
+    	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             
-    	    _addBtn.click(function(){
-                for(var key in holidays){
-                    holidays[key].year = "2014";
-                    console.log(holidays[key]);
-                    grid.options.collection.add(holidays[key]);
-                }
-                console.log(grid.options.collection);
-                grid.options.collection.save();
-            });
-            
-            _removeBtn.click(function(){
-               var selectItem=grid.getSelectItem();
-            });
+            this.grid.render();
+
      	}
     });
     

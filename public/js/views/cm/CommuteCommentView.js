@@ -7,7 +7,7 @@ define([
   'text!templates/commuteListTemplete.html',
   'collection/cm/CommuteCollection',
 ], function($, _, Backbone, animator, BaseView, commuteListTmp, CommuteCollection){
-  var commuteListView = BaseView.extend({
+  var commuteCommentView = BaseView.extend({
     el:$(".main-container"),
    
     events: {
@@ -71,5 +71,5 @@ define([
       return false;
     }
   });
-  return commuteListView;
+  return commuteCommentView;
 });

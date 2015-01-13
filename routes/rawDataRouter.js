@@ -19,6 +19,15 @@ router.route('/bulk')
 });
 
 
+router.route("/")
+.get(function(req, res){
+    debug(req.query);
+    var rawData = RawData();
+    rawData.selectRawDataList(req.query.start, req.query.end).then(function(result){
+        res.send(result);
+    });
+});
+
 // router.route('/upload')
 // .post(function(req, res){
     // fs.readFile(req.files.file.path, function(err, data){

@@ -21,7 +21,12 @@ BaseView, loadingTemplate, cubeTemplate){
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'disable');
     	},
-    	render:function(){
+    	render:function(options){
+    		if (!_.isUndefined(options)){
+    			if (!_.isUndefined(options.el)){
+    				this.el=options.el;
+    			}
+    		}
     		$(this.el).append(cubeTemplate);
     		$(this.el).append(loadingTemplate);
     		//var users=this.model.toJSON();

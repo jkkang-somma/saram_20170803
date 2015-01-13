@@ -13,10 +13,12 @@ define([
         },
         
         default:{ 
+            year: null,
             id : null,
             name : null,
             department : null,
-            time: null,
+            int_date: null,
+            char_date: null,
             type: null,
         },
         

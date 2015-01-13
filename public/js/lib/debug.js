@@ -14,7 +14,10 @@ define([
     };
     var modules={
         "DEFAULT":defaultConfig,
-        "APP":app    
+        "APP":app,
+        "AddUserView":{
+            level:DEBUG
+        }
     };
     
     var log = log4javascript.getLogger();

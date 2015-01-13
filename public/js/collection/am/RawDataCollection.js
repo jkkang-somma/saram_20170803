@@ -12,7 +12,16 @@ define([
         }, 
         save : function(option){
             this.wrapper.saveAll(option);
-        }
+        },
+        default:{ 
+            start: null,
+            end: null,
+            id : null,
+            name : null,
+            department : null,
+            time: null,
+            type: null,
+        },
 
     });
     var RawDataCollectionWrapper = Backbone.Model.extend({

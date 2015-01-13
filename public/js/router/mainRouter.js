@@ -19,13 +19,18 @@ define([
 	'views/am/HolidayListView',
 	'views/cm/CommuteListView',
 	'views/cm/CreateDataView',
+	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
+	'views/rm/ReportListView',
+	'views/rm/AddNewReportView',
+	'views/rm/ApprovalReportView',
 ], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView, AddUserView,	// 사원관리
 AddRawDataView, HolidayListView, // 근태관리
-CommuteListView,CreateDataView, // CM View
-VacationView
+CommuteListView, CreateDataView, CommuteCommentView, // CM View
+VacationView, 
+ReportListView,AddNewReportView,ApprovalReportView // report manager
 ){
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
@@ -41,7 +46,11 @@ VacationView
 			'createdata' : 'showCreateData',
 			'holidaymanager' : 'showHolidayManager',
 			'commutemanager' : 'showCommuteManager',
+			'commutemanager/comment' : 'showCommuteComment',
 			'vacation' : 'showVacation',
+			'reportmanager' : 'showReportManager',
+			'reportmanager/add' : 'showAddReportData',
+			'reportmanager/approval' : 'showApprovalReportData',
 			'*actions' : 'showHome'
 
 		},
@@ -136,7 +145,28 @@ VacationView
 		showVacation : function() {
 			var vacationView = new VacationView();
 			this.changeView(vacationView);
-		}
+		},
+		
+		showCommuteComment : function(){
+			var commuteCommentView = new CommuteCommentView();
+			this.changeView(commuteCommentView);
+		},
+		
+		showReportManager : function(){
+			var reportListView = new ReportListView();
+			this.changeView(reportListView);
+		},
+		
+		showAddReportData : function(){
+			var addNewReportView = new AddNewReportView();
+			this.changeView(addNewReportView);
+		},
+		
+		showApprovalReportData : function(){
+			var approvalReportView = new ApprovalReportView();
+			this.changeView(approvalReportView);
+		},
+		
 	});
 
 	return Router;

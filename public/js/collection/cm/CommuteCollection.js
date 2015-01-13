@@ -3,11 +3,11 @@ define([
   'underscore',
   'backbone',
   'models/cm/CommuteModel'
-], function($, _,Backbone,CommuteModel){
-	
+
+], function($, _, Backbone, commuteModel){
     var CommuteCollection = Backbone.Collection.extend({
-        model : CommuteModel,
-        url:'/commute'
+        model : commuteModel,
+        url:'/bulk'
     });
     
     return CommuteCollection;

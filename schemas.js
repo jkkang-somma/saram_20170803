@@ -18,7 +18,8 @@ var Schemas = function (schemaName) {
             id: null,
             name: null,
             password: null,
-            department: null,
+            dept_code: null,
+            dept_name: null,
             name_commute: null,
             join_company: null,
             leave_company: null,
@@ -28,13 +29,42 @@ var Schemas = function (schemaName) {
         auth:{
         },
         rawData:{
+            year : null,
             id : null,
             name : null,
             department : null,
+            date : null,
             time : null,
             type : null
-        }
+        },
+        //Common
+        code:{
+            code:null,
+            name:null
+        },
         
+        approval:{
+            doc_num : null,
+            submit_id : null,
+            submit_name : null,
+            manager_id : null,     
+            manager_name : null,     
+            submit_date : null,    
+            decide_date : null,    
+            submit_comment : null, 
+            decide_comment : null, 
+            start_date : null,      
+            end_date : null,    
+            office_code : null,    
+            office_code_name : null,    
+            state : null           
+        },
+        
+        office_code:{
+            code : null,
+            name : null,
+            day_count : null
+        }
     }
     
     var _schema=_.noop();
