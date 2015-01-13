@@ -22,7 +22,7 @@
     
     <group id="rawData">
         <query id="insertRawData">insert into commute_base_tbl(id, name, department, int_date, char_date, year, type) values(?,?,?,?,?,?,?)</query>
-        <query id="selectRawDataList">select * from commute_base_tbl where time between ? and ? </query>
+        <query id="selectRawDataList">select * from commute_base_tbl where int_date between ? and ? </query>
     </group>
     
     <group id="holiday">
@@ -112,11 +112,33 @@
     		from 
     			approval_tbl app
 		</query>
-        <query id="selectApprovalList2">select * from approval_tbl</query>
+        <query id="selectApprovalListWhere">
+        	select 
+        		app.doc_num
+        		, app.submit_id
+        		, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name
+        		, app.manager_id
+        		, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
+        		, submit_date
+        		, decide_date
+        		, submit_comment
+        		, decide_comment
+        		, start_date
+        		, end_date
+        		, office_code
+        		, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
+        		, state
+    		from 
+    			approval_tbl app
+        	where (STR_TO_DATE(start_date,'%Y-%m-%d') between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
+        	  OR (STR_TO_DATE(end_date,'%Y-%m-%d')  between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
+        	  
+    	</query>
 	</group>
+	
 	<group id="office_code">
 		<query id="selectOfficeCodeList">select * from office_code_tbl</query>
-        <query id="selectOfficeCodeList2">select * from office_code_tbl</query>
+        <query id="empty"></query>
 	</group>
 
     <group id="commute">
@@ -147,6 +169,7 @@
 				date BETWEEN '%s' AND '%s'
 			ORDER BY date
         </query>
+        
         <query id="empty"></query>
     </group>
     

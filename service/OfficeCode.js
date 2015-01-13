@@ -4,11 +4,11 @@
 var _ = require("underscore"); 
 var debug = require('debug')('Approval');
 var Schemas = require("../schemas.js");
-var ApprovalDao= require('../dao/approvalDao.js');
+var OfficeCodeDao= require('../dao/officeCodeDao.js');
 
 var Approval = function (data) {
     var _data=_.initial([]);
-    var schema=new Schemas('approval');
+    var schema=new Schemas('office_code');
     _data = schema.get(data);
     var _get = function (fieldName) {
         if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
@@ -18,16 +18,12 @@ var Approval = function (data) {
             return _.noop;
         }
     }
-    var _getApprovalList = function () {
-        return ApprovalDao.selectApprovalList();
-    }
-    var _getApprovalListWhere = function (startDate, endDate) {
-        return ApprovalDao.selectApprovalListWhere(startDate, endDate);
+    var _getOfficeCodeList = function () {
+        return OfficeCodeDao.selectOfficeCodeList();
     }
     return {
         get:_get,
-        getApprovalList:_getApprovalList,
-        getApprovalListWhere:_getApprovalListWhere
+        getOfficeCodeList:_getOfficeCodeList
     }
 }
 

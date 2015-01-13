@@ -11,19 +11,38 @@ var Approval = require('../service/Approval.js');
 router.route('/list')
 .get(function(req, res){
     // Get user infomation list (GET)
+    debug(req.query);
     var approval = new Approval();
-    var result = approval.getApprovalList().then(function(result){
-        debug("Complete Select Approval List.");
-        res.send(result);    
-    }).catch(function(e){
-        debug("Error Select Approval List.");
-        res.status(500);
-        res.send({
-            success:false,
-            message: e.message,
-            error:e
+    var result;
+    if(req.query.startDate == '' || req.query.endDate == ''){
+        result = approval.getApprovalList().then(function(result){
+            debug("Complete Select Approval List.");
+            res.send(result);    
+        }).catch(function(e){
+            debug("Error Select Approval List.");
+            res.status(500);
+            res.send({
+                success:false,
+                message: e.message,
+                error:e
+            });
         });
-    });
+    }else{
+        result = approval.getApprovalListWhere(req.query.startDate, req.query.endDate).then(function(result){
+            debug("Complete Select Approval List Where.");
+            res.send(result);    
+        }).catch(function(e){
+            debug("Error Select Approval List Where.");
+            res.status(500);
+            res.send({
+                success:false,
+                message: e.message,
+                error:e
+            });
+        });
+    }
+    
 });
+
 
 module.exports = router;

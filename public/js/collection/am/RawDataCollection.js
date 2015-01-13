@@ -13,16 +13,28 @@ define([
         save : function(option){
             this.wrapper.saveAll(option);
         },
-        default:{ 
-            start: null,
-            end: null,
-            id : null,
-            name : null,
-            department : null,
-            time: null,
-            type: null,
+        filterID : function(id){
+            return _.filter(this.models, function(model){
+               if(model.get("id") == id){
+                   return model;
+               } 
+            });
         },
-
+        filterDate : function(charDate){
+            return _.filter(this.models, function(model){
+                
+                var startDate = new Date(charDate + " " + "06:00:00");
+                var endDate = new Date(charDate + " " + "06:00:00");
+                endDate.setDate(endDate.getDate() + 1);
+                
+                var modelDate = new Date(model.get("char_date"));
+                
+                if(modelDate > startDate && modelDate <= endDate){
+                    return model;
+                }
+            
+            });
+        }
     });
     var RawDataCollectionWrapper = Backbone.Model.extend({
         url:'/rawdata/bulk',

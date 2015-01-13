@@ -20,7 +20,7 @@ require.config({
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
       'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
-      'datatables':'tool/datatables/media/js/jquery.dataTables.min',
+      'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
       dialog:'lib/dialog',

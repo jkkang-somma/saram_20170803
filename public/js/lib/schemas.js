@@ -41,8 +41,10 @@ define([
         glyphicon:{
             refresh:"glyphicon-refresh",
             add:"glyphicon-plus",
-            remove:"glyphicon-remove",
-            wrench:"glyphicon-wrench"
+            remove:"glyphicon-trash",
+            wrench:"glyphicon-wrench",
+            search:"glyphicon-search",
+            edit:"glyphicon-pencil"
         },
         
         //API

@@ -14123,7 +14123,9 @@
 	
 							switch ( button ) {
 								case 'ellipsis':
-									container.append('<span>&hellip;</span>');
+									container.append('<button type="button" class="btn btn-default btn-sm btn-success">'+
+  													'<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>'+
+												 '</button>');
 									break;
 	
 								case 'first':
@@ -14133,13 +14135,17 @@
 									break;
 	
 								case 'previous':
-									btnDisplay = lang.sPrevious;
+									btnDisplay = '<button type="button" class="btn btn-default btn-sm btn-success">'+
+  													'<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>'+
+												 '</button>';
 									btnClass = button + (page > 0 ?
 										'' : ' '+classes.sPageButtonDisabled);
 									break;
 	
 								case 'next':
-									btnDisplay = lang.sNext;
+									btnDisplay = '<button type="button" class="btn btn-default btn-sm btn-success">'+
+  													'<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>'+
+												 '</button>';
 									btnClass = button + (page < pages-1 ?
 										'' : ' '+classes.sPageButtonDisabled);
 									break;

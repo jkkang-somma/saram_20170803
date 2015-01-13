@@ -13,7 +13,8 @@ define([
     el:$(".main-container"),
     
     events: {
-  	  "click #commuteManageTbl tbody tr": "onSelectRow"
+  	  "click #commuteManageTbl tbody tr": "onSelectRow",
+  	  "click #btnCommuteSearch": "onClickSearchBtn"
   	},
    
   	initialize:function(){
@@ -33,7 +34,7 @@ define([
       // button Setting
       this.setBottomButtonCon();
       // table setting
-      this.setReportTable();
+      this.setReportTable(false);
     },
     
     setTitleTxt : function(){
@@ -91,9 +92,17 @@ define([
       });
     },
     
-    setReportTable : function(){
+    setReportTable : function(val){
+      var formData = this.getSearchData(val);
       var view = this;
-      this.collection.fetch().done(function(result){
+      this.collection.fetch({
+     			reset : true, 
+     			data: formData,
+     			error : function(result) {
+     				alert("데이터 조회가 실패했습니다.");
+     			}
+     		})
+      .done(function(result){
         // list Element
         // var commuteTbl = $(this.el).find('#commuteManageTbl');
         if( $.fn.DataTable.isDataTable( $(view.el).find("#commuteManageTbl") ) )
@@ -146,6 +155,31 @@ define([
       return sZero + s;
     },
     
+    getSearchData : function(val){
+      var data = {};
+      
+      var startDate = $(this.el).find("#beforeDate").val();
+      var endDate = $(this.el).find("#afterDate").val();
+      
+      if(val && (startDate == "" || endDate == "")){
+        data["msg"] = "기간을 모두 입력 해주세요.";
+        return data;
+      }else{
+        var start= new Date(startDate);
+        var end=new Date(endDate);
+        
+        if(val && (start > end)){
+          data["msg"] = "기간을 잘못 입력 하였습니다.";
+          return data;
+        }else{
+          data["startDate"] = startDate;
+          data["endDate"] = endDate;
+        }
+      }
+      
+      return data;
+    },
+    
     onSelectRow : function(evt){
       var $currentTarget = $(evt.currentTarget);
       if ( $currentTarget.hasClass('selected') ) {
@@ -154,6 +188,16 @@ define([
       else {
       	$(this.el).find('#commuteManageTbl tr.selected').removeClass('selected');
       	$currentTarget.addClass('selected');
+      }
+    },
+    
+    onClickSearchBtn : function(evt){
+      var data = this.getSearchData(true);
+      
+      if(data["msg"] != undefined || data["msg"] != "") {
+        alert(data["msg"]);
+      } else {
+        this.setReportTable(true);
       }
     }
     

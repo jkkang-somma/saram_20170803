@@ -11,9 +11,8 @@ ApprovalDao.prototype.selectApprovalList =  function () {
     var queryStr = db.getQuery('approval', 'selectApprovalList');
     return db.queryV2(queryStr);
 };
-
-ApprovalDao.prototype.selectOfficeCodeList =  function () {
-    var queryStr = db.getQuery('office_code', 'selectOfficeCodeList');
-    return db.queryV2(queryStr);
+ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate) {
+    var queryStr = db.getQuery('approval', 'selectApprovalListWhere');
+    return db.queryV2(queryStr, [startDate,endDate,startDate,endDate]);
 };
 module.exports = new ApprovalDao();

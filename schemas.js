@@ -37,11 +37,6 @@ var Schemas = function (schemaName) {
             time : null,
             type : null
         },
-        //Common
-        code:{
-            code:null,
-            name:null
-        },
         
         approval:{
             doc_num : null,
@@ -58,6 +53,12 @@ var Schemas = function (schemaName) {
             office_code : null,    
             office_code_name : null,    
             state : null           
+        },
+        
+        //Common
+        code:{
+            code:null,
+            name:null
         },
         
         office_code:{

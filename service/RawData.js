@@ -18,7 +18,10 @@ var RawData = function (data) {
         }
     }
     var _selectRawDataList = function(start, end){
-        return RawDataDao.selectRawDataList(start, end);
+        var startDate = new Date(start);
+        var endDate = new Date(end);
+        
+        return RawDataDao.selectRawDataList(startDate.getTime(), endDate.getTime());
     }
     var _insertRawData = function () {
         return RawDataDao.insertRawData(_data);

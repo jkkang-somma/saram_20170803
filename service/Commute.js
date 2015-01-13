@@ -4,7 +4,7 @@
 var _ = require("underscore"); 
 var debug = require('debug')('Commute');
 var Schemas = require("../schemas.js");
-var CommuteDao = require('../dao/CommuteDao.js');
+var CommuteDao = require('../dao/commuteDao.js');
 
 var Vacation = function() {	
 

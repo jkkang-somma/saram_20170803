@@ -6,9 +6,10 @@ define([
   'backbone',
   'log',
   'datatables',
+  'util',
   //'fnFindCellRowIndexes',
   'text!templates/component/grid.html',
-  ], function($, _, Backbone, log, Datatables, GridHTML){
+  ], function($, _, Backbone, log, Datatables, Util, GridHTML){
     var LOG=log.getLogger('Grid');
     var gridId=0;
     var Grid = Backbone.View.extend({
@@ -28,7 +29,7 @@ define([
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'getSelectItem');
     		_.bindAll(this, 'removeRow');
-    		
+    		_.bindAll(this, 'search');
     		this.render();
     	},
     	updateCSS:function(){
@@ -96,6 +97,13 @@ define([
     	addRow:function(model){//add row
     	    this.DataTableAPI.row.add(model).draw();
     	},
+    	search:function(value, regex, smart){
+    	    this.DataTableAPI.search(
+                value,
+                _.isUndefined(regex)?false:regex,
+                _.isUndefined(smart)?false:smart
+            ).draw();
+    	},
     	draw:function(){
     	    var _grid = this;
     	    if($.fn.DataTable.isDataTable($("#"+this.options.el).find("#"+this.options.id))){//
@@ -125,7 +133,7 @@ define([
     	    _dataTable.attr("id", this.options.id);
             _dataTable.dataTable({
                 "lengthChange": false,
-                "searching": false,
+                "sDom": '<"top">rt<"bottom"ip>',// _dataTable display controll
      	        "data" : this.options.collection.toJSON(),
      	        "columns" : _columns
      	    });
@@ -166,11 +174,15 @@ define([
     	},
     	render:function(){
     	   var grid = this;
-    	   this.options.collection.fetch({
-    	       success: function(){
-    	           grid.draw();
-    	       }
-    	   });
+    	   if(Util.isNull(this.options.fetch) || this.options.fetch === true){
+        	   this.options.collection.fetch({
+        	       success: function(){
+        	           grid.draw();
+        	       }
+        	   });    
+    	   }else{
+    	       grid.draw();
+    	   }
     	   return grid;
      	}
     });

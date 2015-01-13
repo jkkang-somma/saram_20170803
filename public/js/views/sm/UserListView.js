@@ -45,45 +45,90 @@ define([
     	    _head.addClass("relative-layout");
     	    
     	    //Button Group
-    	    var _refreshBtn=$(ButtonHTML);
-    	    _refreshBtn.attr("id", "userList_refreshBtn");
-            _refreshBtn.addClass(_glyphiconSchema.value("refresh"));
-            var _addshBtn=$(ButtonHTML);
-    	    _addshBtn.attr("id", "userList_addshBtn");
-            _addshBtn.addClass(_glyphiconSchema.value("add"));
-            var _removeBtn=$(ButtonHTML);
-    	    _removeBtn.attr("id", "userList_removeBtn");
-            _removeBtn.addClass(_glyphiconSchema.value("remove"));
-            
-            var _btnBox=$(RightBoxHTML);
-            
-            _btnBox.append(
-                    '<div class="input-group-sm">'+
-                        '<input type="text" class="form-control" placeholder="Search for...">'+
-                        '<span class="input-group-btn">'+
-                            '<button class="btn btn-default btn-sm btn-success" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></button>'+
-                        '</span>'+
-                    '</div>'
-            );
-  
-  
-            _btnBox.append(_addshBtn);
-            _btnBox.append(_removeBtn);
-            _btnBox.append(_refreshBtn);
-            //_head.append(_btnBox);
+    	    var _defatulInputGroup=$('<div class="input-group input-group-sm"></div>');
+    	    var _defaultSearchInput=$('<input type="text" class="form-control" placeholder="Search">');
+    	    _defaultSearchInput.addClass('yes-form-control');
     	    
+    	    _defatulInputGroup.append(_defaultSearchInput);
+    	    _defatulInputGroup.css({display:"table"});
+    	    var _defaultGroupBtnTag='<span class="input-group-btn"></span>';
+    	    var _defaultBtnTag='<button class="btn btn-default btn-sm btn-success" type="button"></button>';
+    	    
+    	    //SearchButton
+            var _searchIcon=$(ButtonHTML);
+    	    _searchIcon.attr("id", "userList_searchBtn");
+            _searchIcon.addClass(_glyphiconSchema.value("search"));
+            var _searchBtn=$(_defaultBtnTag);
+            _searchBtn.append(_searchIcon);
+            _searchBtn.css({"border-radius":"0px"});
+            _searchBtn.css({"border-color":"transparent"});
+            _searchBtn.css({"transition":"border-color .5s, background .5s"});
+            
+            _defatulInputGroup.append($(_defaultGroupBtnTag).append(_searchBtn));
+    	    
+            //AddButton
+            var _addshIcon=$(ButtonHTML);
+    	    _addshIcon.attr("id", "userList_addshBtn");
+            _addshIcon.addClass(_glyphiconSchema.value("add"));
+            var _addshBtn=$(_defaultBtnTag);
+            _addshBtn.append(_addshIcon);
+            _addshBtn.css({"border-radius":"0px"});
+            _addshBtn.css({"border-color":"transparent"});
+            _addshBtn.css({"transition":"border-color .5s, background .5s"});
+            _defatulInputGroup.append($(_defaultGroupBtnTag).append(_addshBtn));
+            
+            //EditButton
+            var _editIcon=$(ButtonHTML);
+    	    _editIcon.attr("id", "userList_addshBtn");
+            _editIcon.addClass(_glyphiconSchema.value("edit"));
+            var _editBtn=$(_defaultBtnTag);
+            _editBtn.append(_editIcon);
+            _editBtn.css({"border-radius":"0px"});
+            _editBtn.css({"border-color":"transparent"});
+            _editBtn.css({"transition":"border-color .5s, background .5s"});
+            _defatulInputGroup.append($(_defaultGroupBtnTag).append(_editBtn));
+            
+            //RemoveButton
+            var _removeIcon=$(ButtonHTML);
+    	    _removeIcon.attr("id", "userList_removeBtn");
+            _removeIcon.addClass(_glyphiconSchema.value("remove"));
+            var _removeBtn=$(_defaultBtnTag);
+            _removeBtn.css({"border-radius":"0px"});
+            _removeBtn.css({"border-color":"transparent"});
+            _removeBtn.css({"transition":"border-color .5s, background .5s"});
+            _removeBtn.append(_removeIcon);
+            _defatulInputGroup.append($(_defaultGroupBtnTag).append(_removeBtn));
+            
+    	    //RefreshButton
+    	    var _refreshIcon=$(ButtonHTML);
+    	    _refreshIcon.attr("id", "userList_refreshBtn");
+            _refreshIcon.addClass(_glyphiconSchema.value("refresh"));
+            var _refreshBtn=$(_defaultBtnTag);
+            _refreshBtn.css({"border-color":"transparent"});
+            _refreshBtn.css({"transition":"border-color .5s, background .5s"});
+            _refreshBtn.append(_refreshIcon);
+            _defatulInputGroup.append($(_defaultGroupBtnTag).append(_refreshBtn));
+            
     	    var _content=$(ContentHTML).attr("id", this.option.el);
     	    _layOut.append(_head);
-    	    _layOut.append(_btnBox);
+    	    _layOut.append(_defatulInputGroup);
     	    _layOut.append(_content);
     	    $(this.el).html(_layOut);
 
     	    var _gridSchema=Schemas.getSchema('grid');
     	    var grid= new Grid(_gridSchema.getDefault(this.option));
     	    
-    	     _refreshBtn.click(function(){
+    	    _defaultSearchInput.on('keyup',function(key){
+    	        console.log(this.value);
+    	         grid.search(this.value,false,true);          
+    	    });
+    	    
+    	    //refresh event
+    	    _refreshBtn.click(function(){
                 _view.render();
             });
+            
+            //add Event
     	    _addshBtn.click(function(){
                 var addUserView= new AddUserView();
                 Dialog.show({
@@ -109,6 +154,8 @@ define([
                     
                 });
             });
+            
+            //remove event
             _removeBtn.click(function(){
                var selectItem=grid.getSelectItem();
                if (_.isUndefined(selectItem)){
