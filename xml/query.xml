@@ -112,6 +112,69 @@
     		from 
     			approval_tbl app
 		</query>
-        <query id="selectOfficeCodeList">select * from office_code_tbl</query>
+        <query id="selectApprovalList2">select * from approval_tbl</query>
 	</group>
+	<group id="office_code">
+		<query id="selectOfficeCodeList">select * from office_code_tbl</query>
+        <query id="selectOfficeCodeList2">select * from office_code_tbl</query>
+	</group>
+
+    <group id="commute">
+        <query id="selectCommute">
+        SELECT
+				c.year,
+			    c.date,		
+			    c.id,
+			    c.department,
+			    c.name,
+				c.work_type,
+                c.late_time,
+                c.over_time,
+			    c.in_time,
+			    c.out_time,
+			    c.in_time_change,
+			    c.out_time_change,
+			    c.comment_count,
+                o.name as overtime_type,
+                o.overtime_pay,
+                (select name from office_code_tbl where code = c.vacation_code) as vacation_name,
+                (select name from office_code_tbl where code = c.out_office_code) as out_office_name
+                
+			FROM 
+				commute_result_tbl c
+                left join overtime_code_tbl o on c.overtime_code = o.code
+			WHERE
+				date BETWEEN '%s' AND '%s'
+			ORDER BY date
+        </query>
+        <query id="empty"></query>
+    </group>
+    
+    <group id="changeHistory">
+    	<query id="selectChangeHistory">
+			SELECT
+					c.seq,
+					c.year,
+			        c.id,
+			        m.name,
+			        c.date,
+			        c.change_column,
+			        c.change_before,
+			        c.change_after,
+			        c.change_date,
+			        c.change_id,
+			        (SELECT name FROM members_tbl WHERE id = c.change_id) AS change_name
+			FROM
+				change_history_tbl c
+                inner join members_tbl m 
+                on c.id = m.id
+			WHERE
+				c.id = '%s'
+			    AND c.date = '%s'
+			    AND c.change_column = '%s'
+    	</query>
+    	<query id="empty">
+    	</query>
+    </group>
+     
 </querys>

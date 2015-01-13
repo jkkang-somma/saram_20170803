@@ -13,7 +13,7 @@ ApprovalDao.prototype.selectApprovalList =  function () {
 };
 
 ApprovalDao.prototype.selectOfficeCodeList =  function () {
-    var queryStr = db.getQuery('approval', 'selectOfficeCodeList');
+    var queryStr = db.getQuery('office_code', 'selectOfficeCodeList');
     return db.queryV2(queryStr);
 };
 module.exports = new ApprovalDao();

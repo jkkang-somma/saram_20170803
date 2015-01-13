@@ -3,16 +3,17 @@ define([
   'underscore',
   'backbone',
   'util',
+  'datatables',
   'core/BaseView',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
   'text!templates/vacation/vacationTemplate.html',
-  'text!templates/vacation/vacationInfoModalTemplate.html'
-], function($, _,Backbone, Util, BaseView, 
+  'text!templates/vacation/vacationInfoPopupTemplate.html'
+], function($, _,Backbone, Util, Datatables,BaseView, 
 			VacationModel, 
 			VacationCollection,
 			vacationTemplate,
-			vacationInfoModalTemplate){
+			vacationInfoPopupTemplate){
 	
 	// 검색 조건 년도 
 	function _getFormYears() {
@@ -41,9 +42,9 @@ define([
     	events: {
     		'click #btnCreateData' : 'onClickCreateDataBtn',
     		'click #btnSearch' : 'onClickSearchBtn',
-    		'click #btnUpdate' : 'onOpenVacationInfoModal',
+    		'click #btnUpdate' : 'onOpenVacationInfoPopup',
     		'click #vacationDataTable tbody tr': 'onSelectRow',
-    		'click #vacationInfoModal .btnUpdate': 'onUpdateVacationInfo'
+    		'click #vacationInfoPopup .btnUpdate': 'onUpdateVacationInfo'
     	},
     	render:function(){
     		var tpl = _.template( vacationTemplate, {variable: 'data'} )( {formYears: _getFormYears(), nowYear: new Date().getFullYear()} );
@@ -76,14 +77,14 @@ define([
      		_vacationCollection.reset();
      		this.selectVacations();
      	},
-     	onOpenVacationInfoModal : function() {	// 연차 수정 팝업 창 
+     	onOpenVacationInfoPopup : function() {	// 연차 수정 팝업 창 
      		var table = this.$el.find("#vacationDataTable").DataTable();
      		var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-         		var tpl = _.template( vacationInfoModalTemplate, {variable: 'data'} )( selectData );
-         		this.$el.find('#vacationInfoModal #vacationInfoModalCon').empty().append(tpl);
-         		this.$el.find('#vacationInfoModal').modal('show');
+         		var tpl = _.template( vacationInfoPopupTemplate, {variable: 'data'} )( selectData );
+         		this.$el.find('#vacationInfoPopup #vacationInfoPopupCon').empty().append(tpl);
+         		this.$el.find('#vacationInfoPopup').modal('show');
      		} else {
      			alert("사원을 선택해주세요");
      		}
@@ -106,7 +107,7 @@ define([
             }
      	},
      	onUpdateVacationInfo : function(evt) {	// 연차 수정
-     		var data = Util.getFormJSON( this.$el.find('#vacationInfoModal').find("form") );
+     		var data = Util.getFormJSON( this.$el.find('#vacationInfoPopup').find("form") );
      		var reg = new RegExp('^\\d+$');
      		
      		if (!reg.test(data.total_day)) {
@@ -122,7 +123,7 @@ define([
 //     		     		var table = _this.$el.find("#vacationDataTable").DataTable();
 //     		     		data.holiday = data.total_day - data.used_holiday;
 //     		     		table.row('.selected').data( data );
-     		     		_this.$el.find('#vacationInfoModal').modal('hide');
+     		     		_this.$el.find('#vacationInfoPopup').modal('hide');
      		     		_this.onClickSearchBtn();
      				} else {
      					alert("해당 데이터가 존재하지 않습니다.");

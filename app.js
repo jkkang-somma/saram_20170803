@@ -16,8 +16,14 @@ var session = require('./routes/sessionRouter');
 var rawData = require('./routes/rawDataRouter');
 var holiday = require('./routes/holidayRouter');
 var vacation = require('./routes/vacationRouter');
+
 var approval = require('./routes/approvalRouter');
 var code = require('./routes/codeRouter');
+
+var commute = require('./routes/commuteRouter');
+var changeHistory = require('./routes/changeHistoryRouter');
+//var error = require('./routes/error');
+
 
 var app = express();
 
@@ -93,6 +99,10 @@ app.use('/holiday', holiday);
 app.use('/vacation', vacation);
 app.use('/approval', approval);
 app.use('/code', code);
+app.use('/commute', commute);
+app.use('/changeHistory', changeHistory);
+
+//app.use('/error', error);
 
 
 // catch 404 and forward to error handler

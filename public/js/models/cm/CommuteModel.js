@@ -3,7 +3,7 @@ define([
   'underscore',
   'backbone'
 ], function($, _,Backbone){
-    var commuteModel=Backbone.Model.extend({
+    var CommuteModel=Backbone.Model.extend({
         urlRoot: '/commute',
         
         idAttribute:"_id",
@@ -34,6 +34,7 @@ define([
         },
         
     });
+
     
-    return commuteModel;
+    return CommuteModel;
 });

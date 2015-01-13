@@ -38,10 +38,13 @@ define([
     	    var _glyphiconSchema=Schemas.getSchema('glyphicon');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
+    	    
+    	    //Head 
     	    var _head=$(_headTemp(_headSchema.getDefault({title:"User Manager ", subTitle:"User list"})));
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
+    	    //Button Group
     	    var _refreshBtn=$(ButtonHTML);
     	    _refreshBtn.attr("id", "userList_refreshBtn");
             _refreshBtn.addClass(_glyphiconSchema.value("refresh"));

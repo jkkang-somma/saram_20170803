@@ -21,9 +21,13 @@ var Approval = function (data) {
     var _getApprovalList = function () {
         return ApprovalDao.selectApprovalList();
     }
+    var _getOfficeCodeList = function () {
+        return ApprovalDao.selectOfficeCodeList();
+    }
     return {
         get:_get,
-        getApprovalList:_getApprovalList
+        getApprovalList:_getApprovalList,
+        getOfficeCodeList:_getOfficeCodeList
     }
 }
 
