@@ -194,7 +194,7 @@ define([
     onClickSearchBtn : function(evt){
       var data = this.getSearchData(true);
       
-      if(data["msg"] != undefined || data["msg"] != "") {
+      if(data["msg"] != undefined && data["msg"] != "") {
         alert(data["msg"]);
       } else {
         this.setReportTable(true);
