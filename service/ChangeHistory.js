@@ -4,7 +4,7 @@
 var _ = require("underscore"); 
 var debug = require('debug')('ChangeHistory');
 var Schemas = require("../schemas.js");
-var ChangeHistoryDao = require('../dao/ChangeHistoryDao.js');
+var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
 
 var ChangeHistory = function() {	
 

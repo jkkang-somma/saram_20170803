@@ -20,13 +20,13 @@ VacationDao.prototype.selectVacatonCount =  function (year) {
 // vacation 1개 등록
 VacationDao.prototype.insertVacation =  function (data) {	
     var queryStr = db.getQuery('vacation', 'insertVacation');
-    return db.query(queryStr, [data.id, data.year, data.total_day, data.id, data.year]);
+    return db.queryV2(queryStr, [data.id, data.year, data.total_day, data.id, data.year]);
 }
 
 //vacation 수정
 VacationDao.prototype.updateVacation =  function (data) {
     var queryStr = db.getQuery('vacation', 'updateVacation');
-    return db.query(queryStr, [data.total_day, data.id, data.year]);
+    return db.queryV2(queryStr, [data.total_day, data.id, data.year]);
 }
 module.exports = new VacationDao();
 
