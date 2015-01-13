@@ -24,7 +24,12 @@ define([
 			var view=this;
 			view.undelegateEvents();
             view.$el.removeData();
-            view.$el.html('');	
+            view.$el.html('');
+            
+            this.destroy();
+		},
+		destroy : function() {
+			// 상속 후  개별 초기화 할 내용들 
 		}
 	});
 

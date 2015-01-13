@@ -5,34 +5,13 @@ var db = require('../lib/dbmanager.js');
 var CommuteDao = function () {
 }
 
-// 연차 조회 
+// 근태자료관리 조회 
 CommuteDao.prototype.selectCommute =  function (data) {
-    var queryStr = util.format(db.getQuery('commute', 'selectCommute'), data.startDate, data.endDate);
+    //var queryStr = util.format(db.getQuery('commute', 'selectCommute'), data.startDate, data.endDate);
+	var queryStr = db.getQuery('commute', 'selectCommute');
     debug(queryStr);
     console.log(queryStr);
-    return db.query(queryStr);
+    return db.queryV2(queryStr, [data.startDate, data.endDate]);
 }
 
-// 연차 갯수 조회 - 해당 년도의 연차 데이터 생성 여부 체크 위해서 
-CommuteDao.prototype.selectVacatonCount =  function (year) {
-    var queryStr = util.format(db.getQuery('vacation', 'selectVacatonCount'), year);
-    debug(queryStr);
-    return db.query(queryStr);
-}
-
-// vacation 1개 등록
-CommuteDao.prototype.insertVacation =  function (data) {	
-    var queryStr = util.format(db.getQuery('vacation', 'insertVacation'), data.id, data.year, data.total_day, data.id, data.year);
-    debug(queryStr);
-    return db.query(queryStr);
-}
-
-//vacation 수정
-CommuteDao.prototype.updateVacation =  function (data) {
-    var queryStr = util.format(db.getQuery('vacation', 'updateVacation'), data.total_day, data.id, data.year);
-    console.log(queryStr);
-    debug(queryStr);
-    return db.query(queryStr);
-}
 module.exports = new CommuteDao();
-

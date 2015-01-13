@@ -1,5 +1,5 @@
 /**
- * 변경 이력
+ * 변경 이력 팝업창 
  */
 
 define([ 'jquery',
@@ -13,61 +13,61 @@ define([ 'jquery',
          'text!templates/cm/popup/changeHistoryPopupTemplate.html'
 ], function($, _, Backbone, Util, Datatables, BaseView, ChangeHistoryModel, ChangeHistoryCollection, changeHistoryPopupTemplate) {
 
-	var _changeHistoryTbl = null;
-	
+	var _changeHistoryTbl = null;	
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(opt) {
 			this.collection = new ChangeHistoryCollection();			
-			this.render(opt.searchData);
+			this.render();
 		},
 		events : {
+			'hidden.bs.modal' : 'onCloseChangeHistoryPopup'
 		},
-		render : function(data) {
-			var title = "";
-			if (data.change_column == "in_time") {
-				title = "출근 시간 변경 이력";
-			} else {
-				title = "퇴근 시간 변경 이력";
-			}
-			
-			var tpl = _.template(changeHistoryPopupTemplate, {variable: 'data'})( {title: title} );
+		render : function() {			
+			var tpl = _.template(changeHistoryPopupTemplate, {variable: 'data'})( {title: ""} );
 			this.setElement( tpl);
 
-			_changeHistoryTbl = this.$el.find("#commuteManageTbl").dataTable({
+			_changeHistoryTbl = this.$el.find("#changeHistoryTbl").dataTable({
             	"bPaginate" : false,
      	        "columns" : [
      	                     { data : "date", "title" : "일자" },
      	                     { data : "id", "title" : "ID" },
      	                     { data : "name", "title" : "이름"},
-     	                     { data : "change_column", "title" : "변경 필드"},
      	                     { data : "change_before", "title" : "변경 전"},
      	                     { data : "change_after", "title" : "변경 후"},
      	                     { data : "change_date", "title" : "수정 날짜"},
-     	                     { data : "change_id", "title" : "수정 ID"}     	                    
+     	                     { data : "change_name", "title" : "수정자 이름"}     	                    
      	        ]
      	    });
-    		
-			
-     		this.collection.fetch({
-     			reset : true, 
-     			data: data,
-     			success : function(result) {
-     				_changeHistoryTbl.fnClearTable();
-     	     		if (result.length) {
-     	     			_changeHistoryTbl.fnAddData(result.toJSON());
-     	     			_changeHistoryTbl.fnDraw();
-     	     		}
-     			},
-     			error : function(result) {
-     				alert("데이터 조회가 실패했습니다.");
-     			}
-     		});
-			
 			return this;
 		},
+		selectChangeHistory: function(data) {
+     		this.collection.fetch({
+	 			reset : true, 
+	 			data: data,
+	 			success : function(result) {
+	 				_changeHistoryTbl.fnClearTable();
+	 	     		if (result.length) {
+	 	     			_changeHistoryTbl.fnAddData(result.toJSON());
+	 	     			_changeHistoryTbl.fnDraw();
+	 	     		}
+	 			},
+	 			error : function(result) {
+	 				alert("데이터 조회가 실패했습니다.");
+	 			}
+     		});
+		},
+		show: function(data) {
+			var title = (data.change_column == "in_time")? "출근 시간 변경 이력":"퇴근 시간 변경 이력";
+			this.$el.find('.modal-title').text(title);
+			this.$el.modal('show');
+			
+			this.selectChangeHistory(data);
+		},
+		onCloseChangeHistoryPopup: function() {
+			_changeHistoryTbl.fnClearTable();
+		},
 		destroy: function() {
-			 $('#commuteManageTbl').DataTable().destroy();
-			 
+			 $('#changeHistoryTbl').DataTable().destroy();
 			_changeHistoryTbl = null;
 			this.remove();
 		}

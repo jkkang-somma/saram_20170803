@@ -152,8 +152,8 @@
 				c.work_type,
                 c.late_time,
                 c.over_time,
-			    c.in_time,
-			    c.out_time,
+			    date_format(c.in_time, '%Y-%m-%d %T') AS in_time,
+			    date_format(c.out_time, '%Y-%m-%d %T') AS out_time,
 			    c.in_time_change,
 			    c.out_time_change,
 			    c.comment_count,
@@ -166,7 +166,7 @@
 				commute_result_tbl c
                 left join overtime_code_tbl o on c.overtime_code = o.code
 			WHERE
-				date BETWEEN '%s' AND '%s'
+				date BETWEEN ? AND ?
 			ORDER BY date
         </query>
         
@@ -192,9 +192,10 @@
                 inner join members_tbl m 
                 on c.id = m.id
 			WHERE
-				c.id = '%s'
-			    AND c.date = '%s'
-			    AND c.change_column = '%s'
+				c.id = ?
+			    AND c.date = ?
+			    AND c.change_column = ?
+			ORDER BY c.seq
     	</query>
     	<query id="empty">
     	</query>
