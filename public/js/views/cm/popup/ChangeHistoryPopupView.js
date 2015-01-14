@@ -16,13 +16,12 @@ define([ 'jquery',
 	var _changeHistoryTbl = null;	
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(opt) {
-			this.collection = new ChangeHistoryCollection();			
-			this.render();
+			this.collection = new ChangeHistoryCollection();
 		},
 		events : {
 			'hidden.bs.modal' : 'onCloseChangeHistoryPopup'
 		},
-		render : function() {			
+		render : function(data) {			
 			var tpl = _.template(changeHistoryPopupTemplate, {variable: 'data'})( {title: ""} );
 			this.setElement( tpl);
 
@@ -38,6 +37,11 @@ define([ 'jquery',
      	                     { data : "change_name", "title" : "수정자 이름"}     	                    
      	        ]
      	    });
+
+			var title = (data.change_column == "in_time")? "출근 시간 변경 이력":"퇴근 시간 변경 이력";
+			this.$el.find('.modal-title').text(title);
+			this.selectChangeHistory(data);
+
 			return this;
 		},
 		selectChangeHistory: function(data) {
@@ -57,19 +61,15 @@ define([ 'jquery',
      		});
 		},
 		show: function(data) {
-			var title = (data.change_column == "in_time")? "출근 시간 변경 이력":"퇴근 시간 변경 이력";
-			this.$el.find('.modal-title').text(title);
-			this.$el.modal('show');
-			
-			this.selectChangeHistory(data);
+			this.render(data);
+			this.$el.modal('show');			
 		},
 		onCloseChangeHistoryPopup: function() {
-			_changeHistoryTbl.fnClearTable();
+			this.remove();
 		},
 		destroy: function() {
 			 $('#changeHistoryTbl').DataTable().destroy();
 			_changeHistoryTbl = null;
-			this.remove();
 		}
 	});
 	

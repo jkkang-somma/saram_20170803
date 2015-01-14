@@ -7,12 +7,23 @@ var ChangeHistoryDao = function () {
 
 // 변경 이력 조회 
 ChangeHistoryDao.prototype.selectChangeHistory =  function (data) {
-    //var queryStr = util.format(db.getQuery('changeHistory', 'selectChangeHistory'), data.id, data.date, data.change_column);
 	var queryStr = db.getQuery('changeHistory', 'selectChangeHistory');
     debug(queryStr);
-    console.log(queryStr);
     return db.queryV2(queryStr, [data.id, data.date, data.change_column]);
 }
 
-module.exports = new ChangeHistoryDao();
+//퇴퇴근 변경 이력 조회 
+ChangeHistoryDao.prototype.selectInOutChangeCount =  function (data) {
+	var queryStr = db.getQuery('changeHistory', 'selectInOutChangeCount');
+    debug(queryStr);
+    return db.queryV2(queryStr, [data.year, data.id, data.date, data.year, data.id, data.date]);
+}
 
+//변경 이력 등록
+ChangeHistoryDao.prototype.inserChangeHistory =  function (data) {
+	var queryStr = db.getQuery('changeHistory', 'inserChangeHistory');
+    debug(queryStr);
+    return db.queryV2(queryStr, [data.year, data.id,  data.date,  data.change_column, data.change_before, data.change_after, data.change_id]);
+}
+
+module.exports = new ChangeHistoryDao();

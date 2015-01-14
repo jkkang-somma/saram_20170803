@@ -9,19 +9,18 @@ router.route('/')
 	Commute.getCommute(req.query, function(result) {
 		return res.send(result);
 	});
+})
+
+router.route('/:id')
+.get(function(req, res){	
+	console.log(111);
 }).post(function(req, res){
-	var data = {};
-	if (req.body.data === undefined) {
-		data = req.body;
-	} else {
-		data = req.body.data;
-	}
-	
-	Vacation.setVacation(data, function(result) {
+
+}).put(function(req, res){
+	console.log(req.body);
+	Commute.updateCommute(req.body, function(result) {
 		return res.send(result);
 	});
 });
-
-
 
 module.exports = router;
