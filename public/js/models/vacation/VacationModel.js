@@ -6,7 +6,7 @@ define([
 	
     var VacationModel = Backbone.Model.extend({
         urlRoot: '/vacation',
-        idAttribute:"id",
+        idAttribute:"_id",
         initialize: function () {
         },
         defaults:{

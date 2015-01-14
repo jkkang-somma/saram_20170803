@@ -12,7 +12,8 @@ define([
             
         },
     
-        default:{ 
+        default:{
+        	idx : 0,
             year : "",    
             date : "",            
             id : "",        

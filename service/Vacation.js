@@ -84,7 +84,7 @@ var Vacation = function() {
 			var obj = {};
 			for (var i = 0, len = result.length; i < len; i++) {
 				obj = {
-						id : result[i].id,
+						id : (result[i].id + ""),
 						year : data.year,
 						total_day : getHoliday(result[i].join_company)
 				}

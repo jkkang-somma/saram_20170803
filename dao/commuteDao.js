@@ -19,4 +19,10 @@ CommuteDao.prototype.updateCommuteResultInOutTime =  function (data) {
     return db.queryV2(queryStr, [data.in_time, data.in_time_change, data.out_time, data.out_time_change, data.id, data.year, data.date]);
 }
 
+// comment 갯수 수정 
+CommuteDao.prototype.updateCommuteCommentCount =  function (data) {
+	var queryStr = db.getQuery('commute', 'updateCommuteCommentCount');
+    debug(queryStr);
+    return db.queryV2(queryStr, [data.id, data.year, data.date, data.id, data.year, data.date]);
+}
 module.exports = new CommuteDao();

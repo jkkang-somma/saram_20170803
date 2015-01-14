@@ -1,8 +1,8 @@
-<div id="commuteUpdatePopup" class="modal fade" tabindex="-1"
+<div id="commentPopup" class="modal fade" tabindex="-1"
 	role="dialog" aria-hidden="true">
 	
 	<div id="changeHistoryModalCon">
-		<div class="modal-dialog" style="width: 400px;">
+		<div class="modal-dialog" style="width: 600px;">
 			<div class="modal-content">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -10,10 +10,10 @@
 							aria-label="Close">
 							<span aria-hidden="true">×</span>
 						</button>
-						<h4 class="modal-title">근태 자료</h4>
+						<h4 class="modal-title">Comment</h4>
 					</div>
 					<div class="modal-body">
-						<form id="commuteInfoForm" class="form-horizontal">
+						<form id="commentInfoForm" class="form-horizontal">
 							<input type="hidden" id="id" name="id" value="<%=data.id%>">
 							<input type="hidden" id="year" name="year" value="<%=data.year%>">
 							<input type="hidden" id="date" name="date" value="<%=data.date%>">
@@ -39,21 +39,26 @@
 							<div class="form-group">
 								<label class="col-sm-5 control-label">출근 시간</label>
 								<div class="col-sm-7">
-									<input type="text" class="input-small" id="in_time" name="in_time" value="<%=data.in_time%>">
+									<label class="control-label"><%=data.in_time%></label>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-5 control-label">퇴근 시간</label>
 								<div class="col-sm-7">
-									<input type="text" class="input-small" id="out_time" name="out_time" value="<%=data.out_time%>">
+									<label class="control-label"><%=data.out_time%></label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label">Comment</label>
+								<div class="col-sm-7">
+									<textarea class="form-control" rows="5" id="comment" name="comment" style="resize:none;"></textarea>									
 								</div>
 							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button id="btnUpdateCommute" type="button" class="btn btn-primary btnUpdate">수정</button>
-						<button id="btnCloseChangeHistoryPopup" type="button"
-							class="btn btn-default" data-dismiss="modal">닫기</button>
+						<button id="btnInsertComment" type="button" class="btn btn-primary btnUpdate">등록</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 					</div>
 				</div>
 			</div>

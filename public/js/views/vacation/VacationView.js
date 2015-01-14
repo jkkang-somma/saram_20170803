@@ -68,10 +68,24 @@ define([
             this.selectVacations();
      	},
      	onClickCreateDataBtn : function() {// 연차 데이터 생성 버튼 
+     		
      		var _this = this;
-     		$.post("/vacation", this.getSearchForm(), function(result) {
-     			_this.onClickSearchBtn();
-     		})
+//     		$.post("/vacation", this.getSearchForm(), function(result) {
+//     			_this.onClickSearchBtn();
+//     		})
+     		
+     		var inData = this.getSearchForm();
+     		
+			var vacationModel = new VacationModel();
+     		vacationModel.save(inData, {
+				success: function(model, response) {
+					_this.onClickSearchBtn();
+				},
+				error: function(model, res) {
+					alert("데이터 생성이 실패했습니다.");
+				}
+			})     		
+     		
      	},
      	onClickSearchBtn : function() {	// 연차 조회 
      		_vacationCollection.reset();
@@ -117,6 +131,7 @@ define([
      		
      		var vacationModel = new VacationModel();
      		var _this = this;
+     		data._id = data.id;
      		vacationModel.save(data, {
      			success: function(model, response) {
      				_this.$el.find('#vacationInfoPopup').modal('hide');

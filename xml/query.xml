@@ -133,6 +133,7 @@
     <group id="commute">
         <query id="selectCommute">
         SELECT
+        		(@idx:=@idx+1) as idx,
 				c.year,
 			    c.date,		
 			    c.id,
@@ -150,12 +151,12 @@
                 o.name as overtime_type,
                 o.overtime_pay,
                 (select name from office_code_tbl where code = c.vacation_code) as vacation_name,
-                (select name from office_code_tbl where code = c.out_office_code) as out_office_name
-                
+                (select name from office_code_tbl where code = c.out_office_code) as out_office_name                
 			FROM 
 				commute_result_tbl c
                 left join overtime_code_tbl o on c.overtime_code = o.code
-                left join work_type_code_tbl w on w.code = c.work_type
+                left join work_type_code_tbl w on w.code = c.work_type,
+                (select @idx:= 0) as idx
 			WHERE
 				date BETWEEN ? AND ?
 			ORDER BY date
@@ -172,6 +173,16 @@
         	WHERE 
         		id = ? AND year = ? AND date = ?
         </query>
+        
+        <query id="updateCommuteCommentCount">
+        	UPDATE
+        		commute_result_tbl
+        	SET
+        		comment_count = ( SELECT COUNT(*) + 1 FROM comment_tbl WHERE id = ? AND year = ? AND date = ?)
+        	WHERE
+        		id = ? AND year = ? AND date = ?
+        </query>
+        
     </group>
     
     <group id="changeHistory">
@@ -231,6 +242,31 @@
 				?, ?, ?, ?, ?, ?, now(), ?			
 			);
     	</query>
+    </group>
+    
+    <group id="comment">
+    	<query id="selectComment">
+    		SELECT
+    			year, date, id, seq, comment, comment_date, comment_reply, comment_reply_date, state
+    		FROM
+    			comment_tbl
+    		WHERE
+    			date BETWEEN ? AND ?
+			ORDER BY date
+    	</query>
+    	
+    	<query id="insertComment">
+    		INSERT INTO comment_tbl
+    		(
+    			year, id, date, comment, comment_date, state
+    		)
+    		values
+    		(
+    			?, ?, ?, ?, now(), ?
+    		)
+    	</query>
+    	
+    	<query id="empty"></query>
     </group>
     
     <group id="outOffice">
