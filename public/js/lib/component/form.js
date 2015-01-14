@@ -5,9 +5,10 @@ define([
   'underscore',
   'backbone',
   'log',
+  'schemas',
   'text!templates/default/form.html',
   'text!templates/default/input.html',
-  ], function($, _, Backbone, log, FormHTML, InputHTML){
+  ], function($, _, Backbone, log, Schemas, FormHTML, InputHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -41,21 +42,23 @@ define([
     };
     var Form = Backbone.View.extend({
     	initialize:function(options){
-    	   
+    	   var _formSchema=Schemas.getSchema('form');
+    	   this.options=_formSchema.getDefault(options);
     	   
          var _formTemp=_.template(FormHTML);
-         var _form=(_formTemp(this.options.form));
+         var _form=_formTemp(this.options.form);
          
          this.formTemp=_formTemp;
          this.childs=this.options.childs;
          this.elements=[];
          
+         if (_.isUndefined(_form.id)){
+            this.id = _formName+(_formId++);    
+         }
+         
          var autoRender=this.options.autoRender;
          if (!_.isUndefined(autoRender) || autoRender){
             this.render();   
-         }
-         if (_.isUndefined(_form.id)){
-            this.id = _formName+(_formId++);    
          }
          _.bindAll(this, 'render');
     	},

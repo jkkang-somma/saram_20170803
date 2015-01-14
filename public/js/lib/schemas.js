@@ -57,6 +57,14 @@ define([
             dataschema:[],
             buttons:[]
         },
+        form:{
+            el:null,
+            id:null,
+            childs:[],
+            form:_.noop(),
+            dataschema:[],
+            autoRender:true
+        },
         //SERVER response
         response:{
             status:true,// 정상:true, 비정상:flase
