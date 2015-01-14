@@ -29,12 +29,21 @@ define([ 'jquery',
             	"bPaginate" : false,
      	        "columns" : [
      	                     { data : "date", "title" : "일자" },
-     	                     { data : "id", "title" : "ID" },
-     	                     { data : "name", "title" : "이름"},
+     	                     { data : "id", "title" : "ID", visible: false },
+     	                     { data : "name", "title" : "이름",
+     	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+     	                    		 $(nTd).html(oData.name + "</br>(" +oData.id + ")");
+     	                    	}
+     	                     },
      	                     { data : "change_before", "title" : "변경 전"},
      	                     { data : "change_after", "title" : "변경 후"},
      	                     { data : "change_date", "title" : "수정 날짜"},
-     	                     { data : "change_name", "title" : "수정자 이름"}     	                    
+     	                     { data : "change_name", "title" : "수정자 이름",
+     	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+     	                    		 $(nTd).html(oData.change_name + "</br>(" +oData.change_id + ")");
+     	                    	}
+
+     	                     }     	                    
      	        ]
      	    });
 

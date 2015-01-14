@@ -120,22 +120,22 @@ define([ 'jquery',
      	                   { data : "year", 			"title" : "년", visible: false},
      	                   { data : "date", "title" : "일자" },
      	                   { data : "department", "title" : "부서" },
-     	                   { data : "id", "title" : "ID" },
-     	                   { data : "name", "title" : "이름", visible: false,
+     	                   { data : "id", "title" : "ID", visible: false },
+     	                   { data : "name", "title" : "이름", 
      	                	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
     	                            $(nTd).html(oData.name + "</br>(" +oData.id + ")");
     	                       }
      	                   },
-     	                   { data : "work_type", "title" : "근무타입"},
+     	                   { data : "work_type_name", "title" : "근무타입"},
      	                   { data : "vacation_name", "title" : "휴가 타입"},
      	                   { data : "out_office_name", "title" : "외근 정보"},
-     	                   { data : "overtime_pay", "title" : "초과근무수당",
+     	                   { data : "overtime_pay", "title" : "초과</br>근무수당",
      	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
        	                            $(nTd).html(oData.overtime_pay + " 원");
        	                        }
      	                   },
      	                   { data : "late_time", "title" : "지각시간"},
-     	                   { data : "over_time", "title" : "초과근무시간 (분)",
+     	                   { data : "over_time", "title" : "초과</br>근무시간",
      	                	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
      	                		   $(nTd).html(  _getMinToHours(oData.over_time));
      	                	   }
