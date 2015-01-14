@@ -6,11 +6,9 @@ var RawData = require("../service/RawData.js")
 
 router.route('/bulk')
 .post(function(req, res){
-    var data = req.body;
-
     var count = 0;    
-    for(var key in data){
-        var rawData = RawData(data[key]);
+    for(var key in req.body){
+        var rawData = RawData(req.body[key]);
         rawData.insertRawData();
         count++;
     }

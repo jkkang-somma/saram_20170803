@@ -1,50 +1,36 @@
 <div class="container">
-    <div class="page-header">
-        <h1>결재 관리 <small id="smallTitleTxt"></small></h1>
-    </div>
-    <div id="dataContent">
-        <form role='form' method='post'>
-            <div class='form-group'>
-                <table id="addReportFormTable">
-                    <tr class="addReportNone">
-                        <th>신청자</th>
-                        <td><input type="text" id="writeName" name="writeName" class="form-control"/></td>
-                    </tr>
-                    <tr>
-                        <th>기간</th>
-                        <td>
-                            <div> 
-                                <input type="text" id="beforeDate" name="beforeDate" class="openDatePicker form-control"/>
-                                <span>~</span>
-                                <input type="text" id="afterDate" name="afterDate" class="openDatePicker form-control"/>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>구분</th>
-                        <!--<td><input type="text" name="gubun"/></td>-->
-                        <td><select id="selGubun" name="gubun" class="form-control"></select></td>
-                    </tr>
-                    <tr>
-                        <th>메모</th>
-                        <td><textarea id="memo" name="memo" rows="4" class="form-control"/></td>
-                    </tr>
-                    <tr class="addReportNone">
-                        <th>결재자 메모</th>
-                        <td><textarea id="approvalMemo" name="approvalMemo" rows="4" class="form-control"/></td>
-                    </tr>
-                    <tr class="approvalReportNone">
-                        <th>결재자</th>
-                        <td><select id="selAddApprovalName" name="addApprovalName" class="form-control"></select></td>
-                    </tr>
-                    <tr class="addReportNone">
-                        <th>결재구분</th>
-                        <td><select id="addApprovalGubun" name="addApprovalGubun" class="form-control"></select></td>
-                    </tr>
-                    
-                </table>
+    <form role='form'>
+        <div class="form-group addReportNone">
+            <label for="submit_id">신청자</label>
+            <input type="text" id="submit_id" name="submit_id" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="start_date">기간</label>
+            <div>
+                <input type="text" id="start_date" name="start_date" class="openDatePicker form-control"/>
+                <span>~</span>
+                <input type="text" id="end_date" name="end_date" class="openDatePicker form-control"/>
             </div>
-        </form>
-        <div id="bottomBtnCon"></div>
-    </div>
+        </div>
+        <div class="form-group">
+            <label for="office_code">구분</label>
+            <select id="office_code" name="office_code" class="form-control"></select>
+        </div>
+        <div class="form-group">
+            <label for="submit_comment">메모</label>
+            <textarea id="submit_comment" name="submit_comment" rows="4" class="form-control"/>
+        </div>
+        <div class="form-group addReportNone">
+            <label for="decide_comment">결재자 메모</label>
+            <textarea id="decide_comment" name="decide_comment" rows="4" class="form-control"/>
+        </div>
+        <div class="form-group approvalReportNone">
+            <label for="manager_id">결재자</label>
+            <select id="manager_id" name="manager_id" class="form-control"></select>
+        </div>
+        <div class="form-group addReportNone">
+            <label for="state">결재구분</label>
+            <select id="state" name="state" class="form-control"></select>
+        </div>
+    </form>
 </div>

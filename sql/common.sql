@@ -12,9 +12,11 @@ drop table approval_tbl;
 drop table comment_tbl;
 drop table change_history_tbl;
 drop table commute_result_tbl;
-drop table overtime_code_tbl;
 
+drop table overtime_code_tbl;
+drop table work_type_code_tbl;
 drop table office_code_tbl;
+
 drop table holiday_tbl;
 
 
@@ -162,6 +164,21 @@ CREATE TABLE IF NOT EXISTS `commute_base_tbl` (
 )ENGINE = InnoDB
 COMMENT = '근태 기초파일';
 
+CREATE TABLE IF NOT EXISTS `work_type_code_tbl` (
+  `code` VARCHAR(10) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`code`))
+ENGINE = InnoDB
+COMMENT = '근무타입 코드';
+
+insert into work_type_code_tbl values 
+  ('00', '정상'),
+  ('10', '지각'),
+  ('01', '조퇴'),
+  ('11', '지각,조퇴'),
+  ('22', '결근'),
+  ('33', '휴일');
+
 
 CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   `year` VARCHAR(4) NOT NULL COMMENT '기준년도',
@@ -186,6 +203,7 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   INDEX `fk_commute_result_tbl_office_code_tbl1_idx` (`vacation_code` ASC),
   INDEX `fk_commute_result_tbl_office_code_tbl2_idx` (`out_office_code` ASC),
   PRIMARY KEY (`year`, `date`, `id`),
+  INDEX `fk_commute_result_tbl_work_type_code_tbl1_idx` (`work_type` ASC),
   CONSTRAINT `fk_commute_result_tbl_overtime_rule_tbl1`
     FOREIGN KEY (`overtime_code`)
     REFERENCES `overtime_code_tbl` (`code`)
@@ -199,6 +217,11 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   CONSTRAINT `fk_commute_result_tbl_office_code_tbl2`
     FOREIGN KEY (`out_office_code`)
     REFERENCES `office_code_tbl` (`code`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_commute_result_tbl_work_type_code_tbl1`
+    FOREIGN KEY (`work_type`)
+    REFERENCES `work_type_code_tbl` (`code`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

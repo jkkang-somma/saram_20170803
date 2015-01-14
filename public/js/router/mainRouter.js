@@ -15,22 +15,20 @@ define([
 	'views/NavigationView',
 	'views/sm/UserListView',
 	'views/sm/AddUserView',
-	'views/am/AddRawDataView',
-	'views/am/HolidayListView',
+	'views/RawData/AddRawDataView',
+	'views/Holiday/HolidayManagerView',
 	'views/cm/CommuteListView',
 	'views/cm/CreateDataView',
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-	'views/rm/AddNewReportView',
-	'views/rm/ApprovalReportView',
 ], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView, AddUserView,	// 사원관리
-AddRawDataView, HolidayListView, // 근태관리
+AddRawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
-ReportListView,AddNewReportView,ApprovalReportView // report manager
+ReportListView // report manager
 ){
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
@@ -49,8 +47,6 @@ ReportListView,AddNewReportView,ApprovalReportView // report manager
 			'commutemanager/comment' : 'showCommuteComment',
 			'vacation' : 'showVacation',
 			'reportmanager' : 'showReportManager',
-			'reportmanager/add' : 'showAddReportData',
-			'reportmanager/approval' : 'showApprovalReportData',
 			'*actions' : 'showHome'
 
 		},
@@ -133,8 +129,8 @@ ReportListView,AddNewReportView,ApprovalReportView // report manager
 			loginView.render();
 		},
 		showHolidayManager : function(){
-			var holidayListView = new HolidayListView();
-			this.changeView(holidayListView);
+			var holidayManagerView = new HolidayManagerView();
+			this.changeView(holidayManagerView);
 		},
 		
 		showCommuteManager : function(){
@@ -155,16 +151,6 @@ ReportListView,AddNewReportView,ApprovalReportView // report manager
 		showReportManager : function(){
 			var reportListView = new ReportListView();
 			this.changeView(reportListView);
-		},
-		
-		showAddReportData : function(){
-			var addNewReportView = new AddNewReportView();
-			this.changeView(addNewReportView);
-		},
-		
-		showApprovalReportData : function(){
-			var approvalReportView = new ApprovalReportView();
-			this.changeView(approvalReportView);
 		},
 		
 	});

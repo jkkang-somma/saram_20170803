@@ -5,41 +5,23 @@ var express = require('express');
 var _ = require("underscore"); 
 var debug = require('debug')('code');
 var router = express.Router();
-var Code = require('../service/officeCode.js');
+var OfficeCode = require('../service/OfficeCode.js');
 
-//코드 목록  코드 테이블 관리시 ... 사용 현제 x
-router.route('/list')
+router.route('/')
 .get(function(req, res) {
-    res.send({});
-});
-
-//코드 조건 목록
-router.route('/list/:category')
-.get(function(req, res) {
-    var _category=req.param("category");
-    if (_.isUndefined(_category) || _.isEmpty(_category)){
-        res.status(500);
-        res.send({
-            success:false,
-            message: "Category is null.",
-            error:{}
+    var officeCode = new OfficeCode();
+    var result = officeCode.getOfficeCodeList().then(function(result){
+            debug("Complete Select OfficeCode List.");
+            res.send(result);    
+        }).catch(function(e){
+            debug("Error Select OfficeCode List.");
+            res.status(500);
+            res.send({
+                success:false,
+                message: e.message,
+                error:e
+            });
         });
-    }
-    
-    var code = new Code({category:_category});
-    var result = code.getCodeList().then(function(result){
-        debug("Complete Select Code List.");
-        res.send(result);    
-    }).catch(function(e){
-        debug("Error Select Code List.");
-        res.status(500);
-        res.send({
-            success:false,
-            message: e.message,
-            error:e
-        });
-    });
 });
-
 
 module.exports = router;

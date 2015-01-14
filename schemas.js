@@ -55,6 +55,16 @@ var Schemas = function (schemaName) {
             state : null           
         },
         
+        outoffice:{
+            year:null,
+            date:null,
+            id:null,
+            office_code:null,
+            day_count:null,
+            memo:null,
+            doc_num:null  
+        },
+        
         //Common
         code:{
             code:null,

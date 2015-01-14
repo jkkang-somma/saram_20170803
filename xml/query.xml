@@ -6,6 +6,7 @@
         	FROM members_tbl
         </query>
         <query id="selectIdByUser">select * from members_tbl where id=?</query>
+        <query id="selectManager">select * from members_tbl where privilege &lt;= 2</query>
         <query id="insertUser">insert into members_tbl(id, name, dept_code, name_commute, join_company, privilege, admin) values(?,?,?,?,?, 0, 0)</query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="deleteUser">delete from members_tbl where id=?</query>
@@ -96,17 +97,9 @@
         <query id="selectApprovalList">
         	select 
         		app.doc_num
-        		, app.submit_id
-        		, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name
-        		, app.manager_id
-        		, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
-        		, submit_date
-        		, decide_date
-        		, submit_comment
-        		, decide_comment
-        		, start_date
-        		, end_date
-        		, office_code
+        		, app.submit_id, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name 
+        		, app.manager_id , (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
+        		, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
         		, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
         		, state
     		from 
@@ -115,24 +108,20 @@
         <query id="selectApprovalListWhere">
         	select 
         		app.doc_num
-        		, app.submit_id
-        		, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name
-        		, app.manager_id
-        		, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
-        		, submit_date
-        		, decide_date
-        		, submit_comment
-        		, decide_comment
-        		, start_date
-        		, end_date
-        		, office_code
+        		, app.submit_id, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name 
+        		, app.manager_id , (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
+        		, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
         		, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
         		, state
     		from 
     			approval_tbl app
         	where (STR_TO_DATE(start_date,'%Y-%m-%d') between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
         	  OR (STR_TO_DATE(end_date,'%Y-%m-%d')  between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
-        	  
+    	</query>
+    	<query id="insertApproval">
+    		insert into approval_tbl
+				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state) 
+			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신')
     	</query>
 	</group>
 	
@@ -200,5 +189,11 @@
     	<query id="empty">
     	</query>
     </group>
-     
+    
+    <group id="outOffice">
+    	<query id="selectOutOfficeList">
+    		select * from out_office_tbl;
+    	</query>
+    	<query id="empty"></query>
+    </group>
 </querys>

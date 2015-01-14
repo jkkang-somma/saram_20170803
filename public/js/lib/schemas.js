@@ -44,7 +44,8 @@ define([
             remove:"glyphicon-trash",
             wrench:"glyphicon-wrench",
             search:"glyphicon-search",
-            edit:"glyphicon-pencil"
+            edit:"glyphicon-pencil",
+            ok:"glyphicon-ok"
         },
         
         //API

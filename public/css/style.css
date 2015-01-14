@@ -6,6 +6,9 @@ body {
 .no-margin{
     margin:10px 10px;
 }
+.no-radius{
+    border-radius:0px !important;
+}
 .head-btn-group{
     padding: 10px;
     padding-bottom: 5px;
@@ -24,13 +27,31 @@ body {
 .relative-layout{
     position:relative;
 }
-
+.page-header{
+    margin: 0;
+    border:none;
+}
+.page-header h1{
+    color: #219076;
+}
+.page-header h1 small{
+    color: #2ABB9B;
+}
 .form-control.yes-form-control{
     border-color:#2ABB9B;
 }
 
 
 /*dataTable*/
+table.dataTable{
+    margin-top:10px;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #2ABB9B;
+}
+table.dataTable thead th {
+border-bottom: 1px solid #2ABB9B;
+}
 table.dataTable tbody tr.selected {
     background: rgb(26, 188, 156);
     color: white;
@@ -38,11 +59,11 @@ table.dataTable tbody tr.selected {
 table.dataTable tbody tr{
     cursor:pointer;
 }
+table.dataTable tbody tr:first-child td{
+    border:none;
+}
 table.dataTable tbody tr.selected td:first-child {
   /*  border-left: 4px solid rgb(22, 160, 133);*/
-}
-table.dataTable tbody tr.selected td{
-    border-bottom: 1px solid rgb(22, 160, 133);
 }
 table.dataTable tbody td {
     vertical-align: middle;
@@ -69,7 +90,6 @@ table.dataTable .subTable {
     cursor: pointer;
     cursor: hand;
     color: white !important;
-    box-sizing:border-box;
     background: #2ABB9B;
     margin:0px;
     border: none;
@@ -104,7 +124,7 @@ table.dataTable .subTable {
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
   color: #2ABB9B !important;
   border: none;
-  background: white;
+  background: beige;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
   color: #2ABB9B !important;
@@ -112,20 +132,74 @@ table.dataTable .subTable {
   background: none;
   padding:0px;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous {
   color: #2ABB9B !important;
   border: none;
   background: none;
   padding:0px;
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled .btn{
+  color: #2ABB9B !important;
+  border: 1px solid #2ABB9B;
+  border-right:none;
+  background: beige;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled .btn{
+  color: #2ABB9B !important;
+  border: 1px solid #2ABB9B;
+  border-left:none;
+  background: beige;
+}
+
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.next .btn {
     border-radius: 0px 3px 3px 0px;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous .btn {
     border-radius: 3px 0px 0px 3px;
 }
- 
+.dataTables_wrapper .dataTables_info{
+    padding-top:.25em;
+}
+.dataTables_wrapper .default_span{
+    display: inline-block;
+    min-width: 1.5em;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: white !important;
+    background: #2ABB9B;
+    margin: 0px;
+    border: none;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;    
+}
 
+.table caption+thead tr:first-child th, .table colgroup+thead tr:first-child th, .table thead:first-child tr:first-child th, .table caption+thead tr:first-child td, .table colgroup+thead tr:first-child td, .table thead:first-child tr:first-child td {
+    border-top: 0;
+    background-image:none;
+    background-color: rgb(52, 73, 94);
+    color: white;
+    transition:border-color .5s, background .5s;
+}
+
+table.dataTable thead .sorting_asc{
+    border-top: 3px #219076 solid !important;
+    background-color: #2ABB9B !important;
+    /*background: url("img/sort_asc.svg") no-repeat center right;*/
+    
+    background-size:12px 12px;
+    color: white;
+}
+table.dataTable thead .sorting_desc {
+    border-bottom: 3px #219076 solid !important;
+    background-color: #2ABB9B !important;
+    color: white;
+}
 
 
 /*Dialog*/
@@ -143,28 +217,22 @@ table.dataTable .subTable {
 }
 .btn-default {
 color: #333;
-background-color: #fff;
-border-color: #ccc;
+background-color: #e0e0e0;
 }
 .btn-default {
-text-shadow: 0 1px 0 #fff;
-background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffffff), to(#e6e6e6));
-background-image: -webkit-linear-gradient(top, #ffffff, 0%, #e6e6e6, 100%);
-background-image: -moz-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
-background-image: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 100%);
-background-repeat: repeat-x;
-border-color: #e0e0e0;
-border-color: #ccc;
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+    color: rgb(42, 187, 155);
+    background-image: none;
+    border-color: transparent;
+    background: beige;
 }
 .btn-default, .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-danger {
-text-shadow: none;
--webkit-box-shadow: none;
-box-shadow:none;
-}
-.btn-success {
-background-image: none;
-filter:none;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow:none;
+    -webkit-transition: background .5s;
+    transition: background .5s;
+    background-image: none;
+    filter:none;
 }
 .btn-success {
     color: #fff;
@@ -174,8 +242,8 @@ filter:none;
 }
 
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open .dropdown-toggle.btn-success {
-    color: #fff;
-    background-color: #16A085;
+    color: #2ABB9B;
+    background: beige;
     background-image:none;
     border-color: transparent;
 }
@@ -189,11 +257,25 @@ filter:none;
     background-image:none;
     border-color: transparent;
 }
+.btn-default:hover,
+.btn-default:focus{
+    border-color: #2ABB9B;
+    color: #2ABB9B;
+    background-color: beige;
+}
 .btn-danger {
     color: #fff;
     background-color: #d9534f;
     background-image:none;
     border-color: transparent;
+}
+.input-group .grid-btn{
+    border-radius:0px !important;
+    border-color:transparent;
+    transition:border-color .5s, background .5s;
+}
+.input-group .input-group-btn:last-child .btn{
+    border-radius: 0px 3px 3px 0px !important;
 }
 
 
@@ -384,4 +466,34 @@ filter:none;
 
 .navbar-inverse .navbar-collapse {
 	border-color: #00CFAF;
+}
+
+/* DatePicker */
+.datepicker .datepicker-days td:nth-child(1).old{
+    color: rgb(200, 100, 100);
+    font-weight: bold;
+}
+
+.datepicker .datepicker-days td:nth-child(7).old{
+    color: rgb(152, 152, 252);
+    font-weight: bold;
+}
+
+.datepicker .datepicker-days td:nth-child(1).new{
+    color: rgb(200, 100, 100);
+    font-weight: bold;
+}
+
+.datepicker .datepicker-days td:nth-child(7).new{
+    color: rgb(152, 152, 252);
+    font-weight: bold;
+}
+.datepicker .datepicker-days td:nth-child(1){
+    color: red;
+    font-weight: bold;
+}
+
+.datepicker .datepicker-days td:nth-child(7){
+    color: blue;
+    font-weight: bold;
 }

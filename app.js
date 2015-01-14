@@ -16,12 +16,12 @@ var session = require('./routes/sessionRouter');
 var rawData = require('./routes/rawDataRouter');
 var holiday = require('./routes/holidayRouter');
 var vacation = require('./routes/vacationRouter');
-
 var approval = require('./routes/approvalRouter');
 var code = require('./routes/codeRouter');
-
 var commute = require('./routes/commuteRouter');
 var changeHistory = require('./routes/changeHistoryRouter');
+var outOffice = require('./routes/outofficeRouter');
+var officeCode = require('./routes/officeCodeRouter');
 //var error = require('./routes/error');
 
 
@@ -36,9 +36,9 @@ app.set('view engine', 'ejs');
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // set bodyParser(Body Limit 50mb)
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser({limit : '50mb'}));
+app.use(bodyParser.urlencoded({limit: '80mb', extended: true}));
+app.use(bodyParser.json({limit: '80mb'}));
+app.use(bodyParser({limit : '80mb'}));
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -101,6 +101,8 @@ app.use('/approval', approval);
 app.use('/code', code);
 app.use('/commute', commute);
 app.use('/changeHistory', changeHistory);
+app.use('/outOffice',outOffice);
+app.use('/officeCode',officeCode);
 
 //app.use('/error', error);
 

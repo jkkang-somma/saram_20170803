@@ -4,30 +4,40 @@ define([
   'backbone',
   'animator',
   'core/BaseView',
+  'dialog',
   'text!templates/addReportTemplate.html',
   'collection/cm/CommuteCollection',
-], function($, _, Backbone, animator, BaseView, addReportTmp, CommuteCollection){
-  var addReportView = BaseView.extend({
-    el:$(".main-container"),
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, CommuteCollection){
+  var approvalReportView = BaseView.extend({
+    options : {},
    
   	events: {
-  	  "click #btnConfirmReport": "onClickBtnSend"
   	},
   	
   	initialize:function(){
   		this.collection = new CommuteCollection();
-  		
-  		$(this.el).html('');
+  		  
+  		$(this.el).html();
 	    $(this.el).empty();
+	    
+	   _.bindAll(this, "onClickBtnSend");
   	},
   	
-    render: function(){
-      $(this.el).append(addReportTmp);
-      
-      // title setting
-      this.setTitleTxt();
-      // default display setting
-      this.setAddReportDisplay();
+    render: function(el){
+  	    var dfd= new $.Deferred();
+  	        
+        if (!_.isUndefined(el)){
+	        this.el=el;
+  	    }
+        $(this.el).append(addReportTmp);
+	    
+  	     // title setting
+        this.setTitleTxt();
+        // default display setting
+        this.setAddReportDisplay(this.options);
+        dfd.resolve();
+  	    
+  	    return dfd.promise();
     },
     
     setTitleTxt : function(){
@@ -39,57 +49,62 @@ define([
       return this;
     },
     
-    setAddReportDisplay : function(){
+    setAddReportDisplay : function(param){
       // table Setting
       this.setTableDisplay();
+      // display setting
+      this.setDefaultDisplay();
       // select box data setting
-      this.setDataDefaultValues();
-      // button Setting
-      this.setBottomButtonCon();
+      this.setDataDefaultValues(param);
     },
     
     setTableDisplay : function() {
-      var table = $(this.el).find('#addReportFormTable');
-      table.css('width','100%');
-      
-      var tableTh = $(this.el).find('#addReportFormTable th');
-      tableTh.css('width','30%');
-      tableTh.css('height','50px');
-      tableTh.css('text-align','center');
-      
-      var tableTdMemo = $(this.el).find('#addReportFormTable textarea');
-      tableTdMemo.css('width','80%');
-      tableTdMemo.css('height','100%');
-      
-      var tableTr = $(this.el).find('#addReportFormTable tr.apployReportNone');
+      var tableTr = $(this.el).find('.apployReportNone');
       tableTr.css('display','none');
     },
-    
-    setDataDefaultValues : function(){
+    setDefaultDisplay : function() {
       
-      var disableValues = ['writeName', 'beforeDate', 'afterDate', 'selGubun', 'memo'];
+      var disableValues = ['submit_id', 'start_date', 'end_date', 'office_code', 'submit_comment', 'manager_id'];
       
       for(var dvI=0; dvI<disableValues.length; dvI++){
         $(this.el).find('#' + disableValues[dvI]).attr('readonly',true);
         $(this.el).find('#' + disableValues[dvI]).attr('disabled',true);
       }
-      $(this.el).find('#selGubun').css('width', '35%');
+      
+      // $(this.el).find('#submit_id').css('width', '35%');
+      
+      $(this.el).find('.openDatePicker').css('display', 'inline-block');
+      $(this.el).find('.openDatePicker').css('width', '48%');
       
       // 결재구분 :  
-      var selGubun = $(this.el).find('#addApployGubun');
-      selGubun.css('width', '35%');
+      var selGubun = $(this.el).find('#state');
       
       var arrGubunData = [];
-      // test Data
-      for(var i = 0; i < 10 ; i++){
-        var testData = {'code' : 'V'+i, 'name' : '구분값'+i, 'day_count' : '0.1'+i};
-        arrGubunData[i] = testData;
-      }
+      arrGubunData.push({'code' : '결재', 'name' : '결재'});
+      arrGubunData.push({'code' : '반려', 'name' : '반려'});
+      arrGubunData.push({'code' : '보류', 'name' : '보류'});
       
       // option setting
       for(var index=0; index < arrGubunData.length; index++){
         var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
         selGubun.append(optionHtml);
+      }
+    
+    },
+    
+    setDataDefaultValues : function(param){
+      console.log(param);
+      var _this = $(this.el);
+      if(param != undefined){
+        _this.find('#submit_id').val(param.submit_name);
+        _this.find('#start_date').val(param.start_date);
+        _this.find('#end_date').val(param.end_date);
+        _this.find('#office_code').html("<option>"+param.office_code_name+"</option>");
+        _this.find('#submit_comment').val(param.submit_comment);
+        // _this.find('#decide_comment').val(param.decide_comment);
+        
+        _this.find('#manager_id').html("<option>"+param.manager_name+"</option>");
+        _this.find('#state').val(param.state);
       }
     },
     
@@ -119,13 +134,12 @@ define([
   	},
   	
   	onClickBtnSend : function(evt){
-      var formData = this.getFormData( this.$el.find('form'));
+      var formData = this.getFormData($(this.el).find('form'));
       
-      console.log(formData);
       // 완료 후
       // location.href = '#reportmanager';
     }
     
   });
-  return addReportView;
+  return approvalReportView;
 });

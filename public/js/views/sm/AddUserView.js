@@ -51,34 +51,41 @@ define([
     	submitAdd : function(e){
     	    var view = this;
     	    var dfd= new $.Deferred();
-    	    var _userModel=new UserModel(this.getFormData( $(this.el).find('form')));
-    	    _userModel.on("invalid", function(model, error) {
-                Dialog.warning(error);  
-            });
-    	    _userModel.save({},{
-    	        success:function(model, xhr, options){
-    	            
-    	            //view.collection
-    	            var codeList= view.collection.models;
-    	            var modelArr=_.pluck(codeList, "attributes");
-    	            //var keyArr=_.pluck(models, "code");
-    	            var findArr=_.filter(modelArr, function(obj){ 
-    	                return obj.code==model.attributes.dept_code;
-    	            });
-
-    	            var deptName=findArr[0].name; 
-    	            model.attributes.dept_name = deptName;
-    	            model.attributes.leave_company ="";
-    	            model.attributes.privilege ="0";
-    	            dfd.resolve(model);
-    	        },
-    	        error:function(model, xhr, options){
-    	            var respons=xhr.responseJSON;
-    	            Dialog.error(respons.message);
-    	            dfd.reject();
-    	        },
-    	        wait:false
-    	    });
+    	    var _data= this.getFormData( $(this.el).find('form'));
+    	    var _userModel=new UserModel(_data);
+    	   // _userModel.on("invalid", function(model, error) {
+        //         Dialog.warning(error);  
+        //     });
+            var _validate=_userModel.validation(_data);
+            if(!_.isUndefined(_validate)){
+                Dialog.warning(_validate);
+                dfd.reject();
+            } else {
+                _userModel.save({},{
+        	        success:function(model, xhr, options){
+        	            //view.collection
+        	            var codeList= view.collection.models;
+        	            var modelArr=_.pluck(codeList, "attributes");
+        	            //var keyArr=_.pluck(models, "code");
+        	            var findArr=_.filter(modelArr, function(obj){ 
+        	                return obj.code==model.attributes.dept_code;
+        	            });
+    
+        	            var deptName=findArr[0].name; 
+        	            model.attributes.dept_name = deptName;
+        	            model.attributes.leave_company ="";
+        	            model.attributes.privilege ="0";
+        	            dfd.resolve(model);
+        	        },
+        	        error:function(model, xhr, options){
+        	            var respons=xhr.responseJSON;
+        	            Dialog.error(respons.message);
+        	            dfd.reject();
+        	        },
+        	        wait:false
+        	    });    
+            }
+    	    
     	    return dfd.promise();
     	},
     	

@@ -5,13 +5,20 @@ define([
   'underscore',
   'backbone',
   'log',
+  'schemas',
+  'dialog',
   'datatables',
   'util',
+  'text!templates/default/button.html',
   //'fnFindCellRowIndexes',
   'text!templates/component/grid.html',
-  ], function($, _, Backbone, log, Datatables, Util, GridHTML){
+  ], function($, _, Backbone, log, Schemas, Dialog, Datatables, Util, ButtonHTML, GridHTML){
     var LOG=log.getLogger('Grid');
     var gridId=0;
+    var _glyphiconSchema=Schemas.getSchema('glyphicon');
+    var _defaultGroupBtnTag='<span class="input-group-btn"></span>';
+    var _defaultBtnTag='<button class="btn btn-default btn-sm btn-success grid-btn" type="button"></button>';
+    
     var Grid = Backbone.View.extend({
     	initialize:function(options){
     	    var grid=this;
@@ -21,11 +28,20 @@ define([
     	    });
     	    
             this.options=options;
+            this.buttonid=[]
+            
+            var _btns=this.options.buttons;
+            if (_.isUndefined(_btns) || _.isNull(_btns) || _btns.length <= 0){
+                _btns=["search"];
+                LOG.debug(_btns);
+                this.options.buttons=_btns;    
+            }
             this.options.format=this.format;
             
             if (_.isUndefined(this.options.id) || _.isNull(this.options.id)){
                 this.options.id = "grid-"+(gridId++);
             }
+            
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'getSelectItem');
     		_.bindAll(this, 'removeRow');
@@ -104,8 +120,103 @@ define([
                 _.isUndefined(smart)?false:smart
             ).draw();
     	},
-    	draw:function(){
+    	_crteateDefaultButton:function(id, name){
+    	    var _buttonIcon=$(ButtonHTML);
+    	    //_buttonIcon.attr("id", id);
+            _buttonIcon.addClass(_glyphiconSchema.value(name));
+            
+            var _button=$(_defaultBtnTag);
+            _button.attr("id", id);
+            _button.append(_buttonIcon);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));       
+            return _button;
+    	},
+    	_crteateCustomButton:function(obj){
+    	    var _grid=this;
+    	    var _buttonIcon=$(ButtonHTML);
+    	    var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+    	    //_buttonIcon.attr("id", _btnId);
+            _buttonIcon.addClass(_glyphiconSchema.value(obj.name));
+
+            this.buttonid[obj.name] = _btnId;
+            var _button=$(_defaultBtnTag);
+            _button.attr("id", _btnId);
+            _button.append(_buttonIcon);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
+            _button.click(function(){
+                if(_.isFunction(obj.click)){
+                    var callback=obj.click;
+                    callback(_grid);
+                }
+            })
+    	},
+    	_createSearchButton:function(name){
+    	    var _grid=this;
+    	    var _btnId=this.options.id +"_"+ name +"_Btn";
+    	    
+    	    var _defaultSearchInput=$('<input type="text" class="form-control" placeholder="Search">');
+    	    _defaultSearchInput.addClass('yes-form-control');
+    	    this._defatulInputGroup.append(_defaultSearchInput);
+    	    this._defatulInputGroup.css({display:"table"});
+    	    
+    	    _defaultSearchInput.on('keyup',function(key){
+    	         _grid.search(this.value,false,true);          
+    	    });
+    	    this.buttonid["search"] = _btnId;
+    	    this._crteateDefaultButton(_btnId, name);
+    	},
+    	_createRefreshButton:function(name){
+    	    var _grid=this;
+    	    var _btnId=this.options.id +"_"+ name +"_Btn";
+    	    var _btn=this._crteateDefaultButton(_btnId, name);
+    	    this.buttonid["refresh"] = _btnId;
+    	     //refresh event
+    	    _btn.click(function(){
+                _grid.render();//ew.render();
+            });
+    	},
+    	_drawButtons:function(){//button draw
+    	    var _grid=this;
+    	    var _btns=this.options.buttons;
+            
+    	    //Button Group
+    	    if($("#"+this.options.el).find(".input-group")){
+    	        $("#"+this.options.el).find(".input-group").remove();
+    	    }
+    	    this._defatulInputGroup=$('<div class="input-group input-group-sm"></div>');
+    	    
+    	    for (var index in _btns){
+    	        var obj = _btns[index];
+    	        var name;
+    	        if (_.isString(obj)){
+    	            name=obj;
+    	        } else if (_.isObject(obj)){
+    	            if (_.isUndefined(obj.type) || _.isNull(obj.type) || _.isEmpty(obj.type)){
+    	                continue;
+    	            }
+    	            
+    	            name=obj.type;
+    	        }
+    	        switch (name) {
+    	            case "search" :
+                	    this._createSearchButton(name);
+    	                break;
+    	            case "custom" :
+    	                this._crteateCustomButton(obj);
+    	                break;
+                    case "refresh" :
+                        this._createRefreshButton(name);
+                        break;
+    	        }
+    	    }
+            
+    	    $("#"+this.options.el).append(this._defatulInputGroup);
+    	},
+    	_draw:function(){
     	    var _grid = this;
+    	    
+    	    this._drawButtons();
+    	
     	    if($.fn.DataTable.isDataTable($("#"+this.options.el).find("#"+this.options.id))){//
     	        $("#"+this.options.el).find("#"+this.options.id).parent().remove();
     	    }
@@ -172,16 +283,20 @@ define([
             this.DataTableAPI=_tableAPI;
             this.updateCSS();
     	},
+    	getButton: function(name){
+    	    return this.buttonid[name];
+    	    
+    	},
     	render:function(){
     	   var grid = this;
     	   if(Util.isNull(this.options.fetch) || this.options.fetch === true){
         	   this.options.collection.fetch({
         	       success: function(){
-        	           grid.draw();
+        	           grid._draw();
         	       }
         	   });    
     	   }else{
-    	       grid.draw();
+    	       grid._draw();
     	   }
     	   return grid;
      	}

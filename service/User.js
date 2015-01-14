@@ -24,6 +24,9 @@ var User = function (data) {
     var _getUserList = function(){
         return UserDao.selectUserList();
     }
+    var _getManagerList = function(){
+        return UserDao.selectManagerList();
+    }
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
     }
@@ -37,6 +40,7 @@ var User = function (data) {
         get:_get,
         getUser:_getUser,
         getUserList:_getUserList,
+        getManagerList:_getManagerList,
         initPassword:_initPassword,
         data:_data,
         remove:_removeUser,

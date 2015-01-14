@@ -8,11 +8,12 @@ define([
         idAttribute:"_id",
         initialize: function () {
             _.bindAll(this, "remove");
+            _.bindAll(this, "validation");
         },
-    	validate:function(attrs){
+    	validation:function(attrs){
     	    for(var name in attrs){
     	        var value=attrs[name];
-    	        if (_.has(this.default=name)){//default에 있는 필드만 유효성 검사
+    	        if (_.has(this.default, name)){//default에 있는 필드만 유효성 검사
         	        if (_.isUndefined(value) || _.isNull(value) || _.isEmpty(value)){
         	            return name + " field is require."
         	        }    

@@ -5,16 +5,22 @@ define([
   'util',
   'animator',
   'core/BaseView',
+  'grid',
+  'schemas',
+  'dialog',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
+  'views/rm/AddNewReportView',
+  'views/rm/ApprovalReportView',
   'bootstrap-datepicker',
-], function($, _, Backbone, Util, animator, BaseView, commuteListTmp, ApprovalCollection, datepicker){
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, datepicker){
   var reportListView = BaseView.extend({
     el:$(".main-container"),
     
     events: {
   	  "click #commuteManageTbl tbody tr": "onSelectRow",
-  	  "click #btnCommuteSearch": "onClickSearchBtn"
+  	  "click #btnCommuteSearch": "onClickSearchBtn",
+  	  "click #btnCommuteClear": "onClickClearBtn"
   	},
    
   	initialize:function(){
@@ -65,7 +71,24 @@ define([
       
       // reportmanager/add
       addReportBtn.click(function(){
-        location.href = '#reportmanager/add';
+        // location.href = '#reportmanager/add';
+        var _addNewReportView = new AddNewReportView();
+        Dialog.show({
+          title:"결재 상신", 
+          content:_addNewReportView, 
+          buttons:[{
+            label: "상신",
+            cssClass: Dialog.CssClass.SUCCESS,
+            action: function(dialogRef){// 버튼 클릭 이벤트
+            _addNewReportView.onClickBtnSend(dialogRef);
+            }
+          }, {
+            label: 'Close',
+            action: function(dialogRef){
+            dialogRef.close();
+          }
+          }]
+        });
       });
        // reportmanager/approval
       approvalBtn.click(function(){
@@ -73,9 +96,28 @@ define([
      		var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-         		 location.href = '#reportmanager/approval';
+         		 var _approvalReportView = new ApprovalReportView();
+         		 // data param 전달
+         		 _approvalReportView.options = selectData;
+         		 // Dialog
+         		 Dialog.show({
+                  title:"결재", 
+                  content:_approvalReportView, 
+                  buttons:[{
+                      label: "확인",
+                      cssClass: Dialog.CssClass.SUCCESS,
+                      action: function(dialogRef){// 버튼 클릭 이벤트
+                        _approvalReportView.onClickBtnSend(dialogRef);
+                      }
+                  }, {
+                      label: 'Close',
+                      action: function(dialogRef){
+                          dialogRef.close();
+                      }
+                  }]
+              });
      		} else {
-     			alert("결재 항목을 선택해주세요");
+     		  Dialog.warning("항목을 선택해주세요.");
      		}
        
       });
@@ -140,7 +182,9 @@ define([
       var sDateFormat
         = d.getFullYear() + "-" + this.getzFormat(d.getMonth() + 1, 2) + "-" + this.getzFormat(d.getDate(), 2)
          + " " + this.getzFormat(d.getHours(), 2) + ":" + this.getzFormat(d.getMinutes(), 2) + ":" + this.getzFormat(d.getSeconds(), 2);
-      
+      if (dateData == null){
+        sDateFormat = "-"
+      }
       console.log(sDateFormat);
       return sDateFormat;
     },
@@ -200,6 +244,11 @@ define([
       } else {
         this.setReportTable(true);
       }
+    },
+    onClickClearBtn : function(evt){
+      $(this.el).find("#beforeDate").val('');
+      $(this.el).find("#afterDate").val('');
+      this.setReportTable(false);
     }
     
   });

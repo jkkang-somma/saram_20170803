@@ -11091,7 +11091,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": '<span class="default_span">_START_ ~ _END_ Totall _TOTAL_ </span>',
 	
 	
 			/**
@@ -11112,7 +11112,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": '<span class="default_span">Total 0 </span>',
 	
 	
 			/**
@@ -11134,7 +11134,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": '<span class="default_span">Filtered from Total _MAX_ </span>',
 	
 	
 			/**
@@ -14123,8 +14123,7 @@
 	
 							switch ( button ) {
 								case 'ellipsis':
-									container.append('<button type="button" class="btn btn-default btn-sm btn-success">...'+
-												 '</button>');
+									container.append('<span class="default_span no-radius" >. . .</span>');
 									break;
 	
 								case 'first':

@@ -14,7 +14,7 @@ require.config({
    },
    paths: {
    //    jquery: 'tool/jquery.min',
-      backbone: 'tool/backbone/backbone-min',
+      backbone: 'tool/backbone/backbone',
       underscore: 'tool/underscore/underscore-min',
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
@@ -33,7 +33,6 @@ require.config({
       
       monthpicker:'lib/component/monthpicker',
       grid:'lib/component/grid',
-      gridtemp:'lib/component/gridtemp',
       schemas:'lib/schemas',
       
       i18n:'tool/i18n-master/i18n',

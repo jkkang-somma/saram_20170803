@@ -41,6 +41,9 @@ define([
                 cssClass: CssClass.ERROR,
                 action: function(dialogRef){
                     dialogRef.close();
+                    if (!_.isUndefined(callback)){
+                        callback();    
+                    }
                 }
             }] 
         });
@@ -56,6 +59,9 @@ define([
                 cssClass: CssClass.WARNING,
                 action: function(dialogRef){
                     dialogRef.close();
+                    if (!_.isUndefined(callback)){
+                        callback();    
+                    }
                 }
             }] 
         });
@@ -72,6 +78,9 @@ define([
                 cssClass: CssClass.SUCCESS,
                 action: function(dialogRef){
                     dialogRef.close();
+                    if (!_.isUndefined(callback)){
+                        callback();    
+                    }
                 }
             }] 
         });
@@ -150,14 +159,20 @@ define([
                                     dialogRef.getModalBody().html(res.msg); 
                                 }
                                 
-                                if ((!_.isUndefined(config.actionCallBaCK))&&_.isFunction(config.actionCallBaCK)){
+                                if ((!_.isUndefined(config.actionCallBack))&&_.isFunction(config.actionCallBack)){
                                     //validation 체크, 콜백 함수가 정의 되어있다면 해당 함수 호출
-                                    var callbackFn=config.actionCallBaCK;
+                                    var callbackFn=config.actionCallBack;
                                     callbackFn(res);
                                 }
                                 dialogRef.close();
                             }).fail(function(e){//에러 처리.
                                 var response=_responseSchema.getDefault(e);
+                                if ((!_.isUndefined(config.errorCallBack))&&_.isFunction(config.errorCallBack)){
+                                    //validation 체크, 콜백 함수가 정의 되어있다면 해당 함수 호출
+                                    var callbackFn=config.errorCallBack;
+                                    callbackFn(response);
+                                }
+                                dialogRef.close();
                                 error(response.msg);
                             })
                         }

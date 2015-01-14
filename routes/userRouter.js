@@ -25,7 +25,24 @@ router.route('/list')
         });
     });
 });
-
+//사용자 목록 조회(관리자).
+router.route('/list/manager')
+.get(function(req, res){
+    // Get user infomation list (GET)
+    var user = new User();
+    var result = user.getManagerList().then(function(result){
+        debug("Complete Select User List.");
+        res.send(result);    
+    }).catch(function(e){
+        debug("Error Select User List.");
+        res.status(500);
+        res.send({
+            success:false,
+            message: e.message,
+            error:e
+        });
+    });
+});
 //사용자 정보 조회
 router.route('/:id')
 .get(function(req, res){
