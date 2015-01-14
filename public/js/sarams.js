@@ -9,6 +9,7 @@ require.config({
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
       'bootstrap-datepicker': { deps: ['jquery','bootstrap']  },
+      'bootstrap-datetimepicker': { deps: ['jquery','bootstrap']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
    },
@@ -20,7 +21,9 @@ require.config({
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
       'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
+      'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min', 
       'datatables':'tool/datatables/media/js/jquery.dataTables',
+      moment:'tool/moment/moment.min',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
       dialog:'lib/dialog',
