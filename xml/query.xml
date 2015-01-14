@@ -169,8 +169,18 @@
 				date BETWEEN ? AND ?
 			ORDER BY date
         </query>
-        
-        <query id="empty"></query>
+
+        <query id="updateCommuteResultInOutTime">
+        	UPDATE 
+        		commute_result_tbl 
+        	SET 
+        		in_time = ?,
+        		in_time_change = ?,
+        		out_time = ?,
+        		out_time_change = ?
+        	WHERE 
+        		id = ? AND year = ? AND date = ?
+        </query>
     </group>
     
     <group id="changeHistory">
@@ -197,7 +207,38 @@
 			    AND c.change_column = ?
 			ORDER BY c.seq
     	</query>
-    	<query id="empty">
+    	
+        <query id="selectInOutChangeCount">
+			select (
+			            select count(*) 
+			            from change_history_tbl
+			            where
+							year = ?
+			                and id = ?
+			                and date = ?
+			                and change_column = 'in_time'
+					) as in_time_change_count,
+			        (
+			            select count(*) 
+			            from change_history_tbl
+			            where
+							year = ?
+			                and id = ?
+			                and date = ?
+			                and change_column = 'out_time'
+					) as out_time_change_count        
+			from dual;        
+        </query>    	
+    	
+    	<query id="inserChangeHistory">
+			INSERT INTO change_history_tbl
+			(
+				year, id, date,	change_column, change_before, change_after, change_date, change_id
+			)
+			values
+			(
+				?, ?, ?, ?, ?, ?, now(), ?			
+			);
     	</query>
     </group>
      
