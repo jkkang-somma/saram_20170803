@@ -30,9 +30,9 @@ define([
             over_time : "", 
             in_time_change : 0,
             out_time_change : 0,
-            comment_count : 0
-        },
-        
+            comment_count : 0,
+            changeHistoryJSONArr : []
+        }
     });
 
     

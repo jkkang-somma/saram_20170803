@@ -119,15 +119,8 @@ define([
      		var _this = this;
      		vacationModel.save(data, {
      			success: function(model, response) {
-     				if (response.changedRows) {
-//     		     		var table = _this.$el.find("#vacationDataTable").DataTable();
-//     		     		data.holiday = data.total_day - data.used_holiday;
-//     		     		table.row('.selected').data( data );
-     		     		_this.$el.find('#vacationInfoPopup').modal('hide');
-     		     		_this.onClickSearchBtn();
-     				} else {
-     					alert("해당 데이터가 존재하지 않습니다.");
-     				}
+     				_this.$el.find('#vacationInfoPopup').modal('hide');
+     				_this.onClickSearchBtn();
      			}, error : function(model, res){
      				alert("업데이트가 실패했습니다.");
      			}

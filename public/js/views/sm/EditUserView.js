@@ -21,7 +21,9 @@ define([
     	render:function(el){
     	    var dfd= new $.Deferred();
     	    var view=this;
-    	    var form = new Form();
+    	    var form = new Form({
+    	        form:_.noop()
+    	    });
     	    return dfd.promise();
      	},
     	
