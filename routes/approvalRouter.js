@@ -105,15 +105,15 @@ router.route('/')
         });
     });
 }).put(function(req, res) {
-	debug("결재 수정:");
+	debug("###############결재 수정:");
     var approval = new Approval(req.body);
-    debug("ID:" + approval.get("id"));
+    debug("ID:" + approval.get("doc_num"));
     
-    approval.insertApproval().then(function(e){
-        debug("Complete Add Approval.");
-        res.send({success:true, msg:"Complete Add Approval."})
+    approval.updateApprovalConfirm().then(function(e){
+        debug("Complete Update Approval.");
+        res.send({success:true, msg:"Complete Update Approval."})
     }).catch(function(e){
-        debug("Error Add Approval.");
+        debug("Error Update Approval.");
         res.status(500);
         res.send({
             success:false,

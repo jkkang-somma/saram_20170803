@@ -27,6 +27,9 @@ var Approval = function (data) {
     var _insertApproval = function () {
         return ApprovalDao.insertApproval(_data);
     }
+    var _updateApprovalConfirm = function() {
+        return ApprovalDao.updateApprovalConfirm(_data);
+    }
     var _getApprovalIndex = function (yearmonth) {
         return ApprovalDao.selectApprovalIndex(yearmonth);
     }
@@ -50,6 +53,7 @@ var Approval = function (data) {
         getApprovalList:_getApprovalList,
         getApprovalListWhere:_getApprovalListWhere,
         insertApproval:_insertApproval,
+        updateApprovalConfirm:_updateApprovalConfirm,
         getApprovalIndex:_getApprovalIndex,
         setApprovalIndex:_setApprovalIndex,
         updateApprovalIndex:_updateApprovalIndex
