@@ -60,7 +60,6 @@ INSERT INTO `members_tbl` VALUES
   ('0120801','','석정훈','7100','석정훈','2012-08-07','','3',0),
   ('0130101','','조영재','5100','조영재','2013-01-01','','3',0),
   ('0140201','','김정숙','5100','김정숙','2014-02-10','','3',0),
-  ('0140607','','문영철','0001','문영철','2014-07-02','','3',0),
   ('0150101','','손애호','7300','손애호','2015-01-01','','3',0),
   ('0150102','','김종민','7100','김종민','2015-01-05','','3',0),
   ('030301','','이혜영','1000','이혜영','2003-03-01','','3',0),
@@ -176,8 +175,9 @@ insert into work_type_code_tbl values
   ('10', '지각'),
   ('01', '조퇴'),
   ('11', '지각,조퇴'),
-  ('22', '결근'),
-  ('33', '휴일');
+  ('21', '결근'),
+  ('22', '결근_미결'),
+  ('30', '휴일');
   
 CREATE TABLE IF NOT EXISTS `office_code_tbl` (
   `code` VARCHAR(10) NOT NULL COMMENT '관리코드',
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   `standard_out_time` DATETIME NULL COMMENT '퇴근 기준 시각',
   `in_time` DATETIME NULL COMMENT '출근 시각',
   `out_time` DATETIME NULL COMMENT '퇴근 시각',
-  `work_type` VARCHAR(10) NULL COMMENT '00:정상, 10:지각, 01:조퇴, 11:지각.조퇴, 22:결근, 33:휴일',
+  `work_type` VARCHAR(10) NULL COMMENT 'work_type_code_tbl 테이블 참조',
   `vacation_code` VARCHAR(10) NULL COMMENT '휴가정보 (V01 ~ V06)',
   `out_office_code` VARCHAR(10) NULL COMMENT '외근, 출장 정보 (W01 ~ W04)',
   `overtime_code` VARCHAR(10) NULL COMMENT '야근수당 정보 ( 2015_AA ~ 2015_BC )',
@@ -321,6 +321,7 @@ CREATE TABLE IF NOT EXISTS `approval_tbl` (
   `end_date` VARCHAR(12) NULL COMMENT '근태 종료일',
   `office_code` VARCHAR(10) NOT NULL,
   `state` VARCHAR(45) NOT NULL COMMENT '처리 상태 ( 상신 / 결제완료 / 반려 / 보류 )',
+  `black_mark` VARCHAR(3) NULL COMMENT '상신.결재 상태 ( 1:정상, 2:당일결재, 3:익일결재 )',
   PRIMARY KEY (`doc_num`),
   INDEX `fk_approval_tbl_office_code_tbl1_idx` (`office_code` ASC),
   CONSTRAINT `fk_approval_tbl_office_code_tbl1`
@@ -339,6 +340,7 @@ CREATE TABLE IF NOT EXISTS `out_office_tbl` (
   `day_count` FLOAT NOT NULL COMMENT 'office_code_tbl의 day_count',
   `memo` VARCHAR(300) NULL COMMENT 'comment',
   `doc_num` VARCHAR(45) NOT NULL COMMENT '결재문서 번호',
+  `black_mark` VARCHAR(3) NULL COMMENT '상신.결재 상태 ( 1:정상, 2:당일결재, 3:익일결재 )',
   INDEX `fk_out_office_tbl_approval_tbl_idx` (`doc_num` ASC),
   PRIMARY KEY (`date`, `id`, `year`, `office_code`),
   CONSTRAINT `fk_out_office_tbl_approval_tbl`
@@ -378,6 +380,7 @@ CREATE TABLE IF NOT EXISTS `vacation_tbl` (
   `year` VARCHAR(10) NOT NULL COMMENT '적용 년도',
   `id` VARCHAR(45) NOT NULL COMMENT '사번',
   `total_day` FLOAT NOT NULL COMMENT '총 연차일수',
+  `memo` TEXT(1000) NULL COMMENT '메모',
   PRIMARY KEY (`year`, `id`))
 ENGINE = InnoDB
 COMMENT = '직원의 연차 할당';

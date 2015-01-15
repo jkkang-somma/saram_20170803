@@ -21,7 +21,7 @@ ApprovalDao.prototype.insertApproval =  function (data) {
 };
 ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
     var queryStr = db.getQuery('approval', 'updateApprovalConfirm');
-    return db.queryV2(queryStr, []);
+    return db.queryV2(queryStr, [data.decide_comment, data.state, data.doc_num]);
 };
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
     var queryStr = db.getQuery('approval_index', 'selectMaxIndexApproval');

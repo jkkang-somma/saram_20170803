@@ -12,7 +12,7 @@ define([
   'i18n!nls/common',
   'i18n!nls/error',
   'views/LoadingView',
-  'views/NavigationView',
+  'views/NavigationView','bootstrap-datetimepicker'
 ], function($, _, Backbone, SessionModel, MainRouter, log, Bootstrap, Dialog, i18Common, i18Error, LoadingView, NavigationView){
     var LOG=log.getLogger("APP");
     var loadingView;

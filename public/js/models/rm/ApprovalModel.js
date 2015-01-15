@@ -6,7 +6,7 @@ define([
 	
     var ApprovalModel = Backbone.Model.extend({
         urlRoot: '/approval',
-        idAttribute:"id",
+        idAttribute:"_id",
         initialize: function () {
         },
         default:{

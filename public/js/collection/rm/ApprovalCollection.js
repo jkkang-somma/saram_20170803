@@ -10,5 +10,6 @@ define([
         initialize : function(){
         }
     });
+    
     return ApprovalCollection;
 });

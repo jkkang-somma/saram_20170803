@@ -3,14 +3,13 @@
 // js lib config
 // load end event ==> app.initialize();
 require.config({
-   locale: "en",
+   locale: "kr",
    waitSeconds: 2000,
    shim: {
       'util' : {deps : ['jquery', 'underscore']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
-      'bootstrap-datepicker': { deps: ['jquery','bootstrap']  },
-      'bootstrap-datetimepicker': { deps: ['jquery','bootstrap','moment']  },
+      //'bootstrap-datepicker': { deps: ['jquery','bootstrap']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
    },
@@ -21,11 +20,8 @@ require.config({
       'underscore.string': 'tool/underscore/underscore.string.min',
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
-      'moment':'tool/moment/moment.min',
-      'moment_kr':'tool/moment/locale/kr',
-      'moment_en':'tool/moment/locale/en',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
-      'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
+      //'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min', 
       'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
@@ -52,9 +48,6 @@ require.config({
    config:{
       i18n:{
          locale:'kr'
-      },
-      moment: {
-         noGlobal: true
       }
    }
 });

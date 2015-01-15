@@ -30,7 +30,6 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     	initialize:function(){
     		$(this.el).html('');
     	    $(this.el).empty();
-
     	    this.rawDataCollection = new RawDataCollection();
     	    //this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}});
             this.departmentCollection = null;
@@ -47,7 +46,7 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     		    buttons:["search","refresh"]
     		};
     		
-    		this.buttonInit();
+    		//this.buttonInit();
     	},
     	events: {
     	    "change #rawDataDeptCombo" : "changeDept"
@@ -57,7 +56,7 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
             
     	},
     	buttonInit:function(){
-    	   
+
     	},
     	
     	render:function(){

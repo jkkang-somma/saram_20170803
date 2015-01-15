@@ -104,7 +104,9 @@ router.route('/')
             error:e
         });
     });
-}).put(function(req, res) {
+})
+router.route('/:_id')
+.put(function(req, res) {
 	debug("###############결재 수정:");
     var approval = new Approval(req.body);
     debug("ID:" + approval.get("doc_num"));

@@ -152,7 +152,6 @@ define([
     	    _layOut.append(_head);
     	    _layOut.append(_content);
     	    $(this.el).html(_layOut);
-    	    
           //  this.affterRender();
      	}
     });
