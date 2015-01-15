@@ -115,7 +115,9 @@ define([
   	      var _datePickerElement=$(_datePickerTag);
   	      
   	      _datePickerElement.find("#"+_data.id).datetimepicker({
-            pickTime: false
+            pickTime: false,
+            language: "ko",
+            format: "YYYY-MM-DD"
          });
          
   	      _view.elements.push(_datePickerElement);

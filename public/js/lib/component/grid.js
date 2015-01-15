@@ -231,9 +231,13 @@ define([
                 });
     	    }
             
-            
     	    for (var i=0; i < this.options.column.length; i++){// 컬럼 만들기.
-    	        _columns.push({ "title":this.options.column[i], "data" : this.options.dataschema[i] });
+    	        var _column=this.options.column[i];
+    	        if (_.isObject(_column)){
+    	            _columns.push(_column);
+    	        } else {
+    	            _columns.push({ "title":this.options.column[i], "data" : this.options.dataschema[i] });
+    	        }
     	    }
     	    
     	    this.columns= _columns;
@@ -289,12 +293,17 @@ define([
     	},
     	render:function(){
     	   var grid = this;
+    	   
     	   if(Util.isNull(this.options.fetch) || this.options.fetch === true){
-        	   this.options.collection.fetch({
+    	       var _defaultFetchParams={
         	       success: function(){
         	           grid._draw();
         	       }
-        	   });    
+        	   };
+    	       if (!_.isUndefined(this.options.fetchParam)){
+    	           _defaultFetchParams=_.extend(_defaultFetchParams, this.options.fetchParam);
+    	       }
+        	   this.options.collection.fetch(_defaultFetchParams);    
     	   }else{
     	       grid._draw();
     	   }

@@ -12,7 +12,6 @@ define([
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'bootstrap-datepicker',
   'models/common/HolidayModel',
   'collection/common/HolidayCollection',
   'models/common/RawDataModel',
@@ -25,7 +24,7 @@ define([
   'collection/vacation/OutOfficeCollection',
   'views/cm/popup/CreateDataPopupView',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, 
-HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, datepicker,
+HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
 HolidayModel, HolidayCollection, RawDataModel, RawDataCollection, UserModel, UserCollection, CommuteModel, CommuteCollection, OutOfficeModel, OutOfficeCollection,
 CreateDataPopupView){
     var CreateDataView = BaseView.extend({

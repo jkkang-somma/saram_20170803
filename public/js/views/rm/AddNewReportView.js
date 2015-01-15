@@ -11,8 +11,7 @@ define([
   'collection/sm/UserCollection',
   'models/rm/ApprovalModel',
   'models/rm/ApprovalIndexModel',
-  'bootstrap-datepicker',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel, datepicker){
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
     
   	events: {

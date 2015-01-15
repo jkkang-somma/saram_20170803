@@ -28,9 +28,6 @@ AddRawDataAddPopupView){
     		$(this.el).html('');
     	    $(this.el).empty();
     	    
-    	    this.userCollection = new UserCollection();
-    	    this.userCollection.fetch();
-    	    
     	    this.rawDataCollection = new RawDataCollection();
     	    var today = new Date(), y = today.getFullYear, m = today.getMonth();
     	    var firstDay = new Date(y, m, 1);
@@ -49,11 +46,11 @@ AddRawDataAddPopupView){
     		    buttons:["search","refresh"]
     		};
     		
-    		this.buttonInit();
+    		//this.buttonInit();
     	},
     	
     	buttonInit:function(){
-    	    var that = this;
+    	    //var that = this;
 
     	},
     	

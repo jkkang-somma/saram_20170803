@@ -135,30 +135,80 @@ define([
   	},
   	
   	onClickBtnSend : function(evt){
-  	  this.dfd = new $.Deferred();
+  	  this.thisDfd = new $.Deferred();
       var formData = this.getFormData($(this.el).find('form'));
       formData["doc_num"] = this.options["doc_num"];
-      formData["idAttribute"] = this.options["update"];
+      // formData["idAttribute"] = "doc_num";
       console.log(formData);
+      // "_id" : formData.doc_num
+      formData["_id"] = this.options["doc_num"];
       
       
-      var _this = this;
-      var _approvalModel = new ApprovalModel(formData);
-      _approvalModel.save({},{
-      	        success:function(model, xhr, options){
-      	            Dialog.show("Complete Update Approval.");
-      	            _this.thisDfd.resolve(model);
-      	        },
-      	        error:function(model, xhr, options){
-      	            var respons=xhr.responseJSON;
-      	            Dialog.error(respons.message);
-      	            _this.thisDfd.reject();
-      	        },
-      	        wait:false
-      	    }); 
-	       return _this.thisDfd.promise();
+      var sStart = $(this.el).find('#start_date').val();
+      var sEnd = $(this.el).find('#end_date').val();
+      
+      var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
+      var end = new Date(sEnd.substr(0,4),sEnd.substr(5,2)-1,sEnd.substr(8,2));
+      var day = 1000*60*60*24;
+      alert("end - start : " + (end - start) + "  // 기간 : " + (parseInt((end - start)/day)));
+      
+      var compareVal = parseInt((end - start)/day) + 2;
+      formData["insertCnt"] = compareVal;
+      var arrInsertDate = [];
+      if(compareVal > 2){
+        // 차이
+        for(var i=0; i<=compareVal; i++){
+          var dt = start+(i*day);
+          var resDate = new Date(dt);
+          console("dt : " + dt)
+          
+        }
+      }else{
+        arrInsertDate.push(sStart);
+        arrInsertDate.push(sEnd);
+      }
+      // var _this = this;
+      // var _approvalModel = new ApprovalModel(formData);
+      // _approvalModel.idAttribute = "doc_num";
+      // _approvalModel.save({},{
+      // 	        success:function(model, xhr, options){
+      // 	            Dialog.show("Complete Update Approval.");
+      	            
+      // 	            // insert
+      // 	            console.log();
+      // 	        },
+      // 	        error:function(model, xhr, options){
+      // 	            var respons=xhr.responseJSON;
+      // 	            Dialog.error(respons.message);
+      // 	            _this.thisDfd.reject();
+      // 	        },
+      // 	        wait:false
+      // 	    }); 
+	     //  return _this.thisDfd.promise();
     
-      // this.collection
+      // // this.collection
+    },
+    
+    getDateFormat : function(dateData){
+      var sDateFormat = "";
+      if (dateData == null){
+        sDateFormat = "";
+      }else {
+        sDateFormat
+        = dateData.getFullYear() + "-" + this.getzFormat(dateData.getMonth() + 1, 2) + "-" + this.getzFormat(dateData.getDate(), 2);
+      }
+      return sDateFormat;
+    },
+    
+    getzFormat: function(s, len){
+      var sZero = "";
+      s = s + "";
+      if(s.length < len){
+        for(var i = 0; i < (len-s.length); i++){
+          sZero += "0";
+        }
+      }
+      return sZero + s;
     }
     
   });
