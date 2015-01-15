@@ -9,7 +9,9 @@ require.config({
       'util' : {deps : ['jquery', 'underscore']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
-      //'bootstrap-datepicker': { deps: ['jquery','bootstrap']  },
+      momentjs:{deps:['jquery']},
+      moment:{deps:['momentjs']},
+      'bootstrap-datepicker': { deps: ['jquery','bootstrap', 'moment']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
    },
@@ -21,8 +23,10 @@ require.config({
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
+      moment:'tool/moment/cutom-moment',
+      momentjs:'tool/moment/moment',
       //'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
-      'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min', 
+      'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min',
       'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
@@ -45,9 +49,13 @@ require.config({
       templates:'../templates',
       cs:'../css'
    },
+   wrapShim: true,
    config:{
       i18n:{
          locale:'kr'
+      },
+      moment:{
+         noGlobal:true
       }
    }
 });

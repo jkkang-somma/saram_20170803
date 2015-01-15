@@ -21,9 +21,13 @@ var OutOffice = function (data) {
     var _getOutOfficeList = function (start, end) {
         return OutOfficeDao.selectOutOfficeList(start, end);
     }
+    var _addOutOffice = function () {
+        return OutOfficeDao.insertOutOffice(_data);
+    }
     return {
         get:_get,
-        getOutOfficeList:_getOutOfficeList
+        getOutOfficeList:_getOutOfficeList,
+        addOutOffice:_addOutOffice
     }
 }
 

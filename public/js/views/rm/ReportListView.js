@@ -28,9 +28,8 @@ define([
   		this.collection = new ApprovalCollection();
  		this.option = {
  		    el:_id+"_content",
- 		    column:["사번", "이름", "부서", "name_commute", "입사일", "퇴사일", "권한"],
- 		    
- 		    dataschema:["id", "name", "dept_name", "name_commute", "join_company", "leave_company", "privilege"],
+ 		    column:[],
+          dataschema:["submit_date", "submit_id", "submit_name", "office_code_name", "end_date", "decide_date", "state"],
  		    collection:this.collection,
  		    detail:true,
  		    view:this
@@ -107,32 +106,43 @@ define([
       });
        // reportmanager/approval
       approvalBtn.click(function(){
-        var table = $(_this.$el).find("#commuteManageTbl").DataTable();
-     		var selectData = table.row('.selected').data();
+         var selectData=_this.grid.getSelectItem();
+      //    var table = $(_this.$el).find("#commuteManageTbl").DataTable();
+     	// 	var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-         		 var _approvalReportView = new ApprovalReportView();
-         		 // data param 전달
-         		 _approvalReportView.options = selectData;
-         		 // Dialog
-         		 Dialog.show({
-                  title:"결재", 
-                  content:_approvalReportView, 
-                  buttons:[{
-                      label: "확인",
-                      cssClass: Dialog.CssClass.SUCCESS,
-                      action: function(dialogRef){// 버튼 클릭 이벤트
-                        _approvalReportView.onClickBtnSend(dialogRef);
-                      }
-                  }, {
-                      label: 'Close',
-                      action: function(dialogRef){
-                          dialogRef.close();
-                      }
-                  }]
-              });
+     		  if(selectData.state != '결재완료'){
+       		  var _approvalReportView = new ApprovalReportView();
+           		 // data param 전달
+           		 _approvalReportView.options = selectData;
+           		 // Dialog
+           		 Dialog.show({
+                    title:"결재", 
+                    content:_approvalReportView, 
+                    buttons:[{
+                        label: "확인",
+                        cssClass: Dialog.CssClass.SUCCESS,
+                        action: function(dialogRef){// 버튼 클릭 이벤트
+                           _approvalReportView.onClickBtnSend(dialogRef).done(function(model){
+                              Dialog.show("Success Approval Confirm.");
+                                _this.onClickClearBtn();
+                                dialogRef.close();
+                            });
+                        }
+                    }, {
+                        label: 'Close',
+                        action: function(dialogRef){
+                            dialogRef.close();
+                        }
+                    }]
+                });
+     		    
+     		    }else{
+     		      Dialog.warning("결재 완료된 항목입니다.");
+     		    }
+         		 
      		} else {
-     		  Dialog.warning("항목을 선택해주세요.");
+     		  Dialog.error("항목을 선택해주세요.");
      		}
        
       });
@@ -142,28 +152,27 @@ define([
     
     setDatePickerPop : function(){
       var beforeDate = $(this.el).find("#beforeDate");
-      beforeDate.attr('readonly', true);
-      beforeDate.datetimepicker({
-          format: "yyyy/mm/dd",
+      //beforeDate.attr('readonly', true);
+      this.beforeDate=beforeDate.datetimepicker({
           pickTime: false,
           language: "ko",
-          todayHighlight: true
+          todayHighlight: true,
+          format: "YYYY-MM-DD"
       });
       
       var afterDate = $(this.el).find("#afterDate");
-      afterDate.attr('readonly', true);
-      afterDate.datetimepicker({
-          format: "yyyy/mm/dd",
+      //afterDate.attr('readonly', true);
+      this.afterDate= afterDate.datetimepicker({
           pickTime: false,
           language: "ko",
-          todayHighlight: true
+          todayHighlight: true, 
+          format: "YYYY-MM-DD"
       });
     },
     
     setReportTable : function(val){
       var formData = this.getSearchData(val);
       var view = this;
-      
       this.option.column=[
          { "title" : "신청일자", "render": function(data, type, row){
             var dataVal = view.getDateFormat(row.submit_date);
@@ -191,49 +200,8 @@ define([
   			}
   		};
       var _gridSchema=Schemas.getSchema('grid');
- 	   var grid= new Grid(_gridSchema.getDefault(this.option));
+ 	    this.grid= new Grid(_gridSchema.getDefault(this.option));
  	   
- 	   
- 	   //{"doc_num":"2014-10-30-01","submit_id":"100501","submit_name":"강정규","manager_id":"060601","manager_name":"윤정관","submit_date":"2014-10-30T11:15:11.000Z","decide_date":"2014-11-30T09:01:22.000Z","submit_comment":"휴가 상신합니다.","decide_comment":"수락합니다.","start_date":"2014-11-10","end_date":"2014-11-11","office_code":"V01","office_code_name":"연차휴가","state":"결제완료"}
- 	   
-      // this.collection.fetch({
-     	// 		reset : true, 
-     	// 		data: formData,
-     	// 		error : function(result) {
-     	// 			Dialog.error("데이터 조회가 실패했습니다.");
-     	// 		}
-     	// 	})
-      // .done(function(result){
-        // list Element
-        // var commuteTbl = $(this.el).find('#commuteManageTbl');
-        
-        
-        
-      //  if( $.fn.DataTable.isDataTable( $(view.el).find("#commuteManageTbl") ) )
-     	//        $(view.el).find("#commuteManageTbl").parent().replaceWith("<table id='commuteManageTbl'></table>");
-     	    
-   	  //  $(view.el).find("#commuteManageTbl").dataTable({
-   	  //      "data" : result,
-   	  //      "columns" : [
-   	  //          { "title" : "신청일자", "render": function(data, type, row){
-      //             var dataVal = view.getDateFormat(row.submit_date);
-      //             return dataVal;
-      //           }},
-      //           { data : "submit_id", "title" : "ID" },
-      //           { data : "submit_name", "title" : "이름"},
-      //           { data : "office_code_name", "title" : "구분"},
-      //           { "title" : "근태기간", "render": function(data, type, row){
-      //             var dataVal = row.start_date +"</br>~ " + row.end_date;
-      //             return dataVal;
-      //           }},
-      //           { "title" : "처리일자", "render": function(data, type, row){
-      //             var dataVal = view.getDateFormat(row.decide_date);
-      //             return dataVal;
-      //           }},
-      //           { data : "state", "title" : "처리상태"}
-   	  //      ]
-   	  //  });
-      // });
       return this;
     },
     
@@ -264,8 +232,9 @@ define([
     getSearchData : function(val){
       var data = {};
       
-      var startDate = $(this.el).find("#beforeDate").val();
-      var endDate = $(this.el).find("#afterDate").val();
+      var startDate=this.beforeDate.data("DateTimePicker").getDate().format("YYYY/MM/DD");
+      var endDate=this.afterDate.data("DateTimePicker").getDate().format("YYYY/MM/DD");
+     // Dialog.error(startDate);
       
       if(val && (startDate == "" || endDate == "")){
         data["msg"] = "기간을 모두 입력 해주세요.";
