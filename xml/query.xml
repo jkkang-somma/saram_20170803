@@ -358,7 +358,14 @@
     	<query id="selectOutOfficeList">
     		select * from out_office_tbl;
     	</query>
-    	<query id="empty"></query>
+    	<query id="insertOutOffice">
+			insert into out_office_tbl(year, date, id, office_code, day_count, memo, doc_num, black_mark) 
+				values(
+					? ,? , ?, ?
+					,(select day_count from office_code_tbl where code = ?) 
+					,? ,? ,?
+				)    		
+    	</query>
     </group>
     
 </querys>

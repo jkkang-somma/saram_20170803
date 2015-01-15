@@ -18,6 +18,7 @@ define([
             day_count:"",
             memo:"",
             doc_num:"",
+            arrInsertDate:[],
         }
         
     });

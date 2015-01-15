@@ -8,7 +8,8 @@ define([
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'models/rm/ApprovalModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel){
+  'models/vacation/OutOfficeModel',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel){
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -136,6 +137,7 @@ define([
   	
   	onClickBtnSend : function(evt){
   	  this.thisDfd = new $.Deferred();
+  	  var _this = this;
       var formData = this.getFormData($(this.el).find('form'));
       formData["doc_num"] = this.options["doc_num"];
       // formData["idAttribute"] = "doc_num";
@@ -143,52 +145,75 @@ define([
       // "_id" : formData.doc_num
       formData["_id"] = this.options["doc_num"];
       
-      
+      var _approvalModel = new ApprovalModel(formData);
+      _approvalModel.idAttribute = "doc_num";
+      _approvalModel.save({},{
+      	        success:function(model, xhr, options){
+      	            // insert
+      	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
+      	            if(formData.state == '결재완료'){
+        	            _this.addOutOfficeData();
+      	            }else{
+      	              _this.thisDfd.resolve();
+      	            }
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            _this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
+       return _this.thisDfd.promise();
+    
+      // // this.collection
+    },
+    
+    addOutOfficeData : function(){
+      var _this = this;
+      // 날짜 개수 이용하여 날짜 구하기
       var sStart = $(this.el).find('#start_date').val();
       var sEnd = $(this.el).find('#end_date').val();
       
       var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
       var end = new Date(sEnd.substr(0,4),sEnd.substr(5,2)-1,sEnd.substr(8,2));
       var day = 1000*60*60*24;
-      alert("end - start : " + (end - start) + "  // 기간 : " + (parseInt((end - start)/day)));
       
-      var compareVal = parseInt((end - start)/day) + 2;
-      formData["insertCnt"] = compareVal;
+      var compareVal = parseInt((end - start)/day);
       var arrInsertDate = [];
-      if(compareVal > 2){
+      if(compareVal > 0){
         // 차이
         for(var i=0; i<=compareVal; i++){
-          var dt = start+(i*day);
+          var dt = start.valueOf() + (i*day);
           var resDate = new Date(dt);
           console.log("dt : " + dt + ", resDate : " + this.getDateFormat(resDate));
           arrInsertDate.push(this.getDateFormat(resDate));
         }
       }else{
         arrInsertDate.push(sStart);
-        arrInsertDate.push(sEnd);
       }
       
       console.log(arrInsertDate);
-      // var _this = this;
-      // var _approvalModel = new ApprovalModel(formData);
-      // _approvalModel.idAttribute = "doc_num";
-      // _approvalModel.save({},{
-      // 	        success:function(model, xhr, options){
-      // 	            Dialog.show("Complete Update Approval.");
-      	            
-      // 	            // insert
-      // 	            console.log();
-      // 	        },
-      // 	        error:function(model, xhr, options){
-      // 	            var respons=xhr.responseJSON;
-      // 	            Dialog.error(respons.message);
-      // 	            _this.thisDfd.reject();
-      // 	        },
-      // 	        wait:false
-      // 	    }); 
-	     //  return _this.thisDfd.promise();
-    
-      // // this.collection
+      // data 저장
+      var sendData = this.getFormData($(this.el).find('form'));
+      sendData["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
+      sendData["id"] = this.options["submit_id"];
+      sendData["doc_num"] = this.options["doc_num"];
+      sendData["memo"] = this.options["submit_comment"];
+      sendData["office_code"] = this.options["office_code"];
+      
+      var _outOfficeModel = new OutOfficeModel(sendData);
+      _outOfficeModel.save({},{
+      	        success:function(model, xhr, options){
+      	          _this.thisDfd.resolve();
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            _this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
     },
     
     getDateFormat : function(dateData){

@@ -19,7 +19,7 @@ drop table if exists office_code_tbl;
 
 drop table if exists holiday_tbl;
 drop table if exists approval_index_tbl;
-
+drop table if exists black_mark_tbl;
 
 CREATE TABLE IF NOT EXISTS `dept_code_tbl` (
   `code` VARCHAR(10) NOT NULL COMMENT '부서 코드',
@@ -193,10 +193,8 @@ INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('V03', '오�
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('V04', '경조휴가', 0.0);
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('V05', '공적휴가', 0.0);
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('V06', '특별휴가', 0.0);
-INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W01', '종일외근', 0.0);
-INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W02', '오전외근', 0.0);
-INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W03', '오후외근', 0.0);
-INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W04', '출장', 0.0);
+INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W01', '외근', 0.0);
+INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W02', '출장', 0.0);
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('B01', '휴일근무', 0.0);
 
 CREATE TABLE IF NOT EXISTS `overtime_code_tbl` (
@@ -228,15 +226,19 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   `standard_out_time` DATETIME NULL COMMENT '퇴근 기준 시각',
   `in_time` DATETIME NULL COMMENT '출근 시각',
   `out_time` DATETIME NULL COMMENT '퇴근 시각',
-  `work_type` VARCHAR(10) NULL COMMENT 'work_type_code_tbl 테이블 참조',
+  `in_time_type` VARCHAR(5) NULL COMMENT '출근시간 구분 ( 1 : 정상출근, 2 : 자동 셋팅 )',
+  `out_time_type` VARCHAR(5) NULL COMMENT '퇴근시간 구분 ( 1 : 정상퇴근, 2 : 자동 셋팅 )',
+  `work_type` VARCHAR(10) NULL COMMENT '00:정상, 10:지각, 01:조퇴, 11:지각.조퇴, 21:결근,22:결근_미결, 33:휴일',
   `vacation_code` VARCHAR(10) NULL COMMENT '휴가정보 (V01 ~ V06)',
-  `out_office_code` VARCHAR(10) NULL COMMENT '외근, 출장 정보 (W01 ~ W04)',
+  `out_office_code` VARCHAR(10) NULL COMMENT '외근, 출장 정보 (W01 ~ W02)',
   `overtime_code` VARCHAR(10) NULL COMMENT '야근수당 정보 ( 2015_AA ~ 2015_BC )',
   `late_time` INT NULL COMMENT '지각 시간 ( 분 )',
   `over_time` INT NULL COMMENT '초과근무 시간 ( 분 )',
   `in_time_change` TINYINT NULL DEFAULT 0 COMMENT '출근시간 수정 Count',
   `out_time_change` TINYINT NULL DEFAULT 0 COMMENT '퇴근시간 수정 Count',
   `comment_count` TINYINT NULL DEFAULT 0 COMMENT 'Comment Count',
+  `out_office_start_time` VARCHAR(10) NULL COMMENT '외근인 경우 외근 시작시간',
+  `out_office_end_time` VARCHAR(10) NULL COMMENT '외근인 경우 외근 종료시간',
   INDEX `fk_commute_result_tbl_overtime_rule_tbl1_idx` (`overtime_code` ASC),
   INDEX `fk_commute_result_tbl_office_code_tbl1_idx` (`vacation_code` ASC),
   INDEX `fk_commute_result_tbl_office_code_tbl2_idx` (`out_office_code` ASC),
@@ -322,6 +324,8 @@ CREATE TABLE IF NOT EXISTS `approval_tbl` (
   `office_code` VARCHAR(10) NOT NULL,
   `state` VARCHAR(45) NOT NULL COMMENT '처리 상태 ( 상신 / 결제완료 / 반려 / 보류 )',
   `black_mark` VARCHAR(3) NULL COMMENT '상신.결재 상태 ( 1:정상, 2:당일결재, 3:익일결재 )',
+  `start_time` VARCHAR(10) NULL COMMENT '외근인 경우 시작시간',
+  `end_time` VARCHAR(10) NULL COMMENT '외근인경우 종료시간',
   PRIMARY KEY (`doc_num`),
   INDEX `fk_approval_tbl_office_code_tbl1_idx` (`office_code` ASC),
   CONSTRAINT `fk_approval_tbl_office_code_tbl1`
@@ -340,13 +344,15 @@ CREATE TABLE IF NOT EXISTS `out_office_tbl` (
   `day_count` FLOAT NOT NULL COMMENT 'office_code_tbl의 day_count',
   `memo` VARCHAR(300) NULL COMMENT 'comment',
   `doc_num` VARCHAR(45) NOT NULL COMMENT '결재문서 번호',
-  `black_mark` VARCHAR(3) NULL COMMENT '상신.결재 상태 ( 1:정상, 2:당일결재, 3:익일결재 )',
+  `black_mark` VARCHAR(3) NULL COMMENT '결재 종류 ( 1:정상, 2:당일결재, 3:익일결재 )',
+  `start_time` VARCHAR(10) NULL COMMENT '외근일 경우 외근 시작 시간',
+  `end_time` VARCHAR(10) NULL COMMENT '외근일 경우 외근 종료시간',
   INDEX `fk_out_office_tbl_approval_tbl_idx` (`doc_num` ASC),
   PRIMARY KEY (`date`, `id`, `year`, `office_code`),
   CONSTRAINT `fk_out_office_tbl_approval_tbl`
     FOREIGN KEY (`doc_num`)
     REFERENCES `approval_tbl` (`doc_num`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '휴가 / 외근 / 출장 (결재 완료된)  테이블';
@@ -368,7 +374,7 @@ COMMENT = '휴일 근무 ( 결재 완료된 테이블 )';
 
 
 CREATE TABLE IF NOT EXISTS `holiday_tbl` (
-  `date` VARCHAR(12) NOT NULL,
+  `date` VARCHAR(12) NOT NULL COMMENT '년/월/일',
   `memo` VARCHAR(200) NOT NULL,
   `year` VARCHAR(4) NULL,
   PRIMARY KEY (`date`),
@@ -394,3 +400,13 @@ CREATE TABLE IF NOT EXISTS `approval_index_tbl` (
 ENGINE = InnoDB
 COMMENT = '결재 고유번호를 년.월 단위로 생성한다.';
 
+
+CREATE TABLE IF NOT EXISTS `black_mark_tbl` (
+  `year` VARCHAR(10) NOT NULL COMMENT '해당 년도',
+  `id` VARCHAR(45) NULL COMMENT '사번',
+  `point` TINYINT NULL COMMENT '벌점',
+  `date` VARCHAR(45) NULL,
+  `memo` VARCHAR(200) NULL,
+  PRIMARY KEY (`year`))
+ENGINE = InnoDB
+COMMENT = '벌점 관리';

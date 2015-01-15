@@ -87,10 +87,21 @@ define([
     	    for (var name in rowData){
     	        var index=_.indexOf(this.dataschema, name);
     	        if (-1 < index){
+    	            var _column=this.column[index];
+    	            var _value;
+    	            if (_.isObject(_column)){
+    	                if (!_.isUndefined(_column.render)){
+    	                    _value=_column.render({},{},rowData);
+    	                } else {
+    	                    _value=rowData[name];
+    	                }
+    	                _column=_column.title;
+    	            }
+    	            
     	            _subTable.append(
         	            '<tr>'
-        	                +'<td>'+this.column[index]+'</td>'
-                            +'<td>'+rowData[name]+'</td>'
+        	                +'<td>'+_column+'</td>'
+                            +'<td>'+_value+'</td>'
                         +'</tr>'
         	        );
     	        }
