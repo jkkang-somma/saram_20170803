@@ -1,5 +1,7 @@
 <div class='form-group'>
+    <% if(label != ""){ %>
     <label for='<%= id %>'><%= label %></label>
-    <select class='form-control' id='<%= id %>'>
+    <% } %>
+    <select class='form-control yes-form-control' id='<%= id %>'>
     </select>
 </div>

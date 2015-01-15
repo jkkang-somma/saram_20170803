@@ -43,6 +43,7 @@ define([
   	
     render: function(){
       $(this.el).append(commuteListTmp);
+      $(this.el).find(".content").attr({"id":this.option.el});
       
       // title setting
       this.setTitleTxt();

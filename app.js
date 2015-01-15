@@ -23,6 +23,7 @@ var changeHistory = require('./routes/changeHistoryRouter');
 var outOffice = require('./routes/outofficeRouter');
 var officeCode = require('./routes/officeCodeRouter');
 var comment = require('./routes/commentRouter');
+var department = require('./routes/departmentCodeRouter');
 //var error = require('./routes/error');
 
 
@@ -105,7 +106,7 @@ app.use('/changeHistory', changeHistory);
 app.use('/outOffice',outOffice);
 app.use('/officeCode',officeCode);
 app.use('/comment', comment);
-
+app.use('/department', department);
 
 //app.use('/error', error);
 

@@ -160,13 +160,15 @@ define([
         for(var i=0; i<=compareVal; i++){
           var dt = start+(i*day);
           var resDate = new Date(dt);
-          console("dt : " + dt)
-          
+          console.log("dt : " + dt + ", resDate : " + this.getDateFormat(resDate));
+          arrInsertDate.push(this.getDateFormat(resDate));
         }
       }else{
         arrInsertDate.push(sStart);
         arrInsertDate.push(sEnd);
       }
+      
+      console.log(arrInsertDate);
       // var _this = this;
       // var _approvalModel = new ApprovalModel(formData);
       // _approvalModel.idAttribute = "doc_num";

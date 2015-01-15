@@ -150,7 +150,7 @@ ReportListView // report manager
 			this.changeView(commuteCommentView);
 		},
 		
-		showRawData : function(){
+		showRawdata : function(){
 			var rawDataView = new RawDataView();
 			this.changeView(rawDataView);
 		},
