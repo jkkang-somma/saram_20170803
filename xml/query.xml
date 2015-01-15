@@ -123,25 +123,6 @@
 				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state) 
 			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신')
     	</query>
-    	<query id="updateApprovalConfirm">
-    		update approval_tbl set 
-    			decide_date = NOW()
-    			,decide_comment = ?
-    			,state = ? 
-			where doc_num=?
-    	</query>
-	</group>
-	
-	<group id="approval_index">
-		<query id="selectMaxIndexApproval">
-			select MAX(seq) as maxSeq from approval_index_tbl where yearmonth=?
-		</query>
-		<query id="insertApprovalIndex">
-			insert into approval_index_tbl (yearmonth, seq) values (?, 1)
-		</query>
-		<query id="updateMaxIndex">
-			update approval_index_tbl set seq = (seq+1) where yearmonth=?
-		</query>
 	</group>
 	
 	<group id="office_code">
@@ -151,34 +132,38 @@
 
     <group id="commute">
         <query id="selectCommute">
-        SELECT
-        		(@idx:=@idx+1) as idx,
-				c.year,
-			    c.date,		
-			    c.id,
-			    c.department,
-			    c.name,
-				c.work_type,
-				w.name AS work_type_name,
-                c.late_time,
-                c.over_time,
-			    date_format(c.in_time, '%Y-%m-%d %T') AS in_time,
-			    date_format(c.out_time, '%Y-%m-%d %T') AS out_time,
-			    c.in_time_change,
-			    c.out_time_change,
-			    c.comment_count,
-                o.name as overtime_type,
-                o.overtime_pay,
-                (select name from office_code_tbl where code = c.vacation_code) as vacation_name,
-                (select name from office_code_tbl where code = c.out_office_code) as out_office_name                
-			FROM 
-				commute_result_tbl c
-                left join overtime_code_tbl o on c.overtime_code = o.code
-                left join work_type_code_tbl w on w.code = c.work_type,
-                (select @idx:= 0) as idx
-			WHERE
-				date BETWEEN ? AND ?
-			ORDER BY date
+            SELECT 
+				(@idx:=@idx+1) AS idx,
+            t1.*
+            from (
+					SELECT
+							c.year,
+							c.date,		
+							c.id,
+							c.department,
+							c.name,
+							c.work_type,
+							w.name AS work_type_name,
+							c.late_time,
+							c.over_time,
+							date_format(c.in_time, '%Y-%m-%d %T') AS in_time,
+							date_format(c.out_time, '%Y-%m-%d %T') AS out_time,
+							c.in_time_change,
+							c.out_time_change,
+							c.comment_count,
+							o.name as overtime_type,
+							IFNULL(o.overtime_pay, 0) AS overtime_pay,
+							(select name from office_code_tbl where code = c.vacation_code) as vacation_name,
+							(select name from office_code_tbl where code = c.out_office_code) as out_office_name                
+						FROM 
+							commute_result_tbl c
+							left join overtime_code_tbl o on c.overtime_code = o.code
+							left join work_type_code_tbl w on w.code = c.work_type							
+						WHERE
+							date BETWEEN ? AND ?
+						ORDER BY date
+            ) t1,
+            (SELECT @idx:= 0) AS idx
         </query>
 
         <query id="updateCommuteResultInOutTime">
@@ -193,50 +178,6 @@
         		id = ? AND year = ? AND date = ?
         </query>
         
-        <query id="insetCommuteResult">
-        	INSERT INTO commute_result_tbl
-        		(date, department, id, in_time, late_time, name, out_office_code, out_time, over_time, overtime_code, vacation_code, standard_in_time, standard_out_time, work_type, year)
-        	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        	ON DUPLICATE KEY UPDATE
-				department=?,
-				in_time=?,
-				late_time=?,
-				name=?,
-				out_office_code=?,
-				out_time=?,
-				over_time=?,
-				overtime_code=?,
-				vacation_code=?,
-				standard_in_time=?,
-				standard_out_time=?,
-				work_type=?
-
-        	
-        </query>
-        <query id="selectCommuteDate">
-        	SELECT 
-        		year,
-        		date,
-        		id,
-        		name,
-        		department,
-        		date_format(in_time, '%Y-%m-%d %T') AS in_time,
-        		date_format(out_time, '%Y-%m-%d %T') AS out_time,
-        		date_format(standard_in_time, '%Y-%m-%d %T') AS standard_in_time,
-        		date_format(standard_out_time, '%Y-%m-%d %T') AS standard_out_time,
-				late_time,
-				over_time,
-				work_type,
-				out_office_code,
-				overtime_code,
-				vacation_code
-        	FROM
-        		commute_result_tbl
-        	WHERE
-        		date = ?
-        </query>
-
         <query id="updateCommuteCommentCount">
         	UPDATE
         		commute_result_tbl
