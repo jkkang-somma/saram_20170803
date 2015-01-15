@@ -157,7 +157,8 @@ define([
           pickTime: false,
           language: "ko",
           todayHighlight: true,
-          format: "YYYY-MM-DD"
+          format: "YYYY-MM-DD",
+          autoclose: true
       });
       
       var afterDate = $(this.el).find("#afterDate");
@@ -232,24 +233,25 @@ define([
     getSearchData : function(val){
       var data = {};
       
-      var startDate=this.beforeDate.data("DateTimePicker").getDate().format("YYYY/MM/DD");
-      var endDate=this.afterDate.data("DateTimePicker").getDate().format("YYYY/MM/DD");
-     // Dialog.error(startDate);
+      var startDate=this.beforeDate.find("input").val();
+      var endDate=this.afterDate.find("input").val();
+      //var endDate=//this.afterDate.data("DateTimePicker").getDate().format("YYYY-MM-DD");
+    // Dialog.error(this.afterDate.data("DateTimePicker").getText());
       
       if(val && (startDate == "" || endDate == "")){
-        data["msg"] = "기간을 모두 입력 해주세요.";
-        return data;
+       data["msg"] = "기간을 모두 입력 해주세요.";
+       return data;
       }else{
-        var start= new Date(startDate);
-        var end=new Date(endDate);
+       var start= new Date(startDate);
+       var end=new Date(endDate);
         
-        if(val && (start > end)){
+       if(val && (start > end)){
           data["msg"] = "기간을 잘못 입력 하였습니다.";
           return data;
-        }else{
+       }else{
           data["startDate"] = startDate;
           data["endDate"] = endDate;
-        }
+       }
       }
       
       return data;
