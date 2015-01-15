@@ -12,10 +12,6 @@
         <query id="deleteUser">delete from members_tbl where id=?</query>
     </group>
     
-    <group id="data">
-        <query id="select_user_all">select * from members_tbl</query>
-    </group>
-    
     <group id="dept">
         <query id="selectDeptList">SELECT code, name FROM dept_code_tbl</query>
         <query id="selectDeptList1">SELECT code, name FROM dept_code_tbl</query>
@@ -27,10 +23,16 @@
     </group>
     
     <group id="holiday">
-        <query id="selectHolidayYearList">select distinct year from holiday_tbl</query>
         <query id="selectHolidayList">select * from holiday_tbl where year=?</query>
-        <query id="insertHoliday">insert into holiday_tbl(year, date, memo) values(?, ?, ?)</query>
-        <query id="deleteHoliday">delete from holiday_tbl where year=? and date=?</query>
+        <query id="insertHoliday">
+        	INSERT INTO holiday_tbl
+        		(year, date, memo)
+        	VALUES
+        		(?, ?, ?)
+        	ON DUPLICATE KEY UPDATE
+        		memo = CONCAT( memo, ',', ?)
+        </query>
+        <query id="deleteHoliday">delete from holiday_tbl where date=?</query>
 	</group>
 	
     <group id="vacation">
@@ -319,9 +321,20 @@
     <group id="comment">
     	<query id="selectComment">
     		SELECT
-    			year, date, id, seq, comment, comment_date, comment_reply, comment_reply_date, state
+    			c.year,
+    			c.date,
+    			c.id,
+    			m.name,
+    			c.seq,
+    			c.comment,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			c.comment_reply,
+    			c.comment_reply_date,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			c.state
     		FROM
-    			comment_tbl
+    			comment_tbl c
+    			LEFT JOIN members_tbl m ON m.id = c.id
     		WHERE
     			date BETWEEN ? AND ?
 			ORDER BY date

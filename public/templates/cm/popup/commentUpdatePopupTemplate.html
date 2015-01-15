@@ -1,0 +1,74 @@
+<div id="commentPopup" class="modal fade" tabindex="-1"
+	role="dialog" aria-hidden="true">
+	
+	<div id="changeHistoryModalCon">
+		<div class="modal-dialog" style="width: 600px;">
+			<div class="modal-content">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title">Comment</h4>
+					</div>
+					<div class="modal-body">
+						<form id="commentInfoForm" class="form-horizontal">
+							<input type="hidden" id="id" name="id" value="<%=data.id%>">
+							<input type="hidden" id="year" name="year" value="<%=data.year%>">
+							<input type="hidden" id="date" name="date" value="<%=data.date%>">
+							
+							<div class="form-group">
+								<label class="col-sm-5 control-label">일자</label>
+								<div class="col-sm-7">
+									<label class="control-label"><%=data.date%></label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label">이름</label>
+								<div class="col-sm-7">
+									<label class="control-label"><%=data.name%></br>(<%=data.id%>)</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label">신청일자</label>
+								<div class="col-sm-7">
+									<label class="control-label"><%=data.comment_date%></label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label">접수내용</label>
+								<div class="col-sm-7">
+									<label class="control-label"><%=data.comment%></label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label">처리내용</label>
+								<div class="col-sm-7">
+									<textarea class="form-control" rows="5" id="comment" name="comment" style="resize:none;"></textarea>									
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-5 control-label">처리내용</label>
+								<div class="col-sm-7">
+					<select id="state" class="form-control">
+						<option value="접수중">접수중<option>
+					
+						<%_.each(data.formYears, function(year){ if (year == data.nowYear)
+						{%>
+						<option value="<%=year%>" selected><%=year%></option> <%}%>
+						<option value="<%=year%>"><%=year%></option> <%} }); %>
+					</select>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button id="btnInsertComment" type="button" class="btn btn-primary btnUpdate">등록</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

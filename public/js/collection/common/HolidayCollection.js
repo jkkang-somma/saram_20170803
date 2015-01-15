@@ -7,9 +7,6 @@ define([
     var HolidayCollection = Backbone.Collection.extend({
         model : HolidayModel,
         url:'/holiday',
-        initialize : function(){
-            this.wrapper = new HolidayCollectionWrapper(this);
-        }, 
         save : function(option){
             this.wrapper = new HolidayCollectionWrapper(this.toJSON());
             this.wrapper.save({}, option);

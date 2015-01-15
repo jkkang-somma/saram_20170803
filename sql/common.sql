@@ -376,8 +376,9 @@ COMMENT = '휴일 근무 ( 결재 완료된 테이블 )';
 CREATE TABLE IF NOT EXISTS `holiday_tbl` (
   `date` VARCHAR(12) NOT NULL COMMENT '년/월/일',
   `memo` VARCHAR(200) NOT NULL,
-  `year` VARCHAR(4) NOT NULL,
-  PRIMARY KEY (`date`))
+  `year` VARCHAR(4) NULL,
+  PRIMARY KEY (`date`),
+  INDEX `holiday_date_index` (`date` ASC))
 ENGINE = InnoDB
 COMMENT = '토/일을 제외한 휴일 관리';
 

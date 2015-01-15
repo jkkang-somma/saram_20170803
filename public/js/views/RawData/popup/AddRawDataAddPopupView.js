@@ -24,9 +24,22 @@ define([
     	    
             $(this.el).append(_fileForm);
             $(this.el).append(_progressBar);
+            
+            this.progress = $(this.el).find(".progress");
+			this.progressbar = $(this.el).find(".progress-bar");
 
             dfd.resolve();
             return dfd.promise();
+		},
+		setProgressVisible : function(flag){
+			if(flag){
+				this.progress.css("display", "block");
+			}else{
+				this.progress.css("display", "none");
+			}
+		},
+		setProgresPercent : function(percent){
+			this.progressbar.css("width", (percent * 100) + "%");
 		}
 	});
 	

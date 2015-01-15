@@ -1,5 +1,4 @@
 var debug = require('debug')('holidayDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var HolidayDao = function () {
@@ -11,8 +10,14 @@ HolidayDao.prototype.selectHolidayList =  function (year) {//select user;
 
 HolidayDao.prototype.insertHoliday = function(data){
     var queryStr =db.getQuery('holiday', 'insertHoliday');
-    return db.queryV2(queryStr, [data.year, data.date, data.memo ]);
+    return db.queryV2(queryStr, [data.year, data.date, data.memo, data.memo]);
 }
+
+HolidayDao.prototype.deleteHoliday = function(data){
+    var queryStr =db.getQuery('holiday', 'deleteHoliday');
+    return db.queryV2(queryStr, [data.date]);
+}
+
 
 module.exports = new HolidayDao();
 

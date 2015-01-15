@@ -6,7 +6,9 @@ var HolidayDao= require('../dao/holidayDao.js');
 var Holdiay = function (data) {
     var _data = data;
     
-    _data.date = _data.year + "-" + _data.date;
+    if(_data.year){
+        _data.date = _data.year + "-" + _data.date;    
+    }
     
     if(_data.lunar){
         //debug("lunarDate : " + _data.date);
@@ -20,9 +22,7 @@ var Holdiay = function (data) {
     }
     
     //debug("solarDate : " + _data.date);
-    
     var _getHolidayList = function () {//select user;
-        debug(_data.year);
         return HolidayDao.selectHolidayList(_data.year);
     }
     
@@ -46,10 +46,15 @@ var Holdiay = function (data) {
         }
     }
     
+    var _deleteHoliday = function(){
+        return HolidayDao.deleteHoliday(_data);
+    }
+    
     return {
         data : _data,
         getHolidayList : _getHolidayList,
-        insertHoliday : _insertHoliday 
+        insertHoliday : _insertHoliday, 
+        deleteHoliday : _deleteHoliday
     }
 }
 

@@ -9,23 +9,17 @@ define([
   'dialog',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/right.html',
-  'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'models/common/HolidayModel',
+  'text!templates/component/progressbar.html',
   'collection/common/HolidayCollection',
-  'models/common/RawDataModel',
   'collection/common/RawDataCollection',
-  'models/sm/UserModel',
   'collection/sm/UserCollection',
-  'models/cm/CommuteModel',
   'collection/cm/CommuteCollection',
-  'models/vacation/OutOfficeModel',
   'collection/vacation/OutOfficeCollection',
   'views/cm/popup/CreateDataPopupView',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, 
-HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
-HolidayModel, HolidayCollection, RawDataModel, RawDataCollection, UserModel, UserCollection, CommuteModel, CommuteCollection, OutOfficeModel, OutOfficeCollection,
+HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML,
+HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection,
 CreateDataPopupView){
     var CreateDataView = BaseView.extend({
         el:$(".main-container"),
@@ -160,8 +154,8 @@ CreateDataPopupView){
                                                     year: today.getFullYear(),
                                                     date: todayStr,
                                                     work_type : "00",
-                                                    in_time: "기록없음",
-                                                    out_time: "기록없음",
+                                                    in_time: null,
+                                                    out_time: null,
                                                     standard_in_time: "09:00:00",
                                                     standard_out_time:"18:00:00",  
                                                     late_time : 0,
@@ -205,8 +199,8 @@ CreateDataPopupView){
                                                             break;
                                                     }
                                                     
-                                                    commuteAttribute.in_time = "";  
-                                                    commuteAttribute.out_time = ""; 
+                                                    commuteAttribute.in_time = null;  
+                                                    commuteAttribute.out_time = null; 
                                                 }
                                                 
                                                 // 휴일
@@ -214,8 +208,8 @@ CreateDataPopupView){
                                                     commuteAttribute.work_type = "33";
                                                     commuteAttribute.standard_in_time = null;  
                                                     commuteAttribute.standard_out_time = null;  
-                                                    commuteAttribute.in_time = "";  
-                                                    commuteAttribute.out_time = ""; 
+                                                    commuteAttribute.in_time = null;  
+                                                    commuteAttribute.out_time = null; 
                                                 }
                                                 
                                                 var rawData = userRawDataCollection.filterDate(todayStr); // 당일 사용자의 출입기록
@@ -354,9 +348,11 @@ CreateDataPopupView){
     	        type:"custom",
     	        name:"ok",
     	        click:function(){
+    	            that._disabledProgressbar(false);
     	            that.commuteCollection.save({
     	                success : function(){
     	                    Dialog.info("데이터 전송 성공!");
+    	                    that._disabledProgressbar(true);
     	                }
     	            });
     	        }
@@ -372,16 +368,27 @@ CreateDataPopupView){
     	    _head.addClass("relative-layout");
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
+    	     
     	    _layout.append(_head);
             _layout.append(_content);
-            
+            _layout.append(_progressBar);
     	    $(this.el).append(_layout);
 
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
 
             return this;
-     	}
+     	},
+     	
+     	_disabledProgressbar : function(flag){
+     	    var progressbar = $(this.el).find(".progress");
+     	    if(flag){
+     	        progressbar.css("display","none");
+     	    }else{
+     	        progressbar.css("display","block");
+     	    }
+     	},
     });
     
     return CreateDataView;
