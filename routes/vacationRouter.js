@@ -11,7 +11,7 @@ router.route('/')
 
 }).post(function(req, res){
 	Vacation.setVacation(req.body, function(result) {
-		return res.send({});
+		return res.send(result);
 	});
 });
 
