@@ -77,8 +77,6 @@ define([ 'jquery',
 		 return tp.html();
 	}
 	
-	var _btnCommuteAddTpl = "";
-	
 	// 변경 이력 팝업 뷰 
 	var _changeHistoryPopupView = null;
 	
@@ -143,9 +141,8 @@ define([ 'jquery',
     		var tpl = _.template( commuteListTemplete, {} );
     		this.$el.append(tpl);
     		
-    		
-    		var _btnCommuteAddTpl = this.$el.find('.btn-comment-add').html(); //_.template( );
-    		//console.log(btnTpl);    		
+    		// comment 추가 html 템플릿
+    		var _btnCommuteAddTpl = this.$el.find('.btn-comment-add').html();    		
     		
     		_commuteManageTbl = this.$el.find("#commuteManageTbl").dataTable({
      	        columns : [
@@ -191,15 +188,12 @@ define([ 'jquery',
      	                        }
      	                     },
      	                     { data : "comment_count", "title" : "Comment",
-     	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {     	                    		 
-     	                            
-     	                            
+     	                    	 fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
      	                            if (oData.comment_count) {
      	                            	$(nTd).html(_createCommentCell(oData) + _createCommentCellAddBtn(oData, _btnCommuteAddTpl));
      	                            } else {
      	                            	$(nTd).html("0 건" + _createCommentCellAddBtn(oData, _btnCommuteAddTpl) );
      	                            }
-
      	                        }
      	                     },
      	                     { data : "in_time_change", "title" : "in_time_change", visible: false},
@@ -218,14 +212,14 @@ define([ 'jquery',
 
      	            // Total over this page
      	           var totalOvertimePay = api
-     	                .column( 8, { page: 'current'} )
+     	                .column( 8 )
      	                .data()
      	                .reduce( function (a, b) {
      	                    return intVal(a) + intVal(b);
      	                }, 0 );
 
      	           var totalOvertime = api
-	                .column( 10, { page: 'current'} )
+	                .column( 10 )
 	                .data()
 	                .reduce( function (a, b) {
 	                    return intVal(a) + intVal(b);

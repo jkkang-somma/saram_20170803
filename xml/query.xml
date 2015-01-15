@@ -342,4 +342,11 @@
     	</query>
     	<query id="empty"></query>
     </group>
+    
+    <group id="test">
+    	<query id="empty"></query>
+    </group>
+	<group id="test2">
+    	<query id="empty2"></query>
+    </group>    
 </querys>
