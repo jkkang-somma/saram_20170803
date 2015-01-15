@@ -104,5 +104,22 @@ router.route('/')
             error:e
         });
     });
-});
+}).put(function(req, res) {
+	debug("결재 수정:");
+    var approval = new Approval(req.body);
+    debug("ID:" + approval.get("id"));
+    
+    approval.insertApproval().then(function(e){
+        debug("Complete Add Approval.");
+        res.send({success:true, msg:"Complete Add Approval."})
+    }).catch(function(e){
+        debug("Error Add Approval.");
+        res.status(500);
+        res.send({
+            success:false,
+            message: e.message,
+            error:e
+        });
+    });
+});;
 module.exports = router;

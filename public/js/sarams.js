@@ -50,6 +50,9 @@ require.config({
    config:{
       i18n:{
          locale:'kr'
+      },
+      moment: {
+         noGlobal: true
       }
    }
 });
