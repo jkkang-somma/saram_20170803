@@ -319,9 +319,20 @@
     <group id="comment">
     	<query id="selectComment">
     		SELECT
-    			year, date, id, seq, comment, comment_date, comment_reply, comment_reply_date, state
+    			c.year,
+    			c.date,
+    			c.id,
+    			m.name,
+    			c.seq,
+    			c.comment,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			c.comment_reply,
+    			c.comment_reply_date,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			c.state
     		FROM
-    			comment_tbl
+    			comment_tbl c
+    			LEFT JOIN members_tbl m ON m.id = c.id
     		WHERE
     			date BETWEEN ? AND ?
 			ORDER BY date
