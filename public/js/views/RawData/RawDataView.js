@@ -10,11 +10,8 @@ define([
   'csvParser',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'text!templates/inputForm/forminline.html',
-  'text!templates/inputForm/combobox.html',
-  'text!templates/inputForm/label.html',
+  'text!templates/component/progressbar.html',
   'models/common/RawDataModel',
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
@@ -22,7 +19,7 @@ define([
   'models/common/DepartmentCodeModel',
   'collection/common/DepartmentCodeCollection',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser,
-HeadHTML, ContentHTML, ButtonHTML, LayoutHTML, InlineFormHTML, ComboBoxHTML, LabelHTML,
+HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML,
 RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, DepartmentCodeCollection){
     var RawDataView = BaseView.extend({
         el:$(".main-container"),
@@ -34,7 +31,6 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     	    $(this.el).empty();
     	    this.rawDataCollection = new RawDataCollection();
     
-    	    //this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}});
             this.departmentCollection = null;
             this.userCollection = new UserCollection();
             this.userCollection.fetch();
@@ -51,42 +47,23 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     		};
     		
     		//this.rawDataCollection.fetch({data : {start : Util.dateToString(firstDay), end : Util.dateToString(lastDay)}});
-            this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}}).done(function(){
+
+            
+    	},
+    
+        renderTable : function(startDate, endDate){
+            var that = this;
+            this.rawDataCollection.fetch({
+                data : {start : "2014-10-26", end : "2014-11-25"},
+                success: function(){
         	    var today = new Date(), y = today.getFullYear, m = today.getMonth();
         	    var firstDay = new Date(y, m, 1);
         	    var lastDay = new Date(y, m+1, 0);       
                 that.grid.render();
-                return that;
+                that._disabledProgressbar(true);
+                }
     	    });
-    	},
-    // 	events: {
-    // 	    "change #rawDataDeptCombo" : "changeDept"
-    // 	},
-    // 	changeDept: function(event){
-    // 	    var that  = this;
-    //         var dept_name = $(event.currentTarget).val();
-    //         var dept_users = null;
-    //         if(dept_name === ""){
-    //             dept_users = this.userCollection.where({});    
-    //         }else{
-    //             dept_users = this.userCollection.where({"dept_name" : dept_name});    
-    //         }
-            
-    //         _.each(dept_users, function(user){
-    //             var option = $("<option>"+user.get("name")+"</option>");
-                
-    //             var nameCombo = $(that.el).find("#rawDataNameCombo").find("select");
-    //             nameCombo.html('');
-    // 	        nameCombo.append(option);
-    //         });
-            
-
-
-    // 	},
-    // 	buttonInit:function(){
-
-    // 	},
-    	
+        },
     	render:function(){
     	    var that = this;
     	    var _headSchema=Schemas.getSchema('headTemp');
@@ -97,45 +74,33 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
-    	   // var _inlineForm=$(InlineFormHTML).attr("id", "test");
-    	   // var _deptComboLabel = $(_.template(LabelHTML)({label:"부서"}));
-    	   // var _deptCombo = $(_.template(ComboBoxHTML)({id:"rawDataDeptCombo", label:""}));
-    	   // _inlineForm.append(_deptComboLabel);
-    	   // _inlineForm.append(_deptCombo);
-    	    
-    	   // var _nameComboLabel = $(_.template(LabelHTML)({label:"이름"}));
-    	   // var _nameCombo = $(_.template(ComboBoxHTML)({id:"rawDataNameCombo", label:""}));
-    	   // _inlineForm.append(_nameComboLabel);
-    	   // _inlineForm.append(_nameCombo);
-    	    
-    	   // this.departmentCollection = new DepartmentCodeCollection();
-    	   // this.departmentCollection.fetch({
-    	   //     success: function(resultCollection){
-	                
-	       //         _deptCombo.find("select").append($("<option></option>"));
-                    
-    	   //         _.each(resultCollection.models, function(model){
-    	   //             var option = $("<option>"+model.get("name")+"</option>");
-    	   //             _deptCombo.find("select").append(option);
-    	   //         })     
-    	   //     }
-    	   // });
-    	    
-    	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
+    	    
     	    _layout.append(_head);
-    	   // _layout.append(_inlineForm);
             _layout.append(_content);
-            
+            _layout.append(_progressBar);
+
     	    $(this.el).append(_layout);
     	    
     	    var _gridSchema=Schemas.getSchema('grid');
         	that.grid= new Grid(_gridSchema.getDefault(that.gridOption));
             that.grid.render();
             
-    	    
+            this._disabledProgressbar(false);
+            this.renderTable();
+            
+            return this;
      	},
      	
+     	_disabledProgressbar : function(flag){
+     	    var progressbar = $(this.el).find(".progress");
+     	    if(flag){
+     	        progressbar.css("display","none");
+     	    }else{
+     	        progressbar.css("display","block");
+     	    }
+     	},
     });
     return RawDataView;
 });
