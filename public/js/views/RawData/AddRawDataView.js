@@ -41,7 +41,7 @@ AddRawDataAddPopupView){
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search","refresh"]
+    		    buttons:["search"]
     		};
     		
     		this.buttonInit();
@@ -65,13 +65,13 @@ AddRawDataAddPopupView){
                             label: '등록',
                             action: function(dialog) {
                                 var fileForm = dialog.getModalBody().find("input");
-                                var progress = dialog.getModalBody().find(".progress");
-                                var progressbar = dialog.getModalBody().find(".progress-bar");
-                                
+
                                 var selectedFiles = fileForm[0].files;
                                 if(selectedFiles.length > 0){
                                     if(window.File && window.FileList && window.FileReader){
-                                        progress.css("display", "block"); // display progressbar 
+                                        
+                                        addRawDataAddPopupView.setProgressVisible(true);
+                                        //progress.css("display", "block"); // display progressbar 
                                         $(this).prop("disabled", true); // 버튼 disabled
                                         
                                         var file = selectedFiles[0];
@@ -82,7 +82,7 @@ AddRawDataAddPopupView){
                                             that.rawDataCollection.reset();
                                             var errCount = 0;
                                             for(var i = 1; i < result.length; i++){ // 제목줄을 빼기 위해서 1부터 시작
-                                                progressbar.css("width", (i / result.length * 100) + "%");
+                                                addRawDataAddPopupView.setProgressVisible(i / result.length);
                                                 var item = result[i];
                                                 
                                                 if(item.length != 4){

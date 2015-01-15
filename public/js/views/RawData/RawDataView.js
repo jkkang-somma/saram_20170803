@@ -28,12 +28,16 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
         el:$(".main-container"),
         
     	initialize:function(){
+    		var that  = this;
+    		
     		$(this.el).html('');
     	    $(this.el).empty();
     	    this.rawDataCollection = new RawDataCollection();
+    
     	    //this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}});
             this.departmentCollection = null;
-            this.userCollection = null;
+            this.userCollection = new UserCollection();
+            this.userCollection.fetch();
             
             this.gridOption = {
     		    el:"rawDataContent",
@@ -46,18 +50,42 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     		    buttons:["search","refresh"]
     		};
     		
-    		//this.buttonInit();
+    		//this.rawDataCollection.fetch({data : {start : Util.dateToString(firstDay), end : Util.dateToString(lastDay)}});
+            this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}}).done(function(){
+        	    var today = new Date(), y = today.getFullYear, m = today.getMonth();
+        	    var firstDay = new Date(y, m, 1);
+        	    var lastDay = new Date(y, m+1, 0);       
+                that.grid.render();
+                return that;
+    	    });
     	},
-    	events: {
-    	    "change #rawDataDeptCombo" : "changeDept"
-    	},
-    	changeDept: function(ref){
-            console.log($(ref).value());
+    // 	events: {
+    // 	    "change #rawDataDeptCombo" : "changeDept"
+    // 	},
+    // 	changeDept: function(event){
+    // 	    var that  = this;
+    //         var dept_name = $(event.currentTarget).val();
+    //         var dept_users = null;
+    //         if(dept_name === ""){
+    //             dept_users = this.userCollection.where({});    
+    //         }else{
+    //             dept_users = this.userCollection.where({"dept_name" : dept_name});    
+    //         }
             
-    	},
-    	buttonInit:function(){
+    //         _.each(dept_users, function(user){
+    //             var option = $("<option>"+user.get("name")+"</option>");
+                
+    //             var nameCombo = $(that.el).find("#rawDataNameCombo").find("select");
+    //             nameCombo.html('');
+    // 	        nameCombo.append(option);
+    //         });
+            
 
-    	},
+
+    // 	},
+    // 	buttonInit:function(){
+
+    // 	},
     	
     	render:function(){
     	    var that = this;
@@ -69,51 +97,43 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
-    	    var _inlineForm=$(InlineFormHTML).attr("id", "test");
-    	    var _deptComboLabel = $(_.template(LabelHTML)({label:"부서"}));
-    	    var _deptCombo = $(_.template(ComboBoxHTML)({id:"rawDataDeptCombo", label:""}));
-    	    _inlineForm.append(_deptComboLabel);
-    	    _inlineForm.append(_deptCombo);
+    	   // var _inlineForm=$(InlineFormHTML).attr("id", "test");
+    	   // var _deptComboLabel = $(_.template(LabelHTML)({label:"부서"}));
+    	   // var _deptCombo = $(_.template(ComboBoxHTML)({id:"rawDataDeptCombo", label:""}));
+    	   // _inlineForm.append(_deptComboLabel);
+    	   // _inlineForm.append(_deptCombo);
     	    
-    	    var _nameComboLabel = $(_.template(LabelHTML)({label:"이름"}));
-    	    var _nameCombo = $(_.template(ComboBoxHTML)({id:"rawDataNameCombo", label:""}));
-    	    _inlineForm.append(_nameComboLabel);
-    	    _inlineForm.append(_nameCombo);
+    	   // var _nameComboLabel = $(_.template(LabelHTML)({label:"이름"}));
+    	   // var _nameCombo = $(_.template(ComboBoxHTML)({id:"rawDataNameCombo", label:""}));
+    	   // _inlineForm.append(_nameComboLabel);
+    	   // _inlineForm.append(_nameCombo);
     	    
-    	    this.departmentCollection = new DepartmentCodeCollection();
-    	    this.departmentCollection.fetch({
-    	        success: function(resultCollection){
+    	   // this.departmentCollection = new DepartmentCodeCollection();
+    	   // this.departmentCollection.fetch({
+    	   //     success: function(resultCollection){
 	                
-	                _deptCombo.find("select").append($("<option></option>"));
+	       //         _deptCombo.find("select").append($("<option></option>"));
                     
-    	            _.each(resultCollection.models, function(model){
-    	                var option = $("<option>"+model.get("name")+"</option>");
-    	                _deptCombo.find("select").append(option);
-    	            })     
-    	        }
-    	    });
+    	   //         _.each(resultCollection.models, function(model){
+    	   //             var option = $("<option>"+model.get("name")+"</option>");
+    	   //             _deptCombo.find("select").append(option);
+    	   //         })     
+    	   //     }
+    	   // });
     	    
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    _layout.append(_head);
-    	    _layout.append(_inlineForm);
+    	   // _layout.append(_inlineForm);
             _layout.append(_content);
             
     	    $(this.el).append(_layout);
     	    
-    	    //this.rawDataCollection.fetch({data : {start : Util.dateToString(firstDay), end : Util.dateToString(lastDay)}});
+    	    var _gridSchema=Schemas.getSchema('grid');
+        	that.grid= new Grid(_gridSchema.getDefault(that.gridOption));
+            that.grid.render();
+            
     	    
-    	    this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}}).done(function(){
-    	        var _gridSchema=Schemas.getSchema('grid');
-        	    that.grid= new Grid(_gridSchema.getDefault(that.gridOption));
-        	    
-        	    var today = new Date(), y = today.getFullYear, m = today.getMonth();
-        	    var firstDay = new Date(y, m, 1);
-        	    var lastDay = new Date(y, m+1, 0);       
-                that.grid.render();
-                return that;
-    	    });
-
      	},
      	
     });

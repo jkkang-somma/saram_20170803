@@ -6,16 +6,12 @@ var Holiday = require('../service/Holiday.js');
 
 router.route('/')
 .get(function(req, res){
-    // Get user infomation list (GET)
-    var date = new Date();
-    var holiday = new Holiday({year:date.getFullYear()});
+    var holiday = new Holiday({year:req.query.year});
     
-    console.log(req.body);
     holiday.getHolidayList().then(function(result){
         debug(result);
         res.send(result);    
-    }) ;
-    
+    });
     
 }).post(function(req, res){
     // Insert user infomation (PUT)
@@ -23,10 +19,9 @@ router.route('/')
      
     var holiday = new Holiday(req.body);
     debug(req.body);
-    holiday.insertHoliday();
-    
-    res.send({msg : "Insert Data Success", count : 1});
-
+    holiday.insertHoliday().then(function(){
+        res.send({msg : "Insert Data Success", count : 1});    
+    });
 });
 
 router.route('/bulk')
@@ -40,5 +35,18 @@ router.route('/bulk')
     }
     res.send({msg : "Insert Data Success", count : count});
 })
+
+router.route('/:date')
+.delete(function(req,res){
+    debug(req.params.date);
+    
+    var holiday = new Holiday({date: req.params.date});
+    
+    holiday.deleteHoliday().then(function(){
+        res.send({msg : "Delete Data Success", count: 1});    
+    });
+    
+    
+});
 
 module.exports = router;

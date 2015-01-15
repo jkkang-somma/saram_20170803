@@ -11,12 +11,15 @@ define([
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
+  'text!templates/inputForm/forminline.html',
+  'text!templates/inputForm/combobox.html',
+  'text!templates/inputForm/label.html',
   'collection/common/HolidayCollection',
   'models/common/HolidayModel',
   'views/Holiday/popup/CreateHolidayPopup',
   'views/Holiday/popup/AddHolidayPopup',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Dialog,
-HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
+HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, InlineFormHTML, ComboBoxHTML, LabelHTML,
 HolidayCollection, HolidayModel,
 CreateHolidayPopup, AddHolidayPopup){
 
@@ -47,6 +50,7 @@ CreateHolidayPopup, AddHolidayPopup){
     		    dataschema:["date", "memo"],
     		    collection:this.holidayCollection,
     		    detail: true,
+    		    fetch:false,
     		    buttons:["search","refresh"]
     		}
     		
@@ -55,45 +59,6 @@ CreateHolidayPopup, AddHolidayPopup){
     	
     	buttonInit: function(){
     	    var that = this;
-    	    // tool btn
-    	    this.gridOption.buttons.push({
-    	        type:"custom",
-    	        name:"wrench",
-    	        click:function(){
-    	            var createHolidayPopup = new CreateHolidayPopup();
-    	            Dialog.show({
-    	                title:"공휴일 생성", 
-                        content:createHolidayPopup, 
-                        buttons: [{
-                            id: 'createHolidayBtn',
-                            cssClass: Dialog.CssClass.SUCCESS,
-                            label: '생성',
-                            action: function(dialog) {
-                                var year = dialog.getModalBody().find("#createHolidayCombo").val();
-                                var newHolidayCollection = new HolidayCollection();
-                                
-                                for(var key in holidays){
-                                    holidays[key].year = year;
-                                    newHolidayCollection.add(holidays[key]);
-                                }
-                                
-                                newHolidayCollection.save({
-                                    success : function(){
-                                        that.grid.render();
-                                        dialog.close();
-                                    }
-                                });
-                                return false;
-                            }
-                        }, {
-                            label : "취소",
-                            action : function(dialog){
-                                dialog.close();
-                            }
-                        }]
-    	            })
-    	        }
-    	    });
     	    
     	    // add buton
     	    this.gridOption.buttons.push({
@@ -136,11 +101,92 @@ CreateHolidayPopup, AddHolidayPopup){
     	            })
     	        }
     	    });
+    	    
+    	    // removeBtn
+    	    this.gridOption.buttons.push({
+    	       type:"custom",
+    	        name:"remove",
+    	        click:function(_grid){ 
+    	            var selectedItem = _grid.getSelectItem();
+    	            if(_.isUndefined(selectedItem)){
+    	                Dialog.error("선택된 데이터가 없습니다!");
+    	                return;
+    	            }
+    	            selectedItem["_date"] = selectedItem.date;
+    	            var selectHolidayModel = new HolidayModel(selectedItem);
+    	            selectHolidayModel.destroy({
+    	                success : function(){
+    	                    that.grid.render();
+    	                    Dialog.info("삭제되었습니다.");    
+    	                },
+    	                error : function(){
+    	                    Dialog.error("삭제 실패");    
+    	                }
+    	            });
+    	        }
+    	    });
+    	    // tool btn
+    	    this.gridOption.buttons.push({
+    	        type:"custom",
+    	        name:"wrench",
+    	        click:function(_grid){
+    	            var createHolidayPopup = new CreateHolidayPopup();
+    	            Dialog.show({
+    	                title:"공휴일 생성", 
+                        content:createHolidayPopup, 
+                        buttons: [{
+                            id: 'createHolidayBtn',
+                            cssClass: Dialog.CssClass.SUCCESS,
+                            label: '생성',
+                            action: function(dialog) {
+                                var year = dialog.getModalBody().find("#createHolidayCombo").val();
+                                var newHolidayCollection = new HolidayCollection();
+                                
+                                for(var key in holidays){
+                                    holidays[key].year = year;
+                                    newHolidayCollection.add(holidays[key]);
+                                }
+                                
+                                newHolidayCollection.save({
+                                    success : function(){
+                                        that.grid.render();
+                                        dialog.close();
+                                    }
+                                });
+                                return false;
+                            }
+                        }, {
+                            label : "취소",
+                            action : function(dialog){
+                                dialog.close();
+                            }
+                        }]
+    	            })
+    	        }
+    	    });
+    	    
+    	    
     	},
 
-
+        events : {
+            "change #holidayYearCombo" : "renderTable"
+        },
+        renderTable: function(event){
+            var that=this;
+            var _yearCombo = $(this.el).find("#holidayYearCombo");
+            var year = _yearCombo.val();
+            console.log(year);
+            this.holidayCollection.fetch({
+                data : {  
+                    year : year
+                },
+                success : function(){
+                    that.grid.render();
+                }
+            });
+        },
     	render:function(){
-    	    //var _view=this;
+    	    
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
@@ -149,15 +195,33 @@ CreateHolidayPopup, AddHolidayPopup){
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
 
+            var _inlineForm=$(InlineFormHTML).attr("id", "holidayForm");
+    	    var _yearComboLabel = $(_.template(LabelHTML)({label:"연도"}));
+    	    var _yearCombo = $(_.template(ComboBoxHTML)({id:"holidayYearCombo", label:""}));
+    	    
+            var nameCombo = _yearCombo.find("select");
+            for(var i=2014; i<2050; i++){
+                var option = $("<option>"+i+"</option>").attr("value",i);
+                nameCombo.append(option);
+            }
+            
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    _layOut.append(_head);
-    	    _layOut.append(_content);
-    	    $(this.el).html(_layOut);
-
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
-            this.grid.render();
-            
+    	    
+    	    _inlineForm.append(_yearComboLabel);
+    	    _inlineForm.append(_yearCombo);
+    	    
+    	    _layOut.append(_head);
+    	    _layOut.append(_inlineForm);
+    	    _layOut.append(_content);
+    	    
+    	    $(this.el).html(_layOut);
+    	    
+    	    var today = new Date();
+    	    _yearCombo.find("select").val(today.getFullYear());
+    	    
+    	    this.renderTable();
             return this;
      	}
     });

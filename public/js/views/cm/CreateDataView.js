@@ -160,8 +160,8 @@ CreateDataPopupView){
                                                     year: today.getFullYear(),
                                                     date: todayStr,
                                                     work_type : "00",
-                                                    in_time: "기록없음",
-                                                    out_time: "기록없음",
+                                                    in_time: null,
+                                                    out_time: null,
                                                     standard_in_time: "09:00:00",
                                                     standard_out_time:"18:00:00",  
                                                     late_time : 0,
@@ -205,8 +205,8 @@ CreateDataPopupView){
                                                             break;
                                                     }
                                                     
-                                                    commuteAttribute.in_time = "";  
-                                                    commuteAttribute.out_time = ""; 
+                                                    commuteAttribute.in_time = null;  
+                                                    commuteAttribute.out_time = null; 
                                                 }
                                                 
                                                 // 휴일
@@ -214,8 +214,8 @@ CreateDataPopupView){
                                                     commuteAttribute.work_type = "33";
                                                     commuteAttribute.standard_in_time = null;  
                                                     commuteAttribute.standard_out_time = null;  
-                                                    commuteAttribute.in_time = "";  
-                                                    commuteAttribute.out_time = ""; 
+                                                    commuteAttribute.in_time = null;  
+                                                    commuteAttribute.out_time = null; 
                                                 }
                                                 
                                                 var rawData = userRawDataCollection.filterDate(todayStr); // 당일 사용자의 출입기록

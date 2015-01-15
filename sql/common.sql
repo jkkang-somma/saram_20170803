@@ -371,6 +371,7 @@ CREATE TABLE IF NOT EXISTS `holiday_tbl` (
   `date` VARCHAR(12) NOT NULL,
   `memo` VARCHAR(200) NOT NULL,
   `year` VARCHAR(4) NULL,
+  PRIMARY KEY (`date`),
   INDEX `holiday_date_index` (`date` ASC))
 ENGINE = InnoDB
 COMMENT = '토/일을 제외한 휴일 관리';
