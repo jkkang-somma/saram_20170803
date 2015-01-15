@@ -7,7 +7,8 @@ define([
   'dialog',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection){
+  'models/rm/ApprovalModel',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel){
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -134,11 +135,29 @@ define([
   	},
   	
   	onClickBtnSend : function(evt){
+  	  this.dfd = new $.Deferred();
       var formData = this.getFormData($(this.el).find('form'));
       formData["doc_num"] = this.options["doc_num"];
-      formData["_id"] = this.options["update"];
+      formData["idAttribute"] = this.options["update"];
       console.log(formData);
       
+      
+      var _this = this;
+      var _approvalModel = new ApprovalModel(formData);
+      _approvalModel.save({},{
+      	        success:function(model, xhr, options){
+      	            Dialog.show("Complete Update Approval.");
+      	            _this.thisDfd.resolve(model);
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            _this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
+	       return _this.thisDfd.promise();
+    
       // this.collection
     }
     

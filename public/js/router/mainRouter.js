@@ -47,7 +47,7 @@ ReportListView // report manager
 			'commutemanager' : 'showCommuteManager',
 			'commutemanager/comment' : 'showCommuteComment',
 			'vacation' : 'showVacation',
-			'rawdata' : 'showRawdata',
+			'rawdatalist' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
 			'*actions' : 'showHome'
 

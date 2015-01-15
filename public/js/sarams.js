@@ -25,7 +25,7 @@ require.config({
       'moment_kr':'tool/moment/locale/kr',
       'moment_en':'tool/moment/locale/en',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
-      //'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
+      'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min', 
       'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
