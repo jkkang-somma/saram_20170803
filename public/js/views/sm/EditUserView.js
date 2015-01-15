@@ -27,12 +27,6 @@ define([
     	    if (!_.isUndefined(el)){
     	        this.el=el;
     	    }
-    // 	        ID:"Id",
-    // DEPT:"Department",
-    // NAME_COMMUTE:"Name Commute",
-    // JOIN_COMPANY:"Join Date",
-    // LEAVE_COMPANY:"Leave Date",
-    // PRIVILEGE:"Privilege"
     	    
     	    var _form = new Form({
     	        el:this.el,
@@ -54,14 +48,19 @@ define([
     	                value:view.model.attributes.name_commute
     	        },{
     	                type:"input",
-    	                name:"id",
-    	                label:i18nUser.ID,
-    	                value:view.model.attributes.id
+    	                name:"join_company",
+    	                label:i18nUser.JOIN_COMPANY,
+    	                value:view.model.attributes.join_company
     	        },{
     	                type:"input",
-    	                name:"id",
-    	                label:i18nUser.ID,
-    	                value:view.model.attributes.id
+    	                name:"leave_company",
+    	                label:i18nUser.LEAVE_COMPANY,
+    	                value:view.model.attributes.leave_company
+    	        },{
+    	                type:"input",
+    	                name:"privilege",
+    	                label:i18nUser.PRIVILEGE,
+    	                value:view.model.attributes.privilege
     	        }]
     	    });
     	    

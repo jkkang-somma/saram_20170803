@@ -9,11 +9,12 @@ define([ 'jquery',
          'core/BaseView',
          'views/cm/popup/ChangeHistoryPopupView',
          'views/cm/popup/CommuteUpdatePopupView',
+         'views/cm/popup/CommentPopupView',
          'models/cm/CommuteModel',
          'collection/cm/CommuteCollection',
          'text!templates/cm/commuteListTemplete.html'
 ], function($, _, Backbone, Util, Datatables, BaseView, 
-		ChangeHistoryPopupView, CommuteUpdatePopupView,
+		ChangeHistoryPopupView, CommuteUpdatePopupView, CommentPopupView,
 		CommuteModel, CommuteCollection, commuteListTemplete) {
 
 	// 분 -> 시간 
@@ -57,6 +58,25 @@ define([ 'jquery',
  		 return aHrefStr;
 	}
 	
+	// comment Cell 페이지 링크 
+	function _createCommentCell(cellData) {
+		 var data = JSON.stringify({
+			 idx : cellData.idx
+		 });
+		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='-' onclick='return false'>" + cellData.comment_count + " 건</a>";
+		 return aHrefStr;
+	}
+	
+	// comment Cell 추가 팝어 버튼 
+	function _createCommentCellAddBtn(cellData, tpl) {
+		 var data = JSON.stringify({
+			 idx : cellData.idx
+		 });
+		 var tp = $(tpl);
+		 tp.find(".btn").attr("data", data);
+		 return tp.html();
+	}
+	
 	var _btnCommuteAddTpl = "";
 	
 	// 변경 이력 팝업 뷰 
@@ -64,6 +84,9 @@ define([ 'jquery',
 	
 	// 근태 자료 수정 팝업
 	var _commuteUpdatePopupView = null;
+	
+	// comment 등록 팝업
+	var _commentPopupView = null;
 	
 	var _commuteManageTbl = null;
 
@@ -73,7 +96,8 @@ define([ 'jquery',
 			'click #btnSearch' : 'onClickSearchBtn',
 			'click #btnUpdate' : 'onClickOpenCommuteUpdatePopup',
 			'click #commuteManageTbl tbody tr': 'onSelectRow',
-			'click #commuteManageTbl .td-in-out-time' : 'onClickOpenChangeHistoryPopup'
+			'click #commuteManageTbl .td-in-out-time' : 'onClickOpenChangeHistoryPopup',
+			'click #commuteManageTbl .btn-comment-add' : 'onClickOpenInsertCommentPopup'
 		},
 		initialize : function() {
 			$(this.el).html('');
@@ -84,6 +108,9 @@ define([ 'jquery',
     		
 			// 근태 자료 수정 팝업
 			_commuteUpdatePopupView = new CommuteUpdatePopupView({parentView: this});
+			
+			// comment 등록 팝업
+			_commentPopupView = new CommentPopupView({parentView: this});
 			
 			this.collection = new CommuteCollection();
 
@@ -105,6 +132,11 @@ define([ 'jquery',
 				_commuteUpdatePopupView.destroy();
 				_commuteUpdatePopupView = null;
 			}
+
+			if (Util.isNotNull(_commentPopupView) ) {
+				_commentPopupView.destroy();
+				_commentPopupView = null;
+			}
 		},
 		render : function() {
 			var _this = this;
@@ -120,22 +152,22 @@ define([ 'jquery',
      	                   { data : "year", 			"title" : "년", visible: false},
      	                   { data : "date", "title" : "일자" },
      	                   { data : "department", "title" : "부서" },
-     	                   { data : "id", "title" : "ID" },
-     	                   { data : "name", "title" : "이름", visible: false,
+     	                   { data : "id", "title" : "ID", visible: false },
+     	                   { data : "name", "title" : "이름", 
      	                	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
     	                            $(nTd).html(oData.name + "</br>(" +oData.id + ")");
     	                       }
      	                   },
-     	                   { data : "work_type", "title" : "근무타입"},
+     	                   { data : "work_type_name", "title" : "근무타입"},
      	                   { data : "vacation_name", "title" : "휴가 타입"},
      	                   { data : "out_office_name", "title" : "외근 정보"},
-     	                   { data : "overtime_pay", "title" : "초과근무수당",
+     	                   { data : "overtime_pay", "title" : "초과</br>근무수당",
      	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
        	                            $(nTd).html(oData.overtime_pay + " 원");
        	                        }
      	                   },
      	                   { data : "late_time", "title" : "지각시간"},
-     	                   { data : "over_time", "title" : "초과근무시간 (분)",
+     	                   { data : "over_time", "title" : "초과</br>근무시간",
      	                	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
      	                		   $(nTd).html(  _getMinToHours(oData.over_time));
      	                	   }
@@ -160,7 +192,14 @@ define([ 'jquery',
      	                     },
      	                     { data : "comment_count", "title" : "Comment",
      	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {     	                    		 
-     	                            $(nTd).html(oData.comment_count + " 건" + _btnCommuteAddTpl);
+     	                            
+     	                            
+     	                            if (oData.comment_count) {
+     	                            	$(nTd).html(_createCommentCell(oData) + _createCommentCellAddBtn(oData, _btnCommuteAddTpl));
+     	                            } else {
+     	                            	$(nTd).html("0 건" + _createCommentCellAddBtn(oData, _btnCommuteAddTpl) );
+     	                            }
+
      	                        }
      	                     },
      	                     { data : "in_time_change", "title" : "in_time_change", visible: false},
@@ -239,6 +278,15 @@ define([ 'jquery',
 			var dataStr = $(evt.currentTarget).attr('data');
 			var searchData = JSON.parse(dataStr);
 			_changeHistoryPopupView.show(searchData);
+		},
+		onClickOpenInsertCommentPopup: function(evt) {
+			var data = JSON.parse( $(evt.currentTarget).attr('data') );
+     		var table = this.$el.find("#commuteManageTbl").DataTable();
+
+     		// 0부터 시작
+     		var selectData = table.row(data.idx-1).data();
+     		
+     		_commentPopupView.show(selectData);
 		},
      	getSearchForm: function() {	// 검색 조건
      		var data = Util.getFormJSON( this.$el.find('.form-inline'));

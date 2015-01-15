@@ -41,9 +41,11 @@ CommuteDao.prototype.selectCommuteDate = function(date) {
     return db.queryV2(queryStr, [date]);
 }
 
-// CommuteDao.prototype.deleteCommute =  function (start, end) {
-//     var queryStr = db.getQuery('commute', 'deleteCommuteResult');
-//     debug(queryStr);
-//     return db.queryV2(queryStr, [start, end]);
-// }
+// comment 갯수 수정 
+CommuteDao.prototype.updateCommuteCommentCount =  function (data) {
+	var queryStr = db.getQuery('commute', 'updateCommuteCommentCount');
+    debug(queryStr);
+    return db.queryV2(queryStr, [data.id, data.year, data.date, data.id, data.year, data.date]);
+}
+
 module.exports = new CommuteDao();

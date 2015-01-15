@@ -8,6 +8,7 @@ define([
     var ChangeHistoryCollection = Backbone.Collection.extend({
         model : ChangeHistoryModel,
         url: '/changeHistory',
+        idAttribute : '_id'
     });
     
     return ChangeHistoryCollection;

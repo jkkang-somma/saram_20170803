@@ -7,7 +7,7 @@ var Schemas = require("../schemas.js");
 var CommuteDao = require('../dao/commuteDao.js');
 var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
 
-var Vacation = function() {	
+var Commute = function() {	
 
 	var _getCommute = function(data, callback) {
 		CommuteDao.selectCommute(data).then(function(result) {
@@ -77,4 +77,4 @@ var Vacation = function() {
 	}
 } 
 
-module.exports = new Vacation();
+module.exports = new Commute();

@@ -22,6 +22,7 @@ var commute = require('./routes/commuteRouter');
 var changeHistory = require('./routes/changeHistoryRouter');
 var outOffice = require('./routes/outofficeRouter');
 var officeCode = require('./routes/officeCodeRouter');
+var comment = require('./routes/commentRouter');
 //var error = require('./routes/error');
 
 
@@ -103,6 +104,8 @@ app.use('/commute', commute);
 app.use('/changeHistory', changeHistory);
 app.use('/outOffice',outOffice);
 app.use('/officeCode',officeCode);
+app.use('/comment', comment);
+
 
 //app.use('/error', error);
 

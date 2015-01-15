@@ -6,7 +6,7 @@ define([
 	
     var CommuteModel=Backbone.Model.extend({
         urlRoot: '/changeHistory',
-        idAttribute : '',
+        idAttribute : '_id',
         defaults:{
         	seq : 0,
             year : '',
