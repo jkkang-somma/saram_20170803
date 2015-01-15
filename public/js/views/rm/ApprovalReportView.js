@@ -136,7 +136,7 @@ define([
   	onClickBtnSend : function(evt){
       var formData = this.getFormData($(this.el).find('form'));
       formData["doc_num"] = this.options["doc_num"];
-      
+      formData["_id"] = this.options["update"];
       console.log(formData);
       
       // this.collection
