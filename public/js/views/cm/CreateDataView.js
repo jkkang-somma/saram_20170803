@@ -139,6 +139,7 @@ CreateDataPopupView){
                                                 yesterdayAttribute.standard_out_time = Util.timeToString(new Date(yesterdayAttribute.standard_out_time));
                                             }
                                                 
+                                            
                                             for(var i=0; i <= diff_days; i++){ //차이나는 날짜만큼 기본데이터 생성 (사원수 X 날짜)
                                                 var todayStr = Util.dateToString(today);
                                                 
@@ -215,53 +216,42 @@ CreateDataPopupView){
                                                 var rawData = userRawDataCollection.filterDate(todayStr); // 당일 사용자의 출입기록
                                                 
                                                 // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
-                                                var earliestTime = null;
-                                                var inTime = null;
-                                                var outTime = null;
-                                                var latestTime = null;
+
+                                                analyzeInOutTime.init(); //계산전 초기화
+                                                
                                                 _.each(rawData, function(rawDataModel){
                                                     var rawDataTime = new Date(rawDataModel.get("char_date"));
-                                                    if(rawDataModel.get("type").slice(0,2) == "출근" && todayStr == Util.dateToString(rawDataTime)){ // 출근 기록일 경우
-                                                        if(Util.isNull(inTime))
-                                                            inTime = rawDataTime;
-                                                        else
-                                                            if(inTime - rawDataTime > 0) inTime = rawDataTime;
-                                                        
-                                                    }else if(rawDataModel.get("type").slice(0,2) == "퇴근"){ // 퇴근기록일 경우
-                                                        if(Util.isNull(outTime))
-                                                            outTime = rawDataTime;
-                                                        else
-                                                            if(outTime - rawDataTime < 0) outTime = rawDataTime;
-                                                    }
-                                                    // 출퇴근 기록이 없을때를 대비해서 이른시간 / 늦은시간을 구한다.
-                                                    if(Util.isNull(earliestTime))
-                                                        earliestTime = rawDataTime;
-                                                    else
-                                                        if(earliestTime - rawDataTime > 0) earliestTime = rawDataTime;
-                                                        
-                                                    if(Util.isNull(latestTime))
-                                                        latestTime = rawDataTime;
-                                                    else
-                                                        if(latestTime - rawDataTime < 0) outTime = rawDataTime;
                                                     
+                                                    if(rawDataModel.get("type").slice(0,2) == "출근" && todayStr == Util.dateToString(rawDataTime)){ // 출근 기록일 경우
+                                                        analyzeInOutTime.setInTime(rawDataTime);
+                                                        analyzeInOutTime.setEarliestTime(rawDataTime);
+                                                            
+                                                    }else if(rawDataModel.get("type").slice(0,2) == "퇴근"){ // 퇴근기록일 경우
+                                                        analyzeInOutTime.setOutTime(rawDataTime);
+                                                        analyzeInOutTime.setLatestTime(rawDataTime);
+                                                    }else{
+                                                        // 출퇴근 기록이 없을때를 대비해서 이른시간 / 늦은시간을 구한다.
+                                                        analyzeInOutTime.setEarliestTime(rawDataTime);
+                                                        analyzeInOutTime.setLatestTime(rawDataTime);
+                                                    }
                                                 });
                                                 
                                                 // 출퇴근시간 판단
-                                                if(Util.isNotNull(inTime))
-                                                    commuteAttribute.in_time = Util.dateToString(inTime) + " " + Util.timeToString(inTime);
+                                                if(Util.isNotNull(analyzeInOutTime.getInTime()))
+                                                    commuteAttribute.in_time = analyzeInOutTime.getInTime();
                                                 else{
-                                                    if(Util.isNotNull(earliestTime)){
-                                                        commuteAttribute.in_time = Util.dateToString(earliestTime) + " " + Util.timeToString(earliestTime);
-                                                        inTime = earliestTime;
+                                                    if(Util.isNotNull(analyzeInOutTime.getEarliestTime())){
+                                                        commuteAttribute.in_time = analyzeInOutTime.getEarliestTime()
+                                                        
                                                     }
                                                 }
                                                 
-                                                if(Util.isNotNull(outTime))
-                                                    commuteAttribute.out_time = Util.dateToString(outTime) + " " + Util.timeToString(outTime);
+                                                if(Util.isNotNull(analyzeInOutTime.getOutTime()))
+                                                    commuteAttribute.out_time = analyzeInOutTime.getOutTime();
                                                 else{
-                                                    if(Util.isNotNull(latestTime)){
-                                                        commuteAttribute.out_time = Util.dateToString(latestTime) + " " + Util.timeToString(latestTime);
-                                                        outTime = latestTime;
+                                                    if(Util.isNotNull(analyzeInOutTime.getLatestTime())){
+                                                        commuteAttribute.out_time = analyzeInOutTime.getLatestTime();
+                                                        // flag 추가
                                                     }
                                                 }
                                                 
@@ -389,7 +379,69 @@ CreateDataPopupView){
      	        progressbar.css("display","block");
      	    }
      	},
+        
     });
+    
+    var analyzeInOutTime = function(){
+        var earliestTime, inTime, outTime,latestTime;
+    
+        var init = function(){
+            earliestTime = null;
+            inTime = null;
+            outTime = null;
+            latestTime = null;
+    
+        };
+        
+        var setEarliestTime = function(destTime){
+            if(Util.isNull(earliestTime)) earliestTime = destTime;
+            else
+                if(earliestTime - destTime > 0) earliestTime = destTime;
+        };
+        
+        var setInTime = function(destTime){
+            if(Util.isNull(inTime)) inTime = destTime;
+            else
+                if(inTime - destTime > 0) inTime = destTime;
+        };
+        
+        var setOutTime = function(destTime){
+            if(Util.isNull(outTime)) outTime = destTime;
+            else
+                if(outTime - destTime < 0) outTime = destTime;
+        };
+        
+        var setLatestTime = function(destTime){
+            if(Util.isNull(destTime)) latestTime = destTime;
+            else
+                if(latestTime - destTime < 0) outTime = destTime;
+        };
+        
+        var getEarliestTime = function(){
+            return Util.isNull(earliestTime)? null : Util.dateToString(earliestTime) + " " + Util.timeToString(earliestTime);
+        };
+        
+        var getInTime = function(){
+            return Util.isNull(inTime)? null : Util.dateToString(inTime) + " " + Util.timeToString(inTime);
+        };
+        
+        var getOutTime = function(){
+            return Util.isNull(outTime)? null : Util.dateToString(outTime) + " " + Util.timeToString(outTime);
+        };
+        
+        var getLatestTime = function(){
+            return Util.isNull(latestTime)? null : Util.dateToString(latestTime) + " " + Util.timeToString(latestTime);
+        };
+        
+        return {
+            init : init,
+            setEarliestTime : setEarliestTime,  getEarliestTime : getEarliestTime,
+            setInTime : setInTime,              getInTime : getInTime,
+            setOutTime : setOutTime,            getOutTime : getOutTime,
+            setLatestTime : setLatestTime,      getLatestTime : getLatestTime,
+        }
+            
+    };
     
     return CreateDataView;
 });
