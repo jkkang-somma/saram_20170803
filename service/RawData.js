@@ -17,9 +17,9 @@ var RawData = function (data) {
             return _.noop;
         }
     }
-    var _selectRawDataList = function(start, end){
-        var startDate = new Date(start);
-        var endDate = new Date(end);
+    var _selectRawDataList = function(data){
+        var startDate = new Date(data.start);
+        var endDate = new Date(data.end);
         
         return RawDataDao.selectRawDataList(startDate.getTime(), endDate.getTime());
     }

@@ -27,7 +27,7 @@ router.route("/")
 .get(function(req, res){
     debug(req.query);
     var rawData = RawData();
-    rawData.selectRawDataList(req.query.start, req.query.end).then(function(result){
+        rawData.selectRawDataList(req.query).then(function(result){
         res.send(result);
     });
 });

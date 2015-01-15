@@ -16,6 +16,7 @@ define([
 	'views/sm/UserListView',
 	'views/sm/AddUserView',
 	'views/RawData/AddRawDataView',
+	'views/RawData/RawDataView',
 	'views/Holiday/HolidayManagerView',
 	'views/cm/CommuteListView',
 	'views/cm/CreateDataView',
@@ -25,7 +26,7 @@ define([
 ], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView, AddUserView,	// 사원관리
-AddRawDataView, HolidayManagerView, // 근태관리
+AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
 ReportListView // report manager
@@ -46,6 +47,7 @@ ReportListView // report manager
 			'commutemanager' : 'showCommuteManager',
 			'commutemanager/comment' : 'showCommuteComment',
 			'vacation' : 'showVacation',
+			'rawdata' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
 			'*actions' : 'showHome'
 
@@ -146,6 +148,11 @@ ReportListView // report manager
 		showCommuteComment : function(){
 			var commuteCommentView = new CommuteCommentView();
 			this.changeView(commuteCommentView);
+		},
+		
+		showRawData : function(){
+			var rawDataView = new RawDataView();
+			this.changeView(rawDataView);
 		},
 		
 		showReportManager : function(){

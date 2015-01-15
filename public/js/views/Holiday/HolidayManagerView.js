@@ -11,14 +11,12 @@ define([
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'text!templates/holiday/holidaytoolsTemplate.html',
   'collection/common/HolidayCollection',
   'models/common/HolidayModel',
   'views/Holiday/popup/CreateHolidayPopup',
   'views/Holiday/popup/AddHolidayPopup',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Dialog,
 HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
-HolidaytoolsTemplate,
 HolidayCollection, HolidayModel,
 CreateHolidayPopup, AddHolidayPopup){
 

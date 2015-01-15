@@ -3,14 +3,14 @@
 // js lib config
 // load end event ==> app.initialize();
 require.config({
-   locale: "kr",
+   locale: "en",
    waitSeconds: 2000,
    shim: {
       'util' : {deps : ['jquery', 'underscore']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
       'bootstrap-datepicker': { deps: ['jquery','bootstrap']  },
-      'bootstrap-datetimepicker': { deps: ['jquery','bootstrap']  },
+      'bootstrap-datetimepicker': { deps: ['jquery','bootstrap','moment']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
    },
@@ -21,11 +21,11 @@ require.config({
       'underscore.string': 'tool/underscore/underscore.string.min',
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
+      moment:'tool/moment/moment.min',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
       'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min', 
       'datatables':'tool/datatables/media/js/jquery.dataTables',
-      moment:'tool/moment/moment.min',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
       dialog:'lib/dialog',

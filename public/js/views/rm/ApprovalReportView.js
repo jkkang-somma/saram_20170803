@@ -6,8 +6,8 @@ define([
   'core/BaseView',
   'dialog',
   'text!templates/addReportTemplate.html',
-  'collection/cm/CommuteCollection',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, CommuteCollection){
+  'collection/rm/ApprovalCollection',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection){
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -15,7 +15,7 @@ define([
   	},
   	
   	initialize:function(){
-  		this.collection = new CommuteCollection();
+  		this.collection = new ApprovalCollection();
   		  
   		$(this.el).html();
 	    $(this.el).empty();
@@ -139,8 +139,7 @@ define([
       
       console.log(formData);
       
-      // 완료 후
-      // location.href = '#reportmanager';
+      // this.collection
     }
     
   });
