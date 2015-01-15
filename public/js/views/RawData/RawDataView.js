@@ -30,11 +30,6 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
     	initialize:function(){
     		$(this.el).html('');
     	    $(this.el).empty();
-<<<<<<< HEAD
-    	    
-=======
-
->>>>>>> deda82b2dfb50066ad0a9daf04ef666efa2c2f6e
     	    this.rawDataCollection = new RawDataCollection();
     	    //this.rawDataCollection.fetch({data : {start : "2014-10-26", end : "2014-11-25"}});
             this.departmentCollection = null;
