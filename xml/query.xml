@@ -148,7 +148,12 @@
 		<query id="selectOfficeCodeList">select * from office_code_tbl</query>
         <query id="empty"></query>
 	</group>
-
+	
+	<group id="dept_code">
+		<query id="selectDepartmentCodeList">select * from dept_code_tbl</query>
+        <query id="empty"></query>
+	</group>
+	
     <group id="commute">
         <query id="selectCommute">
             SELECT 
