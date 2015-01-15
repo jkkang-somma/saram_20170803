@@ -9,7 +9,7 @@ var Promise = require('bluebird');
 router.route('/')
 .get(function(req, res){
 	debug(req.query);
-	if(_.isUndefined(req.query)){
+	if(_.isUndefined(req.query.date)){
 		Commute.getCommute(req.query, function(result) {
 			return res.send(result);
 		});

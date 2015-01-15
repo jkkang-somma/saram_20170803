@@ -1,0 +1,12 @@
+<%  if (typeof(obj) != "undefined") { %>
+<div class="form-group">
+    
+    <label for="<%= obj.el %>"><%= obj.label %></label>
+    <div id="<%= obj.id %>" class="input-append">
+        <input type="text" data-format="yyyy-MM-dd"  name="<%= obj.name %>"/>
+        <span class="add-on">
+              <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+        </span>
+    </div>    
+</div>
+<% } %>

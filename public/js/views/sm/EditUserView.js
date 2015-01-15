@@ -33,21 +33,21 @@ define([
     	        form:undefined,
     	        childs:[{
     	                type:"input",
-    	                name:"name",
-    	                label:i18nUser.NAME,
-    	                value:view.model.attributes.name
-    	        },{
-    	                type:"input",
     	                name:"id",
     	                label:i18nUser.ID,
     	                value:view.model.attributes.id
+    	        },{
+    	                type:"input",
+    	                name:"name",
+    	                label:i18nUser.NAME,
+    	                value:view.model.attributes.name
     	        },{
     	                type:"input",
     	                name:"name_commute",
     	                label:i18nUser.NAME_COMMUTE,
     	                value:view.model.attributes.name_commute
     	        },{
-    	                type:"input",
+    	                type:"date",
     	                name:"join_company",
     	                label:i18nUser.JOIN_COMPANY,
     	                value:view.model.attributes.join_company
