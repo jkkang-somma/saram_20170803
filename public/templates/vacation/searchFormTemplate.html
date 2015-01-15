@@ -1,0 +1,12 @@
+<form class="form-inline">
+	<div class="form-group">
+		<select id="selectYear" class="form-control">
+			<%_.each(data.formYears, function(year){ if (year == data.nowYear)
+			{%>
+			<option value="<%=year%>" selected><%=year%></option> <%} else {%>
+			<option value="<%=year%>"><%=year%></option> <%} }); %>
+		</select>
+	</div>
+	<button id="btnCreateData" class="btn btn-default" type="button">자료 생성</button>	
+	<button id="btnSearch" class="btn btn-default" type="button">조회</button>
+</form>
