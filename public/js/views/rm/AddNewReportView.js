@@ -4,12 +4,15 @@ define([
   'backbone',
   'animator',
   'core/BaseView',
+  'dialog',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'collection/common/OfficeCodeCollection',
   'collection/sm/UserCollection',
+  'models/rm/ApprovalModel',
+  'models/rm/ApprovalIndexModel',
   'bootstrap-datepicker',
-], function($, _, Backbone, animator, BaseView, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, datepicker){
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel, datepicker){
   var addReportView = BaseView.extend({
     
   	events: {
@@ -62,6 +65,8 @@ define([
     },
     
     setTableDisplay : function() {
+      $(this.el).find("#submit_id").val('150105');
+      
       var tableTr = $(this.el).find('.addReportNone');
       tableTr.css('display','none');
     },
@@ -115,8 +120,8 @@ define([
       
       // option setting
       for(var k=0; k < arrApprovalMemData.length; k++){
-      var approvalOptionHtml = "<option value='"+arrApprovalMemData[k].id+"'>"+arrApprovalMemData[k].name+"</option>";
-      approvalMem.append(approvalOptionHtml);
+        var approvalOptionHtml = "<option value='"+arrApprovalMemData[k].id+"'>"+arrApprovalMemData[k].name+"</option>";
+        approvalMem.append(approvalOptionHtml);
       }
       });
     },
@@ -132,6 +137,17 @@ define([
       
       return indexed_array;
   	},
+    
+    getzFormat: function(s, len){
+      var sZero = "";
+      s = s + "";
+      if(s.length < len){
+        for(var i = 0; i < (len-s.length); i++){
+          sZero += "0";
+        }
+      }
+      return sZero + s;
+    },
   	
   	isDateCompare : function(){
   	  var startDate = $(this.el).find("#beforeDate").val();
@@ -148,8 +164,11 @@ define([
   	},
   	
   	onClickBtnSend : function(evt){
+  	  this.dialogRef = evt;
+  	  var _this = this;
+  	  this.thisDfd = new $.Deferred();
+  	  
       var formData = this.getFormData($(this.el).find('form'));
-      
       console.log(formData);
       
       var essenId = ["start_date", "end_date", "office_code", "submit_comment"];
@@ -158,18 +177,83 @@ define([
       for(var i = 0; i < essenId.length; i++){
         if(formData[essenId[i]] == ""){
           alert(essenMsg[i]+"을(를) 입력하세요.");
+          this.thisDfd.reject();
           return;
         }
       }
       
       if(!this.isDateCompare()){
           alert("기간을 잘못 입력하였습니다.");      
+          this.thisDfd.reject();
           return;
       }else{
-        console.log("완료!!!!");
-        // 완료 후
-        // location.href = '#reportmanager';
+        var _appCollection = new ApprovalCollection();
+        _appCollection.url = "/approval/appIndex";
+        
+        var nowDate = new Date();
+        var yearMonth = "";
+        
+        // getzFormat
+        yearMonth = nowDate.getFullYear() + this.getzFormat(nowDate.getMonth()+1 , 2);
+        
+        var _thisData = {yearmonth : yearMonth};
+        
+        _appCollection.fetch({
+     			reset : true, 
+     			data: _thisData,
+     			error : function(result) {
+     				alert("데이터 조회가 실패했습니다.");
+     			}
+     		})
+        .done(function(result){
+            // insert
+            _thisData["seq"] = result[0].maxSeq;
+            _this.addApprovalIndex(_thisData, formData);
+        });
       }
+      
+      return this.thisDfd.promise();
+    },
+    
+    addApprovalIndex : function(docData, formData){
+      var _this = this;
+      var _approvalIndexModel = new ApprovalIndexModel(docData);
+      _approvalIndexModel.save({},{
+      	        success:function(model, xhr, options){
+      	          console.log("##########success");
+      	          console.log(model);
+      	          var _seq = model.attributes.seq;
+      	          _seq = (_seq==null)? 1 : _seq + 1;
+      	           var doc_num = docData.yearmonth + "-" + _this.getzFormat(_seq, 3);
+      	           formData["doc_num"] = doc_num;
+      	           _this.addApproval(formData);
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
+      
+    },
+    
+    addApproval : function(formData) {
+      var _this = this;
+      var _approvalModel = new ApprovalModel(formData);
+      _approvalModel.save({},{
+      	        success:function(model, xhr, options){
+      	            Dialog.show("Complete Add Approval.");
+      	            _this.thisDfd.resolve(model);
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            _this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
+	       return _this.thisDfd.promise();
     }
     
   });

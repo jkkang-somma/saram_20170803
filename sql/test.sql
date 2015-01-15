@@ -23,3 +23,18 @@ INSERT INTO `out_office_tbl`
   (`year`, `date`, `id`, `office_code`, `day_count`, `memo`, `doc_num`) 
 VALUES 
   ('2014', '2014-11-11', '100501', 'V01', 1.0, '', '2014-10-30-01');
+
+
+
+// 결재 테이블의 고유번호 생성시 사용
+UPDATE 
+	approval_index_tbl 
+SET 
+	seq = 1 + 
+		( 
+			SELECT MAX_VALUE FROM
+				( SELECT max(seq) AS MAX_VALUE FROM approval_index_tbl WHERE yearmonth = '201502' ) AS x
+        )
+WHERE 
+	yearmonth = '201502';
+	

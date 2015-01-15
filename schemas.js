@@ -75,6 +75,11 @@ var Schemas = function (schemaName) {
             code : null,
             name : null,
             day_count : null
+        },
+        
+        approval_index:{
+            yearmonth : null,
+            seq : null
         }
     }
     

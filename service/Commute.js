@@ -61,9 +61,19 @@ var Vacation = function() {
 		});
 	}
 	
+	var _insertCommute = function(data){
+		return CommuteDao.insertCommute(data);
+	}
+	
+	var _getCommuteDate = function(date){
+		return CommuteDao.selectCommuteDate(date);
+	}
+	
 	return {
 		getCommute : _getCommute,
-		updateCommute : _updateCommute
+		updateCommute : _updateCommute,
+		insertCommute : _insertCommute,
+		getCommuteDate : _getCommuteDate
 	}
 } 
 

@@ -15,4 +15,20 @@ ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate) {
     var queryStr = db.getQuery('approval', 'selectApprovalListWhere');
     return db.queryV2(queryStr, [startDate,endDate,startDate,endDate]);
 };
+ApprovalDao.prototype.insertApproval =  function (data) {
+    var queryStr = db.getQuery('approval', 'insertApproval');
+    return db.queryV2(queryStr, [data.doc_num,data.submit_id,data.manager_id,data.submit_comment,data.start_date,data.end_date,data.office_code,data.state]);
+};
+ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
+    var queryStr = db.getQuery('approval_index', 'selectMaxIndexApproval');
+    return db.queryV2(queryStr, [yearmonth]);
+};
+ApprovalDao.prototype.insertApprovalIndex =  function (data) {
+    var queryStr = db.getQuery('approval_index', 'insertApprovalIndex');
+    return db.queryV2(queryStr, [data.yearmonth]);
+};
+ApprovalDao.prototype.updateMaxIndex =  function (data) {
+    var queryStr = db.getQuery('approval_index', 'updateMaxIndex');
+    return db.queryV2(queryStr, [data.yearmonth]);
+};
 module.exports = new ApprovalDao();

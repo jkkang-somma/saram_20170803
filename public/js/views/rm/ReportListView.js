@@ -77,10 +77,13 @@ define([
           title:"결재 상신", 
           content:_addNewReportView, 
           buttons:[{
-            label: "상신",
-            cssClass: Dialog.CssClass.SUCCESS,
-            action: function(dialogRef){// 버튼 클릭 이벤트
-            _addNewReportView.onClickBtnSend(dialogRef);
+              label: "상신",
+              cssClass: Dialog.CssClass.SUCCESS,
+              action: function(dialogRef){// 버튼 클릭 이벤트
+              _addNewReportView.onClickBtnSend(dialogRef).done(function(model){
+                  _this.onClickClearBtn();
+                  dialogRef.close();
+              });
             }
           }, {
             label: 'Close',
@@ -178,14 +181,14 @@ define([
     
     getDateFormat : function(dateData){
       var d = new Date(dateData);
-      
-      var sDateFormat
+      var sDateFormat = "";
+      if (dateData == null){
+        sDateFormat = "-";
+      }else {
+        sDateFormat
         = d.getFullYear() + "-" + this.getzFormat(d.getMonth() + 1, 2) + "-" + this.getzFormat(d.getDate(), 2)
          + " " + this.getzFormat(d.getHours(), 2) + ":" + this.getzFormat(d.getMinutes(), 2) + ":" + this.getzFormat(d.getSeconds(), 2);
-      if (dateData == null){
-        sDateFormat = "-"
       }
-      console.log(sDateFormat);
       return sDateFormat;
     },
     

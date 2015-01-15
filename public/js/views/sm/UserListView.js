@@ -5,6 +5,7 @@ define([
   'core/BaseView',
   'grid',
   'schemas',
+  'i18n!nls/common',
   'dialog',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
@@ -15,7 +16,7 @@ define([
   'views/sm/AddUserView',
   'views/sm/EditUserView',
   'models/sm/UserModel',
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
+], function($, _, Backbone, BaseView, Grid, Schemas, i18Common, Dialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
     var userListCount=0;
     var UserListView = BaseView.extend({
         el:".main-container",
@@ -40,7 +41,7 @@ define([
     	    var _layOut=$(LayoutHTML);
     	    	    
     	    //Head 
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"User Manager ", subTitle:"User list"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18Common.PAGE.TITLE.USER_MANAGER, subTitle:i18Common.PAGE.SUB_TITLE.USER_LIST})));
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
@@ -52,10 +53,10 @@ define([
     	        click:function(){
                     var addUserView= new AddUserView();
                     Dialog.show({
-                        title:"Registration User", 
+                        title:i18Common.DIALOG.TITLE.USER_ADD, 
                         content:addUserView, 
                         buttons:[{
-                            label: "Add",
+                            label: i18Common.DIALOG.BUTTON.ADD,
                             cssClass: Dialog.CssClass.SUCCESS,
                             action: function(dialogRef){// 버튼 클릭 이벤트
                                 addUserView.submitAdd().done(function(model){
@@ -65,7 +66,7 @@ define([
                                 });//실패 따로 처리안함 add화면에서 처리.
                             }
                         }, {
-                            label: 'Close',
+                            label: i18Common.DIALOG.BUTTON.CLOSE,
                             action: function(dialogRef){
                                 dialogRef.close();
                             }
@@ -81,14 +82,14 @@ define([
     	        click:function(_grid){
     	            var selectItem=_grid.getSelectItem();
                     if (_.isUndefined(selectItem)){
-                        Dialog.warning("Plese Select User.");
+                        Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
                     } else {
                         var editUserView= new EditUserView(selectItem);
                         Dialog.show({
-                            title:"Edit User", 
+                            title:i18Common.DIALOG.TITLE.USER_UPDATE, 
                             content:editUserView, 
                             buttons:[{
-                                label: "Save",
+                                label: i18Common.DIALOG.BUTTON.SAVE,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialogRef){// 버튼 클릭 이벤트
                                     editUserView.submitSave().done(function(model){
@@ -98,7 +99,7 @@ define([
                                     });//실패 따로 처리안함 add화면에서 처리.
                                 }
                             }, {
-                                label: 'Close',
+                                label: i18Common.DIALOG.BUTTON.CLOSE,
                                 action: function(dialogRef){
                                     dialogRef.close();
                                 }
@@ -115,7 +116,7 @@ define([
     	        click:function(_grid){
                     var selectItem=_grid.getSelectItem();
                     if (_.isUndefined(selectItem)){
-                        Dialog.warning("Plese Select User.");
+                        Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
                     } else {
                         selectItem._id="-1";
                         var dd=Dialog.confirm({

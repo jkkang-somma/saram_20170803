@@ -160,10 +160,10 @@ AddRawDataAddPopupView){
     	        type:"custom",
     	        name:"ok",
     	        click:function(){
+    	            that._disabledOkBtn(true);
     	            that.rawDataCollection.save({
     	                success:function(){
     	                    Dialog.info("데이터 전송이 완료되었습니다.");
-    	                    that._disabledOkBtn(true);     
     	                }
     	            });
     	        }

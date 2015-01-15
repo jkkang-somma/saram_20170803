@@ -3,6 +3,7 @@
 // js lib config
 // load end event ==> app.initialize();
 require.config({
+   locale: "kr",
    waitSeconds: 2000,
    shim: {
       'util' : {deps : ['jquery', 'underscore']},
@@ -17,6 +18,7 @@ require.config({
    //    jquery: 'tool/jquery.min',
       backbone: 'tool/backbone/backbone',
       underscore: 'tool/underscore/underscore-min',
+      'underscore.string': 'tool/underscore/underscore.string.min',
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',

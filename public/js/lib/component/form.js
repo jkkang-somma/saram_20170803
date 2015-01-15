@@ -5,10 +5,13 @@ define([
   'underscore',
   'backbone',
   'log',
+  'dialog',
   'schemas',
+  'i18n!nls/common',
+  'i18n!nls/error',
   'text!templates/default/form.html',
   'text!templates/default/input.html',
-  ], function($, _, Backbone, log, Schemas, FormHTML, InputHTML){
+  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, i18nError, FormHTML, InputHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -19,12 +22,7 @@ define([
           getElement:function(data){
             var _InputTemp=_.template(InputHTML);
             var _input=_.noop();
-            
-            if (_.isString(data)||_.isUndefined(data)){
-               _input=_InputTemp();   
-            } else {
-               _input=_InputTemp(data);   
-            }
+            _input=_InputTemp(data);
             return _input;
           }
        },
@@ -46,51 +44,59 @@ define([
     	   this.options=_formSchema.getDefault(options);
     	   
          var _formTemp=_.template(FormHTML);
-         var _form=_formTemp(this.options.form);
-         
          this.formTemp=_formTemp;
          this.childs=this.options.childs;
          this.elements=[];
          
-         if (_.isUndefined(_form.id)){
+         if (_.isUndefined(this.options.form.id)){
             this.id = _formName+(_formId++);    
          }
          
          var autoRender=this.options.autoRender;
-         if (!_.isUndefined(autoRender) || autoRender){
+         if (autoRender){
             this.render();   
          }
          _.bindAll(this, 'render');
     	},
     	render:function(){
-    	   var _form=this;
-    	   var _childs=_form.childs;
+    	   var dfd= new $.Deferred();
+         
+    	   var _view=this;
+         var _form=$(_view.formTemp(this.options.form));
+    	   var _childs=_view.childs;
     	   
-    	   for (var index in _childs){// form child make
-    	      var _child=_childs[index];
-    	      
-    	      //단순한 스트링일때 default make
-    	      if (_.isString(_child)){
-    	         _form._createDefaultInput(_child);  
+    	   for (var i=0; i < _childs.length; i++){// form child make
+    	      var _child=_childs[i];
+    	      if (_.isObject(_child)){
+    	         var _inputElement=_view._createDefaultInput(_child);  
+    	         if (!_.isUndefined(_view.el)){
+       	         _form.append(_inputElement);     
+       	      }  
+    	      } else {
+    	         Dialog.error(i18nError.NOT_SUPPORT_FORM_CHILD);
+    	         dfd.reject();
     	      }
     	   }
     	   
-    	   LOG.debug(_form.elements);
+    	   $(_view.el).html(_form);
+    	   dfd.resolve();
+    	   return dfd.promise();
      	},
-     	_createDefaultInput:function(childName){
-     	   var _form=this;
+     	_createDefaultInput:function(child){
+     	   var _view=this;
      	   var _inputTypes=_.keys(_defaultInputType);
-     	   var _index=_.indexOf(_inputTypes, childName);   
-     	   if (-1 < _index){//default Input
-     	      var _data={
-     	         el:childName,
-     	         label:childName,
-     	         id:_form.id+"_input_"+(_inputId++)
-     	      };
-     	      var _inputTag=_defaultInputType[_INPUT].getElement(_data);
-     	      var _inputElement=$(_inputTag);
-     	      _form.elements.push(_inputElement);
-     	   }
+     	   var _index=_.indexOf(_inputTypes, child.type);   
+  	      var _data={
+  	         el:child.el,
+  	         label:child.label,
+  	         name:child.name,
+  	         id:_view.id+"_input_"+(_inputId++),
+  	         value:child.value
+  	      };
+  	      var _inputTag=_defaultInputType[_INPUT].getElement(_data);
+  	      var _inputElement=$(_inputTag);
+  	      _view.elements.push(_inputElement);
+  	      return _inputElement;
      	},
      	getData: function() {
          var unindexed_array = $("#"+this.options.id).serializeArray();

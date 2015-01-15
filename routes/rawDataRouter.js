@@ -1,19 +1,25 @@
 var express = require('express');
 var debug = require('debug')('rawDataRouter');
+var Promise = require('bluebird');
 var router = express.Router();
-
 var RawData = require("../service/RawData.js")
 
 router.route('/bulk')
 .post(function(req, res){
     var count = 0;    
+    var resultArr = [];
     for(var key in req.body){
         var rawData = RawData(req.body[key]);
-        rawData.insertRawData();
+        resultArr.push(rawData.insertRawData());
         count++;
     }
-    debug("Add RawData Count : " + count);
-    res.send({msg : "Add RawData Count : " + count, count: count});
+    
+    Promise.all(resultArr).then(function(){
+        debug("Add RawData Count : " + count);
+        res.send({msg : "Add RawData Count : " + count, count: count});    
+    });
+    
+    
 });
 
 

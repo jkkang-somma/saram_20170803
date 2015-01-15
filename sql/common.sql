@@ -1,24 +1,24 @@
-drop table members_tbl;
-drop table dept_code_tbl;
+drop table if exists members_tbl;
+drop table if exists dept_code_tbl;
 
-drop table vacation_tbl;
+drop table if exists vacation_tbl;
 
-drop table commute_base_tbl;
+drop table if exists commute_base_tbl;
 
-drop table out_office_tbl;
-drop table in_office_tbl;
-drop table approval_tbl;
+drop table if exists out_office_tbl;
+drop table if exists in_office_tbl;
+drop table if exists approval_tbl;
 
-drop table comment_tbl;
-drop table change_history_tbl;
-drop table commute_result_tbl;
+drop table if exists comment_tbl;
+drop table if exists change_history_tbl;
+drop table if exists commute_result_tbl;
 
-drop table overtime_code_tbl;
-drop table work_type_code_tbl;
-drop table office_code_tbl;
+drop table if exists overtime_code_tbl;
+drop table if exists work_type_code_tbl;
+drop table if exists office_code_tbl;
 
-drop table holiday_tbl;
-
+drop table if exists holiday_tbl;
+drop table if exists approval_index_tbl;
 
 
 CREATE TABLE IF NOT EXISTS `dept_code_tbl` (
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `comment_tbl` (
   `year` VARCHAR(4) NOT NULL COMMENT '기준 년도',
   `date` VARCHAR(12) NOT NULL COMMENT '날짜',
   `id` VARCHAR(45) NOT NULL COMMENT '사번',
-  `seq` INT NOT NULL COMMENT 'index',
+  `seq` INT NOT NULL AUTO_INCREMENT COMMENT 'index',
   `comment` VARCHAR(300) NULL COMMENT 'Comment 내용',
   `comment_date` DATETIME NULL COMMENT '신청일시',
   `comment_reply` VARCHAR(300) NULL COMMENT 'Comment 에 대한 답변',
@@ -311,7 +311,7 @@ INSERT INTO `overtime_code_tbl` (`code`, `name`, `holiday`, `overtime`, `overtim
 
 
 CREATE TABLE IF NOT EXISTS `approval_tbl` (
-  `doc_num` VARCHAR(45) NOT NULL COMMENT '문서번호 (년-월-일-index)',
+  `doc_num` VARCHAR(45) NOT NULL COMMENT '문서번호 (201501-001)',
   `submit_id` VARCHAR(45) NOT NULL COMMENT '결제 요청자 사번\n',
   `manager_id` VARCHAR(45) NOT NULL COMMENT '결제권자 사번',
   `submit_date` DATETIME NOT NULL COMMENT '상신일자',
@@ -382,4 +382,12 @@ CREATE TABLE IF NOT EXISTS `vacation_tbl` (
   PRIMARY KEY (`year`, `id`))
 ENGINE = InnoDB
 COMMENT = '직원의 연차 할당';
+
+
+CREATE TABLE IF NOT EXISTS `approval_index_tbl` (
+  `yearmonth` VARCHAR(10) NOT NULL COMMENT '년월 ( 201501 )',
+  `seq` INT NULL COMMENT '1부터 순차 증가',
+  PRIMARY KEY (`yearmonth`))
+ENGINE = InnoDB
+COMMENT = '결재 고유번호를 년.월 단위로 생성한다.';
 

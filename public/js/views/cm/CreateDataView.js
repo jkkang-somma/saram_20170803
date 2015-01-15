@@ -19,12 +19,13 @@ define([
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
   'collection/sm/UserCollection',
-  'models/sm/UserModel',
-  'collection/sm/UserCollection',
+  'models/cm/CommuteModel',
+  'collection/cm/CommuteCollection',
   'models/vacation/OutOfficeModel',
   'collection/vacation/OutOfficeCollection',
-  'views/cm/popup/CreateDataPopupView'
-], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, datepicker,
+  'views/cm/popup/CreateDataPopupView',
+], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, 
+HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, datepicker,
 HolidayModel, HolidayCollection, RawDataModel, RawDataCollection, UserModel, UserCollection, CommuteModel, CommuteCollection, OutOfficeModel, OutOfficeCollection,
 CreateDataPopupView){
     var CreateDataView = BaseView.extend({
@@ -73,6 +74,9 @@ CreateDataPopupView){
         
                                 var startDate = datepicker.find("#start").datepicker("getDate");
                                 var endDate = datepicker.find("#end").datepicker("getDate")
+                                var yesterdayDate = new Date(startDate);
+                                
+                                yesterdayDate.setDate(startDate.getDate() -1);
                                 
                                 var selectedDate = {
                                     start:Util.dateToString(startDate),
@@ -97,8 +101,14 @@ CreateDataPopupView){
                                 var userCollection = new UserCollection();
                                 var holidayCollection = new HolidayCollection();
                                 var outOfficeCollection = new OutOfficeCollection();
-                                
-                                $.when(rawDataCollection.fetch({data: selectedDate}),userCollection.fetch(), holidayCollection.fetch(), outOfficeCollection.fetch())
+                                var yesterdayCommuteCollection = new CommuteCollection();
+
+                                $.when(
+                                    rawDataCollection.fetch({data: selectedDate}),
+                                    userCollection.fetch(),
+                                    holidayCollection.fetch(),
+                                    outOfficeCollection.fetch(),
+                                    yesterdayCommuteCollection.fetchDate(Util.dateToString(yesterdayDate)))
                                 .done(function(){
                                     var startDate = new Date(selectedDate.start);
                                     var endDate = new Date(selectedDate.end);
@@ -127,7 +137,14 @@ CreateDataPopupView){
                                                 userOutOfficeCollection.add(model);
                                             });
                                             
-                                            
+                                            var filterDate = yesterdayCommuteCollection.where({id : userId}); // 시작일 - 1
+                                            if(filterDate.length > 0){
+                                                yesterdayAttribute = filterDate[0].toJSON();
+                                                yesterdayAttribute.in_time = Util.timeToString(new Date(yesterdayAttribute.in_time));
+                                                yesterdayAttribute.out_time = Util.timeToString(new Date(yesterdayAttribute.out_time));
+                                                yesterdayAttribute.standard_in_time = Util.timeToString(new Date(yesterdayAttribute.standard_in_time));
+                                                yesterdayAttribute.standard_out_time = Util.timeToString(new Date(yesterdayAttribute.standard_out_time));
+                                            }
                                                 
                                             for(var i=0; i <= diff_days; i++){ //차이나는 날짜만큼 기본데이터 생성 (사원수 X 날짜)
                                                 var todayStr = Util.dateToString(today);
@@ -150,8 +167,9 @@ CreateDataPopupView){
                                                     standard_out_time:"18:00:00",  
                                                     late_time : 0,
                                                     over_time : 0,
-                                                    overtime_code : "",
-                                                    out_office_code : "",
+                                                    overtime_code : null,
+                                                    out_office_code : null,
+                                                    vacation_code : null,
                                                 };
                                                 
                                                 // 출근 기준시간 판단 01:00 = 10:00, 02:00 = 11:00, 03:00 = 13:20
@@ -309,7 +327,6 @@ CreateDataPopupView){
                                         progressbar.css("width", ((idx+1) / userCollection.models.length * 100) + "%");
                                     });
                                     
-                                    console.log(that.commuteCollection);
                                     that.grid.render();
                                     
                                     Dialog.show("데이터 생성 완료!", function(){
@@ -317,6 +334,7 @@ CreateDataPopupView){
                                         progressbar.css("width","0%");
                                         dialog.close();    
                                         $(that).prop("disabled", false);
+                                        that.selectedDate = selectedDate;
                                     });
                                     
                                 });
@@ -331,6 +349,18 @@ CreateDataPopupView){
                     });
                         
                 }
+                
+    	    });
+    	    this.gridOption.buttons.push({
+    	        type:"custom",
+    	        name:"ok",
+    	        click:function(){
+    	            that.commuteCollection.save({
+    	                success : function(){
+    	                    Dialog.info("데이터 전송 성공!");
+    	                }
+    	            });
+    	        }
     	    });
         },
     	render:function(){
@@ -344,15 +374,11 @@ CreateDataPopupView){
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    _layout.append(_head);
-    	    
-    	    
             _layout.append(_content);
-            
             
     	    $(this.el).append(_layout);
 
     	    var _gridSchema=Schemas.getSchema('grid');
-    	    
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
 
             return this;

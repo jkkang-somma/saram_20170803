@@ -58,12 +58,14 @@ define([
             buttons:[]
         },
         form:{
-            el:null,
+            el:undefined,
             id:null,
             childs:[],
-            form:_.noop(),
+            form:{
+                id:undefined
+            },
             dataschema:[],
-            autoRender:true
+            autoRender:false
         },
         //SERVER response
         response:{

@@ -24,10 +24,35 @@ var Approval = function (data) {
     var _getApprovalListWhere = function (startDate, endDate) {
         return ApprovalDao.selectApprovalListWhere(startDate, endDate);
     }
+    var _insertApproval = function () {
+        return ApprovalDao.insertApproval(_data);
+    }
+    var _getApprovalIndex = function (yearmonth) {
+        return ApprovalDao.selectApprovalIndex(yearmonth);
+    }
+    var _setApprovalIndex = function () {
+        var _schema = new Schemas('approval_index');
+        var _param = _schema.get(data);
+        var _result = null;
+        if(_param.seq != null){
+            _result = ApprovalDao.updateMaxIndex(_param);            
+        }else{
+            _result = ApprovalDao.insertApprovalIndex(_param);
+        }
+        
+        return _result;
+    }
+    var _updateApprovalIndex = function (yearmonth) {
+        return ApprovalDao.updateMaxIndex(yearmonth);
+    }
     return {
         get:_get,
         getApprovalList:_getApprovalList,
-        getApprovalListWhere:_getApprovalListWhere
+        getApprovalListWhere:_getApprovalListWhere,
+        insertApproval:_insertApproval,
+        getApprovalIndex:_getApprovalIndex,
+        setApprovalIndex:_setApprovalIndex,
+        updateApprovalIndex:_updateApprovalIndex
     }
 }
 

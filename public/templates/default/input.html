@@ -1,6 +1,7 @@
 <div class="form-group">
-    <% if (typeof(data) != "undefined") { %>
-        <label for="<%= date.el %>"><%= date.label %></label>
-        <input type="text" class="form-control" id="<%= date.id %>" name="<%= date.name %>"/>
+    <%  console.log(obj);
+        if (typeof(obj) != "undefined") { %>
+        <label for="<%= obj.el %>"><%= obj.label %></label>
+        <input type="text" class="form-control" id="<%= obj.id %>" name="<%= obj.name %>" value="<%= obj.value %>"/>
     <% } %>
 </div>

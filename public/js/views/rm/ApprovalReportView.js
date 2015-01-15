@@ -80,7 +80,7 @@ define([
       var selGubun = $(this.el).find('#state');
       
       var arrGubunData = [];
-      arrGubunData.push({'code' : '결재', 'name' : '결재'});
+      arrGubunData.push({'code' : '결재완료', 'name' : '결재'});
       arrGubunData.push({'code' : '반려', 'name' : '반려'});
       arrGubunData.push({'code' : '보류', 'name' : '보류'});
       
@@ -135,6 +135,9 @@ define([
   	
   	onClickBtnSend : function(evt){
       var formData = this.getFormData($(this.el).find('form'));
+      formData["doc_num"] = this.options["doc_num"];
+      
+      console.log(formData);
       
       // 완료 후
       // location.href = '#reportmanager';
