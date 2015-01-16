@@ -20,7 +20,10 @@ define([
             start_date : null,      
             end_date : null,    
             office_code : null,     // 구분
-            state : null            // 결재 구분
+            black_mark : null,     
+            state : null,           // 결재 구분
+            start_time : null,
+            end_time : null        
         },
         
     });

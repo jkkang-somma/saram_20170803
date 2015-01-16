@@ -19,6 +19,6 @@ OutOfficeDao.prototype.insertOutOffice =  function (_data) {
     
     _data.black_mark = (_data.black_mark == undefined)? "" : _data.black_mark;
     
-    return db.queryV2(queryStr, [year, _data.date, _data.id, _data.office_code, _data.office_code,  _data.memo, _data.doc_num, _data.black_mark]);
+    return db.queryV2(queryStr, [year, _data.date, _data.id, _data.office_code, _data.office_code,  _data.memo, _data.doc_num, _data.black_mark, _data.start_time, _data.end_time]);
 };
 module.exports = new OutOfficeDao();

@@ -5,16 +5,74 @@
             <input type="text" id="submit_id" name="submit_id" class="form-control"/>
         </div>
         <div class="form-group">
-            <label for="start_date">기간</label>
-            <div>
-                <input type="text" id="start_date" name="start_date" class="openDatePicker form-control"/>
-                <span>~</span>
-                <input type="text" id="end_date" name="end_date" class="openDatePicker form-control"/>
+            <div class="row">
+                <div class='col-sm-3'><label for="start_date">기간</label></div>
+            </div>
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="start_date">
+                            <span class="input-group-addon">
+                                from
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="start_date"/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="end_date">
+                            <span class="input-group-addon">
+                                to
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="end_date"/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label for="office_code">구분</label>
             <select id="office_code" name="office_code" class="form-control"></select>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class='col-sm-3'><label for="start_date" id="timePickTitle">외근 시간</label></div>
+            </div>
+            <div class="row" style="height: 45px;">
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="start_time">
+                            <span class="input-group-addon">
+                                from
+                            </span>
+                            <input type="text" class="form-control" data-format="hh:mm" name="start_time"/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="end_time">
+                            <span class="input-group-addon">
+                                to
+                            </span>
+                            <input type="text" class="form-control" data-format="hh:mm" name="end_time"/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="submit_comment">메모</label>

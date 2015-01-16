@@ -17,11 +17,13 @@ ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate) {
 };
 ApprovalDao.prototype.insertApproval =  function (data) {
     var queryStr = db.getQuery('approval', 'insertApproval');
-    return db.queryV2(queryStr, [data.doc_num,data.submit_id,data.manager_id,data.submit_comment,data.start_date,data.end_date,data.office_code,data.state]);
+    return db.queryV2(queryStr, [data.doc_num,data.submit_id,data.manager_id
+    ,data.submit_comment,data.start_date,data.end_date
+    ,data.office_code,data.start_time,data.end_time]);
 };
 ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
     var queryStr = db.getQuery('approval', 'updateApprovalConfirm');
-    return db.queryV2(queryStr, [data.decide_comment, data.state, data.doc_num]);
+    return db.queryV2(queryStr, [data.decide_comment, data.state, data.black_mark, data.doc_num]);
 };
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
     var queryStr = db.getQuery('approval_index', 'selectMaxIndexApproval');

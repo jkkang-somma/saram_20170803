@@ -73,10 +73,17 @@ define([
         $(this.el).find('#' + disableValues[dvI]).attr('disabled',true);
       }
       
-      // $(this.el).find('#submit_id').css('width', '35%');
+      $(this.el).find('#start_date input').attr('readonly',true);
+      $(this.el).find('#end_date input').attr('readonly',true);
       
-      $(this.el).find('.openDatePicker').css('display', 'inline-block');
-      $(this.el).find('.openDatePicker').css('width', '48%');
+      $(this.el).find('#start_date input').attr('disabled',true);
+      $(this.el).find('#end_date input').attr('disabled',true);
+      
+      $(this.el).find('#start_time input').attr('readonly',true);
+      $(this.el).find('#end_time input').attr('readonly',true);
+      
+      $(this.el).find('#start_time input').attr('disabled',true);
+      $(this.el).find('#end_time input').attr('disabled',true);
       
       // 결재구분 :  
       var selGubun = $(this.el).find('#state');
@@ -99,8 +106,10 @@ define([
       var _this = $(this.el);
       if(param != undefined){
         _this.find('#submit_id').val(param.submit_name);
-        _this.find('#start_date').val(param.start_date);
-        _this.find('#end_date').val(param.end_date);
+        _this.find('#start_date input').val(param.start_date);
+        _this.find('#end_date input').val(param.end_date);
+        _this.find('#start_time input').val(param.start_time);
+        _this.find('#end_time input').val(param.end_time);
         _this.find('#office_code').html("<option>"+param.office_code_name+"</option>");
         _this.find('#submit_comment').val(param.submit_comment);
         // _this.find('#decide_comment').val(param.decide_comment);
@@ -132,6 +141,29 @@ define([
         indexed_array[n['name']] = n['value'];
       });
       
+      indexed_array["doc_num"] = this.options["doc_num"];
+      
+      if(indexed_array.state == '결재완료'){
+        // black_mark 값 설정 1: 정상 , 2: 당일 결재 , 3: 익일결재
+        var _today = new Date();
+        var sToday = _today.getFullYear() + "-" + this.getzFormat(_today.getMonth()+1, 2) + "-" + _today.getDate();
+        _today = new Date(sToday.substr(0,4),sToday.substr(5,2)-1,sToday.substr(8,2));
+        var sStart = $(this.el).find('#start_date input').val();
+        var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
+        
+        if(start > _today){
+          // 정상
+          indexed_array["black_mark"] = '1';
+        }else if(sStart == sToday){
+          // 당일결재
+          indexed_array["black_mark"] = '2';
+        }else if(start < _today){
+          // 익일결재
+          indexed_array["black_mark"] = '3';
+        }
+        
+      }
+      
       return indexed_array;
   	},
   	
@@ -139,10 +171,8 @@ define([
   	  this.thisDfd = new $.Deferred();
   	  var _this = this;
       var formData = this.getFormData($(this.el).find('form'));
-      formData["doc_num"] = this.options["doc_num"];
-      // formData["idAttribute"] = "doc_num";
+      
       console.log(formData);
-      // "_id" : formData.doc_num
       formData["_id"] = this.options["doc_num"];
       
       var _approvalModel = new ApprovalModel(formData);
@@ -172,8 +202,8 @@ define([
     addOutOfficeData : function(){
       var _this = this;
       // 날짜 개수 이용하여 날짜 구하기
-      var sStart = $(this.el).find('#start_date').val();
-      var sEnd = $(this.el).find('#end_date').val();
+      var sStart = $(this.el).find('#start_date input').val();
+      var sEnd = $(this.el).find('#end_date input').val();
       
       var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
       var end = new Date(sEnd.substr(0,4),sEnd.substr(5,2)-1,sEnd.substr(8,2));
@@ -201,6 +231,8 @@ define([
       sendData["doc_num"] = this.options["doc_num"];
       sendData["memo"] = this.options["submit_comment"];
       sendData["office_code"] = this.options["office_code"];
+      sendData["start_time"] = this.options["start_time"];
+      sendData["end_time"] = this.options["end_time"];
       
       var _outOfficeModel = new OutOfficeModel(sendData);
       _outOfficeModel.save({},{

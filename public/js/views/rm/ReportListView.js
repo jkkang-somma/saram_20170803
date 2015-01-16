@@ -70,10 +70,10 @@ define([
       // bottomBtnCon.empty();
       
       // approval Button
-      var approvalBtn = bottomBtnCon.find('#btnApprovalPop');
+      var approvalBtn = $('#btnApprovalPop');
       
       // add new report button
-      var addReportBtn = bottomBtnCon.find('#btnAddReport');
+      var addReportBtn = $('#btnAddReport');
       
       // reportmanager/add
       addReportBtn.click(function(){
@@ -106,7 +106,8 @@ define([
      	// 	var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-     		  if(selectData.state != '결재완료'){
+     		  //if(selectData.state != '결재완료'){
+     		  if(true){
        		  var _approvalReportView = new ApprovalReportView();
            		 // data param 전달
            		 _approvalReportView.options = selectData;
@@ -179,6 +180,13 @@ define([
          { data : "office_code_name", "title" : "구분"},
          { "title" : "근태기간", "render": function(data, type, row){
             var dataVal = row.start_date +"</br>~ " + row.end_date;
+            return dataVal;
+         }},
+         { "title" : "외근시간", "render": function(data, type, row){
+            var dataVal = row.start_time +"</br>~ " + row.end_time;
+            if(row.start_time == null){
+              dataVal = "-";
+            }
             return dataVal;
          }},
          { "title" : "처리일자", "render": function(data, type, row){

@@ -71,19 +71,47 @@ define([
     },
     
     setDatePickerPop : function(){
-      var pickerView = $(this.el).find(".openDatePicker");
-      pickerView.attr('readonly', true);
-      pickerView.attr('disabled', false);
-      pickerView.css('width', '48%');
-      pickerView.css('display', 'inline-block');
-      pickerView.css('cursor', 'pointer');
-      
-      pickerView.datepicker({
+      var beforeDate = $(this.el).find("#start_date");
+      //beforeDate.attr('readonly', true);
+      this.beforeDate=beforeDate.datetimepicker({
           todayBtn: "linked",
-          format: "yyyy-mm-dd",
-          language: "kr",
-          todayHighlight: true
+          pickTime: false,
+          language: "ko",
+          todayHighlight: true,
+          format: "YYYY-MM-DD",
+          autoclose: true
       });
+      
+      var afterDate = $(this.el).find("#end_date");
+      //afterDate.attr('readonly', true);
+      this.afterDate= afterDate.datetimepicker({
+          todayBtn: "linked",
+          pickTime: false,
+          language: "ko",
+          todayHighlight: true, 
+          format: "YYYY-MM-DD",
+          autoclose: true
+      });
+      
+      var beforeTime = $(this.el).find("#start_time");
+      //beforeDate.attr('readonly', true);
+      this.beforeTime=beforeTime.datetimepicker({
+          pickDate: false,
+          language: "ko",
+          format: "hh:mm",
+          autoclose: true
+      });
+      
+      var afterTime = $(this.el).find("#end_time");
+      //afterDate.attr('readonly', true);
+      this.afterTime= afterTime.datetimepicker({
+          pickDate: false,
+          language: "ko",
+          format: "hh:mm",
+          autoclose: true
+      });
+      
+      this.setTimePicker(true);
     },
     
     setSelectBoxData : function(){
@@ -94,6 +122,7 @@ define([
     },
     
     setOfficeCode : function(){
+      var _this = this;
       var selGubun = $(this.el).find('#office_code');
       // selGubun.css('width', '35%');
       
@@ -105,6 +134,16 @@ define([
         for(var index=0; index < arrGubunData.length; index++){
           var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
           selGubun.append(optionHtml);
+        }
+      });
+      
+      selGubun.change(function() {
+        var selVal = selGubun.val();
+        if(selVal == 'W01'){
+          // 외근
+          _this.setTimePicker(false);
+        }else{
+          _this.setTimePicker(true);
         }
       });
     },
@@ -123,6 +162,18 @@ define([
         approvalMem.append(approvalOptionHtml);
       }
       });
+    },
+    
+    setTimePicker: function(isDisable){
+      if(isDisable){
+        $(this.el).find('#timePickTitle').text('');
+        this.beforeTime.hide();
+        this.afterTime.hide();
+      }else{
+        $(this.el).find('#timePickTitle').text('외근시간');
+        this.beforeTime.show();
+        this.afterTime.show();
+      }
     },
     
   	getFormData: function(form) {
@@ -149,8 +200,8 @@ define([
     },
   	
   	isDateCompare : function(){
-  	  var startDate = $(this.el).find("#beforeDate").val();
-      var endDate = $(this.el).find("#afterDate").val();
+  	  var startDate = $(this.el).find("#beforeDate input").val();
+      var endDate = $(this.el).find("#afterDate input").val();
       
       var start= new Date(startDate);
       var end=new Date(endDate);
