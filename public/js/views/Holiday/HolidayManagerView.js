@@ -74,9 +74,9 @@ CreateHolidayPopup, AddHolidayPopup){
                             cssClass: Dialog.CssClass.SUCCESS,
                             label: '추가',
                             action: function(dialog) {
-                                var datepicker = dialog.getModalBody().find("#addHolidayDate");
+                                var datepicker = dialog.getModalBody().find("#ahDatePicker");
                                 
-                                var date = datepicker.datepicker("getDate");
+                                var date = datepicker.data("DateTimePicker").getDate().toDate();
                                 var month = date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1;
                                 var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
                                 
@@ -86,7 +86,7 @@ CreateHolidayPopup, AddHolidayPopup){
                                 
                                 holidayModel.save({}, {
                                     success : function(){
-                                        that.grid.render();
+                                        that.renderTable();
                                         dialog.close();
                                     }
                                 });
@@ -116,7 +116,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	            var selectHolidayModel = new HolidayModel(selectedItem);
     	            selectHolidayModel.destroy({
     	                success : function(){
-    	                    that.grid.render();
+    	                    that.renderTable();
     	                    Dialog.info("삭제되었습니다.");    
     	                },
     	                error : function(){
@@ -149,7 +149,7 @@ CreateHolidayPopup, AddHolidayPopup){
                                 
                                 newHolidayCollection.save({
                                     success : function(){
-                                        that.grid.render();
+                                        that.renderTable();
                                         dialog.close();
                                     }
                                 });
@@ -171,7 +171,7 @@ CreateHolidayPopup, AddHolidayPopup){
         events : {
             "change #holidayYearCombo" : "renderTable"
         },
-        renderTable: function(event){
+        renderTable: function(){
             var that=this;
             var _yearCombo = $(this.el).find("#holidayYearCombo");
             var year = _yearCombo.val();
