@@ -330,8 +330,7 @@
     			c.comment,
     			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
     			c.comment_reply,
-    			c.comment_reply_date,
-    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
     			c.state
     		FROM
     			comment_tbl c
@@ -352,7 +351,16 @@
     		)
     	</query>
     	
-    	<query id="empty"></query>
+    	<query id="updateCommentReply">
+			UPDATE
+				comment_tbl
+			SET
+				comment_reply = ?,
+			    comment_reply_date = now(),
+			    state = ?
+			WHERE
+				id = ? AND year = ? AND date = ?
+    	</query>
     </group>
     
     <group id="outOffice">

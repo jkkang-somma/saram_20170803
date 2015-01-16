@@ -118,6 +118,13 @@ define([
     	    var selectItem=this.DataTableAPI.row('.selected').data();
     	    return selectItem;
     	},
+    	getDataAt:function(idx){ // 데이터 배열에서 index 값으로 가져오기 
+    	    if (_.isUndefined(this.DataTableAPI)){
+    	       return _.noop(); 
+    	    }
+    	    var selectItem=this.DataTableAPI.row(idx).data();
+    	    return selectItem;
+    	},
     	removeRow:function(item){//선택된 row 삭제
     	    this.DataTableAPI.row('.selected').remove().draw( false );
     	},

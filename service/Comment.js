@@ -26,9 +26,16 @@ var Comment = function() {
 		});
 	}
 	
+	var _updateCommentReply = function(inData, callback) {
+		CommentDao.updateCommentReply(inData).then(function(result) {
+			return callback(result);
+		});
+	}
+	
 	return {
 		getComment : _getComment,
-		insertComment : _insertComment
+		insertComment : _insertComment,
+		updateCommentReply : _updateCommentReply
 	}
 } 
 
