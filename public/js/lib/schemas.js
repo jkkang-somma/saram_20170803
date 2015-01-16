@@ -85,10 +85,18 @@ define([
             name:undefined,
             label:undefined,
             value:undefined,
-            code:undefined
+            code:undefined,
+            textKey:"name",
+            collection:undefined,
+            codeKey:"code",
+            linkField:undefined
         },
-        
-        
+        hidden:{
+            type:"hidden",
+            name:undefined,
+            label:undefined,
+            value:undefined
+        },
         //SERVER response
         response:{
             status:true,// 정상:true, 비정상:flase

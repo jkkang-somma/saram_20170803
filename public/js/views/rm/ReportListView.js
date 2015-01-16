@@ -182,6 +182,13 @@ define([
             var dataVal = row.start_date +"</br>~ " + row.end_date;
             return dataVal;
          }},
+         { "title" : "외근시간", "render": function(data, type, row){
+            var dataVal = row.start_time +"</br>~ " + row.end_time;
+            if(row.start_time == null){
+              dataVal = "-";
+            }
+            return dataVal;
+         }},
          { "title" : "처리일자", "render": function(data, type, row){
             var dataVal = view.getDateFormat(row.decide_date);
             return dataVal;

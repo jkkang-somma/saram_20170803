@@ -49,7 +49,13 @@ define([
         	                name:"dept_code",
         	                label:i18nUser.DEPT,
         	                value:_model.dept_code,
-        	                collection:codeCollection
+        	                collection:codeCollection,
+        	                linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
+        	        },{
+        	                type:"hidden",
+        	                name:"dept_name",
+        	                value:_model.dept_name,
+        	                collection:codeCollection,
         	        },{
         	                type:"input",
         	                name:"name_commute",
@@ -91,8 +97,8 @@ define([
     	submitSave : function(e){
     	    var dfd= new $.Deferred();
     	    var _view=this,_form=this.form,_data=_form.getData();
-    	    
     	    var _userModel= new UserModel(_data);
+    	    _userModel.attributes._id="-2";
     	    var _validate=_userModel.validation(_data);
     	    _userModel.save({},{
     	        success:function(model, xhr, options){

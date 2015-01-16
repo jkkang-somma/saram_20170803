@@ -16,9 +16,9 @@ define([
         	name : "",		// 이름
         	total_day: 0,	// 연차
         	used_holiday: 0, 		// 사용 일수  (out_office_tbl - year + id 조홥 조회   )
-        	holiday: 0			// 휴가 잔여 일수 (total_day - used_holiday) 
-        },
-        
+        	holiday: 0,			// 휴가 잔여 일수 (total_day - used_holiday)
+        	memo: ''
+        }        
     });
     
     return VacationModel;

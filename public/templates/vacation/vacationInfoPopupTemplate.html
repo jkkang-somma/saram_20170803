@@ -1,45 +1,52 @@
 <form id="vacationInfoForm" class="form-horizontal">
 	<input type="hidden" name="year" value="<%=data.year%>">
 	<div class="form-group">
-		<label class="col-sm-6 control-label">사번</label>
-		<div class="col-sm-6">
+		<label class="col-sm-4 control-label">사번</label>
+		<div class="col-sm-8">
 			<label name="id" class="control-label"><%=data.id%></label> <input
 				type="hidden" name="id" value="<%=data.id%>">
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-6 control-label">부서</label>
-		<div class="col-sm-6">
+		<label class="col-sm-4 control-label">부서</label>
+		<div class="col-sm-8">
 			<label name="dept_name" class="control-label"><%=data.dept_name%></label>
 			<input type="hidden" name="dept_name" value="<%=data.dept_name%>">
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-6 control-label">이름</label>
-		<div class="col-sm-6">
+		<label class="col-sm-4 control-label">이름</label>
+		<div class="col-sm-8">
 			<label class="control-label"><%=data.name%></label> <input
 				type="hidden" name="name" value="<%=data.name%>">
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-6 control-label">연차휴가</label>
-		<div class="col-sm-6">
+		<label class="col-sm-4 control-label">연차휴가</label>
+		<div class="col-sm-8">
 			<input type="text" class="form-control" id="total_day"
 				name="total_day" value="<%=data.total_day%>">
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-6 control-label">사용 일수</label>
-		<div class="col-sm-6">
+		<label class="col-sm-4 control-label">사용 일수</label>
+		<div class="col-sm-8">
 			<label class="control-label"><%=data.used_holiday%></label> <input
 				type="hidden" name="used_holiday" value="<%=data.used_holiday%>">
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-6 control-label">휴가 잔여 일수</label>
-		<div class="col-sm-6">
+		<label class="col-sm-4 control-label">휴가 잔여 일수</label>
+		<div class="col-sm-8">
 			<label class="control-label"><%=data.holiday%></label> <input
 				type="hidden" name="holiday" value="<%=data.holiday%>">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Memo</label>
+		<div class="col-sm-8">
+			<textarea class="form-control" rows="5" id="memo" name="memo" cols="6"
+				style="resize: none;"><%=data.memo%></textarea>
 		</div>
 	</div>
 </form>

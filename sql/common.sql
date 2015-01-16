@@ -301,6 +301,8 @@ CREATE TABLE IF NOT EXISTS `comment_tbl` (
   `comment_reply` VARCHAR(300) NULL COMMENT 'Comment 에 대한 답변',
   `comment_reply_date` DATETIME NULL COMMENT '처리일시',
   `state` VARCHAR(10) NOT NULL COMMENT '처리상태 ( 접수,처리중,완료 )',
+  `writer_id` VARCHAR(45) NOT NULL COMMENT 'comment 작성자 사번',
+  `reply_id` VARCHAR(45) NULL COMMENT 'comment 답변자 사번',
   PRIMARY KEY (`seq`, `year`, `date`, `id`),
   INDEX `fk_comment_tbl_commute_result_tbl1_idx` (`year` ASC, `date` ASC, `id` ASC),
   CONSTRAINT `fk_comment_tbl_commute_result_tbl1`
