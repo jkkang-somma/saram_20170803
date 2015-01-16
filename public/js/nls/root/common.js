@@ -29,5 +29,12 @@ define({
         SUB_TITLE:{
             USER_LIST:"User List"
         }
+    },
+    SUCCESS:{
+        USER:{
+            SAVE:"Success Save User.",
+            REMOVE:"Success Remove User.",
+            ADD:"Success Add User."
+        }
     }
 });

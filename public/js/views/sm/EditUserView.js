@@ -23,72 +23,91 @@ define([
     	},
     	render:function(el){
     	    var dfd= new $.Deferred();
-    	    var view=this;
+    	    var _view=this;
     	    if (!_.isUndefined(el)){
     	        this.el=el;
     	    }
     	    
-    	    var _form = new Form({
-    	        el:this.el,
-    	        form:undefined,
-    	        childs:[{
-    	                type:"input",
-    	                name:"id",
-    	                label:i18nUser.ID,
-    	                value:view.model.attributes.id
-    	        },{
-    	                type:"input",
-    	                name:"name",
-    	                label:i18nUser.NAME,
-    	                value:view.model.attributes.name
-    	        },{
-    	                type:"input",
-    	                name:"name_commute",
-    	                label:i18nUser.NAME_COMMUTE,
-    	                value:view.model.attributes.name_commute
-    	        },{
-    	                type:"date",
-    	                name:"join_company",
-    	                label:i18nUser.JOIN_COMPANY,
-    	                value:view.model.attributes.join_company
-    	        },{
-    	                type:"input",
-    	                name:"leave_company",
-    	                label:i18nUser.LEAVE_COMPANY,
-    	                value:view.model.attributes.leave_company
-    	        },{
-    	                type:"input",
-    	                name:"privilege",
-    	                label:i18nUser.PRIVILEGE,
-    	                value:view.model.attributes.privilege
-    	        }]
+    	    var codeCollection= new CodeCollection("dept");
+    	    $.when(codeCollection.fetch()).done(function(){
+                var _model=_view.model.attributes;
+        	    var _form = new Form({
+        	        el:_view.el,
+        	        form:undefined,
+        	        childs:[{
+        	                type:"input",
+        	                name:"id",
+        	                label:i18nUser.ID,
+        	                value:_model.id
+        	        },{
+        	                type:"input",
+        	                name:"name",
+        	                label:i18nUser.NAME,
+        	                value:_model.name
+        	        },{
+        	                type:"combo",
+        	                name:"dept_code",
+        	                label:i18nUser.DEPT,
+        	                value:_model.dept_code,
+        	                collection:codeCollection
+        	        },{
+        	                type:"input",
+        	                name:"name_commute",
+        	                label:i18nUser.NAME_COMMUTE,
+        	                value:_model.name_commute
+        	        },{
+        	                type:"date",
+        	                name:"join_company",
+        	                label:i18nUser.JOIN_COMPANY,
+        	                value:_model.join_company,
+        	                format:"YYYY-MM-DD"
+        	        },{
+        	                type:"date",
+        	                name:"leave_company",
+        	                label:i18nUser.LEAVE_COMPANY,
+        	                value:_model.leave_company,
+        	                format:"YYYY-MM-DD"
+        	        },{
+        	                type:"input",
+        	                name:"privilege",
+        	                label:i18nUser.PRIVILEGE,
+        	                value:_model.privilege
+        	        }]
+        	    });
+        	    
+        	    _form.render().done(function(){
+        	        _view.form=_form;
+        	        dfd.resolve();
+        	    }).fail(function(){
+        	        dfd.reject();
+        	    });  
+    	    }).fail(function(e){
+    	        Dialog.error("사용자 정보를 받아오지 못하였습니다.");
+    	        LOG.error(e.responseJSON.message);
+                dfd.reject();    	      
     	    });
+    	    return dfd.promise();
+     	},
+    	submitSave : function(e){
+    	    var dfd= new $.Deferred();
+    	    var _view=this,_form=this.form,_data=_form.getData();
     	    
-    	    _form.render().done(function(){
-    	        dfd.resolve();
-    	    }).fail(function(){
-    	        dfd.reject();
+    	    var _userModel= new UserModel(_data);
+    	    var _validate=_userModel.validation(_data);
+    	    _userModel.save({},{
+    	        success:function(model, xhr, options){
+    	            dfd.resolve(_data);
+    	        },
+    	        error:function(model, xhr, options){
+    	            var respons=xhr.responseJSON;
+    	            Dialog.error(respons.message);
+    	            dfd.reject();
+    	        },
+    	        wait:false
     	    });
     	    
     	    return dfd.promise();
-     	},
-    	
-    	submitSave : function(e){
-    	    
-    	},
-    	
-    	getFormData: function(form) {
-    	    var unindexed_array = form.serializeArray();
-    	    var indexed_array= {};
-    	    
-    	    $.map(unindexed_array, function(n, i){
-                indexed_array[n['name']] = n['value'];
-            });
-            
-            return indexed_array;
     	}
-    	
     });
-    
     return EditUserView;
 });

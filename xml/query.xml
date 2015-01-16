@@ -130,6 +130,7 @@
     			decide_date = NOW()
     			,decide_comment = ?
     			,state = ? 
+    			,black_mark = ?
 			where doc_num=?
     	</query>
 	</group>

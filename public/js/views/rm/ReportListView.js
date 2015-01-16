@@ -70,10 +70,10 @@ define([
       // bottomBtnCon.empty();
       
       // approval Button
-      var approvalBtn = bottomBtnCon.find('#btnApprovalPop');
+      var approvalBtn = $('#btnApprovalPop');
       
       // add new report button
-      var addReportBtn = bottomBtnCon.find('#btnAddReport');
+      var addReportBtn = $('#btnAddReport');
       
       // reportmanager/add
       addReportBtn.click(function(){
@@ -106,7 +106,8 @@ define([
      	// 	var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-     		  if(selectData.state != '결재완료'){
+     		  //if(selectData.state != '결재완료'){
+     		  if(true){
        		  var _approvalReportView = new ApprovalReportView();
            		 // data param 전달
            		 _approvalReportView.options = selectData;

@@ -59,14 +59,36 @@ define([
         },
         form:{
             el:undefined,
-            id:null,
+            id:undefined,
             childs:[],
             form:{
                 id:undefined
             },
             dataschema:[],
-            autoRender:false
+            autoRender:false,
         },
+        input:{
+            type:"input",
+            name:undefined,
+            label:undefined,
+            value:undefined
+        },
+        date:{
+            type:"date",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            format:"YYYY-MM-DD" 
+        },
+        combo:{
+            type:"combo",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            code:undefined
+        },
+        
+        
         //SERVER response
         response:{
             status:true,// 정상:true, 비정상:flase
