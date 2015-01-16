@@ -9,6 +9,20 @@
         <query id="selectManager">select * from members_tbl where privilege &lt;= 2</query>
         <query id="insertUser">insert into members_tbl(id, name, dept_code, name_commute, join_company, privilege, admin) values(?,?,?,?,?, 0, 0)</query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
+        <query id="updateUser">
+    		UPDATE
+        		members_tbl 
+        	SET 
+        		password=?,
+        		name=?,
+        		dept_code=?,
+        		name_commute=?,
+        		join_company=?,
+        		leave_company=?,
+        		privilege=?,
+        		admin=?
+        	WHERE id=?
+        </query>
         <query id="deleteUser">delete from members_tbl where id=?</query>
     </group>
     
@@ -89,7 +103,8 @@
         	UPDATE 
         		vacation_tbl 
         	SET 
-        		total_day = ? 
+        		total_day = ?,
+        		memo = ? 
         	WHERE 
         		id = ? AND year = ?
         </query>
@@ -130,6 +145,7 @@
     			decide_date = NOW()
     			,decide_comment = ?
     			,state = ? 
+    			,black_mark = ?
 			where doc_num=?
     	</query>
 	</group>
@@ -172,8 +188,8 @@
 							w.name AS work_type_name,
 							c.late_time,
 							c.over_time,
-							date_format(c.in_time, '%Y-%m-%d %T') AS in_time,
-							date_format(c.out_time, '%Y-%m-%d %T') AS out_time,
+							date_format(c.in_time, '%m-%d %T') AS in_time,
+							date_format(c.out_time, '%m-%d %T') AS out_time,
 							c.in_time_change,
 							c.out_time_change,
 							c.comment_count,
@@ -232,10 +248,10 @@
         		id,
         		name,
         		department,
-        		date_format(in_time, '%Y-%m-%d %T') AS in_time,
-        		date_format(out_time, '%Y-%m-%d %T') AS out_time,
-        		date_format(standard_in_time, '%Y-%m-%d %T') AS standard_in_time,
-        		date_format(standard_out_time, '%Y-%m-%d %T') AS standard_out_time,
+        		date_format(in_time, '%m-%d %T') AS in_time,
+        		date_format(out_time, '%m-%d %T') AS out_time,
+        		date_format(standard_in_time, '%m-%d %T') AS standard_in_time,
+        		date_format(standard_out_time, '%m-%d %T') AS standard_out_time,
 				late_time,
 				over_time,
 				work_type,
@@ -270,7 +286,7 @@
 			        c.change_column,
 			        c.change_before,
 			        c.change_after,
-			        date_format(c.change_date, '%Y-%m-%d %T') AS change_date,
+			        date_format(c.change_date, '%m-%d %T') AS change_date,
 			        c.change_id,
 			        (SELECT name FROM members_tbl WHERE id = c.change_id) AS change_name
 			FROM
@@ -326,11 +342,16 @@
     			c.id,
     			m.name,
     			c.seq,
-    			c.comment,
-    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
-    			c.comment_reply,
-    			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
-    			c.state
+    			IFNULL( c.comment, '') AS comment,
+    			date_format(c.comment_date, '%m-%d %T') AS comment_date,
+    			IFNULL( c.comment_reply, '') AS comment_reply,
+    			date_format(c.comment_reply_date, '%m-%d %T') AS comment_reply_date,
+    			c.state,
+    			c.writer_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
+    			c.reply_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
+    			
     		FROM
     			comment_tbl c
     			LEFT JOIN members_tbl m ON m.id = c.id
@@ -342,11 +363,11 @@
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state
+    			year, id, date, comment, comment_date, state, writer_id
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?
+    			?, ?, ?, ?, now(), ?, ?
     		)
     	</query>
     	
@@ -356,7 +377,8 @@
 			SET
 				comment_reply = ?,
 			    comment_reply_date = now(),
-			    state = ?
+			    state = ?,
+			    reply_id = ?
 			WHERE
 				id = ? AND year = ? AND date = ?
     	</query>

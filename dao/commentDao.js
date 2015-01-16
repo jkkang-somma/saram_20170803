@@ -16,14 +16,14 @@ CommentDao.prototype.selectComment =  function (data) {
 CommentDao.prototype.insertComment =  function (data) {
 	var queryStr = db.getQuery('comment', 'insertComment');
     debug(queryStr);
-    return db.queryV2(queryStr, [data.year, data.id, data.date, data.comment, data.state]);
+    return db.queryV2(queryStr, [data.year, data.id, data.date, data.comment, data.state, data.writer_id]);
 }
 
 // comment reply 수정 
 CommentDao.prototype.updateCommentReply =  function (data) {
 	var queryStr = db.getQuery('comment', 'updateCommentReply');
     debug(queryStr);
-    return db.queryV2(queryStr, [data.comment_reply, data.state, data.id, data.year, data.date]);
+    return db.queryV2(queryStr, [data.comment_reply, data.state, data.reply_id, data.id, data.year, data.date]);
 }
 
 module.exports = new CommentDao();

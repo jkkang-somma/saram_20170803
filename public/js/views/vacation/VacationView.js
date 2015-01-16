@@ -60,7 +60,16 @@ define([
                             { data : "name", 			"title" : "이름" },
                             { data : "total_day", 		"title" : "연차 휴가" },
                             { data : "used_holiday", 	"title" : "사용 일수" },
-                            { data : "holiday", 		"title" : "휴가 잔여 일수111"}
+                            { data : "holiday", 		"title" : "휴가 잔여 일수111"},
+                            { data : "memo", 			"title" : "Memo",
+                            	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            		var tpl = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
+                            		if (oData.memo == '' ) {
+                            			tpl = '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>';
+                            		}
+                            		$(nTd).html(tpl);
+                            	}
+                            }
              	        ],
         		    collection:this.vacationCollection,
         		    detail: true,
