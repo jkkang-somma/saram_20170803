@@ -36,7 +36,7 @@ define([
 	// 입력받은 시간을 YYYY-MM-DD HH:mm:ss 형식으로 반환 또는 체크
 	function _getTimeStr(inTime) {
 		if ( Util.isNotNull(inTime) ) {
-			var t = moment( inTime , "YYYY-MM-DD HH:mm:ss");				
+			var t = new Moment( inTime , "YYYY-MM-DD HH:mm:ss");				
 			if (t.isValid()) {
 				return t.format("YYYY-MM-DD HH:mm:ss");
 			} else {

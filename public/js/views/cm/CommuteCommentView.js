@@ -112,7 +112,7 @@ define([
     	    _head.addClass("relative-layout");
       	    
     	    var $searchForm = $(searchFormTemplate);
-    		var today = moment().format("YYYY-MM-DD");
+    		var today = new Moment().format("YYYY-MM-DD");
     		$searchForm.find('#startDate').val( today.toString() );
     		$searchForm.find('#endDate').val( today.toString() );
 
