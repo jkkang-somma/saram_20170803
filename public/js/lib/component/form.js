@@ -12,8 +12,9 @@ define([
   'text!templates/default/form.html',
   'text!templates/default/input.html',
   'text!templates/default/datepicker.html',
-  'text!templates/default/datepicker.html',
-  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, i18nError, FormHTML, InputHTML, DatePickerHTML, ComboHTML){
+  'text!templates/default/combo.html',
+  'text!templates/default/hidden.html',
+  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, i18nError, FormHTML, InputHTML, DatePickerHTML, ComboHTML, HiddenHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -48,10 +49,34 @@ define([
                 _combo=$(_comboTemp(data));
                 
                 var _select=_combo.find("select");
-                //data.collection.
+                var _options=data.collection.models;
+                for (var index in _options){
+                    var _option= _options[index].attributes;
+                    var _code=_option[data.codeKey];
+                    var _text=_option[[data.textKey]];
+                    if (_code==data.value){
+                        _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
+                    } else {
+                        _select.append("<option value='"+_code+"'>"+_text+"</option>");
+                    }
+                }
+                
+                _select.on('change', function(e){
+                    var _text=$(this).find("option:selected").text();
+                    if (!_.isUndefined(data.linkField)){
+                        $('[data-hidden="'+data.linkField+'"]').val(_text);
+                    }
+                });
                 return _combo;  
             }
-          
+        },
+        hidden:{
+            getElement:function(data){
+                var _hiddenTemp=_.template(HiddenHTML);
+                var _hidden=_.noop();
+                _hidden=$(_hiddenTemp(data));
+                return _hidden;  
+            }
         }
     };
     var Form = Backbone.View.extend({
