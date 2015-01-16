@@ -41,7 +41,7 @@ define([
   	},
   	
     render: function(){
-      $(this.el).append(commuteListTmp);
+      $(this.el).html(commuteListTmp);
       $(this.el).find(".content").attr({"id":this.option.el});
       
       // title setting
@@ -66,19 +66,14 @@ define([
     setBottomButtonCon : function(){
       var _this = this;
       var bottomBtnCon = $(this.el).find('#bottomBtnCon');
-      bottomBtnCon.css('float','right');
-      bottomBtnCon.empty();
+      // bottomBtnCon.css('float','right');
+      // bottomBtnCon.empty();
       
       // approval Button
-      var approvalBtn = $('<button class="btn btn-default">결재</button>');
-      approvalBtn.attr('id','btnApprovalPop');
-      bottomBtnCon.append(approvalBtn);
+      var approvalBtn = bottomBtnCon.find('#btnApprovalPop');
       
       // add new report button
-      var addReportBtn = $('<button class="btn btn-default">신규 상신</button>');
-      addReportBtn.attr('id','btnAddReport');
-      addReportBtn.css('margin-left','10px');
-      bottomBtnCon.append(addReportBtn);
+      var addReportBtn = bottomBtnCon.find('#btnAddReport');
       
       // reportmanager/add
       addReportBtn.click(function(){
@@ -281,6 +276,7 @@ define([
       $(this.el).find("#beforeDate").val('');
       $(this.el).find("#afterDate").val('');
       this.setReportTable(false);
+      this.render();
     }
     
   });
