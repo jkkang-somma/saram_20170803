@@ -20,6 +20,7 @@ var RawData = function (data) {
     var _selectRawDataList = function(data){
         var startDate = new Date(data.start);
         var endDate = new Date(data.end);
+        endDate.setDate(endDate.getDate() + 1);
         
         return RawDataDao.selectRawDataList(startDate.getTime(), endDate.getTime());
     }
