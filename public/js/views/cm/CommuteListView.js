@@ -273,7 +273,7 @@ define([
      	},
      	onClickOpenChangeHistoryPopup: function(evt) {
 			var data = JSON.parse( $(evt.currentTarget).attr('data') );
-        	var selectItem = this.grid.getItemAt(data.idx-1); // 0부터 시작
+        	var selectItem = this.grid.getDataAt(data.idx-1); // 0부터 시작
 			var searchData = {
 					id : selectItem.id,
 					year : selectItem.year, 
@@ -292,9 +292,7 @@ define([
                         dialog.close();
                     }
                 }]
-            }, function() {
-            	alert(1);
-            })
+            });
      	},
      	getSearchForm: function() {	// 검색 조건  
      		var data = Util.getFormJSON( this.$el.find('.form-inline'));
