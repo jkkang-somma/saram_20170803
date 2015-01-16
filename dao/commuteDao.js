@@ -28,6 +28,7 @@ CommuteDao.prototype.insertCommute =  function (data) {
             data.date, data.department, data.id, data.in_time, data.late_time, data.name, data.out_office_code,
             data.out_time, data.over_time, data.overtime_code, data.vacation_code, data.date+" "+data.standard_in_time,
             data.date+" "+data.standard_out_time, data.work_type, data.year,
+            
             data.department, data.in_time, data.late_time, data.name, data.out_office_code,
             data.out_time, data.over_time, data.overtime_code, data.vacation_code, data.date+" "+data.standard_in_time,
             data.date+" "+data.standard_out_time, data.work_type

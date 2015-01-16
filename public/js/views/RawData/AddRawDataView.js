@@ -10,15 +10,16 @@ define([
   'csvParser',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/button.html',
   'text!templates/layout/default.html',
+  'text!templates/component/progressbar.html',
   'models/common/RawDataModel',
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
   'collection/sm/UserCollection',
   'views/RawData/popup/AddRawDataAddPopupView',
+  
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser,
-HeadHTML, ContentHTML, ButtonHTML, LayoutHTML,
+HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML,
 RawDataModel, RawDataCollection, UserModel, UserCollection,
 AddRawDataAddPopupView){
     var AddRawDataView = BaseView.extend({
@@ -41,7 +42,7 @@ AddRawDataAddPopupView){
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search","refresh"]
+    		    buttons:["search"]
     		};
     		
     		this.buttonInit();
@@ -65,13 +66,13 @@ AddRawDataAddPopupView){
                             label: '등록',
                             action: function(dialog) {
                                 var fileForm = dialog.getModalBody().find("input");
-                                var progress = dialog.getModalBody().find(".progress");
-                                var progressbar = dialog.getModalBody().find(".progress-bar");
-                                
+
                                 var selectedFiles = fileForm[0].files;
                                 if(selectedFiles.length > 0){
                                     if(window.File && window.FileList && window.FileReader){
-                                        progress.css("display", "block"); // display progressbar 
+                                        
+                                        addRawDataAddPopupView.setProgressVisible(true);
+                                        //progress.css("display", "block"); // display progressbar 
                                         $(this).prop("disabled", true); // 버튼 disabled
                                         
                                         var file = selectedFiles[0];
@@ -82,7 +83,7 @@ AddRawDataAddPopupView){
                                             that.rawDataCollection.reset();
                                             var errCount = 0;
                                             for(var i = 1; i < result.length; i++){ // 제목줄을 빼기 위해서 1부터 시작
-                                                progressbar.css("width", (i / result.length * 100) + "%");
+                                                addRawDataAddPopupView.setProgressVisible(i / result.length);
                                                 var item = result[i];
                                                 
                                                 if(item.length != 4){
@@ -161,9 +162,11 @@ AddRawDataAddPopupView){
     	        name:"ok",
     	        click:function(){
     	            that._disabledOkBtn(true);
+    	            that._disabledProgressbar(false);
     	            that.rawDataCollection.save({
     	                success:function(){
     	                    Dialog.info("데이터 전송이 완료되었습니다.");
+    	                    that._disabledProgressbar(true);
     	                }
     	            });
     	        }
@@ -181,8 +184,11 @@ AddRawDataAddPopupView){
     	    _head.addClass("relative-layout");
     	    
     	     var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	     var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
+    	     
     	    _layout.append(_head);
             _layout.append(_content);
+            _layout.append(_progressBar);
             
             
     	    $(this.el).append(_layout);
@@ -193,6 +199,14 @@ AddRawDataAddPopupView){
             this._disabledOkBtn(true);
             
             return this;
+     	},
+     	_disabledProgressbar : function(flag){
+     	    var progressbar = $(this.el).find(".progress");
+     	    if(flag){
+     	        progressbar.css("display","none");
+     	    }else{
+     	        progressbar.css("display","block");
+     	    }
      	},
      	_disabledOkBtn : function(flag){
      	    var okbtn = this.grid.getButton("ok");

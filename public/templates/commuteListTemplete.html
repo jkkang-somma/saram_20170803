@@ -11,7 +11,7 @@
                             <span class="input-group-addon">
                                 from
                             </span>
-                            <input type="text" class="form-control" data-format="yyyy-MM-dd"  name="beforeDate"/>
+                            <input type="text" class="form-control" data-date-format="YYYY-MM-DD" name="beforeDate"/>
                             <span class="input-group-addon datepickerbutton">
                                   <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -24,16 +24,20 @@
                             <span class="input-group-addon">
                                 to
                             </span>
-                            <input type="text" class="form-control" data-format="yyyy-MM-dd"  name="afterDate"/>
+                            <input type="text" class="form-control" data-date-format="YYYY-MM-DD" name="afterDate"/>
                             <span class="input-group-addon datepickerbutton">
                                   <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class='col-sm-3 right'>
-                    <button class="btn btn-default" id="btnCommuteClear">Clear</button>
-                    <button class="btn btn-default" id="btnCommuteSearch">조회</button>
+                <div class='col-sm-3'>
+                    <div id="bottomBtnCon" class="form-group form-group-sm pull-right">
+                        <button class="btn btn-default btn-success btn-sm" id="btnCommuteClear">Clear</button>
+                        <button class="btn btn-default btn-success btn-sm" id="btnCommuteSearch">조회</button>
+                        <button id="btnApprovalPop" class="btn btn-default btn-success btn-sm">결재</button>
+                        <button id="btnAddReport" class="btn btn-default btn-success btn-sm">신규 상신</button>
+                    </div>
                 </div>
             </div>
             
@@ -46,8 +50,4 @@
         <!--</div>-->
     </div>
     <div class="content"></div>
-    <br/>
-    <div id="bottomBtnCon">
-        <button class="btn btn-default" id="btnCommuteEdit">Edit</button>
-    </div>
 </div>           

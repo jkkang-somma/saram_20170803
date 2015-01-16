@@ -6,14 +6,7 @@
 // - Kyungwook, Park : https://github.com/kyungw00k
 // - Jeeeyul Lee <jeeeyul@gmail.com>
 (function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
-    } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
-    } else {
-        factory((typeof global !== 'undefined' ? global : this).moment); // node or other global
-    }
-}(function (moment) {
+}(function () {
     return moment.defineLocale('kr', {
         months : '1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월'.split('_'),
         monthsShort : '1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월'.split('_'),
