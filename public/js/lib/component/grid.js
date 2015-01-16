@@ -44,6 +44,7 @@ define([
             
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'getSelectItem');
+    	    _.bindAll(this, 'updateRow');
     		_.bindAll(this, 'removeRow');
     		_.bindAll(this, 'search');
     		this.render();
@@ -96,7 +97,9 @@ define([
     	                    _value=rowData[name];
     	                }
     	                _column=_column.title;
-    	            }
+    	            }   else {
+	                    _value=rowData[name];
+	                }
     	            
     	            _subTable.append(
         	            '<tr>'
@@ -125,11 +128,22 @@ define([
     	    var selectItem=this.DataTableAPI.row(idx).data();
     	    return selectItem;
     	},
-    	removeRow:function(item){//선택된 row 삭제
-    	    this.DataTableAPI.row('.selected').remove().draw( false );
+    	removeRow:function(item, index){//선택된 row 삭제 //default 선택된 아이템  index로 하려면. index 를 넣어주세요
+    	    if (_.isUndefined(index)){
+    	        this.DataTableAPI.row('.selected').remove().draw( false );
+    	    } else if (_.isNumber(index)){
+    	        this.DataTableAPI.row(index).remove().draw( false );
+    	    }
     	},
-    	addRow:function(model){//add row
-    	    this.DataTableAPI.row.add(model).draw();
+    	addRow:function(item, index){//add row 
+    	    this.DataTableAPI.row.add(item).draw();
+    	},
+    	updateRow:function(item, index){//default 선택된 아이템  index로 하려면. index 를 넣어주세요.
+    	    if (_.isUndefined(index)){
+    	        this.DataTableAPI.row('.selected').data(item).draw();
+    	    } else if (_.isNumber(index)){
+    	        this.DataTableAPI.row(index).data(item).draw();
+    	    }
     	},
     	search:function(value, regex, smart){
     	    this.DataTableAPI.search(

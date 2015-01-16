@@ -59,13 +59,43 @@ define([
         },
         form:{
             el:undefined,
-            id:null,
+            id:undefined,
             childs:[],
             form:{
                 id:undefined
             },
             dataschema:[],
-            autoRender:false
+            autoRender:false,
+        },
+        input:{
+            type:"input",
+            name:undefined,
+            label:undefined,
+            value:undefined
+        },
+        date:{
+            type:"date",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            format:"YYYY-MM-DD" 
+        },
+        combo:{
+            type:"combo",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            code:undefined,
+            textKey:"name",
+            collection:undefined,
+            codeKey:"code",
+            linkField:undefined
+        },
+        hidden:{
+            type:"hidden",
+            name:undefined,
+            label:undefined,
+            value:undefined
         },
         //SERVER response
         response:{

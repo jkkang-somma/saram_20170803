@@ -52,6 +52,7 @@ var Schemas = function (schemaName) {
             end_date : null,    
             office_code : null,    
             office_code_name : null,    
+            black_mark : null,
             state : null           
         },
         

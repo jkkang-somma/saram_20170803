@@ -3,6 +3,7 @@
 // 사용자 Service
 var _ = require("underscore"); 
 var debug = require('debug')('User');
+var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var UserDao= require('../dao/userDao.js');
 
@@ -36,6 +37,24 @@ var User = function (data) {
     var _addUser=function(){
        return UserDao.insertUser(_data); 
     }
+    var _editUser=function(){
+        var _user=this;
+        return new Promise(function(resolve, reject){// promise patten
+            _getUser().then(function(currentData){
+                debug(currentData);
+                var _updateData=_.defaults(currentData, _data);
+                UserDao.updateUser(_updateData).then(function(result){
+                    resolve(result);
+                }).catch(function(e){
+                    debug("_editUser ERROR:"+e.message);
+                    reject(e);
+                });
+            }).catch(function(e){//Connection Error
+               debug("_getUser ERROR:"+e.message);
+               reject(e);
+            });
+        });
+    }
     return {
         get:_get,
         getUser:_getUser,
@@ -44,7 +63,8 @@ var User = function (data) {
         initPassword:_initPassword,
         data:_data,
         remove:_removeUser,
-        addUser:_addUser
+        addUser:_addUser,
+        editUser:_editUser
     }
 }
 

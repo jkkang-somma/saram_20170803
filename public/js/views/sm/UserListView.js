@@ -21,12 +21,19 @@ define([
     var UserListView = BaseView.extend({
         el:".main-container",
     	initialize:function(){
+    	    var view=this;
     	    var userCollection= new UserCollection();
     	    var _id="userList_"+(userListCount++);
     		this.option = {
     		    el:_id+"_content",
-    		    column:["사번", "이름", "부서", "name_commute", "입사일", "퇴사일", "권한"],
-    		    dataschema:["id", "name", "dept_name", "name_commute", "join_company", "leave_company", "privilege"],
+    		    column:[
+    		        "사번", "이름", 
+    		        { "title" : "부서", "render": function(data, type, row){
+                        return row.dept_name;
+                    }}
+                    , "name_commute", "입사일", "퇴사일", "권한"
+                ],
+    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "privilege"],
     		    collection:userCollection,
     		    detail:true,
     		    view:this
@@ -92,10 +99,10 @@ define([
                                 label: i18Common.DIALOG.BUTTON.SAVE,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialogRef){// 버튼 클릭 이벤트
-                                    editUserView.submitSave().done(function(model){
-                                        grid.addRow(model.attributes);
+                                    editUserView.submitSave().done(function(data){
+                                        grid.updateRow(data);
                                         dialogRef.close();
-                                        Dialog.show("Complete Save User.");
+                                        Dialog.show(i18Common.SUCCESS.USER.SAVE);
                                     });//실패 따로 처리안함 add화면에서 처리.
                                 }
                             }, {
