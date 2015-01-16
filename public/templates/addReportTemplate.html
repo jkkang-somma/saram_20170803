@@ -5,11 +5,41 @@
             <input type="text" id="submit_id" name="submit_id" class="form-control"/>
         </div>
         <div class="form-group">
-            <label for="start_date">기간</label>
-            <div>
-                <input type="text" id="start_date" name="start_date" class="openDatePicker form-control"/>
-                <span>~</span>
-                <input type="text" id="end_date" name="end_date" class="openDatePicker form-control"/>
+            <div class="row">
+                <div class='col-sm-3'><label for="start_date">기간</label></div>
+            </div>
+            <!--<div>-->
+            <!--    <input type="text" id="start_date" name="start_date" class="openDatePicker form-control"/>-->
+            <!--    <span>~</span>-->
+            <!--    <input type="text" id="end_date" name="end_date" class="openDatePicker form-control"/>-->
+            <!--</div>-->
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="start_date">
+                            <span class="input-group-addon">
+                                from
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="start_date"/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="end_date">
+                            <span class="input-group-addon">
+                                to
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="end_date"/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group">

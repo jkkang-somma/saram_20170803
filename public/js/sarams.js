@@ -23,9 +23,8 @@ require.config({
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
-      moment:'tool/moment/cutom-moment',
-      momentjs:'tool/moment/moment',
-      //'bootstrap-datepicker' : 'tool/bootstrap-datepicker/js/bootstrap-datepicker',
+      moment:'tool/moment/cutom-moment', // moment config
+      momentjs:'tool/moment/moment', //moment lib js 파일 define 오류 때문에 수정함. 주의 !!
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min',
       'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
@@ -49,13 +48,10 @@ require.config({
       templates:'../templates',
       cs:'../css'
    },
-   wrapShim: true,
+   wrapShim: true,//moment 사용시 
    config:{
       i18n:{
          locale:'kr'
-      },
-      moment:{
-         noGlobal:true
       }
    }
 });

@@ -3,7 +3,7 @@
     
     <label for="<%= obj.id %>"><%= obj.label %></label>
     <div class="input-group date" id="<%= obj.id %>">
-        <input type="text" class="form-control" data-format="yyyy-MM-dd"  name="<%= obj.name %>"/>
+        <input type="text" class="form-control" data-date-format="<%= obj.format %>"  name="<%= obj.name %>" value="<%= obj.value %>"/>
         <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
         </span>

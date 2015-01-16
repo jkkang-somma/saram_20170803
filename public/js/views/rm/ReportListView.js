@@ -41,7 +41,7 @@ define([
   	},
   	
     render: function(){
-      $(this.el).append(commuteListTmp);
+      $(this.el).html(commuteListTmp);
       $(this.el).find(".content").attr({"id":this.option.el});
       
       // title setting
@@ -66,19 +66,14 @@ define([
     setBottomButtonCon : function(){
       var _this = this;
       var bottomBtnCon = $(this.el).find('#bottomBtnCon');
-      bottomBtnCon.css('float','right');
-      bottomBtnCon.empty();
+      // bottomBtnCon.css('float','right');
+      // bottomBtnCon.empty();
       
       // approval Button
-      var approvalBtn = $('<button class="btn btn-default">결재</button>');
-      approvalBtn.attr('id','btnApprovalPop');
-      bottomBtnCon.append(approvalBtn);
+      var approvalBtn = $('#btnApprovalPop');
       
       // add new report button
-      var addReportBtn = $('<button class="btn btn-default">신규 상신</button>');
-      addReportBtn.attr('id','btnAddReport');
-      addReportBtn.css('margin-left','10px');
-      bottomBtnCon.append(addReportBtn);
+      var addReportBtn = $('#btnAddReport');
       
       // reportmanager/add
       addReportBtn.click(function(){
@@ -111,7 +106,8 @@ define([
      	// 	var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-     		  if(selectData.state != '결재완료'){
+     		  //if(selectData.state != '결재완료'){
+     		  if(true){
        		  var _approvalReportView = new ApprovalReportView();
            		 // data param 전달
            		 _approvalReportView.options = selectData;
@@ -157,7 +153,8 @@ define([
           pickTime: false,
           language: "ko",
           todayHighlight: true,
-          format: "YYYY-MM-DD"
+          format: "YYYY-MM-DD",
+          autoclose: true
       });
       
       var afterDate = $(this.el).find("#afterDate");
@@ -232,24 +229,25 @@ define([
     getSearchData : function(val){
       var data = {};
       
-      var startDate=this.beforeDate.data("DateTimePicker").getDate().format("YYYY/MM/DD");
-      var endDate=this.afterDate.data("DateTimePicker").getDate().format("YYYY/MM/DD");
-     // Dialog.error(startDate);
+      var startDate=this.beforeDate.find("input").val();
+      var endDate=this.afterDate.find("input").val();
+      //var endDate=//this.afterDate.data("DateTimePicker").getDate().format("YYYY-MM-DD");
+    // Dialog.error(this.afterDate.data("DateTimePicker").getText());
       
       if(val && (startDate == "" || endDate == "")){
-        data["msg"] = "기간을 모두 입력 해주세요.";
-        return data;
+       data["msg"] = "기간을 모두 입력 해주세요.";
+       return data;
       }else{
-        var start= new Date(startDate);
-        var end=new Date(endDate);
+       var start= new Date(startDate);
+       var end=new Date(endDate);
         
-        if(val && (start > end)){
+       if(val && (start > end)){
           data["msg"] = "기간을 잘못 입력 하였습니다.";
           return data;
-        }else{
+       }else{
           data["startDate"] = startDate;
           data["endDate"] = endDate;
-        }
+       }
       }
       
       return data;
@@ -279,6 +277,7 @@ define([
       $(this.el).find("#beforeDate").val('');
       $(this.el).find("#afterDate").val('');
       this.setReportTable(false);
+      this.render();
     }
     
   });

@@ -71,19 +71,42 @@ define([
     },
     
     setDatePickerPop : function(){
-      var pickerView = $(this.el).find(".openDatePicker");
-      pickerView.attr('readonly', true);
-      pickerView.attr('disabled', false);
-      pickerView.css('width', '48%');
-      pickerView.css('display', 'inline-block');
-      pickerView.css('cursor', 'pointer');
+      // var pickerView = $(this.el).find(".openDatePicker");
+      // pickerView.attr('readonly', true);
+      // pickerView.attr('disabled', false);
+      // pickerView.css('width', '48%');
+      // pickerView.css('display', 'inline-block');
+      // pickerView.css('cursor', 'pointer');
       
-      pickerView.datepicker({
+      // pickerView.datepicker({
+      //     todayBtn: "linked",
+      //     format: "yyyy-mm-dd",
+      //     language: "kr",
+      //     todayHighlight: true
+      // });
+      
+      var beforeDate = $(this.el).find("#start_date");
+      //beforeDate.attr('readonly', true);
+      this.beforeDate=beforeDate.datetimepicker({
           todayBtn: "linked",
-          format: "yyyy-mm-dd",
-          language: "kr",
-          todayHighlight: true
+          pickTime: false,
+          language: "ko",
+          todayHighlight: true,
+          format: "YYYY-MM-DD",
+          autoclose: true
       });
+      
+      var afterDate = $(this.el).find("#end_date");
+      //afterDate.attr('readonly', true);
+      this.afterDate= afterDate.datetimepicker({
+          todayBtn: "linked",
+          pickTime: false,
+          language: "ko",
+          todayHighlight: true, 
+          format: "YYYY-MM-DD",
+          autoclose: true
+      });
+    
     },
     
     setSelectBoxData : function(){

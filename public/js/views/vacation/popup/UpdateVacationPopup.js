@@ -8,6 +8,7 @@ define([
 ], function($, _, Backbone, Util,
 		VacationModel,
 		vacationInfoPopupTemplate) {
+	
 	var UpdateVacationPopup = Backbone.View.extend({
 		initialize : function(data) {
 			this.selectData = data;

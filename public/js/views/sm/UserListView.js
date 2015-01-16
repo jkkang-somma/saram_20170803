@@ -95,7 +95,7 @@ define([
                                     editUserView.submitSave().done(function(model){
                                         grid.addRow(model.attributes);
                                         dialogRef.close();
-                                        Dialog.show("Complete Save User.");
+                                        Dialog.show(i18Common.SUCCESS.USER.SAVE);
                                     });//실패 따로 처리안함 add화면에서 처리.
                                 }
                             }, {
