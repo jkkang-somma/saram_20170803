@@ -2,20 +2,36 @@
  * 근태 자료 수정 팝업
  */
 
-define([ 'jquery',
-         'underscore',
-         'backbone',
-         'util',
-         'datatables',
-         'core/BaseView',
-         'models/cm/CommuteModel',
-         'models/cm/ChangeHistoryModel',
-         'collection/cm/CommuteCollection',
-         'text!templates/cm/popup/commuteUpdatePopupTemplate.html'
-], function($, _, Backbone, Util, Datatables,
+define([ 
+        'jquery',
+        'underscore',
+        'backbone',
+        'util',
+        'schemas',
+        'grid',
+        'dialog',
+        'datatables',
+        'moment',
+        'core/BaseView',
+        'models/cm/CommuteModel',
+        'models/cm/ChangeHistoryModel',
+        'collection/cm/CommuteCollection',
+        'text!templates/cm/popup/commuteUpdatePopupTemplate.html'
+], function(
+		$,
+		_,
+		Backbone, 
+		Util, 
+		Schemas,
+		Grid,
+		Dialog,
+		Datatables,
+		Moment,
 		BaseView,
-		CommuteModel, ChangeHistoryModel,
-		CommuteCollection, commuteUpdatePopupTemplate) {
+		CommuteModel,
+		ChangeHistoryModel,
+		CommuteCollection, 
+		commuteUpdatePopupTemplate) {
 
 	// 입력받은 시간을 YYYY-MM-DD HH:mm:ss 형식으로 반환 또는 체크
 	function _getTimeStr(inTime) {
@@ -24,11 +40,11 @@ define([ 'jquery',
 			if (t.isValid()) {
 				return t.format("YYYY-MM-DD HH:mm:ss");
 			} else {
-				alert("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
+				Dialog.show("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
 				return null;
 			}
 		} else {
-			alert("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
+			Dialog.show("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
 			return null;
 		}
 	}
@@ -51,56 +67,33 @@ define([ 'jquery',
 	}
 	
 	var CommuteUpdatePopupView = Backbone.View.extend({
-		initialize : function(opt) {
-			this.parentView = opt.parentView;
+		initialize : function(data) {
+			this.selectData = data;
 		},
-		destroy: function() {
-			this.parentView = null;
-			this.remove();
-		},
-		events : {
-			'click #btnUpdateCommute' : 'onClickBtnUpdateCommute',
-			'hidden.bs.modal' : 'onCloseChangeHistoryPopup'
-		},
-		render: function(data) {
-			var tpl = _.template(commuteUpdatePopupTemplate, {variable: 'data'})(data);
-			this.setElement( tpl);
+		render : function(el) {
+			var dfd= new $.Deferred();
 			
-			this.$el.find("#in_time").datetimepicker();
-			this.$el.find("#out_time").datetimepicker();			
+			if (!_.isUndefined(el)) this.el=el;
+            			
+			var tpl = _.template( commuteUpdatePopupTemplate, {variable: 'data'} )( this.selectData );
+			$(this.el).append(tpl);
 
-			return this;
+            dfd.resolve();
+            return dfd.promise();
 		},
-		show: function(data) {
-			this.originalCommuteData = data;
-			this.render(data);
-			this.$el.modal('show');
-		},
-		onClickBtnUpdateCommute: function() {
+		updateCommute: function(opt) {
      		var _this = this;			
      		var inData = this.getInsertData(); 
      		if (inData == null) {
      			return;
      		}     		
      		
-     		inData._id = this.originalCommuteData.id;	// PUT으로 전송하기
-
+     		inData._id = this.selectData.id;	// PUT으로 전송하기
 			var commuteModel = new CommuteModel();
-			commuteModel.save(inData, {
-				success: function(model, response) {
-					_this.parentView.selectCommutes();
-					_this.$el.modal('hide');
-				},
-				error: function(model, res) {
-					alert("업데이트가 실패했습니다.");
-				}
-			})
-		},
-		onCloseChangeHistoryPopup: function() {
-			this.remove();
+			commuteModel.save(inData, opt)
 		},
 		getInsertData: function() {
-     		var newData = Util.getFormJSON( this.$el.find('#commuteInfoForm'));
+     		var newData = Util.getFormJSON( $(this.el).find("form") );
 			
 			newData.in_time = _getTimeStr(newData.in_time);			
 			if (newData == null) {
@@ -112,9 +105,9 @@ define([ 'jquery',
 				return null;
 			}
 				
-			alert("!!!! 수정자 ID 고정되어있음 !!!!");
-			var inChangeModel = _getChangeHistoryModel("in_time", this.originalCommuteData, newData, '130702');
-			var outChangeModel = _getChangeHistoryModel("out_time", this.originalCommuteData, newData, '130702');
+			Dialog.show("!!!! 수정자 ID 고정되어있음 !!!!");
+			var inChangeModel = _getChangeHistoryModel("in_time", this.selectData, newData, '130702');
+			var outChangeModel = _getChangeHistoryModel("out_time", this.selectData, newData, '130702');
 			
 			newData.changeHistoryJSONArr = [];
 			
@@ -127,12 +120,11 @@ define([ 'jquery',
 			}
 			
 			if (newData.changeHistoryJSONArr.length == 0) {
-				alert("변경된 사항이 없습니다.");
+				Dialog.show("변경된 사항이 없습니다.");
 				return null;
 			}
 			
 			return newData;
-
 		}
 	});
 	

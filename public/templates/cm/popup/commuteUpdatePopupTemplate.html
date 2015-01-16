@@ -1,62 +1,39 @@
-<div id="commuteUpdatePopup" class="modal fade" tabindex="-1"
-	role="dialog" aria-hidden="true">
-	
-	<div id="changeHistoryModalCon">
-		<div class="modal-dialog" style="width: 400px;">
-			<div class="modal-content">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-						<h4 class="modal-title">근태 자료</h4>
-					</div>
-					<div class="modal-body">
-						<form id="commuteInfoForm" class="form-horizontal">
-							<input type="hidden" id="id" name="id" value="<%=data.id%>">
-							<input type="hidden" id="year" name="year" value="<%=data.year%>">
-							<input type="hidden" id="date" name="date" value="<%=data.date%>">
-							
-							<div class="form-group">
-								<label class="col-sm-5 control-label">일자</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.date%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">부서</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.department%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">ID</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.id%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">출근 시간</label>
-								<div class="col-sm-7">
-									<input type="text" class="input-small" id="in_time" name="in_time" value="<%=data.in_time%>">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">퇴근 시간</label>
-								<div class="col-sm-7">
-									<input type="text" class="input-small" id="out_time" name="out_time" value="<%=data.out_time%>">
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button id="btnUpdateCommute" type="button" class="btn btn-primary btnUpdate">수정</button>
-						<button id="btnCloseChangeHistoryPopup" type="button"
-							class="btn btn-default" data-dismiss="modal">닫기</button>
-					</div>
-				</div>
-			</div>
+
+<form id="commuteInfoForm" class="form-horizontal">
+	<input type="hidden" id="id" name="id" value="<%=data.id%>"> <input
+		type="hidden" id="year" name="year" value="<%=data.year%>"> <input
+		type="hidden" id="date" name="date" value="<%=data.date%>">
+
+	<div class="form-group">
+		<label class="col-sm-5 control-label">일자</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.date%></label>
 		</div>
 	</div>
-</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">부서</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.department%></label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">이름</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.name%></br>(<%=data.id%>)</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">출근 시간</label>
+		<div class="col-sm-7">
+			<input type="text" class="input-small" id="in_time" name="in_time"
+				value="<%=data.in_time%>">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">퇴근 시간</label>
+		<div class="col-sm-7">
+			<input type="text" class="input-small" id="out_time" name="out_time"
+				value="<%=data.out_time%>">
+		</div>
+	</div>
+</form>

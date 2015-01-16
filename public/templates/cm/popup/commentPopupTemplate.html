@@ -1,67 +1,44 @@
-<div id="commentPopup" class="modal fade" tabindex="-1"
-	role="dialog" aria-hidden="true">
-	
-	<div id="changeHistoryModalCon">
-		<div class="modal-dialog" style="width: 600px;">
-			<div class="modal-content">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-						<h4 class="modal-title">Comment</h4>
-					</div>
-					<div class="modal-body">
-						<form id="commentInfoForm" class="form-horizontal">
-							<input type="hidden" id="id" name="id" value="<%=data.id%>">
-							<input type="hidden" id="year" name="year" value="<%=data.year%>">
-							<input type="hidden" id="date" name="date" value="<%=data.date%>">
-							
-							<div class="form-group">
-								<label class="col-sm-5 control-label">일자</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.date%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">부서</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.department%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">ID</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.id%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">출근 시간</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.in_time%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">퇴근 시간</label>
-								<div class="col-sm-7">
-									<label class="control-label"><%=data.out_time%></label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label">Comment</label>
-								<div class="col-sm-7">
-									<textarea class="form-control" rows="5" id="comment" name="comment" style="resize:none;"></textarea>									
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button id="btnInsertComment" type="button" class="btn btn-primary btnUpdate">등록</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-					</div>
-				</div>
-			</div>
+
+<form id="commentInfoForm" class="form-horizontal">
+	<input type="hidden" id="id" name="id" value="<%=data.id%>"> <input
+		type="hidden" id="year" name="year" value="<%=data.year%>"> <input
+		type="hidden" id="date" name="date" value="<%=data.date%>">
+
+	<div class="form-group">
+		<label class="col-sm-5 control-label">일자</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.date%></label>
 		</div>
 	</div>
-</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">부서</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.department%></label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">ID</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.id%></label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">출근 시간</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.in_time%></label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">퇴근 시간</label>
+		<div class="col-sm-7">
+			<label class="control-label"><%=data.out_time%></label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-5 control-label">Comment</label>
+		<div class="col-sm-7">
+			<textarea class="form-control" rows="5" id="comment" name="comment"
+				style="resize: none;"></textarea>
+		</div>
+	</div>
+</form>

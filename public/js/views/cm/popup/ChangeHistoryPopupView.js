@@ -2,33 +2,44 @@
  * 변경 이력 팝업창 
  */
 
-define([ 'jquery',
-         'underscore',
-         'backbone',
-         'util',
-         'datatables',
-         'core/BaseView',
-         'models/cm/ChangeHistoryModel',
-         'collection/cm/ChangeHistoryCollection',
-         'text!templates/cm/popup/changeHistoryPopupTemplate.html'
-], function($, _, Backbone, Util, Datatables, BaseView, ChangeHistoryModel, ChangeHistoryCollection, changeHistoryPopupTemplate) {
+define([ 
+        'jquery',
+        'underscore',
+        'backbone',
+        'util',
+        'schemas',
+        'grid',
+        'dialog',
+        'datatables',
+        'moment',
+        'core/BaseView',
+        'text!templates/default/content.html',
+        'models/cm/ChangeHistoryModel',
+        'collection/cm/ChangeHistoryCollection'
+], function(
+		$,
+		_,
+		Backbone,
+		Util,
+		Schemas,
+		Grid,
+		Dialog,
+		Datatables,
+		Moment,
+		BaseView,
+		ContentHTML,
+		ChangeHistoryModel, ChangeHistoryCollection) {
 
 	var _changeHistoryTbl = null;	
 	var ChangeHistoryPopupView = Backbone.View.extend({
-		initialize : function(opt) {
-			this.collection = new ChangeHistoryCollection();
-		},
-		events : {
-			'hidden.bs.modal' : 'onCloseChangeHistoryPopup'
-		},
-		render : function(data) {			
-			var tpl = _.template(changeHistoryPopupTemplate, {variable: 'data'})( {title: ""} );
-			this.setElement( tpl);
-
-			_changeHistoryTbl = this.$el.find("#changeHistoryTbl").dataTable({
-            	"bPaginate" : false,
-     	        "columns" : [
-     	                     { data : "date", "title" : "일자" },
+		initialize : function(data) {
+			this.searchData = data;
+			this.changeHistoryCollection = new ChangeHistoryCollection();
+    		this.gridOption = {
+        		    el:"changeHistoryDataTable_content",
+        		    id:"changeHistoryDataTable",
+        		    column:[
+    	                     { data : "date", "title" : "일자" },
      	                     { data : "id", "title" : "ID", visible: false },
      	                     { data : "name", "title" : "이름",
      	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
@@ -43,42 +54,46 @@ define([ 'jquery',
      	                    		 $(nTd).html(oData.change_name + "</br>(" +oData.change_id + ")");
      	                    	}
 
-     	                     }     	                    
-     	        ]
-     	    });
-
-			var title = (data.change_column == "in_time")? "출근 시간 변경 이력":"퇴근 시간 변경 이력";
-			this.$el.find('.modal-title').text(title);
-			this.selectChangeHistory(data);
-
-			return this;
+     	                     }
+             	        ],
+        		    collection:this.changeHistoryCollection,
+        		    detail: true,
+        		    buttons:["search","refresh"],
+        		    fetch: false
+        	};
 		},
-		selectChangeHistory: function(data) {
-     		this.collection.fetch({
-	 			reset : true, 
-	 			data: data,
-	 			success : function(result) {
-	 				_changeHistoryTbl.fnClearTable();
-	 	     		if (result.length) {
-	 	     			_changeHistoryTbl.fnAddData(result.toJSON());
-	 	     			_changeHistoryTbl.fnDraw();
-	 	     		}
+		render: function(el) {
+			var dfd= new $.Deferred();
+			
+			if (!_.isUndefined(el)) this.el=el;
+			
+			var _content=$(ContentHTML).attr("id", this.gridOption.el);
+			console.log(_content);
+			$(this.el).html(_content);
+
+			var _gridSchema=Schemas.getSchema('grid');
+    	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
+            this.grid.render();
+
+            this.selectChangeHistory();
+			
+
+            dfd.resolve();
+            return dfd.promise();			
+		},
+		selectChangeHistory: function() {
+			var _this = this;
+     		this.changeHistoryCollection.fetch({ 
+     			data: _this.searchData,
+	 			success: function(result) {
+	 				_this.grid.render();
 	 			},
 	 			error : function(result) {
 	 				alert("데이터 조회가 실패했습니다.");
 	 			}
      		});
-		},
-		show: function(data) {
-			this.render(data);
-			this.$el.modal('show');			
-		},
-		onCloseChangeHistoryPopup: function() {
-			this.remove();
-		},
-		destroy: function() {
-			 $('#changeHistoryTbl').DataTable().destroy();
-			_changeHistoryTbl = null;
+     		
+     		
 		}
 	});
 	

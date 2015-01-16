@@ -18,8 +18,10 @@ router.route('/')
 router.route('/:id')
 .get(function(req, res){	
 	console.log(111);
-}).post(function(req, res){
-
+}).put(function(req, res){
+	Comment.updateCommentReply(req.body, function(result) {
+		return res.send(result);
+	});
 })
 
 module.exports = router;
