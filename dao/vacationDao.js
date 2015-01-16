@@ -26,7 +26,7 @@ VacationDao.prototype.insertVacation =  function (data) {
 //vacation 수정
 VacationDao.prototype.updateVacation =  function (data) {
     var queryStr = db.getQuery('vacation', 'updateVacation');
-    return db.queryV2(queryStr, [data.total_day, data.id, data.year]);
+    return db.queryV2(queryStr, [data.total_day, data.memo, data.id, data.year]);
 }
 module.exports = new VacationDao();
 

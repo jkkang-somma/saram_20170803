@@ -64,8 +64,7 @@ router.route('/:id')
 })//사용자 수정
 .put(function(req, res){
     var user = new User(req.body);
-    user.initPassword().then(function(result){
-        debug("Complete initPassword .");
+    user.editUser().then(function(result){
         res.send(result);
     }).catch(function(e){
         debug("Error initPassword.");

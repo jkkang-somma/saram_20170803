@@ -16,7 +16,11 @@ define([
             comment_date : "",
             comment_reply : "",
             comment_reply_date : "",
-            state : ""
+            state : "",
+            writer_name : "",
+            writer_id : "",
+            reply_name : "",
+            reply_id : ""
         }
     });
 
