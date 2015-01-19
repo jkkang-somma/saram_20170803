@@ -69,13 +69,6 @@ table.dataTable tbody td {
     vertical-align: middle;
 }
 
-table.dataTable tbody td.autoCreate{
-    background-color : rgba(242, 184, 95, 0.6);
-}
-
-table.dataTable tbody tr.autoCreate{
-    background-color : rgba(218, 130, 130, 0.6);
-}
 
 td.highlight {
     background-color: rgba(22, 160, 133, 0.6) !important;
@@ -508,3 +501,11 @@ background-color: #e0e0e0;
 }
 
 
+/* CustomTableStyle */
+/*table.dataTable tbody td.autoCreate{*/
+/*    background-color : rgba(242, 184, 95, 0.6);*/
+/*}*/
+
+/*table.dataTable tbody tr.autoCreate{*/
+/*    background-color : rgba(218, 130, 130, 0.6);*/
+/*}*/

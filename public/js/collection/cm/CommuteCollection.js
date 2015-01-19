@@ -13,7 +13,7 @@ define([
             this.wrapper.save({}, option);
         },
         fetchDate : function(date){
-            this.fetch({data : {date:date}});
+            return this.fetch({data : {date:date}});
         }
     });
     var CommuteCollectionWrapper = Backbone.Model.extend({
