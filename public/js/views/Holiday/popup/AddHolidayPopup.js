@@ -36,6 +36,7 @@ DatePickerHTML, TextBoxHTML) {
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD"
             });
+            
             dfd.resolve();
             return dfd.promise();
 		}
