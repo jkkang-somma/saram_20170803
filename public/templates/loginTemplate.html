@@ -1,18 +1,27 @@
-<div class="page-header">
-    <h1>Login</h1>
-</div>
-<div class="panel panel-default">
+<div class="panel panel-default login-form-section animated bounceIn">
+    <div class="panel-header">
+        <h1>Login</h1>
+    </div>    
     <div class="panel-body">
         <form role="form">
             <div class="form-group">
-                <label for="loginIdTextbox">사번</label>
-                <input type="text" class="form-control" id="loginIdTextbox" placeholder="Your ID" name="id">
+                <div class="input-group login-input">
+                    <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-user"></span>
+                    </span>
+                    <input type="text" class="form-control" id="loginIdTextbox" placeholder="ID" name="id">
+                </div>
             </div>
             <div class="form-group">
-                <label for="loginPasswordTextbox">비밀번호</label>
-                <input type="password" class="form-control" id="loginPasswordTextbox" placeholder="Your Password" name="password">
+                <div class="input-group login-input">
+                    <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-lock"></span>
+                    </span>
+                    <input type="password" class="form-control" id="loginPasswordTextbox" placeholder="Password" name="password">
+                </div>
             </div>
-            <button class="btn btn-default" id="loginbtn">Login</td>
+            <button class="btn btn-sm btn-success pull-right login-button login-btn" id="loginbtn">Login</td>
+            <button class="btn btn-sm btn-success pull-right login-button save-password-btn" id="passwadUpdate">Save Password</td>
         </form>
     </div>
 </div>

@@ -4,9 +4,8 @@ define([
   'jquery',
   'underscore', 
   'backbone',
-  'log',
-  'util'
-], function($, _, Backbone, log, Util){
+  'log'
+], function($, _, Backbone, log){
     var LOG=log.getLogger('Schemas');
     var _defaultSchema = {
         //Model
