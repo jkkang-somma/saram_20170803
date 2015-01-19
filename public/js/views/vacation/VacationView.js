@@ -73,8 +73,8 @@ define([
              	        ],
         		    collection:this.vacationCollection,
         		    detail: true,
-        		    buttons:["search","refresh"],
-        		    fetch: false
+        		    buttons:["search"],
+        		    fetch: true
         	};    		
     		this.buttonInit();
     	},

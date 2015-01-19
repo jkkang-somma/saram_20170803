@@ -147,7 +147,7 @@ define([
              	        ],
         		    collection:this.commuteCollection,
         		    detail: true,
-        		    buttons:["search","refresh"],
+        		    buttons:["search"],
         		    fetch: false
         	};    		
     		this.buttonInit();

@@ -56,7 +56,7 @@ define([
              	        ],
         		    collection:this.changeHistoryCollection,
         		    detail: true,
-        		    buttons:["search","refresh"],
+        		    buttons:["search"],
         		    fetch: false
         		};
         		// this.on('view:rendered', this.renderGrid, this);
