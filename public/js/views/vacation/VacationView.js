@@ -62,13 +62,13 @@ define([
                             { data : "used_holiday", 	"title" : "사용 일수" },
                             { data : "holiday", 		"title" : "휴가 잔여 일수111"},
                             { data : "memo", 			"title" : "Memo",
-                            	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            	render: function(data, type, full, meta) {
                             		var tpl = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
-                            		if (oData.memo == '' ) {
+                            		if (full.memo == '' ) {
                             			tpl = '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>';
                             		}
-                            		$(nTd).html(tpl);
-                            	}
+                            		return tpl;
+    			        		}
                             }
              	        ],
         		    collection:this.vacationCollection,
