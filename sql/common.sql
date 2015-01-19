@@ -177,7 +177,8 @@ insert into work_type_code_tbl values
   ('11', '지각,조퇴'),
   ('21', '결근'),
   ('22', '결근_미결'),
-  ('30', '휴일');
+  ('30', '휴일'),
+  ('31', '종일휴가');
   
 CREATE TABLE IF NOT EXISTS `office_code_tbl` (
   `code` VARCHAR(10) NOT NULL COMMENT '관리코드',
@@ -237,8 +238,8 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   `in_time_change` TINYINT NULL DEFAULT 0 COMMENT '출근시간 수정 Count',
   `out_time_change` TINYINT NULL DEFAULT 0 COMMENT '퇴근시간 수정 Count',
   `comment_count` TINYINT NULL DEFAULT 0 COMMENT 'Comment Count',
-  `out_office_start_time` VARCHAR(10) NULL COMMENT '외근인 경우 외근 시작시간',
-  `out_office_end_time` VARCHAR(10) NULL COMMENT '외근인 경우 외근 종료시간',
+  `out_office_start_time` DATETIME NULL COMMENT '외근인 경우 외근 시작시간',
+  `out_office_end_time` DATETIME NULL COMMENT '외근인 경우 외근 종료시간',
   INDEX `fk_commute_result_tbl_overtime_rule_tbl1_idx` (`overtime_code` ASC),
   INDEX `fk_commute_result_tbl_office_code_tbl1_idx` (`vacation_code` ASC),
   INDEX `fk_commute_result_tbl_office_code_tbl2_idx` (`out_office_code` ASC),

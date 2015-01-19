@@ -27,6 +27,7 @@ router.route('/bulk')
 	var resultArr = [];
 	
 	for(var key in data){
+		// debug(data[key].date +","+data[key].name+","+data[key].work_type);
         resultArr.push(Commute.insertCommute(data[key]));
         count++;
     }

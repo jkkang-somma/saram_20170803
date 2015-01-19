@@ -53,7 +53,9 @@ var Schemas = function (schemaName) {
             office_code : null,    
             office_code_name : null,    
             black_mark : null,
-            state : null           
+            state : null,
+            start_time : null,
+            end_time : null
         },
         
         outoffice:{
@@ -63,7 +65,9 @@ var Schemas = function (schemaName) {
             office_code:null,
             day_count:null,
             memo:null,
-            doc_num:null  
+            doc_num:null,
+            start_time : null,
+            end_time : null
         },
         
         //Common

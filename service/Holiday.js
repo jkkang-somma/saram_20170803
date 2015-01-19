@@ -28,6 +28,7 @@ var Holdiay = function (data) {
     
     var _insertHoliday = function(){
         if(_data._3days){
+            var resultArr = [];
             for(var i = -1; i <= 1; i++){
                 var date = new Date(_data.date);
                 date.setDate(date.getDate() + i);
@@ -39,10 +40,11 @@ var Holdiay = function (data) {
                     memo : _data.memo
                 };
                 
-                HolidayDao.insertHoliday(newData);
+                resultArr.push(HolidayDao.insertHoliday(newData));
             }
+            return resultArr;
         }else{
-            HolidayDao.insertHoliday(_data);
+            return HolidayDao.insertHoliday(_data);
         }
     }
     

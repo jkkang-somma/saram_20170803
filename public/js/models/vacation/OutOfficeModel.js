@@ -18,6 +18,8 @@ define([
             day_count:"",
             memo:"",
             doc_num:"",
+            start_time : "",
+            end_time : "",
             arrInsertDate:[],
         }
         

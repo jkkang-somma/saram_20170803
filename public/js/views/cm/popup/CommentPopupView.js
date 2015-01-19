@@ -58,6 +58,10 @@ define([
 		},
 		getInsertData: function() {
      		var newData = Util.getFormJSON( $(this.el).find("form"));
+     		
+     		newData.writer_id = '100501';
+     		alert("comment 작성자 고정되어 있음!!!!!");
+     		
      		if (newData.comment.length == 0) {
      			alert("Comment를 입력해주시기 바랍니다.");
      			return null;

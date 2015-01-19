@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
 	'util',
-	'text!templates/component/datepicker.html',
+	'text!templates/default/datepicker.html',
 	'text!templates/inputForm/textbox.html',
 ], function($, _, Backbone, Util,
 DatePickerHTML, TextBoxHTML) {
@@ -15,16 +15,26 @@ DatePickerHTML, TextBoxHTML) {
 			var dfd= new $.Deferred();
             if (!_.isUndefined(el)) this.el=el;
     	    
-    	    var _datepicker=$(_.template(DatePickerHTML)({id: "addHolidayDate", label: "날짜"}));
+    	    var _datepicker=$(_.template(DatePickerHTML)(
+    	    	{ obj : 
+    	    		{
+    	    			id : "ahDatePicker",
+    	    			label : "날짜",
+    	    			name : "startDate"
+    	    		}
+    	    		
+    	    	})
+    	    );
+    	    
     	    var _textbox=$(_.template(TextBoxHTML)({id: "addHolidayMemo", label: "내용"}));
             $(this.el).append(_datepicker);
             $(this.el).append(_textbox);
             
-            var datepicker = $(this.el).find("#addHolidayDate");
-            datepicker.datepicker({
-                format: "yyyy/mm/dd",
-                language: "kr",
-                todayHighlight: true
+            $(this.el).find("#ahDatePicker").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD"
             });
             dfd.resolve();
             return dfd.promise();

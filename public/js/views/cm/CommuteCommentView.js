@@ -44,15 +44,47 @@ define([
         		    el: "commute_content",
         		    id: "commuteDataTable",
         		    column:[
-        		           { data : "year", "title" : "년" },
      			           { data : "date", "title" : "일자" },
-    			           { data : "id", "title" : "ID" },
-    			           { data : "name", "title" : "이름"},
-    			           { data : "comment", "title" : "접수내용"},
-    			           { data : "comment_reply", "title" : "처리내용"},
+    			           { data : "name", "title" : "이름",
+    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+    			        		   $(nTd).html(oData.name + "</br>(" + oData.id +")");
+    			        	   }
+    			           },
+    			           { data : "comment", "title" : "접수내용", 
+    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {    			        		   
+    			        		   var comment = oData.comment; 
+    			        		   if (comment.length > 7) {
+    			        			   comment = comment.substring(0, 10) + "...";
+    			        		   }
+    			        		   $(nTd).html(comment);
+    			        	   }
+    			           },
+    			           { data : "writer_name", "title" : "작성자",
+    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+    			        		   $(nTd).html(oData.writer_name + "</br>(" + oData.writer_id +")");
+    			        	   }
+    			           },
     			           { data : "comment_date", "title" : "신청일자"},
+    			           { data : "comment_reply", "title" : "처리내용",
+    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {    			        		   
+    			        		   var comment_reply = oData.comment_reply; 
+    			        		   if (comment_reply.length > 7) {
+    			        			   comment_reply = comment_reply.substring(0, 10) + "...";
+    			        		   }
+    			        		   $(nTd).html(comment_reply);
+    			        	   }    			        	   
+    			           },
+    			           { data : "reply_name", "title" : "답변자",
+    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+    			        		   if (oData.reply_id == "" || oData.reply_name == "") {
+    			        			   $(nTd).html("");
+    			        		   } else {
+    			        			   $(nTd).html(oData.reply_name + "</br>(" + oData.reply_id +")");  
+    			        		   }
+    			        	   }
+    			           },
     			           { data : "comment_reply_date", "title" : "업데이트일자"},
-    			           { data : "state", "title" : "처리상태"}   
+    			           { data : "state", "title" : "처리상태"}
              	        ],
         		    collection: this.commentCollection,
         		    detail: true,

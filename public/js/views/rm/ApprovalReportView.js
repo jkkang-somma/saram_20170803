@@ -79,6 +79,12 @@ define([
       $(this.el).find('#start_date input').attr('disabled',true);
       $(this.el).find('#end_date input').attr('disabled',true);
       
+      $(this.el).find('#start_time input').attr('readonly',true);
+      $(this.el).find('#end_time input').attr('readonly',true);
+      
+      $(this.el).find('#start_time input').attr('disabled',true);
+      $(this.el).find('#end_time input').attr('disabled',true);
+      
       // 결재구분 :  
       var selGubun = $(this.el).find('#state');
       
@@ -102,6 +108,8 @@ define([
         _this.find('#submit_id').val(param.submit_name);
         _this.find('#start_date input').val(param.start_date);
         _this.find('#end_date input').val(param.end_date);
+        _this.find('#start_time input').val(param.start_time);
+        _this.find('#end_time input').val(param.end_time);
         _this.find('#office_code').html("<option>"+param.office_code_name+"</option>");
         _this.find('#submit_comment').val(param.submit_comment);
         // _this.find('#decide_comment').val(param.decide_comment);
@@ -146,7 +154,7 @@ define([
         if(start > _today){
           // 정상
           indexed_array["black_mark"] = '1';
-        }else if(start == _today){
+        }else if(sStart == sToday){
           // 당일결재
           indexed_array["black_mark"] = '2';
         }else if(start < _today){
@@ -223,6 +231,8 @@ define([
       sendData["doc_num"] = this.options["doc_num"];
       sendData["memo"] = this.options["submit_comment"];
       sendData["office_code"] = this.options["office_code"];
+      sendData["start_time"] = this.options["start_time"];
+      sendData["end_time"] = this.options["end_time"];
       
       var _outOfficeModel = new OutOfficeModel(sendData);
       _outOfficeModel.save({},{

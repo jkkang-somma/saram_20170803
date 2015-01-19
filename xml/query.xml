@@ -103,7 +103,8 @@
         	UPDATE 
         		vacation_tbl 
         	SET 
-        		total_day = ? 
+        		total_day = ?,
+        		memo = ? 
         	WHERE 
         		id = ? AND year = ?
         </query>
@@ -117,7 +118,7 @@
         		, app.manager_id , (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
         		, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
         		, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
-        		, state
+        		, state, start_time, end_time
     		from 
     			approval_tbl app
 		</query>
@@ -128,7 +129,7 @@
         		, app.manager_id , (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
         		, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
         		, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
-        		, state
+        		, state, start_time, end_time
     		from 
     			approval_tbl app
         	where (STR_TO_DATE(start_date,'%Y-%m-%d') between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
@@ -136,8 +137,8 @@
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
-				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state) 
-			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신')
+				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, start_time, end_time) 
+			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?)
     	</query>
     	<query id="updateApprovalConfirm">
     		update approval_tbl set 
@@ -187,8 +188,8 @@
 							w.name AS work_type_name,
 							c.late_time,
 							c.over_time,
-							date_format(c.in_time, '%Y-%m-%d %T') AS in_time,
-							date_format(c.out_time, '%Y-%m-%d %T') AS out_time,
+							date_format(c.in_time, '%m-%d %T') AS in_time,
+							date_format(c.out_time, '%m-%d %T') AS out_time,
 							c.in_time_change,
 							c.out_time_change,
 							c.comment_count,
@@ -221,9 +222,12 @@
         
         <query id="insetCommuteResult">
         	INSERT INTO commute_result_tbl
-        		(date, department, id, in_time, late_time, name, out_office_code, out_time, over_time, overtime_code, vacation_code, standard_in_time, standard_out_time, work_type, year)
+        		(date, department, id, in_time, late_time, name, out_office_code,
+        		out_time, over_time, overtime_code, vacation_code, standard_in_time,
+        		standard_out_time, work_type, year,
+        		in_time_type, out_time_type, out_office_start_time, out_office_end_time)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         	ON DUPLICATE KEY UPDATE
 				department=?,
 				in_time=?,
@@ -236,7 +240,11 @@
 				vacation_code=?,
 				standard_in_time=?,
 				standard_out_time=?,
-				work_type=?
+				work_type=?,
+				in_time_type=?,
+				out_time_type=?,
+				out_office_start_time=?,
+				out_office_end_time=?
 
         	
         </query>
@@ -247,10 +255,10 @@
         		id,
         		name,
         		department,
-        		date_format(in_time, '%Y-%m-%d %T') AS in_time,
-        		date_format(out_time, '%Y-%m-%d %T') AS out_time,
-        		date_format(standard_in_time, '%Y-%m-%d %T') AS standard_in_time,
-        		date_format(standard_out_time, '%Y-%m-%d %T') AS standard_out_time,
+        		date_format(in_time, '%m-%d %T') AS in_time,
+        		date_format(out_time, '%m-%d %T') AS out_time,
+        		date_format(standard_in_time, '%m-%d %T') AS standard_in_time,
+        		date_format(standard_out_time, '%m-%d %T') AS standard_out_time,
 				late_time,
 				over_time,
 				work_type,
@@ -285,7 +293,7 @@
 			        c.change_column,
 			        c.change_before,
 			        c.change_after,
-			        date_format(c.change_date, '%Y-%m-%d %T') AS change_date,
+			        date_format(c.change_date, '%m-%d %T') AS change_date,
 			        c.change_id,
 			        (SELECT name FROM members_tbl WHERE id = c.change_id) AS change_name
 			FROM
@@ -341,11 +349,15 @@
     			c.id,
     			m.name,
     			c.seq,
-    			c.comment,
-    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
-    			c.comment_reply,
-    			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
-    			c.state
+    			IFNULL( c.comment, '') AS comment,
+    			date_format(c.comment_date, '%m-%d %T') AS comment_date,
+    			IFNULL( c.comment_reply, '') AS comment_reply,
+    			date_format(c.comment_reply_date, '%m-%d %T') AS comment_reply_date,
+    			c.state,
+    			c.writer_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
+    			c.reply_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
     		FROM
     			comment_tbl c
     			LEFT JOIN members_tbl m ON m.id = c.id
@@ -357,11 +369,11 @@
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state
+    			year, id, date, comment, comment_date, state, writer_id
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?
+    			?, ?, ?, ?, now(), ?, ?
     		)
     	</query>
     	
@@ -371,7 +383,8 @@
 			SET
 				comment_reply = ?,
 			    comment_reply_date = now(),
-			    state = ?
+			    state = ?,
+			    reply_id = ?
 			WHERE
 				id = ? AND year = ? AND date = ?
     	</query>
@@ -382,13 +395,12 @@
     		select * from out_office_tbl;
     	</query>
     	<query id="insertOutOffice">
-			insert into out_office_tbl(year, date, id, office_code, day_count, memo, doc_num, black_mark) 
+			insert into out_office_tbl(year, date, id, office_code, day_count, memo, doc_num, black_mark, start_time, end_time) 
 				values(
 					? ,? , ?, ?
 					,(select day_count from office_code_tbl where code = ?) 
-					,? ,? ,?
+					,? ,? ,?, ?, ?
 				)    		
     	</query>
     </group>
-    
 </querys>
