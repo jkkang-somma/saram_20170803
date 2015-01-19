@@ -39,7 +39,7 @@ TextBoxHTML, DatePickerHTML
 	}
 
 	function _getChangeHistoryModel(changeColumn, oriData, newData, changeId ) {
-		if (oriData[changeColumn] == newData[changeColumn]) {
+		if (oriData["year"] + "-" + oriData[changeColumn] == newData[changeColumn]) {
 			return null;
 		} else {
 			var changeHistoryModel = new ChangeHistoryModel({
