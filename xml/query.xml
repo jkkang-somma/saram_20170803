@@ -132,8 +132,8 @@
         		, state, start_time, end_time
     		from 
     			approval_tbl app
-        	where (STR_TO_DATE(start_date,'%Y-%m-%d') between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
-        	  OR (STR_TO_DATE(end_date,'%Y-%m-%d')  between STR_TO_DATE(?,'%Y-%m-%d') AND STR_TO_DATE(?,'%Y/%m/%d'))
+        	where (DATE(start_date) between STR_TO_DATE(?) AND STR_TO_DATE(?))
+        	  OR (DATE(end_date)  between STR_TO_DATE(?) AND STR_TO_DATE(?))
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
