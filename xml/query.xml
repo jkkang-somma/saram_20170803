@@ -60,7 +60,8 @@
 				t2.id,
 				t2.total_day,
 				t2.used_holiday,
-			    (t2.total_day - t2.used_holiday) holiday
+			    (t2.total_day - t2.used_holiday) holiday,
+			    IFNULL(t2.memo, '') AS memo
 			FROM
 				members_tbl m
 			    INNER JOIN (
@@ -68,7 +69,8 @@
 								v.year,
 								v.id,
 								v.total_day,
-								IFNULL(s.used_holiday, 0) used_holiday
+								IFNULL(s.used_holiday, 0) used_holiday,
+								v.memo
 							FROM
 								vacation_tbl v
 								LEFT JOIN (
@@ -88,14 +90,14 @@
         
         <query id="insertVacation">
 			INSERT INTO vacation_tbl(id, year, total_day)
-			SELECT '%s', '%s', '%s' from dual
+			SELECT ?, ?, ? from dual
 			WHERE NOT EXISTS (
 					SELECT id
 					FROM vacation_tbl
 					WHERE 
-						id = '%s'
+						id = ?
 			        AND 
-			        	ear = '%s' 
+			        	year = ? 
 			)
         </query>
 

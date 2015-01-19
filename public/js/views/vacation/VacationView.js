@@ -62,13 +62,13 @@ define([
                             { data : "used_holiday", 	"title" : "사용 일수" },
                             { data : "holiday", 		"title" : "휴가 잔여 일수111"},
                             { data : "memo", 			"title" : "Memo",
-                            	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            	render: function(data, type, full, meta) {
                             		var tpl = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
-                            		if (oData.memo == '' ) {
+                            		if (full.memo == '' ) {
                             			tpl = '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>';
                             		}
-                            		$(nTd).html(tpl);
-                            	}
+                            		return tpl;
+    			        		}
                             }
              	        ],
         		    collection:this.vacationCollection,
@@ -165,12 +165,12 @@ define([
 			var vacationModel = new VacationModel();
      		vacationModel.save(inData, {
 				success: function(model, response) {
-					console.log(model);
-					console.log(response);
-					
-        			Dialog.show("데이터 생성 성공", function() {
+					var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
+        			Dialog.show(msg, function() {
         				_this.selectVacation();
         			});
+        			
+        			console.log(response.error);
 				},
 				error: function(model, res) {
         			Dialog.show("데이터 생성 실패", function() {
