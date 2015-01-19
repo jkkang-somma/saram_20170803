@@ -2,9 +2,9 @@
 // Create Date: 2014.12.18
 define([
   'jquery', 
-  'util',
+  'underscore',
   'log4javascript'
-], function($, Util, log4javascript){
+], function($, _, log4javascript){
     var DEBUG=0,INFO=1,ERROR=2;
     var app={
         level:DEBUG
@@ -30,7 +30,7 @@ define([
         var output = '';
         if($.isArray(printthis) || typeof(printthis) == 'object') {
             for(var name in printthis) {
-                if (Util.isNotNull(output)){
+                if (!_.isNull(output)){
 					output=output+", "+name+":"+printthis[name];
 				} else {
 					output=name+":"+printthis[name];
@@ -44,7 +44,7 @@ define([
     
     var getLogger=function(module){
         var moduleName="DEFAULT";
-        if (Util.inObject(module, modules)){
+        if (_.has(modules, module)){
             moduleName=module;
         } 
         return {

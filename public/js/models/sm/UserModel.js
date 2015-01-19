@@ -20,10 +20,6 @@ define([
     	        }
     	    }
     	},        
-        initPassword: function(data){
-            this.set(data);
-            this.save();
-        },
         remove:function(){
             return this.destroy(); 
         },

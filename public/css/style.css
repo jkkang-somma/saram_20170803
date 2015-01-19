@@ -42,6 +42,7 @@ body {
 }
 
 
+
 /*dataTable*/
 table.dataTable{
     margin-top:10px;
@@ -286,8 +287,11 @@ background-color: #e0e0e0;
 .input-group .input-group-btn:last-child .btn{
     border-radius: 0px 3px 3px 0px !important;
 }
-
-
+.input-group-addon{
+    color:beige;
+    background-color:#2ABB9B;
+    border-color:transparent;
+}
 /*bootstrap*/
 .navbar.navbar-inverse{
 	border: none;

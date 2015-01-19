@@ -68,12 +68,11 @@ ReportListView // report manager
 			if (Util.isNotNull(affterCallback)&&_.isFunction(affterCallback)){
 				affterCallback();
 			} 
-			LOG.debug("Initalize Success");
 		},
 		
 		before : function(url, next){
 			LOG.debug(url);
-			var router=this;
+			// var router=this;
 			// var session=SessionModel.getInstance();
 			
 			// if(!session.isLogin){

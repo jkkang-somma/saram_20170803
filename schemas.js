@@ -11,7 +11,7 @@ var Schemas = function (schemaName) {
             id:null,
             auth:null,
             isLogin:false,
-            init:false,
+            initPassword:false,
             msg:null
         },
         user: {
