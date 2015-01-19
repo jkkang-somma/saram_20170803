@@ -16,33 +16,19 @@ define([
         'models/cm/CommuteModel',
         'models/cm/ChangeHistoryModel',
         'collection/cm/CommuteCollection',
-        'text!templates/cm/popup/commuteUpdatePopupTemplate.html'
+        'text!templates/cm/popup/commuteUpdatePopupTemplate.html',
+        'text!templates/inputForm/textbox.html',
+        'text!templates/default/datepicker.html',
 ], function(
-		$,
-		_,
-		Backbone, 
-		Util, 
-		Schemas,
-		Grid,
-		Dialog,
-		Datatables,
-		Moment,
+		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,
 		BaseView,
-		CommuteModel,
-		ChangeHistoryModel,
-		CommuteCollection, 
-		commuteUpdatePopupTemplate) {
+		CommuteModel, ChangeHistoryModel, CommuteCollection, 
+		commuteUpdatePopupTemplate,
+		TextBoxHTML, DatePickerHTML) {
 
-	// 입력받은 시간을 YYYY-MM-DD HH:mm:ss 형식으로 반환 또는 체크
-	function _getTimeStr(inTime) {
-		if ( Util.isNotNull(inTime) ) {
-			var t = new Moment( inTime , "YYYY-MM-DD HH:mm:ss");				
-			if (t.isValid()) {
-				return t.format("YYYY-MM-DD HH:mm:ss");
-			} else {
-				Dialog.show("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
-				return null;
-			}
+	function _getTimeStr(datePicker) {
+		if ( Util.isNotNull(datePicker) ) {
+			return datePicker.getDate().format("YYYY-MM-DD HH:mm:ss")
 		} else {
 			Dialog.show("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
 			return null;
@@ -75,16 +61,64 @@ define([
 			
 			if (!_.isUndefined(el)) this.el=el;
             			
-			var tpl = _.template( commuteUpdatePopupTemplate, {variable: 'data'} )( this.selectData );
-			$(this.el).append(tpl);
+			// var tpl = _.template( commuteUpdatePopupTemplate, {variable: 'data'} )( this.selectData );
+			// $(this.el).append(tpl);
+			
+			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupDate", label : "일자", value : this.selectData.date}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupDept", label : "부서", value : this.selectData.department}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupName", label : "이름", value : this.selectData.name}));
+			$(this.el).append(_.template(DatePickerHTML)(
+    	    	{ obj : 
+    	    		{
+    	    			id : "commutUpdatePopupIn",
+    	    			label : "날짜",
+    	    			name : "in_time",
+    	    			format : "YYYY-MM-DD HH:mm:ss"
+    	    			
+    	    		}
+    	    		
+    	    	})
+    	    );
+    	    $(this.el).append(_.template(DatePickerHTML)(
+    	    	{ obj : 
+    	    		{
+    	    			id : "commutUpdatePopupOut",
+    	    			label : "날짜",
+    	    			name : "out_time",
+    	    			format : "YYYY-MM-DD HH:mm:ss"
+    	    		}
+    	    		
+    	    	})
+    	    );
+			
+			$(this.el).find("#commutUpdatePopupIn").datetimepicker({
+            	pickTime: true,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD HH:mm:SS",
+		        defaultDate: Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
+            });
+            
+            $(this.el).find("#commutUpdatePopupOut").datetimepicker({
+            	pickTime: true,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD HH:mm:SS",
+		        defaultDate: Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
+            });
+            
+			$(this.el).find("#commutUpdatePopupDate").attr("disabled", "true");
+			$(this.el).find("#commutUpdatePopupDept").attr("disabled", "true");
+			$(this.el).find("#commutUpdatePopupName").attr("disabled", "true");
+			
+			
 
             dfd.resolve();
             return dfd.promise();
 		},
 		updateCommute: function(opt) {
-     		var _this = this;			
      		var inData = this.getInsertData(); 
-     		if (inData == null) {
+     		if (inData === null) {
      			return;
      		}     		
      		
@@ -93,15 +127,18 @@ define([
 			commuteModel.save(inData, opt)
 		},
 		getInsertData: function() {
-     		var newData = Util.getFormJSON( $(this.el).find("form") );
+     		var newData = {
+     			in_time : $(this.el).find("#commutUpdatePopupIn").data("DateTimePicker"),
+     			out_time : $(this.el).find("#commutUpdatePopupOut").data("DateTimePicker")
+     		}
 			
 			newData.in_time = _getTimeStr(newData.in_time);			
-			if (newData == null) {
+			if (newData.in_time === null) {
 				return null;
 			} 
 
 			newData.out_time = _getTimeStr(newData.out_time);
-			if (newData.out_time == null) {
+			if (newData.out_time === null) {
 				return null;
 			}
 				
@@ -119,7 +156,7 @@ define([
 				newData.changeHistoryJSONArr.push(outChangeModel);
 			}
 			
-			if (newData.changeHistoryJSONArr.length == 0) {
+			if (newData.changeHistoryJSONArr.length === 0) {
 				Dialog.show("변경된 사항이 없습니다.");
 				return null;
 			}

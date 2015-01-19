@@ -16,7 +16,11 @@ define([
         'text!templates/default/content.html',
         'text!templates/default/right.html',
         'text!templates/default/button.html',
-        'text!templates/layout/default.html',        
+        'text!templates/layout/default.html',      
+        'text!templates/default/row.html',
+        'text!templates/default/datepickerRange.html',
+        'text!templates/default/rowbuttoncontainer.html',
+        'text!templates/default/rowbutton.html',
         'models/cm/CommuteModel',
         'collection/cm/CommuteCollection',
         'views/cm/popup/CommuteUpdatePopupView',
@@ -25,29 +29,16 @@ define([
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnCommentAddTemplate.html'
 ], function(
-		$,
-		_,
-		Backbone, 
-		Util, 
-		Schemas,
-		Grid,
-		Dialog,
-		Datatables,
-		Moment,
-		BaseView,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
-		CommuteModel, 
-		CommuteCollection,
-		CommuteUpdatePopupView,
-		CommentPopupView,
-		ChangeHistoryPopupView,
-		searchFormTemplate,
-		btnCommentAddTemplate){
+		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView,
+		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
+		CommuteModel, CommuteCollection,
+		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
+		searchFormTemplate, btnCommentAddTemplate){
 
 	// 분 -> 시간 
 	function _getMinToHours(inMin) {
 		if ( Util.isNotNull(inMin) ) {
-			inMin = parseInt( inMin);				
+			inMin = parseInt(inMin);				
 			if (inMin === NaN) {
 				inMin = 0;
 			}	
@@ -101,55 +92,55 @@ define([
         		    el:"commute_content",
         		    id:"commuteDataTable",
         		    column:[
-//      	                   { data : "year", 			"title" : "년", visible: false},
+//      	               { data : "year", 			"title" : "년", visible: false},
      	                   { data : "date", 			"title" : "일자" },
      	                   { data : "department", 		"title" : "부서" },
 //     	                   { data : "id", 				"title" : "ID", visible: false },
      	                   { data : "name", 			"title" : "이름", 
-     	                	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-    	                            $(nTd).html(oData.name + "</br>(" +oData.id + ")");
-    	                       }
+     	                   		render: function(data, type, full, meta) {
+     	                   			return full.name + "</br>(" +full.id + ")";
+     	                   		}
      	                   },
      	                   { data : "work_type_name", 	"title" : "근무</br>타입"},
      	                   { data : "vacation_name", 	"title" : "휴가</br>타입"},
      	                   { data : "out_office_name", 	"title" : "외근</br>정보"},
      	                   { data : "overtime_pay", 	"title" : "초과</br>근무수당",
-     	                    	 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-       	                            $(nTd).html(oData.overtime_pay + " 원");
-       	                        }
+     	                   		render: function(data, type, full, meta) {
+     	                   			return full.overtime_pay + " 원";
+     	                   		}
      	                   },
      	                   { data : "late_time", 		"title" : "지각</br>시간"},
      	                   { data : "over_time", 		"title" : "초과</br>근무시간",
-     	                	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-     	                		   $(nTd).html(  _getMinToHours(oData.over_time));
-     	                	   }
+     	                   		render: function(data, type, full, meta) {
+     	                   			return _getMinToHours(full.over_time);
+     	                   		}
      	                   },
      	                   { data : "in_time", "title" : "출근시간",
-     	                	   fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-     	                    		 if (oData.in_time_change){
-     	                    			$(nTd).html( _createHistoryCell("in_time", oData) );
+     	                   		render: function(data, type, full, meta) {
+     	                   			if (full.in_time_change){
+     	                    			return  _createHistoryCell("in_time", full);
      	                    		 } else {
-     	                    			$(nTd).html(oData.in_time);
+     	                    			return full.in_time;
      	                    		 }
-     	                        }
+     	                   		}
      	                     },
      	                     { data : "out_time", "title" : "퇴근시간",
-     	                    	 fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-     	                    		 if (oData.out_time_change) {
-     	                    			$(nTd).html( _createHistoryCell("out_time", oData) );
+     	                     	render: function(data, type, full, meta) {
+     	                   			if (full.out_time_change) {
+     	                    			return _createHistoryCell("out_time", full);
      	                    		 } else {
-     	                    			$(nTd).html(oData.out_time);
+     	                    			return full.out_time;
      	                    		 }
-     	                        }
+     	                   		}
      	                     },
      	                     { data : "comment_count", "title" : "Comment",
-     	                    	 fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-     	                            if (oData.comment_count) {
-     	                            	$(nTd).html(_createCommentCell(oData) + _createCommentCellAddBtn(oData, btnCommentAddTemplate));
+     	                     	render: function(data, type, full, meta) {
+     	                   			if (full.comment_count) {
+     	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
      	                            } else {
-     	                            	$(nTd).html("0 건" + _createCommentCellAddBtn(oData, btnCommentAddTemplate) );
+     	                            	return "0 건" + _createCommentCellAddBtn(full, btnCommentAddTemplate);
      	                            }
-     	                        }
+     	                   		}
      	                     }
 //     	                     { data : "in_time_change", "title" : "", visible: false},
 //     	                     { data : "out_time_change", "title" : "", visible: false}   
@@ -162,7 +153,7 @@ define([
     		this.buttonInit();
     	},
     	events: {
-        	'click #btnSearch' : 'onClickSearchBtn',
+        	'click #ccmSearchBtn' : 'onClickSearchBtn',
         	'click #commuteDataTable .td-in-out-time' : 'onClickOpenChangeHistoryPopup',
         	'click #commuteDataTable .btn-comment-add' : 'onClickOpenInsertCommentPopup'
     	},
@@ -176,7 +167,7 @@ define([
     	        	var selectItem =_grid.getSelectItem();
     	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
     	            Dialog.show({
-    	                title:"연차 수정", 
+    	                title:"출퇴근시간 수정", 
                         content: commuteUpdatePopupView,
                         buttons: [{
                             id: 'updateCommuteBtn',
@@ -209,24 +200,62 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"연차 관리 ", subTitle:"연차 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 관리"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
-      	    
-    	    var $searchForm = $(searchFormTemplate);
-    	        	    
-    		var today = new Moment().format("YYYY-MM-DD");
-    		$searchForm.find('#startDate').val( today.toString() );
-    		$searchForm.find('#endDate').val( today.toString() );
 
+ 			var _row=$(RowHTML);
+    	    var _datepickerRange=$(_.template(DatePickerHTML)(
+    	    	{ obj : 
+    	    		{
+    	    			fromId : "ccmFromDatePicker",
+    	    			toId : "ccmToDatePicker"
+    	    		}
+    	    		
+    	    	})
+    	    );
+    	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
+    	            obj: {
+    	                id: "ccmBtnContainer"
+    	            }
+    	        })
+    	    );
+    	    
+    	    var _searchBtn = $(_.template(RowButtonHTML)({
+    	            obj: {
+    	                id: "ccmSearchBtn",
+    	                label: "검색"
+    	            }
+    	        })
+	        );
+	        _btnContainer.append(_searchBtn);
+	        
+    	    _row.append(_datepickerRange);
+    	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    _layOut.append(_head);
-    	    _layOut.append($searchForm);
+    	    _layOut.append(_row);
     	    _layOut.append(_content);
     	      	    
     	    $(this.el).html(_layOut);
-
+			var today = new Date();
+    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+    	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD",
+		        defaultDate: Moment(firstDay).format("YYYY-MM-DD")
+            });
+            
+            $(this.el).find("#ccmToDatePicker").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD",
+		        defaultDate: Moment(today).format("YYYY-MM-DD")
+            });
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
@@ -308,7 +337,11 @@ define([
      		return data;
      	},
     	selectCommute: function() {
-     		var data = this.getSearchForm();     		
+     		var data = {
+     		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
+     		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+     		};
+     		   		
      		if (Util.isNull (data) ) {
      			return;
      		}

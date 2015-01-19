@@ -14,27 +14,20 @@ define([
         'core/BaseView',
         'text!templates/default/head.html',
         'text!templates/default/content.html',
-        'text!templates/default/right.html',
-        'text!templates/default/button.html',
         'text!templates/layout/default.html',
+        'text!templates/default/row.html',
+        'text!templates/default/datepickerRange.html',
+        'text!templates/default/rowbuttoncontainer.html',
+        'text!templates/default/rowbutton.html',
         'collection/cm/CommentCollection',
         'views/cm/popup/CommentUpdatePopupView',
         'text!templates/cm/searchFormTemplate.html'
 ], function(
-		$,
-		_,
-		Backbone,
-		Util,
-		Schemas,
-		Grid,
-		Dialog,
-		Datatables,
-		Moment,
+		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, 
 		BaseView,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
+		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		CommentCollection,
-		CommentUpdatePopupView,
-		searchFormTemplate){
+		CommentUpdatePopupView,	searchFormTemplate){
 
 	var CommuteCommentView = BaseView.extend({
 		el:$(".main-container"),
@@ -94,7 +87,7 @@ define([
     		this.buttonInit();
 		},
 		events: {
-			'click #btnSearch' : 'onClickSearchBtn'
+			'click #ccmSearchBtn' : 'onClickSearchBtn'
 		},
 		buttonInit: function(){
     	    var that = this;
@@ -105,7 +98,7 @@ define([
     	        	var selectItem =_grid.getSelectItem();
     	            var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);
     	            Dialog.show({
-    	                title:"Comment 업데이트", 
+    	                title:"Comment 입력", 
                         content: commentUpdatePopupView,
                         buttons: [{
                             id: 'updateCommentBtn',
@@ -142,19 +135,60 @@ define([
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
-      	    
-    	    var $searchForm = $(searchFormTemplate);
-    		var today = new Moment().format("YYYY-MM-DD");
-    		$searchForm.find('#startDate').val( today.toString() );
-    		$searchForm.find('#endDate').val( today.toString() );
 
+            var _row=$(RowHTML);
+    	    var _datepickerRange=$(_.template(DatePickerHTML)(
+    	    	{ obj : 
+    	    		{
+    	    			fromId : "ccmFromDatePicker",
+    	    			toId : "ccmToDatePicker"
+    	    		}
+    	    		
+    	    	})
+    	    );
+    	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
+    	            obj: {
+    	                id: "ccmBtnContainer"
+    	            }
+    	        })
+    	    );
+    	    
+    	    var _searchBtn = $(_.template(RowButtonHTML)({
+    	            obj: {
+    	                id: "ccmSearchBtn",
+    	                label: "검색"
+    	            }
+    	        })
+	        );
+	        _btnContainer.append(_searchBtn);
+	        
+    	    _row.append(_datepickerRange);
+    	    _row.append(_btnContainer);
+    	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    _layOut.append(_head);
-    	    _layOut.append($searchForm);
+    	    _layOut.append(_row);
     	    _layOut.append(_content);
     	      	    
     	    $(this.el).html(_layOut);
 
+            var today = new Date();
+    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+    	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD",
+		        defaultDate: Moment(firstDay).format("YYYY-MM-DD")
+            });
+            
+            $(this.el).find("#ccmToDatePicker").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD",
+		        defaultDate: Moment(today).format("YYYY-MM-DD")
+            });
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
@@ -166,7 +200,10 @@ define([
     		this.selectComments();
     	},
      	getSearchForm: function() {	// 검색 조건
-     		var data = Util.getFormJSON( this.$el.find('.form-inline'));
+     		var data = {
+     		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
+     		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+     		}
      		
      		if ( Util.isNull(data.startDate) ) {
      			alert("검색 시작 날짜를 선택해주세요");

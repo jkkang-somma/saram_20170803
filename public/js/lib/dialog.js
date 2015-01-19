@@ -99,17 +99,24 @@ define([
             var _container=$("<div class='container' ></div>");
             if (!_.isUndefined(msg.content)){//화면이 있다면 container 해당하는 화면을 출력한다. view의 render는 promise 패턴 구현.
                 var _content=msg.content;
-                _content.render(_container).done(function(){
+                _content.render(_container).done(function(resultView){
                     var dialogOption=_.defaults(msg, {
                         title: i18nCommon.DIALOG.TITLE.DEFAULT,
                         message:_container,
                         type: BootstrapDialog.TYPE_DEFAULT,
                         //cssClass:CssClass.DEFAULT,
                         closable: true, 
-                        buttons: []
-                    });
+                        buttons: [],
+                        });
+                    if(!_.isUndefined(resultView)){
+                        if(!_.isUndefined(resultView.afterRender)){
+                            dialogOption.onshown = function(){
+                                resultView.afterRender();
+                            };
+                        }    
+                    }
                     
-                    BootstrapDialog.show(dialogOption);    
+                    BootstrapDialog.show(dialogOption);        
                 });
             } else {
                 var dialogOption=_.defaults(msg, {

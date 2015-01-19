@@ -26,7 +26,7 @@ DatePickerHTML, TextBoxHTML) {
     	    	})
     	    );
     	    
-    	    var _textbox=$(_.template(TextBoxHTML)({id: "addHolidayMemo", label: "내용"}));
+    	    var _textbox=$(_.template(TextBoxHTML)({id: "addHolidayMemo", label: "내용", value : ""}));
             $(this.el).append(_datepicker);
             $(this.el).append(_textbox);
             

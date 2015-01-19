@@ -70,18 +70,18 @@ var authError=function(next){
 app.use(logger('dev'));
 
 // if session hasn`t loginid, redirect login page
-app.use(function(req,res,next){
-    if(req.originalUrl == "/session"||req.originalUrl == "/"){
-        next();
-    }else{       
-        // Session 객체가 SessionManager에 등록된 유효한 Session인지 확인 
-        if (sessionManager.hasSession(req.session.id)){
-            next();
-        } else {
-            authError(next);
-        } 
-    }
-});
+// app.use(function(req,res,next){
+//     if(req.originalUrl == "/session"||req.originalUrl == "/"){
+//         next();
+//     }else{       
+//         // Session 객체가 SessionManager에 등록된 유효한 Session인지 확인 
+//         if (sessionManager.hasSession(req.session.id)){
+//             next();
+//         } else {
+//             authError(next);
+//         } 
+//     }
+// });
 
 var debug = require('debug')('APP');
 // route page
