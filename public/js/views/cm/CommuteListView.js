@@ -145,11 +145,8 @@ define([
      	                    		 }
      	                   		}
      	                     },
-<<<<<<< HEAD
      	                     { data : "comment_count", "title" : "비고",
-=======
-     	                     { data : "comment_count", "title" : "코멘트",
->>>>>>> 28b8674cbe9cb17698d16c4b60dd8dd517516841
+
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.comment_count) {
      	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
