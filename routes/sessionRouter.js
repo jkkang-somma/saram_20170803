@@ -6,6 +6,7 @@ var debug = require('debug')('sessionRouter');
 var router = express.Router();
 var User = require('../service/User.js');
 var encryptor = require('../lib/encryptor.js');
+var suid =  require('rand-token').suid;
 
 var sessionResponse=function(req, res, session){
     if (_.isUndefined(session)||_.isNull(session)){
@@ -15,20 +16,20 @@ var sessionResponse=function(req, res, session){
     }
 };
 router.route('/')
-.get(function(req, res){// 이거 왜하지 ---? client에서 세션 정보 필요할때.
-    if (sessionManager.hasSession(req.session.id)){ // 세션이 유효하지 않을 때
-        sessionResponse(sessionManager.get(req.session.id));
-    } else {
-        sessionResponse(req, res);
-    } 
-    
-})
 .post(function(req, res){//만들기.
-    if (sessionManager.hasSession(req.session.id)){ // 세션이 유효하지 않을 때
-        sessionResponse(sessionManager.get(req.session.id));
-    } else {
+    if (req.cookies.saram) {//cookie가 있을 때.
+        if (sessionManager.validationCookie(req.cookies.saram)){
+            sessionResponse(req, res, sessionManager.get(req.cookies.saram));
+        } else {//유효하지 않은 cookie 삭제.
+            sessionManager.remove(req.cookies.saram);
+            res.clearCookie("saram");
+            sessionResponse(req, res);
+        }
+    } else {// 아예 세션 정보가 없을 때.
         sessionResponse(req, res);
-    } 
+    }
+    
+    sessionManager.poolCount(req.session.id);
 })
 .put(function(req, res){//login 부분 
     var user = new User(req.body.user);
@@ -59,15 +60,19 @@ router.route('/')
                     if (user.get("password")==resultUser.get("password")){
                         debug("login success");
                         
-                        var hour = 3600000
-                        res.cookie('saram', {
-                            user:resultUser,
-                            auth:"default"
-                            //expire:
-                        }, { maxAge: hour, httpOnly: false });
+                        var hour = 3600000;
+                        var accessToken = suid(32);
                         
-                        session =new Session({isLogin:true, id:req.session.id, user:resultUser.data})
-                        sessionManager.add(session);
+                        var userInfo = resultUser.data;
+                        userInfo.password="";
+                        
+                       
+                        session =new Session({isLogin:true, id:req.session.id, user:userInfo, auth:"default", ACCESS_TOKEN:accessToken});
+                        
+                        res.cookie('saram', session, { maxAge: hour, httpOnly: false });
+                        sessionManager.add(session, accessToken);
+                        
+                        
                         /*
                         * auth 관련 셋팅 로직 구현 필요
                         */
@@ -85,13 +90,13 @@ router.route('/')
         });
     }
     
-});
-
-router.route('/:id')
-.delete(function(req, res){
-    req.session.regenerate(function(err){
-        res.send({login: false});
+}).delete(function(req, res){
+    sessionManager.remove(req.cookies.saram);
+    req.session.destroy(function(){
+        
     });
+    res.clearCookie("saram");
+    res.send({});
 });
 
 module.exports = router;

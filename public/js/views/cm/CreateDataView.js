@@ -33,9 +33,12 @@ CreateDataPopupView){
         VACATION : "31"
     };
     var CreateDataView = BaseView.extend({
+        
         el:$(".main-container"),
         
     	initialize:function(){
+    	    var that = this;
+    	    
     		$(this.el).html('');
     	    $(this.el).empty();
     	    this.commuteCollection = new CommuteCollection();
@@ -47,36 +50,32 @@ CreateDataPopupView){
                     {"title": "날짜", "data": "date"},
                     {"title": "이름", "data": "name"},
                     {"title": "출근시간", "data": "in_time",
-                        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                            if(oData.in_time_type == 2 && oData.work_type != "31" && oData.work_type != "31"){
-                                $(nTd).addClass("autoCreate");
-                            }
-                            $(nTd).text(_.isNull(oData.in_time) ? null : Moment(oData.in_time).format("YYYY-MM-DD HH:mm"));
+                        "render": function (data, type, rowData, meta) {
+                            // if(rowData.in_time_type == 2 && rowData.work_type != "31" && rowData.work_type != "31"){
+                            //     // $(nTd).addClass("autoCreate");
+                            // }
+                            return _.isNull(rowData.in_time) ? null : Moment(rowData.in_time).format("YYYY-MM-DD HH:mm");
                        }
                     },
                     {"title": "퇴근시간", "data": "out_time",
-                        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                            if(oData.out_time_type == 2 && oData.work_type != "31" && oData.work_type != "31"){
-                                $(nTd).addClass("autoCreate");
-                            }
-                            $(nTd).text(_.isNull(oData.out_time) ? null : Moment(oData.out_time).format("YYYY-MM-DD HH:mm"));
+                        "render": function (data, type, rowData, meta) {
+                            // if(rowData.out_time_type == 2 && rowData.work_type != "31" && rowData.work_type != "31"){
+                            //     // $(nTd).addClass("autoCreate");
+                            // }
+                            return _.isNull(rowData.out_time) ? null : Moment(rowData.out_time).format("YYYY-MM-DD HH:mm");
+                            
                        }
                     },
-                    {"title": "Type", "data": "work_type",
-                        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                            if(oData.work_type == "21" || oData.work_type == "22"){
-                                $(nTd).parent().addClass("autoCreate");
-                            }
-                       }
-                    },
+                    {"title": "Type", "data": "work_type"},
+                    
                     {"title": "출근기준", "data": "standard_in_time",
-                        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                            $(nTd).text(_.isNull(oData.standard_in_time) ? null : Moment(oData.standard_in_time).format("HH:mm"));
+                        "render": function (data, type, rowData, meta) {
+                            return _.isNull(rowData.standard_in_time) ? null : Moment(rowData.standard_in_time).format("YYYY-MM-DD HH:mm");
                        }
                     },
                     {"title": "퇴근기준", "data": "standard_out_time",
-                        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                            $(nTd).text(_.isNull(oData.standard_out_time) ? null : Moment(oData.standard_out_time).format("HH:mm"));
+                        "render": function (data, type, rowData, meta) {
+                            return _.isNull(rowData.standard_out_time) ? null : Moment(rowData.standard_out_time).format("YYYY-MM-DD HH:mm");
                        }
                     },
                     {"title": "지각", "data": "late_time"},
@@ -84,6 +83,12 @@ CreateDataPopupView){
                     {"title": "초과근무", "data": "overtime_code"},
                     {"title": "근태", "data": "vacation_code"},
     		    ],
+    		    dataschema:["date", "name", "in_time", "out_time", "work_type", "standard_in_time" ,"standard_out_time", "late_time", "over_time", "overtime_code", "vacation_code"],
+                // rowCallback : function(row, data){
+                //     if(data.work_type == WORKTYPE.ABSENTCE || data.work_type == WORKTYPE._ABSENTCE){
+                //         $(row).addClass("autoCreate");
+                //     }
+                // },
     		    collection:this.commuteCollection,
     		    detail: true,
     		    fetch: false,
@@ -191,10 +196,8 @@ CreateDataPopupView){
                                             var filterDate = yesterdayCommuteCollection.where({id : userId}); // 시작일 - 1의 출입기록
                                             if(filterDate.length > 0){
                                                 yesterdayAttribute = filterDate[0].toJSON();
-                                                yesterdayAttribute.in_time = Util.timeToString(new Date(yesterdayAttribute.in_time));
-                                                yesterdayAttribute.out_time = Util.timeToString(new Date(yesterdayAttribute.out_time));
-                                                yesterdayAttribute.standardInTime = Util.timeToString(new Date(yesterdayAttribute.standardInTime));
-                                                yesterdayAttribute.standardOutTime = Util.timeToString(new Date(yesterdayAttribute.standardOutTime));
+                                                yesterdayAttribute.out_time = Moment(yesterdayAttribute.out_time).year(yesterdayAttribute.year);
+                                                yesterdayAttribute.out_time = yesterdayAttribute.out_time.toDate();
                                             }
                                                 
                                             ResultTimeFactory.init(userId, userName, userDepartment); //계산전 초기화
@@ -223,7 +226,6 @@ CreateDataPopupView){
                                                     ResultTimeFactory.checkTime(destTime, type);   
                                                 });
                                                 
-                                                console.log(ResultTimeFactory.getResult());
                                                 var result = ResultTimeFactory.getResult();
                                                 
                                                 that.commuteCollection.add(result);
@@ -492,7 +494,7 @@ CreateDataPopupView){
             if(!_.isNull(this.inTime)){
                 this.lateTime = Math.floor((this.inTime - this.standardInTime) / 1000 / 60);
                 if(this.lateTime > 0 ){
-                    this.workType = WORKTYPE.LATE;
+                    this.workType = WORKTYPE.LATE;  // 지각
                 }else{
                     this.lateTime = 0;
                 }
@@ -515,14 +517,16 @@ CreateDataPopupView){
                                                     
             if(this.outTime - this.standardOutTime >= 0) {
                 this.overTime = Math.floor( ((this.outTime - this.standardOutTime) - this.lateTimeOver) / 1000 / 60 ); // 초과근무 시간 (지각시간 제외)
-                if(this.vacationCode === ""){
+                if(this.vacationCode === null || this.vacationCode === "V02"){
                     if(this.overTime > 360)                 this.overtimeCode = "2015_AC";
                     else if(this.overTime > 240)            this.overtimeCode =  "2015_AB";
                     else if(this.overTime > 120)            this.overtimeCode =  "2015_AA";
                 }
             }else{ // 조퇴 판정
-                if (this.workType == WORKTYPE.LATE)     this.workType == WORKTYPE.EARLY_LATE;
-                else                                    this.workType == WORKTYPE.EARLY;
+                if (this.workType == WORKTYPE.LATE)
+                    this.workType = WORKTYPE.EARLY_LATE;
+                else
+                    this.workType = WORKTYPE.EARLY;
             }
         },
 

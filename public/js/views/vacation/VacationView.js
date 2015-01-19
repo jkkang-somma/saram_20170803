@@ -62,18 +62,18 @@ define([
                             { data : "used_holiday", 	"title" : "사용 일수" },
                             { data : "holiday", 		"title" : "휴가 잔여 일수111"},
                             { data : "memo", 			"title" : "Memo",
-                            	"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            	render: function(data, type, full, meta) {
                             		var tpl = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
-                            		if (oData.memo == '' ) {
+                            		if (full.memo == '' ) {
                             			tpl = '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>';
                             		}
-                            		$(nTd).html(tpl);
-                            	}
+                            		return tpl;
+    			        		}
                             }
              	        ],
         		    collection:this.vacationCollection,
         		    detail: true,
-        		    buttons:["search","refresh"],
+        		    buttons:["search"],
         		    fetch: false
         	};    		
     		this.buttonInit();
@@ -89,7 +89,11 @@ define([
     	        type:"custom",
     	        name:"edit",
     	        click:function(_grid){
-    	        	var selectItem =_grid.getSelectItem();
+    	        	var selectItem =_grid.getSelectItem();    	        	
+    	        	if ( Util.isNull(selectItem) ) {
+            			Dialog.warning("사용자를 선택 하여 주시기 바랍니다.");
+            			return;
+    	        	}
     	            var updateVacationPopup = new UpdateVacationPopup(selectItem);
     	            Dialog.show({
     	                title:"연차 수정", 
@@ -165,12 +169,12 @@ define([
 			var vacationModel = new VacationModel();
      		vacationModel.save(inData, {
 				success: function(model, response) {
-					console.log(model);
-					console.log(response);
-					
-        			Dialog.show("데이터 생성 성공", function() {
+					var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
+        			Dialog.show(msg, function() {
         				_this.selectVacation();
         			});
+        			
+        			console.log(response.error);
 				},
 				error: function(model, res) {
         			Dialog.show("데이터 생성 실패", function() {

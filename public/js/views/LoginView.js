@@ -7,9 +7,9 @@ define([
 'models/sm/UserModel',
 'models/sm/SessionModel',
 'text!templates/loginTemplate.html',
-'text!templates/initpasswordTemplate.html',
-'css!cs/login.css'
-], function($, _,Backbone, log, Dialog, UserModel, SessionModel, LoginHTML, initpasswordTemplate){
+'i18n!nls/common',
+'css!cs/login.css',
+], function($, _,Backbone, log, Dialog, UserModel, SessionModel, LoginHTML, i18nCommon){
     var LOG=log.getLogger('LoginView');
     var LoginView = Backbone.View.extend({
         events: {
@@ -18,6 +18,7 @@ define([
         },
     	initialize:function(){
             this.el=$(".main-container");
+            $("body").addClass("login-body");
             _.bindAll(this, 'render');
             _.bindAll(this, 'login');
     	},
@@ -38,13 +39,14 @@ define([
     	    var _view=this;
     	    var data = this.getFormData( this.el.find('form'));
     	    if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
-    	        Dialog.warning("로그인 정보를 입력해주세요.");         
+    	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_LOGIN_INFO);         
     	    } else {
                 SessionModel.login(data).then(function(){
                     _view.app.draw();    
                 }).fail(function(e){
                     if (!_.isUndefined(e.user)){
-                        Dialog.warning(e.msg);
+                        Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg]);
+            
                         $("#loginbtn").fadeOut(100, function(){
                             $("#passwadUpdate").fadeIn(500, function(){
                                 $("#loginPasswordTextbox").val("");
@@ -52,18 +54,16 @@ define([
                             });
                         });
                     } else {
-                        
-                        Dialog.warning(e.msg);
+                        Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg]);
                     }
                 });
             }
     	    return false;
     	},
-    	
     	commitPassword : function(e){
             var data = this.getFormData( this.$el.find('form'));
             if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
-                Dialog.warning("초기화 정보를 입력해주세요.");         
+                Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);         
             } else {
                 SessionModel.initPassword({id: data.id, password:data.password}).done(function(result){
                     Dialog.show(result.msg);

@@ -82,27 +82,22 @@ var Vacation = function() {
 
 	var _setVacation = function(data, callback) {
 		UserDao.selectUserList().then(function(result) {			
-			var daoArr = [];
-			var count = 0;
-			var obj = {};
+			var datas = [],
+				obj = {};
 			
 			for (var i = 0, len = result.length; i < len; i++) {
 				obj = {
 						id : (result[i].id),
 						year : data.year,
 						total_day : ( (result[i].id.length == 7)?15 : getHoliday(result[i].join_company) ) // id 자릿수가 7자리(외주인력)은 휴가 수가 15일
-				}
-				daoArr.push( VacationDao.insertVacation(obj) );
-				count++;
+				};
+				datas.push(obj);
 			}
-
-		    Promise.all(daoArr).then(function(){
-		        debug("Add RawData Count : " + count);
-		        return callback( {msg : "Add RawData Count : " + count, count: count} );
-		    });
-		    
+			
+			VacationDao.insertVacation(datas).then(function(result) {
+				return callback(result);
+			});
 		});
-		
 	};	
 	
 	

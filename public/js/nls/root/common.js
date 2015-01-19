@@ -36,5 +36,22 @@ define({
             REMOVE:"Success Remove User.",
             ADD:"Success Add User."
         }
+    },
+    WARNING:{
+        LOGIN:{
+            NOT_VALID_LOGIN_INFO:"Check your Login Info.",
+            INIT_PASSWORD_PUT:"Init password.",
+            DO_NOT_FOUND_USER:"Not valid account.",
+            NOT_EQULES_PASSWORD:"Not valid account.",
+            INIT_PASSWORD:"Initialize password."
+        }
+    },
+    ERROR:{
+        AUTH:{
+            EXPIRE_AUTH:"Session has expired."
+        },
+        HTTP:{
+            NOT_FIND_PAGE:"Not find page."
+        }
     }
 });

@@ -93,6 +93,9 @@ define([
     	            if (_.isObject(_column)){
     	                if (!_.isUndefined(_column.render)){
     	                    _value=_column.render({},{},rowData);
+    	                    if(_.isNull(_value)){
+    	                        _value ="";
+    	                    }
     	                } else {
     	                    _value=rowData[name];
     	                }
@@ -127,6 +130,27 @@ define([
     	    }
     	    var selectItem=this.DataTableAPI.row(idx).data();
     	    return selectItem;
+    	},
+    	getNodeAt:function(rowIndex, colIndex){
+    	    if (_.isUndefined(this.DataTableAPI)){
+    	       return _.noop(); 
+    	    }
+    	    var selectedNode=this.DataTableAPI.cell({row : rowIndex, column : colIndex}).node();
+    	    return selectedNode;
+    	},
+    	getRowNodeAt:function(rowIdx){
+    	    if (_.isUndefined(this.DataTableAPI)){
+    	       return _.noop(); 
+    	    }
+    	    var selectedNode=this.DataTableAPI.row(rowIdx).node();
+    	    return selectedNode;
+    	},
+    	getColumnNodeAt:function(colIdx){
+    	    if (_.isUndefined(this.DataTableAPI)){
+    	       return _.noop(); 
+    	    }
+    	    var selectedNode=this.DataTableAPI.row(colIdx).node();
+    	    return selectedNode;
     	},
     	removeRow:function(item, index){//선택된 row 삭제 //default 선택된 아이템  index로 하려면. index 를 넣어주세요
     	    if (_.isUndefined(index)){
@@ -282,7 +306,8 @@ define([
                 "lengthChange": false,
                 "sDom": '<"top">rt<"bottom"ip>',// _dataTable display controll
      	        "data" : this.options.collection.toJSON(),
-     	        "columns" : _columns
+     	        "columns" : _columns,
+     	        "rowCallback" : _.isUndefined(this.options.rowCallback) ? null : this.options.rowCallback
      	    });
      	    
      	    //ROW click
@@ -340,6 +365,27 @@ define([
     	       grid._draw();
     	   }
     	   return grid;
+     	},
+     	renderDfd:function(){
+     	    var dfd= new $.Deferred();
+     	    var grid = this;
+    	   
+    	   if(Util.isNull(this.options.fetch) || this.options.fetch === true){
+    	       var _defaultFetchParams={
+        	       success: function(){
+        	           grid._draw();
+        	           dfd.resolve();
+        	       }
+        	   };
+    	       if (!_.isUndefined(this.options.fetchParam)){
+    	           _defaultFetchParams=_.extend(_defaultFetchParams, this.options.fetchParam);
+    	       }
+        	   this.options.collection.fetch(_defaultFetchParams);    
+    	   }else{
+    	       grid._draw();
+    	       dfd.resolve();
+    	   }
+    	   return dfd.promise();
      	}
     });
     return Grid;
