@@ -18,6 +18,7 @@ define([
         },
     	initialize:function(){
             this.el=$(".main-container");
+            $("body").addClass("login-body");
             _.bindAll(this, 'render');
             _.bindAll(this, 'login');
     	},
@@ -38,7 +39,7 @@ define([
     	    var _view=this;
     	    var data = this.getFormData( this.el.find('form'));
     	    if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
-    	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_USER_INFO);         
+    	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_LOGIN_INFO);         
     	    } else {
                 SessionModel.login(data).then(function(){
                     _view.app.draw();    
@@ -59,7 +60,6 @@ define([
             }
     	    return false;
     	},
-    	
     	commitPassword : function(e){
             var data = this.getFormData( this.$el.find('form'));
             if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){

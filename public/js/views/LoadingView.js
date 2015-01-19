@@ -69,5 +69,5 @@ BaseView, loadingTemplate, cubeTemplate){
 			});
     	}
     });
-    return LoadingView;
+    return new LoadingView();
 });

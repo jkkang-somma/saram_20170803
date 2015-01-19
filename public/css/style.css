@@ -2,7 +2,9 @@
 body {
   overflow:hidden;
   font-family: 'Nanum Gothic';
+  transition:background .5s;
 }
+
 .no-margin{
     margin:10px 10px;
 }

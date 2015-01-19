@@ -14,7 +14,7 @@ INSERT INTO approval_tbl
 '2015-01-01', 
 '2015-01-01', 
 'V01', 
-'결제완료');
+'결재완료');
 
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-16','140601','V03','0.5','개인사유','201501-001','','','');
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-16','111102','V01','1','개인사유','201501-001','','','');
@@ -63,12 +63,12 @@ INSERT INTO out_office_tbl VALUES ('2015','2015-01-02','100102','V01','1','삼�
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','071001','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','110303','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','150102','2015-01-10','201501-001');
-INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','100801','2015-01-11','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','100801','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','0130101','2015-01-11','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','150104','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','120501','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','111101','2015-01-10','201501-001');
+INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','100801','2015-01-11','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','130801','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','111102','2015-01-10','201501-001');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','0130101','2015-01-10','201501-001');
@@ -84,17 +84,3 @@ INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','0
 
 
 
-
-
-// 결재 테이블의 고유번호 생성시 사용
-UPDATE 
-	approval_index_tbl 
-SET 
-	seq = 1 + 
-		( 
-			SELECT MAX_VALUE FROM
-				( SELECT max(seq) AS MAX_VALUE FROM approval_index_tbl WHERE yearmonth = '201502' ) AS x
-        )
-WHERE 
-	yearmonth = '201502';
-	

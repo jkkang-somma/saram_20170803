@@ -32,7 +32,6 @@ require.config({
       dialog:'lib/dialog',
       animator:'lib/animator',
       router:'router/mainRouter',
-      sessionManager:'lib/sessionManager',
       log:'lib/debug',
       util:'lib/util',
       csvParser:'lib/csvParser',
@@ -57,8 +56,17 @@ require.config({
 });
 
 require([
-    'app',
-], function(App){
-   var app = new App();
-   app.start();
+   'views/LoadingView',
+], function(LoadingView){
+   LoadingView.render();
+});
+
+require([
+   'app',
+   'views/LoadingView',
+], function(App, LoadingView){
+   LoadingView.disable(function(){
+      var app = new App();
+      app.start();
+   });
 });
