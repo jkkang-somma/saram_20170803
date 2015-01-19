@@ -36,5 +36,14 @@ define({
             REMOVE:"사용자를 삭제하였습니다.",
             ADD:"사용자를 등록하였습니다."
         }
+    },
+    WARNING:{
+        LOGIN:{
+            NOT_VALID_LOGIN_INFO:"로그인 정보를 입력해주세요.",
+            INIT_PASSWORD_PUT:"초기화 정보를 입력해 주세요.",
+            DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
+            NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
+            INIT_PASSWORD:"비밀번호를 설정해주세요."
+        }
     }
 });

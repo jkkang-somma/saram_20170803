@@ -21,9 +21,9 @@ define([
             var _session=this;
             var dfd= new $.Deferred();
                 this.save({},{
-                    success:function(session){//{isLogin:false, id:req.session.id}
-                        _session.isLogin=session.isLogin;
-                        _session.set({id:session.id,isLogin:session.isLogin});
+                    success:function(session, result){//{isLogin:false, id:req.session.id}
+                        _session.isLogin=result.isLogin;
+                        _session.set(result);
                         dfd.resolve(_session.isLogin);
                     },
                     error:function(e){

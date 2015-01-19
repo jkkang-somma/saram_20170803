@@ -15,20 +15,14 @@ var sessionResponse=function(req, res, session){
     }
 };
 router.route('/')
-.get(function(req, res){// 이거 왜하지 ---? client에서 세션 정보 필요할때.
-    if (sessionManager.hasSession(req.session.id)){ // 세션이 유효하지 않을 때
-        sessionResponse(sessionManager.get(req.session.id));
-    } else {
-        sessionResponse(req, res);
-    } 
-    
-})
 .post(function(req, res){//만들기.
     if (sessionManager.hasSession(req.session.id)){ // 세션이 유효하지 않을 때
-        sessionResponse(sessionManager.get(req.session.id));
+        sessionResponse(req, res, sessionManager.get(req.session.id));
     } else {
         sessionResponse(req, res);
-    } 
+    }
+    
+    sessionManager.poolCount(req.session.id);
 })
 .put(function(req, res){//login 부분 
     var user = new User(req.body.user);
