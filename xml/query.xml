@@ -88,14 +88,14 @@
         
         <query id="insertVacation">
 			INSERT INTO vacation_tbl(id, year, total_day)
-			SELECT ?, ?, ? from dual
+			SELECT '%s', '%s', '%s' from dual
 			WHERE NOT EXISTS (
 					SELECT id
 					FROM vacation_tbl
 					WHERE 
-						id = ?
+						id = '%s'
 			        AND 
-			        	year = ? 
+			        	ear = '%s' 
 			)
         </query>
 

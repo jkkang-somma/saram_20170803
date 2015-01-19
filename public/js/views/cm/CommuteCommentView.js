@@ -46,40 +46,40 @@ define([
         		    column:[
      			           { data : "date", "title" : "일자" },
     			           { data : "name", "title" : "이름",
-    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-    			        		   $(nTd).html(oData.name + "</br>(" + oData.id +")");
+     			        	   render: function(data, type, full, meta) {
+    			        		   return full.name + "</br>(" + full.id +")";
     			        	   }
     			           },
-    			           { data : "comment", "title" : "접수내용", 
-    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {    			        		   
-    			        		   var comment = oData.comment; 
+    			           { data : "comment", "title" : "접수내용",
+     			        	   render: function(data, type, full, meta) {
+    			        		   var comment = full.comment; 
     			        		   if (comment.length > 7) {
     			        			   comment = comment.substring(0, 10) + "...";
     			        		   }
-    			        		   $(nTd).html(comment);
+    			        		   return comment;
     			        	   }
     			           },
     			           { data : "writer_name", "title" : "작성자",
-    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-    			        		   $(nTd).html(oData.writer_name + "</br>(" + oData.writer_id +")");
+     			        	   render: function(data, type, full, meta) {
+    			        		   return full.writer_name + "</br>(" + full.writer_id +")";
     			        	   }
     			           },
     			           { data : "comment_date", "title" : "신청일자"},
     			           { data : "comment_reply", "title" : "처리내용",
-    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {    			        		   
-    			        		   var comment_reply = oData.comment_reply; 
+     			        	   render: function(data, type, full, meta) {
+    			        		   var comment_reply = full.comment_reply; 
     			        		   if (comment_reply.length > 7) {
     			        			   comment_reply = comment_reply.substring(0, 10) + "...";
     			        		   }
-    			        		   $(nTd).html(comment_reply);
+    			        		   return comment_reply;
     			        	   }    			        	   
     			           },
     			           { data : "reply_name", "title" : "답변자",
-    			        	   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-    			        		   if (oData.reply_id == "" || oData.reply_name == "") {
-    			        			   $(nTd).html("");
+     			        	   render: function(data, type, full, meta) {
+    			        		   if (full.reply_id == "" || full.reply_name == "") {
+    			        			   return "";
     			        		   } else {
-    			        			   $(nTd).html(oData.reply_name + "</br>(" + oData.reply_id +")");  
+    			        			   return full.reply_name + "</br>(" + full.reply_id +")";  
     			        		   }
     			        	   }
     			           },
