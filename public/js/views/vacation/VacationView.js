@@ -73,7 +73,7 @@ define([
              	        ],
         		    collection:this.vacationCollection,
         		    detail: true,
-        		    buttons:["search","refresh"],
+        		    buttons:["search"],
         		    fetch: false
         	};    		
     		this.buttonInit();
@@ -89,7 +89,11 @@ define([
     	        type:"custom",
     	        name:"edit",
     	        click:function(_grid){
-    	        	var selectItem =_grid.getSelectItem();
+    	        	var selectItem =_grid.getSelectItem();    	        	
+    	        	if ( Util.isNull(selectItem) ) {
+            			Dialog.warning("사용자를 선택 하여 주시기 바랍니다.");
+            			return;
+    	        	}
     	            var updateVacationPopup = new UpdateVacationPopup(selectItem);
     	            Dialog.show({
     	                title:"연차 수정", 

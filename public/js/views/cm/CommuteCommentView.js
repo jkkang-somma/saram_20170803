@@ -81,7 +81,7 @@ define([
              	        ],
         		    collection: this.commentCollection,
         		    detail: true,
-        		    buttons: ["search","refresh"],
+        		    buttons: ["search"],
         		    fetch: false
         	};    		
     		this.buttonInit();

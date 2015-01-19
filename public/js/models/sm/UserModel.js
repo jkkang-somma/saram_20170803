@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'backbone'
+  'backbone', 
 ], function($, _,Backbone){
     var UserModel=Backbone.Model.extend({
         urlRoot: '/user',

@@ -7,6 +7,7 @@ define([
   'schemas',
   'i18n!nls/common',
   'dialog',
+  'models/sm/SessionModel',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/default/right.html',
@@ -16,7 +17,7 @@ define([
   'views/sm/AddUserView',
   'views/sm/EditUserView',
   'models/sm/UserModel',
-], function($, _, Backbone, BaseView, Grid, Schemas, i18Common, Dialog, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
+], function($, _, Backbone, BaseView, Grid, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
     var userListCount=0;
     var UserListView = BaseView.extend({
         el:".main-container",
@@ -46,7 +47,6 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    	    
     	    //Head 
     	    var _head=$(_headTemp(_headSchema.getDefault({title:i18Common.PAGE.TITLE.USER_MANAGER, subTitle:i18Common.PAGE.SUB_TITLE.USER_LIST})));
     	    _head.addClass("no-margin");

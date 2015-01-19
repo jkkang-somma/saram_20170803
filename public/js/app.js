@@ -35,18 +35,18 @@ define([
             //유효한 세션인지 체크한다.
             
             
-            // SessionModel.checkSession().done(function(isLogin){
-            //     if (!isLogin){
-            //         LOG.debug("Not login User.");
-            //         loadingView.disable(function(){
-            //             _loginView= new LoginView({el:$(".main-container")});
-            //             _loginView.render(_app);
-            //         });
-            //         return;
-            //     } else {
+            SessionModel.checkSession().done(function(isLogin){
+                if (!isLogin){
+                    LOG.debug("Not login User.");
+                    loadingView.disable(function(){
+                        _loginView= new LoginView({el:$(".main-container")});
+                        _loginView.render(_app);
+                    });
+                    return;
+                } else {
                    _app.draw(); 
-            //     }    
-            // });
+                }    
+            });
             
             
             // _user=$.cookie('saram', JSON.stringify({

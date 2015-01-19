@@ -12,7 +12,8 @@ define([
   'collection/rm/ApprovalCollection',
   'views/rm/AddNewReportView',
   'views/rm/ApprovalReportView',
-], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView){
+  'views/rm/DetailReportView',
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, DetailReportView){
    var _reportListView=0;
    var reportListView = BaseView.extend({
     el:$(".main-container"),
@@ -65,7 +66,7 @@ define([
     
     setBottomButtonCon : function(){
       var _this = this;
-      var bottomBtnCon = $(this.el).find('#bottomBtnCon');
+      // var bottomBtnCon = $(this.el).find('#bottomBtnCon');
       // bottomBtnCon.css('float','right');
       // bottomBtnCon.empty();
       
@@ -74,6 +75,9 @@ define([
       
       // add new report button
       var addReportBtn = $('#btnAddReport');
+      
+      // detail Button
+      var detailReportBtn = $('#btnDetailReport');
       
       // reportmanager/add
       addReportBtn.click(function(){
@@ -137,6 +141,33 @@ define([
      		      Dialog.warning("결재 완료된 항목입니다.");
      		    }
          		 
+     		} else {
+     		  Dialog.error("결재 대상을 선택해주세요.");
+     		}
+       
+      });
+      
+      detailReportBtn.click(function(){
+         var selectData=_this.grid.getSelectItem();
+      //    var table = $(_this.$el).find("#commuteManageTbl").DataTable();
+     	// 	var selectData = table.row('.selected').data();
+     		
+     		if ( Util.isNotNull(selectData) ) {
+     		  var _detailReportView = new DetailReportView();
+         		 // data param 전달
+         		 _detailReportView.options = selectData;
+         		 // Dialog
+         		 Dialog.show({
+                  title:"상세보기", 
+                  content:_detailReportView, 
+                  buttons:[{
+                      label: "확인",
+                      cssClass: Dialog.CssClass.SUCCESS,
+                      action: function(dialogRef){// 버튼 클릭 이벤트
+                            dialogRef.close();
+                      }
+                  }]
+              });
      		} else {
      		  Dialog.error("항목을 선택해주세요.");
      		}

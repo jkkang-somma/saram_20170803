@@ -1,13 +1,17 @@
+.login-body{
+    height: 100%;
+    width: 100%;
+    background-image: url(img/green-pattern.png);
+    background-attachment: fixed;
+}
 
 .login-form-section {
-    width: 100%;
-    max-width: 360px;
+    width: 80%;
+    max-width: 30em;
     margin: 0 auto;
     margin-top:5em;
     border-color: #1F8871;
 }
-
-
 
 .login-form-section .form-control{
     color:#2ABB9B;

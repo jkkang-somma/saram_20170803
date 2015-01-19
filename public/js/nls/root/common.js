@@ -45,5 +45,13 @@ define({
             NOT_EQULES_PASSWORD:"Not valid account.",
             INIT_PASSWORD:"Initialize password."
         }
+    },
+    ERROR:{
+        AUTH:{
+            EXPIRE_AUTH:"Session has expired."
+        },
+        HTTP:{
+            NOT_FIND_PAGE:"Not find page."
+        }
     }
 });

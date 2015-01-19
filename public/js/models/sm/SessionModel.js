@@ -10,12 +10,8 @@ define([
             
         },
         initialize : function(){
-            var _saram=$.cookie('saram');
-            if (_.isUndefined(_saram)){
-                this.isLogin=false;
-            }
             _.bindAll(this, "checkSession");
-            //this.fetch();
+            _.bindAll(this, "getUserInfo");
         },
         checkSession:function(){
             var _session=this;
@@ -52,10 +48,7 @@ define([
                 success:function(resultModel, result, s, sd){
                     var _login=result.isLogin;
                     if ((!_.isUndefined(result.isLogin)) && _login){
-                        //Dialog.show($.cookie('saram'));
-                        
-                        //{"user":{"id":"140602","name":"이정구","password":"333","dept_code":"7100","dept_name":null,"name_commute":"이정구","join_company":"2014-06-10","leave_company":"","privilege":"3","admin":0},"id":"ZW0csQEVea2ZN1uVVCpjY7mOnEpYzFov","auth":null,"isLogin":true,"initPassword":false,"msg":null}
-                        dfd.resolve();
+                         dfd.resolve();
                     } else {
                         if (result.initPassword){
                             dfd.reject({user:result.user, msg:result.msg});
@@ -80,11 +73,14 @@ define([
                     model.clear();
                     model.id = null;
                     that.set({user_id : null, isLogin : false});
+                    window.location.href="/";
                 }
             });
         },
+        getUserInfo:function(){
+            return this.attributes.user;
+        },
         wait:false
-        
     });
     return new SessionModel();
 });
