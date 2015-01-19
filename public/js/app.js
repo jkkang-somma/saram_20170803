@@ -4,7 +4,6 @@ define([
   'jquery', 
   'underscore', 
   'backbone',
-  'models/sm/SessionModel',
   'log',
   'bootstrap',
   'dialog',
@@ -17,10 +16,13 @@ define([
   'views/LoginView',
   'views/NavigationView', 
   'moment', 'bootstrap-datetimepicker',
-], function($, _, Backbone, SessionModel, log, Bootstrap, Dialog, i18Common, i18Error,  MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
+], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, i18Error,  MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
-    var loadingView;
+    var _loadingView;
     var _saram;
+    var _router;
+    var _navigationView;
+    var _initFlalg= true;
     var App = Backbone.Model.extend({
         start : function(){
             LOG.debug("==============================================================================");   
@@ -28,42 +30,59 @@ define([
             LOG.debug("==============================================================================");
             
             var _app=this;
-            loadingView = new LoadingView();
-            loadingView.render();
+            // _loadingView = new LoadingView();
+            // _loadingView.render();
             
             var _loginView;
-            //유효한 세션인지 체크한다.
             
-            
-            // SessionModel.checkSession().done(function(isLogin){
-            //     if (!isLogin){
-            //         LOG.debug("Not login User.");
-            //         loadingView.disable(function(){
-            //             _loginView= new LoginView({el:$(".main-container")});
-            //             _loginView.render(_app);
-            //         });
-            //         return;
-            //     } else {
-                   _app.draw(); 
-            //     }    
-            // });
-            
-            
-            // _user=$.cookie('saram', JSON.stringify({
-            //     user : {
-            //         id:"babo"
-            //     }})
-            // );
+            //Global Error Handle
+            $(document).ajaxError(function (event, xhr) {
+                if (xhr.status == 401){// 권한 없음.
+                    Dialog.error(i18Common.ERROR.AUTH.EXPIRE_AUTH, function(){
+                        
+                        _navigationView.hide();
+                        _initFlalg=false;
+                        
+                        $(document).unbind('ajaxError');
+                        _app.start();
+                    });
+                } else if (xhr.status == 401){
+                    Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
+                }
+                    
+            });
 
-            
+            //Session 체크 
+            SessionModel.checkSession().done(function(isLogin){
+                if (!isLogin){
+                    LOG.debug("Not login User.");
+                    //_loadingView.disable(function(){
+                        _loginView= new LoginView({el:$(".main-container")});
+                        _loginView.render(_app);
+                    //});
+                    return;
+                } else {
+                   _app.draw(); 
+                }    
+            });
         },
         draw:function(){
-            var router = new MainRouter({affterCallback:function(){// mainRouter create
-                loadingView.disable(function(){// loadingView close
-                    var navigationView= new NavigationView();
-        		    navigationView.render();
-                    Backbone.history.start({root:"/"});
-                });
+            $("body").removeClass("login-body");
+            _router = new MainRouter({affterCallback:function(){// mainRouter create
+               // _loadingView.disable(function(){// loadingView close
+                    if (_.isUndefined(_navigationView)){
+                        _navigationView= new NavigationView();
+            		    _navigationView.render();
+                    } else {
+                        _navigationView.show();
+                    }
+                    
+                    if (_initFlalg){
+                        Backbone.history.start({root:"/"});
+                    } else {
+                        Backbone.history.loadUrl();
+                    }
+               // });
             }});
         }
     });

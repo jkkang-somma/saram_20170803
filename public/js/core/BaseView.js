@@ -24,7 +24,7 @@ define([
 			var view=this;
 			view.undelegateEvents();
             view.$el.removeData();
-            view.$el.html('');
+            view.$el.empty();
             
             this.destroy();
 		},

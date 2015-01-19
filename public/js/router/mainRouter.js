@@ -8,6 +8,7 @@ define([
 	'animator',
 	'util',
 	'log',
+	'dialog',
 	'models/sm/SessionModel',
 	'core/BaseRouter',
 	'views/DashBoardView',
@@ -23,7 +24,7 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-], function($, _,  Backbone, animator, Util, log, SessionModel, BaseRouter,
+], function($, _,  Backbone, animator, Util, log, Dialog, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView, AddUserView,	// 사원관리
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
@@ -38,7 +39,7 @@ ReportListView // report manager
 	
 	var Router = BaseRouter.extend({
 		routes : {
-			'login' : 'showLogin',
+			'logout': 'logout',
 			'usermanager/add' : 'showAddUser',
 			'usermanager' : 'showUserList',
 			'addrawdata' : 'showAddRawData',
@@ -124,11 +125,6 @@ ReportListView // report manager
 		    var dashBoardView = new DashBoardView({el:mainContainer});
 		    this.changeView(dashBoardView);
 		},
-
-		showLogin : function(){
-			var loginView = new LoginView({el:loginContainer});
-			loginView.render();
-		},
 		showHolidayManager : function(){
 			var holidayManagerView = new HolidayManagerView();
 			this.changeView(holidayManagerView);
@@ -158,7 +154,9 @@ ReportListView // report manager
 			var reportListView = new ReportListView();
 			this.changeView(reportListView);
 		},
-		
+		logout:function(){
+			SessionModel.logout();
+		}
 	});
 
 	return Router;
