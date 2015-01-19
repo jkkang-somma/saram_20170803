@@ -19,8 +19,11 @@ var RawData = function (data) {
     }
     var _selectRawDataList = function(data){
         var startDate = new Date(data.start);
+        startDate.setHours(0,0,0);
         var endDate = new Date(data.end);
+        endDate.setHours(0,0,0);
         endDate.setDate(endDate.getDate() + 1);
+        
         
         return RawDataDao.selectRawDataList(startDate.getTime(), endDate.getTime());
     }
