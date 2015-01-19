@@ -82,10 +82,8 @@ var Vacation = function() {
 
 	var _setVacation = function(data, callback) {
 		UserDao.selectUserList().then(function(result) {			
-			var daoArr = [];
-			var count = 0;
-			var obj = {};
-			var datas = [];
+			var datas = [],
+				obj = {};
 			
 			for (var i = 0, len = result.length; i < len; i++) {
 				obj = {
@@ -96,18 +94,10 @@ var Vacation = function() {
 				datas.push(obj);
 			}
 			
-			
-			VacationDao.insertVacation(datas)
-			
-			
-//			
-//		    Promise.all(daoArr).then(function(){
-//		        debug("Add RawData Count : " + count);
-//		        return callback( {msg : "Add RawData Count : " + count, count: count} );
-//		    });
-		    
+			VacationDao.insertVacation(datas).then(function(result) {
+				return callback(result);
+			});
 		});
-		
 	};	
 	
 	

@@ -165,12 +165,12 @@ define([
 			var vacationModel = new VacationModel();
      		vacationModel.save(inData, {
 				success: function(model, response) {
-					console.log(model);
-					console.log(response);
-					
-        			Dialog.show("데이터 생성 성공", function() {
+					var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
+        			Dialog.show(msg, function() {
         				_this.selectVacation();
         			});
+        			
+        			console.log(response.error);
 				},
 				error: function(model, res) {
         			Dialog.show("데이터 생성 실패", function() {
