@@ -4,7 +4,6 @@ define([
   'jquery', 
   'underscore', 
   'backbone',
-  'util',
   'log',
   'schemas',
   'bootstrap',
@@ -13,7 +12,7 @@ define([
   'i18n!nls/common',
   'i18n!nls/error',
   'animator',
-], function($, _, Backbone, Util, log, Schemas, Bootstrap, BootstrapDialog, log4javascript, i18nCommon, i18nError, Animation){
+], function($, _, Backbone, log, Schemas, Bootstrap, BootstrapDialog, log4javascript, i18nCommon, i18nError, Animation){
     var CssClass={
         ERROR:"btn-danger",
         INFO:"btn-info",
