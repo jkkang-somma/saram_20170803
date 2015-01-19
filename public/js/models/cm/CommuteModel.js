@@ -33,8 +33,8 @@ define([
             out_time_change : 0,
             comment_count : 0,
             changeHistoryJSONArr : [],
-            in_time_type : "",
-            out_time_type : "",
+            in_time_type : 0,
+            out_time_type : 0,
             out_office_start_time : "",
             out_office_end_time : "",
         }

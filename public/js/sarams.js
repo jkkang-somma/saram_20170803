@@ -14,6 +14,7 @@ require.config({
       'bootstrap-datepicker': { deps: ['jquery','bootstrap', 'moment']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
+      'resulttimefactory' : { deps : ['jquery, underscore, moment'] },
    },
    paths: {
    //    jquery: 'tool/jquery.min',
@@ -40,6 +41,7 @@ require.config({
       monthpicker:'lib/component/monthpicker',
       grid:'lib/component/grid',
       schemas:'lib/schemas',
+      resulttimefactory: 'lib/resultTimeFactory',
       
       i18n:'tool/i18n-master/i18n',
       fittext:'tool/textillate/jquery.fittext',

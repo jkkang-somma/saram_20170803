@@ -10,9 +10,15 @@ router.route('/')
 .get(function(req, res){
 	debug(req.query);
 	if(_.isUndefined(req.query.date)){
-		Commute.getCommute(req.query, function(result) {
-			return res.send(result);
-		});
+		if(!_.isUndefined(req.query.id)){
+			Commute.getCommuteByID(req.query).then(function(result){
+				return res.send(result);
+			});
+		}else{
+			Commute.getCommute(req.query, function(result) {
+				return res.send(result);
+			});
+		}
 	}else{
 		Commute.getCommuteDate(req.query.date).then(function(result){
 			return res.send(result);	

@@ -69,11 +69,16 @@ var Commute = function() {
 		return CommuteDao.selectCommuteDate(date);
 	}
 	
+	var _getCommuteByID = function(data){
+		return CommuteDao.selectCommuteByID(data)
+	}
+	
 	return {
 		getCommute : _getCommute,
 		updateCommute : _updateCommute,
 		insertCommute : _insertCommute,
-		getCommuteDate : _getCommuteDate
+		getCommuteDate : _getCommuteDate,
+		getCommuteByID: _getCommuteByID
 	}
 } 
 

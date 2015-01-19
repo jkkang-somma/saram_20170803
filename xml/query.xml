@@ -257,22 +257,52 @@
         		id,
         		name,
         		department,
-        		date_format(in_time, '%m-%d %T') AS in_time,
-        		date_format(out_time, '%m-%d %T') AS out_time,
-        		date_format(standard_in_time, '%m-%d %T') AS standard_in_time,
-        		date_format(standard_out_time, '%m-%d %T') AS standard_out_time,
+        		date_format(in_time, '%Y-%m-%d %T') AS in_time,
+        		date_format(out_time, '%Y-%m-%d %T') AS out_time,
+        		date_format(standard_in_time, '%Y-%m-%d %T') AS standard_in_time,
+        		date_format(standard_out_time, '%Y-%m-%d %T') AS standard_out_time,
 				late_time,
 				over_time,
 				work_type,
 				out_office_code,
 				overtime_code,
 				vacation_code
+				in_time_type,
+				out_time_type,
+				out_office_end_time,
+				out_office_start_time
         	FROM
         		commute_result_tbl
         	WHERE
         		date = ?
         </query>
-
+		<query id="selectCommuteByID">
+        	SELECT 
+        		year,
+        		date,
+        		id,
+        		name,
+        		department,
+        		date_format(in_time, '%Y-%m-%d %T') AS in_time,
+        		date_format(out_time, '%Y-%m-%d %T') AS out_time,
+        		date_format(standard_in_time, '%Y-%m-%d %T') AS standard_in_time,
+        		date_format(standard_out_time, '%Y-%m-%d %T') AS standard_out_time,
+				late_time,
+				over_time,
+				work_type,
+				out_office_code,
+				overtime_code,
+				vacation_code,
+				in_time_type,
+				out_time_type,
+				out_office_end_time,
+				out_office_start_time
+        	FROM
+        		commute_result_tbl
+        	WHERE
+        		(date between ? and ?) AND id = ?
+        	ORDER BY date
+        </query>
         <query id="updateCommuteCommentCount">
         	UPDATE
         		commute_result_tbl
@@ -295,7 +325,7 @@
 			        c.change_column,
 			        c.change_before,
 			        c.change_after,
-			        date_format(c.change_date, '%m-%d %T') AS change_date,
+			        date_format(c.change_date, '%Y-%m-%d %T') AS change_date,
 			        c.change_id,
 			        (SELECT name FROM members_tbl WHERE id = c.change_id) AS change_name
 			FROM
@@ -352,9 +382,9 @@
     			m.name,
     			c.seq,
     			IFNULL( c.comment, '') AS comment,
-    			date_format(c.comment_date, '%m-%d %T') AS comment_date,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
     			IFNULL( c.comment_reply, '') AS comment_reply,
-    			date_format(c.comment_reply_date, '%m-%d %T') AS comment_reply_date,
+    			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
     			c.state,
     			c.writer_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
