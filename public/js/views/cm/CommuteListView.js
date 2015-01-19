@@ -61,7 +61,7 @@ define([
 			 idx : cellData.idx
  		 });
 		 
- 		 var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + cellData[cellType] + "</a>";
+ 		 var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + _getTimeCell( cellData[cellType] ) + "</a>";
  		 return aHrefStr;
 	}
 	
@@ -82,6 +82,17 @@ define([
 		 var tp = $(tpl);
 		 tp.find(".btn").attr("data", data);
 		 return tp.html();
+	}
+	
+	// 시간 값을 두 줄로 표시 
+	function _getTimeCell(inTime) {
+		if (Util.isNotNull(inTime) ) {
+			var tArr = inTime.split(" ");
+			if (tArr.length == 2) {
+				return tArr[0] + "</br>" + tArr[1]; 
+			}
+		}
+		return "";
 	}
 
 	var commuteListView = BaseView.extend({
@@ -115,25 +126,25 @@ define([
      	                   			return _getMinToHours(full.over_time);
      	                   		}
      	                   },
-     	                   { data : "in_time", "title" : "출근시간",
+     	                   { data : "in_time", "title" : "출근</br>시간",
      	                   		render: function(data, type, full, meta) {
      	                   			if (full.in_time_change){
-     	                    			return  _createHistoryCell("in_time", full);
+     	                    			return  _createHistoryCell("in_time", full );
      	                    		 } else {
-     	                    			return full.in_time;
+     	                    			return _getTimeCell(full.in_time);
      	                    		 }
      	                   		}
      	                     },
-     	                     { data : "out_time", "title" : "퇴근시간",
+     	                     { data : "out_time", "title" : "퇴근</br>시간",
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.out_time_change) {
      	                    			return _createHistoryCell("out_time", full);
      	                    		 } else {
-     	                    			return full.out_time;
+     	                    			return _getTimeCell(full.out_time);
      	                    		 }
      	                   		}
      	                     },
-     	                     { data : "comment_count", "title" : "Comment",
+     	                     { data : "comment_count", "title" : "코멘트",
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.comment_count) {
      	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
