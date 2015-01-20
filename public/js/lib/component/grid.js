@@ -366,27 +366,6 @@ define([
     	   }
     	   return grid;
      	},
-     	renderDfd:function(){
-     	    var dfd= new $.Deferred();
-     	    var grid = this;
-    	   
-    	   if(Util.isNull(this.options.fetch) || this.options.fetch === true){
-    	       var _defaultFetchParams={
-        	       success: function(){
-        	           grid._draw();
-        	           dfd.resolve();
-        	       }
-        	   };
-    	       if (!_.isUndefined(this.options.fetchParam)){
-    	           _defaultFetchParams=_.extend(_defaultFetchParams, this.options.fetchParam);
-    	       }
-        	   this.options.collection.fetch(_defaultFetchParams);    
-    	   }else{
-    	       grid._draw();
-    	       dfd.resolve();
-    	   }
-    	   return dfd.promise();
-     	}
     });
     return Grid;
 });

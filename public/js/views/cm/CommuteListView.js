@@ -26,13 +26,14 @@ define([
         'views/cm/popup/CommuteUpdatePopupView',
         'views/cm/popup/CommentPopupView',
         'views/cm/popup/ChangeHistoryPopupView',
+        'views/component/ProgressbarView',
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnCommentAddTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		CommuteModel, CommuteCollection,
-		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
+		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
 		searchFormTemplate, btnCommentAddTemplate){
 
 	// 분 -> 시간 
@@ -144,7 +145,8 @@ define([
      	                    		 }
      	                   		}
      	                     },
-     	                     { data : "comment_count", "title" : "코멘트",
+     	                     { data : "comment_count", "title" : "비고",
+
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.comment_count) {
      	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
@@ -245,10 +247,14 @@ define([
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    this.progressbar = new ProgressbarView();
+    	    
+    	    
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
-    	      	    
+    	    _layOut.append(this.progressbar.render());
+
     	    $(this.el).html(_layOut);
 			var today = new Date();
     	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
@@ -270,7 +276,7 @@ define([
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
-
+            
             this.selectCommute();
             return this;
      	},
@@ -348,6 +354,7 @@ define([
      		return data;
      	},
     	selectCommute: function() {
+    	    this.progressbar.disabledProgressbar(false);
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
@@ -362,6 +369,7 @@ define([
      			data: data,
 	 			success: function(result) {
 	 				_this.grid.render();
+	 				_this.progressbar.disabledProgressbar(true);
 	 			},
 	 			error : function(result) {
 	 				alert("데이터 조회가 실패했습니다.");
