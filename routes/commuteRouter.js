@@ -35,7 +35,6 @@ router.route('/bulk')
 	var session = sessionManager.get(req.cookies.saram);
 	if (session.user.admin == 1) {	// admin 일 경우만 생성
 		for(var key in data){
-			// debug(data[key].date +","+data[key].name+","+data[key].work_type);
 	        resultArr.push(Commute.insertCommute(data[key]));
 	        count++;
 	    }

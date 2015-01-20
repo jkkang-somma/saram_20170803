@@ -37,24 +37,24 @@ define([
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
 		searchFormTemplate, btnCommentAddTemplate){
 
-	// 분 -> 시간 
-	function _getMinToHours(inMin) {
-		if ( Util.isNotNull(inMin) ) {
-			inMin = parseInt(inMin);				
-			if (inMin === NaN) {
-				inMin = 0;
-			}	
-		} else {
-			inMin = 0;
-		}
-		var min = inMin % 60;
-		var hours = inMin / 60;
-		hours = parseInt(hours);
+	// // 분 -> 시간 
+	// function _getMinToHours(inMin) {
+	// 	if ( Util.isNotNull(inMin) ) {
+	// 		inMin = parseInt(inMin);				
+	// 		if (inMin === NaN) {
+	// 			inMin = 0;
+	// 		}	
+	// 	} else {
+	// 		inMin = 0;
+	// 	}
+	// 	var min = inMin % 60;
+	// 	var hours = inMin / 60;
+	// 	hours = parseInt(hours);
 		
-		min = (min == 0)? '': (" " + min + "분");
-		hours = (hours == 0)? '': (hours + "시간");
-		return hours + min;
-	}
+	// 	min = (min == 0)? '': (" " + min + "분");
+	// 	hours = (hours == 0)? '': (hours + "시간");
+	// 	return hours + min;
+	// }
 	
 	// 출퇴근 시간 셀 생성
 	function _createHistoryCell(cellType, cellData, change) {
@@ -121,16 +121,28 @@ define([
                         cssClass: Dialog.CssClass.SUCCESS,
                         label: '수정',
                         action: function(dialog) {
-                        	commuteUpdatePopupView.updateCommute({
-                        		success: function(model, response) {
-                        			Dialog.show("성공", function() {
-                        				dialog.close();
-                        				that.selectCommute();
-                        			});
-                             	}, error : function(model, res){
-                             		Dialog.show("업데이트가 실패했습니다.");
-                             	}
-                            });
+                        	commuteUpdatePopupView.updateCommute().done(function(result){
+            					console.log(result);
+            					var current = result.models[0];
+            					var yesterday = result.models[1];
+            					that.grid.updateRow(current.attributes);
+            					that.grid.getRowByFunction(
+            						function(idx, data, node){
+	            						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
+	            							return true;
+	            							
+	            						}else{
+	            							return false;
+	            						}
+	            					}
+	            				).data(yesterday.attributes).draw();
+            					
+        						Dialog.show("성공", function() {
+                    				dialog.close();
+                    			})
+            				}).fail(function(){
+
+            				});
                         }
                     }, {
                         label : "취소",
@@ -157,33 +169,48 @@ define([
      	                   			return full.name + "</br>(" +full.id + ")";
      	                   		}
      	                   	},
-     	                   	{ data : "work_type_name", 	"title" : "근무</br>타입"},
-     	                   	{ data : "vacation_name", 	"title" : "휴가</br>타입"},
-     	                   	{ data : "out_office_name", 	"title" : "외근</br>정보"},
-     	                   	{ data : "overtime_pay", 	"title" : "초과</br>근무수당",
-     	                   		render: function(data, type, full, meta) {
-     	                   			return full.overtime_pay + " 원";
+     	                   	{ data : "work_type", 	"title" : "근무</br>타입",
+     	                   		render : function(data, type, full, meta){
+     	                   			var result = "";
+     	                   			switch(data){
+     	                   				case "00" : result = "정상"; break;
+     	                   				case "01" : result = "조퇴"; break;
+     	                   				case "10" : result = "지각"; break;
+     	                   				case "11" : result = "지각,조퇴"; break;
+     	                   				case "21" : result = "결근"; break;
+     	                   				case "22" : result = "결근_미결"; break;
+     	                   				case "30" : result = "휴일"; break;
+     	                   				case "31" : result = "종일휴가"; break;
+     	                   			}
+     	                   			return result;
      	                   		}
      	                   	},
-     	                   	{ data : "late_time", 		"title" : "지각</br>시간"},
-     	                   	{ data : "over_time", 		"title" : "초과</br>근무시간",
-     	                   		render: function(data, type, full, meta) {
-     	                   			return _getMinToHours(full.over_time);
+
+     	                   	// { data : "vacation_name", 	"title" : "휴가</br>타입"},
+
+     	                   	{ data : "out_office_code", 	"title" : "외근</br>정보",
+     	                   		render : function(data, type, full, meta){
+     	                   			var result = "";
+     	                   			switch(data){
+     	                   				case "W01" : result = "외근"; break;
+     	                   				case "W02" : result = "출장"; break;
+     	                   			}
+     	                   			return result;
      	                   		}
      	                   	},
      	                   	{ data : "in_time", "title" : "출근</br>시간",
      	                   		render: function(data, type, full, meta) {
    	                    			return  _createHistoryCell("in_time", full,"in_time_change" );
      	                   		}
-     	                     },
-     	                     
-     	                     { data : "out_time", "title" : "퇴근</br>시간",
-     	                     	render: function(data, type, full, meta) {
+     	                    },
+     	                    { data : "out_time", "title" : "퇴근</br>시간",
+     	                    	render: function(data, type, full, meta) {
 									return _createHistoryCell("out_time", full, "out_time_change");
      	                   		}
-     	                     },
-     	                     { data : "comment_count", "title" : "비고",
-
+     	                    },
+     	                    { data : "late_time", 		"title" : "지각</br>시간"}, 
+     	                   	{ data : "overtime_code", 		"title" : "초과</br>근무"},
+     	                    { data : "comment_count", "title" : "비고",
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.comment_count) {
      	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
@@ -201,11 +228,11 @@ define([
              	    	}
              	    	
              	    	if(data.in_time_type != "1"){
-             	    		$('td:eq(9)', row).css("background-color", "rgb(247, 198, 142)");
+             	    		$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
              	    	}
              	    	
              	    	if(data.out_time_type != "1"){
-             	    		$('td:eq(10)', row).css("background-color", "rgb(247, 198, 142)");
+             	    		$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
              	    	}
              	    },
         		    collection:this.commuteCollection,
@@ -276,8 +303,10 @@ define([
     	    _layOut.append(this.progressbar.render());
 
     	    $(this.el).html(_layOut);
+    	    
 			var today = new Date();
     	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+    	    
     	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
@@ -293,11 +322,14 @@ define([
 		        format: "YYYY-MM-DD",
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
+            
+            this.progressbar.disabledProgressbar(true);
+            
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
             
-            this.selectCommute();
+			
             return this;
      	},
      	onClickSearchBtn: function(evt) {
@@ -348,7 +380,6 @@ define([
 			};
         	
             var changeHistoryPopupView = new ChangeHistoryPopupView(searchData);
-            var that = this;
             Dialog.show({
                 title: ( (data.change_column == "in_time")? "출근 시간 변경 이력":"퇴근 시간 변경 이력" ), 
                 content: changeHistoryPopupView,
@@ -360,27 +391,18 @@ define([
                 }]
             });
      	},
-     	getSearchForm: function() {	// 검색 조건  
-     		var data = Util.getFormJSON( this.$el.find('.form-inline'));
-     		
-     		if ( Util.isNull(data.startDate) ) {
-     			alert("검색 시작 날짜를 선택해주세요");
-     			return null;
-     		} else if ( Util.isNull(data.endDate) ) {
-     			alert("검색 끝 날짜를 선택해주세요");
-     			return null;
-     		}
-     		
-     		return data;
-     	},
     	selectCommute: function() {
     	    this.progressbar.disabledProgressbar(false);
      		var data = {
-     		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
-     		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+     		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
+     		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
      		};
      		   		
-     		if (Util.isNull (data) ) {
+     		data.startDate.getText() === "" ? null : data.startDate = data.startDate.getDate().format("YYYY-MM-DD");
+     		data.endDate.getText() === "" ? null : data.endDate = data.endDate.getDate().format("YYYY-MM-DD");
+     		
+     		if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
+     			Dialog.error("시작일 / 종료일을 입력해 주십시오");
      			return;
      		}
      		

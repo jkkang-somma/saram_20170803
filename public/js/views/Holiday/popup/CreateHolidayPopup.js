@@ -20,10 +20,13 @@ ComboboxHTML) {
     	    var _yearCombo=$(_.template(ComboboxHTML)({id: "createHolidayCombo", label: "연도"}));
     	    $(this.el).append(_yearCombo);
     	    
-    	    for(var year = 2010; year< 2060; year++){
-    	    	$(this.el).find("#createHolidayCombo").append($("<option>"+year+"</option>"));
+    	    var today = new Date();
+    	    var year = today.getFullYear();
+    	    for(var i = -1; i< 5; i++){
+    	    	$(this.el).find("#createHolidayCombo").append($("<option>"+(year + i)+"</option>"));
     	    }
             
+            _yearCombo.find("select").val(year);
             dfd.resolve();
             return dfd.promise();
 		}
