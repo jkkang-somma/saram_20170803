@@ -228,7 +228,7 @@
         		out_time = ?,
         		out_time_change = ?
         	WHERE 
-        		id = ? AND year = ? AND date = ?
+        		id = ? AND date = ?
         </query>
         
         <query id="insetCommuteResult">
@@ -320,7 +320,15 @@
         	WHERE
         		id = ? AND year = ? AND date = ?
         </query>
-        
+        <query id="getLastiestDate">
+        	select
+        		date
+        	from
+        		commute_result_tbl
+        	order by
+        		date desc
+        	limit 1
+        </query>
     </group>
     
     <group id="changeHistory">

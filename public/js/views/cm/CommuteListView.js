@@ -57,8 +57,8 @@ define([
 	}
 	
 	// 출퇴근 시간 셀 생성
-	function _createHistoryCell(cellType, cellData) {
-		if (cellData.in_time_change){
+	function _createHistoryCell(cellType, cellData, change) {
+		if (cellData[change]){
 			var data = JSON.stringify({
 				change_column : cellType,
 				idx : cellData.idx
@@ -174,13 +174,13 @@ define([
      	                   	},
      	                   	{ data : "in_time", "title" : "출근</br>시간",
      	                   		render: function(data, type, full, meta) {
-   	                    			return  _createHistoryCell("in_time", full );
+   	                    			return  _createHistoryCell("in_time", full,"in_time_change" );
      	                   		}
      	                     },
      	                     
      	                     { data : "out_time", "title" : "퇴근</br>시간",
      	                     	render: function(data, type, full, meta) {
-									return _createHistoryCell("out_time", full);
+									return _createHistoryCell("out_time", full, "out_time_change");
      	                   		}
      	                     },
      	                     { data : "comment_count", "title" : "비고",
@@ -202,11 +202,11 @@ define([
              	    	}
              	    	
              	    	if(data.in_time_type != "1"){
-             	    		$(row).find("td")[10].css("backgrount-color", "yellow");
+             	    		$('td:eq(9)', row).css("background-color", "rgb(247, 198, 142)");
              	    	}
              	    	
              	    	if(data.out_time_type != "1"){
-             	    		$(row).find("td)")[11].css("backgrount-color", "yellow");
+             	    		$('td:eq(10)', row).css("background-color", "rgb(247, 198, 142)");
              	    	}
              	    },
         		    collection:this.commuteCollection,
