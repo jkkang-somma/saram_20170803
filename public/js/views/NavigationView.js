@@ -59,7 +59,7 @@ define([
             _leftMenu.append(li);
         }
         
-        $("#userConifg").html('<span class="glyphicon glyphicon-user"> '+SessionModel.getUserInfo().name+'</span>');
+        $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);
         animator.animate(this.el, animator.FADE_IN_DOWN);
     },
     show:function(){

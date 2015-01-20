@@ -74,10 +74,17 @@ define([
         	                value:_model.leave_company,
         	                format:"YYYY-MM-DD"
         	        },{
-        	                type:"input",
+        	                type:"combo",
         	                name:"privilege",
         	                label:i18nUser.PRIVILEGE,
-        	                value:_model.privilege
+        	                value:_model.privilege,
+        	                collection:[{key:1,value:"전체"},{key:2,value:"부서"},{key:3,value:"개인"}]
+        	        },{
+        	                type:"combo",
+        	                name:"admin",
+        	                label:i18nUser.ADMIN,
+        	                value:_model.admin,
+        	                collection:[{key:0,value:"사용자"},{key:1,value:"관리자"}]
         	        }]
         	    });
         	    
