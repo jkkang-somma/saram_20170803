@@ -60,24 +60,30 @@ define([
             if (width > 768) {
                 for (var index in _columns){
                     column=API.column(index);
-                    column.visible(index > 0);
+                    if(index === "0"){
+                        column.visible(false);
+                    }else{    
+                        column.visible(_.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible);
+                    }
                 }
             } else if ( width  < 768) {
                 
-                API.column(index).visible(true);
+                // API.column(index).visible(true);
                  for (var index in _columns){
                     column=API.column(index);
-                    
-                    var header=column.header();
-                    //var _pWidth= header.parentNode.offsetWidth;
+                    var header=column.header(index);
                     var _cWidth = header.offsetWidth;
                     _cTotallWidth=_cTotallWidth+_cWidth;
                     
-                    if (width < _cTotallWidth+_padding){
-                        column.visible(false);
-                    } else {
+                    var colVisible = _.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible;
+                    if (width > _cTotallWidth+_padding && colVisible){
                         column.visible(true);
+                    } else {
+                        column.visible(false);
                     }
+                
+                    
+                    
                 }
             }
     	},
@@ -283,7 +289,7 @@ define([
                     "className":      'details-control',
                     "orderable":      false,
                     "data":           null,
-                    "defaultContent": ''
+                    "defaultContent": '',
                 });
     	    }
             

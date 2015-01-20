@@ -17,7 +17,6 @@ define([
             id : null,
             name : null,
             department : null,
-            int_date: null,
             char_date: null,
             type: null,
         },

@@ -107,7 +107,7 @@ AddRawDataAddPopupView){
                                                 }else{ // 등록되지 않은 이름인경우 (사번이 없는경우)
                                                     if(item[1] != "청소용 출입"){ // 청소 아저씨 제외하고 id에 '-' 넣어서 결과 출력
                                                         that.rawDataCollection.add(new RawDataModel({
-                                                            id : "-",
+                                                            id : "?",
                                                             name : item[1],
                                                             department : item[0],
                                                             time: Util.timeToString(resultDate),
