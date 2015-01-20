@@ -71,6 +71,13 @@ var Schemas = function (schemaName) {
             end_time : null
         },
         
+        inoffice:{
+            year:null,
+            date:null,
+            id:null,
+            doc_num:null
+        },
+        
         //Common
         code:{
             code:null,

@@ -9,7 +9,8 @@ define([
   'collection/rm/ApprovalCollection',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel){
+  'models/vacation/InOfficeModel',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -102,7 +103,6 @@ define([
     },
     
     setDataDefaultValues : function(param){
-      console.log(param);
       var _this = $(this.el);
       if(param != undefined){
         _this.find('#submit_id').val(param.submit_name);
@@ -182,7 +182,12 @@ define([
       	            // insert
       	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
       	            if(formData.state == '결재완료'){
-        	            _this.addOutOfficeData();
+      	              if(_this.options.office_code != 'B01'){
+          	            _this.addOutOfficeData();
+      	              }else{
+      	                // 휴일 근무
+      	                _this.addInOfficeData();
+      	              }
       	            }else{
       	              _this.thisDfd.resolve();
       	            }
@@ -216,14 +221,18 @@ define([
         for(var i=0; i<=compareVal; i++){
           var dt = start.valueOf() + (i*day);
           var resDate = new Date(dt);
-          console.log("dt : " + dt + ", resDate : " + this.getDateFormat(resDate));
-          arrInsertDate.push(this.getDateFormat(resDate));
+          if(resDate.getDay() != 0 && resDate.getDay() != 6){
+            // 주말이 아닌 날짜
+            arrInsertDate.push(this.getDateFormat(resDate));
+          }
         }
       }else{
-        arrInsertDate.push(sStart);
+         if(start.getDay() != 0 && start.getDay() != 6){
+            // 주말이 아닌 날짜
+            arrInsertDate.push(sStart);
+          }
       }
       
-      console.log(arrInsertDate);
       // data 저장
       var sendData = this.getFormData($(this.el).find('form'));
       sendData["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
@@ -247,6 +256,34 @@ define([
       	        wait:false
       	    }); 
     },
+    
+    addInOfficeData : function(){
+      var _this = this;
+      // 날짜 개수 이용하여 날짜 구하기
+      var sStart = $(this.el).find('#start_date input').val();
+      var arrInsertDate = [];
+      arrInsertDate.push(sStart);
+      
+      // data 저장
+      var sendData = this.getFormData($(this.el).find('form'));
+      sendData["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
+      sendData["id"] = this.options["submit_id"];
+      sendData["doc_num"] = this.options["doc_num"];
+      
+      var _inOfficeModel = new InOfficeModel(sendData);
+      _inOfficeModel.save({},{
+      	        success:function(model, xhr, options){
+      	          _this.thisDfd.resolve();
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            _this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
+    },
+    
     
     getDateFormat : function(dateData){
       var sDateFormat = "";

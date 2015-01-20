@@ -444,4 +444,12 @@
 				)    		
     	</query>
     </group>
+    <group id="inOffice">
+    	<query id="selectInOfficeList">
+    		select * from in_office_tbl
+    	</query>
+    	<query id="insertInOffice">
+			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
+    	</query>
+    </group>
 </querys>
