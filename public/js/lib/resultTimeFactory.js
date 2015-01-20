@@ -14,6 +14,12 @@ define([
         VACATION : "31"
     };
     
+    var TIMEFORMAT = "HH:mm:SS";
+    
+    var DATEFORMAT = "YYYY-MM-DD";
+    
+    var DATETIMEFORMAT = "YYYY-MM-DD HH:mm:SS";
+    
     var Builder = {
         id:                 "",
         name:               "",
@@ -100,11 +106,11 @@ define([
             this.department = model.get("department");
             this.year = model.get("year");
             this.date = model.get("date");
-            this.standardInTime = Moment(model.get("standard_in_time"), "YYYY-MM-DD HH:mm:SS").toDate();
-            this.standardOutTime = Moment(model.get("standard_out_time"), "YYYY-MM-DD HH:mm:SS").toDate();
-            this.inTime = Moment(model.get("in_time"), "YYYY-MM-DD HH:mm:SS").toDate();
+            this.standardInTime = Moment(model.get("standard_in_time"), DATETIMEFORMAT).toDate();
+            this.standardOutTime = Moment(model.get("standard_out_time"), DATETIMEFORMAT).toDate();
+            this.inTime = Moment(model.get("in_time"), DATETIMEFORMAT).toDate();
             this.inTimeType = model.get("in_time_type");
-            this.outTime = Moment(model.get("out_time"), "YYYY-MM-DD HH:mm:SS").toDate();
+            this.outTime = Moment(model.get("out_time"), DATETIMEFORMAT).toDate();
             this.outTimeType = model.get("out_time_type");
             this.lateTime = model.get("late_time");
             // this.holidayWorkTime = model.get("holidayWorkTime");
@@ -119,7 +125,7 @@ define([
         },
         
         setStandardInTime : function(yesterdayOutTime){
-            if(Moment(yesterdayOutTime).format("YYYY-MM-DD") == this.date){
+            if(Moment(yesterdayOutTime).format(DATEFORMAT) == this.date){
                 var outTimeHour = yesterdayOutTime.getHours();
                 if(outTimeHour >= 3)        this.standardInTime.setHours(13,20,0);
                 else if(outTimeHour >= 2)   this.standardInTime.setHours(11,0,0);
@@ -178,7 +184,7 @@ define([
         
         checkTime : function(destTime, type){
             type = type.slice(0,2);
-            if(type == "출근" && this.date == Moment(destTime).format("YYYY-MM-DD")){ // 출근 기록일 경우
+            if(type == "출근" && this.date == Moment(destTime).format(DATEFORMAT)){ // 출근 기록일 경우
                 this.setInTime(destTime);
                 this.setEarliestTime(destTime);
             }else if(type == "퇴근"){ // 퇴근기록일 경우
@@ -301,10 +307,10 @@ define([
                 year : this.year,
                 date : this.date,
                 work_type : this.workType,
-                standard_in_time : _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).format("YYYY-MM-DD HH:mm"),
-                standard_out_time :_.isNull(this.standardOutTime) ? null : Moment(this.standardOutTime).format("YYYY-MM-DD HH:mm"),
-                in_time : _.isNull(this.inTime) ? null : Moment(this.inTime).format("YYYY-MM-DD HH:mm"),
-                out_time : _.isNull(this.outTime) ? null : Moment(this.outTime).format("YYYY-MM-DD HH:mm"),
+                standard_in_time : _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).format(DATETIMEFORMAT),
+                standard_out_time :_.isNull(this.standardOutTime) ? null : Moment(this.standardOutTime).format(DATETIMEFORMAT),
+                in_time : _.isNull(this.inTime) ? null : Moment(this.inTime).format(DATETIMEFORMAT),
+                out_time : _.isNull(this.outTime) ? null : Moment(this.outTime).format(DATETIMEFORMAT),
                 in_time_type : this.inTimeType,
                 out_time_type: this.outTimeType,
                 late_time : this.lateTime,
@@ -312,13 +318,16 @@ define([
                 vacation_code : this.vacationCode,
                 overtime_code : this.overtimeCode,
                 out_office_code : this.outOfficeCode,
-                out_office_start_time : _.isNull(this.outOfficeStartTime) ? null : Moment(this.outOfficeStartTime).format("YYYY-MM-DD HH:mm"),
-                out_office_end_time : _.isNull(this.outOfficeEndTime) ? null : Moment(this.outOfficeEndTime).format("YYYY-MM-DD HH:mm"),
+                out_office_start_time : _.isNull(this.outOfficeStartTime) ? null : Moment(this.outOfficeStartTime).format(DATETIMEFORMAT),
+                out_office_end_time : _.isNull(this.outOfficeEndTime) ? null : Moment(this.outOfficeEndTime).format(DATETIMEFORMAT),
             };
         }
     };
     
     return {
+        TIMEFORMAT : TIMEFORMAT,
+        DATEFORMAT : DATEFORMAT,
+        DATETIMEFORMAT : DATETIMEFORMAT,
         WORKTYPE : WORKTYPE,
         Builder : Builder
     };  

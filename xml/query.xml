@@ -32,8 +32,15 @@
     </group>
     
     <group id="rawData">
-        <query id="insertRawData">insert into commute_base_tbl(id, name, department, int_date, char_date, year, type) values(?,?,?,?,?,?,?)</query>
-        <query id="selectRawDataList">select * from commute_base_tbl where int_date between ? and ? </query>
+        <query id="insertRawData">insert into commute_base_tbl(id, name, department, char_date, year, type) values(?,?,?,?,?,?)</query>
+        <query id="selectRawDataList">
+        	select
+        		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
+        	from
+        		commute_base_tbl
+        	where
+        		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1);
+        </query>
     </group>
     
     <group id="holiday">
