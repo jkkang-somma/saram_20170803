@@ -27,6 +27,7 @@ define([
             vacation_code : "", 
             out_office_code : "",
             overtime_code : "",
+            overtime_type : "",
             late_time : "",
             over_time : "", 
             in_time_change : 0,

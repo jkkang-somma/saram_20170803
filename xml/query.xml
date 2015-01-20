@@ -220,6 +220,7 @@
 							IFNULL(o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') as vacation_name,
 							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') as out_office_name
+
 						FROM 
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
@@ -467,6 +468,14 @@
 					,(select day_count from office_code_tbl where code = ?) 
 					,? ,? ,?, ?, ?
 				)    		
+    	</query>
+    </group>
+    <group id="inOffice">
+    	<query id="selectInOfficeList">
+    		select * from in_office_tbl
+    	</query>
+    	<query id="insertInOffice">
+			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
     	</query>
     </group>
 </querys>

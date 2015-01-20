@@ -50,23 +50,38 @@ define([
                 
                 var _select=_combo.find("select");
                 var _options=data.collection.models;
-                for (var index in _options){
-                    var _option= _options[index].attributes;
-                    var _code=_option[data.codeKey];
-                    var _text=_option[[data.textKey]];
-                    if (_code==data.value){
-                        _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
-                    } else {
-                        _select.append("<option value='"+_code+"'>"+_text+"</option>");
+                
+                if (_.isArray(data.collection)){
+                    for (var index in data.collection){
+                        var _option= data.collection[index];
+                        var _code=_option.key;
+                        var _text=_option.value;
+                        if (_code==data.value){
+                            _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
+                        } else {
+                            _select.append("<option value='"+_code+"'>"+_text+"</option>");
+                        }
                     }
+                } else {
+                    
+                    for (var index in _options){
+                        var _option= _options[index].attributes;
+                        var _code=_option[data.codeKey];
+                        var _text=_option[[data.textKey]];
+                        if (_code==data.value){
+                            _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
+                        } else {
+                            _select.append("<option value='"+_code+"'>"+_text+"</option>");
+                        }
+                    }
+                    _select.on('change', function(e){
+                        var _text=$(this).find("option:selected").text();
+                        if (!_.isUndefined(data.linkField)){
+                            $('[data-hidden="'+data.linkField+'"]').val(_text);
+                        }
+                    });
                 }
                 
-                _select.on('change', function(e){
-                    var _text=$(this).find("option:selected").text();
-                    if (!_.isUndefined(data.linkField)){
-                        $('[data-hidden="'+data.linkField+'"]').val(_text);
-                    }
-                });
                 return _combo;  
             }
         },

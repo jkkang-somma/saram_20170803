@@ -118,13 +118,13 @@ define([
                             { data : "used_holiday", 	"title" : "사용 일수" },
                             { data : "holiday", 		"title" : "휴가 잔여 일수"},
                             { data : "memo", 			"title" : "Memo",
-                            	render: function(data, type, full, meta) {
-                            		var tpl = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
-                            		if (full.memo == '' ) {
-                            			tpl = '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>';
-                            		}
-                            		return tpl;
-    			        		}
+      			        	   render: function(data, type, full, meta) {
+     			        		   var memo = full.memo; 
+     			        		   if (memo.length > 10) {
+     			        			  memo = memo.substring(0, 10) + "...";
+     			        		   }
+     			        		   return memo;
+     			        	   }
                             }
              	        ],
              	    dataschema:["year", "dept_name", "name", "total_day", "used_holiday", "holiday", "memo"],
@@ -160,7 +160,7 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"연차 관리 ", subTitle:"연차 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"일반 관리", subTitle:"연차 관리"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
