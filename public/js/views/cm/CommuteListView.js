@@ -104,10 +104,8 @@ define([
         		    el:"commute_content",
         		    id:"commuteDataTable",
         		    column:[
-//      	               { data : "year", 			"title" : "년", visible: false},
      	                   { data : "date", 			"title" : "일자" },
      	                   { data : "department", 		"title" : "부서" },
-//     	                   { data : "id", 				"title" : "ID", visible: false },
      	                   { data : "name", 			"title" : "이름", 
      	                   		render: function(data, type, full, meta) {
      	                   			return full.name + "</br>(" +full.id + ")";
@@ -154,11 +152,10 @@ define([
      	                            	return "0 건" + _createCommentCellAddBtn(full, btnCommentAddTemplate);
      	                            }
      	                   		}
-     	                     }
-//     	                     { data : "in_time_change", "title" : "", visible: false},
-//     	                     { data : "out_time_change", "title" : "", visible: false}   
+     	                     }   
              	        ],
         		    collection:this.commuteCollection,
+        		    dataschema:["date", "department", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
         		    detail: true,
         		    buttons:["search"],
         		    fetch: false
