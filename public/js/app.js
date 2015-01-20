@@ -29,6 +29,8 @@ define([
             LOG.debug("==============================Welcome to Sarams.=============================="); 
             LOG.debug("==============================================================================");
             
+            $.ajaxSetup({ cache: false });
+            
             var _app=this;
             // _loadingView = new LoadingView();
             // _loadingView.render();

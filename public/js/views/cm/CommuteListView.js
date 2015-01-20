@@ -21,18 +21,20 @@ define([
         'text!templates/default/datepickerRange.html',
         'text!templates/default/rowbuttoncontainer.html',
         'text!templates/default/rowbutton.html',
+        'models/sm/SessionModel',
         'models/cm/CommuteModel',
         'collection/cm/CommuteCollection',
         'views/cm/popup/CommuteUpdatePopupView',
         'views/cm/popup/CommentPopupView',
         'views/cm/popup/ChangeHistoryPopupView',
+        'views/component/ProgressbarView',
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnCommentAddTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-		CommuteModel, CommuteCollection,
-		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
+		SessionModel, CommuteModel, CommuteCollection,
+		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
 		searchFormTemplate, btnCommentAddTemplate){
 
 	// 분 -> 시간 
@@ -56,13 +58,28 @@ define([
 	
 	// 출퇴근 시간 셀 생성
 	function _createHistoryCell(cellType, cellData) {
-		 var data = JSON.stringify({
-			 change_column : cellType,
-			 idx : cellData.idx
- 		 });
+		if (cellData.in_time_change){
+			var data = JSON.stringify({
+				change_column : cellType,
+				idx : cellData.idx
+			});
+			var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + _getTimeCell( cellData[cellType] ) + "</a>";
+			return aHrefStr;
+ 		} else {
+ 			return _getTimeCell( cellData[cellType] );
+ 		}
 		 
- 		 var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + cellData[cellType] + "</a>";
- 		 return aHrefStr;
+	}
+	
+	// 시간 값을 두 줄로 표시 
+	function _getTimeCell(inTime) {
+		if (Util.isNotNull(inTime) ) {
+			var tArr = inTime.split(" ");
+			if (tArr.length == 2) {
+				return tArr[0] + "</br>" + tArr[1]; 
+			}
+		}
+		return "";
 	}
 	
 	// comment Cell 페이지 링크 
@@ -83,7 +100,48 @@ define([
 		 tp.find(".btn").attr("data", data);
 		 return tp.html();
 	}
-
+	
+	function _getCommuteUpdateBtn(that) {
+		return {
+	        type:"custom",
+	        name:"edit",
+	        click:function(_grid){
+	        	var selectItem =_grid.getSelectItem();
+	        	if ( Util.isNull(selectItem) ) {
+        			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
+        			return;
+	        	}
+	        	
+	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
+	            Dialog.show({
+	                title:"출퇴근시간 수정", 
+                    content: commuteUpdatePopupView,
+                    buttons: [{
+                        id: 'updateCommuteBtn',
+                        cssClass: Dialog.CssClass.SUCCESS,
+                        label: '수정',
+                        action: function(dialog) {
+                        	commuteUpdatePopupView.updateCommute({
+                        		success: function(model, response) {
+                        			Dialog.show("성공", function() {
+                        				dialog.close();
+                        				that.selectCommute();
+                        			});
+                             	}, error : function(model, res){
+                             		Dialog.show("업데이트가 실패했습니다.");
+                             	}
+                            });
+                        }
+                    }, {
+                        label : "취소",
+                        action : function(dialog){
+                            dialog.close();
+                        }
+                    }]
+	            })
+	        }
+	    };
+	}
 	var commuteListView = BaseView.extend({
         el:$(".main-container"),
     	initialize:function(){
@@ -92,48 +150,40 @@ define([
         		    el:"commute_content",
         		    id:"commuteDataTable",
         		    column:[
-//      	               { data : "year", 			"title" : "년", visible: false},
-     	                   { data : "date", 			"title" : "일자" },
-     	                   { data : "department", 		"title" : "부서" },
-//     	                   { data : "id", 				"title" : "ID", visible: false },
-     	                   { data : "name", 			"title" : "이름", 
+     	                   	{ data : "date", 			"title" : "일자" },
+     	                   	{ data : "department", 		"title" : "부서" },
+     	                   	{ data : "name", 			"title" : "이름", 
      	                   		render: function(data, type, full, meta) {
      	                   			return full.name + "</br>(" +full.id + ")";
      	                   		}
-     	                   },
-     	                   { data : "work_type_name", 	"title" : "근무</br>타입"},
-     	                   { data : "vacation_name", 	"title" : "휴가</br>타입"},
-     	                   { data : "out_office_name", 	"title" : "외근</br>정보"},
-     	                   { data : "overtime_pay", 	"title" : "초과</br>근무수당",
+     	                   	},
+     	                   	{ data : "work_type_name", 	"title" : "근무</br>타입"},
+     	                   	{ data : "vacation_name", 	"title" : "휴가</br>타입"},
+     	                   	{ data : "out_office_name", 	"title" : "외근</br>정보"},
+     	                   	{ data : "overtime_pay", 	"title" : "초과</br>근무수당",
      	                   		render: function(data, type, full, meta) {
      	                   			return full.overtime_pay + " 원";
      	                   		}
-     	                   },
-     	                   { data : "late_time", 		"title" : "지각</br>시간"},
-     	                   { data : "over_time", 		"title" : "초과</br>근무시간",
+     	                   	},
+     	                   	{ data : "late_time", 		"title" : "지각</br>시간"},
+     	                   	{ data : "over_time", 		"title" : "초과</br>근무시간",
      	                   		render: function(data, type, full, meta) {
      	                   			return _getMinToHours(full.over_time);
      	                   		}
-     	                   },
-     	                   { data : "in_time", "title" : "출근시간",
+     	                   	},
+     	                   	{ data : "in_time", "title" : "출근</br>시간",
      	                   		render: function(data, type, full, meta) {
-     	                   			if (full.in_time_change){
-     	                    			return  _createHistoryCell("in_time", full);
-     	                    		 } else {
-     	                    			return full.in_time;
-     	                    		 }
+   	                    			return  _createHistoryCell("in_time", full );
      	                   		}
      	                     },
-     	                     { data : "out_time", "title" : "퇴근시간",
+     	                     
+     	                     { data : "out_time", "title" : "퇴근</br>시간",
      	                     	render: function(data, type, full, meta) {
-     	                   			if (full.out_time_change) {
-     	                    			return _createHistoryCell("out_time", full);
-     	                    		 } else {
-     	                    			return full.out_time;
-     	                    		 }
+									return _createHistoryCell("out_time", full);
      	                   		}
      	                     },
-     	                     { data : "comment_count", "title" : "Comment",
+     	                     { data : "comment_count", "title" : "비고",
+
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.comment_count) {
      	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
@@ -141,13 +191,27 @@ define([
      	                            	return "0 건" + _createCommentCellAddBtn(full, btnCommentAddTemplate);
      	                            }
      	                   		}
-     	                     }
-//     	                     { data : "in_time_change", "title" : "", visible: false},
-//     	                     { data : "out_time_change", "title" : "", visible: false}   
+     	                     },
+     	                     {"title": "출근타입", "data": "in_time_type", visible: false},
+                    		 {"title": "퇴근타입", "data": "out_time_type" , visible: false},
              	        ],
+             	    rowCallback: function(row, data){
+             	    	if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
+             	    		$(row).css("background-color", "rgb(236, 131, 131)");
+             	    	}
+             	    	
+             	    	if(data.in_time_type != "1"){
+             	    		$(row).find("td")[10].css("backgrount-color", "yellow");
+             	    	}
+             	    	
+             	    	if(data.out_time_type != "1"){
+             	    		$(row).find("td)")[11].css("backgrount-color", "yellow");
+             	    	}
+             	    },
         		    collection:this.commuteCollection,
+        		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
         		    detail: true,
-        		    buttons:["search","refresh"],
+        		    buttons:["search"],
         		    fetch: false
         	};    		
     		this.buttonInit();
@@ -160,40 +224,9 @@ define([
     	buttonInit: function(){
     	    var that = this;
     	    // tool btn
-    	    this.gridOption.buttons.push({
-    	        type:"custom",
-    	        name:"edit",
-    	        click:function(_grid){
-    	        	var selectItem =_grid.getSelectItem();
-    	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
-    	            Dialog.show({
-    	                title:"출퇴근시간 수정", 
-                        content: commuteUpdatePopupView,
-                        buttons: [{
-                            id: 'updateCommuteBtn',
-                            cssClass: Dialog.CssClass.SUCCESS,
-                            label: '수정',
-                            action: function(dialog) {
-                            	commuteUpdatePopupView.updateCommute({
-                            		success: function(model, response) {
-                            			Dialog.show("성공", function() {
-                            				dialog.close();
-                            				that.selectCommute();
-                            			});
-                                 	}, error : function(model, res){
-                                 		Dialog.show("업데이트가 실패했습니다.");
-                                 	}
-                                });
-                            }
-                        }, {
-                            label : "취소",
-                            action : function(dialog){
-                                dialog.close();
-                            }
-                        }]
-    	            })
-    	        }
-    	    });
+    	    if (SessionModel.get("user").admin == 1 ) {
+    	    	this.gridOption.buttons.push(_getCommuteUpdateBtn(that));
+    	    }
     	},
     	render:function(){
     	    //var _view=this;
@@ -234,10 +267,14 @@ define([
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    this.progressbar = new ProgressbarView();
+    	    
+    	    
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
-    	      	    
+    	    _layOut.append(this.progressbar.render());
+
     	    $(this.el).html(_layOut);
 			var today = new Date();
     	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
@@ -259,7 +296,7 @@ define([
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
-
+            
             this.selectCommute();
             return this;
      	},
@@ -337,6 +374,7 @@ define([
      		return data;
      	},
     	selectCommute: function() {
+    	    this.progressbar.disabledProgressbar(false);
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
@@ -351,6 +389,7 @@ define([
      			data: data,
 	 			success: function(result) {
 	 				_this.grid.render();
+	 				_this.progressbar.disabledProgressbar(true);
 	 			},
 	 			error : function(result) {
 	 				alert("데이터 조회가 실패했습니다.");

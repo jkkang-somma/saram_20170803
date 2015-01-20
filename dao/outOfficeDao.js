@@ -15,7 +15,7 @@ OutOfficeDao.prototype.selectOutOfficeList =  function () {
 OutOfficeDao.prototype.insertOutOffice =  function (_data) {
     var queryStr = util.format(db.getQuery('outOffice', 'insertOutOffice'));
     var year = _data.date + "";
-    year.substr(0,4);
+    year = year.substr(0,4);
     
     _data.black_mark = (_data.black_mark == undefined)? "" : _data.black_mark;
     

@@ -6,14 +6,13 @@ var RawDataDao = function () {
 }
 
 RawDataDao.prototype.insertRawData =  function (data) {
-    var date = new Date(data.date + " " + data.time);
     var queryStr = db.getQuery('rawData', 'insertRawData');
-    return db.queryV2(queryStr, [data.id, data.name, data.department, date.getTime(), data.date + " " + data.time, data.year, data.type]);
+    return db.queryV2(queryStr, [data.id, data.name, data.department, data.date + " " + data.time, data.year, data.type]);
 }
 
-RawDataDao.prototype.selectRawDataList =  function (start, end) {
+RawDataDao.prototype.selectRawDataList =  function (data) {
     var queryStr = db.getQuery('rawData', 'selectRawDataList');
-    return db.queryV2(queryStr, [start, end]);
+    return db.queryV2(queryStr, [data.start, data.end]);
 }
 
 

@@ -157,10 +157,10 @@ CREATE TABLE IF NOT EXISTS `commute_base_tbl` (
   `id` VARCHAR(40) NOT NULL COMMENT '사번',
   `name` VARCHAR(45) NOT NULL COMMENT '이름',
   `department` VARCHAR(45) NOT NULL COMMENT '부서',
-  `int_date` BIGINT NOT NULL COMMENT '출입 시간(시간)',
+  -- `int_date` BIGINT NOT NULL COMMENT '출입 시간(시간)',
   `char_date` VARCHAR(20) NOT NULL COMMENT '출입 시간(날짜)',
   `type` VARCHAR(45) NOT NULL COMMENT '출근,퇴근,출입,외출,복귀 / (카드),(지문)',
-  PRIMARY KEY (`int_date`, `char_date`, `id`))
+  PRIMARY KEY (`char_date`, `id`))
 ENGINE = InnoDB
 COMMENT = '근태 기초파일';
 

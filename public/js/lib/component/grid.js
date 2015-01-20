@@ -60,24 +60,30 @@ define([
             if (width > 768) {
                 for (var index in _columns){
                     column=API.column(index);
-                    column.visible(index > 0);
+                    if(index === "0"){
+                        column.visible(false);
+                    }else{    
+                        column.visible(_.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible);
+                    }
                 }
             } else if ( width  < 768) {
                 
-                API.column(index).visible(true);
+                // API.column(index).visible(true);
                  for (var index in _columns){
                     column=API.column(index);
-                    
-                    var header=column.header();
-                    //var _pWidth= header.parentNode.offsetWidth;
+                    var header=column.header(index);
                     var _cWidth = header.offsetWidth;
                     _cTotallWidth=_cTotallWidth+_cWidth;
                     
-                    if (width < _cTotallWidth+_padding){
-                        column.visible(false);
-                    } else {
+                    var colVisible = _.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible;
+                    if (width > _cTotallWidth+_padding && colVisible){
                         column.visible(true);
+                    } else {
+                        column.visible(false);
                     }
+                
+                    
+                    
                 }
             }
     	},
@@ -283,7 +289,7 @@ define([
                     "className":      'details-control',
                     "orderable":      false,
                     "data":           null,
-                    "defaultContent": ''
+                    "defaultContent": '',
                 });
     	    }
             
@@ -366,27 +372,6 @@ define([
     	   }
     	   return grid;
      	},
-     	renderDfd:function(){
-     	    var dfd= new $.Deferred();
-     	    var grid = this;
-    	   
-    	   if(Util.isNull(this.options.fetch) || this.options.fetch === true){
-    	       var _defaultFetchParams={
-        	       success: function(){
-        	           grid._draw();
-        	           dfd.resolve();
-        	       }
-        	   };
-    	       if (!_.isUndefined(this.options.fetchParam)){
-    	           _defaultFetchParams=_.extend(_defaultFetchParams, this.options.fetchParam);
-    	       }
-        	   this.options.collection.fetch(_defaultFetchParams);    
-    	   }else{
-    	       grid._draw();
-    	       dfd.resolve();
-    	   }
-    	   return dfd.promise();
-     	}
     });
     return Grid;
 });

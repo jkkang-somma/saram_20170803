@@ -15,7 +15,8 @@ define([
         'core/BaseView',
         'text!templates/default/content.html',
         'models/cm/ChangeHistoryModel',
-        'collection/cm/ChangeHistoryCollection'
+        'collection/cm/ChangeHistoryCollection',
+        'views/component/ProgressbarView'
 ], function(
 		$,
 		_,
@@ -28,7 +29,8 @@ define([
 		Moment,
 		BaseView,
 		ContentHTML,
-		ChangeHistoryModel, ChangeHistoryCollection) {
+		ChangeHistoryModel, ChangeHistoryCollection,
+		ProgressbarView) {
 
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(data) {
@@ -49,14 +51,14 @@ define([
      	                     { data : "change_after", "title" : "변경 후"},
      	                     { data : "change_date", "title" : "수정 날짜"},
      	                     { data : "change_name", "title" : "수정자 이름",
-     	                     "render": function (data, type, full, meta) {
-     	                    		 return full.change_name + "</br>(" +full.change_id + ")";
-     	                    	}
+				"render": function (data, type, full, meta) {
+					return full.change_name + "</br>(" +full.change_id + ")";
+				}
      	                     }
              	        ],
         		    collection:this.changeHistoryCollection,
         		    detail: true,
-        		    buttons:["search","refresh"],
+        		    buttons:["search"],
         		    fetch: false
         		};
         		// this.on('view:rendered', this.renderGrid, this);
@@ -76,6 +78,10 @@ define([
 			var _gridSchema=Schemas.getSchema('grid');
 		    	this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
 			dfd.resolve(this);
+			
+    	    		this.progressbar = new ProgressbarView();
+			$(this.el).append(this.progressbar.render());
+			this.progressbar.disabledProgressbar(false);
 		        return dfd.promise();				
 		},
 		
@@ -85,6 +91,7 @@ define([
 				data: _this.searchData,
 				success: function(result) {
 				 	_this.grid.render();
+				 	_this.progressbar.disabledProgressbar(true);
 				},
 				error : function(result) {
 					alert("데이터 조회가 실패했습니다.");
