@@ -21,6 +21,7 @@ define([
         'text!templates/default/datepickerRange.html',
         'text!templates/default/rowbuttoncontainer.html',
         'text!templates/default/rowbutton.html',
+        'models/sm/SessionModel',
         'models/cm/CommuteModel',
         'collection/cm/CommuteCollection',
         'views/cm/popup/CommuteUpdatePopupView',
@@ -32,7 +33,7 @@ define([
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-		CommuteModel, CommuteCollection,
+		SessionModel, CommuteModel, CommuteCollection,
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
 		searchFormTemplate, btnCommentAddTemplate){
 
@@ -94,6 +95,49 @@ define([
 			}
 		}
 		return "";
+	}
+	
+	function _getCommuteUpdateBtn(that) {
+		return {
+	        type:"custom",
+	        name:"edit",
+	        click:function(_grid){
+	        	var selectItem =_grid.getSelectItem();
+	        	
+	        	if ( Util.isNull(selectItem) ) {
+        			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
+        			return;
+	        	}    	        	
+	        	
+	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
+	            Dialog.show({
+	                title:"출퇴근시간 수정", 
+                    content: commuteUpdatePopupView,
+                    buttons: [{
+                        id: 'updateCommuteBtn',
+                        cssClass: Dialog.CssClass.SUCCESS,
+                        label: '수정',
+                        action: function(dialog) {
+                        	commuteUpdatePopupView.updateCommute({
+                        		success: function(model, response) {
+                        			Dialog.show("성공", function() {
+                        				dialog.close();
+                        				that.selectCommute();
+                        			});
+                             	}, error : function(model, res){
+                             		Dialog.show("업데이트가 실패했습니다.");
+                             	}
+                            });
+                        }
+                    }, {
+                        label : "취소",
+                        action : function(dialog){
+                            dialog.close();
+                        }
+                    }]
+	            })
+	        }
+	    };
 	}
 
 	var commuteListView = BaseView.extend({
@@ -170,40 +214,9 @@ define([
     	buttonInit: function(){
     	    var that = this;
     	    // tool btn
-    	    this.gridOption.buttons.push({
-    	        type:"custom",
-    	        name:"edit",
-    	        click:function(_grid){
-    	        	var selectItem =_grid.getSelectItem();
-    	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
-    	            Dialog.show({
-    	                title:"출퇴근시간 수정", 
-                        content: commuteUpdatePopupView,
-                        buttons: [{
-                            id: 'updateCommuteBtn',
-                            cssClass: Dialog.CssClass.SUCCESS,
-                            label: '수정',
-                            action: function(dialog) {
-                            	commuteUpdatePopupView.updateCommute({
-                            		success: function(model, response) {
-                            			Dialog.show("성공", function() {
-                            				dialog.close();
-                            				that.selectCommute();
-                            			});
-                                 	}, error : function(model, res){
-                                 		Dialog.show("업데이트가 실패했습니다.");
-                                 	}
-                                });
-                            }
-                        }, {
-                            label : "취소",
-                            action : function(dialog){
-                                dialog.close();
-                            }
-                        }]
-    	            })
-    	        }
-    	    });
+    	    if (SessionModel.get("user").admin == 1 ) {
+    	    	this.gridOption.buttons.push(_getCommuteUpdateBtn(that));
+    	    }
     	},
     	render:function(){
     	    //var _view=this;

@@ -37,8 +37,6 @@ router.route('/:id')
 	} else {
 		return res.send({"error": "관리자 등급만 수정이 가능합니다."});
 	}
-	
-	
 });
 
 module.exports = router;

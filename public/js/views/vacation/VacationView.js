@@ -54,7 +54,7 @@ define([
 	        type:"custom",
 	        name:"edit",
 	        click:function(_grid){
-	        	var selectItem =_grid.getSelectItem();    	        	
+	        	var selectItem =_grid.getSelectItem();
 	        	if ( Util.isNull(selectItem) ) {
         			Dialog.warning("사용자를 선택 하여 주시기 바랍니다.");
         			return;
