@@ -3,9 +3,11 @@ define([
 	'underscore',
 	'backbone',
 	'util',
+	'models/sm/SessionModel',
 	'models/vacation/VacationModel',
 	'text!templates/vacation/vacationInfoPopupTemplate.html'
 ], function($, _, Backbone, Util,
+		SessionModel,
 		VacationModel,
 		vacationInfoPopupTemplate) {
 	
@@ -21,6 +23,12 @@ define([
 			var tpl = _.template( vacationInfoPopupTemplate, {variable: 'data'} )( this.selectData );
 			
 			$(this.el).append(tpl);
+			
+			// 일반 사용자는 단순 읽기만 가능
+			if (SessionModel.get("user").admin == 0) {
+				$(this.el).find("#total_day").prop("disabled", true);
+				$(this.el).find("#memo").prop("disabled", true);
+			}			
 
             dfd.resolve();
             return dfd.promise();

@@ -44,7 +44,7 @@ define([
 	            var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);	            
 	            var buttons = [];
 	            
-	            if(SessionModel.get("user").admin == 1) {
+	            if(SessionModel.get("user").admin == 1) { // 관리자만 수정 가능
 	            	buttons.push({
                         id: 'updateCommentBtn',
                         cssClass: Dialog.CssClass.SUCCESS,
