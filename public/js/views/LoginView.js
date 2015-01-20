@@ -66,7 +66,7 @@ define([
                 Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);         
             } else {
                 SessionModel.initPassword({id: data.id, password:data.password}).done(function(result){
-                    Dialog.show(result.msg);
+                    Dialog.show(i18nCommon.SUCCESS.LOGIN[result.msg]);
                     $("#passwadUpdate").fadeOut(100, function(){
                         $("#loginbtn").fadeIn(500, function(){
                         });

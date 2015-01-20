@@ -37,6 +37,9 @@ define({
             SAVE:"사용자 정보를 수정하였습니다.",
             REMOVE:"사용자를 삭제하였습니다.",
             ADD:"사용자를 등록하였습니다."
+        },
+        LOGIN:{
+            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다."
         }
     },
     WARNING:{
@@ -45,8 +48,7 @@ define({
             INIT_PASSWORD_PUT:"초기화 정보를 입력해 주세요.",
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
-            INIT_PASSWORD:"비밀번호를 설정해주세요.",
-            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다."
+            INIT_PASSWORD:"비밀번호를 설정해주세요."
         }
     },
     ERROR:{

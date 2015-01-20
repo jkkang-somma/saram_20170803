@@ -32,9 +32,9 @@ define([
     		        { "title" : "부서", "render": function(data, type, row){
                         return row.dept_name;
                     }}
-                    , "name_commute", "입사일", "퇴사일", "권한"
+                    , "name_commute", "입사일", "퇴사일", "권한", "Admin"
                 ],
-    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "privilege"],
+    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "privilege", "admin"],
     		    collection:userCollection,
     		    detail:true,
     		    view:this

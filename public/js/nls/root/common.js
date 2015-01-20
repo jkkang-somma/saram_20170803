@@ -35,6 +35,9 @@ define({
             SAVE:"Success Save User.",
             REMOVE:"Success Remove User.",
             ADD:"Success Add User."
+        },
+        LOGIN:{
+            SUCCESS_INIT_PASSWORD:"Success Initialize Password."
         }
     },
     WARNING:{
@@ -43,8 +46,7 @@ define({
             INIT_PASSWORD_PUT:"Init password.",
             DO_NOT_FOUND_USER:"Not valid account.",
             NOT_EQULES_PASSWORD:"Not valid account.",
-            INIT_PASSWORD:"Initialize password.",
-            SUCCESS_INIT_PASSWORD:"Success Initialize Password."
+            INIT_PASSWORD:"Initialize password."
         }
     },
     ERROR:{
