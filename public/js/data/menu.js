@@ -26,7 +26,7 @@ define([
         subMenu:[{
             title:i18Common.MENU.SUB.AM.ADD_RAW_DATA, //"출입 기록 등록",
             hashTag:"#addrawdata",
-            auth:USER
+            auth:ADMIN
         },{
             title:i18Common.MENU.SUB.AM.RAW_DATA_LIST,//"출입 기록 조회",
             hashTag:"#rawdatalist",
