@@ -44,7 +44,8 @@ define([
             wrench:"glyphicon-wrench",
             search:"glyphicon-search",
             edit:"glyphicon-pencil",
-            ok:"glyphicon-ok"
+            ok:"glyphicon-ok",
+            read: "glyphicon-list-alt"
         },
         
         //API
