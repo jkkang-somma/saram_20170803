@@ -16,6 +16,7 @@ define([
   'models/sm/SessionModel',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
+  'views/component/ProgressbarView',
   'views/vacation/popup/UpdateVacationPopup',
   'text!templates/vacation/vacationInfoPopupTemplate.html',
   'text!templates/vacation/searchFormTemplate.html'
@@ -32,6 +33,7 @@ define([
 		SessionModel,
 		VacationModel, 
 		VacationCollection,
+		ProgressbarView,
 		UpdateVacationPopup,
 		vacationInfoPopupTemplate,
 		searchFormTemplate){
@@ -166,9 +168,12 @@ define([
     	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear(), isShowCreateBtn: isShowCreateBtn});
 
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    this.progressbar = new ProgressbarView();
+    	    
     	    _layOut.append(_head);
     	    _layOut.append(searchForm);
     	    _layOut.append(_content);
+    	    _layOut.append(this.progressbar.render());
     	      	    
     	    $(this.el).html(_layOut);
 
@@ -183,9 +188,13 @@ define([
       		var _this = this;
      		var inData = this.getSearchForm();
      		
+     		this.progressbar.disabledProgressbar(false);
+     		
 			var vacationModel = new VacationModel();
      		vacationModel.save(inData, {
 				success: function(model, response) {
+					_this.progressbar.disabledProgressbar(true);
+					
 					if (Util.isNull( response["error"] )) {
 						var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
 	        			Dialog.show(msg, function() {
@@ -196,6 +205,7 @@ define([
 					}
 				},
 				error: function(model, res) {
+					_this.progressbar.disabledProgressbar(true);
         			Dialog.show("데이터 생성 실패", function() {
         				_this.selectVacation();
         			});
