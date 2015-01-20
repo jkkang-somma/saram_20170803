@@ -106,11 +106,11 @@ define([
             this.department = model.get("department");
             this.year = model.get("year");
             this.date = model.get("date");
-            this.standardInTime = Moment(model.get("standard_in_time"), DATETIMEFORMAT).toDate();
-            this.standardOutTime = Moment(model.get("standard_out_time"), DATETIMEFORMAT).toDate();
-            this.inTime = Moment(model.get("in_time"), DATETIMEFORMAT).toDate();
+            this.standardInTime = model.get("standard_in_time") ? null : Moment(model.get("standard_in_time")).toDate();
+            this.standardOutTime = model.get("standard_out_time") ? null : Moment(model.get("standard_out_time")).toDate();
+            this.inTime = model.get("in_time") ? null : Moment(model.get("in_time")).toDate();
+            this.outTime = model.get("out_time") ? null : Moment(model.get("out_time")).toDate();
             this.inTimeType = model.get("in_time_type");
-            this.outTime = Moment(model.get("out_time"), DATETIMEFORMAT).toDate();
             this.outTimeType = model.get("out_time_type");
             this.lateTime = model.get("late_time");
             // this.holidayWorkTime = model.get("holidayWorkTime");
