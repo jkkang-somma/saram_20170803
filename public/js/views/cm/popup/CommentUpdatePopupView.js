@@ -64,10 +64,6 @@ define([
 		},
 		getInsertData: function() {
      		var newData = Util.getFormJSON( $(this.el).find("form"));
-     		
-     		newData.reply_id = '100501';
-     		alert("답변자 ID 고정되어 있음!!!!!!");
-     		
      		if (newData.comment_reply == "" ) {
      			alert("처리 내용을 입력해주시기 바랍니다. ");
      			return null;

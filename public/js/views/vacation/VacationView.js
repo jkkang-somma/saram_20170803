@@ -99,9 +99,12 @@ define([
         		    id:"vacationDataTable",
         		    column:[
              	            { data : "year", 			"title" : "년" },
-             	            { data : "id", 				"title" : "사번" },
              	            { data : "dept_name", 		"title" : "부서" },
-                            { data : "name", 			"title" : "이름" },
+                            { data : "name", 			"title" : "이름",
+                            	render: function(data, type, full, meta) {
+                            		return full.name + "</br>(" + full.id + ")";
+    			        		}
+                            },
                             { data : "total_day", 		"title" : "연차 휴가" },
                             { data : "used_holiday", 	"title" : "사용 일수" },
                             { data : "holiday", 		"title" : "휴가 잔여 일수"},
@@ -115,6 +118,7 @@ define([
     			        		}
                             }
              	        ],
+             	    dataschema:["year", "dept_name", "name", "total_day", "used_holiday", "holiday", "memo"],
         		    collection:this.vacationCollection,
         		    detail: true,
         		    buttons:["search"],

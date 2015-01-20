@@ -197,8 +197,8 @@
 							c.comment_count,
 							o.name as overtime_type,
 							IFNULL(o.overtime_pay, 0) AS overtime_pay,
-							(select name from office_code_tbl where code = c.vacation_code) as vacation_name,
-							(select name from office_code_tbl where code = c.out_office_code) as out_office_name                
+							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') as vacation_name,
+							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') as out_office_name                
 						FROM 
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
