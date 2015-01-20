@@ -13,6 +13,7 @@ define([
         'datatables',
         'moment',
         'core/BaseView',
+        'models/sm/SessionModel',
         'models/cm/CommentModel',
         'text!templates/cm/popup/commentUpdatePopupTemplate.html'
 ], function(
@@ -25,7 +26,8 @@ define([
 		Dialog,
 		Datatables,
 		Moment,
-		BaseView,			
+		BaseView,
+		SessionModel,
 		CommentModel,
 		commentUpdatePopupTemplate) {
 	
@@ -40,13 +42,13 @@ define([
             			
 			var tpl = _.template(commentUpdatePopupTemplate, {variable: 'data'})(this.selectData);			
 			$(this.el).append(tpl);
-			console.log( $(tpl).find("#state").val());
-			$(tpl).find("select[name=state] option:selected").val(this.selectData.state);
-			$(tpl).find("#state").val("처리중").attr("selected", "selected");
-			console.log( $(tpl).find("#state").val());
 			
-			$(tpl).find("#state > option[value=처리중]").attr("selected", "ture");
-			
+			// 일반 사용자는 단순 읽기만 가능
+			if (SessionModel.get("user").admin == 0) {
+				$(this.el).find("#comment_reply").prop("readonly", true);
+				$(this.el).find("#state").prop("disabled", true);
+			}
+
             dfd.resolve();
             return dfd.promise();			
 		},

@@ -356,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `out_office_tbl` (
   CONSTRAINT `fk_out_office_tbl_approval_tbl`
     FOREIGN KEY (`doc_num`)
     REFERENCES `approval_tbl` (`doc_num`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = '휴가 / 외근 / 출장 (결재 완료된)  테이블';
@@ -404,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `approval_index_tbl` (
 ENGINE = InnoDB
 COMMENT = '결재 고유번호를 년.월 단위로 생성한다.';
 
-INSERT INTO approval_index_tbl VALUES ( '201501', 300 );
+INSERT INTO approval_index_tbl VALUES ( '201501', 400 );
 
 CREATE TABLE IF NOT EXISTS `black_mark_tbl` (
   `year` VARCHAR(10) NOT NULL COMMENT '해당 년도',

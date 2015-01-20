@@ -5,13 +5,14 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
+  'models/sm/SessionModel',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'collection/common/OfficeCodeCollection',
   'collection/sm/UserCollection',
   'models/rm/ApprovalModel',
   'models/rm/ApprovalIndexModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
+], function($, _, Backbone, animator, BaseView, Dialog, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
     
   	events: {
@@ -64,7 +65,9 @@ define([
     },
     
     setTableDisplay : function() {
-      $(this.el).find("#submit_id").val('150105');
+      //session id 셋팅
+      var sessionInfo = SessionModel.getUserInfo();
+      $(this.el).find("#submit_id").val(sessionInfo.id);
       
       var tableTr = $(this.el).find('.addReportNone');
       tableTr.css('display','none');
@@ -199,9 +202,9 @@ define([
       return sZero + s;
     },
   	
-  	isDateCompare : function(){
-  	  var startDate = $(this.el).find("#beforeDate input").val();
-      var endDate = $(this.el).find("#afterDate input").val();
+  	isDateCompare : function(formData){
+  	  var startDate = formData.start_date;
+      var endDate = formData.end_date;
       
       var start= new Date(startDate);
       var end=new Date(endDate);
@@ -232,7 +235,7 @@ define([
         }
       }
       
-      if(!this.isDateCompare()){
+      if(!this.isDateCompare(formData)){
           alert("기간을 잘못 입력하였습니다.");      
           this.thisDfd.reject();
           return;

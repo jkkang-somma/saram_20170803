@@ -45,7 +45,8 @@ define({
             INIT_PASSWORD_PUT:"초기화 정보를 입력해 주세요.",
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
-            INIT_PASSWORD:"비밀번호를 설정해주세요."
+            INIT_PASSWORD:"비밀번호를 설정해주세요.",
+            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다."
         }
     },
     ERROR:{
@@ -54,6 +55,27 @@ define({
         },
         HTTP:{
             NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다."
+        }
+    },
+    MENU:{
+        TOP:{
+            SM:"일반 관리",
+            AM:"근태 관리"
+        },
+        SUB:{
+            SM:{
+                USER:"사원 관리",
+                HOLIDAY:"휴일 관리",
+                VACATION:"연차 관리"
+            },
+            AM:{
+                ADD_RAW_DATA:"출입 기록 등록",
+                RAW_DATA_LIST:"출입 기록 조회",
+                CREATE_DATA:"근태 자료 생성",
+                COMMUTE_MANAGER:"근태 자료 관리",
+                COMMUTE_MANAGER_COMMENT:"근태 수정 내역 관리",
+                REPORT_MANAGER:"근태 상신"
+            }
         }
     }
 });

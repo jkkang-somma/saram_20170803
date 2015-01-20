@@ -8,12 +8,13 @@ define([
   'grid',
   'schemas',
   'dialog',
+  'models/sm/SessionModel',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
   'views/rm/AddNewReportView',
   'views/rm/ApprovalReportView',
   'views/rm/DetailReportView',
-], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, DetailReportView){
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, SessionModel, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, DetailReportView){
    var _reportListView=0;
    var reportListView = BaseView.extend({
     el:$(".main-container"),
@@ -106,12 +107,11 @@ define([
        // reportmanager/approval
       approvalBtn.click(function(){
          var selectData=_this.grid.getSelectItem();
-      //    var table = $(_this.$el).find("#commuteManageTbl").DataTable();
-     	// 	var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
-     		  //if(selectData.state != '결재완료'){
-     		  if(true){
+     		   var sessionInfo = SessionModel.getUserInfo();
+     		   
+     		  if(selectData.manager_id == sessionInfo.id){
        		  var _approvalReportView = new ApprovalReportView();
            		 // data param 전달
            		 _approvalReportView.options = selectData;
@@ -138,7 +138,7 @@ define([
                 });
      		    
      		    }else{
-     		      Dialog.warning("결재 완료된 항목입니다.");
+     		      Dialog.warning("해당 상신 항목의 결재자가 아닙니다.");
      		    }
          		 
      		} else {
@@ -149,8 +149,6 @@ define([
       
       detailReportBtn.click(function(){
          var selectData=_this.grid.getSelectItem();
-      //    var table = $(_this.$el).find("#commuteManageTbl").DataTable();
-     	// 	var selectData = table.row('.selected').data();
      		
      		if ( Util.isNotNull(selectData) ) {
      		  var _detailReportView = new DetailReportView();

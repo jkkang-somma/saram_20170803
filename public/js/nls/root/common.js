@@ -43,7 +43,8 @@ define({
             INIT_PASSWORD_PUT:"Init password.",
             DO_NOT_FOUND_USER:"Not valid account.",
             NOT_EQULES_PASSWORD:"Not valid account.",
-            INIT_PASSWORD:"Initialize password."
+            INIT_PASSWORD:"Initialize password.",
+            SUCCESS_INIT_PASSWORD:"Success Initialize Password."
         }
     },
     ERROR:{
@@ -52,6 +53,27 @@ define({
         },
         HTTP:{
             NOT_FIND_PAGE:"Not find page."
+        }
+    },
+    MENU:{
+        TOP:{
+            SM:"Security Manager",
+            AM:"Attendance Manager"
+        },
+        SUB:{
+            SM:{
+                USER:"User Manager",
+                HOLIDAY:"Holiday Manager",
+                VACATION:"Vacation Manager"
+            },
+            AM:{
+                ADD_RAW_DATA:"Add Raw Data",
+                RAW_DATA_LIST:"Raw Data List",
+                CREATE_DATA:"Create Commute Data",
+                COMMUTE_MANAGER:"Commute Data Manager",
+                COMMUTE_MANAGER_COMMENT:"Commute History Manager",
+                REPORT_MANAGER:"Commute Report"
+            }
         }
     }
 });

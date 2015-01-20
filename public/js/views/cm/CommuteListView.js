@@ -107,11 +107,10 @@ define([
 	        name:"edit",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
-	        	
 	        	if ( Util.isNull(selectItem) ) {
         			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
         			return;
-	        	}    	        	
+	        	}
 	        	
 	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
 	            Dialog.show({
