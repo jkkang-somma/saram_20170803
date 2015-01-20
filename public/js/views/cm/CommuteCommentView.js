@@ -19,6 +19,7 @@ define([
         'text!templates/default/datepickerRange.html',
         'text!templates/default/rowbuttoncontainer.html',
         'text!templates/default/rowbutton.html',
+        'models/sm/SessionModel',
         'collection/cm/CommentCollection',
         'views/cm/popup/CommentUpdatePopupView',
         'text!templates/cm/searchFormTemplate.html'
@@ -26,8 +27,61 @@ define([
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, 
 		BaseView,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-		CommentCollection,
+		SessionModel, CommentCollection,
 		CommentUpdatePopupView,	searchFormTemplate){
+	
+	function _getCommentUpdateBtn(that){
+		return {
+	        type:"custom",
+	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
+	        click:function(_grid){
+	        	var selectItem =_grid.getSelectItem();
+	        	if ( Util.isNull(selectItem) ) {
+        			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
+        			return;
+	        	}
+	        	
+	            var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);	            
+	            var buttons = [];
+	            
+	            if(SessionModel.get("user").admin == 1) {
+	            	buttons.push({
+                        id: 'updateCommentBtn',
+                        cssClass: Dialog.CssClass.SUCCESS,
+                        label: '수정',
+                        action: function(dialog) {
+                        	commentUpdatePopupView.updateComment({
+                        		success: function(model, response) {
+                        			if (Util.isNull( response["error"] )) {
+                            			Dialog.show("성공", function() {
+                            				dialog.close();
+                            				that.selectComments();
+                            			});                        				
+                        			} else {
+                						Dialog.warning("Error: " + response["error"]);
+                        			}
+                             	}, error : function(model, res){
+                             		Dialog.show("업데이트가 실패했습니다.");
+                             	}
+                            });
+                        }
+                    });
+	            }
+	            buttons.push({
+                    label : "취소",
+                    action : function(dialog){
+                        dialog.close();
+                    }
+                });
+	            
+	            Dialog.show({
+	                title:"Comment 입력", 
+                    content: commentUpdatePopupView,
+                    buttons: buttons
+	            });
+	        }
+	    };
+	}
 
 	var CommuteCommentView = BaseView.extend({
 		el:$(".main-container"),
@@ -80,6 +134,7 @@ define([
     			           { data : "state", "title" : "처리상태"}
              	        ],
         		    collection: this.commentCollection,
+        		    dataschema:["date", "name", "comment", "writer_name", "comment_date", "comment_reply", "reply_name", "comment_reply_date", "state"],
         		    detail: true,
         		    buttons: ["search"],
         		    fetch: false
@@ -91,40 +146,8 @@ define([
 		},
 		buttonInit: function(){
     	    var that = this;
-    	    this.gridOption.buttons.push({
-    	        type:"custom",
-    	        name:"edit",
-    	        click:function(_grid){
-    	        	var selectItem =_grid.getSelectItem();
-    	            var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);
-    	            Dialog.show({
-    	                title:"Comment 입력", 
-                        content: commentUpdatePopupView,
-                        buttons: [{
-                            id: 'updateCommentBtn',
-                            cssClass: Dialog.CssClass.SUCCESS,
-                            label: '수정',
-                            action: function(dialog) {
-                            	commentUpdatePopupView.updateComment({
-                            		success: function(model, response) {
-                            			Dialog.show("성공", function() {
-                            				dialog.close();
-                            				that.selectComments();
-                            			});
-                                 	}, error : function(model, res){
-                                 		Dialog.show("업데이트가 실패했습니다.");
-                                 	}
-                                });
-                            }
-                        }, {
-                            label : "취소",
-                            action : function(dialog){
-                                dialog.close();
-                            }
-                        }]
-    	            })
-    	        }
-    	    });
+    	    // tool btn
+    	    this.gridOption.buttons.push( _getCommentUpdateBtn(that) );
     	},
 		render: function(){
 	   	    //var _view=this;

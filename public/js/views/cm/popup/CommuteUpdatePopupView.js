@@ -14,6 +14,7 @@ define([
         'moment',
         'resulttimefactory',
         'core/BaseView',
+        'models/sm/SessionModel',
         'models/cm/CommuteModel',
         'models/cm/ChangeHistoryModel',
         'collection/cm/CommuteCollection',
@@ -24,6 +25,7 @@ define([
 ], function(
 $, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory,
 BaseView,
+SessionModel,
 CommuteModel, ChangeHistoryModel, CommuteCollection, 
 commuteUpdatePopupTemplate,
 TextBoxHTML, DatePickerHTML
@@ -63,9 +65,6 @@ TextBoxHTML, DatePickerHTML
 			var dfd= new $.Deferred();
 			
 			if (!_.isUndefined(el)) this.el=el;
-            			
-			// var tpl = _.template( commuteUpdatePopupTemplate, {variable: 'data'} )( this.selectData );
-			// $(this.el).append(tpl);
 			
 			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupDate", label : "일자", value : this.selectData.date}));
 			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupDept", label : "부서", value : this.selectData.department}));
@@ -184,10 +183,11 @@ TextBoxHTML, DatePickerHTML
 			if (newData.out_time === null) {
 				return null;
 			}
-				
-			Dialog.show("!!!! 수정자 ID 고정되어있음 !!!!");
-			var inChangeModel = _getChangeHistoryModel("in_time", this.selectData, newData, '130702');
-			var outChangeModel = _getChangeHistoryModel("out_time", this.selectData, newData, '130702');
+			
+			var userId = SessionModel.get("user").id;
+			
+			var inChangeModel = _getChangeHistoryModel("in_time", this.selectData, newData, userId);
+			var outChangeModel = _getChangeHistoryModel("out_time", this.selectData, newData, userId);
 			
 			newData.changeHistoryJSONArr = [];
 			
