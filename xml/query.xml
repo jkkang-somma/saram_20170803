@@ -134,8 +134,8 @@
         		, state, start_time, end_time
     		from 
     			approval_tbl app
-        	where (DATE(start_date) between STR_TO_DATE(?) AND STR_TO_DATE(?))
-        	  OR (DATE(end_date)  between STR_TO_DATE(?) AND STR_TO_DATE(?))
+        	where (DATE(start_date) between DATE(?) AND DATE(?))
+        	  OR (DATE(end_date)  between DATE(?) AND DATE(?))
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
