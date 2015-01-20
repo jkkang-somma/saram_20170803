@@ -27,6 +27,7 @@ var department = require('./routes/departmentCodeRouter');
 //var error = require('./routes/error');
 
 
+//var sass = require('node-sass-middleware')
 var app = express();
 
 // view engine setup
@@ -60,6 +61,16 @@ app.use(express_session({
     //store : sessionStore,
     saveUninitialized:true
 }));
+
+// app.use(
+//     sass({
+//         src: __dirname + '/sass', 
+//         dest: __dirname + '/css/sass',
+//         debug: true,   
+//         outputStyle: 'expanded',
+//         prefix: '/style'    
+//     })
+// );
 
 var authError=function(next){
     var err = new Error('not Authoryty');
