@@ -160,17 +160,12 @@ define([
      	                   	{ data : "work_type_name", 	"title" : "근무</br>타입"},
      	                   	{ data : "vacation_name", 	"title" : "휴가</br>타입"},
      	                   	{ data : "out_office_name", 	"title" : "외근</br>정보"},
-     	                   	{ data : "overtime_pay", 	"title" : "초과</br>근무수당",
+     	                   	{ data : "overtime_pay", 	"title" : "초과</br>근무 타입",
      	                   		render: function(data, type, full, meta) {
-     	                   			return full.overtime_pay + " 원";
+     	                   			return full.overtime_type;
      	                   		}
      	                   	},
      	                   	{ data : "late_time", 		"title" : "지각</br>시간"},
-     	                   	{ data : "over_time", 		"title" : "초과</br>근무시간",
-     	                   		render: function(data, type, full, meta) {
-     	                   			return _getMinToHours(full.over_time);
-     	                   		}
-     	                   	},
      	                   	{ data : "in_time", "title" : "출근</br>시간",
      	                   		render: function(data, type, full, meta) {
    	                    			return  _createHistoryCell("in_time", full,"in_time_change" );

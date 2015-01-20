@@ -204,10 +204,10 @@
 							c.in_time_change,
 							c.out_time_change,
 							c.comment_count,
-							o.name as overtime_type,
-							IFNULL(o.overtime_pay, 0) AS overtime_pay,
-							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') as vacation_name,
-							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') as out_office_name                
+							IFNULL( o.name, '') AS overtime_type,
+							IFNULL( o.overtime_pay, 0) AS overtime_pay,
+							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
+							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name                
 						FROM 
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code

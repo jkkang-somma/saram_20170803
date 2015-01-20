@@ -26,7 +26,7 @@ define([
         subMenu:[{
             title:i18Common.MENU.SUB.AM.ADD_RAW_DATA, //"출입 기록 등록",
             hashTag:"#addrawdata",
-            auth:USER
+            auth:ADMIN
         },{
             title:i18Common.MENU.SUB.AM.RAW_DATA_LIST,//"출입 기록 조회",
             hashTag:"#rawdatalist",
@@ -40,7 +40,7 @@ define([
             hashTag:"#commutemanager",
             auth:USER
         },{
-            title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 수정 내역 관리",
+            title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
             hashTag:"#commutemanager/comment",
             auth:USER
         },{
