@@ -13,6 +13,7 @@ define([
   'text!templates/default/right.html',
   'text!templates/default/button.html',
   'text!templates/layout/default.html',
+  'models/sm/SessionModel',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
   'views/vacation/popup/UpdateVacationPopup',
@@ -28,6 +29,7 @@ define([
 		Datatables,
 		BaseView,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
+		SessionModel,
 		VacationModel, 
 		VacationCollection,
 		UpdateVacationPopup,
@@ -44,6 +46,48 @@ define([
 			years.push(endYear);
 		}
 		return  years;
+	}
+	
+	// 휴가 편집 버튼 
+	function _getVacationUpdateBtn(that) {
+		return {
+	        type:"custom",
+	        name:"edit",
+	        click:function(_grid){
+	        	var selectItem =_grid.getSelectItem();    	        	
+	        	if ( Util.isNull(selectItem) ) {
+        			Dialog.warning("사용자를 선택 하여 주시기 바랍니다.");
+        			return;
+	        	}
+	            var updateVacationPopup = new UpdateVacationPopup(selectItem);
+	            Dialog.show({
+	                title:"연차 수정", 
+                    content: updateVacationPopup,
+                    buttons: [{
+                        id: 'updateVacationBtn',
+                        cssClass: Dialog.CssClass.SUCCESS,
+                        label: '수정',
+                        action: function(dialog) {
+                        	updateVacationPopup.onUpdateVacationInfo({
+                        		success: function(model, response) {
+                        			Dialog.show("성공", function() {
+                        				dialog.close();
+                        				that.selectVacation();
+                        			})
+                             	}, error : function(model, res){
+                             		alert("업데이트가 실패했습니다.");
+                             	}
+                            });
+                        }
+                    }, {
+                        label : "취소",
+                        action : function(dialog){
+                            dialog.close();
+                        }
+                    }]
+	            })
+	        }
+	    };
 	}
     
 	var VacationView = BaseView.extend({
@@ -85,44 +129,9 @@ define([
     	buttonInit: function(){
     	    var that = this;
     	    // tool btn
-    	    this.gridOption.buttons.push({
-    	        type:"custom",
-    	        name:"edit",
-    	        click:function(_grid){
-    	        	var selectItem =_grid.getSelectItem();    	        	
-    	        	if ( Util.isNull(selectItem) ) {
-            			Dialog.warning("사용자를 선택 하여 주시기 바랍니다.");
-            			return;
-    	        	}
-    	            var updateVacationPopup = new UpdateVacationPopup(selectItem);
-    	            Dialog.show({
-    	                title:"연차 수정", 
-                        content: updateVacationPopup,
-                        buttons: [{
-                            id: 'updateVacationBtn',
-                            cssClass: Dialog.CssClass.SUCCESS,
-                            label: '수정',
-                            action: function(dialog) {
-                            	updateVacationPopup.onUpdateVacationInfo({
-                            		success: function(model, response) {
-                            			Dialog.show("성공", function() {
-                            				dialog.close();
-                            				that.selectVacation();
-                            			})
-                                 	}, error : function(model, res){
-                                 		alert("업데이트가 실패했습니다.");
-                                 	}
-                                });
-                            }
-                        }, {
-                            label : "취소",
-                            action : function(dialog){
-                                dialog.close();
-                            }
-                        }]
-    	            })
-    	        }
-    	    });
+    	    if (SessionModel.get("user").admin == 1 ) {
+    	    	this.gridOption.buttons.push(_getVacationUpdateBtn(that));
+    	    }
     	},
     	selectVacation: function() {
             var _this = this;
@@ -137,7 +146,6 @@ define([
      		});            
     	},
     	render:function(){
-    	    //var _view=this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
@@ -145,8 +153,13 @@ define([
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
-      	    
-    	    var searchForm = _.template( searchFormTemplate, {variable: 'data'} )( {formYears: _getFormYears(), nowYear: new Date().getFullYear()} );
+
+    	    var isShowCreateBtn = false;
+    	    if (SessionModel.get("user").admin == 1 ) {
+    	    	isShowCreateBtn = true;
+    	    }
+    	    
+    	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear(), isShowCreateBtn: isShowCreateBtn});
 
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    _layOut.append(_head);
@@ -169,16 +182,17 @@ define([
 			var vacationModel = new VacationModel();
      		vacationModel.save(inData, {
 				success: function(model, response) {
-					var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
-        			Dialog.show(msg, function() {
-        				_this.selectVacation();
-        			});
-        			
-        			console.log(response.error);
+					if (Util.isNull( response["error"] )) {
+						var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
+	        			Dialog.show(msg, function() {
+	        				_this.selectVacation();
+	        			});
+					} else {
+						Dialog.warning("Error: " + response["error"]);
+					}
 				},
 				error: function(model, res) {
         			Dialog.show("데이터 생성 실패", function() {
-        				dialog.close();
         				_this.selectVacation();
         			});
 				}

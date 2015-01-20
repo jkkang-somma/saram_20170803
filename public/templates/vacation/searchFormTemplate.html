@@ -1,12 +1,29 @@
-<form class="form-inline">
-	<div class="form-group">
-		<select id="selectYear" class="form-control">
-			<%_.each(data.formYears, function(year){ if (year == data.nowYear)
-			{%>
-			<option value="<%=year%>" selected><%=year%></option> <%} else {%>
-			<option value="<%=year%>"><%=year%></option> <%} }); %>
-		</select>
+<div class="row">
+	<div class="col-sm-2">
+		<div class="form-group form-group-sm">
+			<form class="form-inline" style="margin-bottom: 10px">
+				<div class="form-group" style="margin-right:10px">
+					<label class="control-label">연도</label>
+				</div>
+				<div class="form-group">
+					<select id="selectYear" class="form-control yes-form-control">
+						<%_.each(formYears, function(year){ if (year == nowYear) {%>
+						<option value="<%=year%>" selected><%=year%></option> <%} else {%>
+						<option value="<%=year%>"><%=year%></option> <%} }); %>
+					</select>
+				</div>
+			</form>
+		</div>
 	</div>
-	<button id="btnCreateData" class="btn btn-default" type="button">자료 생성</button>	
-	<button id="btnSearch" class="btn btn-default" type="button">조회</button>
-</form>
+	<div class="col-sm-3">
+		<div class="form-group form-group-sm">
+			<button id="btnSearch" class="btn btn-default btn-success btn-sm"
+				type="button">조회</button>
+			<% if (isShowCreateBtn) { %>
+			<button id="btnCreateData" class="btn btn-default btn-success btn-sm"
+				type="button">자료 생성</button>
+			<% }%>
+		</div>
+	</div>
+</div>
+
