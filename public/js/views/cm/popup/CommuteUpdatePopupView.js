@@ -31,31 +31,8 @@ commuteUpdatePopupTemplate,
 TextBoxHTML, DatePickerHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
-	function _getTimeStr(datePicker) {
-		if ( Util.isNotNull(datePicker) ) {
-			return datePicker.getDate().format("YYYY-MM-DD HH:mm:ss")
-		} else {
-			Dialog.show("시간을 입력해 주시기 바랍니다. ex: 2015-01-01 09:00:00");
-			return null;
-		}
-	}
 
-	function _getChangeHistoryModel(changeColumn, oriData, newData, changeId ) {
-		if (oriData["year"] + "-" + oriData[changeColumn] == newData[changeColumn]) {
-			return null;
-		} else {
-			var changeHistoryModel = new ChangeHistoryModel({
-				year : oriData.year,
-				id : oriData.id,
-				date : oriData.date,
-				change_column : changeColumn,
-				change_before : oriData[changeColumn],
-				change_after : newData[changeColumn],
-				change_id : changeId 
-			});				
-			return changeHistoryModel;
-		}
-	}
+
 	
 	var CommuteUpdatePopupView = Backbone.View.extend({
 		initialize : function(data) {
@@ -74,7 +51,7 @@ TextBoxHTML, DatePickerHTML
     	    	{ obj : 
     	    		{
     	    			id : "commutUpdatePopupIn",
-    	    			label : "날짜",
+    	    			label : "출근 시간",
     	    			name : "in_time",
     	    			format : "YYYY-MM-DD HH:mm:ss"
     	    			
@@ -86,11 +63,10 @@ TextBoxHTML, DatePickerHTML
     	    	{ obj : 
     	    		{
     	    			id : "commutUpdatePopupOut",
-    	    			label : "날짜",
+    	    			label : "퇴근 시간",
     	    			name : "out_time",
     	    			format : "YYYY-MM-DD HH:mm:ss"
     	    		}
-    	    		
     	    	})
     	    );
     	    
@@ -128,18 +104,20 @@ TextBoxHTML, DatePickerHTML
      		data._id = this.selectData.id;	// PUT으로 전송하기
 			var commuteModel = new CommuteModel();
 			commuteModel.save(data, opt).done(function(){
+				// 당일, 다음날의 Commute_Result를 요청
 				var commuteCollection = new CommuteCollection();
 	     		commuteCollection.fetch({ 
 	     			data: {
 	     				id : data.id,
 	     				startDate : data.date,	
 	     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
-	     			},success : function(){
+	     			},success : function(resultCollection){
+	     				
 	     				var modifyCollection = new CommuteCollection();
-		     			var currentDayCommute = commuteCollection.models[0];
+		     			var currentDayCommute = resultCollection.models[0];
 		     			resultTimeFactory.initByModel(currentDayCommute);
-		     			resultTimeFactory.inTime = Moment(data.in_time).toDate();
-		     			resultTimeFactory.outTime = Moment(data.out_time).toDate();
+		     			resultTimeFactory.inTime = data.in_time === "" ? null : Moment(data.in_time).toDate();
+		     			resultTimeFactory.outTime = data.out_time === "" ? null : Moment(data.out_time).toDate();
 		     			
 		     			var currentResult = resultTimeFactory.getResult();
 		     			console.log(currentResult);
@@ -147,7 +125,7 @@ TextBoxHTML, DatePickerHTML
 		     			
 		     			modifyCollection.add(currentResult);
 	
-		     			var nextDayCommute = commuteCollection.models[1];		
+		     			var nextDayCommute = resultCollection.models[1];		
 		     			resultTimeFactory.initByModel(nextDayCommute);
 		     			
 		     			var yesterdayOutTime = new Date(currentResult.out_time);
@@ -165,38 +143,32 @@ TextBoxHTML, DatePickerHTML
 			});
 		},
 		getInsertData: function() {
+			var inTimeDatePicker = $(this.el).find("#commutUpdatePopupIn").data("DateTimePicker");
+			var outTimeDatePicker = $(this.el).find("#commutUpdatePopupOut").data("DateTimePicker");
      		var newData = {
      			date : $(this.el).find("#commutUpdatePopupDate").val(),
      			id : $(this.el).find("#commutUpdatePopupId").val(),
-     			in_time : $(this.el).find("#commutUpdatePopupIn").data("DateTimePicker"),
-     			out_time : $(this.el).find("#commutUpdatePopupOut").data("DateTimePicker")
+     			in_time : inTimeDatePicker.getText()==="" ? "": inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
+     			out_time : outTimeDatePicker.getText()==="" ? "": inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
      		}
 			
-			newData.in_time = _getTimeStr(newData.in_time);	
+     		var userId = SessionModel.get("user").id;
 			
-			if (newData.in_time === null) {
-				return null;
-			} 
-			newData.year = Moment(newData.in_time).year();
-
-			newData.out_time = _getTimeStr(newData.out_time);
-			if (newData.out_time === null) {
-				return null;
-			}
-			
-			var userId = SessionModel.get("user").id;
-			
-			var inChangeModel = _getChangeHistoryModel("in_time", this.selectData, newData, userId);
-			var outChangeModel = _getChangeHistoryModel("out_time", this.selectData, newData, userId);
+			var inChangeModel = _getChangeHistoryModel("in_time", newData, this.selectData, userId);
+			var outChangeModel = _getChangeHistoryModel("out_time", newData, this.selectData,userId);
 			
 			newData.changeHistoryJSONArr = [];
 			
 			if (inChangeModel) {
 				newData.changeHistoryJSONArr.push(inChangeModel);
+			}else{
+				newData.in_time = null;
 			}
 			
 			if (outChangeModel) {
 				newData.changeHistoryJSONArr.push(outChangeModel);
+			}else{
+				newData.out_time = null;
 			}
 			
 			if (newData.changeHistoryJSONArr.length === 0) {
@@ -207,6 +179,26 @@ TextBoxHTML, DatePickerHTML
 			return newData;
 		}
 	});
+	
+	function _getChangeHistoryModel(changeColumn, newData, oriData, changeId ) {
+		if (oriData["year"] + "-" + oriData[changeColumn] == newData[changeColumn] ||
+			oriData[changeColumn] == newData[changeColumn] ){
+			
+			return null;
+			
+		} else {
+			var changeHistoryModel = new ChangeHistoryModel({
+				year : oriData.year,
+				id : oriData.id,
+				date : oriData.date,
+				change_column : changeColumn,
+				change_before : oriData[changeColumn],
+				change_after : newData[changeColumn],
+				change_id : changeId 
+			});				
+			return changeHistoryModel;
+		}
+	}
 	
 	return CommuteUpdatePopupView;
 });

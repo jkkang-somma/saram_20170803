@@ -42,7 +42,7 @@ var User = function (data) {
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
                 debug(currentData);
-                var _updateData=_.defaults(currentData, _data);
+                var _updateData=_.defaults(currentData[0], currentData,_data);
                 UserDao.updateUser(_updateData).then(function(result){
                     resolve(result);
                 }).catch(function(e){

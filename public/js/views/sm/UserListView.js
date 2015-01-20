@@ -32,9 +32,25 @@ define([
     		        { "title" : "부서", "render": function(data, type, row){
                         return row.dept_name;
                     }}
-                    , "name_commute", "입사일", "퇴사일", "권한"
+                    , "식별명칭", "입사일", "퇴사일",
+                    { "title" : "조회 권한", "render": function(data, type, row){
+                        var result="전체";
+                        if (row.privilege == 3){
+                            result="개인";
+                        } else if (row.privilege == 2){
+                            result="부서";
+                        }
+                        return result;
+                    }},
+                    { "title" : "관리 권한", "render": function(data, type, row){
+                        var result="사용자";
+                        if (row.admin > 0){
+                            result="관리자";
+                        }
+                        return result;
+                    }}
                 ],
-    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "privilege"],
+    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "privilege", "admin"],
     		    collection:userCollection,
     		    detail:true,
     		    view:this

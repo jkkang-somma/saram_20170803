@@ -35,6 +35,9 @@ define({
             SAVE:"Success Save User.",
             REMOVE:"Success Remove User.",
             ADD:"Success Add User."
+        },
+        LOGIN:{
+            SUCCESS_INIT_PASSWORD:"Success Initialize Password."
         }
     },
     WARNING:{
@@ -52,6 +55,27 @@ define({
         },
         HTTP:{
             NOT_FIND_PAGE:"Not find page."
+        }
+    },
+    MENU:{
+        TOP:{
+            SM:"Security Manager",
+            AM:"Attendance Manager"
+        },
+        SUB:{
+            SM:{
+                USER:"User Manager",
+                HOLIDAY:"Holiday Manager",
+                VACATION:"Vacation Manager"
+            },
+            AM:{
+                ADD_RAW_DATA:"Add Raw Data",
+                RAW_DATA_LIST:"Raw Data List",
+                CREATE_DATA:"Create Commute Data",
+                COMMUTE_MANAGER:"Commute Data Manager",
+                COMMUTE_MANAGER_COMMENT:"Commute History Manager",
+                REPORT_MANAGER:"Commute Report"
+            }
         }
     }
 });

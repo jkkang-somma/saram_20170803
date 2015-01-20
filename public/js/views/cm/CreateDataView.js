@@ -12,6 +12,8 @@ define([
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
   'text!templates/component/progressbar.html',
+  'text!templates/inputForm/forminline.html',
+  'text!templates/inputForm/label.html',
   'collection/common/HolidayCollection',
   'collection/common/RawDataCollection',
   'collection/sm/UserCollection',
@@ -19,7 +21,7 @@ define([
   'collection/vacation/OutOfficeCollection',
   'views/cm/popup/CreateDataPopupView',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, Moment, ResultTimeFactory,
-HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML,
+HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, ForminlineHTML, LabelHTML,
 HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection,
 CreateDataPopupView){
     var resultTimeFactory = ResultTimeFactory.Builder;
@@ -245,6 +247,7 @@ CreateDataPopupView){
     	                success : function(){
     	                    Dialog.info("데이터 전송 성공!");
     	                    that._disabledProgressbar(true);
+    	                    that._setLabel();
     	                }
     	            });
     	        }
@@ -261,16 +264,36 @@ CreateDataPopupView){
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
-    	     
+    	    
+    	    var _row=$(ForminlineHTML);
+    	    var _label = $(_.template(LabelHTML)({label : ""}));
+    	    this.label = _label;
+    	    _row.append(_label);
+    	    
     	    _layout.append(_head);
+    	    _layout.append(_row);
             _layout.append(_content);
             _layout.append(_progressBar);
     	    $(this.el).append(_layout);
-
+            this._setLabel();
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
-
             return this;
+     	},
+     	_setLabel : function(){
+     	    var that = this;
+     	    $.get(
+    	        "/commute/lastiestdate",
+    	        function(data){
+    	            if(data.length === 0){
+    	                that.label.parent().css("display","none");
+    	            }else{
+    	                that.label.parent().css("display","block");
+    	                that.label.text("Lastest data : " + data["0"].date);
+    	            }
+    	            
+    	        }
+    	    );
      	},
      	
      	_disabledProgressbar : function(flag){

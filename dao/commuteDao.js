@@ -21,7 +21,7 @@ CommuteDao.prototype.selectCommuteByID = function(data){
 CommuteDao.prototype.updateCommuteResultInOutTime =  function (data) {
 	var queryStr = db.getQuery('commute', 'updateCommuteResultInOutTime');
     debug(queryStr);
-    return db.queryV2(queryStr, [data.in_time, data.in_time_change, data.out_time, data.out_time_change, data.id, data.year, data.date]);
+    return db.queryV2(queryStr, [data.in_time, data.in_time_change, data.out_time, data.out_time_change, data.id, data.date]);
 }
 
 CommuteDao.prototype.insertCommute =  function (data) {
@@ -55,4 +55,8 @@ CommuteDao.prototype.updateCommuteCommentCount =  function (data) {
     return db.queryV2(queryStr, [data.id, data.year, data.date, data.id, data.year, data.date]);
 }
 
+CommuteDao.prototype.getLastiestDate = function(){
+    var queryStr = db.getQuery('commute', 'getLastiestDate');
+    return db.queryV2(queryStr);
+}
 module.exports = new CommuteDao();

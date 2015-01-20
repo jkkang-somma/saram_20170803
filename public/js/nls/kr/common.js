@@ -37,6 +37,9 @@ define({
             SAVE:"사용자 정보를 수정하였습니다.",
             REMOVE:"사용자를 삭제하였습니다.",
             ADD:"사용자를 등록하였습니다."
+        },
+        LOGIN:{
+            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다."
         }
     },
     WARNING:{
@@ -54,6 +57,27 @@ define({
         },
         HTTP:{
             NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다."
+        }
+    },
+    MENU:{
+        TOP:{
+            SM:"일반 관리",
+            AM:"근태 관리"
+        },
+        SUB:{
+            SM:{
+                USER:"사원 관리",
+                HOLIDAY:"휴일 관리",
+                VACATION:"연차 관리"
+            },
+            AM:{
+                ADD_RAW_DATA:"출입 기록 등록",
+                RAW_DATA_LIST:"출입 기록 조회",
+                CREATE_DATA:"근태 자료 생성",
+                COMMUTE_MANAGER:"근태 자료 관리",
+                COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
+                REPORT_MANAGER:"근태 상신"
+            }
         }
     }
 });

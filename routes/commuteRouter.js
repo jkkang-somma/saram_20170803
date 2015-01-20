@@ -46,10 +46,14 @@ router.route('/bulk')
 	} else {
 		return res.send({error: "관리자 등급만 생성이 가능합니다."});
 	}
-	
-
 });
 
+router.route('/lastiestdate')
+.get(function(req,res){
+	Commute.getLastiestDate().then(function(result){
+		res.send(result);
+	})
+});
 
 router.route('/:id')
 .get(function(req, res){	
@@ -63,5 +67,10 @@ router.route('/:id')
 	});
 });
 
+
+router.route('/result')
+.get(function(req, res){
+	res.send({});
+});
 
 module.exports = router;
