@@ -54,18 +54,18 @@ define([
 	function _getVacationUpdateBtn(that) {
 		return {
 	        type:"custom",
-	        name:"edit",
+	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
 	        	if ( Util.isNull(selectItem) ) {
-        			Dialog.warning("사용자를 선택 하여 주시기 바랍니다.");
+        			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
         			return;
 	        	}
+	        	
 	            var updateVacationPopup = new UpdateVacationPopup(selectItem);
-	            Dialog.show({
-	                title:"연차 수정", 
-                    content: updateVacationPopup,
-                    buttons: [{
+	            var buttons = [];
+	            if(SessionModel.get("user").admin == 1) { // 관리자만 수정 가능
+	            	buttons.push({
                         id: 'updateVacationBtn',
                         cssClass: Dialog.CssClass.SUCCESS,
                         label: '수정',
@@ -81,12 +81,19 @@ define([
                              	}
                             });
                         }
-                    }, {
-                        label : "취소",
-                        action : function(dialog){
-                            dialog.close();
-                        }
-                    }]
+                    });
+	            }
+	            buttons.push({
+                    label : "취소",
+                    action : function(dialog){
+                        dialog.close();
+                    }
+                });
+	            
+	            Dialog.show({
+	                title:"연차 수정", 
+                    content: updateVacationPopup,
+                    buttons: buttons
 	            })
 	        }
 	    };
@@ -135,9 +142,7 @@ define([
     	buttonInit: function(){
     	    var that = this;
     	    // tool btn
-    	    if (SessionModel.get("user").admin == 1 ) {
-    	    	this.gridOption.buttons.push(_getVacationUpdateBtn(that));
-    	    }
+    	    this.gridOption.buttons.push(_getVacationUpdateBtn(that));
     	},
     	selectVacation: function() {
             var _this = this;
