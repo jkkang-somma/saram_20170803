@@ -30,9 +30,15 @@ router.route('/:id')
 	var data = req.body;
 	data.reply_id = session.user.id;	// 코멘트 작성자 ID	
 	
-	Comment.updateCommentReply(data, function(result) {
-		return res.send(result);
-	});
+	if (session.user.admin == 1) {
+		Comment.updateCommentReply(data, function(result) {
+			return res.send(result);
+		});
+	} else {
+		return res.send({"error": "관리자 등급만  가능합니다."});
+	}
+	
+
 })
 
 module.exports = router;
