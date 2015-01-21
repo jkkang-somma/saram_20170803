@@ -40,6 +40,20 @@ define([
             			
 			var tpl = _.template(commentPopupTemplate, {variable: 'data'})(this.selectData);			
 			$(this.el).append(tpl);
+			
+			$(this.el).find("#wantInTimePopup").datetimepicker({
+            	pickTime: true,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD HH:mm:SS"
+            });
+            
+			$(this.el).find("#wantOutTimePopup").datetimepicker({
+            	pickTime: true,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD HH:mm:SS"
+            });
 
             dfd.resolve();
             return dfd.promise();			
