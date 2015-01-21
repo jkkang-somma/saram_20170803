@@ -1,45 +1,45 @@
 
-<form id="commentInfoForm" class="form-horizontal">
+<form id="commentInfoForm">
 	<input type="hidden" id="id" name="id" value="<%=data.id%>"> 
 	<input type="hidden" id="year" name="year" value="<%=data.year%>"> 
 	<input type="hidden" id="date" name="date" value="<%=data.date%>">
 
 	<div class="form-group">
-		<label class="col-sm-5 control-label">일자</label>
+		<label class="col-sm-5 ">일자</label>
 		<div class="col-sm-7">
-			<label class="control-label"><%=data.date%></label>
+			<label class=""><%=data.date%></label>
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-5 control-label">이름</label>
+		<label class="col-sm-5 ">이름</label>
 		<div class="col-sm-7">
-			<label class="control-label"><%=data.name%></br>(<%=data.id%>)
+			<label class=""><%=data.name%></br>(<%=data.id%>)
 			</label>
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-5 control-label">신청일자</label>
+		<label class="col-sm-5 ">신청일자</label>
 		<div class="col-sm-7">
-			<label class="control-label"><%=data.comment_date%></label>
+			<label class=""><%=data.comment_date%></label>
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-5 control-label">접수내용</label>
+		<label class="col-sm-5 ">접수내용</label>
 		<div class="col-sm-7">
-<!-- 			<label class="control-label"><%=data.comment%></label> -->
+<!-- 			<label class=""><%=data.comment%></label> -->
 			<textarea class="form-control" rows="5" readonly="readonly"
 				style="resize: none;"><%=data.comment%></textarea>			
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-5 control-label">처리내용</label>
+		<label class="col-sm-5 ">처리내용</label>
 		<div class="col-sm-7">
 			<textarea class="form-control" rows="5" id="comment_reply" name="comment_reply"
 				style="resize: none;"><%=data.comment_reply%></textarea>
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-5 control-label">처리내용</label>
+		<label class="col-sm-5 ">처리내용</label>
 		<div class="col-sm-7">
 			<select id="state" name="state" class="form-control">
 				<option value="접수중" <% if (data.state == '접수중') { %>selected<%}%>>접수중</option>

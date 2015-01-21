@@ -85,18 +85,22 @@ define([
 
 	var CommuteCommentView = BaseView.extend({
 		el:$(".main-container"),
+		setSearchParam : function(searchParam) {
+			this.searchParam = searchParam; // url + 검색 조건으로 페이지 이동시 조건감들 {id: id, date: date}
+		},
 		initialize:function(){
     		this.commentCollection = new CommentCollection();
     		this.gridOption = {
         		    el: "commute_content",
         		    id: "commuteDataTable",
         		    column:[
-     			           { data : "date", "title" : "일자" },
+        		    	   { data : "comment_date", "title" : "신청일자"},
     			           { data : "name", "title" : "이름",
      			        	   render: function(data, type, full, meta) {
     			        		   return full.name + "</br>(" + full.id +")";
     			        	   }
     			           },
+    			           { data : "date", "title" : "일자" },
     			           { data : "comment", "title" : "접수내용",
      			        	   render: function(data, type, full, meta) {
     			        		   var comment = full.comment; 
@@ -111,7 +115,6 @@ define([
     			        		   return full.writer_name + "</br>(" + full.writer_id +")";
     			        	   }
     			           },
-    			           { data : "comment_date", "title" : "신청일자"},
     			           { data : "comment_reply", "title" : "처리내용",
      			        	   render: function(data, type, full, meta) {
     			        		   var comment_reply = full.comment_reply; 
@@ -121,6 +124,7 @@ define([
     			        		   return comment_reply;
     			        	   }    			        	   
     			           },
+    			           { data : "comment_reply_date", "title" : "업데이트일자"},
     			           { data : "reply_name", "title" : "답변자",
      			        	   render: function(data, type, full, meta) {
     			        		   if (full.reply_id == "" || full.reply_name == "") {
@@ -130,7 +134,6 @@ define([
     			        		   }
     			        	   }
     			           },
-    			           { data : "comment_reply_date", "title" : "업데이트일자"},
     			           { data : "state", "title" : "처리상태"}
              	        ],
         		    collection: this.commentCollection,
@@ -216,6 +219,11 @@ define([
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
 
+            if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+            	$(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+     		    $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+            }
+            
             this.selectComments();
             return this;
     	},
@@ -226,6 +234,11 @@ define([
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+     		}
+     		
+     		if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+     			data.id = this.searchParam.id;
+     			this.searchParam = null; // url 접속 - 최초 검색 후 초기화 
      		}
      		
      		if ( Util.isNull(data.startDate) ) {

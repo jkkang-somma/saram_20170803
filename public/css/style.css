@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(https://fonts.googleapis.com/css?family=Great+Vibes|Orbitron|Audiowide);
 body {
   overflow:hidden;
   font-family: 'Nanum Gothic';
@@ -39,7 +40,7 @@ body {
 .page-header h1 small{
     color: #2ABB9B;
 }
-.form-control.yes-form-control{
+.form-control{
     border-color:#2ABB9B;
 }
 
@@ -283,7 +284,7 @@ background-color: #e0e0e0;
     border-radius: 0px 3px 3px 0px !important;
 }
 .input-group-addon{
-    color:beige;
+    color:white;
     background-color:#2ABB9B;
     border-color:transparent;
 }
@@ -354,8 +355,7 @@ background-color: #e0e0e0;
 }
 
 .navbar-inverse .navbar-brand {
-/*	font-family: 'Oleo Script Swash Caps', cursive;*/
-	color: #FFFFFF;
+    color:#29BB9B;
 	transition: color .5s;
 }
 
@@ -475,6 +475,11 @@ background-color: #e0e0e0;
 .navbar-inverse .navbar-collapse {
 	border-color: #00CFAF;
 }
+.navbar-brand{
+    font-family:"Audiowide";
+}
+
+
 
 /* DatePicker */
 .datepicker .datepicker-days td:nth-child(1).old{

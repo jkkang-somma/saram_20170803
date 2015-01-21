@@ -12,11 +12,19 @@ CommentDao.prototype.selectComment =  function (data) {
     return db.queryV2(queryStr, [data.startDate, data.endDate]);
 }
 
+//comment 조회  
+CommentDao.prototype.selectCommentById =  function (data) {
+	var queryStr = db.getQuery('comment', 'selectCommentById');
+    debug(queryStr);
+    return db.queryV2(queryStr, [data.startDate, data.endDate, data.id]);
+}
+
+
 // comment 등록 
 CommentDao.prototype.insertComment =  function (data) {
 	var queryStr = db.getQuery('comment', 'insertComment');
     debug(queryStr);
-    return db.queryV2(queryStr, [data.year, data.id, data.date, data.comment, data.state, data.writer_id]);
+    return db.queryV2(queryStr, [data.year, data.id, data.date, data.comment, data.state, data.writer_id, data.want_in_time, data.want_out_time]);
 }
 
 // comment reply 수정 

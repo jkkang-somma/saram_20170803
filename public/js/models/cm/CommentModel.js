@@ -20,7 +20,9 @@ define([
             writer_name : "",
             writer_id : "",
             reply_name : "",
-            reply_id : ""
+            reply_id : "",
+            want_in_time: "",
+            want_out_time: ""
         }
     });
 

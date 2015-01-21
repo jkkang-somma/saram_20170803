@@ -72,10 +72,11 @@ define([
                         action: function(dialog) {
                         	updateVacationPopup.onUpdateVacationInfo({
                         		success: function(model, response) {
+                        			model.initHoliday(); // 휴가 잔여 일수 재 설정
                         			Dialog.show("성공", function() {
                         				dialog.close();
-                        				that.selectVacation();
-                        			})
+                        				that.grid.updateRow(model.attributes);
+                        			});
                              	}, error : function(model, res){
                              		alert("업데이트가 실패했습니다.");
                              	}

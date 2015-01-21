@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `change_history_tbl` (
   `id` VARCHAR(45) NOT NULL COMMENT '사번',
   `date` VARCHAR(12) NOT NULL COMMENT '근태일자',
   `change_column` VARCHAR(45) NOT NULL COMMENT '수정 컬럼 ( 출근,퇴근 )',
-  `change_before` VARCHAR(45) NOT NULL COMMENT '변견 전 내용',
+  `change_before` VARCHAR(45) COMMENT '변견 전 내용',
   `change_after` VARCHAR(45) NOT NULL COMMENT '변경 후 내용',
   `change_date` DATETIME NOT NULL COMMENT '수정 시각',
   `change_id` VARCHAR(45) NOT NULL COMMENT '수정작업 ID',
@@ -304,6 +304,8 @@ CREATE TABLE IF NOT EXISTS `comment_tbl` (
   `state` VARCHAR(10) NOT NULL COMMENT '처리상태 ( 접수,처리중,완료 )',
   `writer_id` VARCHAR(45) NOT NULL COMMENT 'comment 작성자 사번',
   `reply_id` VARCHAR(45) NULL COMMENT 'comment 답변자 사번',
+  `want_in_time` VARCHAR(45) NULL COMMENT '변경 요청 출근시간 ( 년-월-일 시:분:초 )',
+  `want_out_time` VARCHAR(45) NULL COMMENT '변경 요청 퇴근시간 ( 년-월-일 시:분:초 )',
   PRIMARY KEY (`seq`, `year`, `date`, `id`),
   INDEX `fk_comment_tbl_commute_result_tbl1_idx` (`year` ASC, `date` ASC, `id` ASC),
   CONSTRAINT `fk_comment_tbl_commute_result_tbl1`

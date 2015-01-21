@@ -33,6 +33,11 @@ define([
     	        $(this).parent().addClass("login-input-focus");
     	    });
     	    $("#loginIdTextbox").focus();
+    	    
+    	    this.el.find("#initPasswordBtn").click(function(){
+    	        Dialog.show("초기화 요청");
+    	        return false;
+    	    })
      	},
     	
     	login : function(e){

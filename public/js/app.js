@@ -8,15 +8,14 @@ define([
   'bootstrap',
   'dialog',
   'i18n!nls/common',
-  'i18n!nls/error',
-  
+  'data/code',
   'router',
   'models/sm/SessionModel',
   'views/LoadingView',
   'views/LoginView',
   'views/NavigationView', 
   'moment', 'bootstrap-datetimepicker',
-], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, i18Error,  MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
+], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
     var _loadingView;
     var _saram;
@@ -32,9 +31,6 @@ define([
             $.ajaxSetup({ cache: false });
             
             var _app=this;
-            // _loadingView = new LoadingView();
-            // _loadingView.render();
-            
             var _loginView;
             
             //Global Error Handle
@@ -46,9 +42,10 @@ define([
                         _initFlalg=false;
                         
                         $(document).unbind('ajaxError');
-                        _app.start();
+                        //_app.start();
+                        window.location="/";
                     });
-                } else if (xhr.status == 401){
+                } else if (xhr.status == 404){
                     Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
                 }
                     
@@ -64,28 +61,32 @@ define([
                     //});
                     return;
                 } else {
-                   _app.draw(); 
+                        _app.draw();   
                 }    
             });
         },
         draw:function(){
             $("body").removeClass("login-body");
-            _router = new MainRouter({affterCallback:function(){// mainRouter create
-               // _loadingView.disable(function(){// loadingView close
-                    if (_.isUndefined(_navigationView)){
-                        _navigationView= new NavigationView();
-            		    _navigationView.render();
-                    } else {
-                        _navigationView.show();
+            Code.init().then(function(){
+                _router = new MainRouter({
+                    affterCallback:function(){// mainRouter create
+                        if (_.isUndefined(_navigationView)){
+                            _navigationView= new NavigationView();
+                		    _navigationView.render();
+                        } else {
+                            _navigationView.show();
+                        }
+                        
+                        if (_initFlalg){
+                            Backbone.history.start({root:"/"});
+                        } else {
+                            Backbone.history.loadUrl();
+                        }
                     }
-                    
-                    if (_initFlalg){
-                        Backbone.history.start({root:"/"});
-                    } else {
-                        Backbone.history.loadUrl();
-                    }
-               // });
-            }});
+                });     
+            }, function(){
+                Dialog.error("Code Init Fail");
+            });
         }
     });
     return App;
