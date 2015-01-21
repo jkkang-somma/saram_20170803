@@ -28,7 +28,8 @@ define({
         PRIVILEGE:"Privilege",
         ADMIN:"Admin",
         PASSWORD:"Password",
-        NEW_PASSWORD:"New Password"
+        NEW_PASSWORD:"New Password",
+        RE_NEW_PASSWORD:"Re New Password"
     },
     GRID:{
         MSG:{
@@ -72,6 +73,9 @@ define({
             DO_NOT_FOUND_USER:"Not valid account.",
             NOT_EQULES_PASSWORD:"Not valid account.",
             INIT_PASSWORD:"Initialize password."
+        },
+        USER:{
+            NOT_EQULES_CONFIG_PASSWORD:"Not valid new password."
         }
     },
     ERROR:{

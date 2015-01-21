@@ -71,14 +71,23 @@ define([
             type:"input",
             name:undefined,
             label:undefined,
-            value:undefined
+            value:undefined,
+            disabled:false
+        },
+        password:{
+            type:"input",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            disabled:false
         },
         date:{
             type:"date",
             name:undefined,
             label:undefined,
             value:undefined,
-            format:"YYYY-MM-DD" 
+            format:"YYYY-MM-DD",
+            disabled:false
         },
         combo:{
             type:"combo",
@@ -89,7 +98,8 @@ define([
             textKey:"name",
             collection:undefined,
             codeKey:"code",
-            linkField:undefined
+            linkField:undefined,
+            disabled:false
         },
         hidden:{
             type:"hidden",

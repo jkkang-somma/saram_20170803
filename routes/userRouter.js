@@ -113,4 +113,20 @@ router.route('/')
         });
     });
 });
+//사용자 등록
+router.route('/config/:id')
+.put(function(req, res){
+    var user = new User(req.body);
+    user.configUser().then(function(result){
+        res.send(result);
+    }).catch(function(e){
+        debug("Error initPassword.");
+        res.status(500);
+        res.send({
+            success:false,
+            message: e.message,
+            error:e
+        });
+    });
+});
 module.exports = router;

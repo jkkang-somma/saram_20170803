@@ -55,6 +55,30 @@ var User = function (data) {
             });
         });
     }
+    var _configUser=function(){
+        var _user=this;
+        return new Promise(function(resolve, reject){// promise patten
+            _getUser().then(function(currentData){
+                debug(currentData[0]);
+                if (currentData[0].password!=_data.password){
+                    debug("_configUser ERROR:Not equls Password");
+                    throw new Error("NOT_EQULES_PASSWORD");
+                }
+                _data.password=_data.new_password;
+                var _updateData=_.defaults(_data, currentData[0]);
+                debug(_updateData);
+                UserDao.updateUser(_updateData).then(function(result){
+                    resolve(result);
+                }).catch(function(e){
+                    debug("_editUser ERROR:"+e.message);
+                    reject(e);
+                });
+            }).catch(function(e){//Connection Error
+               debug("_getUser ERROR:"+e.message);
+               reject(e);
+            });
+        });
+    };
     return {
         get:_get,
         getUser:_getUser,
@@ -64,7 +88,8 @@ var User = function (data) {
         data:_data,
         remove:_removeUser,
         addUser:_addUser,
-        editUser:_editUser
+        editUser:_editUser,
+        configUser:_configUser
     }
 }
 

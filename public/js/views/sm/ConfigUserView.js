@@ -9,10 +9,11 @@ define([
   'i18n!nls/common',
   'lib/component/form',
   'models/sm/UserModel',
+  'models/sm/UserConfigModel',
   'models/sm/SessionModel',
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
-], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, SessionModel, CodeCollection, container){
+], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, UserConfigModel, SessionModel, CodeCollection, container){
     var LOG= log.getLogger("EditUserView");
     var ConfigUserView = BaseView.extend({
     	initialize:function(data){
@@ -45,14 +46,19 @@ define([
     	                value:_model.name,
     	                disabled:true
     	        },{
-    	                type:"input",
+    	                type:"password",
     	                name:"password",
     	                label:i18nCommon.USER.PASSWORD,
     	                value:_model.password
     	        },{
-    	                type:"input",
+    	                type:"password",
     	                name:"new_password",
     	                label:i18nCommon.USER.NEW_PASSWORD,
+    	                value:_model.password
+    	        },{
+    	                type:"password",
+    	                name:"re_new_password",
+    	                label:i18nCommon.USER.RE_NEW_PASSWORD,
     	                value:_model.password
     	        }]
     	    });
@@ -68,43 +74,39 @@ define([
     	submitSave : function(e){
     	    var dfd= new $.Deferred();
     	    var _view=this,_form=this.form,_data=_form.getData();
-    	    var _userModel= new UserModel(_data);
-    	    _userModel.attributes._id="-2";
-    	    var _validate=_userModel.validation(_data);
-    	    _userModel.save({},{
-    	        success:function(model, xhr, options){
-    	            dfd.resolve(_data);
-    	        },
-    	        error:function(model, xhr, options){
-    	            var respons=xhr.responseJSON;
-    	            Dialog.error(respons.message);
-    	            dfd.reject();
-    	        },
-    	        wait:false
-    	    });
+    	    var _id=_data.id;
+    	    var _password=_data.password;
+    	    var _new_password=_data.new_password;
+    	    var _re_new_password=_data.re_new_password;
     	    
+    	   
+  	      if (_.isEmpty(_password)||_.isEmpty(_new_password)||_.isEmpty(_re_new_password)){// 입력하지 않으 정보가 있을때
+  	        Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);
+  	        dfd.reject();
+  	      } else {//정상 작동 .
+  	        if (_data.new_password!=_data.re_new_password) {// 같지 않을때
+              Dialog.warning(i18nCommon.WARNING.USER.NOT_EQULES_CONFIG_PASSWORD);
+              dfd.reject();
+      	    } else {
+    	        _data._id="-1";
+    	        var userConfigModel=new UserConfigModel(_data);
+    	        userConfigModel.save({},{
+    	          success:function(){
+    	            Dialog.show(i18nCommon.SUCCESS.LOGIN.SUCCESS_INIT_PASSWORD);
+    	            dfd.resolve();
+    	          },
+    	          error:function(model, e){
+    	            if (!_.isUndefined(e.responseJSON.success)){
+    	              Dialog.warning(i18nCommon.WARNING.LOGIN[e.responseJSON.message]);
+    	            } else {
+    	              Dialog.error(e.responseJSON.message);
+    	            }
+    	            dfd.reject();
+    	          }
+    	        });
+  	        }
+  	      }
     	    return dfd.promise();
-    	},
-    	initializePassword:function(){
-    	    var dfd= new $.Deferred();
-    	    var _view=this,_form=this.form,_data=_form.getData();
-    	    _data.password="";
-    	    var _userModel= new UserModel(_data);
-    	    _userModel.attributes._id="-2";
-    	    var _validate=_userModel.validation(_data);
-    	    _userModel.save({},{
-    	        success:function(model, xhr, options){
-    	            dfd.resolve(_data);
-    	        },
-    	        error:function(model, xhr, options){
-    	            var respons=xhr.responseJSON;
-    	            Dialog.error(respons.message);
-    	            dfd.reject();
-    	        },
-    	        wait:false
-    	    });
-    	    
-    	    return dfd.promise();  
     	}
     });
     return ConfigUserView;
