@@ -116,8 +116,10 @@ define([
 			}
 			
 			inData._id = inData.id;
+			// Comment table 수정
 			var commentModel = new CommentModel();
 			commentModel.save(inData, opt);
+			// CommuteResult 수정
 		},
 		getInsertData: function() {
      		var newData = {
