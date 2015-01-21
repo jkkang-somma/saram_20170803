@@ -52,7 +52,6 @@ define([
             dept_code: '',
             dept_name:'',
             join_company: null,
-            leave_company: "-",
             privilege : 0,
             admin : 0,
         },

@@ -1,3 +1,4 @@
+
 .login-body{
     height: 100%;
     width: 100%;
@@ -11,6 +12,11 @@
     margin: 0 auto;
     margin-top:5em;
     border-color: #1F8871;
+    -webkit-animation-duration: .7s;
+    -moz-animation-duration: .7s;
+    animation-duration: .7s;
+    
+    font-family: 'Audiowide';
 }
 
 .login-form-section .form-control{
@@ -33,6 +39,23 @@
     /* IE 10+ */
     color: #2ABB9B;
 }
+.login-password-sestion {
+    width: 80%;
+    max-width: 30em;
+    margin: 0 auto;
+    margin-top:1em;
+    background: rgb(41, 187, 155);
+    padding: 10px;
+    border-radius:3px;
+    border:1px solid #1F8871;
+    color: white;
+    
+    -webkit-animation-duration: .7s;
+    -moz-animation-duration: .7s;
+    animation-duration: .7s;
+    
+    font-family: 'Orbitron';
+}
 
 
 .login-input {
@@ -54,12 +77,12 @@
     padding-right: 15px;
     padding-top: 15px;
     padding-bottom:5px;
-    border-radius: 3px 3px 0px 0px;
     border: 1px transparent;
 }
 .panel-header h1{
     margin:0;
-    color:beige;
+    color:white;
+    font-family: 'Orbitron';
 }
 .login-button{
     margin-right: 15px;

@@ -7,7 +7,7 @@
         </query>
         <query id="selectIdByUser">select * from members_tbl where id=?</query>
         <query id="selectManager">select * from members_tbl where privilege &lt;= 2</query>
-        <query id="insertUser">insert into members_tbl(id, name, dept_code, name_commute, join_company, privilege, admin) values(?,?,?,?,?, 0, 0)</query>
+        <query id="insertUser">insert into members_tbl(id, name, dept_code, name_commute, join_company, privilege, admin) values(?,?,?,?,?, ?,?)</query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
     		UPDATE

@@ -1,6 +1,10 @@
 define({
     DIALOG:{
        TITLE:{
+           PRIMARY:"알림",
+           DEFAULT:"알림",
+           WARNING:"경고",
+           INFO:"알림",
            ERROR:"에러",
            USER_ADD:"사용자 등록",
            USER_UPDATE:"사용자 정보 수정"
@@ -10,12 +14,21 @@ define({
            CANCEL:"취소",
            ADD:"등록",
            SAVE:"저장",
-           CLOSE:"닫기"
+           CLOSE:"닫기",
+           INIT_PASSWORD:"비밀번호 초기화"
        }
-    },
+    }, 
     USER:{
         NAME:"이름",
-        id:"사번"
+        ID:"사번",
+        DEPT:"부서",
+        NAME_COMMUTE:"식별 이름",
+        JOIN_COMPANY:"입사일",
+        LEAVE_COMPANY:"퇴사일",
+        PRIVILEGE:"조회 권한",
+        ADMIN:"관리 권한",
+        PASSWORD:"비밀번호",
+        NEW_PASSWORD:"새 비밀번호"
     },
     GRID:{
         MSG:{
@@ -29,6 +42,13 @@ define({
         SUB_TITLE:{
             USER_LIST:"사용자 목록"
         }
+    },
+    CODE:{
+        PRIVILEGE_1:"전체",
+        PRIVILEGE_2:"부서",
+        PRIVILEGE_3:"개인",
+        ADMIN_0:"사용자",
+        ADMIN_1:"관리자"
     },
     
     //MSG
@@ -57,6 +77,14 @@ define({
         },
         HTTP:{
             NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다."
+        },
+        USER_EDIT_VIEW:{
+            FAIL_RENDER:"사용자 정보를 받아오지 못하였습니다.",
+        }
+    },
+    CONFIRM:{
+        USER:{
+            REMOVE:"사용자를 삭제 하시겠습니까?"
         }
     },
     MENU:{

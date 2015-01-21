@@ -3,47 +3,103 @@ define([
   'underscore',
   'backbone',
   'core/BaseView',
-  'text!templates/adduserTemplate.html',
-  'models/sm/UserModel',
-  'collection/common/CodeCollection',
   'log',
   'dialog',
-], function($, _, Backbone, BaseView, adduserTemplate, UserModel, CodeCollection, log, Dialog){
+  'i18n!nls/common',
+  'lib/component/form',
+  'models/sm/UserModel',
+  'collection/common/CodeCollection',
+  'text!templates/adduserTemplate.html',
+], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, CodeCollection, adduserTemplate){
     var LOG= log.getLogger("AddUserView");
     var AddUserView = BaseView.extend({
     	initialize:function(){
     		$(this.el).html('');
     	    $(this.el).empty();
+    	    
+    	    this.model=new UserModel();
     	    _.bindAll(this, "submitAdd");
     	},
     	render:function(el){
     	    var dfd= new $.Deferred();
-    	    var view=this;
+    	    var _view=this;
     	    if (!_.isUndefined(el)){
     	        this.el=el;
     	    }
+    	    
     	    var codeCollection= new CodeCollection("dept");
-    	    codeCollection.fetch().done(function(result){
-    	        
-    	        var _adduserTemplate= $(adduserTemplate);
-    	        var codeList =result;
-    	        
-                _adduserTemplate.find("#departmentSelector").append("<option></option>");
-    	        if (!_.isUndefined(codeList)){
-                    for (var index in codeList){
-                        var code=codeList[index];
-                        _adduserTemplate.find("#departmentSelector").append("<option value='"+code.code+"'>"+code.name+"</option>");
-                        
-                    }    	       
-    	        }
-    	        $(view.el).append(_adduserTemplate);
-    	        
-    	        view.collection=codeCollection;
-    	        dfd.resolve();
+    	    $.when(codeCollection.fetch()).done(function(){
+                var _model=_view.model.attributes;
+        	    var _form = new Form({
+        	        el:_view.el,
+        	        form:undefined,
+        	        childs:[{
+        	                type:"input",
+        	                name:"id",
+        	                label:i18nCommon.USER.ID,
+        	                value:_model.id
+        	        },{
+        	                type:"input",
+        	                name:"name",
+        	                label:i18nCommon.USER.NAME,
+        	                value:_model.name
+        	        },{
+        	                type:"combo",
+        	                name:"dept_code",
+        	                label:i18nCommon.USER.DEPT,
+        	                value:_model.dept_code,
+        	                collection:codeCollection,
+        	                linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
+        	        },{
+        	                type:"hidden",
+        	                name:"dept_name",
+        	                value:_model.dept_name,
+        	                collection:codeCollection,
+        	        },{
+        	                type:"input",
+        	                name:"name_commute",
+        	                label:i18nCommon.USER.NAME_COMMUTE,
+        	                value:_model.name_commute
+        	        },{
+        	                type:"date",
+        	                name:"join_company",
+        	                label:i18nCommon.USER.JOIN_COMPANY,
+        	                value:_model.join_company,
+        	                format:"YYYY-MM-DD"
+        	        },
+        	       // {
+        	       //         type:"date",
+        	       //         name:"leave_company",
+        	       //         label:i18nCommon.USER.LEAVE_COMPANY,
+        	       //         value:_model.leave_company,
+        	       //         format:"YYYY-MM-DD",
+        	       //         validation:false
+        	       // },
+        	        {
+        	                type:"combo",
+        	                name:"privilege",
+        	                label:i18nCommon.USER.PRIVILEGE,
+        	                value:_model.privilege,
+        	                collection:[{key:1,value:i18nCommon.CODE.PRIVILEGE_1},{key:2,value:i18nCommon.CODE.PRIVILEGE_2},{key:3,value:i18nCommon.CODE.PRIVILEGE_3}]
+        	        },{
+        	                type:"combo",
+        	                name:"admin",
+        	                label:i18nCommon.USER.ADMIN,
+        	                value:_model.admin,
+        	                collection:[{key:0,value:i18nCommon.CODE.ADMIN_0},{key:1,value:i18nCommon.CODE.ADMIN_1}]
+        	        }]
+        	    });
+        	    
+        	    _form.render().done(function(){
+        	        _view.form=_form;
+        	        dfd.resolve();
+        	    }).fail(function(){
+        	        dfd.reject();
+        	    });  
     	    }).fail(function(e){
+    	        Dialog.error(i18nCommon.ERROR.USER_EDIT_VIEW.FAIL_RENDER);
     	        LOG.error(e.responseJSON.message);
-    	        Dialog.error("CodeCollection loading fail.");
-    	        dfd.reject();
+                dfd.reject();    	      
     	    });
     	    return dfd.promise();
      	},
@@ -51,31 +107,17 @@ define([
     	submitAdd : function(e){
     	    var view = this;
     	    var dfd= new $.Deferred();
-    	    var _data= this.getFormData( $(this.el).find('form'));
+    	    var _view=this,_form=this.form,_data=_form.getData();
     	    var _userModel=new UserModel(_data);
-    	   // _userModel.on("invalid", function(model, error) {
-        //         Dialog.warning(error);  
-        //     });
             var _validate=_userModel.validation(_data);
+            
             if(!_.isUndefined(_validate)){
                 Dialog.warning(_validate);
                 dfd.reject();
             } else {
                 _userModel.save({},{
         	        success:function(model, xhr, options){
-        	            //view.collection
-        	            var codeList= view.collection.models;
-        	            var modelArr=_.pluck(codeList, "attributes");
-        	            //var keyArr=_.pluck(models, "code");
-        	            var findArr=_.filter(modelArr, function(obj){ 
-        	                return obj.code==model.attributes.dept_code;
-        	            });
-    
-        	            var deptName=findArr[0].name; 
-        	            model.attributes.dept_name = deptName;
-        	            model.attributes.leave_company ="";
-        	            model.attributes.privilege ="0";
-        	            dfd.resolve(model);
+        	            dfd.resolve(_data);
         	        },
         	        error:function(model, xhr, options){
         	            var respons=xhr.responseJSON;

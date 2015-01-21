@@ -1,6 +1,10 @@
 define({
     DIALOG:{
        TITLE:{
+           PRIMARY:"Info",
+           DEFAULT:"Info",
+           WARNING:"Warning",
+           INFO:"Info",
            ERROR:"Error",
            USER_ADD:"Registration User",
            USER_UPDATE:"Edit User"
@@ -10,12 +14,21 @@ define({
            CANCEL:"Cancel",
            ADD:"Add",
            SAVE:"Save",
-           CLOSE:"Close"
+           CLOSE:"Close",
+           INIT_PASSWORD:"Initialize password"
        }
     },
     USER:{
         NAME:"Name",
-        id:"Id"
+        ID:"Id",
+        DEPT:"Department",
+        NAME_COMMUTE:"Commute Name",
+        JOIN_COMPANY:"Join Date",
+        LEAVE_COMPANY:"Leave Date",
+        PRIVILEGE:"Privilege",
+        ADMIN:"Admin",
+        PASSWORD:"Password",
+        NEW_PASSWORD:"New Password"
     },
     GRID:{
         MSG:{
@@ -30,6 +43,18 @@ define({
             USER_LIST:"User List"
         }
     },
+    
+    //CODE
+     CODE:{
+        PRIVILEGE_1:"ALL",
+        PRIVILEGE_2:"TEAM",
+        PRIVILEGE_3:"USER",
+        ADMIN_0:"USER",
+        ADMIN_1:"MANAGER"
+    },
+    
+    
+    //MSG
     SUCCESS:{
         USER:{
             SAVE:"Success Save User.",
@@ -55,8 +80,18 @@ define({
         },
         HTTP:{
             NOT_FIND_PAGE:"Not find page."
+        },
+        USER_EDIT_VIEW:{
+            FAIL_RENDER:"Fail Load User Data.",
         }
     },
+    CONFIRM:{
+        USER:{
+            REMOVE:"Do you want remove User?"
+        }
+    },
+    
+    //MENU
     MENU:{
         TOP:{
             SM:"Security Manager",
