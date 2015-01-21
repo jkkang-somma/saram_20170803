@@ -79,6 +79,12 @@ var Vacation = function() {
 			return callback(result);	
 		});
 	};
+	
+	var _getVacationById = function(data, callback) {
+		VacationDao.selectVacatonById(data.id).then(function(result) {
+			return callback(result);	
+		});
+	};
 
 	var _setVacation = function(data, callback) {
 		UserDao.selectUserList().then(function(result) {			
@@ -116,6 +122,7 @@ var Vacation = function() {
 	
 	return {
 		getVacation : _getVacation,
+		getVacationById : _getVacationById,
 		setVacation : _setVacation,
 		updateVacation : _updateVacation
 	}

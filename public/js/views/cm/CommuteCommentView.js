@@ -94,12 +94,13 @@ define([
         		    el: "commute_content",
         		    id: "commuteDataTable",
         		    column:[
-     			           { data : "date", "title" : "일자" },
+        		    	   { data : "comment_date", "title" : "신청일자"},
     			           { data : "name", "title" : "이름",
      			        	   render: function(data, type, full, meta) {
     			        		   return full.name + "</br>(" + full.id +")";
     			        	   }
     			           },
+    			           { data : "date", "title" : "일자" },
     			           { data : "comment", "title" : "접수내용",
      			        	   render: function(data, type, full, meta) {
     			        		   var comment = full.comment; 
@@ -114,7 +115,6 @@ define([
     			        		   return full.writer_name + "</br>(" + full.writer_id +")";
     			        	   }
     			           },
-    			           { data : "comment_date", "title" : "신청일자"},
     			           { data : "comment_reply", "title" : "처리내용",
      			        	   render: function(data, type, full, meta) {
     			        		   var comment_reply = full.comment_reply; 
@@ -124,6 +124,7 @@ define([
     			        		   return comment_reply;
     			        	   }    			        	   
     			           },
+    			           { data : "comment_reply_date", "title" : "업데이트일자"},
     			           { data : "reply_name", "title" : "답변자",
      			        	   render: function(data, type, full, meta) {
     			        		   if (full.reply_id == "" || full.reply_name == "") {
@@ -133,7 +134,6 @@ define([
     			        		   }
     			        	   }
     			           },
-    			           { data : "comment_reply_date", "title" : "업데이트일자"},
     			           { data : "state", "title" : "처리상태"}
              	        ],
         		    collection: this.commentCollection,

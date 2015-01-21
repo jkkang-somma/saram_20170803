@@ -74,6 +74,13 @@ define([
                  for (var index in _columns){
                     column=API.column(index);
                     var header=column.header(index);
+                    
+                    if(index === "0"){
+                        column.visible(true);
+                        _cTotallWidth = _cTotallWidth+ header.offsetWidth;
+                        continue;
+                    }
+                    
                     var _cWidth = header.offsetWidth;
                     _cTotallWidth=_cTotallWidth+_cWidth;
                     
@@ -177,7 +184,7 @@ define([
     	    if (_.isUndefined(index)){
     	        this.DataTableAPI.row('.selected').data(item);
     	    } else if (_.isNumber(index)){
-    	        this.DataTableAPI.row(index).data(item).draw();
+    	        this.DataTableAPI.row(index).data(item);
     	    }
     	},
     	search:function(value, regex, smart){

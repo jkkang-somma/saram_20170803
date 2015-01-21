@@ -121,7 +121,7 @@ define([
 	            							return false;
 	            						}
 	            					}
-	            				).data(yesterday.attributes).draw();
+	            				).data(yesterday.attributes);
             					
         						Dialog.show("성공", function() {
                     				dialog.close();
@@ -325,7 +325,8 @@ define([
                     		success: function(model, response) {
                     			Dialog.show("성공", function() {
                     				dialog.close();
-                    				that.selectCommute();
+                    				selectItem.comment_count++;	 // comment 수 증가 
+                    				that.grid.updateRow(selectItem, selectItem.idx -1 );	// index 0부터 시작 
                     			});
                          	}, error : function(model, res){
                          		Dialog.show("업데이트가 실패했습니다.");

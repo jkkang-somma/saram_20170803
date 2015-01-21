@@ -3,37 +3,32 @@
  */
 
 define([ 
-        'jquery',
-        'underscore',
-        'backbone',
-        'util',
-        'schemas',
-        'grid',
-        'dialog',
-        'datatables',
-        'moment',
-        'resulttimefactory',
-        'core/BaseView',
-        'models/sm/SessionModel',
-        'models/cm/CommuteModel',
-        'models/cm/ChangeHistoryModel',
-        'collection/cm/CommuteCollection',
-        'text!templates/cm/popup/commuteUpdatePopupTemplate.html',
-        'text!templates/inputForm/textbox.html',
-        'text!templates/default/datepicker.html',
+    'jquery',
+    'underscore',
+    'backbone',
+    'util',
+    'schemas',
+    'grid',
+    'dialog',
+    'datatables',
+    'moment',
+    'resulttimefactory',
+    'core/BaseView',
+    'models/sm/SessionModel',
+    'models/cm/CommuteModel',
+    'models/cm/ChangeHistoryModel',
+    'collection/cm/CommuteCollection',
+    'text!templates/inputForm/textbox.html',
+    'text!templates/default/datepicker.html',
         
 ], function(
 $, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory,
 BaseView,
 SessionModel,
 CommuteModel, ChangeHistoryModel, CommuteCollection, 
-commuteUpdatePopupTemplate,
 TextBoxHTML, DatePickerHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
-
-
-	
 	var CommuteUpdatePopupView = Backbone.View.extend({
 		initialize : function(data) {
 			this.selectData = data;
@@ -45,8 +40,7 @@ TextBoxHTML, DatePickerHTML
 			
 			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupDate", label : "일자", value : this.selectData.date}));
 			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupDept", label : "부서", value : this.selectData.department}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupId", label : "사번", value : this.selectData.id}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupName", label : "이름", value : this.selectData.name}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupName", label : "이름", value : this.selectData.name  + " ("+this.selectData.id+")"}));
 			$(this.el).append(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
@@ -69,7 +63,7 @@ TextBoxHTML, DatePickerHTML
     	    		}
     	    	})
     	    );
-    	    
+
 			$(this.el).find("#commuteUpdatePopupIn").datetimepicker({
             	pickTime: true,
 		        language: "ko",
