@@ -5,10 +5,18 @@ var Comment = require('../service/Comment.js');
 var sessionManager = require('../lib/sessionManager');
 
 router.route('/')
-.get(function(req, res){	
-	Comment.getComment(req.query, function(result) {
-		return res.send(result);
-	});
+.get(function(req, res){
+	
+	var query = req.query;
+	if (query["id"] != undefined && query["id"] != "") {
+		Comment.getCommentById(query, function(result) {
+			return res.send(result);
+		});
+	} else {
+		Comment.getComment(query, function(result) {
+			return res.send(result);
+		});
+	}
 }).post(function(req, res) {
 	
 	var session = sessionManager.get(req.cookies.saram);
