@@ -7,9 +7,10 @@ define([
 'models/sm/UserModel',
 'models/sm/SessionModel',
 'text!templates/loginTemplate.html',
+'text!templates/loginPasswordSectionTemplate.html',
 'i18n!nls/common',
 'css!cs/login.css',
-], function($, _,Backbone, log, Dialog, UserModel, SessionModel, LoginHTML, i18nCommon){
+], function($, _,Backbone, log, Dialog, UserModel, SessionModel, LoginHTML, LoginPasswordSectionHTML, i18nCommon){
     var LOG=log.getLogger('LoginView');
     var LoginView = Backbone.View.extend({
         events: {
@@ -19,13 +20,18 @@ define([
     	initialize:function(){
             this.el=$(".main-container");
             $("body").addClass("login-body");
+            
+            this.formSection=$(LoginHTML);
+            this.passwordSection=$(LoginPasswordSectionHTML);
+            
             _.bindAll(this, 'render');
             _.bindAll(this, 'login');
+            _.bindAll(this, 'close');
     	},
     	render:function(app){
     	    var _window_size = $(window).height();
     	    this.el.removeClass("container");
-    	    this.el.html(LoginHTML);
+    	    this.el.html(this.formSection);
     	    this.app=app;
     	    $("#passwadUpdate").css("display","none");
     	    this.el.find(".form-control").on("focus",function(){
@@ -38,6 +44,7 @@ define([
     	        Dialog.show("초기화 요청");
     	        return false;
     	    })
+    	    this.el.append(this.passwordSection);
      	},
     	
     	login : function(e){
@@ -82,7 +89,13 @@ define([
             }
             return false;
     	},
-    	
+    	close:function(){
+            this.formSection.removeClass("bounceIn");
+            this.passwordSection.removeClass("fadeInRightBig");
+            
+            this.formSection.addClass("bounceOut");
+            this.passwordSection.addClass("fadeOutRightBig");
+    	},
     	getFormData: function(form) {
             form.find(':input:disabled').removeAttr('disabled');
             var unindexed_array = form.serializeArray();

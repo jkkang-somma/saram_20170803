@@ -28,7 +28,8 @@ define({
         PRIVILEGE:"조회 권한",
         ADMIN:"관리 권한",
         PASSWORD:"비밀번호",
-        NEW_PASSWORD:"새 비밀번호"
+        NEW_PASSWORD:"New 비밀번호",
+        RE_NEW_PASSWORD:"확인 New 비밀번호"
     },
     GRID:{
         MSG:{
@@ -69,6 +70,9 @@ define({
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
             INIT_PASSWORD:"비밀번호를 설정해주세요."
+        },
+        USER:{
+            NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지않습니다."
         }
     },
     ERROR:{

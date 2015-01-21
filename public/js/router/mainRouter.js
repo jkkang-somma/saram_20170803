@@ -120,8 +120,11 @@ ReportListView // report manager
 		},
 		
 		showHome : function(){
-		    var dashBoardView = new DashBoardView({el:mainContainer});
-		    this.changeView(dashBoardView);
+		    // var dashBoardView = new DashBoardView({el:mainContainer});
+		    // this.changeView(dashBoardView);
+		    
+		    var createDataView = new CreateDataView();
+			this.changeView(createDataView);
 		},
 		showHolidayManager : function(){
 			var holidayManagerView = new HolidayManagerView();
@@ -167,23 +170,11 @@ ReportListView // report manager
                 title:i18Common.DIALOG.TITLE.USER_UPDATE, 
                 content:configView, 
                 buttons:[{
-                    label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
-                    cssClass: Dialog.CssClass.SUCCESS,
-                    action: function(dialogRef){// 버튼 클릭 이벤트
-                        configView.initializePassword().done(function(data){
-                            grid.updateRow(data);
-                            dialogRef.close();
-                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
-                        });//실패 따로 처리안함 add화면에서 처리.
-                    }
-                },{
                     label: i18Common.DIALOG.BUTTON.SAVE,
                     cssClass: Dialog.CssClass.SUCCESS,
                     action: function(dialogRef){// 버튼 클릭 이벤트
                         configView.submitSave().done(function(data){
-                            grid.updateRow(data);
                             dialogRef.close();
-                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
                         });//실패 따로 처리안함 add화면에서 처리.
                     }
                 }, {
