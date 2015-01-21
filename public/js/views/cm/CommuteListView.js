@@ -12,6 +12,7 @@ define([
         'datatables',
         'moment',
         'core/BaseView',
+        'data/code',
         'text!templates/default/head.html',
         'text!templates/default/content.html',
         'text!templates/default/right.html',
@@ -31,30 +32,12 @@ define([
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnCommentAddTemplate.html'
 ], function(
-		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView,
+		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommuteModel, CommuteCollection,
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
 		searchFormTemplate, btnCommentAddTemplate){
 
-	// // 분 -> 시간 
-	// function _getMinToHours(inMin) {
-	// 	if ( Util.isNotNull(inMin) ) {
-	// 		inMin = parseInt(inMin);				
-	// 		if (inMin === NaN) {
-	// 			inMin = 0;
-	// 		}	
-	// 	} else {
-	// 		inMin = 0;
-	// 	}
-	// 	var min = inMin % 60;
-	// 	var hours = inMin / 60;
-	// 	hours = parseInt(hours);
-		
-	// 	min = (min == 0)? '': (" " + min + "분");
-	// 	hours = (hours == 0)? '': (hours + "시간");
-	// 	return hours + min;
-	// }
 	
 	// 출퇴근 시간 셀 생성
 	function _createHistoryCell(cellType, cellData, change) {
@@ -72,14 +55,14 @@ define([
 	}
 	
 	// 시간 값을 두 줄로 표시 
-	function _getTimeCell(inTime) {
-		if (Util.isNotNull(inTime) ) {
-			var tArr = inTime.split(" ");
+	function _getTimeCell(time) {
+		if (Util.isNotNull(time) ) {
+			var tArr = time.split(" ");
 			if (tArr.length == 2) {
 				return tArr[0] + "</br>" + tArr[1]; 
 			}
 		}
-		return "";
+		return null;
 	}
 	
 	// comment Cell 페이지 링크 
@@ -125,6 +108,7 @@ define([
             					console.log(result);
             					var current = result.models[0];
             					var yesterday = result.models[1];
+            					current.set({idx : selectItem.idx});
             					that.grid.updateRow(current.attributes);
             					that.grid.getRowByFunction(
             						function(idx, data, node){
@@ -171,31 +155,12 @@ define([
      	                   	},
      	                   	{ data : "work_type", 	"title" : "근무</br>타입",
      	                   		render : function(data, type, full, meta){
-     	                   			var result = "";
-     	                   			switch(data){
-     	                   				case "00" : result = "정상"; break;
-     	                   				case "01" : result = "조퇴"; break;
-     	                   				case "10" : result = "지각"; break;
-     	                   				case "11" : result = "지각,조퇴"; break;
-     	                   				case "21" : result = "결근"; break;
-     	                   				case "22" : result = "결근_미결"; break;
-     	                   				case "30" : result = "휴일"; break;
-     	                   				case "31" : result = "종일휴가"; break;
-     	                   			}
-     	                   			return result;
+     	                   			return Code.getCodeName(Code.WORKTYPE, data);
      	                   		}
      	                   	},
-
-     	                   	// { data : "vacation_name", 	"title" : "휴가</br>타입"},
-
      	                   	{ data : "out_office_code", 	"title" : "외근</br>정보",
      	                   		render : function(data, type, full, meta){
-     	                   			var result = "";
-     	                   			switch(data){
-     	                   				case "W01" : result = "외근"; break;
-     	                   				case "W02" : result = "출장"; break;
-     	                   			}
-     	                   			return result;
+     	                   			return Code.getCodeName(Code.OFFICE, data);
      	                   		}
      	                   	},
      	                   	{ data : "in_time", "title" : "출근</br>시간",
@@ -209,7 +174,11 @@ define([
      	                   		}
      	                    },
      	                    { data : "late_time", 		"title" : "지각</br>시간"}, 
-     	                   	{ data : "overtime_code", 		"title" : "초과</br>근무"},
+     	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
+     	                   		render : function(data, type, full, meta){
+     	                   			return Code.getCodeName(Code.OVERTIME, data);
+     	                   		}
+     	                   	},
      	                    { data : "comment_count", "title" : "비고",
      	                     	render: function(data, type, full, meta) {
      	                   			if (full.comment_count) {

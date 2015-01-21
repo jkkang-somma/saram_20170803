@@ -20,12 +20,10 @@ define([
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
   'collection/sm/UserCollection',
-  'models/common/DepartmentCodeModel',
-  'collection/common/DepartmentCodeCollection',
   'views/component/ProgressbarView',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment,
 HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, DepartmentCodeCollection,
+RawDataModel, RawDataCollection,UserModel, UserCollection,
 ProgressbarView){
     var RawDataView = BaseView.extend({
         el:$(".main-container"),

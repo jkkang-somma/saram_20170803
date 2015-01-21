@@ -206,9 +206,9 @@
 							w.name AS work_type_name,
 							c.late_time,
 							c.over_time,
-							IFNULL( date_format(c.in_time, '%m-%d %T'), '') AS in_time,
+							IFNULL( date_format(c.in_time, '%Y-%m-%d %T'), NULL) AS in_time,
 							c.in_time_type,
-							IFNULL( date_format(c.out_time, '%m-%d %T'), '') AS out_time,
+							IFNULL( date_format(c.out_time, '%Y-%m-%d %T'), NULL) AS out_time,
 							c.out_time_type,
 							c.in_time_change,
 							c.out_time_change,
@@ -476,6 +476,33 @@
     	</query>
     	<query id="insertInOffice">
 			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
+    	</query>
+    </group>
+    
+    <group id="code">
+    	<query id="getDepartmentCode">
+    		select 
+    			*
+    		from
+    			dept_code_tbl
+    	</query>
+    	<query id="getOfficeCode">
+    		select 
+    			*
+    		from
+    			office_code_tbl
+    	</query>
+    	<query id="getOvertimeCode">
+    		select 
+    			*
+    		from
+    			overtime_code_tbl
+    	</query>
+    	<query id="getWorktypeCode">
+    		select 
+    			*
+    		from
+    			work_type_code_tbl
     	</query>
     </group>
 </querys>

@@ -37,13 +37,6 @@ TextBoxHTML, DatePickerHTML
 	var CommuteUpdatePopupView = Backbone.View.extend({
 		initialize : function(data) {
 			this.selectData = data;
-			if(this.selectData.in_time !== ""){
-				this.selectData.in_time = this.selectData.year + "-" + this.selectData.in_time;	
-			}
-			
-			if(this.selectData.out_time !== ""){
-				this.selectData.out_time = this.selectData.year + "-" + this.selectData.out_time;	
-			}
 		},
 		render : function(el) {
 			var dfd= new $.Deferred();
@@ -82,7 +75,7 @@ TextBoxHTML, DatePickerHTML
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD HH:mm:SS",
-		        defaultDate: Moment(this.selectData.in_time).format("YYYY-MM-DD HH:mm:ss")
+		        defaultDate: Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
             });
             
             $(this.el).find("#commutUpdatePopupOut").datetimepicker({
@@ -90,7 +83,7 @@ TextBoxHTML, DatePickerHTML
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD HH:mm:SS",
-		        defaultDate: Moment(this.selectData.out_time).format("YYYY-MM-DD HH:mm:ss")
+		        defaultDate: Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
             });
             
 			$(this.el).find("#commutUpdatePopupDate").attr("disabled", "true");
@@ -173,8 +166,8 @@ TextBoxHTML, DatePickerHTML
      		var newData = {
      			date : $(this.el).find("#commutUpdatePopupDate").val(),
      			id : $(this.el).find("#commutUpdatePopupId").val(),
-     			in_time : inTimeDatePicker.getText()==="" ? "": inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
-     			out_time : outTimeDatePicker.getText()==="" ? "": outTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
+     			in_time : inTimeDatePicker.getText()==="" ? null: inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
+     			out_time : outTimeDatePicker.getText()==="" ? null: outTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
      		}
 			
      		var userId = SessionModel.get("user").id;
