@@ -12,18 +12,18 @@ define([
   'models/sm/SessionModel',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
+  'collection/vacation/VacationCollection',
   'views/rm/AddNewReportView',
   'views/rm/ApprovalReportView',
   'views/rm/DetailReportView',
-], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, SessionModel, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, DetailReportView){
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, SessionModel, commuteListTmp, ApprovalCollection, VacationCollection, AddNewReportView, ApprovalReportView, DetailReportView){
    var _reportListView=0;
    var reportListView = BaseView.extend({
     el:$(".main-container"),
     
     events: {
   	  "click #commuteManageTbl tbody tr": "onSelectRow",
-  	  "click #btnCommuteSearch": "onClickSearchBtn",
-  	  "click #btnCommuteClear": "onClickClearBtn"
+  	  "click #btnCommuteSearch": "onClickSearchBtn"
   	},
    
   	initialize:function(){
@@ -32,7 +32,7 @@ define([
  		this.option = {
  		    el:_id+"_content",
  		    column:[],
-          dataschema:["submit_date", "submit_id", "submit_name", "office_code_name", "end_date", "decide_date", "state"],
+          dataschema:["submit_date", "submit_id", "submit_name", "office_code_name", "end_date", "manager_name", "decide_date", "state"],
  		    collection:this.collection,
  		    detail:true,
  		    view:this
@@ -55,6 +55,8 @@ define([
       this.setBottomButtonCon();
       // table setting
       this.setReportTable(true);
+      // 휴가
+      this.setVacationById();
     },
     
     setTitleTxt : function(){
@@ -85,6 +87,10 @@ define([
       addReportBtn.click(function(){
         // location.href = '#reportmanager/add';
         var _addNewReportView = new AddNewReportView();
+        var selectData={};
+        selectData.total_day = _this.total_day;
+        selectData.used_holiday = _this.used_holiday;
+        _addNewReportView.options = selectData;
         Dialog.show({
           title:"결재 상신", 
           content:_addNewReportView, 
@@ -107,13 +113,13 @@ define([
       });
        // reportmanager/approval
       approvalBtn.click(function(){
-         var selectData=_this.grid.getSelectItem();
+        var selectData=_this.grid.getSelectItem();
      		
      		if ( Util.isNotNull(selectData) ) {
      		   var sessionInfo = SessionModel.getUserInfo();
      		   
-     		 // if(selectData.manager_id == sessionInfo.id){
-     		 if(true){
+     		  if(selectData.manager_id == sessionInfo.id){
+     		 //if(true){
        		  var _approvalReportView = new ApprovalReportView();
            		 // data param 전달
            		 _approvalReportView.options = selectData;
@@ -219,11 +225,12 @@ define([
          }},
          { "title" : "외근시간", "render": function(data, type, row){
             var dataVal = row.start_time +"</br>~ " + row.end_time;
-            if(row.start_time == null){
+            if(row.start_time == null || row.office_code != 'W01'){
               dataVal = "-";
             }
             return dataVal;
          }},
+         { data : "manager_name", "title" : "결재자"},
          { "title" : "처리일자", "render": function(data, type, row){
             var dataVal = view.getDateFormat(row.decide_date);
             return dataVal;
@@ -242,6 +249,24 @@ define([
  	    this.grid= new Grid(_gridSchema.getDefault(this.option));
  	   
       return this;
+    },
+    
+    setVacationById : function(){
+      var _this = this;
+      var sessionInfo = SessionModel.getUserInfo();
+      var _vacationColl = new VacationCollection();  
+      _vacationColl.url = '/vacation/list'
+      _vacationColl.fetch({
+        data: {id : sessionInfo.id},
+	 			error : function(result) {
+	 				alert("데이터 조회가 실패했습니다.");
+	 			}
+      }).done(function(result){
+        if(result.length > 0){
+          _this.total_day = result[0].total_day;
+          _this.used_holiday = result[0].used_holiday;
+        }
+      });
     },
     
     getDateFormat : function(dateData){

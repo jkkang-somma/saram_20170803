@@ -116,6 +116,22 @@ define([
         
         _this.find('#manager_id').html("<option>"+param.manager_name+"</option>");
         _this.find('#state').val(param.state);
+        
+        var usable = (param.total_day > param.used_holiday)?param.total_day - param.used_holiday : 0;
+        _this.find('#usableHoliday').val(usable + " 일");
+        
+        var holReq = "0";
+        if(param.office_code == "B01" || param.office_code == "W01"){
+          // 휴일근무
+          holReq = "0";
+        }else if(param.office_code == "V02" || param.office_code == "V03"){
+          // 반차
+          holReq = "0.5";
+        }else {
+          var arrInsertDate = this.getDatePariod();
+          holReq = arrInsertDate.length + "";
+        }
+        _this.find('#reqHoliday').val(holReq + " 일");
       }
     },
     
@@ -206,32 +222,7 @@ define([
     
     addOutOfficeData : function(){
       var _this = this;
-      // 날짜 개수 이용하여 날짜 구하기
-      var sStart = $(this.el).find('#start_date input').val();
-      var sEnd = $(this.el).find('#end_date input').val();
-      
-      var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
-      var end = new Date(sEnd.substr(0,4),sEnd.substr(5,2)-1,sEnd.substr(8,2));
-      var day = 1000*60*60*24;
-      
-      var compareVal = parseInt((end - start)/day);
-      var arrInsertDate = [];
-      if(compareVal > 0){
-        // 차이
-        for(var i=0; i<=compareVal; i++){
-          var dt = start.valueOf() + (i*day);
-          var resDate = new Date(dt);
-          if(resDate.getDay() != 0 && resDate.getDay() != 6){
-            // 주말이 아닌 날짜
-            arrInsertDate.push(this.getDateFormat(resDate));
-          }
-        }
-      }else{
-         if(start.getDay() != 0 && start.getDay() != 6){
-            // 주말이 아닌 날짜
-            arrInsertDate.push(sStart);
-          }
-      }
+      var arrInsertDate = this.getDatePariod();
       
       // data 저장
       var sendData = this.getFormData($(this.el).find('form'));
@@ -284,6 +275,36 @@ define([
       	    }); 
     },
     
+    getDatePariod : function(){
+       // 날짜 개수 이용하여 날짜 구하기
+      var sStart = $(this.el).find('#start_date input').val();
+      var sEnd = $(this.el).find('#end_date input').val();
+      
+      var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
+      var end = new Date(sEnd.substr(0,4),sEnd.substr(5,2)-1,sEnd.substr(8,2));
+      var day = 1000*60*60*24;
+      
+      var compareVal = parseInt((end - start)/day);
+      var arrInsertDate = [];
+      if(compareVal > 0){
+        // 차이
+        for(var i=0; i<=compareVal; i++){
+          var dt = start.valueOf() + (i*day);
+          var resDate = new Date(dt);
+          if(resDate.getDay() != 0 && resDate.getDay() != 6){
+            // 주말이 아닌 날짜
+            arrInsertDate.push(this.getDateFormat(resDate));
+          }
+        }
+      }else{
+         if(start.getDay() != 0 && start.getDay() != 6){
+            // 주말이 아닌 날짜
+            arrInsertDate.push(sStart);
+          }
+      }
+      
+      return arrInsertDate;
+    },
     
     getDateFormat : function(dateData){
       var sDateFormat = "";

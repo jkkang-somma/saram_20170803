@@ -21,10 +21,18 @@ router.route('/')
 		return res.send({error: "관리자 등급만 생성이 가능합니다."});
 	}
 });
-
+router.route('/list')
+.get(function(req, res){	
+	Vacation.getVacationById(req.query, function(result) {
+		return res.send(result);
+	});
+});
 router.route('/:id')
 .get(function(req, res){	
 	console.log("get /:id");
+	Vacation.getVacationById(req.query, function(result) {
+		return res.send(result);
+	});
 }).post(function(req, res){
 
 }).put(function(req, res) {

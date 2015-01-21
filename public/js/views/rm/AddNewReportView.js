@@ -5,6 +5,7 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
+  'moment',
   'models/sm/SessionModel',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
@@ -12,9 +13,9 @@ define([
   'collection/sm/UserCollection',
   'models/rm/ApprovalModel',
   'models/rm/ApprovalIndexModel',
-], function($, _, Backbone, animator, BaseView, Dialog, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
+], function($, _, Backbone, animator, BaseView, Dialog, Moment, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
-    
+    options: {},
   	events: {
   	},
   	
@@ -71,9 +72,17 @@ define([
       
       var tableTr = $(this.el).find('.addReportNone');
       tableTr.css('display','none');
+      
+      // 잔여 연차 일수 
+      var usable = "0";
+      if(this.options.total_day != undefined){
+        usable = (this.options.total_day > this.options.used_holiday)?this.options.total_day - this.options.used_holiday : 0;
+      }
+      $(this.el).find('#usableHoliday').val(usable + " 일");
     },
     
     setDatePickerPop : function(){
+      var _this=this;
       var beforeDate = $(this.el).find("#start_date");
       //beforeDate.attr('readonly', true);
       this.beforeDate=beforeDate.datetimepicker({
@@ -82,7 +91,8 @@ define([
           language: "ko",
           todayHighlight: true,
           format: "YYYY-MM-DD",
-          autoclose: true
+          autoclose: true,
+          defaultDate: Moment(new Date()).format("YYYY-MM-DD")
       });
       
       var afterDate = $(this.el).find("#end_date");
@@ -93,9 +103,35 @@ define([
           language: "ko",
           todayHighlight: true, 
           format: "YYYY-MM-DD",
-          autoclose: true
+          autoclose: true,
+          defaultDate: Moment(new Date()).format("YYYY-MM-DD")
       });
-      
+      this.beforeDate.change(function(val){
+         var startDate=$(_this.el).find('#start_date input').val();
+         if(startDate.length > 8){
+          var selGubun = $(_this.el).find('#office_code');
+          var selVal = selGubun.val();
+          var holReq = "0";
+          if(selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03'){
+            var arrInsertDate = _this.getDatePariod();
+            holReq = arrInsertDate.length + "";
+            $(_this.el).find('#reqHoliday').val(holReq + " 일");
+          }
+         } 
+      });
+      this.afterDate.change(function(val) {
+        var endDate=$(_this.el).find('#end_date input').val();
+        if(endDate.length > 8){
+          var selGubun = $(_this.el).find('#office_code');
+          var selVal = selGubun.val();
+          var holReq = "0";
+          if(selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03'){
+            var arrInsertDate = _this.getDatePariod();
+            holReq = arrInsertDate.length + "";
+            $(_this.el).find('#reqHoliday').val(holReq + " 일");
+          }
+        } 
+      });
       var beforeTime = $(this.el).find("#start_time");
       //beforeDate.attr('readonly', true);
       this.beforeTime=beforeTime.datetimepicker({
@@ -138,17 +174,36 @@ define([
           var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
           selGubun.append(optionHtml);
         }
+        // 휴일근무
+        $(_this.el).find('#datePickerTitleTxt').text('date');
+         _this.afterDate.hide();
+         $(_this.el).find('#reqHoliday').val("0 일");
       });
       
       selGubun.change(function() {
         var selVal = selGubun.val();
+        var holReq = "0";
         if(selVal == 'W01'){
           // 외근
+          holReq = "0";
+          $(_this.el).find('#datePickerTitleTxt').text('date');
+          _this.afterDate.hide();
           _this.setTimePicker(false);
+        }else if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03'){
+          holReq = (selVal == 'B01')?"0": "0.5";
+          $(_this.el).find('#datePickerTitleTxt').text('date');
+          _this.afterDate.hide();
+          _this.setTimePicker(true);
         }else{
+          var arrInsertDate = _this.getDatePariod();
+          holReq = arrInsertDate.length + "";
+          $(_this.el).find('#datePickerTitleTxt').text('from');
+          _this.afterDate.css('display', 'table');
           _this.setTimePicker(true);
         }
+        $(_this.el).find('#reqHoliday').val(holReq + " 일");
       });
+     
     },
     
     setManagerList: function(){
@@ -179,6 +234,37 @@ define([
       }
     },
     
+    getDatePariod : function(){
+       // 날짜 개수 이용하여 날짜 구하기
+      var sStart = $(this.el).find('#start_date input').val();
+      var sEnd = $(this.el).find('#end_date input').val();
+      
+      var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
+      var end = new Date(sEnd.substr(0,4),sEnd.substr(5,2)-1,sEnd.substr(8,2));
+      var day = 1000*60*60*24;
+      
+      var compareVal = parseInt((end - start)/day);
+      var arrInsertDate = [];
+      if(compareVal > 0){
+        // 차이
+        for(var i=0; i<=compareVal; i++){
+          var dt = start.valueOf() + (i*day);
+          var resDate = new Date(dt);
+          if(resDate.getDay() != 0 && resDate.getDay() != 6){
+            // 주말이 아닌 날짜
+            arrInsertDate.push(this.getDateFormat(resDate));
+          }
+        }
+      }else{
+         if(start.getDay() != 0 && start.getDay() != 6){
+            // 주말이 아닌 날짜
+            arrInsertDate.push(sStart);
+          }
+      }
+      
+      return arrInsertDate;
+    },
+    
   	getFormData: function(form) {
   	  // input value
       var unindexed_array = form.serializeArray();
@@ -190,6 +276,17 @@ define([
       
       return indexed_array;
   	},
+    
+    getDateFormat : function(dateData){
+      var sDateFormat = "";
+      if (dateData == null){
+        sDateFormat = "";
+      }else {
+        sDateFormat
+        = dateData.getFullYear() + "-" + this.getzFormat(dateData.getMonth() + 1, 2) + "-" + this.getzFormat(dateData.getDate(), 2);
+      }
+      return sDateFormat;
+    },
     
     getzFormat: function(s, len){
       var sZero = "";
@@ -228,6 +325,14 @@ define([
       var essenMsg = ["기간", "기간", "구분", "메모"];
       
       for(var i = 0; i < essenId.length; i++){
+        if(i==1){// end date 일경우
+          var selGubun = $(this.el).find('#office_code');
+          var selVal = selGubun.val();
+          if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03'){
+            $(this.el).find('#'+essenId[i]).val(formData["start_date"]);
+            formData[essenId[i]] = formData["start_date"];
+          }
+        } 
         if(formData[essenId[i]] == ""){
           alert(essenMsg[i]+"을(를) 입력하세요.");
           this.thisDfd.reject();
