@@ -39,7 +39,9 @@ define([
 				{
 					id: "commentAddPopupInTime", 
 					label : "출근시간",
-					beforeTime:  this.selectData.in_time
+					beforeTime:  this.selectData.in_time,
+					checkId : "",
+					
 				}
 			));
 			
@@ -47,7 +49,8 @@ define([
 				{
 					id: "commentAddPopupOutTime", 
 					label : "퇴근시간",
-					beforeTime:  this.selectData.in_time
+					beforeTime:  this.selectData.out_time,
+					checkId : "",
 				}
 			));
 			
