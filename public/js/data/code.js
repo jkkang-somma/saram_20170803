@@ -36,16 +36,16 @@ DepartmentCodeCollection, OfficeCodeCollection, OvertimeCodeCollection, WorkType
             var destCollection = null;
             switch(kind){
                 case this.DEPARTMENT:
-                    destCollection =this.department;
+                    destCollection =this.departmentCollection;
                     break;
                 case this.OFFICE:
-                    destCollection =this.office;
+                    destCollection =this.officeCollection;
                     break;
                 case this.OVERTIME:
-                    destCollection =this.overtime;
+                    destCollection =this.overtimeCollection;
                     break;
                 case this.WORKTYPE:
-                    destCollection =this.worktype;
+                    destCollection =this.worktypeCollection;
                     break;
             }
             return destCollection;
