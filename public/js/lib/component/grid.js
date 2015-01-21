@@ -177,7 +177,7 @@ define([
     	    if (_.isUndefined(index)){
     	        this.DataTableAPI.row('.selected').data(item);
     	    } else if (_.isNumber(index)){
-    	        this.DataTableAPI.row(index).data(item).draw();
+    	        this.DataTableAPI.row(index).data(item);
     	    }
     	},
     	search:function(value, regex, smart){
