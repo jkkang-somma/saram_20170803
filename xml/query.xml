@@ -32,7 +32,16 @@
     </group>
     
     <group id="rawData">
-        <query id="insertRawData">insert into commute_base_tbl(id, name, department, char_date, year, type) values(?,?,?,?,?,?)</query>
+        <query id="insertRawData">
+        	insert into commute_base_tbl
+        		(id, name, department, char_date, year, type)
+        	values
+        		(?,?,?,?,?,?)
+        	ON DUPLICATE KEY UPDATE
+        		char_date=?,
+        		type=?
+        	
+        </query>
         <query id="selectRawDataList">
         	select
         		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
@@ -204,6 +213,9 @@
 							c.in_time_change,
 							c.out_time_change,
 							c.comment_count,
+							c.overtime_code,
+							c.vacation_code,
+							c.out_office_code,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -231,14 +243,15 @@
         		id = ? AND date = ?
         </query>
         
-        <query id="insetCommuteResult">
+        <query id="insertCommuteResult">
         	INSERT INTO commute_result_tbl
         		(date, department, id, in_time, late_time, name, out_office_code,
         		out_time, over_time, overtime_code, vacation_code, standard_in_time,
         		standard_out_time, work_type, year,
-        		in_time_type, out_time_type, out_office_start_time, out_office_end_time)
+        		in_time_type, out_time_type, out_office_start_time, out_office_end_time,
+        		in_time_change, out_time_change)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         	ON DUPLICATE KEY UPDATE
 				department=?,
 				in_time=?,
@@ -255,9 +268,9 @@
 				in_time_type=?,
 				out_time_type=?,
 				out_office_start_time=?,
-				out_office_end_time=?
-
-        	
+				out_office_end_time=?,
+				in_time_change=?,
+				out_time_change=?
         </query>
         <query id="selectCommuteDate">
         	SELECT 
@@ -279,7 +292,9 @@
 				in_time_type,
 				out_time_type,
 				out_office_end_time,
-				out_office_start_time
+				out_office_start_time,
+				in_time_change,
+				out_time_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -305,7 +320,9 @@
 				in_time_type,
 				out_time_type,
 				out_office_end_time,
-				out_office_start_time
+				out_office_start_time,
+				in_time_change,
+				out_time_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -418,11 +435,11 @@
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state, writer_id
+    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?, ?
+    			?, ?, ?, ?, now(), ?, ?, ?, ?
     		)
     	</query>
     	
@@ -450,6 +467,14 @@
 					,(select day_count from office_code_tbl where code = ?) 
 					,? ,? ,?, ?, ?
 				)    		
+    	</query>
+    </group>
+    <group id="inOffice">
+    	<query id="selectInOfficeList">
+    		select * from in_office_tbl
+    	</query>
+    	<query id="insertInOffice">
+			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
     	</query>
     </group>
 </querys>
