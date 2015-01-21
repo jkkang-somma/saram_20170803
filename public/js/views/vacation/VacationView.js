@@ -75,15 +75,7 @@ define([
                         			model.initHoliday(); // 휴가 잔여 일수 재 설정
                         			Dialog.show("성공", function() {
                         				dialog.close();
-                    					that.grid.getRowByFunction(
-                    							function(idx, data, node){
-                    								if(data.year === model.get("year") && data.id === model.get("id")){
-                    									return true;
-            	            						}else{
-            	            							return false;
-            	            						}
-                    							}
-                    						).data(model.attributes);
+                        				that.grid.updateRow(model.attributes);
                         			});
                              	}, error : function(model, res){
                              		alert("업데이트가 실패했습니다.");
