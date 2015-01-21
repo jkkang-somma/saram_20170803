@@ -86,6 +86,11 @@ var Vacation = function() {
 				obj = {};
 			
 			for (var i = 0, len = result.length; i < len; i++) {
+				
+				if (result[i].leave_company != "" && result[i].leave_company != null) {	// 퇴사일이 있는 경우 연차 생성하지 않음 
+					continue;
+				}
+				
 				obj = {
 						id : (result[i].id),
 						year : data.year,

@@ -32,7 +32,16 @@
     </group>
     
     <group id="rawData">
-        <query id="insertRawData">insert into commute_base_tbl(id, name, department, char_date, year, type) values(?,?,?,?,?,?)</query>
+        <query id="insertRawData">
+        	insert into commute_base_tbl
+        		(id, name, department, char_date, year, type)
+        	values
+        		(?,?,?,?,?,?)
+        	ON DUPLICATE KEY UPDATE
+        		char_date=?,
+        		type=?
+        	
+        </query>
         <query id="selectRawDataList">
         	select
         		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
@@ -197,17 +206,20 @@
 							w.name AS work_type_name,
 							c.late_time,
 							c.over_time,
-							IFNULL( date_format(c.in_time, '%m-%d %T'), '') AS in_time,
+							IFNULL( date_format(c.in_time, '%Y-%m-%d %T'), NULL) AS in_time,
 							c.in_time_type,
-							IFNULL( date_format(c.out_time, '%m-%d %T'), '') AS out_time,
+							IFNULL( date_format(c.out_time, '%Y-%m-%d %T'), NULL) AS out_time,
 							c.out_time_type,
 							c.in_time_change,
 							c.out_time_change,
 							c.comment_count,
-							o.name as overtime_type,
-							IFNULL(o.overtime_pay, 0) AS overtime_pay,
-							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') as vacation_name,
-							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') as out_office_name                
+							c.overtime_code,
+							c.vacation_code,
+							c.out_office_code,
+							IFNULL( o.name, '') AS overtime_type,
+							IFNULL( o.overtime_pay, 0) AS overtime_pay,
+							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
+							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name                
 						FROM 
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
@@ -231,14 +243,15 @@
         		id = ? AND date = ?
         </query>
         
-        <query id="insetCommuteResult">
+        <query id="insertCommuteResult">
         	INSERT INTO commute_result_tbl
         		(date, department, id, in_time, late_time, name, out_office_code,
         		out_time, over_time, overtime_code, vacation_code, standard_in_time,
         		standard_out_time, work_type, year,
-        		in_time_type, out_time_type, out_office_start_time, out_office_end_time)
+        		in_time_type, out_time_type, out_office_start_time, out_office_end_time,
+        		in_time_change, out_time_change)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         	ON DUPLICATE KEY UPDATE
 				department=?,
 				in_time=?,
@@ -255,9 +268,9 @@
 				in_time_type=?,
 				out_time_type=?,
 				out_office_start_time=?,
-				out_office_end_time=?
-
-        	
+				out_office_end_time=?,
+				in_time_change=?,
+				out_time_change=?
         </query>
         <query id="selectCommuteDate">
         	SELECT 
@@ -279,7 +292,9 @@
 				in_time_type,
 				out_time_type,
 				out_office_end_time,
-				out_office_start_time
+				out_office_start_time,
+				in_time_change,
+				out_time_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -305,7 +320,9 @@
 				in_time_type,
 				out_time_type,
 				out_office_end_time,
-				out_office_start_time
+				out_office_start_time,
+				in_time_change,
+				out_time_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -415,14 +432,38 @@
 			ORDER BY date
     	</query>
     	
+    	<query id="selectCommentById">
+    		SELECT
+    			c.year,
+    			c.date,
+    			c.id,
+    			m.name,
+    			c.seq,
+    			IFNULL( c.comment, '') AS comment,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			IFNULL( c.comment_reply, '') AS comment_reply,
+    			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
+    			c.state,
+    			c.writer_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
+    			c.reply_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
+    		FROM
+    			comment_tbl c
+    			LEFT JOIN members_tbl m ON m.id = c.id
+    		WHERE
+    			date BETWEEN ? AND ? and c.id = ?
+			ORDER BY date
+    	</query>    	
+    	
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state, writer_id
+    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?, ?
+    			?, ?, ?, ?, now(), ?, ?, ?, ?
     		)
     	</query>
     	
@@ -450,6 +491,41 @@
 					,(select day_count from office_code_tbl where code = ?) 
 					,? ,? ,?, ?, ?
 				)    		
+    	</query>
+    </group>
+    <group id="inOffice">
+    	<query id="selectInOfficeList">
+    		select * from in_office_tbl
+    	</query>
+    	<query id="insertInOffice">
+			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
+    	</query>
+    </group>
+    
+    <group id="code">
+    	<query id="getDepartmentCode">
+    		select 
+    			*
+    		from
+    			dept_code_tbl
+    	</query>
+    	<query id="getOfficeCode">
+    		select 
+    			*
+    		from
+    			office_code_tbl
+    	</query>
+    	<query id="getOvertimeCode">
+    		select 
+    			*
+    		from
+    			overtime_code_tbl
+    	</query>
+    	<query id="getWorktypeCode">
+    		select 
+    			*
+    		from
+    			work_type_code_tbl
     	</query>
     </group>
 </querys>

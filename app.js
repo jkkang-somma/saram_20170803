@@ -21,9 +21,11 @@ var code = require('./routes/codeRouter');
 var commute = require('./routes/commuteRouter');
 var changeHistory = require('./routes/changeHistoryRouter');
 var outOffice = require('./routes/outofficeRouter');
+var inOffice = require('./routes/inofficeRouter');
 var officeCode = require('./routes/officeCodeRouter');
 var comment = require('./routes/commentRouter');
-var department = require('./routes/departmentCodeRouter');
+var codeV2 = require('./routes/codeRouterV2');
+
 //var error = require('./routes/error');
 
 
@@ -113,9 +115,10 @@ app.use('/code', code);
 app.use('/commute', commute);
 app.use('/changeHistory', changeHistory);
 app.use('/outOffice',outOffice);
+app.use('/inOffice',inOffice);
 app.use('/officeCode',officeCode);
 app.use('/comment', comment);
-app.use('/department', department);
+app.use('/codev2', codeV2);
 
 //app.use('/error', error);
 

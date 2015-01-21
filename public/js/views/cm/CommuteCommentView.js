@@ -85,6 +85,9 @@ define([
 
 	var CommuteCommentView = BaseView.extend({
 		el:$(".main-container"),
+		setSearchParam : function(searchParam) {
+			this.searchParam = searchParam; // url + 검색 조건으로 페이지 이동시 조건감들 {id: id, date: date}
+		},
 		initialize:function(){
     		this.commentCollection = new CommentCollection();
     		this.gridOption = {
@@ -154,7 +157,7 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"연차 관리 ", subTitle:"Comment 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리", subTitle:"Comment 관리"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
@@ -216,6 +219,11 @@ define([
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
 
+            if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+            	$(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+     		    $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+            }
+            
             this.selectComments();
             return this;
     	},
@@ -226,6 +234,11 @@ define([
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+     		}
+     		
+     		if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+     			data.id = this.searchParam.id;
+     			this.searchParam = null; // url 접속 - 최초 검색 후 초기화 
      		}
      		
      		if ( Util.isNull(data.startDate) ) {

@@ -8,7 +8,7 @@ define([
     var CommuteCollection = Backbone.Collection.extend({
         model : commuteModel,
         url:'/commute',
-        save : function(option, data){
+        save : function(option){
             this.wrapper = new CommuteCollectionWrapper(this.toJSON());
             this.wrapper.save({}, option);
         },

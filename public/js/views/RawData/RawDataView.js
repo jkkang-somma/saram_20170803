@@ -12,7 +12,6 @@ define([
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
-  'text!templates/component/progressbar.html',
   'text!templates/default/row.html',
   'text!templates/default/datepickerRange.html',
   'text!templates/default/rowbuttoncontainer.html',
@@ -21,17 +20,15 @@ define([
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
   'collection/sm/UserCollection',
-  'models/common/DepartmentCodeModel',
-  'collection/common/DepartmentCodeCollection',
+  'views/component/ProgressbarView',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment,
-HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, DepartmentCodeCollection){
+HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
+RawDataModel, RawDataCollection,UserModel, UserCollection,
+ProgressbarView){
     var RawDataView = BaseView.extend({
         el:$(".main-container"),
         
     	initialize:function(){
-    		var that  = this;
-    		
     		$(this.el).html('');
     	    $(this.el).empty();
     	    this.rawDataCollection = new RawDataCollection();
@@ -62,11 +59,13 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
         },
         renderTable : function(startDate, endDate){
             var that = this;
+            this.progressbar.disabledProgressbar(false);
             this.rawDataCollection.fetch({
                 data : {start : Moment(startDate).format("YYYY-MM-DD"), end : Moment(endDate).format("YYYY-MM-DD")},
                 success: function(){
                     that.grid.render();
-                    that._disabledProgressbar(true);
+                    that.progressbar.disabledProgressbar(true);
+                    Dialog.info("검색이 완료되었습니다");
                 }
     	    });
         },
@@ -110,13 +109,12 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
 	        
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
-
-    	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
-    	    
+            this.progressbar = new ProgressbarView();
+            
     	    _layout.append(_head);
     	    _layout.append(_row);
             _layout.append(_content);
-            _layout.append(_progressBar);
+            _layout.append(this.progressbar.render());
 
     	    $(this.el).append(_layout);
     	    
@@ -142,19 +140,8 @@ RawDataModel, RawDataCollection,UserModel, UserCollection,DepartmentCodeModel, D
         	that.grid= new Grid(_gridSchema.getDefault(that.gridOption));
             that.grid.render();
             
-            this._disabledProgressbar(false);
-            this.renderTable(firstDay, today);
             
             return this;
-     	},
-     	
-     	_disabledProgressbar : function(flag){
-     	    var progressbar = $(this.el).find(".progress");
-     	    if(flag){
-     	        progressbar.css("display","none");
-     	    }else{
-     	        progressbar.css("display","block");
-     	    }
      	},
     });
     return RawDataView;

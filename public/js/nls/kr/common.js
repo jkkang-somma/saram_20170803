@@ -103,7 +103,7 @@ define({
                 RAW_DATA_LIST:"출입 기록 조회",
                 CREATE_DATA:"근태 자료 생성",
                 COMMUTE_MANAGER:"근태 자료 관리",
-                COMMUTE_MANAGER_COMMENT:"근태 수정 내역 관리",
+                COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
                 REPORT_MANAGER:"근태 상신"
             }
         }

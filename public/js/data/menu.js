@@ -40,7 +40,7 @@ define([
             hashTag:"#commutemanager",
             auth:USER
         },{
-            title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 수정 내역 관리",
+            title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
             hashTag:"#commutemanager/comment",
             auth:USER
         },{

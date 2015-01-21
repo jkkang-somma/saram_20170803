@@ -15,6 +15,12 @@ var Comment = function() {
 		});
 	};
 	
+	var _getCommentById = function(data, callback) {
+		CommentDao.selectCommentById(data).then(function(result) {
+			return callback(result);
+		});		
+	};
+	
 	var _insertComment = function(inData, callback) {
 		// comment count 업데이트 
 		CommuteDao.updateCommuteCommentCount(inData).then(function(result) {
@@ -34,6 +40,7 @@ var Comment = function() {
 	
 	return {
 		getComment : _getComment,
+		getCommentById : _getCommentById,
 		insertComment : _insertComment,
 		updateCommentReply : _updateCommentReply
 	}

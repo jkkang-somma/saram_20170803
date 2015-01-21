@@ -48,6 +48,7 @@ ReportListView // report manager
 			'holidaymanager' : 'showHolidayManager',
 			'commutemanager' : 'showCommuteManager',
 			'commutemanager/comment' : 'showCommuteComment',
+			'commutemanager/comment/:id/:date' : 'showCommuteCommentListCount',
 			'vacation' : 'showVacation',
 			'rawdatalist' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
@@ -140,6 +141,12 @@ ReportListView // report manager
 		showCommuteComment : function(){
 			var commuteCommentView = new CommuteCommentView();
 			this.changeView(commuteCommentView);
+		},
+		
+		showCommuteCommentListCount : function(id, date) { // url + 검색 조건을 토한 페이지 이동 
+			var commuteCommentView = new CommuteCommentView();
+			commuteCommentView.setSearchParam({"id": id, "date": date});
+			this.changeView(commuteCommentView);			
 		},
 		
 		showRawdata : function(){
