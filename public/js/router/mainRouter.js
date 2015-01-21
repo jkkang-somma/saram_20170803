@@ -120,8 +120,11 @@ ReportListView // report manager
 		},
 		
 		showHome : function(){
-		    var dashBoardView = new DashBoardView({el:mainContainer});
-		    this.changeView(dashBoardView);
+		    // var dashBoardView = new DashBoardView({el:mainContainer});
+		    // this.changeView(dashBoardView);
+		    
+		    var createDataView = new CreateDataView();
+			this.changeView(createDataView);
 		},
 		showHolidayManager : function(){
 			var holidayManagerView = new HolidayManagerView();
@@ -172,7 +175,6 @@ ReportListView // report manager
                     action: function(dialogRef){// 버튼 클릭 이벤트
                         configView.submitSave().done(function(data){
                             dialogRef.close();
-                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
                         });//실패 따로 처리안함 add화면에서 처리.
                     }
                 }, {

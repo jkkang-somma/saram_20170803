@@ -7,10 +7,14 @@ var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var UserDao= require('../dao/userDao.js');
 
-var User = function (data) {
+var User = function (data, isNoSchemas) {
     var _data=_.initial([]);
     var schema=new Schemas('user');
-    _data = schema.get(data);
+    if (_.isUndefined(isNoSchemas)){// 스키마 미사용
+        _data = schema.get(data);
+    } else if (!_.isUndefined(isNoSchemas)||isNoSchemas){
+        _data=data;
+    }
     var _get = function (fieldName) {
         if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
         if (_.has(_data, fieldName)){

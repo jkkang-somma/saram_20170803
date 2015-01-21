@@ -22,6 +22,8 @@ define([
     var _router;
     var _navigationView;
     var _initFlalg= true;
+    
+    var _loginView;
     var App = Backbone.Model.extend({
         start : function(){
             LOG.debug("==============================================================================");   
@@ -31,7 +33,6 @@ define([
             $.ajaxSetup({ cache: false });
             
             var _app=this;
-            var _loginView;
             
             //Global Error Handle
             $(document).ajaxError(function (event, xhr) {
@@ -55,10 +56,10 @@ define([
             SessionModel.checkSession().done(function(isLogin){
                 if (!isLogin){
                     LOG.debug("Not login User.");
-                    //_loadingView.disable(function(){
+                    LoadingView.disable(function(){
                         _loginView= new LoginView({el:$(".main-container")});
                         _loginView.render(_app);
-                    //});
+                    });
                     return;
                 } else {
                         _app.draw();   
@@ -66,24 +67,29 @@ define([
             });
         },
         draw:function(){
-            $("body").removeClass("login-body");
+            if (!_.isUndefined(_loginView)){
+                _loginView.close();
+            }
             Code.init().then(function(){
-                _router = new MainRouter({
-                    affterCallback:function(){// mainRouter create
-                        if (_.isUndefined(_navigationView)){
-                            _navigationView= new NavigationView();
-                		    _navigationView.render();
-                        } else {
-                            _navigationView.show();
+                $("body").removeClass("login-body");
+                LoadingView.disable(function(){
+                    _router = new MainRouter({
+                        affterCallback:function(){// mainRouter create
+                            if (_.isUndefined(_navigationView)){
+                                _navigationView= new NavigationView();
+                    		    _navigationView.render();
+                            } else {
+                                _navigationView.show();
+                            }
+                            
+                            if (_initFlalg){
+                                Backbone.history.start({root:"/"});
+                            } else {
+                                Backbone.history.loadUrl();
+                            }
                         }
-                        
-                        if (_initFlalg){
-                            Backbone.history.start({root:"/"});
-                        } else {
-                            Backbone.history.loadUrl();
-                        }
-                    }
-                });     
+                    });
+                });
             }, function(){
                 Dialog.error("Code Init Fail");
             });

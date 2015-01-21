@@ -116,7 +116,7 @@ router.route('/')
 //사용자 등록
 router.route('/config/:id')
 .put(function(req, res){
-    var user = new User(req.body);
+    var user = new User(req.body,true);
     user.configUser().then(function(result){
         res.send(result);
     }).catch(function(e){

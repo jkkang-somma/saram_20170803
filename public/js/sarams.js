@@ -67,8 +67,6 @@ require([
    'app',
    'views/LoadingView',
 ], function(App, LoadingView){
-   LoadingView.disable(function(){
-      var app = new App();
-      app.start();
-   });
+   var app = new App();
+   app.start();
 });

@@ -49,6 +49,11 @@ define([
     	    _.bindAll(this, 'updateRow');
     		_.bindAll(this, 'removeRow');
     		_.bindAll(this, 'search');
+    		_.bindAll(this, 'filtering');
+    		
+    		//필터링 초기화
+            $.fn.dataTable.ext.search=[];
+    		
     		this.render();
     	},
     	updateCSS:function(){
@@ -194,6 +199,16 @@ define([
                 _.isUndefined(smart)?false:smart
             ).draw();
     	},
+    	filtering:function(filter){
+    	    $.fn.dataTable.ext.search=[];
+            $.fn.dataTable.ext.search.push(
+                function( settings, data, dataIndex ) {
+                    return filter(data);
+                }
+            );
+            
+            this.DataTableAPI.draw();
+    	},
     	_crteateDefaultButton:function(id, name, clickEvent){
     	    var _buttonIcon=$(ButtonHTML);
     	    //_buttonIcon.attr("id", id);
@@ -213,11 +228,16 @@ define([
     	},
     	_crteateCustomButton:function(obj){
     	    var _grid=this;
-    	    var _buttonIcon=$(ButtonHTML);
+    	    
+    	    var _buttonIcon;
+    	    if (obj.name=="filter"){//필터 버튼일떄
+    	        _buttonIcon=obj.filterBtnText[0];
+    	    } else {//일반 아이콘
+    	        _buttonIcon=$(ButtonHTML);
+                _buttonIcon.addClass(_glyphiconSchema.value(obj.name));
+    	    }
+    	    
     	    var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
-    	    //_buttonIcon.attr("id", _btnId);
-            _buttonIcon.addClass(_glyphiconSchema.value(obj.name));
-
             this.buttonid[obj.name] = _btnId;
             var _button=$(_defaultBtnTag);
             _button.attr("id", _btnId);
@@ -226,7 +246,7 @@ define([
             _button.click(function(){
                 if(_.isFunction(obj.click)){
                     var callback=obj.click;
-                    callback(_grid);
+                    callback(_grid, _button);
                 }
             })
     	},
