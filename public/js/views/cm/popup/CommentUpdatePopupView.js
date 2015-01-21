@@ -42,8 +42,7 @@ define([
             		id : this.selectData.id	
             	}, success : function(result){
             		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
-					$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupId", label : "사번", value : that.selectData.id}));
-					$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name}));
+					$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name + " ("+that.selectData.id+")"}));
 					$(that.el).append(_.template(DatePickerChangeHTML)(
 						{
 							id: "commentUpdatePopupInTime", 
@@ -85,7 +84,6 @@ define([
 		            });
 		
 					$(that.el).find("#commentUpdatePopupDate").attr("disabled", "true");
-					$(that.el).find("#commentUpdatePopupId").attr("disabled", "true");
 					$(that.el).find("#commentUpdatePopupName").attr("disabled", "true");
 					$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
 					
