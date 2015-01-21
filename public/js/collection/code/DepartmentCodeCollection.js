@@ -2,11 +2,11 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/common/DepartmentCodeModel'
+  'models/code/DepartmentCodeModel'
 ], function($, _, Backbone, DepartmentCodeModel){
     var DepartmentCodeCollection = Backbone.Collection.extend({
-        url:'/department',
-        initialize: function(options) {
+        url:'/codev2/department',
+        initialize: function() {
         },
         model : DepartmentCodeModel
     });
