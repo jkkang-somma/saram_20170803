@@ -286,6 +286,7 @@ define([
       
       var compareVal = parseInt((end - start)/day);
       var arrInsertDate = [];
+      var holidayInfos = this.options.holidayInfos;
       if(compareVal > 0){
         // 차이
         for(var i=0; i<=compareVal; i++){
@@ -293,14 +294,30 @@ define([
           var resDate = new Date(dt);
           if(resDate.getDay() != 0 && resDate.getDay() != 6){
             // 주말이 아닌 날짜
-            arrInsertDate.push(this.getDateFormat(resDate));
+            var isPush = true;
+            for(var j=0; j<holidayInfos.length; j++){
+              var sDate = this.getDateFormat(resDate);
+              if(holidayInfos[j].date == sDate){
+                isPush = false;
+                break;
+              }
+            }
+            if(isPush){
+              arrInsertDate.push(sDate);
+            }
           }
         }
+       
       }else{
          if(start.getDay() != 0 && start.getDay() != 6){
             // 주말이 아닌 날짜
-            arrInsertDate.push(sStart);
-          }
+           for(var k=0; k<holidayInfos.length; k++){
+              if(holidayInfos[k].date != sStart){
+                arrInsertDate.push(sStart);
+                break;
+              }
+           }
+        }
       }
       
       return arrInsertDate;
