@@ -70,7 +70,9 @@ define([
 		 var data = JSON.stringify({
 			 idx : cellData.idx
 		 });
-		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='-' onclick='return false'>" + cellData.comment_count + " 건</a>";
+		 
+		 var url = "#commutemanager/comment/" + cellData.id + "/" + cellData.date;
+		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' >" + cellData.comment_count + " 건</a>";
 		 return aHrefStr;
 	}
 	
