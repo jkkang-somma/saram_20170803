@@ -43,14 +43,14 @@ TextBoxHTML, DatePickerHTML
 			
 			if (!_.isUndefined(el)) this.el=el;
 			
-			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupDate", label : "일자", value : this.selectData.date}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupDept", label : "부서", value : this.selectData.department}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupId", label : "사번", value : this.selectData.id}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commutUpdatePopupName", label : "이름", value : this.selectData.name}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupDate", label : "일자", value : this.selectData.date}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupDept", label : "부서", value : this.selectData.department}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupId", label : "사번", value : this.selectData.id}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupName", label : "이름", value : this.selectData.name}));
 			$(this.el).append(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			id : "commutUpdatePopupIn",
+    	    			id : "commuteUpdatePopupIn",
     	    			label : "출근 시간",
     	    			name : "in_time",
     	    			format : "YYYY-MM-DD HH:mm:ss"
@@ -62,7 +62,7 @@ TextBoxHTML, DatePickerHTML
     	    $(this.el).append(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			id : "commutUpdatePopupOut",
+    	    			id : "commuteUpdatePopupOut",
     	    			label : "퇴근 시간",
     	    			name : "out_time",
     	    			format : "YYYY-MM-DD HH:mm:ss"
@@ -70,7 +70,7 @@ TextBoxHTML, DatePickerHTML
     	    	})
     	    );
     	    
-			$(this.el).find("#commutUpdatePopupIn").datetimepicker({
+			$(this.el).find("#commuteUpdatePopupIn").datetimepicker({
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
@@ -78,7 +78,7 @@ TextBoxHTML, DatePickerHTML
 		        defaultDate: Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
             });
             
-            $(this.el).find("#commutUpdatePopupOut").datetimepicker({
+            $(this.el).find("#commuteUpdatePopupOut").datetimepicker({
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
@@ -86,10 +86,10 @@ TextBoxHTML, DatePickerHTML
 		        defaultDate: Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
             });
             
-			$(this.el).find("#commutUpdatePopupDate").attr("disabled", "true");
-			$(this.el).find("#commutUpdatePopupId").attr("disabled", "true");
-			$(this.el).find("#commutUpdatePopupDept").attr("disabled", "true");
-			$(this.el).find("#commutUpdatePopupName").attr("disabled", "true");
+			$(this.el).find("#commuteUpdatePopupDate").attr("disabled", "true");
+			$(this.el).find("#commuteUpdatePopupId").attr("disabled", "true");
+			$(this.el).find("#commuteUpdatePopupDept").attr("disabled", "true");
+			$(this.el).find("#commuteUpdatePopupName").attr("disabled", "true");
 			
 			
             dfd.resolve();
@@ -161,11 +161,11 @@ TextBoxHTML, DatePickerHTML
 			
 		},
 		getInsertData: function() {
-			var inTimeDatePicker = $(this.el).find("#commutUpdatePopupIn").data("DateTimePicker");
-			var outTimeDatePicker = $(this.el).find("#commutUpdatePopupOut").data("DateTimePicker");
+			var inTimeDatePicker = $(this.el).find("#commuteUpdatePopupIn").data("DateTimePicker");
+			var outTimeDatePicker = $(this.el).find("#commuteUpdatePopupOut").data("DateTimePicker");
      		var newData = {
-     			date : $(this.el).find("#commutUpdatePopupDate").val(),
-     			id : $(this.el).find("#commutUpdatePopupId").val(),
+     			date : $(this.el).find("#commuteUpdatePopupDate").val(),
+     			id : $(this.el).find("#commuteUpdatePopupId").val(),
      			in_time : inTimeDatePicker.getText()==="" ? null: inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
      			out_time : outTimeDatePicker.getText()==="" ? null: outTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
      		}
