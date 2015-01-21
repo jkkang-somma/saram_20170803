@@ -18,6 +18,7 @@ define([
     var _glyphiconSchema=Schemas.getSchema('glyphicon');
     var _defaultGroupBtnTag='<span class="input-group-btn"></span>';
     var _defaultBtnTag='<button class="btn btn-default btn-sm btn-success grid-btn" type="button"></button>';
+    var _gridLength=[10,25,50,100];
     
     var Grid = Backbone.View.extend({
     	initialize:function(options){
@@ -37,6 +38,7 @@ define([
                 this.options.buttons=_btns;    
             }
             this.options.format=this.format;
+            this.currentLength=10;
             
             if (_.isUndefined(this.options.id) || _.isNull(this.options.id)){
                 this.options.id = "grid-"+(gridId++);
@@ -170,7 +172,7 @@ define([
     	},
     	updateRow:function(item, index){//default 선택된 아이템  index로 하려면. index 를 넣어주세요.
     	    if (_.isUndefined(index)){
-    	        this.DataTableAPI.row('.selected').data(item).draw();
+    	        this.DataTableAPI.row('.selected').data(item);
     	    } else if (_.isNumber(index)){
     	        this.DataTableAPI.row(index).data(item).draw();
     	    }
@@ -182,7 +184,7 @@ define([
                 _.isUndefined(smart)?false:smart
             ).draw();
     	},
-    	_crteateDefaultButton:function(id, name){
+    	_crteateDefaultButton:function(id, name, clickEvent){
     	    var _buttonIcon=$(ButtonHTML);
     	    //_buttonIcon.attr("id", id);
             _buttonIcon.addClass(_glyphiconSchema.value(name));
@@ -190,7 +192,13 @@ define([
             var _button=$(_defaultBtnTag);
             _button.attr("id", id);
             _button.append(_buttonIcon);
-            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));       
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
+            
+            if (!_.isUndefined(clickEvent) && _.isFunction(clickEvent)){
+                _button.click(function(){
+                   clickEvent(); 
+                });
+            }
             return _button;
     	},
     	_crteateCustomButton:function(obj){
@@ -225,7 +233,23 @@ define([
     	         _grid.search(this.value,false,true);          
     	    });
     	    this.buttonid["search"] = _btnId;
-    	    this._crteateDefaultButton(_btnId, name);
+    	    
+            var _button=$(_defaultBtnTag);
+            _button.attr("id", _btnId);
+            _button.append( _grid.currentLength);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
+            _button.click(function(){
+                var index =_.indexOf(_gridLength, _grid.currentLength);
+    	        if (index==3){
+    	            index=0;
+    	        } else {
+    	            index++;
+    	        }
+    	        
+    	        _grid.currentLength=_gridLength[index];
+    	        _button.html(_grid.currentLength);
+    	        _grid.DataTableAPI.page.len( _grid.currentLength ).draw();
+            });
     	},
     	_createRefreshButton:function(name){
     	    var _grid=this;

@@ -6,12 +6,12 @@ define([
   'core/BaseView',
   'log',
   'dialog',
-  'i18n!nls/user',
+  'i18n!nls/common',
   'lib/component/form',
   'models/sm/UserModel',
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
-], function($, _, _S, Backbone, BaseView, log, Dialog, i18nUser, Form, UserModel, CodeCollection, container){
+], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, CodeCollection, container){
     var LOG= log.getLogger("EditUserView");
     var EditUserView = BaseView.extend({
     	initialize:function(data){
@@ -37,17 +37,17 @@ define([
         	        childs:[{
         	                type:"input",
         	                name:"id",
-        	                label:i18nUser.ID,
+        	                label:i18nCommon.USER.ID,
         	                value:_model.id
         	        },{
         	                type:"input",
         	                name:"name",
-        	                label:i18nUser.NAME,
+        	                label:i18nCommon.USER.NAME,
         	                value:_model.name
         	        },{
         	                type:"combo",
         	                name:"dept_code",
-        	                label:i18nUser.DEPT,
+        	                label:i18nCommon.USER.DEPT,
         	                value:_model.dept_code,
         	                collection:codeCollection,
         	                linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
@@ -59,32 +59,32 @@ define([
         	        },{
         	                type:"input",
         	                name:"name_commute",
-        	                label:i18nUser.NAME_COMMUTE,
+        	                label:i18nCommon.USER.NAME_COMMUTE,
         	                value:_model.name_commute
         	        },{
         	                type:"date",
         	                name:"join_company",
-        	                label:i18nUser.JOIN_COMPANY,
+        	                label:i18nCommon.USER.JOIN_COMPANY,
         	                value:_model.join_company,
         	                format:"YYYY-MM-DD"
         	        },{
         	                type:"date",
         	                name:"leave_company",
-        	                label:i18nUser.LEAVE_COMPANY,
+        	                label:i18nCommon.USER.LEAVE_COMPANY,
         	                value:_model.leave_company,
         	                format:"YYYY-MM-DD"
         	        },{
         	                type:"combo",
         	                name:"privilege",
-        	                label:i18nUser.PRIVILEGE,
+        	                label:i18nCommon.USER.PRIVILEGE,
         	                value:_model.privilege,
-        	                collection:[{key:1,value:"전체"},{key:2,value:"부서"},{key:3,value:"개인"}]
+        	                collection:[{key:1,value:i18nCommon.CODE.PRIVILEGE_1},{key:2,value:i18nCommon.CODE.PRIVILEGE_2},{key:3,value:i18nCommon.CODE.PRIVILEGE_3}]
         	        },{
         	                type:"combo",
         	                name:"admin",
-        	                label:i18nUser.ADMIN,
+        	                label:i18nCommon.USER.ADMIN,
         	                value:_model.admin,
-        	                collection:[{key:0,value:"사용자"},{key:1,value:"관리자"}]
+        	                collection:[{key:0,value:i18nCommon.CODE.ADMIN_0},{key:1,value:i18nCommon.CODE.ADMIN_1}]
         	        }]
         	    });
         	    
@@ -95,7 +95,7 @@ define([
         	        dfd.reject();
         	    });  
     	    }).fail(function(e){
-    	        Dialog.error("사용자 정보를 받아오지 못하였습니다.");
+    	        Dialog.error(i18nCommon.ERROR.USER_EDIT_VIEW.FAIL_RENDER);
     	        LOG.error(e.responseJSON.message);
                 dfd.reject();    	      
     	    });
@@ -120,6 +120,27 @@ define([
     	    });
     	    
     	    return dfd.promise();
+    	},
+    	initializePassword:function(){
+    	    var dfd= new $.Deferred();
+    	    var _view=this,_form=this.form,_data=_form.getData();
+    	    _data.password="";
+    	    var _userModel= new UserModel(_data);
+    	    _userModel.attributes._id="-2";
+    	    var _validate=_userModel.validation(_data);
+    	    _userModel.save({},{
+    	        success:function(model, xhr, options){
+    	            dfd.resolve(_data);
+    	        },
+    	        error:function(model, xhr, options){
+    	            var respons=xhr.responseJSON;
+    	            Dialog.error(respons.message);
+    	            dfd.reject();
+    	        },
+    	        wait:false
+    	    });
+    	    
+    	    return dfd.promise();  
     	}
     });
     return EditUserView;

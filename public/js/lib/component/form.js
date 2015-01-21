@@ -8,13 +8,12 @@ define([
   'dialog',
   'schemas',
   'i18n!nls/common',
-  'i18n!nls/error',
   'text!templates/default/form.html',
   'text!templates/default/input.html',
   'text!templates/default/datepicker.html',
   'text!templates/default/combo.html',
   'text!templates/default/hidden.html',
-  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, i18nError, FormHTML, InputHTML, DatePickerHTML, ComboHTML, HiddenHTML){
+  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, DatePickerHTML, ComboHTML, HiddenHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -146,7 +145,7 @@ define([
                         _form.append(_childement);     
                     }
                 } else {
-                    Dialog.error(i18nError.NOT_SUPPORT_FORM_CHILD);
+                    LOG.error("not support child type.");
                     dfd.reject();
                 }
             }

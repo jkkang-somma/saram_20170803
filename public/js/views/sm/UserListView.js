@@ -28,24 +28,24 @@ define([
     		this.option = {
     		    el:_id+"_content",
     		    column:[
-    		        "사번", "이름", 
-    		        { "title" : "부서", "render": function(data, type, row){
+    		        i18Common.USER.ID, i18Common.USER.NAME, 
+    		        { "title" : i18Common.USER.DEPT, "render": function(data, type, row){
                         return row.dept_name;
                     }}
-                    , "식별명칭", "입사일", "퇴사일",
-                    { "title" : "조회 권한", "render": function(data, type, row){
-                        var result="전체";
+                    , i18Common.USER.NAME_COMMUTE, i18Common.USER.JOIN_COMPANY, i18Common.USER.LEAVE_COMPANY,
+                    { "title" : i18Common.USER.PRIVILEGE, "render": function(data, type, row){
+                        var result=i18Common.CODE.PRIVILEGE_1;
                         if (row.privilege == 3){
-                            result="개인";
+                            result=i18Common.CODE.PRIVILEGE_3;
                         } else if (row.privilege == 2){
-                            result="부서";
+                            result=i18Common.CODE.PRIVILEGE_2;
                         }
                         return result;
                     }},
-                    { "title" : "관리 권한", "render": function(data, type, row){
-                        var result="사용자";
+                    { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
+                        var result=i18Common.CODE.ADMIN_0;
                         if (row.admin > 0){
-                            result="관리자";
+                            result=i18Common.CODE.ADMIN_1;
                         }
                         return result;
                     }}
@@ -82,10 +82,10 @@ define([
                             label: i18Common.DIALOG.BUTTON.ADD,
                             cssClass: Dialog.CssClass.SUCCESS,
                             action: function(dialogRef){// 버튼 클릭 이벤트
-                                addUserView.submitAdd().done(function(model){
-                                    grid.addRow(model.attributes);
+                                addUserView.submitAdd().done(function(data){
+                                    grid.addRow(data);
                                     dialogRef.close();
-                                    Dialog.show("Complete Add User.");
+                                    Dialog.show(i18Common.SUCCESS.USER.ADD);
                                 });//실패 따로 처리안함 add화면에서 처리.
                             }
                         }, {
@@ -112,6 +112,16 @@ define([
                             title:i18Common.DIALOG.TITLE.USER_UPDATE, 
                             content:editUserView, 
                             buttons:[{
+                                label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
+                                cssClass: Dialog.CssClass.SUCCESS,
+                                action: function(dialogRef){// 버튼 클릭 이벤트
+                                    editUserView.initializePassword().done(function(data){
+                                        grid.updateRow(data);
+                                        dialogRef.close();
+                                        Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                                    });//실패 따로 처리안함 add화면에서 처리.
+                                }
+                            },{
                                 label: i18Common.DIALOG.BUTTON.SAVE,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialogRef){// 버튼 클릭 이벤트
@@ -143,7 +153,7 @@ define([
                     } else {
                         selectItem._id="-1";
                         var dd=Dialog.confirm({
-                            msg:"Do you want Delete User?",
+                            msg:i18Common.CONFIRM.USER.REMOVE, //"Do you want Delete User?",
                             action:function(){
                                var userModel=new UserModel(selectItem);
                                return userModel.remove();
@@ -151,7 +161,7 @@ define([
                             actionCallBack:function(res){//response schema
                                 if (res.status){
                                     _grid.removeRow(selectItem);
-                                    Dialog.show("Complete Remove User.");
+                                    Dialog.show(i18Common.SUCCESS.USER.REMOVE);
                                 }
                             },
                             errorCallBack:function(){

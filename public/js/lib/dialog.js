@@ -10,9 +10,8 @@ define([
   'bootstrap-dialog',
   'log4javascript',
   'i18n!nls/common',
-  'i18n!nls/error',
   'animator',
-], function($, _, Backbone, log, Schemas, Bootstrap, BootstrapDialog, log4javascript, i18nCommon, i18nError, Animation){
+], function($, _, Backbone, log, Schemas, Bootstrap, BootstrapDialog, log4javascript, i18nCommon, Animation){
     var CssClass={
         ERROR:"btn-danger",
         INFO:"btn-info",

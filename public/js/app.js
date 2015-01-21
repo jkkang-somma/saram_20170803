@@ -8,7 +8,6 @@ define([
   'bootstrap',
   'dialog',
   'i18n!nls/common',
-  'i18n!nls/error',
   
   'router',
   'models/sm/SessionModel',
@@ -16,7 +15,7 @@ define([
   'views/LoginView',
   'views/NavigationView', 
   'moment', 'bootstrap-datetimepicker',
-], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, i18Error,  MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
+], function($, _, Backbone, log, Bootstrap, Dialog, i18Common,  MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
     var _loadingView;
     var _saram;
@@ -32,9 +31,6 @@ define([
             $.ajaxSetup({ cache: false });
             
             var _app=this;
-            // _loadingView = new LoadingView();
-            // _loadingView.render();
-            
             var _loginView;
             
             //Global Error Handle
@@ -46,9 +42,10 @@ define([
                         _initFlalg=false;
                         
                         $(document).unbind('ajaxError');
-                        _app.start();
+                        //_app.start();
+                        window.location="/";
                     });
-                } else if (xhr.status == 401){
+                } else if (xhr.status == 404){
                     Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
                 }
                     

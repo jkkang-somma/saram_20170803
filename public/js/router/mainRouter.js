@@ -9,13 +9,14 @@ define([
 	'util',
 	'log',
 	'dialog',
+  	'i18n!nls/common',
 	'models/sm/SessionModel',
 	'core/BaseRouter',
 	'views/DashBoardView',
 	'views/LoginView',
 	'views/NavigationView',
 	'views/sm/UserListView',
-	'views/sm/AddUserView',
+	'views/sm/ConfigUserView',
 	'views/RawData/AddRawDataView',
 	'views/RawData/RawDataView',
 	'views/Holiday/HolidayManagerView',
@@ -24,9 +25,9 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-], function($, _,  Backbone, animator, Util, log, Dialog, SessionModel, BaseRouter,
+], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
-UserListView, AddUserView,	// 사원관리
+UserListView, ConfigUserView,	// 사원관리
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
@@ -40,7 +41,7 @@ ReportListView // report manager
 	var Router = BaseRouter.extend({
 		routes : {
 			'logout': 'logout',
-			'usermanager/add' : 'showAddUser',
+			'config' :'config',
 			'usermanager' : 'showUserList',
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
@@ -100,10 +101,6 @@ ReportListView // report manager
     		view.render();
     		animator.animate($(view.el), animator.FADE_IN);	
 		},
-		showAddUser : function(){
-			var addUserView = new AddUserView();
-			this.changeView(addUserView);
-		},
 		
 		showUserList : function(){
 			LOG.debug("Initalize showUserList");
@@ -156,6 +153,40 @@ ReportListView // report manager
 		},
 		logout:function(){
 			SessionModel.logout();
+		},
+		config:function(){
+			var configView=new ConfigUserView();
+			Dialog.show({
+                title:i18Common.DIALOG.TITLE.USER_UPDATE, 
+                content:configView, 
+                buttons:[{
+                    label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
+                    cssClass: Dialog.CssClass.SUCCESS,
+                    action: function(dialogRef){// 버튼 클릭 이벤트
+                        configView.initializePassword().done(function(data){
+                            grid.updateRow(data);
+                            dialogRef.close();
+                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                        });//실패 따로 처리안함 add화면에서 처리.
+                    }
+                },{
+                    label: i18Common.DIALOG.BUTTON.SAVE,
+                    cssClass: Dialog.CssClass.SUCCESS,
+                    action: function(dialogRef){// 버튼 클릭 이벤트
+                        configView.submitSave().done(function(data){
+                            grid.updateRow(data);
+                            dialogRef.close();
+                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                        });//실패 따로 처리안함 add화면에서 처리.
+                    }
+                }, {
+                    label: i18Common.DIALOG.BUTTON.CLOSE,
+                    action: function(dialogRef){
+                        dialogRef.close();
+                    }
+                }]
+                
+            });
 		}
 	});
 

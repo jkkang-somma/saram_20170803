@@ -1,9 +1,0 @@
-define({
-    NAME:"이름",
-    ID:"사번",
-    DEPT:"부서",
-    NAME_COMMUTE:"식별명칭",
-    JOIN_COMPANY:"입사일",
-    LEAVE_COMPANY:"퇴사일",
-    PRIVILEGE:"권한"
-});
