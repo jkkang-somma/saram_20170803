@@ -13,6 +13,7 @@ ApprovalDao.prototype.selectApprovalList =  function () {
 };
 ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate) {
     var queryStr = db.getQuery('approval', 'selectApprovalListWhere');
+    
     return db.queryV2(queryStr, [startDate,endDate,startDate,endDate]);
 };
 ApprovalDao.prototype.insertApproval =  function (data) {

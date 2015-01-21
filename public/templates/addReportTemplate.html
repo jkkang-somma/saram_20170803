@@ -5,6 +5,10 @@
             <input type="text" id="submit_id" name="submit_id" class="form-control"/>
         </div>
         <div class="form-group">
+            <label for="office_code">구분</label>
+            <select id="office_code" name="office_code" class="form-control"></select>
+        </div>
+        <div class="form-group">
             <div class="row">
                 <div class='col-sm-3'><label for="start_date">기간</label></div>
             </div>
@@ -12,7 +16,7 @@
                 <div class='col-sm-6'>
                     <div class="form-group form-group-sm">
                         <div class="input-group input-group-sm date" id="start_date">
-                            <span class="input-group-addon">
+                            <span class="input-group-addon" id="datePickerTitleTxt">
                                 from
                             </span>
                             <input type="text" class="form-control" data-format="yyyy-MM-dd" name="start_date"/>
@@ -36,10 +40,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="office_code">구분</label>
-            <select id="office_code" name="office_code" class="form-control"></select>
         </div>
         <div class="form-group">
             <div class="row">
@@ -71,6 +71,18 @@
                             </span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">  
+                <div class='col-sm-6'>
+                    <label for="usableHoliday">잔여연차일수</label>
+                    <input type="text" id="usableHoliday" class="form-control" readonly="true" style='text-align: right;'/>
+                </div>
+                <div class='col-sm-6'>
+                    <label for="reqHoliday">신청연차일수</label>
+                    <input type="text" id="reqHoliday" class="form-control" readonly="true" style='text-align: right;'/>
                 </div>
             </div>
         </div>
