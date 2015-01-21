@@ -13,10 +13,11 @@ define([
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
   'collection/vacation/VacationCollection',
+  'collection/common/HolidayCollection',
   'views/rm/AddNewReportView',
   'views/rm/ApprovalReportView',
   'views/rm/DetailReportView',
-], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, SessionModel, commuteListTmp, ApprovalCollection, VacationCollection, AddNewReportView, ApprovalReportView, DetailReportView){
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, SessionModel, commuteListTmp, ApprovalCollection, VacationCollection, HolidayCollection, AddNewReportView, ApprovalReportView, DetailReportView){
    var _reportListView=0;
    var reportListView = BaseView.extend({
     el:$(".main-container"),
@@ -57,6 +58,8 @@ define([
       this.setReportTable(true);
       // 휴가
       this.setVacationById();
+      // 휴일
+      this.setHolidayInfos();
     },
     
     setTitleTxt : function(){
@@ -70,10 +73,6 @@ define([
     
     setBottomButtonCon : function(){
       var _this = this;
-      // var bottomBtnCon = $(this.el).find('#bottomBtnCon');
-      // bottomBtnCon.css('float','right');
-      // bottomBtnCon.empty();
-      
       // approval Button
       var approvalBtn = $('#btnApprovalPop');
       
@@ -90,6 +89,7 @@ define([
         var selectData={};
         selectData.total_day = _this.total_day;
         selectData.used_holiday = _this.used_holiday;
+        selectData.holidayInfos = _this.holidayInfos;
         _addNewReportView.options = selectData;
         Dialog.show({
           title:"결재 상신", 
@@ -114,7 +114,7 @@ define([
        // reportmanager/approval
       approvalBtn.click(function(){
         var selectData=_this.grid.getSelectItem();
-     		
+     		selectData.holidayInfos = _this.holidayInfos;
      		if ( Util.isNotNull(selectData) ) {
      		   var sessionInfo = SessionModel.getUserInfo();
      		   
@@ -156,8 +156,8 @@ define([
       });
       
       detailReportBtn.click(function(){
-         var selectData=_this.grid.getSelectItem();
-     		
+        var selectData=_this.grid.getSelectItem();
+     		selectData.holidayInfos = _this.holidayInfos;
      		if ( Util.isNotNull(selectData) ) {
      		  var _detailReportView = new DetailReportView();
          		 // data param 전달
@@ -267,6 +267,27 @@ define([
           _this.used_holiday = result[0].used_holiday;
         }
       });
+    },
+    
+    setHolidayInfos : function(){
+      var _this = this;
+      var today = new Date();
+      var sYear = today.getFullYear() + "";
+      
+      var _holiColl = new HolidayCollection();  
+      _holiColl.fetch({
+        data: {year : sYear},
+	 			error : function(result) {
+	 				alert("데이터 조회가 실패했습니다.");
+	 			}
+      }).done(function(result){
+        if(result.length > 0){
+          _this.holidayInfos = result;
+        }else{
+           _this.holidayInfos = [];
+        }
+      });
+      
     },
     
     getDateFormat : function(dateData){
