@@ -74,6 +74,13 @@ define([
                  for (var index in _columns){
                     column=API.column(index);
                     var header=column.header(index);
+                    
+                    if(index === "0"){
+                        column.visible(true);
+                        _cTotallWidth = _cTotallWidth+ header.offsetWidth;
+                        continue;
+                    }
+                    
                     var _cWidth = header.offsetWidth;
                     _cTotallWidth=_cTotallWidth+_cWidth;
                     

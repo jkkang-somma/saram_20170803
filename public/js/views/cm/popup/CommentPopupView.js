@@ -33,9 +33,8 @@ define([
 			if (!_.isUndefined(el)) this.el=el;
 			
 			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupDate", label : "일자", value : this.selectData.date}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupId", label : "사번", value : this.selectData.id}));
 			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupDept", label : "부서", value : this.selectData.department}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupName", label : "이름", value : this.selectData.name}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupName", label : "이름", value : this.selectData.name + " ("+this.selectData.id+")"}));
 			$(this.el).append(_.template(DatePickerChangeHTML)(
 				{
 					id: "commentAddPopupInTime", 
@@ -70,7 +69,6 @@ define([
             });
 
 			$(this.el).find("#commentAddPopupDate").attr("disabled", "true");
-			$(this.el).find("#commentAddPopupId").attr("disabled", "true");
 			$(this.el).find("#commentAddPopupDept").attr("disabled", "true");
 			$(this.el).find("#commentAddPopupName").attr("disabled", "true");
 			

@@ -40,8 +40,7 @@ TextBoxHTML, DatePickerHTML
 			
 			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupDate", label : "일자", value : this.selectData.date}));
 			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupDept", label : "부서", value : this.selectData.department}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupId", label : "사번", value : this.selectData.id}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupName", label : "이름", value : this.selectData.name}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commuteUpdatePopupName", label : "이름", value : this.selectData.name  + " ("+this.selectData.id+")"}));
 			$(this.el).append(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{

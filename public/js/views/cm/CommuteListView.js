@@ -121,7 +121,7 @@ define([
 	            							return false;
 	            						}
 	            					}
-	            				).data(yesterday.attributes).draw();
+	            				).data(yesterday.attributes);
             					
         						Dialog.show("성공", function() {
                     				dialog.close();
