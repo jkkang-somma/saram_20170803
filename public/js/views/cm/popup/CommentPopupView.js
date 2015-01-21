@@ -14,14 +14,12 @@ define([
     'moment',
     'core/BaseView',
     'models/cm/CommentModel',
-    'text!templates/cm/popup/commentPopupTemplate.html',
 	'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/default/datepickerChange.html',
 ], function(
 	$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, BaseView,
 	CommentModel,
-	commentPopupTemplate,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML
 ) {
 	

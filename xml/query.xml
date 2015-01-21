@@ -421,6 +421,8 @@
     			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
     			c.state,
     			c.writer_id,
+    			c.want_in_time,
+    			c.want_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
