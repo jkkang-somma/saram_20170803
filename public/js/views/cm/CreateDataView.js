@@ -26,13 +26,15 @@ HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOffi
 CreateDataPopupView){
     var resultTimeFactory = ResultTimeFactory.Builder;
     
+    function dateToText(data){
+        return _.isNull(data) ? null : Moment(data).format("MM-DD<br>HH:mm:SS");
+    }
+    
     var CreateDataView = BaseView.extend({
         
         el:$(".main-container"),
-        
+       
     	initialize:function(){
-    	    var that = this;
-    	    
     		$(this.el).html('');
     	    $(this.el).empty();
     	    this.commuteCollection = new CommuteCollection();
@@ -43,32 +45,46 @@ CreateDataPopupView){
     		    column:[
                     {"title": "날짜", "data": "date"},
                     {"title": "이름", "data": "name"},
-                    {"title": "출근시간", "data": "in_time",
+                    {"title": "근무<br>형태", "data": "work_type",
                         "render": function (data, type, rowData, meta) {
-                            return _.isNull(rowData.in_time) ? null : Moment(rowData.in_time).format("YYYY-MM-DD HH:mm");
+                            var result = ""
+                            switch(data){
+                                case "00": result = "정상"; break;
+                                case "01": result = "지각"; break;
+                                case "10": result = "조퇴"; break;
+                                case "11": result = "지각<br>조퇴"; break;
+                                case "21":
+                                case "22": result = "결근"; break;
+                                case "30": result = "휴일"; break;
+                                case "31": result = "휴가"; break;
+                            }
+                            return result;
                        }
                     },
-                    {"title": "퇴근시간", "data": "out_time",
+                    {"title": "출근<br>기준", "data": "standard_in_time",
                         "render": function (data, type, rowData, meta) {
-                            return _.isNull(rowData.out_time) ? null : Moment(rowData.out_time).format("YYYY-MM-DD HH:mm");
-                            
+                            return dateToText(data);
                        }
                     },
-                    {"title": "Type", "data": "work_type"},
-                    
-                    {"title": "출근기준", "data": "standard_in_time",
+                    {"title": "출근<br>시간", "data": "in_time",
                         "render": function (data, type, rowData, meta) {
-                            return _.isNull(rowData.standard_in_time) ? null : Moment(rowData.standard_in_time).format("YYYY-MM-DD HH:mm");
-                       }
-                    },
-                    {"title": "퇴근기준", "data": "standard_out_time",
-                        "render": function (data, type, rowData, meta) {
-                            return _.isNull(rowData.standard_out_time) ? null : Moment(rowData.standard_out_time).format("YYYY-MM-DD HH:mm");
+                            return dateToText(data);
                        }
                     },
                     {"title": "지각", "data": "late_time"},
+                    {"title": "퇴근<br>기준", "data": "standard_out_time",
+                        "render": function (data, type, rowData, meta) {
+                            return dateToText(data);
+                       }
+                    },
+                    {"title": "퇴근<br>시간", "data": "out_time",
+                        "render": function (data, type, rowData, meta) {
+                            return dateToText(data);
+                            
+                       }
+                    },
                     {"title": "초과", "data": "over_time"},
-                    {"title": "초과근무", "data": "overtime_code"},
+                    {"title": "초과근무<br>코드", "data": "overtime_code"},
                     {"title": "근태", "data": "vacation_code"},
     		    ],
     		    dataschema:["date", "name", "in_time", "out_time", "work_type", "standard_in_time" ,"standard_out_time", "late_time", "over_time", "overtime_code", "vacation_code"],
@@ -188,7 +204,7 @@ CreateDataPopupView){
                                                 resultTimeFactory.initToday(todayStr, holidayData); //계산전 초기화    
                                                 
                                                 // 출근 기준시간 판단 01:00 = 10:00, 02:00 = 11:00, 03:00 = 13:20
-                                                var yesterdayOutTime = new Date(yesterdayAttribute.out_time);
+                                                var yesterdayOutTime = Moment(yesterdayAttribute.out_time);
                                                 resultTimeFactory.setStandardInTime(yesterdayOutTime);
                                                 
                                                 // 휴가/외근/휴일 판단
@@ -198,7 +214,7 @@ CreateDataPopupView){
                                                 // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
                                                 var rawData = userRawDataCollection.filterDate(todayStr);
                                                 _.each(rawData, function(rawDataModel){
-                                                    var destTime = new Date(rawDataModel.get("char_date"));
+                                                    var destTime = Moment(rawDataModel.get("char_date"));
                                                     var type  = rawDataModel.get("type");
                                                     resultTimeFactory.checkTime(destTime, type);   
                                                 });

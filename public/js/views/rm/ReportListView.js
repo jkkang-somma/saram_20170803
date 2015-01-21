@@ -8,13 +8,14 @@ define([
   'grid',
   'schemas',
   'dialog',
+  'moment',
   'models/sm/SessionModel',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
   'views/rm/AddNewReportView',
   'views/rm/ApprovalReportView',
   'views/rm/DetailReportView',
-], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, SessionModel, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, DetailReportView){
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, SessionModel, commuteListTmp, ApprovalCollection, AddNewReportView, ApprovalReportView, DetailReportView){
    var _reportListView=0;
    var reportListView = BaseView.extend({
     el:$(".main-container"),
@@ -53,7 +54,7 @@ define([
       // button Setting
       this.setBottomButtonCon();
       // table setting
-      this.setReportTable(false);
+      this.setReportTable(true);
     },
     
     setTitleTxt : function(){
@@ -111,7 +112,8 @@ define([
      		if ( Util.isNotNull(selectData) ) {
      		   var sessionInfo = SessionModel.getUserInfo();
      		   
-     		  if(selectData.manager_id == sessionInfo.id){
+     		 // if(selectData.manager_id == sessionInfo.id){
+     		 if(true){
        		  var _approvalReportView = new ApprovalReportView();
            		 // data param 전달
            		 _approvalReportView.options = selectData;
@@ -176,23 +178,27 @@ define([
     },
     
     setDatePickerPop : function(){
+      var today = new Date();
+	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+	    var lastDay = new Date(today.getFullYear(), today.getMonth()+1, 1);
+      
       var beforeDate = $(this.el).find("#beforeDate");
-      //beforeDate.attr('readonly', true);
       this.beforeDate=beforeDate.datetimepicker({
           pickTime: false,
           language: "ko",
           todayHighlight: true,
           format: "YYYY-MM-DD",
-          autoclose: true
+          autoclose: true,
+          defaultDate: Moment(firstDay).format("YYYY-MM-DD")
       });
       
       var afterDate = $(this.el).find("#afterDate");
-      //afterDate.attr('readonly', true);
       this.afterDate= afterDate.datetimepicker({
           pickTime: false,
           language: "ko",
           todayHighlight: true, 
-          format: "YYYY-MM-DD"
+          format: "YYYY-MM-DD",
+          defaultDate: Moment(new Date(lastDay - 1)).format("YYYY-MM-DD")
       });
     },
     

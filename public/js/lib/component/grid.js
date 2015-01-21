@@ -123,6 +123,9 @@ define([
     	    
             return _result.html();
         },
+        getRowByFunction:function(validateFunction){
+            return this.DataTableAPI.row(validateFunction);
+        },
     	getSelectItem:function(){//선택된 row 가져오기
     	    if (_.isUndefined(this.DataTableAPI)){
     	       return _.noop(); 

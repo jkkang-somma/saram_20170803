@@ -199,12 +199,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	    var _yearComboLabel = $(_.template(LabelHTML)({label:"연도"}));
     	    var _yearCombo = $(_.template(ComboBoxHTML)({id:"holidayYearCombo", label:""}));
     	    
-            var nameCombo = _yearCombo.find("select");
-            for(var i=2014; i<2050; i++){
-                var option = $("<option>"+i+"</option>").attr("value",i);
-                nameCombo.append(option);
-            }
-            
+        
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -219,8 +214,12 @@ CreateHolidayPopup, AddHolidayPopup){
     	    $(this.el).html(_layOut);
     	    
     	    var today = new Date();
-    	    _yearCombo.find("select").val(today.getFullYear());
-    	    
+    	    var year = today.getFullYear();
+    	    for(var i = -1; i< 5; i++){
+                $(this.el).find("#holidayYearCombo").append($("<option>"+(year + i)+"</option>"));
+            }
+    	    _yearCombo.find("select").val(year);
+
     	    this.renderTable();
             return this;
      	}

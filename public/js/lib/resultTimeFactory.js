@@ -45,6 +45,8 @@ define([
         holidayData:        null,
         outOfficeStartTime: null,
         outOfficeEndTime:   null,
+        inTimeChange:       0,
+        outnTimeChange:     0,
 
         init : function(userId, userName, userDepartment){
             this.id = userId;
@@ -71,16 +73,16 @@ define([
             this.holidayData = null;
             this.outOfficeStartTime = null;
             this.outOfficeEndTime = null;
+            this.inTimeChange = 0;
+            this.outTimeChange = 0;
         },
         
         initToday : function(todayStr, holidayData){
             this.year = new Date(todayStr);
             this.year = this.year.getFullYear();
             this.date = todayStr;
-            this.standardInTime = new Date(todayStr);
-            this.standardInTime.setHours(9,0,0);
-            this.standardOutTime = new Date(todayStr);
-            this.standardOutTime.setHours(18,0,0);  
+            this.standardInTime = Moment(todayStr).hour(9).minute(0).second(0);
+            this.standardOutTime = Moment(todayStr).hour(18).minute(0).second(0);
             this.earliestTime = null;
             this.inTime = null;
             this.inTimeType = 1;
@@ -98,6 +100,8 @@ define([
             this.holidayData = holidayData;
             this.outOfficeStartTime = null;
             this.outOfficeEndTime = null;
+            this.inTimeChange = 0;
+            this.outTimeChange = 0;
         },
         
         initByModel : function(model){
@@ -106,10 +110,10 @@ define([
             this.department = model.get("department");
             this.year = model.get("year");
             this.date = model.get("date");
-            this.standardInTime = model.get("standard_in_time") ? null : Moment(model.get("standard_in_time")).toDate();
-            this.standardOutTime = model.get("standard_out_time") ? null : Moment(model.get("standard_out_time")).toDate();
-            this.inTime = model.get("in_time") ? null : Moment(model.get("in_time")).toDate();
-            this.outTime = model.get("out_time") ? null : Moment(model.get("out_time")).toDate();
+            this.standardInTime = _.isNull(model.get("standard_in_time")) ? null : Moment(model.get("standard_in_time"));
+            this.standardOutTime = _.isNull(model.get("standard_out_time")) ? null : Moment(model.get("standard_out_time"));
+            this.inTime = _.isNull(model.get("in_time")) ? null : Moment(model.get("in_time"));
+            this.outTime = _.isNull(model.get("out_time")) ? null : Moment(model.get("out_time"));
             this.inTimeType = model.get("in_time_type");
             this.outTimeType = model.get("out_time_type");
             this.lateTime = model.get("late_time");
@@ -122,16 +126,20 @@ define([
             this.overtimeCode = model.get("overtime_code");
             this.outOfficeStartTime = model.get("out_office_start_time");
             this.outOfficeEndTime = model.get("out_office_end_time");
+            this.inTimeChange = model.get("in_time_change");
+            this.outTimeChange = model.get("out_time_change");
+            
         },
         
         setStandardInTime : function(yesterdayOutTime){
-            if(Moment(yesterdayOutTime).format(DATEFORMAT) == this.date){
-                var outTimeHour = yesterdayOutTime.getHours();
-                if(outTimeHour >= 3)        this.standardInTime.setHours(13,20,0);
-                else if(outTimeHour >= 2)   this.standardInTime.setHours(11,0,0);
-                else if(outTimeHour >= 1)   this.standardInTime.setHours(10,0,0);
+            if(yesterdayOutTime.format(DATEFORMAT) == this.date){
+                var outTimeHour = yesterdayOutTime.hour();
+                if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
+                else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
+                else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
             }else{
-                this.standardInTime.setHours(9,0,0);
+                if(!_.isNull(this.standardInTime))
+                    this.standardInTime.hour(9).minute(0).second(0);
             }
         },
         
@@ -146,10 +154,10 @@ define([
                         this.vacationCode = code;
                         switch(code){
                             case "V02": // 오전반차
-                                this.standardInTime = this.standardInTime.setHours(13,20,0);    
+                                this.standardOutTime.hour(13).minute(20).second(0);
                                 break;
                             case "V03": // 오후반차
-                                this.standardOutTime = this.standardOutTime.setHours(12,20,0);
+                                this.standardOutTime.hour(12).minute(20).second(0);
                                 break;
                             case "V01": // 연차휴가
                             case "V04": // 경조휴가
@@ -184,7 +192,7 @@ define([
         
         checkTime : function(destTime, type){
             type = type.slice(0,2);
-            if(type == "출근" && this.date == Moment(destTime).format(DATEFORMAT)){ // 출근 기록일 경우
+            if(type == "출근" && this.date == destTime.format(DATEFORMAT)){ // 출근 기록일 경우
                 this.setInTime(destTime);
                 this.setEarliestTime(destTime);
             }else if(type == "퇴근"){ // 퇴근기록일 경우
@@ -206,30 +214,30 @@ define([
         setEarliestTime : function(destTime){
             if(_.isNull(this.earliestTime)) this.earliestTime = destTime;
             else
-                if(this.earliestTime - destTime > 0) this.earliestTime = destTime;
+                if(this.earliestTime.isAfter(destTime)) this.earliestTime = destTime;
         },
         
         setInTime : function(destTime){
             if(_.isNull(this.inTime)) this.inTime = destTime;
             else
-                if(this.inTime - destTime > 0) this.inTime = destTime;
+                if(this.inTime.isAfter(destTime)) this.inTime = destTime;
         },
         
         setOutTime : function(destTime){
             if(_.isNull(this.outTime)) this.outTime = destTime;
             else
-                if(this.outTime - destTime < 0) this.outTime = destTime;
+                if(this.outTime.isBefore(destTime)) this.outTime = destTime;
         },
         
         setLatestTime : function(destTime){
-            if(_.isNull(destTime)) this.latestTime = destTime;
+            if(_.isNull(this.latestTime)) this.latestTime = destTime;
             else
-                if(this.latestTime - destTime < 0) this.latestTime = destTime;
+                if(this.latestTime.isBefore(destTime)) this.latestTime = destTime;
         },
         
         getLateTime : function(){
             if(!_.isNull(this.inTime)){
-                this.lateTime = Math.floor((this.inTime - this.standardInTime) / 1000 / 60);
+                this.lateTime = this.inTime.diff(this.standardInTime,"minute");
                 this.workType = WORKTYPE.NORMAL;
                 if(this.lateTime > 0 ){
                     this.workType = WORKTYPE.LATE;  // 지각
@@ -242,7 +250,7 @@ define([
         
         getHolidayWorkTimeCode : function(){
             if(!(_.isNull(this.outTime)) && !(_.isNull(this.inTime))){
-                this.holidayWorkTime = Math.floor((this.outTime - this.inTime) / 1000 / 60); // 휴일근무 시간
+                this.holidayWorkTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
                 if (this.holidayWorkTime > 480)              this.overtimeCode =  "2015_BC";
                 else if (this.holidayWorkTime > 360)         this.overtimeCode =  "2015_BB";
                 else if (this.holidayWorkTime > 240)         this.overtimeCode =  "2015_BA";
@@ -251,14 +259,15 @@ define([
         },
         
         getOverTimeCode : function(){
-            this.lateTimeOver= (Math.ceil(this.lateTime/10)) * 10 * 1000 *60; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
+            this.lateTimeOver = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
                                                     
-            if(this.outTime - this.standardOutTime >= 0) {
-                this.overTime = Math.floor( ((this.outTime - this.standardOutTime) - this.lateTimeOver) / 1000 / 60 ); // 초과근무 시간 (지각시간 제외)
-                if(this.vacationCode === null || this.vacationCode === "V02"){
+            if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
+                this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateTimeOver; // 초과근무 시간 (지각시간 제외)
+                if(this.vacationCode === null || this.vacationCode === "V02"){  //
                     if(this.overTime > 360)                 this.overtimeCode = "2015_AC";
                     else if(this.overTime > 240)            this.overtimeCode =  "2015_AB";
                     else if(this.overTime > 120)            this.overtimeCode =  "2015_AA";
+                    else if(this.overTime < 0)              this.overTime = 0;
                 }
             }else{ // 조퇴 판정
                 if (this.workType == WORKTYPE.LATE)
@@ -307,10 +316,10 @@ define([
                 year : this.year,
                 date : this.date,
                 work_type : this.workType,
-                standard_in_time : _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).format(DATETIMEFORMAT),
-                standard_out_time :_.isNull(this.standardOutTime) ? null : Moment(this.standardOutTime).format(DATETIMEFORMAT),
-                in_time : _.isNull(this.inTime) ? null : Moment(this.inTime).format(DATETIMEFORMAT),
-                out_time : _.isNull(this.outTime) ? null : Moment(this.outTime).format(DATETIMEFORMAT),
+                standard_in_time : _.isNull(this.standardInTime) ? null : this.standardInTime.format(DATETIMEFORMAT),
+                standard_out_time :_.isNull(this.standardOutTime) ? null : this.standardOutTime.format(DATETIMEFORMAT),
+                in_time : _.isNull(this.inTime) ? null : this.inTime.format(DATETIMEFORMAT),
+                out_time : _.isNull(this.outTime) ? null : this.outTime.format(DATETIMEFORMAT),
                 in_time_type : this.inTimeType,
                 out_time_type: this.outTimeType,
                 late_time : this.lateTime,
@@ -320,6 +329,8 @@ define([
                 out_office_code : this.outOfficeCode,
                 out_office_start_time : _.isNull(this.outOfficeStartTime) ? null : Moment(this.outOfficeStartTime).format(DATETIMEFORMAT),
                 out_office_end_time : _.isNull(this.outOfficeEndTime) ? null : Moment(this.outOfficeEndTime).format(DATETIMEFORMAT),
+                in_time_change : this.inTimeChange,
+                out_time_change : this.outTimeChange
             };
         }
     };
