@@ -50,8 +50,13 @@ ProgressbarView){
  	                   	{ data : "department", 		"title" : "부서" },
  	                   	{ data : "char_date", 		"title" : "출입시간" },
  	                   	{ data : "type", 			"title" : "출입기록" },
- 	                   	{ data : "char_date", 		"title" : "IP" },
- 	                   	{ data : "char_date", 		"title" : "MAC" } 	                   
+ 	                   	{ data : "ip_address", 		"title" : "IP" },
+ 	                   	{ data : "mac_address", 	"title" : "MAC" },
+ 	                   	{ data : "need_confirm", 	"title" : "확인필요",
+ 	                   		render: function(data, type, full, meta) { 	                   			
+ 	                   			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
+ 	                   		}
+ 	                   	}
     		    ],
     		    dataschema:["id", "name", "department", "char_date", "type"],
     		    collection:this.rawDataCollection,

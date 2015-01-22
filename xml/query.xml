@@ -50,6 +50,13 @@
         		type=?
         	
         </query>
+        <query id="insertRawDataCompanyAccess">
+  			INSERT INTO commute_base_tbl 
+  				( year, id, name, department, char_date, type, ip_address, mac_address, need_confirm)
+  			VALUES
+  				(year(now()), ? , ?, ?, now(), ?, ?, ?, ?)
+        </query>
+        
         <query id="selectRawDataList">
         	select
         		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
@@ -282,25 +289,6 @@
         		in_time_change, out_time_change)
         	VALUES
         		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        	ON DUPLICATE KEY UPDATE
-				department=?,
-				in_time=?,
-				late_time=?,
-				name=?,
-				out_office_code=?,
-				out_time=?,
-				over_time=?,
-				overtime_code=?,
-				vacation_code=?,
-				standard_in_time=?,
-				standard_out_time=?,
-				work_type=?,
-				in_time_type=?,
-				out_time_type=?,
-				out_office_start_time=?,
-				out_office_end_time=?,
-				in_time_change=?,
-				out_time_change=?
         </query>
         <query id="selectCommuteDate">
         	SELECT 
@@ -453,6 +441,8 @@
     			c.writer_id,
     			c.want_in_time,
     			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
@@ -477,6 +467,10 @@
     			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
     			c.state,
     			c.writer_id,
+    			c.want_in_time,
+    			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
@@ -491,11 +485,11 @@
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time
+    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time, before_in_time, before_out_time
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?, ?, ?, ?
+    			?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?
     		)
     	</query>
     	
