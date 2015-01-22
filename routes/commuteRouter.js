@@ -38,8 +38,14 @@ router.route('/bulk')
 	        resultArr.push(Commute.insertCommute(data[key]));
 	        count++;
 	    }
+	    res.send({msg : "Add CommuteResult Count : " + count, count: count});		
 	    Promise.all(resultArr).then(function(){
+	    	debug("success");
 	    	debug("Add CommuteResult Count : " + count);
+	    	res.send({msg : "Add CommuteResult Count : " + count, count: count});		
+	    }, function(result){
+	    	debug("fail");
+	    	debug(result);
 	    	res.send({msg : "Add CommuteResult Count : " + count, count: count});		
 	    });		
 	} else {
@@ -66,9 +72,12 @@ router.route('/:id')
 	});
 });
 
-
-router.route('/result')
+//Dashboard 
+router.route('/result/:id')
 .get(function(req, res){
+	
+	
+	
 	res.send({});
 });
 

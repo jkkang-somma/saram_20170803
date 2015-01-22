@@ -51,16 +51,16 @@ CreateHolidayPopup, AddHolidayPopup){
     		    collection:this.holidayCollection,
     		    detail: true,
     		    fetch:false,
-    		    buttons:["search","refresh"]
-    		}
+    		    buttons:["search"]
+    		};
     		
-            this.buttonInit();
+            this._buttonInit();
     	},
-    	
-    	buttonInit: function(){
+    	events : {
+            "change #holidayYearCombo" : "_renderTable"
+        },
+    	_addAddBtn: function(){
     	    var that = this;
-    	    
-    	    // add buton
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
@@ -86,7 +86,12 @@ CreateHolidayPopup, AddHolidayPopup){
                                 
                                 holidayModel.save({}, {
                                     success : function(){
-                                        that.renderTable();
+                                        Dialog.info("휴일이 추가되었습니다.");
+                                        that._renderTable();
+                                        dialog.close();
+                                    }, error : function(){
+                                        Dialog.info("휴일 추가 실패! ㅠㅠ");
+                                        that._renderTable();
                                         dialog.close();
                                     }
                                 });
@@ -101,8 +106,9 @@ CreateHolidayPopup, AddHolidayPopup){
     	            })
     	        }
     	    });
-    	    
-    	    // removeBtn
+    	},
+    	_addRemoveBtn : function(){
+    	    var that = this;
     	    this.gridOption.buttons.push({
     	       type:"custom",
     	        name:"remove",
@@ -116,7 +122,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	            var selectHolidayModel = new HolidayModel(selectedItem);
     	            selectHolidayModel.destroy({
     	                success : function(){
-    	                    that.renderTable();
+    	                    that._renderTable();
     	                    Dialog.info("삭제되었습니다.");    
     	                },
     	                error : function(){
@@ -125,7 +131,9 @@ CreateHolidayPopup, AddHolidayPopup){
     	            });
     	        }
     	    });
-    	    // tool btn
+    	},
+    	_addToolBtn: function(){
+    	    var that = this;
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"wrench",
@@ -149,8 +157,12 @@ CreateHolidayPopup, AddHolidayPopup){
                                 
                                 newHolidayCollection.save({
                                     success : function(){
-                                        that.renderTable();
+                                        Dialog.info("공휴일 생성이 완료되었습니다.");
+                                        that._renderTable();
                                         dialog.close();
+                                    },
+                                    error : function(){
+                                        Dialog.error("공휴일 생성 실패!");
                                     }
                                 });
                                 return false;
@@ -161,32 +173,18 @@ CreateHolidayPopup, AddHolidayPopup){
                                 dialog.close();
                             }
                         }]
-    	            })
+    	            });
     	        }
     	    });
-    	    
-    	    
+ 
     	},
-
-        events : {
-            "change #holidayYearCombo" : "renderTable"
-        },
-        renderTable: function(){
-            var that=this;
-            var _yearCombo = $(this.el).find("#holidayYearCombo");
-            var year = _yearCombo.val();
-            console.log(year);
-            this.holidayCollection.fetch({
-                data : {  
-                    year : year
-                },
-                success : function(){
-                    that.grid.render();
-                }
-            });
-        },
+    	_buttonInit: function(){
+    	    this._addAddBtn();
+    	    this._addRemoveBtn();
+    	    this._addToolBtn();
+    	},
+        
     	render:function(){
-    	    
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
@@ -213,17 +211,35 @@ CreateHolidayPopup, AddHolidayPopup){
     	    
     	    $(this.el).html(_layOut);
     	    
-    	    var today = new Date();
+            this._setYearCombo();
+    	    this._renderTable();
+            return this;
+     	},
+     	
+     	_setYearCombo : function(){
+     	    var today = new Date();
     	    var year = today.getFullYear();
     	    for(var i = -1; i< 5; i++){
                 $(this.el).find("#holidayYearCombo").append($("<option>"+(year + i)+"</option>"));
             }
-    	    _yearCombo.find("select").val(year);
-
-    	    this.renderTable();
-            return this;
-     	}
+    	    $(this.el).find("#holidayYearCombo").val(year);
+     	},
+     	_renderTable: function(){
+            var that=this;
+            var _yearCombo = $(this.el).find("#holidayYearCombo");
+            var year = _yearCombo.val();
+            console.log(year);
+            this.holidayCollection.fetch({
+                data : {  
+                    year : year
+                },
+                success : function(){
+                    that.grid.render();
+                }
+            });
+        },
     });
+    
     
     return holidayManagerView;
 });
