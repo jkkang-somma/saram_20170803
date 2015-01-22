@@ -125,12 +125,12 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             cssClass: Dialog.CssClass.SUCCESS,
                             label: '데이터 생성',
                             action: function(dialog) {
-                                that._createData(createDataPopupView); // 데이터 생성
-                                
-                                dialog.close();
-                                this.grid.render();
-                                
-                                Dialog.show("데이터 생성 완료!");
+                                that._createData(createDataPopupView).done(function(){ // 데이터 생성
+                                    dialog.close();
+                                    that.grid.render();
+
+                                    Dialog.show("데이터 생성 완료!");    
+                                });
                             }
                         }, {
                             label : "취소",
@@ -145,6 +145,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    });
     	},
     	_createData : function(view){
+    	    var dfd = new $.Deferred();
+    	    var that = this;
     	    var startDate = view.getStartDate();
             var endDate = view.getEndDate();
             var yesterday = Moment(startDate).subtract(1, 'days');
@@ -238,7 +240,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             
                             // 결과 저장
                             var result = resultTimeFactory.getResult();
-                            this.commuteCollection.add(result);
+                            that.commuteCollection.add(result);
                             
                             // 다음날 계산을 위해 결과를 yesterdayAttribute에 저장
                             yesterdayAttribute = result;
@@ -249,7 +251,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     
                     view.setProgressbarPercent( (idx+1) / userCollection.models.length * 100 );
                 });
+                dfd.resolve();
             });  
+            return dfd.promise();
     	},
     	_addCommitBtn : function(){
     	    var that = this;
