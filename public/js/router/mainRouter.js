@@ -120,11 +120,8 @@ ReportListView // report manager
 		},
 		
 		showHome : function(){
-		    // var dashBoardView = new DashBoardView({el:mainContainer});
-		    // this.changeView(dashBoardView);
-		    
-		    var createDataView = new CreateDataView();
-			this.changeView(createDataView);
+		    var dashBoardView = new DashBoardView({el:mainContainer});
+		    this.changeView(dashBoardView);
 		},
 		showHolidayManager : function(){
 			var holidayManagerView = new HolidayManagerView();

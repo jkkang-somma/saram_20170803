@@ -11,7 +11,7 @@ define([
         getCustomUrl: function (method) {//idAttribute값을 사용하지 않고 id로 할때
             switch (method) {
                 case 'read':
-                    return this.urlRoot ;
+                    return this.urlRoot + "/" +this.attributes.id;
                     break;
                 case 'create':
                     return this.urlRoot;
@@ -30,8 +30,16 @@ define([
             return Backbone.sync.apply(this, arguments);
         },
         default:{
-        	
-        }
+            id:null,
+            password: null, 
+            name: '',
+            name_commute: '',
+            dept_code: '',
+            dept_name:'',
+            join_company: null,
+            privilege : 0,
+            admin : 0,
+        },
     });
     return CommuteResultModel;
 });

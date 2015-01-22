@@ -319,6 +319,8 @@ CREATE TABLE IF NOT EXISTS `comment_tbl` (
   `reply_id` VARCHAR(45) NULL COMMENT 'comment 답변자 사번',
   `want_in_time` VARCHAR(45) NULL COMMENT '변경 요청 출근시간 ( 년-월-일 시:분:초 )',
   `want_out_time` VARCHAR(45) NULL COMMENT '변경 요청 퇴근시간 ( 년-월-일 시:분:초 )',
+  `before_in_time` VARCHAR(45) NULL COMMENT '변경전 출근시간',
+  `before_out_time` VARCHAR(45) NULL COMMENT '변경전 퇴근시간',
   PRIMARY KEY (`seq`, `year`, `date`, `id`),
   INDEX `fk_comment_tbl_commute_result_tbl1_idx` (`year` ASC, `date` ASC, `id` ASC),
   CONSTRAINT `fk_comment_tbl_commute_result_tbl1`
