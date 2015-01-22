@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `members_tbl` (
   `ip_addr_1` VARCHAR(45) NULL,
   `mac_addr_1` VARCHAR(45) NULL,
   `ip_addr_2` VARCHAR(45) NULL,
-  `map_addr_2` VARCHAR(45) NULL,
+  `mac_addr_2` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_members_tbl_dept_code_tbl1_idx` (`dept_code` ASC),
   CONSTRAINT `fk_members_tbl_dept_code_tbl1`

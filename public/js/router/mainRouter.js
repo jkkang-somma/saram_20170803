@@ -11,6 +11,7 @@ define([
 	'dialog',
   	'i18n!nls/common',
 	'models/sm/SessionModel',
+	'models/common/RawDataModel',
 	'core/BaseRouter',
 	'views/DashBoardView',
 	'views/LoginView',
@@ -25,7 +26,7 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, BaseRouter,
+], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, RawDataModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView, ConfigUserView,	// 사원관리
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
@@ -52,6 +53,8 @@ ReportListView // report manager
 			'vacation' : 'showVacation',
 			'rawdatalist' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
+			'accessIn' : 'accessIn',
+			'accessOut' : 'accessOut',
 			'*actions' : 'showHome'
 
 		},
@@ -182,7 +185,17 @@ ReportListView // report manager
                 }]
                 
             });
-		}
+		},
+		accessIn: function() {
+			var model = new RawDataModel({type:'출근(수원)'});
+			model.companyAccessUrl().save();
+			alert("출근");
+		},
+		accessOut: function() {
+			var model = new RawDataModel({type:'퇴근(수원)'});
+			model.companyAccessUrl().save();
+			alert("퇴근");
+		},
 	});
 
 	return Router;

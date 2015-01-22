@@ -29,7 +29,7 @@ DepartmentCodeCollection, OfficeCodeCollection, OvertimeCodeCollection, WorkType
                 dfd.resolve();
             }).fail(function(){
                 dfd.reject();
-            })
+            });
             return dfd.promise();
         },
         _getCollection : function(kind){

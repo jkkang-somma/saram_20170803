@@ -3,7 +3,7 @@ define([
   'underscore',
   'backbone'
 ], function($, _,Backbone){
-    var UserModel=Backbone.Model.extend({
+    var RawDataModel=Backbone.Model.extend({
         urlRoot: '/rawdata',
         
         idAttribute:"_id",
@@ -11,7 +11,10 @@ define([
         initialize: function () {
             
         },
-        
+        companyAccessUrl: function() {
+        	this.url = "/companyAccess";
+        	return this;
+        },
         default:{ 
             year: null,
             id : null,
@@ -19,9 +22,12 @@ define([
             department : null,
             char_date: null,
             type: null,
+            ip_address: null,
+            mac_address: null,
+            need_confirm: 1 // 1: 정상 , 2: 확인 필요
         },
         
     });
     
-    return UserModel;
+    return RawDataModel;
 });

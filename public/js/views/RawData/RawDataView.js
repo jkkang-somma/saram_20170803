@@ -40,7 +40,19 @@ ProgressbarView){
             this.gridOption = {
     		    el:"rawDataContent",
     		    id:"rawDataTable",
-    		    column:["사번", "이름", "부서", "출입시간", "출입기록"],
+    		    //column:["사번", "이름", "부서", "출입시간", "출입기록"],
+    		    column:[
+   	                   	{ data : "name", 			"title" : "이름", 
+ 	                   		render: function(data, type, full, meta) {
+ 	                   			return full.name + "</br>(" +full.id + ")";
+ 	                   		}
+ 	                   	},
+ 	                   	{ data : "department", 		"title" : "부서" },
+ 	                   	{ data : "char_date", 		"title" : "출입시간" },
+ 	                   	{ data : "type", 			"title" : "출입기록" },
+ 	                   	{ data : "char_date", 		"title" : "IP" },
+ 	                   	{ data : "char_date", 		"title" : "MAC" } 	                   
+    		    ],
     		    dataschema:["id", "name", "department", "char_date", "type"],
     		    collection:this.rawDataCollection,
     		    detail: true,
