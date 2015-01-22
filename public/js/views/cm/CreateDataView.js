@@ -118,7 +118,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	        click:function(){
                     var createDataPopupView= new CreateDataPopupView();
                     Dialog.show({
-                        title:"근태 데이터 관리", 
+                        title:"근태 데이터 생성", 
                         content:createDataPopupView, 
                         buttons: [{
                             id: 'createDataCreateBtn',
@@ -296,7 +296,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 생성"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
