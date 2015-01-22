@@ -3,11 +3,16 @@ define([
   'underscore',
   'backbone',
   'animator',
+  'dialog',
+  'i18n!nls/common',
   'core/BaseView',
   'text!templates/navigation.html',
   'data/menu',
   'models/sm/SessionModel',
-], function($, _, Backbone, animator, BaseView, navigation, Menu, SessionModel){
+  'models/common/RawDataModel',
+  'views/sm/ConfigUserView',
+], function($, _, Backbone, animator,Dialog, i18Common, 
+		BaseView, navigation, Menu, SessionModel, RawDataModel, ConfigUserView){
   
     
         // <li class="dropdown">
@@ -25,7 +30,7 @@ define([
   		_.bindAll(this, 'render');
   		_.bindAll(this, 'show');
   		_.bindAll(this, 'hide');
-  	},
+  	},  	
     render: function(){
         $(this.el).append(navigation);
         var _auth= SessionModel.getUserInfo().admin;
@@ -62,6 +67,12 @@ define([
         $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);
         animator.animate(this.el, animator.FADE_IN_DOWN);
     },
+    events: {
+		'click #logout': 'logout',
+		'click #userConifg' :'userConifg',
+		'click #accessIn' : 'accessIn',
+		'click #accessOut' : 'accessOut'
+    },
     show:function(){
       var _view=this;
       $(_view.el).fadeIn();
@@ -69,7 +80,52 @@ define([
     hide:function(callback){
       var _view=this;
       $(_view.el).fadeOut();
-    }
+    },
+	logout:function(){
+		SessionModel.logout();
+	},
+	userConifg:function(){
+		var configView=new ConfigUserView();
+		Dialog.show({
+            title:i18Common.DIALOG.TITLE.USER_UPDATE, 
+            content:configView, 
+            buttons:[{
+                label: i18Common.DIALOG.BUTTON.SAVE,
+                cssClass: Dialog.CssClass.SUCCESS,
+                action: function(dialogRef){// 버튼 클릭 이벤트
+                    configView.submitSave().done(function(data){
+                        dialogRef.close();
+                    });//실패 따로 처리안함 add화면에서 처리.
+                }
+            }, {
+                label: i18Common.DIALOG.BUTTON.CLOSE,
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+            
+        });
+	},
+	accessIn: function() {
+		var model = new RawDataModel();
+		model.companyAccessUrl().save({type:'출근(수원)'}, {
+    		success: function(model, response) {
+    			Dialog.show("출근 등록 되었습니다.");
+         	}, error : function(model, res){
+         		Dialog.show("출근 등록이 실패했습니다.");
+         	}
+		});
+	},
+	accessOut: function() {
+		var model = new RawDataModel();
+		model.companyAccessUrl().save({type:'퇴근(수원)'}, {
+    		success: function(model, response) {
+    			Dialog.show("퇴근 등록 되었습니다.");
+         	}, error : function(model, res){
+         		Dialog.show("퇴근 등록이 실패했습니다.");
+         	}
+		});
+	}
   });
   return NavigationView;
 });
