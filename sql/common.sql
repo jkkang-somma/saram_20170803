@@ -40,20 +40,29 @@ INSERT INTO `dept_code_tbl` VALUES
   ('7300','개발품질팀'),
   ('8100','솔루션개발팀');
 
-CREATE TABLE `members_tbl` (
-  `id` varchar(45) NOT NULL COMMENT '사번',
-  `password` varchar(45) DEFAULT NULL,
-  `name` varchar(45) NOT NULL COMMENT '이름',
-  `dept_code` varchar(10) NOT NULL COMMENT '부서코드',
-  `name_commute` varchar(45) NOT NULL COMMENT '근태 기초자료상의 이름',
-  `join_company` varchar(12) NOT NULL COMMENT '입사일',
-  `leave_company` varchar(12) DEFAULT NULL COMMENT '퇴사일',
-  `privilege` varchar(2) NOT NULL COMMENT '권한 1:전체, 2:부서, 3:개인',
-  `admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 : 관리자 모드, 0:직원모드',
+CREATE TABLE IF NOT EXISTS `members_tbl` (
+  `id` VARCHAR(45) NOT NULL COMMENT '사번',
+  `password` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL COMMENT '이름',
+  `dept_code` VARCHAR(10) NOT NULL COMMENT '부서코드',
+  `name_commute` VARCHAR(45) NOT NULL COMMENT '근태 기초자료상의 이름',
+  `join_company` VARCHAR(12) NOT NULL COMMENT '입사일',
+  `leave_company` VARCHAR(12) NULL COMMENT '퇴사일',
+  `privilege` VARCHAR(2) NOT NULL COMMENT '권한 1:전체, 2:부서, 3:개인',
+  `admin` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 : 관리자 모드, 0:직원모드',
+  `ip_addr_1` VARCHAR(45) NULL,
+  `mac_addr_1` VARCHAR(45) NULL,
+  `ip_addr_2` VARCHAR(45) NULL,
+  `map_addr_2` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_members_tbl_dept_code_tbl1_idx` (`dept_code`),
-  CONSTRAINT `fk_members_tbl_dept_code_tbl1` FOREIGN KEY (`dept_code`) REFERENCES `dept_code_tbl` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='사원 테이블';
+  INDEX `fk_members_tbl_dept_code_tbl1_idx` (`dept_code` ASC),
+  CONSTRAINT `fk_members_tbl_dept_code_tbl1`
+    FOREIGN KEY (`dept_code`)
+    REFERENCES `dept_code_tbl` (`code`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = '사원 테이블';
 
 INSERT INTO `members_tbl` VALUES 
   ('001201','','이국원','0000','이국원','2000-12-15','','1',0),
@@ -157,9 +166,11 @@ CREATE TABLE IF NOT EXISTS `commute_base_tbl` (
   `id` VARCHAR(40) NOT NULL COMMENT '사번',
   `name` VARCHAR(45) NOT NULL COMMENT '이름',
   `department` VARCHAR(45) NOT NULL COMMENT '부서',
-  -- `int_date` BIGINT NOT NULL COMMENT '출입 시간(시간)',
   `char_date` VARCHAR(20) NOT NULL COMMENT '출입 시간(날짜)',
   `type` VARCHAR(45) NOT NULL COMMENT '출근,퇴근,출입,외출,복귀 / (카드),(지문)',
+  `ip_address` VARCHAR(45) NULL,
+  `mac_address` VARCHAR(45) NULL,
+  `need_confirm` TINYINT NULL DEFAULT 1 COMMENT '1 : 정상 , 2 : 확인 필요',
   PRIMARY KEY (`char_date`, `id`))
 ENGINE = InnoDB
 COMMENT = '근태 기초파일';
@@ -382,9 +393,8 @@ COMMENT = '휴일 근무 ( 결재 완료된 테이블 )';
 CREATE TABLE IF NOT EXISTS `holiday_tbl` (
   `date` VARCHAR(12) NOT NULL COMMENT '년/월/일',
   `memo` VARCHAR(200) NOT NULL,
-  `year` VARCHAR(4) NULL,
-  PRIMARY KEY (`date`),
-  INDEX `holiday_date_index` (`date` ASC))
+  `year` VARCHAR(4) NOT NULL,
+  PRIMARY KEY (`date`))
 ENGINE = InnoDB
 COMMENT = '토/일을 제외한 휴일 관리';
 

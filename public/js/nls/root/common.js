@@ -46,12 +46,15 @@ define({
     },
     
     //CODE
-     CODE:{
+    CODE:{
         PRIVILEGE_1:"ALL",
         PRIVILEGE_2:"TEAM",
         PRIVILEGE_3:"USER",
         ADMIN_0:"USER",
-        ADMIN_1:"MANAGER"
+        ADMIN_1:"MANAGER",
+        ALL:"ALL",
+        LEAVE_USER:"Leave",
+        WORKER:"Worker"
     },
     
     

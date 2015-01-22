@@ -44,12 +44,16 @@ define({
             USER_LIST:"사용자 목록"
         }
     },
+    
     CODE:{
         PRIVILEGE_1:"전체",
         PRIVILEGE_2:"부서",
         PRIVILEGE_3:"개인",
         ADMIN_0:"사용자",
-        ADMIN_1:"관리자"
+        ADMIN_1:"관리자",
+        ALL:"전체",
+        LEAVE_USER:"퇴사자",
+        WORKER:"근무자"
     },
     
     //MSG

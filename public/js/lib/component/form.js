@@ -101,7 +101,9 @@ define([
                         }
                     });
                 }
-                
+                 _select.selectpicker({
+                    style: 'btn-primary'
+                });
                 return _combo;  
             }
         },
