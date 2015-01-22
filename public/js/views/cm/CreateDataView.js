@@ -128,7 +128,6 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                                 that._createData(createDataPopupView).done(function(){ // 데이터 생성
                                     dialog.close();
                                     that.grid.render();
-
                                     Dialog.show("데이터 생성 완료!");    
                                 });
                             }
@@ -277,11 +276,13 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                 	            that.commuteCollection.save({
                 	                success:function(){
                 	                    dialogRef.close();
+                	                    that._setLabel();
                 	                    Dialog.info("데이터 전송이 완료되었습니다.");
                 	                },
-                	                error: function(){
+                	                error: function(model, response){
+                	                    
                 	                    dialogRef.close();
-                	                    Dialog.error("데이터 전송 실패!");
+                	                    Dialog.error("데이터 전송 실패! \n ("+ response.responseJSON.message +")");
                 	                }
                 	            });
     	                    }
