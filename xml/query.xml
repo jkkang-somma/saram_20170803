@@ -180,7 +180,7 @@
 				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
 				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
-			where app.manager_id = ? 
+			where app.manager_id = ? and (state = '상신' or state = '취소요청')
 				and ((DATE(start_date) between DATE(?) AND DATE(?)) OR (DATE(end_date)  between DATE(?) AND DATE(?)))
     	</query>
     	<query id="insertApproval">
