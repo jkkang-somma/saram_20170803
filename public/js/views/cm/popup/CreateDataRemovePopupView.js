@@ -10,7 +10,7 @@ define([
 	DatePickerHTML,
 	ProgressbarView
 ) {
-	var ChangeHistoryPopupView = Backbone.View.extend({
+	var CreateDataRemovePopupView = Backbone.View.extend({
 		initialize : function() {
 
 		},
@@ -24,38 +24,34 @@ define([
     	    var _startdatePicker=$(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			id : "cdStartDatePicker",
+    	    			id : "cdrStartDatePicker",
     	    			label : "시작일",
     	    			name : "startDate"
     	    		}
-    	    		
     	    	})
     	    );
     	    var _enddatePicker=$(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			id : "cdEndDatePicker",
+    	    			id : "cdrEndDatePicker",
     	    			label : "종료일",
     	    			name : "endDate"
     	    		}
-    	    		
     	    	})
     	    );
 
-            this.progressbar = new ProgressbarView();
             
             $(this.el).append(_startdatePicker);
             $(this.el).append(_enddatePicker);
-            $(this.el).append(this.progressbar.render());
             
-            $(this.el).find("#cdStartDatePicker").datetimepicker({
+            $(this.el).find("#cdrStartDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD"
             });
             
-            $(this.el).find("#cdEndDatePicker").datetimepicker({
+            $(this.el).find("#cdrEndDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
@@ -65,19 +61,13 @@ define([
             dfd.resolve();
             return dfd.promise();
 		},
-		disabledProgressbar : function(flag){
-			this.progressbar.disabledProgressbar(flag);
-		},
-		setProgressbarPercent : function(percent){
-			this.progressbar.setPercent(percent);
-		},
 		getStartDate : function(){
-			return $(this.el).find("#cdStartDatePicker").data("DateTimePicker").getDate();
+			return $(this.el).find("#cdrStartDatePicker").data("DateTimePicker").getDate();
 		},
 		getEndDate : function(){
-			return $(this.el).find("#cdEndDatePicker").data("DateTimePicker").getDate();
+			return $(this.el).find("#cdrEndDatePicker").data("DateTimePicker").getDate();
 		}
 	});
 	
-	return ChangeHistoryPopupView;
+	return CreateDataRemovePopupView;
 });

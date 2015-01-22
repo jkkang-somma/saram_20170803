@@ -11,17 +11,17 @@ define([
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
-  'text!templates/component/progressbar.html',
   'models/common/RawDataModel',
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
   'collection/sm/UserCollection',
   'views/RawData/popup/AddRawDataAddPopupView',
+  'views/component/ProgressbarView'
   
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser,
-HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML,
+HeadHTML, ContentHTML, LayoutHTML, 
 RawDataModel, RawDataCollection, UserModel, UserCollection,
-AddRawDataAddPopupView){
+AddRawDataAddPopupView, ProgressbarView){
     var AddRawDataView = BaseView.extend({
         el:$(".main-container"),
         
@@ -45,11 +45,39 @@ AddRawDataAddPopupView){
     		    buttons:["search"]
     		};
     		
-    		this.buttonInit();
+    		this._buttonInit();
     	},
-    	
-    	buttonInit:function(){
-    	    var that = this;
+    	render:function(){
+    	    var _headSchema=Schemas.getSchema('headTemp');
+    	    var _headTemp=_.template(HeadHTML);
+    	    var _layout=$(LayoutHTML);
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"출입 기록 등록"})));
+    	    
+    	    _head.addClass("no-margin");
+    	    _head.addClass("relative-layout");
+    	    
+    	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    this.progressbar = new ProgressbarView();
+    	    _layout.append(_head);
+            _layout.append(_content);
+            _layout.append(this.progressbar.render());
+            
+            
+    	    $(this.el).append(_layout);
+    	    
+    	    var _gridSchema=Schemas.getSchema('grid');
+    	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
+            
+            this._disabledOkBtn(true);
+            
+            return this;
+     	},
+    	_buttonInit:function(){
+    	    this._addAddBtn();
+    	    this._addCommitBtn();
+    	},
+    	_addAddBtn : function(){
+    	      var that = this;
     	    
     	    // ADD 버튼
     	    this.gridOption.buttons.push({
@@ -71,8 +99,7 @@ AddRawDataAddPopupView){
                                 if(selectedFiles.length > 0){
                                     if(window.File && window.FileList && window.FileReader){
                                         
-                                        addRawDataAddPopupView.setProgressVisible(true);
-                                        //progress.css("display", "block"); // display progressbar 
+                                        addRawDataAddPopupView.setProgressDisabled(false);
                                         $(this).prop("disabled", true); // 버튼 disabled
                                         
                                         var file = selectedFiles[0];
@@ -83,20 +110,20 @@ AddRawDataAddPopupView){
                                             that.rawDataCollection.reset();
                                             var errCount = 0;
                                             for(var i = 1; i < result.length; i++){ // 제목줄을 빼기 위해서 1부터 시작
-                                                addRawDataAddPopupView.setProgressVisible(i / result.length);
+                                                addRawDataAddPopupView.setProgresPercent(i / result.length * 100);
                                                 var item = result[i];
                                                 
-                                                if(item.length != 4){
+                                                if(item.length != 4){    // 4개 줄로 된 데이터가 아니면 분석하지 않는다.
                                                     continue;
                                                 }
                                                 
-                                                var id = that.userCollection.where({name_commute:item[1]});
+                                                var destUserInfo = that.userCollection.where({name_commute:item[1]});
                                                 
                                                 var resultDate = new Date(item[2]);
                                                 
-                                                if(id.length == 1){ // 등록된 이름인 경우
+                                                if(destUserInfo.length == 1){ // 등록된 이름인 경우
                                                     that.rawDataCollection.add(new RawDataModel({
-                                                        id : id[0].attributes.id,
+                                                        id : destUserInfo[0].attributes.id,
                                                         name : item[1],
                                                         department : item[0],
                                                         time: Util.timeToString(resultDate),
@@ -117,26 +144,21 @@ AddRawDataAddPopupView){
                                                         })); 
                                                         errCount++;    
                                                     }
-                                                    
                                                 }
                                             }
                                             
+                                            dialog.close();
+                                            that.grid.render();
+                                            
                                             if(errCount > 0){ // 사번이 없는 데이터가 있을경우 갯수를 표시한다.
-                                                    Dialog.error("분석되지 않은 데이터가 있습니다.\n 데이터를 확인하세요" , function(){
-                                                    that._disabledOkBtn(true);
-                                                    that.grid.render();
-                                                    dialog.close();
-                                                });
+                                                Dialog.error("분석되지 않은 데이터가 있습니다.\n 데이터를 확인하세요");
+                                                that._disabledOkBtn(true);
                                             }else{
-                                                Dialog.info("파일 분석이 완료 되었습니다." , function(){
-                                                    that._disabledOkBtn(false);
-                                                    that.grid.render();
-                                                    dialog.close();
-                                                });
+                                                Dialog.info("파일 분석이 완료 되었습니다.");
+                                                that._disabledOkBtn(false);
                                             }
 
                                         });
-                                        
                                         csvReader.readAsText(file, 'euc-kr');
                                         
                                     } else{
@@ -154,60 +176,51 @@ AddRawDataAddPopupView){
                         }]
     	            });
     	        }
-    	    });
-    	    
+    	    });  
+    	},
+    	_addCommitBtn: function(){
+    	    var that = this;
     	    // Commit
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"ok",
     	        click:function(){
-    	            that._disabledOkBtn(true);
-    	            that._disabledProgressbar(false);
-    	            that.rawDataCollection.save({
-    	                success:function(){
-    	                    Dialog.info("데이터 전송이 완료되었습니다.");
-    	                    that._disabledProgressbar(true);
-    	                }
+    	            Dialog.confirm({
+    					msg : "출입 기록을 서버에 저장하시겠습니까?",
+    	                buttons : [{
+    	                    label: "확인",
+    	                    cssClass: Dialog.CssClass.PRIMARY,
+    	                    action: function(dialogRef){// 버튼 클릭 이벤트
+    	                        var dialogProgressbar = new ProgressbarView();
+    	                    	dialogRef.getModalBody().html("<div>전송중</div>");
+    	                    	dialogRef.getModalBody().append(dialogProgressbar.render());
+    	                    	dialogRef.enableButtons(false);
+    	                    	dialogRef.setClosable(false);
+    	                    	dialogProgressbar.disabledProgressbar(false);
+                	       
+                	            that.rawDataCollection.save({
+                	                success:function(){
+                	                    dialogRef.close();
+                	                    Dialog.info("데이터 전송이 완료되었습니다.");
+                	                },
+                	                error: function(){
+                	                    dialogRef.close();
+                	                    Dialog.error("데이터 전송 실패!");
+                	                }
+                	            });
+                	            
+    	                    }
+    	                },{
+    	                    label: "취소",
+    	                    action: function(dialogRef){// 버튼 클릭 이벤트
+    	                    	dialogRef.close();
+    	                    }
+    	                }]
     	            });
     	        }
-    	    });
-    	   
+    	    });  
     	},
     	
-    	render:function(){
-    	    var _headSchema=Schemas.getSchema('headTemp');
-    	    var _headTemp=_.template(HeadHTML);
-    	    var _layout=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"출입 기록 등록"})));
-    	    
-    	    _head.addClass("no-margin");
-    	    _head.addClass("relative-layout");
-    	    
-    	     var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	     var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
-    	     
-    	    _layout.append(_head);
-            _layout.append(_content);
-            _layout.append(_progressBar);
-            
-            
-    	    $(this.el).append(_layout);
-    	    
-    	    var _gridSchema=Schemas.getSchema('grid');
-    	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
-            
-            this._disabledOkBtn(true);
-            
-            return this;
-     	},
-     	_disabledProgressbar : function(flag){
-     	    var progressbar = $(this.el).find(".progress");
-     	    if(flag){
-     	        progressbar.css("display","none");
-     	    }else{
-     	        progressbar.css("display","block");
-     	    }
-     	},
      	_disabledOkBtn : function(flag){
      	    var okbtn = this.grid.getButton("ok");
             $(this.el).find("#"+okbtn).prop("disabled", flag);

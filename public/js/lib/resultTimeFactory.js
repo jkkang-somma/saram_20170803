@@ -133,14 +133,17 @@ define([
         },
         
         setStandardInTime : function(yesterdayOutTime){
-            if(yesterdayOutTime.format(DATEFORMAT) == this.date){
-                var outTimeHour = yesterdayOutTime.hour();
-                if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
-                else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
-                else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
-            }else{
-                if(!_.isNull(this.standardInTime))
-                    this.standardInTime.hour(9).minute(0).second(0);
+            if(!_.isNull(this.standardInTime)){
+                if(yesterdayOutTime.format(DATEFORMAT) == this.date){
+                    var outTimeHour = yesterdayOutTime.hour();
+                    if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
+                    else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
+                    else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
+                }
+                // else{
+                    
+                //         this.standardInTime.hour(9).minute(0).second(0);
+                // }
             }
         },
         
@@ -176,8 +179,6 @@ define([
                     }
                 }
             }
-            
-            this.setHoliday();
         },
         
         setHoliday : function(){
@@ -334,6 +335,7 @@ define([
                 out_time_change : this.outTimeChange
             };
         },
+        
         /***************************************************
         // destCollection (length = 2, today, yesterday)
         // inData{ changeInTime, changeOutTime }
@@ -374,7 +376,7 @@ define([
 			    }
 			});
 			return dfd.promise();
-        }
+        },
     };
     
     return {

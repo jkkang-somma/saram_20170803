@@ -5,13 +5,21 @@ define([
 	'util',
 	'text!templates/inputForm/file.html',
 	'text!templates/component/progressbar.html',
-], function($, _, Backbone, Util, FileFormHTML, ProgressbarHTML) {
+	'views/component/ProgressbarView',
+], function(
+	$, _, Backbone, Util,
+	FileFormHTML, ProgressbarHTML,
+	ProgressbarView
+) {
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function() {
 
 		},
 		events : {
-
+			
+		},
+		test : function(event){
+			console.log();
 		},
 		render : function(el) {
 			var dfd= new $.Deferred();
@@ -19,27 +27,21 @@ define([
             if (!_.isUndefined(el)){
     	        this.el=el;
     	    }
-    	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
+    	    this.progressBar= new ProgressbarView();
     	    var _fileForm=$(_.template(FileFormHTML)({label : "출입 기록 (CSV)", id:"AddRawDataFileForm", accept:".csv"}));
     	    
             $(this.el).append(_fileForm);
-            $(this.el).append(_progressBar);
-            
-            this.progress = $(this.el).find(".progress");
-			this.progressbar = $(this.el).find(".progress-bar");
-
+            $(this.el).append(this.progressBar.render());
+			$(this.el).find("#AddRawDataFileForm").change(this.test)
+			
             dfd.resolve();
             return dfd.promise();
 		},
-		setProgressVisible : function(flag){
-			if(flag){
-				this.progress.css("display", "block");
-			}else{
-				this.progress.css("display", "none");
-			}
+		setProgressDisabled : function(flag){
+			this.progressBar.disabledProgressbar(flag);
 		},
 		setProgresPercent : function(percent){
-			this.progressbar.css("width", (percent * 100) + "%");
+			this.progressBar.setPercent(percent);
 		}
 	});
 	
