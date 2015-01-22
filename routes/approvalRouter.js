@@ -28,7 +28,7 @@ router.route('/list')
             });
         });
     }else{
-        result = approval.getApprovalListWhere(req.query.startDate, req.query.endDate).then(function(result){
+        result = approval.getApprovalListWhere(req.query.startDate, req.query.endDate, req.query.managerId).then(function(result){
             debug("Complete Select Approval List Where.");
             res.send(result);    
         }).catch(function(e){

@@ -112,11 +112,11 @@ define([
          if(startDate.length > 8){
           var selGubun = $(_this.el).find('#office_code');
           var selVal = selGubun.val();
-          var holReq = "0";
+          _this.holReq = 0;
           if(selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03'){
             var arrInsertDate = _this.getDatePariod();
-            holReq = arrInsertDate.length + "";
-            $(_this.el).find('#reqHoliday').val(holReq + " 일");
+            _this.holReq = arrInsertDate.length;
+            $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
           }
          } 
       });
@@ -125,11 +125,11 @@ define([
         if(endDate.length > 8){
           var selGubun = $(_this.el).find('#office_code');
           var selVal = selGubun.val();
-          var holReq = "0";
+          _this.holReq = 0;
           if(selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03'){
             var arrInsertDate = _this.getDatePariod();
-            holReq = arrInsertDate.length + "";
-            $(_this.el).find('#reqHoliday').val(holReq + " 일");
+            _this.holReq = arrInsertDate.length;
+            $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
           }
         } 
       });
@@ -184,26 +184,26 @@ define([
       
       selGubun.change(function() {
         var selVal = selGubun.val();
-        var holReq = "0";
+        _this.holReq = 0;
         if(selVal == 'W01'){
           // 외근
-          holReq = "0";
+          _this.holReq = 0;
           $(_this.el).find('#datePickerTitleTxt').text('date');
           _this.afterDate.hide();
           _this.setTimePicker(false);
         }else if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03'){
-          holReq = (selVal == 'B01')?"0": "0.5";
+          _this.holReq = (selVal == 'B01')?0: 0.5;
           $(_this.el).find('#datePickerTitleTxt').text('date');
           _this.afterDate.hide();
           _this.setTimePicker(true);
         }else{
           var arrInsertDate = _this.getDatePariod();
-          holReq = arrInsertDate.length + "";
+          _this.holReq = arrInsertDate.length;
           $(_this.el).find('#datePickerTitleTxt').text('from');
           _this.afterDate.css('display', 'table');
           _this.setTimePicker(true);
         }
-        $(_this.el).find('#reqHoliday').val(holReq + " 일");
+        $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
       });
      
     },
@@ -353,16 +353,20 @@ define([
           }
         } 
         if(formData[essenId[i]] == ""){
-          alert(essenMsg[i]+"을(를) 입력하세요.");
+          Dialog.error(essenMsg[i]+"을(를) 입력하세요.");
           this.thisDfd.reject();
           return;
         }
       }
-      
+      var usable = (this.options.total_day > this.options.used_holiday)?this.options.total_day - this.options.used_holiday : 0;
       if(!this.isDateCompare(formData)){
-          alert("기간을 잘못 입력하였습니다.");      
+          Dialog.error("기간을 잘못 입력하였습니다.");      
           this.thisDfd.reject();
           return;
+      }else if(this.holReq > usable){
+        Dialog.error("잔여 연차 일수를 초과 했습니다.");      
+        this.thisDfd.reject();
+        return;
       }else{
         var _appCollection = new ApprovalCollection();
         _appCollection.url = "/approval/appIndex";
@@ -379,7 +383,7 @@ define([
      			reset : true, 
      			data: _thisData,
      			error : function(result) {
-     				alert("데이터 조회가 실패했습니다.");
+     				Dialog.error("데이터 조회가 실패했습니다.");
      			}
      		})
         .done(function(result){
