@@ -6,7 +6,7 @@ var sessionManager = require('../lib/sessionManager');
 var CompanyAccess = require("../service/CompanyAccess.js");
 
 router.route("/")
-.post(function(req, res){
+.post(function(req,res,next){
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
 	
@@ -18,9 +18,9 @@ router.route("/")
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {
 		return res.send(result);
-	}).catch(function(e) {
-		console.log("Error");
-		console.log(e);
+	}).catch(function(err) {
+		console.log(err.message);
+		next(err);
 	});
 });
 

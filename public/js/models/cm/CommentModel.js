@@ -22,7 +22,9 @@ define([
             reply_name : "",
             reply_id : "",
             want_in_time: "",
-            want_out_time: ""
+            want_out_time: "",
+            before_in_time: "",
+            before_out_time: ""
         }
     });
 

@@ -460,6 +460,8 @@
     			c.writer_id,
     			c.want_in_time,
     			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
@@ -484,6 +486,10 @@
     			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
     			c.state,
     			c.writer_id,
+    			c.want_in_time,
+    			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
@@ -498,11 +504,11 @@
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time
+    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time, before_in_time, before_out_time
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?, ?, ?, ?
+    			?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?
     		)
     	</query>
     	

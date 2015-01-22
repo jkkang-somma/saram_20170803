@@ -106,23 +106,23 @@ define([
             
         });
 	},
-	accessIn: function() {
+	accessIn: function() {	// 출근 기록
 		var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'출근(수원)'}, {
     		success: function(model, response) {
     			Dialog.show("출근 등록 되었습니다.");
          	}, error : function(model, res){
-         		Dialog.show("출근 등록이 실패했습니다.");
+         		Dialog.error("출근 등록이 실패했습니다.");
          	}
 		});
 	},
-	accessOut: function() {
+	accessOut: function() { // 퇴근 기록
 		var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'퇴근(수원)'}, {
     		success: function(model, response) {
     			Dialog.show("퇴근 등록 되었습니다.");
          	}, error : function(model, res){
-         		Dialog.show("퇴근 등록이 실패했습니다.");
+         		Dialog.error("퇴근 등록이 실패했습니다.");
          	}
 		});
 	}
