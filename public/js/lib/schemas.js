@@ -27,7 +27,11 @@ define([
             join_company: "-",
             leave_company: "-",
             privilege: null,
-            admin : null
+            admin : null,
+            ip_addr_1 : null,
+            mac_addr_1 : null,
+            ip_addr_2 : null,
+            mac_addr_2 : null
         },
         auth:{
         },

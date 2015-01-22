@@ -25,6 +25,7 @@ var inOffice = require('./routes/inofficeRouter');
 var officeCode = require('./routes/officeCodeRouter');
 var comment = require('./routes/commentRouter');
 var codeV2 = require('./routes/codeRouterV2');
+var companyAccess = require('./routes/companyAccessRouter');
 
 //var error = require('./routes/error');
 
@@ -119,6 +120,8 @@ app.use('/inOffice',inOffice);
 app.use('/officeCode',officeCode);
 app.use('/comment', comment);
 app.use('/codev2', codeV2);
+app.use('/companyAccess', companyAccess);
+
 
 //app.use('/error', error);
 
