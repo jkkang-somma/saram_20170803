@@ -106,46 +106,19 @@ TextBoxHTML, DatePickerHTML
      				startDate : data.date,	
      				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
      			},success : function(resultCollection){
-     				var resultCommuteCollection = new CommuteCollection();
-     				
-	     			var currentDayCommute = resultCollection.models[0];
-	     			
-	     			resultTimeFactory.initByModel(currentDayCommute);
-	     			
-	     			if(!_.isNull(data.in_time)){
-	     				resultTimeFactory.inTime = Moment(data.in_time);
-	     				resultTimeFactory.inTimeChange = resultTimeFactory.inTimeChange + 1;; 
-	     			}
-	     			
-	     			if(!_.isNull(data.out_time)){
-	     				resultTimeFactory.outTime = Moment(data.out_time);
-	     				resultTimeFactory.outTimeChange = resultTimeFactory.outTimeChange + 1;
-	     			}
-	     			
-	     			var currentResult = resultTimeFactory.getResult();
-
-	     			var nextDayCommute = resultCollection.models[1];		
-	     			resultTimeFactory.initByModel(nextDayCommute);
-	     			
-	     			if(currentResult.out_time)
-                    	resultTimeFactory.setStandardInTime(Moment(currentResult.out_time));
-                    
-                    var yesterdayResult = resultTimeFactory.getResult();
-					resultCommuteCollection.add(currentResult);
-					resultCommuteCollection.add(yesterdayResult);
-					resultCommuteCollection.save({
-						success: function(result){
-							var commuteModel = new CommuteModel();
-							commuteModel.save(data, {
-								success: function(){
-									dfd.resolve(resultCommuteCollection);		
-								}
-							});
-						},
-						error : function(){
-							dfd.reject();
-						}
-					});
+     				resultTimeFactory.modifyByCollection( // commute_result 수정
+     					resultCollection,
+     					{ changeInTime : data.in_time, changeOutTime : data.out_time }
+     				).done(function(resultCommuteCollection){ // commute_result 수정 성공!
+     					var commuteModel = new CommuteModel();
+						commuteModel.save(data, { // changehistory tbl 수정
+							success: function(){
+								dfd.resolve(resultCommuteCollection);		
+							}
+						});
+     				}).fail(function(){
+     					dfd.reject();
+     				});
      			},error : function(){
      				dfd.reject();
      			}
@@ -158,8 +131,8 @@ TextBoxHTML, DatePickerHTML
 			var inTimeDatePicker = $(this.el).find("#commuteUpdatePopupIn").data("DateTimePicker");
 			var outTimeDatePicker = $(this.el).find("#commuteUpdatePopupOut").data("DateTimePicker");
      		var newData = {
-     			date : $(this.el).find("#commuteUpdatePopupDate").val(),
-     			id : $(this.el).find("#commuteUpdatePopupId").val(),
+     			date : this.selectData.date,
+     			id : this.selectData.id,
      			in_time : inTimeDatePicker.getText()==="" ? null: inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
      			out_time : outTimeDatePicker.getText()==="" ? null: outTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss"),
      		}

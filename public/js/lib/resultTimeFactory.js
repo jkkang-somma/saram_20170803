@@ -1,8 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'moment'
-], function($, _, Moment){
+  'moment',
+  'collection/cm/CommuteCollection'
+], function($, _, Moment, CommuteCollection){
     var WORKTYPE = {
         NORMAL : "00",
         EARLY : "01",
@@ -132,14 +133,17 @@ define([
         },
         
         setStandardInTime : function(yesterdayOutTime){
-            if(yesterdayOutTime.format(DATEFORMAT) == this.date){
-                var outTimeHour = yesterdayOutTime.hour();
-                if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
-                else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
-                else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
-            }else{
-                if(!_.isNull(this.standardInTime))
-                    this.standardInTime.hour(9).minute(0).second(0);
+            if(!_.isNull(this.standardInTime)){
+                if(yesterdayOutTime.format(DATEFORMAT) == this.date){
+                    var outTimeHour = yesterdayOutTime.hour();
+                    if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
+                    else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
+                    else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
+                }
+                // else{
+                    
+                //         this.standardInTime.hour(9).minute(0).second(0);
+                // }
             }
         },
         
@@ -175,8 +179,6 @@ define([
                     }
                 }
             }
-            
-            this.setHoliday();
         },
         
         setHoliday : function(){
@@ -332,7 +334,49 @@ define([
                 in_time_change : this.inTimeChange,
                 out_time_change : this.outTimeChange
             };
-        }
+        },
+        
+        /***************************************************
+        // destCollection (length = 2, today, yesterday)
+        // inData{ changeInTime, changeOutTime }
+        ****************************************************/
+        modifyByCollection: function(destCommuteCollection, inData){
+            var dfd = new $.Deferred();
+            var resultCommuteCollection = new CommuteCollection();
+		 			
+ 			var currentDayCommute = destCommuteCollection.models[0];
+ 			
+ 			this.initByModel(currentDayCommute);
+ 			
+ 			if(!_.isNull(inData.changeInTime)){
+ 				this.inTime = Moment(inData.changeInTime);
+ 				this.inTimeChange = this.inTimeChange + 1; 
+ 			}
+ 			
+ 			if(!_.isNull(inData.changeOutTime)){
+ 				this.outTime = Moment(inData.changeOutTime);
+ 				this.outTimeChange = this.outTimeChange + 1;
+ 			}
+ 			
+ 			var currentResult = this.getResult();
+
+ 			var nextDayCommute = destCommuteCollection.models[1];		
+ 			this.initByModel(nextDayCommute);
+ 			
+ 			if(currentResult.out_time)
+            	this.setStandardInTime(Moment(currentResult.out_time));
+            var yesterdayResult = this.getResult();
+			resultCommuteCollection.add(currentResult);
+			resultCommuteCollection.add(yesterdayResult);
+			resultCommuteCollection.save({
+			    success : function(){
+			        dfd.resolve(resultCommuteCollection);
+			    }, error: function(){
+			        dfd.reject();
+			    }
+			});
+			return dfd.promise();
+        },
     };
     
     return {

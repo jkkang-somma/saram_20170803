@@ -4,11 +4,12 @@ define([
   'core/BaseView',
   'log',
   'dialog',
-  'text!templates/layout/dashboard.html',
-  'text!templates/dashboardTemplate.html',
   'monthpicker',
   'models/cm/CommuteResultModel',
-  ], function($, _, BaseView, log, Dialog, top_center_layout, dashboardTemp, Monthpicker, CommuteResultModel){
+  'models/sm/SessionModel',
+  'text!templates/layout/dashboard.html',
+  'text!templates/dashboardTemplate.html',
+  ], function($, _, BaseView, log, Dialog, Monthpicker, CommuteResultModel, SessionModel, top_center_layout, dashboardTemp){
     var LOG=log.getLogger('DashBoardView');
     
     var DashBoardView = BaseView.extend({
@@ -20,7 +21,9 @@ define([
     	initialize:function(){
     	  var view = this;
     	  
-    	  this.model= new CommuteResultModel({"_id":-1});
+    	  var _user=SessionModel.getUserInfo();
+    	  _user._id="-1";
+    	  this.model= new CommuteResultModel(_user);
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'close');
     	},

@@ -4,13 +4,14 @@ define([
 	'backbone',
 	'util',
 	'text!templates/default/datepicker.html',
-	'text!templates/component/progressbar.html',
-], function($, _, Backbone, Util, DatePickerHTML, ProgressbarHTML) {
+	'views/component/ProgressbarView'
+], function(
+	$, _, Backbone, Util,
+	DatePickerHTML,
+	ProgressbarView
+) {
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function() {
-
-		},
-		events : {
 
 		},
 		render : function(el) {
@@ -23,7 +24,7 @@ define([
     	    var _startdatePicker=$(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			id : "cdStartdayDatePicker",
+    	    			id : "cdStartDatePicker",
     	    			label : "시작일",
     	    			name : "startDate"
     	    		}
@@ -33,27 +34,28 @@ define([
     	    var _enddatePicker=$(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			id : "cdEnddayDatePicker",
+    	    			id : "cdEndDatePicker",
     	    			label : "종료일",
     	    			name : "endDate"
     	    		}
     	    		
     	    	})
     	    );
-            var _progressBar=$(_.template(ProgressbarHTML)({percent : "100"}));
+
+            this.progressbar = new ProgressbarView();
             
             $(this.el).append(_startdatePicker);
             $(this.el).append(_enddatePicker);
-            $(this.el).append(_progressBar);
+            $(this.el).append(this.progressbar.render());
             
-            $(this.el).find("#cdStartdayDatePicker").datetimepicker({
+            $(this.el).find("#cdStartDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD"
             });
             
-            $(this.el).find("#cdEnddayDatePicker").datetimepicker({
+            $(this.el).find("#cdEndDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
@@ -62,6 +64,18 @@ define([
             
             dfd.resolve();
             return dfd.promise();
+		},
+		disabledProgressbar : function(flag){
+			this.progressbar.disabledProgressbar(flag);
+		},
+		setProgressbarPercent : function(percent){
+			this.progressbar.setPercent(percent);
+		},
+		getStartDate : function(){
+			return $(this.el).find("#cdStartDatePicker").data("DateTimePicker").getDate();
+		},
+		getEndDate : function(){
+			return $(this.el).find("#cdEndDatePicker").data("DateTimePicker").getDate();
 		}
 	});
 	

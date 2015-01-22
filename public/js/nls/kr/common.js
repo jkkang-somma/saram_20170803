@@ -28,7 +28,8 @@ define({
         PRIVILEGE:"조회 권한",
         ADMIN:"관리 권한",
         PASSWORD:"비밀번호",
-        NEW_PASSWORD:"새 비밀번호"
+        NEW_PASSWORD:"New 비밀번호",
+        RE_NEW_PASSWORD:"확인 New 비밀번호"
     },
     GRID:{
         MSG:{
@@ -43,12 +44,16 @@ define({
             USER_LIST:"사용자 목록"
         }
     },
+    
     CODE:{
         PRIVILEGE_1:"전체",
         PRIVILEGE_2:"부서",
         PRIVILEGE_3:"개인",
         ADMIN_0:"사용자",
-        ADMIN_1:"관리자"
+        ADMIN_1:"관리자",
+        ALL:"전체",
+        LEAVE_USER:"퇴사자",
+        WORKER:"근무자"
     },
     
     //MSG
@@ -69,6 +74,9 @@ define({
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
             INIT_PASSWORD:"비밀번호를 설정해주세요."
+        },
+        USER:{
+            NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지않습니다."
         }
     },
     ERROR:{
@@ -101,8 +109,8 @@ define({
             AM:{
                 ADD_RAW_DATA:"출입 기록 등록",
                 RAW_DATA_LIST:"출입 기록 조회",
-                CREATE_DATA:"근태 자료 생성",
-                COMMUTE_MANAGER:"근태 자료 관리",
+                CREATE_DATA:"근태 자료 관리",
+                COMMUTE_MANAGER:"근태 자료 조회",
                 COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
                 REPORT_MANAGER:"근태 상신"
             }

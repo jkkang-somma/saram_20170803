@@ -3771,6 +3771,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .input-group-btn > .btn:hover,
 .input-group-btn > .btn:active {
   z-index: 2;
+  outline:none;
 }
 
 .nav {

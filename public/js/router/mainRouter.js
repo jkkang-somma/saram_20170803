@@ -11,6 +11,7 @@ define([
 	'dialog',
   	'i18n!nls/common',
 	'models/sm/SessionModel',
+	'models/common/RawDataModel',
 	'core/BaseRouter',
 	'views/DashBoardView',
 	'views/LoginView',
@@ -25,7 +26,7 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, BaseRouter,
+], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, RawDataModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView, ConfigUserView,	// 사원관리
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
@@ -52,6 +53,8 @@ ReportListView // report manager
 			'vacation' : 'showVacation',
 			'rawdatalist' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
+			'accessIn' : 'accessIn',
+			'accessOut' : 'accessOut',
 			'*actions' : 'showHome'
 
 		},
@@ -167,23 +170,11 @@ ReportListView // report manager
                 title:i18Common.DIALOG.TITLE.USER_UPDATE, 
                 content:configView, 
                 buttons:[{
-                    label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
-                    cssClass: Dialog.CssClass.SUCCESS,
-                    action: function(dialogRef){// 버튼 클릭 이벤트
-                        configView.initializePassword().done(function(data){
-                            grid.updateRow(data);
-                            dialogRef.close();
-                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
-                        });//실패 따로 처리안함 add화면에서 처리.
-                    }
-                },{
                     label: i18Common.DIALOG.BUTTON.SAVE,
                     cssClass: Dialog.CssClass.SUCCESS,
                     action: function(dialogRef){// 버튼 클릭 이벤트
                         configView.submitSave().done(function(data){
-                            grid.updateRow(data);
                             dialogRef.close();
-                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
                         });//실패 따로 처리안함 add화면에서 처리.
                     }
                 }, {
@@ -194,7 +185,17 @@ ReportListView // report manager
                 }]
                 
             });
-		}
+		},
+		accessIn: function() {
+			var model = new RawDataModel({type:'출근(수원)'});
+			model.companyAccessUrl().save();
+			alert("출근");
+		},
+		accessOut: function() {
+			var model = new RawDataModel({type:'퇴근(수원)'});
+			model.companyAccessUrl().save();
+			alert("퇴근");
+		},
 	});
 
 	return Router;

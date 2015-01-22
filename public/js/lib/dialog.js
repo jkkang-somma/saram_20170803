@@ -141,7 +141,7 @@ define([
             } else {// Default 버튼
                 _btns = [{
                     label: i18nCommon.DIALOG.BUTTON.OK,
-                    cssClass: CssClass.PRIMARY,
+                    cssClass: CssClass.INFO,
                     //autospin: true,
                     action: function(dialogRef){// 버튼 클릭 이벤트
                         var _box=$("<div class='dialog-loding'></div>");
@@ -183,7 +183,7 @@ define([
                         }
                     }
                 }, {
-                    label: 'Close',
+                    label: i18nCommon.DIALOG.BUTTON.CLOSE,
                     action: function(dialogRef){
                         dialogRef.close();
                     }

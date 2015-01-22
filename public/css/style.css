@@ -1,9 +1,9 @@
 @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(https://fonts.googleapis.com/css?family=Great+Vibes|Orbitron|Audiowide);
 body {
-  overflow:hidden;
+  overflow:auto;
   font-family: 'Nanum Gothic';
-  transition:background .5s;
+  transition:background .9s;
 }
 
 .no-margin{
@@ -42,6 +42,17 @@ body {
 }
 .form-control{
     border-color:#2ABB9B;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    cursor: not-allowed;
+    background-color: #DEEEE6;
+}
+
+
+.form-control:focus{
+    border-color:#2ABB9B;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
 }
 
 
@@ -253,6 +264,21 @@ background-color: #e0e0e0;
     background-image:none;
     border-color: transparent;
 }
+
+.btn-primary{
+    color: #fff;
+    background-color: #2ABB9B;
+    background-image:none;
+    border-color: transparent;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+    color: #2ABB9B;
+    background: beige;
+    background-image:none;
+    border-color: transparent;
+}
+
+
 .btn-warning {
     color: #fff;
     background-color: #f0ad4e;
@@ -275,6 +301,16 @@ background-color: #e0e0e0;
     background-image:none;
     border-color: transparent;
 }
+
+
+
+.btn,.btn:hover,.btn:focus,
+.btn:active {
+  outline:none;
+  box-shadow:none;
+}
+
+
 .input-group .grid-btn{
     border-radius:0px !important;
     border-color:transparent;
@@ -520,3 +556,72 @@ background-color: #e0e0e0;
 /*table.dataTable tbody tr.autoCreate{*/
 /*    background-color : rgba(218, 130, 130, 0.6);*/
 /*}*/
+
+
+/*selectPicker*/
+.dropdown-menu{
+    background-color:#2ABB9B;
+    border: 1px solid #2ABB9B;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.175);
+}
+.dropdown-menu>li>a {
+    color: white;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #2ABB9B;
+    text-decoration: none;
+    background: beige;
+    outline: none;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    background: beige;
+    color: #2ABB9B;
+    outline: none;
+}
+
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #999999;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    background-clip: padding-box;
+}
+
+.btn-group.open .dropdown-toggle {
+ -webkit-box-shadow:none; 
+ box-shadow:none; 
+}

@@ -25,7 +25,12 @@ var Schemas = function (schemaName) {
             join_company: null,
             leave_company: null,
             privilege: null,
-            admin : null
+            admin : null,
+            new_password:null,
+            ip_addr_1 : null,
+            mac_addr_1 : null,
+            ip_addr_2 : null,
+            mac_addr_2 : null
         },
         auth:{
         },

@@ -10,10 +10,11 @@ define([
   'i18n!nls/common',
   'text!templates/default/form.html',
   'text!templates/default/input.html',
+  'text!templates/default/password.html',
   'text!templates/default/datepicker.html',
   'text!templates/default/combo.html',
   'text!templates/default/hidden.html',
-  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, DatePickerHTML, ComboHTML, HiddenHTML){
+  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -25,7 +26,27 @@ define([
                 var _InputTemp=_.template(InputHTML);
                 var _input=_.noop();
                 _input=_InputTemp(data);
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    var result=$(_input);
+                    result.find("input").attr("readOnly", "readOnly");
+                    return result;
+                }
                 return $(_input);
+            }
+        },
+        password:{
+            getElement:function(data){
+                var _PasswordTemp=_.template(PasswordHTML);
+                var _password=_.noop();
+                _password=_PasswordTemp(data);
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    var result=$(_password);
+                    result.find("input").attr("readOnly", "readOnly");
+                    return result;
+                }
+                return $(_password);
             }
         },
         date:{
@@ -50,7 +71,7 @@ define([
                 var _select=_combo.find("select");
                 var _options=data.collection.models;
                 
-                if (_.isArray(data.collection)){
+                if (_.isArray(data.collection)){ // 콤보 데이터가 array 일경우
                     for (var index in data.collection){
                         var _option= data.collection[index];
                         var _code=_option.key;
@@ -61,7 +82,7 @@ define([
                             _select.append("<option value='"+_code+"'>"+_text+"</option>");
                         }
                     }
-                } else {
+                } else { // 콤보 데이터가 collection 일경우 
                     
                     for (var index in _options){
                         var _option= _options[index].attributes;
@@ -79,6 +100,15 @@ define([
                             $('[data-hidden="'+data.linkField+'"]').val(_text);
                         }
                     });
+                }
+                
+                if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {//모바일 처리.
+                    _select.selectpicker('mobile');
+                } else {
+                    _select.selectpicker({
+                        style: 'btn-primary'
+                    });
+                    
                 }
                 
                 return _combo;  

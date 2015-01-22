@@ -5,7 +5,15 @@
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, name_commute, join_company, leave_company, privilege, admin
         	FROM members_tbl
         </query>
-        <query id="selectIdByUser">select * from members_tbl where id=?</query>
+        <query id="selectIdByUser">
+        	SELECT 
+        		m.*, d.name AS dept_name 
+        	FROM 
+        		members_tbl m
+        		LEFT JOIN dept_code_tbl d ON d.code = m.dept_code
+        	WHERE 
+        		m.id=?
+        </query>
         <query id="selectManager">select * from members_tbl where privilege &lt;= 2</query>
         <query id="insertUser">insert into members_tbl(id, name, dept_code, name_commute, join_company, privilege, admin) values(?,?,?,?,?, ?,?)</query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>

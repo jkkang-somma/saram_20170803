@@ -19,6 +19,7 @@ define([
   'models/sm/UserModel',
 ], function($, _, Backbone, BaseView, Grid, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
     var userListCount=0;
+    var _currentFilter=0;
     var UserListView = BaseView.extend({
         el:".main-container",
     	initialize:function(){
@@ -70,6 +71,41 @@ define([
     	    
     	    //grid button add;
     	    var _buttons=["search"];
+    	    
+    	    var _filterText=[i18Common.CODE.ALL, i18Common.CODE.WORKER, i18Common.CODE.LEAVE_USER]
+    	    _buttons.push({//User Remove
+    	        type:"custom",
+    	        name:"filter",
+    	        filterBtnText:_filterText,
+    	        click:function(_grid, _button){
+    	           
+    	           var filters=[
+    	                function(){
+    	                    return true;
+    	                },
+    	                function(data){
+    	                    var _data=data[6];
+    	                    return _.isEmpty(_data);
+    	                },
+    	                function(data){
+    	                    var _data=data[6];
+    	                    return !_.isEmpty(_data);
+    	                }
+    	           ];
+    	           
+                   if (_currentFilter==2){
+                        _currentFilter=0;
+                   } else {
+    	                _currentFilter++;
+                   }
+                   
+                   _button.html(_filterText[_currentFilter]);
+                   var filteredData = _grid.filtering(function(data){
+                       var fn=filters[_currentFilter];
+                       return fn(data);
+                   });
+                }
+    	    });
     	    _buttons.push({//User Add
     	        type:"custom",
     	        name:"add",

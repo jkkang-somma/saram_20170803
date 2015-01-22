@@ -28,7 +28,8 @@ define({
         PRIVILEGE:"Privilege",
         ADMIN:"Admin",
         PASSWORD:"Password",
-        NEW_PASSWORD:"New Password"
+        NEW_PASSWORD:"New Password",
+        RE_NEW_PASSWORD:"Re New Password"
     },
     GRID:{
         MSG:{
@@ -45,12 +46,15 @@ define({
     },
     
     //CODE
-     CODE:{
+    CODE:{
         PRIVILEGE_1:"ALL",
         PRIVILEGE_2:"TEAM",
         PRIVILEGE_3:"USER",
         ADMIN_0:"USER",
-        ADMIN_1:"MANAGER"
+        ADMIN_1:"MANAGER",
+        ALL:"ALL",
+        LEAVE_USER:"Leave",
+        WORKER:"Worker"
     },
     
     
@@ -72,6 +76,9 @@ define({
             DO_NOT_FOUND_USER:"Not valid account.",
             NOT_EQULES_PASSWORD:"Not valid account.",
             INIT_PASSWORD:"Initialize password."
+        },
+        USER:{
+            NOT_EQULES_CONFIG_PASSWORD:"Not valid new password."
         }
     },
     ERROR:{
