@@ -72,7 +72,7 @@ define([
     	    //grid button add;
     	    var _buttons=["search"];
     	    
-    	    var _filterText=["전체", "퇴사자", "근무자"]
+    	    var _filterText=[i18Common.CODE.ALL, i18Common.CODE.WORKER, i18Common.CODE.LEAVE_USER]
     	    _buttons.push({//User Remove
     	        type:"custom",
     	        name:"filter",

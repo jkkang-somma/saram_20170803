@@ -51,9 +51,6 @@ define([
     		_.bindAll(this, 'search');
     		_.bindAll(this, 'filtering');
     		
-    		//필터링 초기화
-            $.fn.dataTable.ext.search=[];
-    		
     		this.render();
     	},
     	updateCSS:function(){
@@ -330,7 +327,10 @@ define([
     	},
     	_draw:function(){
     	    var _grid = this;
-    	    
+    		//필터링 초기화
+            $.fn.dataTable.ext.search=[];
+            _grid.currentLength=10;
+            
     	    this._drawButtons();
     	
     	    if($.fn.DataTable.isDataTable($("#"+this.options.el).find("#"+this.options.id))){//
@@ -371,7 +371,7 @@ define([
      	    });
      	    
      	    //ROW click
-     	    _dataTable.find("tbody").on( 'click', 'tr', function () {
+     	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                 }
