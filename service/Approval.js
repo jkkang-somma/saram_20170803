@@ -21,7 +21,10 @@ var Approval = function (data) {
     var _getApprovalList = function () {
         return ApprovalDao.selectApprovalList();
     }
-    var _getApprovalListWhere = function (startDate, endDate) {
+    var _getApprovalListWhere = function (startDate, endDate, managerId) {
+        if(managerId != undefined && managerId != ""){
+            return ApprovalDao.selectApprovalByManager(managerId, startDate, endDate);
+        }
         return ApprovalDao.selectApprovalListWhere(startDate, endDate);
     }
     var _insertApproval = function () {
