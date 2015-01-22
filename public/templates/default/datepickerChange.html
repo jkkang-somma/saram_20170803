@@ -1,5 +1,13 @@
 <div class="form-group">
-	<label><%= label %></label>
+	<label>
+		<% if( checkId != "" ){ %>
+		<label class="checkbox-inline">
+		  	<input type="checkbox" id="<%= checkId %>">
+		</label>
+		<% } %>
+		
+		<%= label %> 
+	</label>
 	<div class="row">
 		<div class="col-sm-5">
 		    <input type="text" class="form-control yes-form-control" value="<%= beforeTime %>" disabled="true">
@@ -8,7 +16,7 @@
 			<span class="glyphicon glyphicon-arrow-right" style="vertical-align: middle" aria-hidden="true"></span>
 		</div>
 		<div class="col-sm-6">
-		    <div class="input-group date" id="<%= id %>">
+		    <div class="input-group" id="<%= id %>">
 		        <input type="text" class="form-control yes-form-control"/>
 		        <span class="input-group-addon">
 		              <span class="glyphicon glyphicon-calendar"></span>

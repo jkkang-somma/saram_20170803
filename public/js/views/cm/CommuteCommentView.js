@@ -30,7 +30,8 @@ define([
 		SessionModel, CommentCollection,
 		CommentUpdatePopupView,	searchFormTemplate){
 	
-	function _getCommentUpdateBtn(that){
+	function _getCommentUpdateBtn(view){
+		var that = view;
 		return {
 	        type:"custom",
 	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
@@ -50,19 +51,13 @@ define([
                         cssClass: Dialog.CssClass.SUCCESS,
                         label: '수정',
                         action: function(dialog) {
-                        	commentUpdatePopupView.updateComment({
-                        		success: function(model, response) {
-                        			if (Util.isNull( response["error"] )) {
-                            			Dialog.show("성공", function() {
-                            				dialog.close();
-                            				that.selectComments();
-                            			});                        				
-                        			} else {
-                						Dialog.warning("Error: " + response["error"]);
-                        			}
-                             	}, error : function(model, res){
-                             		Dialog.show("업데이트가 실패했습니다.");
-                             	}
+                        	commentUpdatePopupView.updateComment().done(function(result){
+                        		Dialog.show("성공", function() {
+                    				that.selectComments();
+                    				dialog.close();
+                    			});                        		
+                            }).fail(function(){
+                            	Dialog.show("업데이트가 실패했습니다.");
                             });
                         }
                     });
@@ -148,9 +143,8 @@ define([
 			'click #ccmSearchBtn' : 'onClickSearchBtn'
 		},
 		buttonInit: function(){
-    	    var that = this;
     	    // tool btn
-    	    this.gridOption.buttons.push( _getCommentUpdateBtn(that) );
+    	    this.gridOption.buttons.push( _getCommentUpdateBtn(this) );
     	},
 		render: function(){
 	   	    //var _view=this;

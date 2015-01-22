@@ -1,8 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'moment'
-], function($, _, Moment){
+  'moment',
+  'collection/cm/CommuteCollection'
+], function($, _, Moment, CommuteCollection){
     var WORKTYPE = {
         NORMAL : "00",
         EARLY : "01",
@@ -332,6 +333,47 @@ define([
                 in_time_change : this.inTimeChange,
                 out_time_change : this.outTimeChange
             };
+        },
+        /***************************************************
+        // destCollection (length = 2, today, yesterday)
+        // inData{ changeInTime, changeOutTime }
+        ****************************************************/
+        modifyByCollection: function(destCommuteCollection, inData){
+            var dfd = new $.Deferred();
+            var resultCommuteCollection = new CommuteCollection();
+		 			
+ 			var currentDayCommute = destCommuteCollection.models[0];
+ 			
+ 			this.initByModel(currentDayCommute);
+ 			
+ 			if(!_.isNull(inData.changeInTime)){
+ 				this.inTime = Moment(inData.changeInTime);
+ 				this.inTimeChange = this.inTimeChange + 1; 
+ 			}
+ 			
+ 			if(!_.isNull(inData.changeOutTime)){
+ 				this.outTime = Moment(inData.changeOutTime);
+ 				this.outTimeChange = this.outTimeChange + 1;
+ 			}
+ 			
+ 			var currentResult = this.getResult();
+
+ 			var nextDayCommute = destCommuteCollection.models[1];		
+ 			this.initByModel(nextDayCommute);
+ 			
+ 			if(currentResult.out_time)
+            	this.setStandardInTime(Moment(currentResult.out_time));
+            var yesterdayResult = this.getResult();
+			resultCommuteCollection.add(currentResult);
+			resultCommuteCollection.add(yesterdayResult);
+			resultCommuteCollection.save({
+			    success : function(){
+			        dfd.resolve(resultCommuteCollection);
+			    }, error: function(){
+			        dfd.reject();
+			    }
+			});
+			return dfd.promise();
         }
     };
     

@@ -112,7 +112,7 @@ define([
             					var yesterday = result.models[1];
             					current.set({idx : selectItem.idx});
             					that.grid.updateRow(current.attributes);
-            					that.grid.getRowByFunction(
+            					var yesterdayRow = that.grid.getRowByFunction(
             						function(idx, data, node){
 	            						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
 	            							return true;
@@ -121,7 +121,9 @@ define([
 	            							return false;
 	            						}
 	            					}
-	            				).data(yesterday.attributes);
+	            				);
+	            				yesterday.set({idx : yesterdayRow.data().idx});
+	            				yesterdayRow.data(yesterday.attributes);
             					
         						Dialog.show("성공", function() {
                     				dialog.close();
