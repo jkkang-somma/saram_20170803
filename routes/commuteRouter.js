@@ -66,9 +66,12 @@ router.route('/:id')
 	});
 });
 
-
-router.route('/result')
+//Dashboard 
+router.route('/result/:id')
 .get(function(req, res){
+	
+	
+	
 	res.send({});
 });
 
