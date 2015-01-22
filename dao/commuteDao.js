@@ -34,11 +34,7 @@ CommuteDao.prototype.insertCommute =  function (data) {
     		data.out_time, data.over_time, data.overtime_code, data.vacation_code, data.standard_in_time,
     		data.standard_out_time, data.work_type, data.year,
     		data.in_time_type, data.out_time_type, data.out_office_start_time, data.out_office_end_time,
-    		data.in_time_change, data.out_time_change,
-            
-            data.department, data.in_time, data.late_time, data.name, data.out_office_code, data.out_time, data.over_time, data.overtime_code,
-			data.vacation_code,	data.standard_in_time,	data.standard_out_time,	data.work_type,	data.in_time_type,	data.out_time_type,
-			data.out_office_start_time,	data.out_office_end_time, data.in_time_change, data.out_time_change
+    		data.in_time_change, data.out_time_change
         ]);
 }
 

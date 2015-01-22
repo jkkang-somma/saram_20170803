@@ -38,9 +38,11 @@ router.route('/bulk')
 	        resultArr.push(Commute.insertCommute(data[key]));
 	        count++;
 	    }
+	    // res.send({msg : "Add CommuteResult Count : " + count, count: count});		
 	    Promise.all(resultArr).then(function(){
 	    	debug("Add CommuteResult Count : " + count);
-	    	res.send({msg : "Add CommuteResult Count : " + count, count: count});		
+	    }, function(result){
+	    	debug(result);
 	    });		
 	} else {
 		return res.send({error: "관리자 등급만 생성이 가능합니다."});
