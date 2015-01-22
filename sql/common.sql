@@ -64,7 +64,9 @@ CREATE TABLE IF NOT EXISTS `members_tbl` (
 ENGINE = InnoDB
 COMMENT = '사원 테이블';
 
-INSERT INTO `members_tbl` VALUES 
+INSERT INTO `members_tbl` 
+(`id`, `password`, `name`, `dept_code`, `name_commute`, `join_company`, `leave_company`, `privilege`, `admin`) 
+VALUES 
   ('001201','','이국원','0000','이국원','2000-12-15','','1',0),
   ('0120801','','석정훈','7100','석정훈','2012-08-07','','3',0),
   ('0130101','','조영재','5100','조영재','2013-01-01','','3',0),

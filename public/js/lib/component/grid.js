@@ -371,7 +371,7 @@ define([
      	    });
      	    
      	    //ROW click
-     	    _dataTable.find("tbody").on( 'click', 'tr', function () {
+     	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                 }
