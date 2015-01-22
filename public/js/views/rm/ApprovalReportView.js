@@ -90,7 +90,11 @@ define([
       var selGubun = $(this.el).find('#state');
       
       var arrGubunData = [];
-      arrGubunData.push({'code' : '결재완료', 'name' : '결재'});
+      if(this.options.state == '취소요청'){
+        arrGubunData.push({'code' : '취소완료', 'name' : '취소승인'});
+      }else{
+        arrGubunData.push({'code' : '결재완료', 'name' : '결재'});
+      }
       arrGubunData.push({'code' : '반려', 'name' : '반려'});
       arrGubunData.push({'code' : '보류', 'name' : '보류'});
       
@@ -204,7 +208,22 @@ define([
       	                // 휴일 근무
       	                _this.addInOfficeData();
       	              }
-      	            }else{
+      	            }else if(formData.state == '취소완료'){
+      	              var sendData = _this.getFormData($(_this.el).find('form'));
+                      sendData["doc_num"] = _this.options["doc_num"];
+                      sendData["_id"] = _this.options["doc_num"];
+      	              if(_this.options.office_code != 'B01'){
+          	           // _this.deleteOutOfficeData();
+          	           var outOfficeModel =new OutOfficeModel(sendData);
+                       outOfficeModel.destroy();
+                       _this.thisDfd.resolve();
+      	              }else{
+      	                // 휴일 근무
+      	               var inOfficeModel =new InOfficeModel(sendData);
+                       inOfficeModel.destroy();
+                       _this.thisDfd.resolve();
+      	              }
+    	              }else{
       	              _this.thisDfd.resolve();
       	            }
       	        },

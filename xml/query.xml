@@ -524,6 +524,9 @@
 					,? ,? ,?, ?, ?
 				)    		
     	</query>
+    	<query id="deleteOutOfficeList">
+    		delete from out_office_tbl where doc_num = ?;
+    	</query>
     </group>
     <group id="inOffice">
     	<query id="selectInOfficeList">
@@ -531,6 +534,9 @@
     	</query>
     	<query id="insertInOffice">
 			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
+    	</query>
+    	<query id="deleteInOfficeList">
+    		delete from in_office_tbl where doc_num = ?;
     	</query>
     </group>
     

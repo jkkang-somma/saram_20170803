@@ -24,10 +24,14 @@ var OutOffice = function (data) {
     var _addOutOffice = function () {
         return OutOfficeDao.insertOutOffice(_data);
     }
+    var _remove = function (doc_num) {
+        return OutOfficeDao.removeOutOffice(doc_num);
+    }
     return {
         get:_get,
         getOutOfficeList:_getOutOfficeList,
-        addOutOffice:_addOutOffice
+        addOutOffice:_addOutOffice,
+        remove : _remove
     }
 }
 

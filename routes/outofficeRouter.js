@@ -45,4 +45,22 @@ router.route('/')
     });
 });
 
+router.route('/:_id')
+.delete(function(req, res){
+    var _id=req.param("_id");
+    var outOffice = OutOffice({doc_num:_id});
+    // var user = new User({id:_id});
+    outOffice.remove(_id).then(function(){
+        debug("Complete Delete User.");
+        res.send({success:true, message:"Complete Delete User."});
+    }).catch(function(e){
+        debug("Error Delete User.");
+        res.status(500);
+        res.send({
+            success:false,
+            message: e.message,
+            error:e
+        });
+    });
+})
 module.exports = router;
