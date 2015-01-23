@@ -128,6 +128,7 @@ AddRawDataAddPopupView, ProgressbarView){
                                                         department : item[0],
                                                         time: Util.timeToString(resultDate),
                                                         date: Util.dateToString(resultDate),
+                                                        char_date : Util.timeToString(resultDate) + " " + Util.dateToString(resultDate),
                                                         year: resultDate.getFullYear(),
                                                         type: item[3]
                                                     }));
@@ -139,6 +140,7 @@ AddRawDataAddPopupView, ProgressbarView){
                                                             department : item[0],
                                                             time: Util.timeToString(resultDate),
                                                             date: Util.dateToString(resultDate),
+                                                            char_date : Util.timeToString(resultDate) + " " + Util.dateToString(resultDate),
                                                             year: resultDate.getFullYear(),
                                                             type: item[3]
                                                         })); 

@@ -5,9 +5,16 @@ var db = require('../lib/dbmanager.js');
 var RawDataDao = function () {
 }
 
-RawDataDao.prototype.insertRawData =  function (data) {
+RawDataDao.prototype.insertRawData =  function (connection, data) {
     var queryStr = db.getQuery('rawData', 'insertRawData');
-    return db.queryV2(queryStr, [data.id, data.name, data.department, data.date + " " + data.time, data.year, data.type, data.date + " " + data.time, data.type]);
+    return db.queryTransaction(
+        connection,
+        queryStr,
+        data,
+        [
+            "id", "name", "department", "char_date", "year", "type", "char_date", "type"
+        ]
+    );
 }
 
 // 툴퇴근 정보 등록 
