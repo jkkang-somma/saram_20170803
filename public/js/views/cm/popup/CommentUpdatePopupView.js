@@ -144,7 +144,6 @@ define([
 		saveCommute : function(data){
 			// 이틀치 Commute 데이터 가져옴
 			var dfd = new $.Deferred();
-			
 			var commuteCollection = new CommuteCollection();
 			commuteCollection.fetch({ 
      			data: {
@@ -270,7 +269,6 @@ define([
      			if (outChangeModel)
 					newData.changeHistoryCollection.add(outChangeModel);
      		}
-     		
      		
 			return newData;
 		},

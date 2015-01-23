@@ -24,9 +24,10 @@ CommuteDao.prototype.updateCommuteResultInOutTime =  function (data) {
     return db.queryV2(queryStr, [data.in_time, data.in_time_change, data.out_time, data.out_time_change, data.id, data.date]);
 }
 
-CommuteDao.prototype.insertCommute = function(data){
+CommuteDao.prototype.insertCommute = function(connection, data){
     var queryStr = db.getQuery('commute', 'insertCommuteResult');
     return db.queryTransaction(
+        connection,
         queryStr,
         data,
         [

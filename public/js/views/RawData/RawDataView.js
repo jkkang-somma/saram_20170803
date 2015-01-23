@@ -40,7 +40,6 @@ ProgressbarView){
             this.gridOption = {
     		    el:"rawDataContent",
     		    id:"rawDataTable",
-    		    //column:["사번", "이름", "부서", "출입시간", "출입기록"],
     		    column:[
    	                   	{ data : "name", 			"title" : "이름", 
  	                   		render: function(data, type, full, meta) {
@@ -62,7 +61,7 @@ ProgressbarView){
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search","refresh"]
+    		    buttons:["search"]
     		};
 
     	},

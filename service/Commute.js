@@ -18,7 +18,22 @@ var Commute = function() {
 	};
 	
 	var _insertCommute = function(data){
-		return CommuteDao.insertCommute(data);
+		return new Promise(function(resolve, reject){
+			db.getConnection().then(function(connection){
+				var inserCommuteResult = CommuteDao.insertCommute(connection, data);	
+				Promise.all([inserCommuteResult]).then(function(resultArr){
+					connection.commit(function(){
+						connection.release();
+						resolve();
+					});
+				},function(){
+					connection.rollback(function(){
+						connection.release();
+						reject();
+					})
+				});	
+			});
+		});
 	};
 	
 	var _updateCommute = function(data){
@@ -56,7 +71,6 @@ var Commute = function() {
 	return {
 		getCommute : _getCommute,
 		updateCommute : _updateCommute,
-		// updateChangeHistory : _updateChangeHistory,
 		insertCommute : _insertCommute,
 		getCommuteDate : _getCommuteDate,
 		getCommuteByID: _getCommuteByID,
