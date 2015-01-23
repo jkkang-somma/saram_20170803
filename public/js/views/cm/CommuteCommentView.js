@@ -53,7 +53,7 @@ define([
                         action: function(dialog) {
                         	commentUpdatePopupView.updateComment().done(function(result){
                         		Dialog.show("성공", function() {
-                    				that.selectComments();
+                        			that.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
                     				dialog.close();
                     			});                        		
                             }).fail(function(){

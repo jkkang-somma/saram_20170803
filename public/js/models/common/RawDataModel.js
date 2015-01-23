@@ -22,8 +22,8 @@ define([
             department : null,
             char_date: null,
             type: null,
-            ip_address: null,
-            mac_address: null,
+            ip_pc: null,
+            ip_office: null,
             need_confirm: 1 // 1: 정상 , 2: 확인 필요
         },
         

@@ -135,8 +135,8 @@ define([
 			var dfd = new $.Deferred();
 			var commentModel = new CommentModel();
 			commentModel.save(data,{
-				success : function(){
-					dfd.resolve();
+				success : function(result){
+					dfd.resolve(result);
 				}
 			});
 			return dfd.promise();
@@ -184,7 +184,7 @@ define([
                        return that.saveComment(inData);
                     },
                     actionCallBack:function(res){//response schema
-                        dfd.resolve();
+                        dfd.resolve(res);
                     },
 	            });
 			}else{
@@ -203,13 +203,14 @@ define([
 					action:function(){
 						var actionDfd = new $.Deferred();
 						that.saveComment(inData).done(
-                    		function(){
+                    		function(result){
+                    			var commentResult = result;
                     			that.saveCommute(inData).done(function(result){
-                    				actionDfd.resolve();
+                    				actionDfd.resolve(commentResult);
 								});
                     		}
                     	);
-        	            return actionDfd;
+        	            return actionDfd.promise();
                     },
                     actionCallBack:function(res){//response schema
                         Dialog.info("데이터 전송이 완료되었습니다.");
@@ -227,6 +228,7 @@ define([
      			id: this.selectData.id,
      			year: this.selectData.year,
      			date: this.selectData.date,
+     			seq: this.selectData.seq,
      			comment_reply: $(this.el).find("#commentUpdatePopupReply").val(),
      			state: $(this.el).find("#commentUpdatePopupState").val(),
      			changeInTime: null,
