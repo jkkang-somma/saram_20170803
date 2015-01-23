@@ -14,7 +14,8 @@ define([
   'views/LoadingView',
   'views/LoginView',
   'views/NavigationView', 
-  'moment', 'bootstrap-datetimepicker',
+  'cmoment', 
+  'bootstrap-datetimepicker',
   'css!tool/bootstrap-select/css/bootstrap-select.css',
 ], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
@@ -49,6 +50,8 @@ define([
                     });
                 } else if (xhr.status == 404){
                     Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
+                } else if (xhr.status == 503 ){
+                    Dialog.error(i18Common.ERROR.HTTP.SERVER_DIE);
                 }
                     
             });

@@ -11,7 +11,7 @@ define([
     'grid',
     'dialog',
     'datatables',
-    'moment',
+    'cmoment',
     'resulttimefactory',
     'core/BaseView',
     'models/sm/SessionModel',

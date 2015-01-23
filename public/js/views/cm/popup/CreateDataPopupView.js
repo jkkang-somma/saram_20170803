@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
 	'util',
-	'moment',
+	'cmoment',
 	'text!templates/default/datepicker.html',
 	'views/component/ProgressbarView'
 ], function(
@@ -13,10 +13,7 @@ define([
 ) {
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(data) {
-			console.log("init "+data);
-			
 			this.date = data.date;
-			console.log("init "+this.date);
 		},
 		render : function(el) {
 			var dfd= new $.Deferred();
