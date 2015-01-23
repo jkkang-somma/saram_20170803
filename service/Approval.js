@@ -18,8 +18,8 @@ var Approval = function (data) {
             return _.noop;
         }
     }
-    var _getApprovalList = function () {
-        return ApprovalDao.selectApprovalList();
+    var _getApprovalList = function (doc_num) {
+        return ApprovalDao.selectApprovalList(doc_num);
     }
     var _getApprovalListWhere = function (startDate, endDate, managerId) {
         if(managerId != undefined && managerId != ""){

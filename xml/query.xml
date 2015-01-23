@@ -159,6 +159,8 @@
         		, state, start_time, end_time
     		from 
     			approval_tbl app
+			where
+				doc_num = ?
 		</query>
         <query id="selectApprovalListWhere">
         	select 
