@@ -278,11 +278,21 @@ define([
                           label: "취소 요청",
                           cssClass: Dialog.CssClass.SUCCESS,
                           action: function(dialogRef){// 버튼 클릭 이벤트
-                               _detailReportView.onClickBtnAppCancel().done(function(model){
-                                    Dialog.show("Completed Approval Cancel.");
-                                    _this.onClickClearBtn();
-                                    dialogRef.close();
-                                });
+                          
+                              var dd = Dialog.confirm({
+                                  msg:"Do you want to cancel approval?", 
+                                  action:function(){
+                                      _detailReportView.onClickBtnAppCancel().done(function(model){
+                                          Dialog.show("Completed Approval Cancel.");
+                                          // _grid.removeRow(selectData);
+                                          // _this.onClickClearBtn();
+                                          dialogRef.close();
+                                       });
+                                      // this.action.caller.arguments[0].close();
+                                  }
+                              });
+                          
+                              
                           }
                       });
                  		 }

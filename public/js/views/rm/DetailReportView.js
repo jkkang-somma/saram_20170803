@@ -189,6 +189,7 @@ define([
     onClickBtnAppCancel : function(){
   	  this.thisDfd = new $.Deferred();
   	  var _this = this;
+  	  
       var formData = this.options;
       
       console.log(formData);
