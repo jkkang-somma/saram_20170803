@@ -227,6 +227,7 @@ define([
      			id: this.selectData.id,
      			year: this.selectData.year,
      			date: this.selectData.date,
+     			seq: this.selectData.seq,
      			comment_reply: $(this.el).find("#commentUpdatePopupReply").val(),
      			state: $(this.el).find("#commentUpdatePopupState").val(),
      			changeInTime: null,

@@ -52,7 +52,7 @@
         </query>
         <query id="insertRawDataCompanyAccess">
   			INSERT INTO commute_base_tbl 
-  				( year, id, name, department, char_date, type, ip_address, mac_address, need_confirm)
+  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm)
   			VALUES
   				(year(now()), ? , ?, ?, now(), ?, ?, ?, ?)
         </query>

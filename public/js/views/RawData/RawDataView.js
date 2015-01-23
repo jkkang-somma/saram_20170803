@@ -49,8 +49,8 @@ ProgressbarView){
  	                   	{ data : "department", 		"title" : "부서" },
  	                   	{ data : "char_date", 		"title" : "출입시간" },
  	                   	{ data : "type", 			"title" : "출입기록" },
- 	                   	{ data : "ip_address", 		"title" : "IP" },
- 	                   	{ data : "mac_address", 	"title" : "MAC" },
+ 	                   	{ data : "ip_pc", 			"title" : "사용자 IP" },
+ 	                   	{ data : "ip_office", 		"title" : "사무실 IP" },
  	                   	{ data : "need_confirm", 	"title" : "확인필요",
  	                   		render: function(data, type, full, meta) { 	                   			
  	                   			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
