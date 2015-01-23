@@ -50,6 +50,8 @@ define([
                     });
                 } else if (xhr.status == 404){
                     Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
+                } else if (xhr.status == 503 ){
+                    Dialog.error(i18Common.ERROR.HTTP.SERVER_DIE);
                 }
                     
             });

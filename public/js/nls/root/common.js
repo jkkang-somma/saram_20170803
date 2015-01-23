@@ -86,7 +86,8 @@ define({
             EXPIRE_AUTH:"Session has expired."
         },
         HTTP:{
-            NOT_FIND_PAGE:"Not find page."
+            NOT_FIND_PAGE:"Not find page.",
+            SERVER_DIE:"Service Down. Manager call."
         },
         USER_EDIT_VIEW:{
             FAIL_RENDER:"Fail Load User Data.",

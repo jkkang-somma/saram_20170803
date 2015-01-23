@@ -84,7 +84,8 @@ define({
             EXPIRE_AUTH:"세션이 만료 되었습니다."
         },
         HTTP:{
-            NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다."
+            NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다.",
+            SERVER_DIE:"서비스가 다운 되었습니다. 관리자에게 문의해주세요."
         },
         USER_EDIT_VIEW:{
             FAIL_RENDER:"사용자 정보를 받아오지 못하였습니다.",
