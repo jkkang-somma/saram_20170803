@@ -9,6 +9,7 @@ define([
   'dialog',
   'csvParser',
   'cmoment',
+  'data/code',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
@@ -16,14 +17,15 @@ define([
   'text!templates/default/datepickerRange.html',
   'text!templates/default/rowbuttoncontainer.html',
   'text!templates/default/rowbutton.html',
+  'models/sm/SessionModel',
   'models/common/RawDataModel',
   'collection/common/RawDataCollection',
   'models/sm/UserModel',
   'collection/sm/UserCollection',
   'views/component/ProgressbarView',
-], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment,
+], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment, Code,
 HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-RawDataModel, RawDataCollection,UserModel, UserCollection,
+SessionModel, RawDataModel, RawDataCollection,UserModel, UserCollection,
 ProgressbarView){
     var RawDataView = BaseView.extend({
         el:$(".main-container"),
@@ -48,14 +50,7 @@ ProgressbarView){
  	                   	},
  	                   	{ data : "department", 		"title" : "부서" },
  	                   	{ data : "char_date", 		"title" : "출입시간" },
- 	                   	{ data : "type", 			"title" : "출입기록" },
- 	                   	{ data : "ip_pc", 			"title" : "사용자 IP" },
- 	                   	{ data : "ip_office", 		"title" : "사무실 IP" },
- 	                   	{ data : "need_confirm", 	"title" : "확인필요",
- 	                   		render: function(data, type, full, meta) { 	                   			
- 	                   			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
- 	                   		}
- 	                   	}
+ 	                   	{ data : "type", 			"title" : "출입기록" }
     		    ],
     		    dataschema:["id", "name", "department", "char_date", "type"],
     		    collection:this.rawDataCollection,
@@ -63,6 +58,18 @@ ProgressbarView){
     		    fetch: false,
     		    buttons:["search"]
     		};
+            
+            // 수원 사업자의 경우 컬럼을 추가 
+            var dept_code = SessionModel.getUserInfo().dept_code;
+            if ( Code.isSuwonWorker(dept_code) ) {
+            	this.gridOption.column.push( { data : "ip_pc", 			"title" : "사용자 IP" } );
+            	this.gridOption.column.push( { data : "ip_office", 		"title" : "사무실 IP" } );
+            	this.gridOption.column.push( { data : "need_confirm", 	"title" : "확인필요",
+            		render: function(data, type, full, meta) {
+               			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
+               		}
+               	});
+            }
 
     	},
         events : {

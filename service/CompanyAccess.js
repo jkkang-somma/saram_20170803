@@ -14,16 +14,11 @@ var CompanyAccess = function() {
 		var need_confirm = 0; // 1: 정상 , 2: 확인 필요
 		
 		var hasIp = false;
-		if (user.ip_addr_1 == data.ip_address || user.ip_addr_2 == data.ip_address) {
+		if (user.ip_pc == data.ip_pc && user.ip_office == data.ip_office) {
 			hasIp = true;
 		}
-		
-		var hasMac = false;
-		if (user.mac_addr_1 == data.mac_address || user.mac_addr_2 == data.mac_address) {
-			hasMac = true;
-		}
-		
-		need_confirm = (hasIp && hasMac)? 1 : 2;
+				
+		need_confirm = (hasIp)? 1 : 2;
 		
 		var insertData = {
 				id : user.id,

@@ -69,6 +69,14 @@ DepartmentCodeCollection, OfficeCodeCollection, OvertimeCodeCollection, WorkType
                 return null;
             }
             return destCollection.toJSON();
+        },
+        isSuwonWorker : function(code) {	// 수원 근로자 여부 체크
+        	var obj = this.departmentCollection.where({code: code});
+        	if (obj.length > 0) {
+        		return (obj[0].get("area") == "수원")?true:false;
+        	} else {
+        		return false;
+        	}
         }
     }
 	return Code;
