@@ -5,12 +5,13 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
+  'comboBox',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'models/vacation/InOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -103,7 +104,8 @@ define([
         var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
         selGubun.append(optionHtml);
       }
-    
+      
+      ComboBox.createCombo(selGubun);
     },
     
     setDataDefaultValues : function(param){

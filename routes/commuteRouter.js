@@ -5,7 +5,6 @@ var router = express.Router();
 var Commute = require('../service/Commute.js');
 var Promise = require('bluebird');
 var sessionManager = require('../lib/sessionManager');
-
 router.route('/')
 .get(function(req, res){
 	debug(req.query);

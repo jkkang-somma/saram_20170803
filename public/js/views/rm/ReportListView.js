@@ -226,6 +226,7 @@ define([
              		  if(selectData.state == "상신" || selectData.state == "취소요청"){
              		 //if(true){
                    		 if(selectData.manager_id == sessionInfo.id){
+                   		 //if(true){
                      		  var _approvalReportView = new ApprovalReportView();
                          		 // data param 전달
                          		 _approvalReportView.options = selectData;
@@ -239,7 +240,6 @@ define([
                                       action: function(dialogRef){// 버튼 클릭 이벤트
                                          _approvalReportView.onClickBtnSend(dialogRef).done(function(model){
                                             Dialog.show("Success Approval Confirm.");
-                                              // _this.onClickClearBtn();
                                               _this.grid.updateRow(model);
                                               dialogRef.close();
                                           });

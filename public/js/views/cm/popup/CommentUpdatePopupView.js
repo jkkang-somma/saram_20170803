@@ -214,7 +214,7 @@ define([
                     },
                     actionCallBack:function(res){//response schema
                         Dialog.info("데이터 전송이 완료되었습니다.");
-						dfd.resolve();	
+						dfd.resolve(res);	
                     },
                     errorCallBack:function(){
                         Dialog.error("데이터 전송 실패!");

@@ -52,10 +52,8 @@ define([
                         label: '수정',
                         action: function(dialog) {
                         	commentUpdatePopupView.updateComment().done(function(result){
-                        		Dialog.show("성공", function() {
-                        			that.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
-                    				dialog.close();
-                    			});                        		
+                    			that.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                				dialog.close();
                             }).fail(function(){
                             	Dialog.show("업데이트가 실패했습니다.");
                             });
