@@ -263,36 +263,25 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	        click:function(){
     	            Dialog.confirm({
     					msg : "근태 데이터를 서버에 저장하시겠습니까?",
-    	                buttons : [{
-    	                    label: "확인",
-    	                    cssClass: Dialog.CssClass.PRIMARY,
-    	                    action: function(dialogRef){
-    	                        var dialogProgressbar = new ProgressbarView();
-    	                    	dialogRef.getModalBody().html("<div>전송중</div>");
-    	                    	dialogRef.getModalBody().append(dialogProgressbar.render());
-    	                    	dialogRef.enableButtons(false);
-    	                    	dialogRef.setClosable(false);
-    	                    	dialogProgressbar.disabledProgressbar(false);
-                	       
-                	            that.commuteCollection.save({
-                	                success:function(){
-                	                    dialogRef.close();
-                	                    that._setLabel();
-                	                    Dialog.info("데이터 전송이 완료되었습니다.");
-                	                },
-                	                error: function(model, response){
-                	                    
-                	                    dialogRef.close();
-                	                    Dialog.error("데이터 전송 실패! \n ("+ response.responseJSON.message +")");
-                	                }
-                	            });
-    	                    }
-    	                },{
-    	                    label: "취소",
-    	                    action: function(dialogRef){
-    	                    	dialogRef.close();
-    	                    }
-    	                }]
+    					action:function(){
+                            var dfd = new $.Deferred();
+                            that.commuteCollection.save({
+            	                success:function(){
+            	                    dfd.resolve();
+            	                },
+            	                error: function(model, response){
+            	                    dfd.reject();
+            	                }
+            	            });
+            	            return dfd;
+                        },
+                        actionCallBack:function(res){//response schema
+    	                    that._setLabel();
+    	                    Dialog.info("데이터 전송이 완료되었습니다.");
+                        },
+                        errorCallBack:function(response){
+    	                    Dialog.error("데이터 전송 실패! \n ("+ response.responseJSON.message +")");
+                        },
     	            });
     	        }
     	    });  

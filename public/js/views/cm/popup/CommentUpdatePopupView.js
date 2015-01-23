@@ -180,23 +180,12 @@ define([
 			if(inData.changeHistoryCollection.length == 0){
 				Dialog.confirm({
 					msg : "출/퇴근 시간이 수정되지 않았습니다. 진행하시겠습니까?",
-	                buttons : [{
-	                    label: "확인",
-	                    cssClass: Dialog.CssClass.PRIMARY,
-	                    action: function(dialogRef){// 버튼 클릭 이벤트
-	                    	that.saveComment(inData).done(
-								function(){
-									dfd.resolve();
-									dialogRef.close();
-								}
-							);
-	                    }
-	                },{
-	                    label: "취소",
-	                    action: function(dialogRef){// 버튼 클릭 이벤트
-	                    	dialogRef.close();
-	                    }
-	                }]
+                    action:function(){
+                       return that.saveComment(inData);
+                    },
+                    actionCallBack:function(res){//response schema
+                        dfd.resolve();
+                    },
 	            });
 			}else{
 				var message = "";
@@ -211,25 +200,24 @@ define([
 				message = message + "\n수정내용이 정확합니까?";
 				Dialog.confirm({
 					msg : message,
-	                buttons : [{
-	                    label: "확인",
-	                    cssClass: Dialog.CssClass.PRIMARY,
-	                    action: function(dialogRef){// 버튼 클릭 이벤트
-	                    	that.saveComment(inData).done(
-	                    		function(){
-	                    			that.saveCommute(inData).done(function(result){
-										dfd.resolve();	
-										dialogRef.close();
-									});
-	                    		}
-	                    	);
-	                    }
-	                },{
-	                    label: "취소",
-	                    action: function(dialogRef){// 버튼 클릭 이벤트
-	                    	dialogRef.close();
-	                    }
-	                }]
+					action:function(){
+						var actionDfd = new $.Deferred();
+						that.saveComment(inData).done(
+                    		function(){
+                    			that.saveCommute(inData).done(function(result){
+                    				actionDfd.resolve();
+								});
+                    		}
+                    	);
+        	            return actionDfd;
+                    },
+                    actionCallBack:function(res){//response schema
+                        Dialog.info("데이터 전송이 완료되었습니다.");
+						dfd.resolve();	
+                    },
+                    errorCallBack:function(){
+                        Dialog.error("데이터 전송 실패!");
+                    },
 	            });
 			}
 			return dfd.promise();
