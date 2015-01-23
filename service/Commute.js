@@ -4,8 +4,10 @@
 var _ = require("underscore"); 
 var debug = require('debug')('Commute');
 var Schemas = require("../schemas.js");
+var Promise = require('bluebird');
 var CommuteDao = require('../dao/commuteDao.js');
 var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
+var db = require('../lib/dbmanager.js');
 
 var Commute = function() {	
 
@@ -15,38 +17,28 @@ var Commute = function() {
 		});
 	};
 	
-	var _updateCommute = function(inData, callback) {
-		// in, out time 변경 횟수 조회 
-		var inTimeChangeData = null;
-		var outTimeChangeData = null;
-		
-		for (var i = 0, len = inData.changeHistoryJSONArr.length; i < len; i++) {
-			if (inData.changeHistoryJSONArr[i].change_column == "in_time") {
-				inTimeChangeData = inData.changeHistoryJSONArr[i];
-			} else {
-				outTimeChangeData = inData.changeHistoryJSONArr[i];
-			}
-		}
-		
-		if (inTimeChangeData && outTimeChangeData === null) {	// in_time 변경 이력 등록
-			ChangeHistoryDao.inserChangeHistory(inTimeChangeData).then(function(result) {
-				return callback(result);	
-			});					
-		} else if (inTimeChangeData === null && outTimeChangeData) {		// out_time 변경 이력 등록
-			ChangeHistoryDao.inserChangeHistory(outTimeChangeData).then(function(result) {
-				return callback(result);	
-			});
-		} else {	// in, out 변경 이력 등록
-			ChangeHistoryDao.inserChangeHistory(inTimeChangeData).then(function(result) {
-				ChangeHistoryDao.inserChangeHistory(outTimeChangeData).then(function(result) {
-					return callback(result);	
-				});
-			});
-		}
-	};
-	
 	var _insertCommute = function(data){
 		return CommuteDao.insertCommute(data);
+	};
+	
+	var _updateCommute = function(data){
+		return new Promise(function(resolve, reject){
+			db.getConnection().then(function(connection){
+				var updateCommuteResult = CommuteDao.updateCommute_t(connection, data.data);
+				var changeHistoryResult = ChangeHistoryDao.inserChangeHistory(connection, data.changeHistory);	
+				Promise.all([updateCommuteResult, changeHistoryResult]).then(function(resultArr){
+					connection.commit(function(){
+						connection.release();
+						resolve();
+					});
+				},function(){
+					connection.rollback(function(){
+						connection.release();
+						reject();
+					})
+				});	
+			});
+		});
 	};
 	
 	var _getCommuteDate = function(date){
@@ -64,6 +56,7 @@ var Commute = function() {
 	return {
 		getCommute : _getCommute,
 		updateCommute : _updateCommute,
+		// updateChangeHistory : _updateChangeHistory,
 		insertCommute : _insertCommute,
 		getCommuteDate : _getCommuteDate,
 		getCommuteByID: _getCommuteByID,

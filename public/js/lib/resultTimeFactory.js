@@ -339,8 +339,9 @@ define([
         /***************************************************
         // destCollection (length = 2, today, yesterday)
         // inData{ changeInTime, changeOutTime }
+        // return resultCommuteCollection(today,yesterday);
         ****************************************************/
-        modifyByCollection: function(destCommuteCollection, inData){
+        modifyByCollection: function(destCommuteCollection, inData, changeHistoryCollection){
             var dfd = new $.Deferred();
             var resultCommuteCollection = new CommuteCollection();
 		 			
@@ -359,13 +360,14 @@ define([
  			}
  			
  			var currentResult = this.getResult();
-
+            
  			var nextDayCommute = destCommuteCollection.models[1];		
  			this.initByModel(nextDayCommute);
  			
  			if(currentResult.out_time)
             	this.setStandardInTime(Moment(currentResult.out_time));
             var yesterdayResult = this.getResult();
+            
 			resultCommuteCollection.add(currentResult);
 			resultCommuteCollection.add(yesterdayResult);
 			resultCommuteCollection.save({
@@ -374,7 +376,7 @@ define([
 			    }, error: function(){
 			        dfd.reject();
 			    }
-			});
+			}, currentResult.id, changeHistoryCollection);
 			return dfd.promise();
         },
     };

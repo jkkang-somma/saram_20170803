@@ -187,6 +187,15 @@ define([
       return indexed_array;
   	},
   	
+  	getChangeFormData : function(sendData){
+        var arrData = this.options;
+        arrData["decide_comment"] = sendData["decide_comment"];
+        arrData["state"] = sendData["state"];
+        arrData["black_mark"] = sendData["black_mark"];
+        arrData["decide_date"] = new Date();
+        return arrData;
+    },
+  	
   	onClickBtnSend : function(evt){
   	  this.thisDfd = new $.Deferred();
   	  var _this = this;
@@ -216,15 +225,15 @@ define([
           	           // _this.deleteOutOfficeData();
           	           var outOfficeModel =new OutOfficeModel(sendData);
                        outOfficeModel.destroy();
-                       _this.thisDfd.resolve();
+                       _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	              }else{
       	                // 휴일 근무
       	               var inOfficeModel =new InOfficeModel(sendData);
                        inOfficeModel.destroy();
-                       _this.thisDfd.resolve();
+                       _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	              }
     	              }else{
-      	              _this.thisDfd.resolve();
+      	              _this.thisDfd.resolve(_this.getChangeFormData(formData));
       	            }
       	        },
       	        error:function(model, xhr, options){
@@ -256,7 +265,7 @@ define([
       var _outOfficeModel = new OutOfficeModel(sendData);
       _outOfficeModel.save({},{
       	        success:function(model, xhr, options){
-      	          _this.thisDfd.resolve();
+      	          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	        },
       	        error:function(model, xhr, options){
       	            var respons=xhr.responseJSON;
@@ -283,7 +292,7 @@ define([
       var _inOfficeModel = new InOfficeModel(sendData);
       _inOfficeModel.save({},{
       	        success:function(model, xhr, options){
-      	          _this.thisDfd.resolve();
+      	          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	        },
       	        error:function(model, xhr, options){
       	            var respons=xhr.responseJSON;

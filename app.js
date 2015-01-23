@@ -135,6 +135,8 @@ app.use(function(req, res, next) {//위에 라우터에까지 안걸리면 404 �
 
 app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따로 에러 처리 안되고 쓰로우 되면 여기 탐.
     debug("Not Catch Error");
+    debug(err);
+    console.log("Error : " + err.message);
     res.status(err.status || 500);
     res.send({
         message: err.message,

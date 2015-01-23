@@ -6,16 +6,22 @@ var sessionManager = require('../lib/sessionManager');
 
 router.route('/')
 .get(function(req, res){
-	
+
 	var query = req.query;
 	if (query["id"] != undefined && query["id"] != "") {
-		Comment.getCommentById(query, function(result) {
+		Comment.getCommentById(query).then(function(result) {
 			return res.send(result);
+		}).catch(function(err) {
+			next(err);
 		});
+		
 	} else {
-		Comment.getComment(query, function(result) {
+		Comment.getComment(query).then(function(result) {
 			return res.send(result);
+		}).catch(function(err) {
+			next(err);
 		});
+		
 	}
 }).post(function(req, res) {
 	
@@ -23,9 +29,11 @@ router.route('/')
 	var data = req.body;
 	data.writer_id = session.user.id;	// 코멘트 작성자 ID
 	
-	Comment.insertComment(data, function(result) {
+	Comment.insertComment(data).then(function(result) {
 		return res.send(result);
-	});	
+	}).catch(function(err) {
+		next(err);
+	});
 });
 
 
@@ -39,13 +47,15 @@ router.route('/:id')
 	data.reply_id = session.user.id;	// 코멘트 작성자 ID	
 	
 	if (session.user.admin == 1) {
-		Comment.updateCommentReply(data, function(result) {
+		Comment.updateCommentReply(data).then(function(result) {
 			return res.send(result);
+		}).catch(function(err) {
+			next(err);
 		});
+		
 	} else {
 		return res.send({"error": "관리자 등급만  가능합니다."});
 	}
-	
 
 })
 

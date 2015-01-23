@@ -19,7 +19,6 @@ router.route("/")
 	CompanyAccess.setAccess(inData, user).then(function(result) {
 		return res.send(result);
 	}).catch(function(err) {
-		console.log(err.message);
 		next(err);
 	});
 });
