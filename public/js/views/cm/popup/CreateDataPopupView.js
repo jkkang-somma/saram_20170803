@@ -3,16 +3,20 @@ define([
 	'underscore',
 	'backbone',
 	'util',
+	'moment',
 	'text!templates/default/datepicker.html',
 	'views/component/ProgressbarView'
 ], function(
-	$, _, Backbone, Util,
+	$, _, Backbone, Util, Moment,
 	DatePickerHTML,
 	ProgressbarView
 ) {
 	var ChangeHistoryPopupView = Backbone.View.extend({
-		initialize : function() {
-
+		initialize : function(data) {
+			console.log("init "+data);
+			
+			this.date = data.date;
+			console.log("init "+this.date);
 		},
 		render : function(el) {
 			var dfd= new $.Deferred();
@@ -52,7 +56,8 @@ define([
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD"
+		        format: "YYYY-MM-DD",
+		        
             });
             
             $(this.el).find("#cdEndDatePicker").datetimepicker({
@@ -62,8 +67,13 @@ define([
 		        format: "YYYY-MM-DD"
             });
             
-            dfd.resolve();
+            $(this.el).find("#cdStartDatePicker input").attr("disabled","true");
+            
+            dfd.resolve(this);
             return dfd.promise();
+		},
+		afterRender : function(){
+			this.setDate();	
 		},
 		disabledProgressbar : function(flag){
 			this.progressbar.disabledProgressbar(flag);
@@ -73,6 +83,14 @@ define([
 		},
 		getStartDate : function(){
 			return $(this.el).find("#cdStartDatePicker").data("DateTimePicker").getDate();
+		},
+		setDate : function(){
+			if(_.isNull(this.date)){
+				$(this.el).find("#cdStartDatePicker").data("DateTimePicker").setDate("2015-01-01");
+			}else{
+				$(this.el).find("#cdStartDatePicker").data("DateTimePicker").setDate(Moment(this.date).add(1,'days'));
+			}
+			
 		},
 		getEndDate : function(){
 			return $(this.el).find("#cdEndDatePicker").data("DateTimePicker").getDate();

@@ -116,21 +116,22 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	        type:"custom",
     	        name:"add",
     	        click:function(){
-                    var createDataPopupView= new CreateDataPopupView();
+    	            console.log("CreateDataView "+that.lastestDate);
+                    var createDataPopupView= new CreateDataPopupView({date : that.lastestDate});
+                    
                     Dialog.show({
-                        title:"근태 데이터 관리", 
+                        title:"근태 데이터 생성", 
                         content:createDataPopupView, 
                         buttons: [{
                             id: 'createDataCreateBtn',
                             cssClass: Dialog.CssClass.SUCCESS,
                             label: '데이터 생성',
                             action: function(dialog) {
-                                that._createData(createDataPopupView); // 데이터 생성
-                                
-                                dialog.close();
-                                this.grid.render();
-                                
-                                Dialog.show("데이터 생성 완료!");
+                                that._createData(createDataPopupView).done(function(){ // 데이터 생성
+                                    dialog.close();
+                                    that.grid.render();
+                                    Dialog.show("데이터 생성 완료!");    
+                                });
                             }
                         }, {
                             label : "취소",
@@ -139,23 +140,24 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             }
                         }],
                     });
-                        
                 }
-                
     	    });
     	},
     	_createData : function(view){
+    	    var dfd = new $.Deferred();
+    	    var that = this;
     	    var startDate = view.getStartDate();
             var endDate = view.getEndDate();
             var yesterday = Moment(startDate).subtract(1, 'days');
             
-            view.disabledProgressbar(false); // display progressbar 
+            
             
             if(startDate.isAfter(endDate)){
                 Dialog.error("시작일이 종료일보다 큽니다.");
                 return;
             }else{
                 this.commuteCollection.reset();    
+                view.disabledProgressbar(false); // display progressbar 
             }
             
             var selectedDate = {
@@ -238,7 +240,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             
                             // 결과 저장
                             var result = resultTimeFactory.getResult();
-                            this.commuteCollection.add(result);
+                            that.commuteCollection.add(result);
                             
                             // 다음날 계산을 위해 결과를 yesterdayAttribute에 저장
                             yesterdayAttribute = result;
@@ -249,7 +251,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     
                     view.setProgressbarPercent( (idx+1) / userCollection.models.length * 100 );
                 });
+                dfd.resolve();
             });  
+            return dfd.promise();
     	},
     	_addCommitBtn : function(){
     	    var that = this;
@@ -273,11 +277,13 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                 	            that.commuteCollection.save({
                 	                success:function(){
                 	                    dialogRef.close();
+                	                    that._setLabel();
                 	                    Dialog.info("데이터 전송이 완료되었습니다.");
                 	                },
-                	                error: function(){
+                	                error: function(model, response){
+                	                    
                 	                    dialogRef.close();
-                	                    Dialog.error("데이터 전송 실패!");
+                	                    Dialog.error("데이터 전송 실패! \n ("+ response.responseJSON.message +")");
                 	                }
                 	            });
     	                    }
@@ -296,13 +302,12 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 생성"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
     	    
     	    var _row=$(ForminlineHTML);
     	    var _label = $(_.template(LabelHTML)({label : ""}));
@@ -311,9 +316,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    _layout.append(_head);
     	    _layout.append(_row);
             _layout.append(_content);
-            _layout.append(_progressBar);
             
     	    $(this.el).append(_layout);
+    	    this.lastestDate = null;
             this._setLabel();
             
     	    var _gridSchema=Schemas.getSchema('grid');
@@ -331,11 +336,11 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	            }else{
     	                that.label.parent().css("display","block");
     	                that.label.text("Lastest data : " + data["0"].date);
+    	                that.lastestDate = data["0"].date;
     	            }
-    	            
     	        }
     	    );
-     	}
+     	},
     });
     
     return CreateDataView;

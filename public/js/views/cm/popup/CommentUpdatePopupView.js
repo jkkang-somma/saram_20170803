@@ -19,13 +19,14 @@ define([
     'models/cm/CommuteModel',
     'models/cm/ChangeHistoryModel',
     'collection/cm/CommuteCollection',
+    'collection/cm/ChangeHistoryCollection',
     'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/default/datepickerChange.html',
 	'text!templates/inputForm/combobox.html',
 ], function(
 	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory, BaseView, 
-	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection,
+	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML, ComboboxHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
@@ -41,90 +42,76 @@ define([
 			
 			if (!_.isUndefined(el)) this.el=el;
             var that = this;
-            var currentCommuteModel = new CommuteModel();
-            currentCommuteModel.fetch({
-            	data : {
-            		startDate : this.selectData.date,
-            		endDate : this.selectData.date,
-            		id : this.selectData.id	
-            	}, success : function(result){
-            		that.preData = {
-            			inTime : result.attributes[0].in_time,
-            			outTime : result.attributes[0].out_time,
-            		};
-            		
-            		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
-					$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name + " ("+that.selectData.id+")"}));
-					$(that.el).append(_.template(DatePickerChangeHTML)(
-						{
-							id: "commentUpdatePopupInTime", 
-							label : "출근시간",
-							beforeTime:  that.preData.inTime,
-							checkId : "commentUpdatePopupInTimeCheck",
-						}
-					));
-					
-					$(that.el).append(_.template(DatePickerChangeHTML)(
-						{
-							id: "commentUpdatePopupOutTime", 
-							label : "퇴근시간",
-							beforeTime:  that.preData.outTime,
-							checkId : "commentUpdatePopupOutTimeCheck",
-						}
-					));
-					$(that.el).append(_.template(TextAreaHTML)({id: "commentUpdatePopupComment", label : "접수내용"}));
-					$(that.el).append(_.template(TextAreaHTML)({id: "commentUpdatePopupReply", label : "처리내용"}));
-					
-				   	$(that.el).append(_.template(ComboboxHTML)({id: "commentUpdatePopupState", label: "상태"}));
-				   	
-				   	var _stateCombo = $(that.el).find("#commentUpdatePopupState");
-				   	_stateCombo.append($("<option>접수중</option>"));
-				   	_stateCombo.append($("<option>처리중</option>"));
-				   	_stateCombo.append($("<option>처리완료</option>"));
-				   	_stateCombo.val(that.selectData.state);
-				   	
-					$(that.el).find("#commentUpdatePopupInTime").datetimepicker({
-		            	pickTime: true,
-				        language: "ko",
-				        todayHighlight: true,
-				        format: "YYYY-MM-DD HH:mm:SS",
-				        defaultDate: Moment(that.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
-		            });
-		            
-					$(that.el).find("#commentUpdatePopupOutTime").datetimepicker({
-		            	pickTime: true,
-				        language: "ko",
-				        todayHighlight: true,
-				        format: "YYYY-MM-DD HH:mm:SS",
-				        defaultDate: Moment(that.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
-		            });
-		
-					$(that.el).find("#commentUpdatePopupDate").attr("disabled", "true");
-					$(that.el).find("#commentUpdatePopupName").attr("disabled", "true");
-					$(that.el).find("#commentUpdatePopupComment").val(that.selectData.comment);
-					$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
-					
-					// 일반 사용자는 단순 읽기만 가능
-					if (SessionModel.get("user").admin == 0) {
-						$(that.el).find("#commentUpdatePopupInTime input").attr("disabled","true");
-						$(that.el).find("#commentUpdatePopupOutTime input").attr("disabled","true");
-						$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
-						$(that.el).find("#commentUpdatePopupReply").attr("disabled", "true");
-						$(that.el).find("#commentUpdatePopupState").prop("disabled", true);
-						$(that.el).find("[type='checkbox']").css("display","none");
-					}else{
-						 $(that.el).find("[type='checkbox']").click(function(){
-						 	that.setDatapickerDisable();
-						 });
-					}
-					that.setDatapickerDisable();
-            		dfd.resolve();
-            		
-            	}, error : function(){
-            		Dialog.error("근태 데이터 조회 실패");
-            		dfd.reject();
-            	}
+
+    		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
+			$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name + " ("+that.selectData.id+")"}));
+			$(that.el).append(_.template(DatePickerChangeHTML)(
+				{
+					id: "commentUpdatePopupInTime", 
+					label : "출근시간",
+					beforeTime:  this.selectData.before_in_time,
+					checkId : "commentUpdatePopupInTimeCheck",
+				}
+			));
+			
+			$(that.el).append(_.template(DatePickerChangeHTML)(
+				{
+					id: "commentUpdatePopupOutTime", 
+					label : "퇴근시간",
+					beforeTime:  this.selectData.before_out_time,
+					checkId : "commentUpdatePopupOutTimeCheck",
+				}
+			));
+			$(that.el).append(_.template(TextAreaHTML)({id: "commentUpdatePopupComment", label : "접수내용"}));
+			$(that.el).append(_.template(TextAreaHTML)({id: "commentUpdatePopupReply", label : "처리내용"}));
+			
+		   	$(that.el).append(_.template(ComboboxHTML)({id: "commentUpdatePopupState", label: "상태"}));
+		   	
+		   	var _stateCombo = $(that.el).find("#commentUpdatePopupState");
+		   	_stateCombo.append($("<option>접수중</option>"));
+		   	_stateCombo.append($("<option>처리중</option>"));
+		   	_stateCombo.append($("<option>처리완료</option>"));
+		   	_stateCombo.val(that.selectData.state);
+		   	
+			$(that.el).find("#commentUpdatePopupInTime").datetimepicker({
+            	pickTime: true,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD HH:mm:SS",
+		        defaultDate: Moment(that.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
             });
+            
+			$(that.el).find("#commentUpdatePopupOutTime").datetimepicker({
+            	pickTime: true,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD HH:mm:SS",
+		        defaultDate: Moment(that.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
+            });
+
+			$(that.el).find("#commentUpdatePopupDate").attr("disabled", "true");
+			$(that.el).find("#commentUpdatePopupName").attr("disabled", "true");
+			$(that.el).find("#commentUpdatePopupComment").val(that.selectData.comment);
+			$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
+			
+			$(that.el).find("#commentUpdatePopupReply").val(that.selectData.comment_reply);
+			
+			// 일반 사용자는 단순 읽기만 가능
+			if (SessionModel.get("user").admin == 0 || $(this.el).find("#commentUpdatePopupState").val() == "처리완료") {
+				$(that.el).find("#commentUpdatePopupInTime input").attr("disabled","true");
+				$(that.el).find("#commentUpdatePopupOutTime input").attr("disabled","true");
+				$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
+				$(that.el).find("#commentUpdatePopupReply").attr("disabled", "true");
+				$(that.el).find("#commentUpdatePopupState").prop("disabled", true);
+				$(that.el).find("[type='checkbox']").css("display","none");
+			}else{
+				 $(that.el).find("[type='checkbox']").click(function(){
+				 	that.setDatapickerDisable();
+				 });
+			}
+			that.setDatapickerDisable();
+    		dfd.resolve();
+	    		
 			return dfd.promise();			
 		},
 		
@@ -157,7 +144,6 @@ define([
 		saveCommute : function(data){
 			// 이틀치 Commute 데이터 가져옴
 			var dfd = new $.Deferred();
-			
 			var commuteCollection = new CommuteCollection();
 			commuteCollection.fetch({ 
      			data: {
@@ -168,14 +154,10 @@ define([
      			success : function(resultCollection){
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
-						data
+						data,
+						data.changeHistoryCollection
 					).done(function(resultCommuteCollection){ // commute_result 수정 성공!
-     					var commuteModel = new CommuteModel();
-						commuteModel.save(data, { // changehistory tbl 수정
-							success: function(){
-								dfd.resolve(resultCommuteCollection);		
-							}
-						});
+						dfd.resolve(resultCommuteCollection);		
      				}).fail(function(){
      					dfd.reject();
      				});
@@ -195,7 +177,7 @@ define([
 			var userId = SessionModel.get("user").id;
 			inData._id = userId;
 			
-			if(inData.changeHistoryJSONArr.length == 0){
+			if(inData.changeHistoryCollection.length == 0){
 				Dialog.confirm({
 					msg : "출/퇴근 시간이 수정되지 않았습니다. 진행하시겠습니까?",
 	                buttons : [{
@@ -218,14 +200,14 @@ define([
 	            });
 			}else{
 				var message = "";
-				for(var i = 0; i < inData.changeHistoryJSONArr.length; i++){
-					var item = inData.changeHistoryJSONArr[i];
-					if(item.get("change_column") == "in_time"){
-						message = message + "출근시간 [ " + item.get("change_before") + " > " +item.get("change_after") + "]\n";
+				_.each(inData.changeHistoryCollection.models, function(model){
+					if(model.get("change_column") == "in_time"){
+						message = message + "출근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
 					}else{
-						message = message + "퇴근시간 [ " + item.get("change_before") + " > " +item.get("change_after") + "]\n";
+						message = message + "퇴근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
 					}
-				}
+				});
+					
 				message = message + "\n수정내용이 정확합니까?";
 				Dialog.confirm({
 					msg : message,
@@ -261,7 +243,7 @@ define([
      			state: $(this.el).find("#commentUpdatePopupState").val(),
      			changeInTime: null,
      			changeOutTime : null,
-     			changeHistoryJSONArr : [],
+     			changeHistoryCollection : new ChangeHistoryCollection(),
      		};
      		
      		if (newData.comment_reply == "" ) {
@@ -275,19 +257,18 @@ define([
      		
      		if(checkResult.inCheck){
      			newData.changeInTime = $(this.el).find("#commentUpdatePopupInTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm:ss");
-     			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.preData.inTime, userId);
+     			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId);
      			if (inChangeModel)
-					newData.changeHistoryJSONArr.push(inChangeModel);
+					newData.changeHistoryCollection.add(inChangeModel);
 			
      		}
      		
      		if(checkResult.outCheck){
      			newData.changeOutTime = $(this.el).find("#commentUpdatePopupOutTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm:ss");
-     			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.preData.outTime, userId);
+     			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId);
      			if (outChangeModel)
-					newData.changeHistoryJSONArr.push(outChangeModel);
+					newData.changeHistoryCollection.add(outChangeModel);
      		}
-     		
      		
 			return newData;
 		},

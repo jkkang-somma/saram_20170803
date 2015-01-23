@@ -24,7 +24,8 @@ CommentDao.prototype.selectCommentById =  function (data) {
 CommentDao.prototype.insertComment =  function (data) {
 	var queryStr = db.getQuery('comment', 'insertComment');
     debug(queryStr);
-    return db.queryV2(queryStr, [data.year, data.id, data.date, data.comment, data.state, data.writer_id, data.want_in_time, data.want_out_time]);
+    return db.queryV2(queryStr, [data.year, data.id, data.date, data.comment, data.state, data.writer_id, 
+                                 data.want_in_time, data.want_out_time, data.before_in_time, data.before_out_time]);
 }
 
 // comment reply 수정 

@@ -24,10 +24,14 @@ var InOffice = function (data) {
     var _addInOffice = function () {
         return InOfficeDao.insertInOffice(_data);
     }
+    var _removeInOffice = function (doc_num) {
+        return InOfficeDao.removeInOffice(doc_num);
+    }
     return {
         get:_get,
         getInOfficeList:_getInOfficeList,
-        addInOffice:_addInOffice
+        addInOffice:_addInOffice,
+        remove : _removeInOffice
     }
 }
 

@@ -11,13 +11,11 @@ define([
 	'dialog',
   	'i18n!nls/common',
 	'models/sm/SessionModel',
-	'models/common/RawDataModel',
 	'core/BaseRouter',
 	'views/dashboard/DashBoardView',
 	'views/LoginView',
 	'views/NavigationView',
 	'views/sm/UserListView',
-	'views/sm/ConfigUserView',
 	'views/RawData/AddRawDataView',
 	'views/RawData/RawDataView',
 	'views/Holiday/HolidayManagerView',
@@ -26,9 +24,9 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, RawDataModel, BaseRouter,
+], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
-UserListView, ConfigUserView,	// 사원관리
+UserListView,
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
@@ -41,8 +39,6 @@ ReportListView // report manager
 	
 	var Router = BaseRouter.extend({
 		routes : {
-			'logout': 'logout',
-			'config' :'config',
 			'usermanager' : 'showUserList',
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
@@ -160,42 +156,7 @@ ReportListView // report manager
 		showReportManager : function(){
 			var reportListView = new ReportListView();
 			this.changeView(reportListView);
-		},
-		logout:function(){
-			SessionModel.logout();
-		},
-		config:function(){
-			var configView=new ConfigUserView();
-			Dialog.show({
-                title:i18Common.DIALOG.TITLE.USER_UPDATE, 
-                content:configView, 
-                buttons:[{
-                    label: i18Common.DIALOG.BUTTON.SAVE,
-                    cssClass: Dialog.CssClass.SUCCESS,
-                    action: function(dialogRef){// 버튼 클릭 이벤트
-                        configView.submitSave().done(function(data){
-                            dialogRef.close();
-                        });//실패 따로 처리안함 add화면에서 처리.
-                    }
-                }, {
-                    label: i18Common.DIALOG.BUTTON.CLOSE,
-                    action: function(dialogRef){
-                        dialogRef.close();
-                    }
-                }]
-                
-            });
-		},
-		accessIn: function() {
-			var model = new RawDataModel({type:'출근(수원)'});
-			model.companyAccessUrl().save();
-			alert("출근");
-		},
-		accessOut: function() {
-			var model = new RawDataModel({type:'퇴근(수원)'});
-			model.companyAccessUrl().save();
-			alert("퇴근");
-		},
+		}
 	});
 	return Router;
 });

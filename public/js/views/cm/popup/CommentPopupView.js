@@ -110,6 +110,9 @@ define([
      			newData.want_out_time = outTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss");
      		}
      		
+     		newData.before_in_time = this.selectData.in_time;
+     		newData.before_out_time = this.selectData.out_time;
+
      		if (newData.comment.length == 0) {
      			alert("Comment를 입력해주시기 바랍니다.");
      			return null;

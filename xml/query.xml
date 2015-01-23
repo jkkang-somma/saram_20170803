@@ -50,6 +50,13 @@
         		type=?
         	
         </query>
+        <query id="insertRawDataCompanyAccess">
+  			INSERT INTO commute_base_tbl 
+  				( year, id, name, department, char_date, type, ip_address, mac_address, need_confirm)
+  			VALUES
+  				(year(now()), ? , ?, ?, now(), ?, ?, ?, ?)
+        </query>
+        
         <query id="selectRawDataList">
         	select
         		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
@@ -161,12 +168,27 @@
 				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
 				, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
 				, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
-				, state, start_time, end_time 
+				, state, start_time, end_time, black_mark 
 				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
 				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
 			where (DATE(start_date) between DATE(?) AND DATE(?)) 
 				OR (DATE(end_date)  between DATE(?) AND DATE(?))
+    	</query>
+    	<query id="selectApprovalByManager">
+        	select 
+				app.doc_num, app.submit_id
+				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name 
+				, app.manager_id 
+				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
+				, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
+				, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
+				, state, start_time, end_time, black_mark 
+				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
+				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
+			from  approval_tbl app 
+			where app.manager_id = ? and (state = '상신' or state = '취소요청')
+				and ((DATE(start_date) between DATE(?) AND DATE(?)) OR (DATE(end_date)  between DATE(?) AND DATE(?)))
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
@@ -267,25 +289,30 @@
         		in_time_change, out_time_change)
         	VALUES
         		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        	ON DUPLICATE KEY UPDATE
-				department=?,
-				in_time=?,
-				late_time=?,
-				name=?,
-				out_office_code=?,
-				out_time=?,
-				over_time=?,
-				overtime_code=?,
-				vacation_code=?,
-				standard_in_time=?,
-				standard_out_time=?,
-				work_type=?,
-				in_time_type=?,
-				out_time_type=?,
-				out_office_start_time=?,
-				out_office_end_time=?,
-				in_time_change=?,
-				out_time_change=?
+        </query>
+        
+        <query id="updateCommuteResult">
+        	UPDATE
+        		commute_result_tbl
+        	SET
+	        	in_time = ?,
+	        	late_time = ?,
+	        	out_office_code = ?,
+				out_time = ?,
+				over_time = ?,
+				overtime_code = ?,
+				vacation_code = ?,
+				standard_in_time = ?,
+				standard_out_time = ?,
+				work_type = ?,
+				in_time_type = ?,
+				out_time_type = ?,
+				out_office_start_time = ?,
+				out_office_end_time = ?,
+				in_time_change = ?,
+				out_time_change =?
+			WHERE
+				id = ? AND date = ?
         </query>
         <query id="selectCommuteDate">
         	SELECT 
@@ -438,6 +465,8 @@
     			c.writer_id,
     			c.want_in_time,
     			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
@@ -462,6 +491,10 @@
     			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
     			c.state,
     			c.writer_id,
+    			c.want_in_time,
+    			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
     			c.reply_id,
     			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
@@ -476,11 +509,11 @@
     	<query id="insertComment">
     		INSERT INTO comment_tbl
     		(
-    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time
+    			year, id, date, comment, comment_date, state, writer_id, want_in_time, want_out_time, before_in_time, before_out_time
     		)
     		values
     		(
-    			?, ?, ?, ?, now(), ?, ?, ?, ?
+    			?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?
     		)
     	</query>
     	
@@ -509,6 +542,9 @@
 					,? ,? ,?, ?, ?
 				)    		
     	</query>
+    	<query id="deleteOutOfficeList">
+    		delete from out_office_tbl where doc_num = ?;
+    	</query>
     </group>
     <group id="inOffice">
     	<query id="selectInOfficeList">
@@ -516,6 +552,9 @@
     	</query>
     	<query id="insertInOffice">
 			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
+    	</query>
+    	<query id="deleteInOfficeList">
+    		delete from in_office_tbl where doc_num = ?;
     	</query>
     </group>
     

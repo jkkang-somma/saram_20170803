@@ -8,7 +8,9 @@ define([
         urlRoot: '/inOffice',
         idAttribute:"_id",
         initialize: function () {
-            
+        },        
+        remove:function(){
+            return this.destroy(); 
         },
         defaults:{
         	year:"",
