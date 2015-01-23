@@ -116,7 +116,6 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	        type:"custom",
     	        name:"add",
     	        click:function(){
-    	            console.log("CreateDataView "+that.lastestDate);
                     var createDataPopupView= new CreateDataPopupView({date : that.lastestDate});
                     
                     Dialog.show({
