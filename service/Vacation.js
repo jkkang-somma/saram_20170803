@@ -74,50 +74,45 @@ var getHoliday = function(joinDate) {
 
 var Vacation = function() {	
 
-	var _getVacation = function(data, callback) {
-		VacationDao.selectVacationsByYear(data.year).then(function(result) {
-			return callback(result);	
-		});
+	var _getVacation = function(data) {
+		return VacationDao.selectVacationsByYear(data.year);
 	};
 	
-	var _getVacationById = function(data, callback) {
-		VacationDao.selectVacatonById(data.id).then(function(result) {
-			return callback(result);	
-		});
+	var _getVacationById = function(data) {
+		return VacationDao.selectVacatonById(data.id);
 	};
 
-	var _setVacation = function(data, callback) {
-		UserDao.selectUserList().then(function(result) {			
-			var datas = [],
-				obj = {};
-			
-			for (var i = 0, len = result.length; i < len; i++) {
-				
-				if (result[i].leave_company != "" && result[i].leave_company != null) {	// 퇴사일이 있는 경우 연차 생성하지 않음 
-					continue;
-				}
-				
-				obj = {
-						id : (result[i].id),
-						year : data.year,
-						total_day : ( (result[i].id.length == 7)?15 : getHoliday(result[i].join_company) ) // id 자릿수가 7자리(외주인력)은 휴가 수가 15일
-				};
-				datas.push(obj);
-			}
-			
-			VacationDao.insertVacation(datas).then(function(result) {
-				return callback(result);
-			});
-		});
+	var _setVacation = function(data) {
+        return new Promise(function(resolve, reject){// promise patten
+    		UserDao.selectUserList().then(function(result) {
+    			var datas = [],
+    				obj = {};
+    			
+    			for (var i = 0, len = result.length; i < len; i++) {    				
+    				if (result[i].leave_company != "" && result[i].leave_company != null) {	// 퇴사일이 있는 경우 연차 생성하지 않음 
+    					continue;
+    				}
+    				
+    				obj = {
+    						id : (result[i].id),
+    						year : data.year,
+    						total_day : ( (result[i].id.length == 7)?15 : getHoliday(result[i].join_company) ) // id 자릿수가 7자리(외주인력)은 휴가 수가 15일
+    				};
+    				datas.push(obj);
+    			}
+    			VacationDao.insertVacation(datas).then(function(result) {
+    				resolve(result);
+                }).catch(function(e){
+                    reject(e);
+                });
+    		}).catch(function(e){//Connection Error
+               reject(e);
+            });
+        });
 	};	
 	
-	
-	var _updateVacation = function(data, callback) {
-		VacationDao.updateVacation(data).then(function(result) {
-			debug("VacationDao.updateVacation 결과");
-			debug(result);
-			return callback(result);	
-		});
+	var _updateVacation = function(data) {
+		return VacationDao.updateVacation(data);
 	}
 	
 	return {
