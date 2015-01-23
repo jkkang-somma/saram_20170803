@@ -26,6 +26,7 @@ var officeCode = require('./routes/officeCodeRouter');
 var comment = require('./routes/commentRouter');
 var codeV2 = require('./routes/codeRouterV2');
 var companyAccess = require('./routes/companyAccessRouter');
+var dashboard = require('./routes/dashboardRouter');
 
 //var error = require('./routes/error');
 
@@ -121,7 +122,7 @@ app.use('/officeCode',officeCode);
 app.use('/comment', comment);
 app.use('/codev2', codeV2);
 app.use('/companyAccess', companyAccess);
-
+app.use('/dashboard', dashboard);
 
 //app.use('/error', error);
 

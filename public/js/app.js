@@ -14,7 +14,8 @@ define([
   'views/LoadingView',
   'views/LoginView',
   'views/NavigationView', 
-  'moment', 'bootstrap-datetimepicker',
+  'cmoment', 
+  'bootstrap-datetimepicker',
   'css!tool/bootstrap-select/css/bootstrap-select.css',
 ], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");

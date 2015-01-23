@@ -1,7 +1,7 @@
 define([
   'jquery',
   'underscore',
-  'moment',
+  'cmoment',
   'collection/cm/CommuteCollection'
 ], function($, _, Moment, CommuteCollection){
     var WORKTYPE = {

@@ -6,7 +6,7 @@ define([
   'grid',
   'schemas',
   'dialog',
-  'moment',
+  'cmoment',
   'resulttimefactory',
   'data/code',
   'text!templates/default/head.html',

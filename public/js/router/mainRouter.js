@@ -13,7 +13,7 @@ define([
 	'models/sm/SessionModel',
 	'models/common/RawDataModel',
 	'core/BaseRouter',
-	'views/DashBoardView',
+	'views/dashboard/DashBoardView',
 	'views/LoginView',
 	'views/NavigationView',
 	'views/sm/UserListView',
@@ -101,7 +101,7 @@ ReportListView // report manager
 				this.currentView.close();
 
 	        this.currentView = view;
-	        view.initialize();
+	        //view.initialize();
     		view.render();
     		animator.animate($(view.el), animator.FADE_IN);	
 		},
@@ -197,6 +197,5 @@ ReportListView // report manager
 			alert("퇴근");
 		},
 	});
-
 	return Router;
 });

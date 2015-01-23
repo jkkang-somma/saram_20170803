@@ -8,7 +8,7 @@ define([
   'util',
   'dialog',
   'csvParser',
-  'moment',
+  'cmoment',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',

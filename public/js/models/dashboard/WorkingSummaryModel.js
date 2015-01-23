@@ -3,15 +3,15 @@ define([
   'underscore',
   'backbone'
 ], function($, _,Backbone){
-    var CommuteResultModel=Backbone.Model.extend({
-        urlRoot: '/commute/result',
+    var WorkingSummaryModel=Backbone.Model.extend({
+        urlRoot: '/dashboard/workingSummary',
         idAttribute:"_id",
         initialize: function () {
         }, 
         getCustomUrl: function (method) {//idAttribute값을 사용하지 않고 id로 할때
             switch (method) {
                 case 'read':
-                    return this.urlRoot + "/" +this.attributes.id;
+                    return this.urlRoot;
                     break;
                 case 'create':
                     return this.urlRoot;
@@ -30,16 +30,21 @@ define([
             return Backbone.sync.apply(this, arguments);
         },
         default:{
-            id:null,
-            password: null, 
-            name: '',
-            name_commute: '',
-            dept_code: '',
-            dept_name:'',
-            join_company: null,
-            privilege : 0,
-            admin : 0,
+            id:undefined,
+            name: undefined,
+            total_working_day: undefined,
+            perception: undefined,
+            sick_leave:undefined,
+            absenteeism: undefined,
+            vacation : undefined,
+            night_working_a : undefined,
+            night_working_b:undefined,
+            night_working_c:undefined,
+            holiday_working_a:undefined,
+            holiday_working_b:undefined,
+            holiday_working_c:undefined,
+            total_overtiem_pay:undefined
         },
     });
-    return CommuteResultModel;
+    return WorkingSummaryModel;
 });

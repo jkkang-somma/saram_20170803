@@ -10,7 +10,7 @@ define([
         'grid',
         'dialog',
         'datatables',
-        'moment',
+        'cmoment',
         'core/BaseView',
         'data/code',
         'text!templates/default/head.html',

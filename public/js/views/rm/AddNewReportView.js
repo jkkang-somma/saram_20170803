@@ -5,7 +5,8 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
-  'moment',
+  'comboBox',
+  'cmoment',
   'models/sm/SessionModel',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
@@ -13,7 +14,7 @@ define([
   'collection/sm/UserCollection',
   'models/rm/ApprovalModel',
   'models/rm/ApprovalIndexModel',
-], function($, _, Backbone, animator, BaseView, Dialog, Moment, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
     options: {},
   	events: {
@@ -167,6 +168,7 @@ define([
       var selGubun = $(this.el).find('#office_code');
       // selGubun.css('width', '35%');
       
+      
       var officeCollection = new OfficeCodeCollection();
       officeCollection.fetch().done(function(result){
         var arrGubunData = result;
@@ -180,6 +182,7 @@ define([
         $(_this.el).find('#datePickerTitleTxt').text('date');
          _this.afterDate.hide();
          $(_this.el).find('#reqHoliday').val("0 일");
+          ComboBox.createCombo(selGubun);
       });
       
       selGubun.change(function() {
@@ -221,6 +224,9 @@ define([
         var approvalOptionHtml = "<option value='"+arrApprovalMemData[k].id+"'>"+arrApprovalMemData[k].name+"</option>";
         approvalMem.append(approvalOptionHtml);
       }
+      
+      ComboBox.createCombo(approvalMem);
+      
       });
     },
     

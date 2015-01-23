@@ -118,7 +118,6 @@ INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','1
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','100801','2015-01-10','201501-205');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','0130101','2015-01-11','201501-206');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','150104','2015-01-10','201501-207');
-INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','120501','2015-01-10','201501-208');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','111101','2015-01-10','201501-209');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','130801','2015-01-10','201501-210');
 INSERT INTO `in_office_tbl` (`year`, `id`, `date`, `doc_num`) VALUES ( '2015','111102','2015-01-10','201501-211');

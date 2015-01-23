@@ -11,7 +11,7 @@ define([
     'grid',
     'dialog',
     'datatables',
-    'moment',
+    'cmoment',
     'core/BaseView',
     'models/cm/CommentModel',
 	'text!templates/inputForm/textbox.html',

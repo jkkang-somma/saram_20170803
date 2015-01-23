@@ -2,10 +2,9 @@
 // Create Date: 2014.12.18
 define([
   'jquery',
-  'momentjs',
-  'module'
-], function($, moment, Module){
-	moment.lang('kr');
+  'momentjs'
+], function($, moment){
+	  moment.lang('kr');
     moment().format();
     return moment;    
 });

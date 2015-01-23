@@ -119,5 +119,35 @@ define({
                 REPORT_MANAGER:"Commute Report"
             }
         }
+    },
+    
+    //단위
+    UNIT:{
+        WON:"Won",
+        DAY:"Day",
+        MONTH:"Month",
+        YEAR:"Year",
+        HOURE:"Houre",
+        MIN:"Min",
+        SEC:"Sec"
+    },
+    
+    DASHBOARD:{
+        WORKING_SUMMARY:{
+            ID:"Id",
+            NAME:"Name",
+            TOTAL_OVERTIEM_PAY:"Total over time pay",
+            TOTAL_WORKING_DAY:"Total working day",
+            VACATION:"Vaction",
+            NIGHT_WORKING_A:"Night WORKTYPE A",
+            NIGHT_WORKING_B:"Night WORKTYPE B",
+            NIGHT_WORKING_C:"Night WORKTYPE C",
+            HOLIDAY_WORKING_A:"Holiday WORKTYPE A",
+            HOLIDAY_WORKING_B:"Holiday WORKTYPE B",
+            HOLIDAY_WORKING_C:"Holiday WORKTYPE C",
+            PERCEPTION:"Perception",
+            SICK_LEAVE:"Sick Leave",
+            ABSENTEEISM:"Absenteeism"
+        }    
     }
 });
