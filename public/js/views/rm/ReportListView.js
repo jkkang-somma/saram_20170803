@@ -270,17 +270,35 @@ define([
              		  var _detailReportView = new DetailReportView();
                  		 // data param 전달
                  		 _detailReportView.options = selectData;
+                 		 
+                 		 var dialogButtons = [];
+                 		 var sessionInfo = SessionModel.getUserInfo();
+                 		 if(selectData.submit_id == sessionInfo.id && selectData.state == '결재완료'){
+                 		   dialogButtons.push({
+                          label: "취소 요청",
+                          cssClass: Dialog.CssClass.SUCCESS,
+                          action: function(dialogRef){// 버튼 클릭 이벤트
+                               _detailReportView.onClickBtnAppCancel().done(function(model){
+                                    Dialog.show("Completed Approval Cancel.");
+                                    _this.onClickClearBtn();
+                                    dialogRef.close();
+                                });
+                          }
+                      });
+                 		 }
+                 		 dialogButtons.push({
+                          label: "확인",
+                          cssClass: Dialog.CssClass.SUCCESS,
+                          action: function(dialogRef){// 버튼 클릭 이벤트
+                                dialogRef.close();
+                          }
+                      });
+                 		 
                  		 // Dialog
                  		 Dialog.show({
                           title:"상세보기", 
                           content:_detailReportView, 
-                          buttons:[{
-                              label: "확인",
-                              cssClass: Dialog.CssClass.SUCCESS,
-                              action: function(dialogRef){// 버튼 클릭 이벤트
-                                    dialogRef.close();
-                              }
-                          }]
+                          buttons:dialogButtons
                       });
              		} else {
              		  Dialog.error("항목을 선택해주세요.");

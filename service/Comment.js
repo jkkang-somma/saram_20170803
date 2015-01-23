@@ -4,38 +4,37 @@
 var _ = require("underscore"); 
 var debug = require('debug')('Comment');
 var Schemas = require("../schemas.js");
+var Promise = require('bluebird');
 var CommentDao = require('../dao/commentDao.js');
 var CommuteDao = require('../dao/commuteDao.js');
 
 var Comment = function() {	
 
-	var _getComment = function(data, callback) {
-		CommentDao.selectComment(data).then(function(result) {
-			return callback(result);
-		});
+	var _getComment = function(data) {
+		return CommentDao.selectComment(data);
 	};
 	
-	var _getCommentById = function(data, callback) {
-		CommentDao.selectCommentById(data).then(function(result) {
-			return callback(result);
-		});		
+	var _getCommentById = function(data) {
+		return CommentDao.selectCommentById(data);
 	};
 	
-	var _insertComment = function(inData, callback) {
-		// comment count 업데이트 
-		CommuteDao.updateCommuteCommentCount(inData).then(function(result) {
-			
-			// comment 등록
-			CommentDao.insertComment(inData).then(function(result) {
-				return callback(result);
-			});
+	var _insertComment = function(inData) {
+		return new Promise(function(resolve, reject){// promise patten			
+			CommuteDao.updateCommuteCommentCount(inData).then(function(result) {
+				// comment 등록
+				CommentDao.insertComment(inData).then(function(result) {
+					resolve(result);
+	    		}).catch(function(e){//Connection Error
+	                reject(e);
+	             });
+    		}).catch(function(e){//Connection Error
+                reject(e);
+             });
 		});
 	}
 	
-	var _updateCommentReply = function(inData, callback) {
-		CommentDao.updateCommentReply(inData).then(function(result) {
-			return callback(result);
-		});
+	var _updateCommentReply = function(inData) {
+		return CommentDao.updateCommentReply(inData);
 	}
 	
 	return {

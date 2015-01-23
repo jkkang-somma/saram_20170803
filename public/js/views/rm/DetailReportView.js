@@ -184,6 +184,35 @@ define([
         }
       }
       return sZero + s;
+    },
+    
+    onClickBtnAppCancel : function(){
+  	  this.thisDfd = new $.Deferred();
+  	  var _this = this;
+      var formData = this.options;
+      
+      console.log(formData);
+      formData["_id"] = this.options["doc_num"];
+      formData["state"] = '취소요청';
+      
+      var _approvalModel = new ApprovalModel(formData);
+      _approvalModel.idAttribute = "doc_num";
+      _approvalModel.save({},{
+      	        success:function(model, xhr, options){
+      	            // insert
+      	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
+    	              _this.thisDfd.resolve();
+      	        },
+      	        error:function(model, xhr, options){
+      	            var respons=xhr.responseJSON;
+      	            Dialog.error(respons.message);
+      	            _this.thisDfd.reject();
+      	        },
+      	        wait:false
+      	    }); 
+       return _this.thisDfd.promise();
+    
+      // // this.collection
     }
     
   });

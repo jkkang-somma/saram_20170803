@@ -19,4 +19,8 @@ InOfficeDao.prototype.insertInOffice =  function (_data) {
     
     return db.queryV2(queryStr, [year, _data.date, _data.id, _data.doc_num]);
 };
+InOfficeDao.prototype.removeInOffice =  function (doc_num) {
+    var queryStr = util.format(db.getQuery('inOffice', 'deleteInOfficeList'));
+    return db.queryV2(queryStr, [doc_num]);
+};
 module.exports = new InOfficeDao();
