@@ -27,9 +27,7 @@ define([
     	    var view=this;
     	    var defaultData=["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
     	    
-    	    
-    	    
-    	    var btn= $("<button class='btn btn-default'>변경<span class='glyphicon glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>");
+    	    var btn= $("<button class='btn btn-default btn-success'>변경</button>");
     	    btn.click(function(){
                 view.onClick();  
     	    });

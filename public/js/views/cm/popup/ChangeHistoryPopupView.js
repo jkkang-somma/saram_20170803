@@ -11,7 +11,7 @@ define([
         'grid',
         'dialog',
         'datatables',
-        'moment',
+        'cmoment',
         'core/BaseView',
         'text!templates/default/content.html',
         'models/cm/ChangeHistoryModel',

@@ -10,11 +10,11 @@ require.config({
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
       'bootstrap-dialog': { deps: ['jquery','bootstrap']  },
       momentjs:{deps:['jquery']},
-      moment:{deps:['momentjs']},
-      'bootstrap-datepicker': { deps: ['jquery','bootstrap', 'moment']  },
+      cmoment:{deps:['momentjs']},
+      'bootstrap-datepicker': { deps: ['jquery','bootstrap', 'momentjs']  },
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
-      'resulttimefactory' : { deps : ['jquery, underscore, moment'] },
+      'resulttimefactory' : { deps : ['jquery, underscore, momentjs'] },
    },
    paths: {
    //    jquery: 'tool/jquery.min',
@@ -24,7 +24,7 @@ require.config({
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',
-      moment:'tool/moment/cutom-moment', // moment config
+      cmoment:'tool/moment/cutom-moment', // moment config
       momentjs:'tool/moment/moment', //moment lib js 파일 define 오류 때문에 수정함. 주의 !!
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min',
       'datatables':'tool/datatables/media/js/jquery.dataTables',
@@ -39,13 +39,14 @@ require.config({
       
       monthpicker:'lib/component/monthpicker',
       grid:'lib/component/grid',
+      comboBox:'lib/component/combo',
       schemas:'lib/schemas',
       resulttimefactory: 'lib/resultTimeFactory',
       
       i18n:'tool/i18n-master/i18n',
-      fittext:'tool/textillate/jquery.fittext',
-      lettering:'tool/textillate/jquery.lettering',
-      textillate:'tool/textillate/jquery.textillate',
+      // fittext:'tool/textillate/jquery.fittext',
+      // lettering:'tool/textillate/jquery.lettering',
+      // textillate:'tool/textillate/jquery.textillate',
       templates:'../templates',
       cs:'../css'
    },

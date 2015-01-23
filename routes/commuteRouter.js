@@ -88,9 +88,6 @@ router.route('/:id')
 //Dashboard 
 router.route('/result/:id')
 .get(function(req, res){
-	
-	
-	
 	res.send({});
 });
 

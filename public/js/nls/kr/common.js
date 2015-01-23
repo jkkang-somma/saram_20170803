@@ -84,7 +84,8 @@ define({
             EXPIRE_AUTH:"세션이 만료 되었습니다."
         },
         HTTP:{
-            NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다."
+            NOT_FIND_PAGE:"요청한 페이지를 찾을 수 없습니다.",
+            SERVER_DIE:"서비스가 다운 되었습니다. 관리자에게 문의해주세요."
         },
         USER_EDIT_VIEW:{
             FAIL_RENDER:"사용자 정보를 받아오지 못하였습니다.",
@@ -115,5 +116,38 @@ define({
                 REPORT_MANAGER:"근태 상신"
             }
         }
+    },
+    
+    //단위
+    UNIT:{
+        WON:"원",
+        DAY:"일",
+        MONTH:"월",
+        YEAR:"년",
+        HOURE:"시",
+        MIN:"분",
+        SEC:"초"
+    },
+    
+    //대시보드
+    DASHBOARD:{
+        WORKING_SUMMARY:{
+            ID:"사번",
+            NAME:"이름",
+            TOTAL_OVERTIEM_PAY:"잔업 수당",
+            TOTAL_WORKING_DAY:"총 근무 일수",
+            VACATION:"휴가",
+            NIGHT_WORKING_A:"야근 A",
+            NIGHT_WORKING_B:"야근 B",
+            NIGHT_WORKING_C:"야근 C",
+            HOLIDAY_WORKING_A:"휴일 근무 A",
+            HOLIDAY_WORKING_B:"휴일 근무 B",
+            HOLIDAY_WORKING_C:"휴일 근무 C",
+            PERCEPTION:"지각",
+            SICK_LEAVE:"조퇴",
+            ABSENTEEISM:"결근"
+        }    
     }
+    
+    
 });
