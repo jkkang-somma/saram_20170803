@@ -116,7 +116,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	        type:"custom",
     	        name:"add",
     	        click:function(){
-                    var createDataPopupView= new CreateDataPopupView();
+    	            console.log("CreateDataView "+that.lastestDate);
+                    var createDataPopupView= new CreateDataPopupView({date : that.lastestDate});
+                    
                     Dialog.show({
                         title:"근태 데이터 생성", 
                         content:createDataPopupView, 
@@ -138,9 +140,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             }
                         }],
                     });
-                        
                 }
-                
     	    });
     	},
     	_createData : function(view){
@@ -150,13 +150,14 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var endDate = view.getEndDate();
             var yesterday = Moment(startDate).subtract(1, 'days');
             
-            view.disabledProgressbar(false); // display progressbar 
+            
             
             if(startDate.isAfter(endDate)){
                 Dialog.error("시작일이 종료일보다 큽니다.");
                 return;
             }else{
                 this.commuteCollection.reset();    
+                view.disabledProgressbar(false); // display progressbar 
             }
             
             var selectedDate = {
@@ -307,7 +308,6 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    _head.addClass("relative-layout");
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    var _progressBar=$(_.template(ProgressbarHTML)({percent : 100}));
     	    
     	    var _row=$(ForminlineHTML);
     	    var _label = $(_.template(LabelHTML)({label : ""}));
@@ -316,9 +316,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    _layout.append(_head);
     	    _layout.append(_row);
             _layout.append(_content);
-            _layout.append(_progressBar);
             
     	    $(this.el).append(_layout);
+    	    this.lastestDate = null;
             this._setLabel();
             
     	    var _gridSchema=Schemas.getSchema('grid');
@@ -336,11 +336,11 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	            }else{
     	                that.label.parent().css("display","block");
     	                that.label.text("Lastest data : " + data["0"].date);
+    	                that.lastestDate = data["0"].date;
     	            }
-    	            
     	        }
     	    );
-     	}
+     	},
     });
     
     return CreateDataView;

@@ -19,13 +19,14 @@ define([
     'models/cm/CommuteModel',
     'models/cm/ChangeHistoryModel',
     'collection/cm/CommuteCollection',
+    'collection/cm/ChangeHistoryCollection',
     'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/default/datepickerChange.html',
 	'text!templates/inputForm/combobox.html',
 ], function(
 	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory, BaseView, 
-	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection,
+	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML, ComboboxHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
@@ -168,14 +169,10 @@ define([
      			success : function(resultCollection){
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
-						data
+						data,
+						data.changeHistoryCollection
 					).done(function(resultCommuteCollection){ // commute_result 수정 성공!
-     					var commuteModel = new CommuteModel();
-						commuteModel.save(data, { // changehistory tbl 수정
-							success: function(){
-								dfd.resolve(resultCommuteCollection);		
-							}
-						});
+						dfd.resolve(resultCommuteCollection);		
      				}).fail(function(){
      					dfd.reject();
      				});
@@ -195,7 +192,7 @@ define([
 			var userId = SessionModel.get("user").id;
 			inData._id = userId;
 			
-			if(inData.changeHistoryJSONArr.length == 0){
+			if(inData.changeHistoryCollection.length == 0){
 				Dialog.confirm({
 					msg : "출/퇴근 시간이 수정되지 않았습니다. 진행하시겠습니까?",
 	                buttons : [{
@@ -218,14 +215,14 @@ define([
 	            });
 			}else{
 				var message = "";
-				for(var i = 0; i < inData.changeHistoryJSONArr.length; i++){
-					var item = inData.changeHistoryJSONArr[i];
-					if(item.get("change_column") == "in_time"){
-						message = message + "출근시간 [ " + item.get("change_before") + " > " +item.get("change_after") + "]\n";
+				_.each(inData.changeHistoryCollection.models, function(model){
+					if(model.get("change_column") == "in_time"){
+						message = message + "출근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
 					}else{
-						message = message + "퇴근시간 [ " + item.get("change_before") + " > " +item.get("change_after") + "]\n";
+						message = message + "퇴근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
 					}
-				}
+				});
+					
 				message = message + "\n수정내용이 정확합니까?";
 				Dialog.confirm({
 					msg : message,
@@ -261,7 +258,7 @@ define([
      			state: $(this.el).find("#commentUpdatePopupState").val(),
      			changeInTime: null,
      			changeOutTime : null,
-     			changeHistoryJSONArr : [],
+     			changeHistoryCollection : new ChangeHistoryCollection(),
      		};
      		
      		if (newData.comment_reply == "" ) {
@@ -277,7 +274,7 @@ define([
      			newData.changeInTime = $(this.el).find("#commentUpdatePopupInTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm:ss");
      			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.preData.inTime, userId);
      			if (inChangeModel)
-					newData.changeHistoryJSONArr.push(inChangeModel);
+					newData.changeHistoryCollection.add(inChangeModel);
 			
      		}
      		
@@ -285,7 +282,7 @@ define([
      			newData.changeOutTime = $(this.el).find("#commentUpdatePopupOutTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm:ss");
      			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.preData.outTime, userId);
      			if (outChangeModel)
-					newData.changeHistoryJSONArr.push(outChangeModel);
+					newData.changeHistoryCollection.add(outChangeModel);
      		}
      		
      		
