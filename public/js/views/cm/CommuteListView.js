@@ -201,11 +201,11 @@ define([
              	    	}
              	    	
              	    	if(data.in_time_type != "1"){
-             	    		$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
+             	    		$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
              	    	}
              	    	
              	    	if(data.out_time_type != "1"){
-             	    		$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
+             	    		$('td:eq(7)', row).css("background-color", "rgb(247, 198, 142)");
              	    	}
              	    },
         		    collection:this.commuteCollection,

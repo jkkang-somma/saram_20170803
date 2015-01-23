@@ -18,6 +18,7 @@ define([
     'models/cm/CommuteModel',
     'models/cm/ChangeHistoryModel',
     'collection/cm/CommuteCollection',
+    'collection/cm/ChangeHistoryCollection',
     'text!templates/inputForm/textbox.html',
     'text!templates/default/datepicker.html',
         
@@ -25,7 +26,7 @@ define([
 $, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory,
 BaseView,
 SessionModel,
-CommuteModel, ChangeHistoryModel, CommuteCollection, 
+CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection,
 TextBoxHTML, DatePickerHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
@@ -108,14 +109,10 @@ TextBoxHTML, DatePickerHTML
      			},success : function(resultCollection){
      				resultTimeFactory.modifyByCollection( // commute_result 수정
      					resultCollection,
-     					{ changeInTime : data.in_time, changeOutTime : data.out_time }
-     				).done(function(resultCommuteCollection){ // commute_result 수정 성공!
-     					var commuteModel = new CommuteModel();
-						commuteModel.save(data, { // changehistory tbl 수정
-							success: function(){
-								dfd.resolve(resultCommuteCollection);		
-							}
-						});
+     					{ changeInTime : data.in_time, changeOutTime : data.out_time },
+     					data.changeHistoryCollection
+     				).done(function(resultCommuteCollection){ // commute_result, changeHistroy 수정 성공!
+	     				dfd.resolve(resultCommuteCollection);		
      				}).fail(function(){
      					dfd.reject();
      				});
@@ -142,21 +139,21 @@ TextBoxHTML, DatePickerHTML
 			var inChangeModel = _getChangeHistoryModel("in_time", newData, this.selectData, userId);
 			var outChangeModel = _getChangeHistoryModel("out_time", newData, this.selectData,userId);
 			
-			newData.changeHistoryJSONArr = [];
+			newData.changeHistoryCollection = new ChangeHistoryCollection();
 			
 			if (inChangeModel) {
-				newData.changeHistoryJSONArr.push(inChangeModel);
+				newData.changeHistoryCollection.add(inChangeModel);
 			}else{
 				newData.in_time = null;
 			}
 			
 			if (outChangeModel) {
-				newData.changeHistoryJSONArr.push(outChangeModel);
+				newData.changeHistoryCollection.add(outChangeModel);
 			}else{
 				newData.out_time = null;
 			}
 			
-			if (newData.changeHistoryJSONArr.length === 0) {
+			if (newData.changeHistoryCollection.length === 0) {
 				Dialog.show("변경된 사항이 없습니다.");
 				return null;
 			}

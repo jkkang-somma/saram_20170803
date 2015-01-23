@@ -28,7 +28,7 @@ router.route('/')
 
 router.route('/bulk')
 .post(function(req, res){
-	var data = req.body;
+	var data = req.body.data;
 	var session = sessionManager.get(req.cookies.saram);
 	if (session.user.admin == 1) {	// admin 일 경우만 생성
 	    Commute.insertCommute(data).then(function(result){
@@ -51,6 +51,21 @@ router.route('/bulk')
             message: "관리자 등급만 생성이 가능합니다.",
         });
 	}
+}).put(function(req, res){
+	var data = req.body;
+	var session = sessionManager.get(req.cookies.saram);
+	if (session.user.admin == 1) {	// admin 일 경우만 생성
+		Commute.updateCommute(data).then(function(){
+			res.send({success : true});
+		});
+
+	}else{
+		res.status(401);
+    	res.send({
+            success:false,
+            message: "관리자 등급만 생성이 가능합니다.",
+        });
+	}
 });
 
 router.route('/lastiestdate')
@@ -61,13 +76,11 @@ router.route('/lastiestdate')
 });
 
 router.route('/:id')
-.get(function(req, res){	
-	console.log(111);
+.get(function(req, res){
 }).post(function(req, res){
 
 }).put(function(req, res){
-	console.log(req.body);
-	Commute.updateCommute(req.body, function(result) {
+	Commute.updateChangeHistory(req.body, function(result) {
 		return res.send(result);
 	});
 });
@@ -75,9 +88,6 @@ router.route('/:id')
 //Dashboard 
 router.route('/result/:id')
 .get(function(req, res){
-	
-	
-	
 	res.send({});
 });
 
