@@ -360,16 +360,18 @@ define([
  			}
  			
  			var currentResult = this.getResult();
-            
- 			var nextDayCommute = destCommuteCollection.models[1];		
- 			this.initByModel(nextDayCommute);
+ 			resultCommuteCollection.add(currentResult);
+            if(destCommuteCollection.length == 2){
+                var nextDayCommute = destCommuteCollection.models[1];		
+     			this.initByModel(nextDayCommute);
+     			
+     			if(currentResult.out_time)
+                	this.setStandardInTime(Moment(currentResult.out_time));
+                var yesterdayResult = this.getResult();
+                
+    			resultCommuteCollection.add(yesterdayResult);    
+            }
  			
- 			if(currentResult.out_time)
-            	this.setStandardInTime(Moment(currentResult.out_time));
-            var yesterdayResult = this.getResult();
-            
-			resultCommuteCollection.add(currentResult);
-			resultCommuteCollection.add(yesterdayResult);
 			resultCommuteCollection.save({
 			    success : function(){
 			        dfd.resolve(resultCommuteCollection);
