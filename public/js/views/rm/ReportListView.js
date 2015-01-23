@@ -8,7 +8,7 @@ define([
   'grid',
   'schemas',
   'dialog',
-  'moment',
+  'cmoment',
   'models/sm/SessionModel',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',

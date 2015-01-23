@@ -584,4 +584,39 @@
     			work_type_code_tbl
     	</query>
     </group>
+    <group id ="dashboard">
+    	<query id="getWorktypeCode">
+    		select 
+    			*
+    		from
+    			work_type_code_tbl
+    	</query>
+    	<query id="selectWorkingSummaryById">
+    		SELECT 
+				id,
+				a.name ,
+				COUNT(0) AS 'total_working_day',
+				SUM(CASE WHEN (work_type=10 || work_type=11) THEN 1 ELSE 0 END) AS 'perception',
+				SUM(CASE WHEN (work_type=01 || work_type=11) THEN 1 ELSE 0 END) AS 'sick_leave',
+				SUM(CASE WHEN (work_type=21 || work_type=22) THEN 1 ELSE 0 END) AS 'absenteeism',
+				IFNULL(SUM(B.day_count), 0) AS 'vacation',
+				SUM(CASE WHEN (overtime_code='2015_AA') THEN 1 ELSE 0 END) AS 'night_working_a',
+				SUM(CASE WHEN (overtime_code='2015_AB') THEN 1 ELSE 0 END) AS 'night_working_b',
+				SUM(CASE WHEN (overtime_code='2015_AC') THEN 1 ELSE 0 END) AS 'night_working_c',
+				SUM(CASE WHEN (overtime_code='2015_BA') THEN 1 ELSE 0 END) AS 'holiday_working_a',
+				SUM(CASE WHEN (overtime_code='2015_BB') THEN 1 ELSE 0 END) AS 'holiday_working_b',
+				SUM(CASE WHEN (overtime_code='2015_BC') THEN 1 ELSE 0 END) AS 'holiday_working_c'
+			FROM yescnc_db.commute_result_tbl A 
+			LEFT OUTER JOIN office_code_tbl B ON A.vacation_code = B.code
+			LEFT OUTER JOIN overtime_code_tbl C ON A.overtime_code=C.code 
+			INNER JOIN (
+				SELECT 
+					STR_TO_DATE(?, '%Y-%m-%d') AS START_DATE,
+					STR_TO_DATE(?, '%Y-%m-%d') AS END_DATE
+				FROM DUAL
+			) D ON A.date &gt;= D.START_DATE AND A.date &lt;= D.END_DATE
+			WHERE A.id = ?
+			GROUP BY ID
+    	</query>
+    </group>
 </querys>

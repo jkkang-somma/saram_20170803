@@ -11091,7 +11091,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": '<span class="default_span">_START_ ~ _END_ Totall _TOTAL_ </span>',
+			"sInfo": '<span class="default_span">_START_ ~ _END_ Total _TOTAL_ </span>',
 	
 	
 			/**
