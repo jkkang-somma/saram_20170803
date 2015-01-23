@@ -18,6 +18,10 @@ var Comment = function() {
 		return CommentDao.selectCommentById(data);
 	};
 	
+	var _getCommentByPk = function(data) {
+		return CommentDao.selectCommentByPk(data);
+	};	
+
 	var _insertComment = function(inData) {
 		return new Promise(function(resolve, reject){// promise patten			
 			CommuteDao.updateCommuteCommentCount(inData).then(function(result) {
@@ -34,12 +38,25 @@ var Comment = function() {
 	}
 	
 	var _updateCommentReply = function(inData) {
-		return CommentDao.updateCommentReply(inData);
+		console.log(inData);
+		return new Promise(function(resolve, reject){// promise patten
+			CommentDao.updateCommentReply(inData).then(function(result) {
+				CommentDao.selectCommentByPk(inData).then(function(result) {
+					resolve(result);
+	    		}).catch(function(e){//Connection Error
+	                reject(e);
+	             });
+			}).catch(function(e){//Connection Error
+	            reject(e);
+	         });		
+		});
+
 	}
 	
 	return {
 		getComment : _getComment,
 		getCommentById : _getCommentById,
+		getCommentByPk : _getCommentByPk,
 		insertComment : _insertComment,
 		updateCommentReply : _updateCommentReply
 	}
