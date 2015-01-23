@@ -3,20 +3,32 @@ var debug = require('debug')('rawDataRouter');
 var Promise = require('bluebird');
 var router = express.Router();
 var RawData = require("../service/RawData.js")
-
+var sessionManager = require('../lib/sessionManager');
+	
 router.route('/bulk')
 .post(function(req, res){
-    var count = 0;    
-    var resultArr = [];
-    for(var key in req.body){
-        resultArr.push(RawData.insertRawData(req.body[key]));
-        count++;
-    }
-    
-    Promise.all(resultArr).then(function(){
-        debug("Add RawData Count : " + count);
-        res.send({msg : "Add RawData Count : " + count, count: count});    
-    });
+    var data = req.body;
+    var session = sessionManager.get(req.cookies.saram);
+    if (session.user.admin == 1) {	// admin 일 경우만 생성
+	    RawData.insertRawData(data).then(function(){
+	    	res.send({
+	            success:true,
+	        });
+	    }, function(errResult){
+	    	res.status(500);
+        	res.send({
+	            success:false,
+	            message: errResult.message,
+	            error:errResult
+	        });
+	    });
+	} else {
+		res.status(401);
+    	res.send({
+            success:false,
+            message: "관리자 등급만 생성이 가능합니다.",
+        });
+	}
     
     
 });
