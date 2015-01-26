@@ -355,7 +355,8 @@ define([
         if(i==1){// end date 일경우
           var selGubun = $(this.el).find('#office_code');
           var selVal = selGubun.val();
-          if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03'){
+          if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03' 
+           || 'W01'){
             $(this.el).find('#'+essenId[i]).val(formData["start_date"]);
             formData[essenId[i]] = formData["start_date"];
           }
