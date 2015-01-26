@@ -86,7 +86,6 @@ ProgressbarView){
                 success: function(){
                     that.grid.render();
                     that.progressbar.disabledProgressbar(true);
-                    Dialog.info("검색이 완료되었습니다");
                 }
     	    });
         },
