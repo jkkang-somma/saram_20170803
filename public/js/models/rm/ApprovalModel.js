@@ -23,7 +23,8 @@ define([
             black_mark : null,     
             state : null,           // 결재 구분
             start_time : null,
-            end_time : null        
+            end_time : null,
+            day_count : null
         },
         
     });

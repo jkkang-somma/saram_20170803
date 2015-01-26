@@ -299,6 +299,8 @@ define([
         indexed_array[n['name']] = n['value'];
       });
       
+      indexed_array["day_count"] = this.holReq;
+      
       return indexed_array;
   	},
     

@@ -59,7 +59,8 @@ var Schemas = function (schemaName) {
             black_mark : null,
             state : null,
             start_time : null,
-            end_time : null
+            end_time : null,
+            day_count : null
         },
         
         outoffice:{
