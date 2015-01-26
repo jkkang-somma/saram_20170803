@@ -84,10 +84,11 @@ define([
                     Dialog.show(i18nCommon.SUCCESS.LOGIN[result.msg]);
                     $("#passwadUpdate").fadeOut(100, function(){
                         $("#loginbtn").fadeIn(500, function(){
+                             $("#loginbtn").button('reset');
                         });
                     });
-                }).fail(function(){
-                    
+                }).fail(function(e){
+                    Dialog.error("Init Password fail.");
                 });
             }
             return false;
