@@ -9,6 +9,8 @@ var VacationDao= require('../dao/vacationDao.js');
 var UserDao= require('../dao/userDao.js');
 
 /**
+ * id 자릿수가 7자리(외주인력)은 휴가 수가 15일로 고정 
+ * 
  * 금년도 - 입사년도 = A
  * A값에 따라서 계산법을 달리합니다.
  * 
@@ -27,12 +29,10 @@ var UserDao= require('../dao/userDao.js');
  *  
  *  
  * A : 2  이상인 경우
- *  => 14 + ( A/2 )
- *       A/2의 계산에서 소수점이 나오면 버림한 후 14와 더한다.
- *       A 값이 3이상일 경우 1을 추가 
+ *  => 15 + ( rounddwon( A-1 ) / 2 ) 
  *
  */
-var getHoliday = function(joinDate) {
+var getHoliday = function(userId, joinDate) {
 	var joinDateArr = joinDate.split("-"),
 		joinYear = parseInt( joinDateArr[0]),
 		joinMonth = parseInt( joinDateArr[1]),
@@ -41,6 +41,10 @@ var getHoliday = function(joinDate) {
 		nowMonth = (new Date().getMonth() +1),
 		diffYear = nowYear -  joinYear,
 		holiday = 0;
+	
+	if (userId.length >= 7) {	// ID가 7자리 이상 -> 외주 인력은 15일로 고정
+		return 15;
+	}
 		
 	if ( diffYear == 0) {
 		return nowMonth - joinMonth;
@@ -63,10 +67,7 @@ var getHoliday = function(joinDate) {
 		}
 
 	} else {
-		var tNum = 14 + (diffYear/2);
-		if (diffYear >= 3) {
-			tNum++;
-		}
+		var tNum = 15 +  parseInt( (diffYear-1) / 2);
 		
 		return parseInt(tNum);
 	}
@@ -96,7 +97,7 @@ var Vacation = function() {
     				obj = {
     						id : (result[i].id),
     						year : data.year,
-    						total_day : ( (result[i].id.length == 7)?15 : getHoliday(result[i].join_company) ) // id 자릿수가 7자리(외주인력)은 휴가 수가 15일
+    						total_day : getHoliday(result[i].id, result[i].join_company)
     				};
     				datas.push(obj);
     			}

@@ -52,7 +52,7 @@ ProgressbarView){
  	                   	{ data : "char_date", 		"title" : "출입시간" },
  	                   	{ data : "type", 			"title" : "출입기록" }
     		    ],
-    		    dataschema:["id", "name", "department", "char_date", "type"],
+    		    dataschema:["name", "department", "char_date", "type"],
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
@@ -62,8 +62,6 @@ ProgressbarView){
             // 수원 사업자의 경우 컬럼을 추가 
             var dept_code = SessionModel.getUserInfo().dept_code;
             if ( Code.isSuwonWorker(dept_code) ) {
-            	this.gridOption.column.push( { data : "ip_pc", 			"title" : "사용자 IP" } );
-            	this.gridOption.column.push( { data : "ip_office", 		"title" : "사무실 IP" } );
             	this.gridOption.column.push( { data : "need_confirm", 	"title" : "확인필요",
             		render: function(data, type, full, meta) {
                			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
@@ -88,7 +86,6 @@ ProgressbarView){
                 success: function(){
                     that.grid.render();
                     that.progressbar.disabledProgressbar(true);
-                    Dialog.info("검색이 완료되었습니다");
                 }
     	    });
         },

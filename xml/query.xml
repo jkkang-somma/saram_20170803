@@ -14,7 +14,7 @@
         	WHERE 
         		m.id=?
         </query>
-        <query id="selectManager">select * from members_tbl where privilege &lt;= 2</query>
+        <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = '150105'</query>
         <query id="insertUser">insert into members_tbl(id, name, dept_code, name_commute, join_company, privilege, admin) values(?,?,?,?,?, ?,?)</query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
@@ -156,7 +156,9 @@
         		, app.manager_id , (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
         		, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
         		, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
-        		, state, start_time, end_time
+        		, state, start_time, end_time, black_mark, day_count 
+				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
+				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
     		from 
     			approval_tbl app
 			where
@@ -170,7 +172,7 @@
 				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
 				, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
 				, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
-				, state, start_time, end_time, black_mark 
+				, state, start_time, end_time, black_mark , day_count 
 				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
 				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
@@ -186,7 +188,7 @@
 				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
 				, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
 				, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
-				, state, start_time, end_time, black_mark 
+				, state, start_time, end_time, black_mark , day_count 
 				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
 				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
@@ -196,8 +198,8 @@
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
-				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, start_time, end_time) 
-			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?)
+				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, start_time, end_time, day_count) 
+			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?, ?)
     	</query>
     	<query id="updateApprovalConfirm">
     		update approval_tbl set 

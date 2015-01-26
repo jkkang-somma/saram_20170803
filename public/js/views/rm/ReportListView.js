@@ -41,7 +41,7 @@ define([
    		this.option = {
    		    el:_id+"_content",
    		    column:[],
-            dataschema:["submit_date", "submit_id", "submit_name", "office_code_name", "end_date", "manager_name", "decide_date", "state"],
+            dataschema:["submit_date", "submit_id", "submit_name", "office_code_name", "day_count", "end_date", "manager_name", "decide_date", "state"],
    		    collection:this.collection,
    		    detail:true,
    		    view:this
@@ -70,7 +70,7 @@ define([
       // small title 
       var smallTitleTxt = $(this.el).find('#smallTitleTxt');
       smallTitleTxt.empty();
-      smallTitleTxt.text('근태보고 관리');
+      smallTitleTxt.text('근태 결재 관리');
       
       return this;
     },
@@ -124,6 +124,10 @@ define([
          { data : "submit_id", "title" : "ID" },
          { data : "submit_name", "title" : "이름"},
          { data : "office_code_name", "title" : "구분"},
+         { "title" : "근태일수", "render": function(data, type, row){
+            var dataVal = (row.day_count != null)?"<span style='float: right;'>" + row.day_count +"일</span>" : "<span style='float: right;'>-</span>";
+            return dataVal;
+         }},
          { "title" : "근태기간", "render": function(data, type, row){
             var dataVal = row.start_date +"</br>~ " + row.end_date;
             return dataVal;

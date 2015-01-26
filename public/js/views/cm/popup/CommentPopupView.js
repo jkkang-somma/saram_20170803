@@ -12,13 +12,16 @@ define([
     'dialog',
     'datatables',
     'cmoment',
+    'i18n!nls/common',
     'core/BaseView',
     'models/cm/CommentModel',
 	'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/default/datepickerChange.html',
 ], function(
-	$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, BaseView,
+	$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, 
+	i18Common,
+	BaseView,
 	CommentModel,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML
 ) {
@@ -86,7 +89,7 @@ define([
 				return;
 			}
 			
-			inData["state"] = "접수중";
+			inData["state"] = i18Common.COMMENT.STATE.ACCEPTING;
 			var commentModel = new CommentModel();
 			commentModel.save(inData, opt);
 		},

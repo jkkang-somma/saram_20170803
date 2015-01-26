@@ -25,7 +25,7 @@ ApprovalDao.prototype.insertApproval =  function (data) {
     var queryStr = db.getQuery('approval', 'insertApproval');
     return db.queryV2(queryStr, [data.doc_num,data.submit_id,data.manager_id
     ,data.submit_comment,data.start_date,data.end_date
-    ,data.office_code,data.start_time,data.end_time]);
+    ,data.office_code,data.start_time,data.end_time,data.day_count]);
 };
 ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
     var queryStr = db.getQuery('approval', 'updateApprovalConfirm');

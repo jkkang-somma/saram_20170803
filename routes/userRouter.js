@@ -30,7 +30,7 @@ router.route('/list/manager')
 .get(function(req, res){
     // Get user infomation list (GET)
     var user = new User();
-    var result = user.getManagerList().then(function(result){
+    var result = user.getManagerList(req.query.id).then(function(result){
         debug("Complete Select User List.");
         res.send(result);    
     }).catch(function(e){
