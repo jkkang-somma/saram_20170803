@@ -1,29 +1,29 @@
 
 # 1.25까지 등록된 연차 정보 ( 개발1팀 )
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-001','071103','130702','2015-01-01','2015-01-01','신혼여행','일괄결재','2015-01-19','2015-01-19','V04','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-002','100501','130702','2015-01-01','2015-01-01','가사','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-003','071103','130702','2015-01-01','2015-01-01','개인사유(결혼준비)','일괄결재','2015-01-07','2015-01-07','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-004','090401','130702','2015-01-01','2015-01-01','조모 제사','일괄결재','2015-01-09','2015-01-09','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-005','140901','130702','2015-01-01','2015-01-01','개인사유로 연차휴가 신청합니다.','일괄결재','2015-01-16','2015-01-16','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-006','110602','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-007','090703','130702','2015-01-01','2015-01-01','징검다리 휴가','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-008','140606','130702','2015-01-01','2015-01-01','연차휴가','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-009','080903','130702','2015-01-01','2015-01-01','개인사유(이사)','일괄결재','2015-01-23','2015-01-23','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-010','0120801','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-011','131201','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-012','131201','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-09','2015-01-09','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-013','140602','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-014','150106','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-015','050801','130702','2015-01-01','2015-01-01','개인 사유 ','일괄결재','2015-01-23','2015-01-23','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-016','080802','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-017','080802','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-12','2015-01-12','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-018','071102','130702','2015-01-01','2015-01-01','가사.','일괄결재','2015-01-19','2015-01-19','V01','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-019','100501','130702','2015-01-01','2015-01-01','자녀 어린이집 졸업발표회','일괄결재','2015-01-13','2015-01-13','V03','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-020','071103','130702','2015-01-01','2015-01-01','개인사유(결혼준비)','일괄결재','2015-01-15','2015-01-15','V03','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-021','140601','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-16','2015-01-16','V03','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-022','130901','130702','2015-01-01','2015-01-01','병원 진료','일괄결재','2015-01-23','2015-01-23','V03','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-023','150106','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-05','2015-01-05','V03','결재완료','1');
-INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark) VALUES ('201501-024','071102','130702','2015-01-01','2015-01-01','가사.','일괄결재','2015-01-09','2015-01-09','V03','결재완료','1');
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-001','071103','130702','2015-01-01','2015-01-01','신혼여행','일괄결재','2015-01-19','2015-01-19','V04','결재완료','1',0);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-002','100501','130702','2015-01-01','2015-01-01','가사','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-003','071103','130702','2015-01-01','2015-01-01','개인사유(결혼준비)','일괄결재','2015-01-07','2015-01-07','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-004','090401','130702','2015-01-01','2015-01-01','조모 제사','일괄결재','2015-01-09','2015-01-09','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-005','140901','130702','2015-01-01','2015-01-01','개인사유로 연차휴가 신청합니다.','일괄결재','2015-01-16','2015-01-16','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-006','110602','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-007','090703','130702','2015-01-01','2015-01-01','징검다리 휴가','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-008','140606','130702','2015-01-01','2015-01-01','연차휴가','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-009','080903','130702','2015-01-01','2015-01-01','개인사유(이사)','일괄결재','2015-01-23','2015-01-23','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-010','0120801','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-011','131201','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-012','131201','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-09','2015-01-09','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-013','140602','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-014','150106','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-015','050801','130702','2015-01-01','2015-01-01','개인 사유 ','일괄결재','2015-01-23','2015-01-23','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-016','080802','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-02','2015-01-02','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-017','080802','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-12','2015-01-12','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-018','071102','130702','2015-01-01','2015-01-01','가사.','일괄결재','2015-01-19','2015-01-19','V01','결재완료','1',1);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-019','100501','130702','2015-01-01','2015-01-01','자녀 어린이집 졸업발표회','일괄결재','2015-01-13','2015-01-13','V03','결재완료','1',0.5);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-020','071103','130702','2015-01-01','2015-01-01','개인사유(결혼준비)','일괄결재','2015-01-15','2015-01-15','V03','결재완료','1',0.5);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-021','140601','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-16','2015-01-16','V03','결재완료','1',0.5);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-022','130901','130702','2015-01-01','2015-01-01','병원 진료','일괄결재','2015-01-23','2015-01-23','V03','결재완료','1',0.5);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-023','150106','130702','2015-01-01','2015-01-01','개인사유','일괄결재','2015-01-05','2015-01-05','V03','결재완료','1',0.5);
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark,day_count) VALUES ('201501-024','071102','130702','2015-01-01','2015-01-01','가사.','일괄결재','2015-01-09','2015-01-09','V03','결재완료','1',0.5);
 
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-19','071103','V04','0','신혼여행','201501-001','','','');
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-20','071103','V04','0','신혼여행','201501-001','','','');
@@ -53,29 +53,6 @@ INSERT INTO out_office_tbl VALUES ('2015','2015-01-16','140601','V03','0.5','개
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-23','130901','V03','0.5','병원 진료','201501-022','','','');
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-05','150106','V03','0.5','개인사유','201501-023','','','');
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-09','071102','V03','0.5','가사.','201501-024','','','');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

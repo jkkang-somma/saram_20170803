@@ -4,13 +4,14 @@ define([
 'backbone',
 'log',
 'dialog',
+'spin',
 'models/sm/UserModel',
 'models/sm/SessionModel',
 'text!templates/loginTemplate.html',
 'text!templates/loginPasswordSectionTemplate.html',
 'i18n!nls/common',
 'css!cs/login.css',
-], function($, _,Backbone, log, Dialog, UserModel, SessionModel, LoginHTML, LoginPasswordSectionHTML, i18nCommon){
+], function($, _,Backbone, log, Dialog, Spin, UserModel, SessionModel, LoginHTML, LoginPasswordSectionHTML, i18nCommon){
     var LOG=log.getLogger('LoginView');
     var LoginView = Backbone.View.extend({
         events: {
@@ -54,8 +55,32 @@ define([
     	    if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
     	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_LOGIN_INFO);         
     	    } else {
+    	       // var _hash = new HASH(data.id);
+    	       // var _hashPassword=_hash.encode(data.password);
     	        
-    	        $("#loginbtn").button("loading");
+    	       // data.password =_hashPassword;
+    	       // $("#loginbtn").button("loading");
+    	       
+    	       
+    	       // var opts = {
+            //       lines: 7, // The number of lines to draw
+            //       length: 1, // The length of each line
+            //       width: 4, // The line thickness
+            //       radius: 4, // The radius of the inner circle
+            //       corners: 1, // Corner roundness (0..1)
+            //       rotate: 0, // The rotation offset
+            //       direction: 1, // 1: clockwise, -1: counterclockwise
+            //       color: '#2ABB9B', // #rgb or #rrggbb or array of colors
+            //       speed: 1, // Rounds per second
+            //       trail: 60, // Afterglow percentage
+            //       shadow: false, // Whether to render a shadow
+            //       hwaccel: false, // Whether to use hardware acceleration
+            //       className: 'spinner', // The CSS class to assign to the spinner
+            //       zIndex: 2e9, // The z-index (defaults to 2000000000)
+            //       top: '12px', // Top position relative to parent
+            //       left: '5px' // Left position relative to parent
+            //     }; 
+    	       // var _spin=new Spin(opts).spin($("#loginbtn").find(".spinIcon")[0]);
                 SessionModel.login(data).then(function(){
                     _view.app.draw();    
                 }).fail(function(e){

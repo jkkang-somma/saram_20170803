@@ -30,6 +30,9 @@ define([
 		},
 		destroy : function() {
 			// 상속 후  개별 초기화 할 내용들 
+		},
+		setActionAuth :function(actionAuth){
+			this.actionAuth=actionAuth;
 		}
 	});
 

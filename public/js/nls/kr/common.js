@@ -147,6 +147,14 @@ define({
             SICK_LEAVE:"조퇴",
             ABSENTEEISM:"결근"
         }    
+    },
+    COMMENT: {
+    	STATE: {
+    		ALL : "전체",
+    		ACCEPTING : "접수중",
+    		PROCESSING : "처리중",
+    		COMPLETE : "처리완료"
+    	}
     }
     
     
