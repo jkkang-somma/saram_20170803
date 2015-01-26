@@ -52,7 +52,7 @@
         </query>
         <query id="insertRawDataCompanyAccess">
   			INSERT INTO commute_base_tbl 
-  				( year, id, name, department, char_date, type, ip_address, mac_address, need_confirm)
+  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm)
   			VALUES
   				(year(now()), ? , ?, ?, now(), ?, ?, ?, ?)
         </query>
@@ -159,6 +159,8 @@
         		, state, start_time, end_time
     		from 
     			approval_tbl app
+			where
+				doc_num = ?
 		</query>
         <query id="selectApprovalListWhere">
         	select 
@@ -174,6 +176,7 @@
 			from  approval_tbl app 
 			where (DATE(start_date) between DATE(?) AND DATE(?)) 
 				OR (DATE(end_date)  between DATE(?) AND DATE(?))
+			ORDER BY doc_num desc
     	</query>
     	<query id="selectApprovalByManager">
         	select 
@@ -189,6 +192,7 @@
 			from  approval_tbl app 
 			where app.manager_id = ? and (state = '상신' or state = '취소요청')
 				and ((DATE(start_date) between DATE(?) AND DATE(?)) OR (DATE(end_date)  between DATE(?) AND DATE(?)))
+			ORDER BY doc_num desc
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
@@ -504,7 +508,35 @@
     		WHERE
     			date BETWEEN ? AND ? and c.id = ?
 			ORDER BY date
-    	</query>    	
+    	</query>
+
+    	<query id="selectCommentByPk">
+    		SELECT
+    			c.year,
+    			c.date,
+    			c.id,
+    			m.name,
+    			c.seq,
+    			IFNULL( c.comment, '') AS comment,
+    			date_format(c.comment_date, '%Y-%m-%d %T') AS comment_date,
+    			IFNULL( c.comment_reply, '') AS comment_reply,
+    			date_format(c.comment_reply_date, '%Y-%m-%d %T') AS comment_reply_date,
+    			c.state,
+    			c.writer_id,
+    			c.want_in_time,
+    			c.want_out_time,
+    			c.before_in_time,
+    			c.before_out_time,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.writer_id) , '') AS writer_name,
+    			c.reply_id,
+    			IFNULL(  (SELECT name FROM members_tbl WHERE id = c.reply_id), '') AS reply_name    			
+    		FROM
+    			comment_tbl c
+    			LEFT JOIN members_tbl m ON m.id = c.id
+    		WHERE
+    			c.id = ? and c.date = ? and c.seq = ?
+			ORDER BY date
+    	</query>
     	
     	<query id="insertComment">
     		INSERT INTO comment_tbl
@@ -526,7 +558,7 @@
 			    state = ?,
 			    reply_id = ?
 			WHERE
-				id = ? AND year = ? AND date = ?
+				id = ? AND year = ? AND date = ? AND seq = ?
     	</query>
     </group>
     

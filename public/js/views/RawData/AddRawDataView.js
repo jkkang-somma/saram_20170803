@@ -128,6 +128,7 @@ AddRawDataAddPopupView, ProgressbarView){
                                                         department : item[0],
                                                         time: Util.timeToString(resultDate),
                                                         date: Util.dateToString(resultDate),
+                                                        char_date : Util.dateToString(resultDate)  + " " + Util.timeToString(resultDate) ,
                                                         year: resultDate.getFullYear(),
                                                         type: item[3]
                                                     }));
@@ -139,6 +140,7 @@ AddRawDataAddPopupView, ProgressbarView){
                                                             department : item[0],
                                                             time: Util.timeToString(resultDate),
                                                             date: Util.dateToString(resultDate),
+                                                            char_date : Util.dateToString(resultDate)  + " " + Util.timeToString(resultDate) ,
                                                             year: resultDate.getFullYear(),
                                                             type: item[3]
                                                         })); 
@@ -186,36 +188,26 @@ AddRawDataAddPopupView, ProgressbarView){
     	        name:"ok",
     	        click:function(){
     	            Dialog.confirm({
-    					msg : "출입 기록을 서버에 저장하시겠습니까?",
-    	                buttons : [{
-    	                    label: "확인",
-    	                    cssClass: Dialog.CssClass.PRIMARY,
-    	                    action: function(dialogRef){// 버튼 클릭 이벤트
-    	                        var dialogProgressbar = new ProgressbarView();
-    	                    	dialogRef.getModalBody().html("<div>전송중</div>");
-    	                    	dialogRef.getModalBody().append(dialogProgressbar.render());
-    	                    	dialogRef.enableButtons(false);
-    	                    	dialogRef.setClosable(false);
-    	                    	dialogProgressbar.disabledProgressbar(false);
-                	       
-                	            that.rawDataCollection.save({
-                	                success:function(){
-                	                    dialogRef.close();
-                	                    Dialog.info("데이터 전송이 완료되었습니다.");
-                	                },
-                	                error: function(){
-                	                    dialogRef.close();
-                	                    Dialog.error("데이터 전송 실패!");
-                	                }
-                	            });
-                	            
-    	                    }
-    	                },{
-    	                    label: "취소",
-    	                    action: function(dialogRef){// 버튼 클릭 이벤트
-    	                    	dialogRef.close();
-    	                    }
-    	                }]
+    	                msg : "출입 기록을 서버에 저장하시겠습니까?",
+                        action:function(){
+                            var dfd = new $.Deferred();
+                            that.rawDataCollection.save({
+                                success : function(){
+                                    dfd.resolve();
+                                },
+                                error : function(){
+                                    dfd.reject();
+                                }
+                            });
+            	            return dfd;
+                        },
+                        actionCallBack:function(res){//response schema
+                            Dialog.info("데이터 전송이 완료되었습니다.");
+                        },
+                        errorCallBack:function(){
+                            Dialog.error("데이터 전송 실패!");
+                        },
+    					
     	            });
     	        }
     	    });  

@@ -8,11 +8,12 @@ define([
   'core/BaseView',
   'text!templates/navigation.html',
   'data/menu',
+  'data/code',
   'models/sm/SessionModel',
   'models/common/RawDataModel',
   'views/sm/ConfigUserView',
 ], function($, _, Backbone, animator,Dialog, i18Common, 
-		BaseView, navigation, Menu, SessionModel, RawDataModel, ConfigUserView){
+		BaseView, navigation, Menu, Code, SessionModel, RawDataModel, ConfigUserView){
   
     
         // <li class="dropdown">
@@ -62,6 +63,13 @@ define([
             }
             li.append(subUl);
             _leftMenu.append(li);
+        }
+        
+        // 수원 근로자가 아닌 경우 출퇴근 기능 삭제
+        var dept_code = SessionModel.getUserInfo().dept_code;
+        if ( !Code.isSuwonWorker(dept_code) ) { 
+        	$(this.el).find('#accessIn').remove();
+        	$(this.el).find('#accessOut').remove();
         }
         
         $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);

@@ -28,10 +28,8 @@ define([
             leave_company: "-",
             privilege: null,
             admin : null,
-            ip_addr_1 : null,
-            mac_addr_1 : null,
-            ip_addr_2 : null,
-            mac_addr_2 : null
+            ip_pc : null,
+            ip_office : null
         },
         auth:{
         },

@@ -5,12 +5,13 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
+  'comboBox',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'models/vacation/InOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -103,7 +104,8 @@ define([
         var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
         selGubun.append(optionHtml);
       }
-    
+      
+      ComboBox.createCombo(selGubun);
     },
     
     setDataDefaultValues : function(param){
@@ -187,6 +189,15 @@ define([
       return indexed_array;
   	},
   	
+  	getChangeFormData : function(sendData){
+        var arrData = this.options;
+        arrData["decide_comment"] = sendData["decide_comment"];
+        arrData["state"] = sendData["state"];
+        arrData["black_mark"] = sendData["black_mark"];
+        arrData["decide_date"] = new Date();
+        return arrData;
+    },
+  	
   	onClickBtnSend : function(evt){
   	  this.thisDfd = new $.Deferred();
   	  var _this = this;
@@ -216,15 +227,15 @@ define([
           	           // _this.deleteOutOfficeData();
           	           var outOfficeModel =new OutOfficeModel(sendData);
                        outOfficeModel.destroy();
-                       _this.thisDfd.resolve();
+                       _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	              }else{
       	                // 휴일 근무
       	               var inOfficeModel =new InOfficeModel(sendData);
                        inOfficeModel.destroy();
-                       _this.thisDfd.resolve();
+                       _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	              }
     	              }else{
-      	              _this.thisDfd.resolve();
+      	              _this.thisDfd.resolve(_this.getChangeFormData(formData));
       	            }
       	        },
       	        error:function(model, xhr, options){
@@ -256,7 +267,7 @@ define([
       var _outOfficeModel = new OutOfficeModel(sendData);
       _outOfficeModel.save({},{
       	        success:function(model, xhr, options){
-      	          _this.thisDfd.resolve();
+      	          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	        },
       	        error:function(model, xhr, options){
       	            var respons=xhr.responseJSON;
@@ -283,7 +294,7 @@ define([
       var _inOfficeModel = new InOfficeModel(sendData);
       _inOfficeModel.save({},{
       	        success:function(model, xhr, options){
-      	          _this.thisDfd.resolve();
+      	          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
       	        },
       	        error:function(model, xhr, options){
       	            var respons=xhr.responseJSON;

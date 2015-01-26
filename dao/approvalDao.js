@@ -7,9 +7,9 @@ var db = require('../lib/dbmanager.js');
 
 var ApprovalDao = function () {
 };
-ApprovalDao.prototype.selectApprovalList =  function () {
+ApprovalDao.prototype.selectApprovalList =  function (doc_num) {
     var queryStr = db.getQuery('approval', 'selectApprovalList');
-    return db.queryV2(queryStr);
+    return db.queryV2(queryStr, [doc_num]);
 };
 ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate) {
     var queryStr = db.getQuery('approval', 'selectApprovalListWhere');

@@ -189,6 +189,7 @@ define([
     onClickBtnAppCancel : function(){
   	  this.thisDfd = new $.Deferred();
   	  var _this = this;
+  	  
       var formData = this.options;
       
       console.log(formData);
@@ -201,7 +202,7 @@ define([
       	        success:function(model, xhr, options){
       	            // insert
       	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
-    	              _this.thisDfd.resolve();
+    	              _this.thisDfd.resolve(formData);
       	        },
       	        error:function(model, xhr, options){
       	            var respons=xhr.responseJSON;

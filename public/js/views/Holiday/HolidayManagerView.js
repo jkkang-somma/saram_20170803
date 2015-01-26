@@ -228,7 +228,6 @@ CreateHolidayPopup, AddHolidayPopup){
             var that=this;
             var _yearCombo = $(this.el).find("#holidayYearCombo");
             var year = _yearCombo.val();
-            console.log(year);
             this.holidayCollection.fetch({
                 data : {  
                     year : year

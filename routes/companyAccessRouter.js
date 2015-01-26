@@ -12,8 +12,8 @@ router.route("/")
 	
 	var inData = {
 			type : req.body.type,
-			ip_address : req.ip,
-			mac_address : ''
+			ip_pc : '',
+			ip_office : req.ip
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {

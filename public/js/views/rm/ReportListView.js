@@ -223,35 +223,40 @@ define([
              		  selectData.holidayInfos = _this.holidayInfos;
              		  var sessionInfo = SessionModel.getUserInfo();
              		   
-             		  if(selectData.manager_id == sessionInfo.id){
+             		  if(selectData.state == "상신" || selectData.state == "취소요청"){
              		 //if(true){
-               		  var _approvalReportView = new ApprovalReportView();
-                   		 // data param 전달
-                   		 _approvalReportView.options = selectData;
-                   		 // Dialog
-                   		 Dialog.show({
-                            title:"결재", 
-                            content:_approvalReportView, 
-                            buttons:[{
-                                label: "확인",
-                                cssClass: Dialog.CssClass.SUCCESS,
-                                action: function(dialogRef){// 버튼 클릭 이벤트
-                                   _approvalReportView.onClickBtnSend(dialogRef).done(function(model){
-                                      Dialog.show("Success Approval Confirm.");
-                                        _this.onClickClearBtn();
-                                        dialogRef.close();
-                                    });
-                                }
-                            }, {
-                                label: 'Close',
-                                action: function(dialogRef){
-                                    dialogRef.close();
-                                }
-                            }]
-                        });
+                   		 if(selectData.manager_id == sessionInfo.id){
+                   		 //if(true){
+                     		  var _approvalReportView = new ApprovalReportView();
+                         		 // data param 전달
+                         		 _approvalReportView.options = selectData;
+                         		 // Dialog
+                         		 Dialog.show({
+                                  title:"결재", 
+                                  content:_approvalReportView, 
+                                  buttons:[{
+                                      label: "확인",
+                                      cssClass: Dialog.CssClass.SUCCESS,
+                                      action: function(dialogRef){// 버튼 클릭 이벤트
+                                         _approvalReportView.onClickBtnSend(dialogRef).done(function(model){
+                                            Dialog.show("Success Approval Confirm.");
+                                              _this.grid.updateRow(model);
+                                              dialogRef.close();
+                                          });
+                                      }
+                                  }, {
+                                      label: 'Close',
+                                      action: function(dialogRef){
+                                          dialogRef.close();
+                                      }
+                                  }]
+                              });
+                   		 }else{
+             		          Dialog.warning("해당 상신 항목의 결재자가 아닙니다.");
+                   		 }
              		    
              		    }else{
-             		      Dialog.warning("해당 상신 항목의 결재자가 아닙니다.");
+             		      Dialog.warning("결재 완료된 항목입니다.");
              		    }
                  		 
              		} else {
@@ -278,11 +283,24 @@ define([
                           label: "취소 요청",
                           cssClass: Dialog.CssClass.SUCCESS,
                           action: function(dialogRef){// 버튼 클릭 이벤트
-                               _detailReportView.onClickBtnAppCancel().done(function(model){
-                                    Dialog.show("Completed Approval Cancel.");
-                                    _this.onClickClearBtn();
-                                    dialogRef.close();
-                                });
+                          
+                              var dd = Dialog.confirm({
+                                  msg:"Do you want to cancel approval?", 
+                                  action:function(){
+                                    var _dfd= new $.Deferred();
+                                      _detailReportView.onClickBtnAppCancel().done(function(model){
+                                          Dialog.show("Completed Approval Cancel.");
+                                          _this.grid.updateRow(model);
+                                          // _this.onClickClearBtn();
+                                          dialogRef.close();
+                                       });
+                                      // this.action.caller.arguments[0].close();
+                                      _dfd.resolve();
+  	                                  return _dfd.promise();
+                                  }
+                              });
+                          
+                              
                           }
                       });
                  		 }

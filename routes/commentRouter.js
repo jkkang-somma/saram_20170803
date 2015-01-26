@@ -6,7 +6,7 @@ var sessionManager = require('../lib/sessionManager');
 
 router.route('/')
 .get(function(req, res){
-
+	
 	var query = req.query;
 	if (query["id"] != undefined && query["id"] != "") {
 		Comment.getCommentById(query).then(function(result) {
@@ -57,6 +57,6 @@ router.route('/:id')
 		return res.send({"error": "관리자 등급만  가능합니다."});
 	}
 
-})
+});
 
 module.exports = router;
