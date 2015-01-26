@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
 	'util',
-	'moment',
+	'cmoment',
 	'text!templates/default/datepicker.html',
 	'views/component/ProgressbarView'
 ], function(

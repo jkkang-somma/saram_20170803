@@ -41,6 +41,7 @@ require.config({
       grid:'lib/component/grid',
       comboBox:'lib/component/combo',
       schemas:'lib/schemas',
+      
       resulttimefactory: 'lib/resultTimeFactory',
       
       i18n:'tool/i18n-master/i18n',

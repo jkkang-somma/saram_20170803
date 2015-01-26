@@ -48,11 +48,14 @@ define([
      	},
     	
     	login : function(e){
-    	    var _view=this;
+    	    var _view=this;  
+       // btn.button('loading')
     	    var data = this.getFormData( this.el.find('form'));
     	    if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
     	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_LOGIN_INFO);         
     	    } else {
+    	        
+    	        $("#loginbtn").button("loading");
                 SessionModel.login(data).then(function(){
                     _view.app.draw();    
                 }).fail(function(e){
@@ -97,7 +100,7 @@ define([
             this.passwordSection.addClass("fadeOutRightBig");
     	},
     	getFormData: function(form) {
-            form.find(':input:disabled').removeAttr('disabled');
+           // form.find(':input:disabled').removeAttr('disabled');
             var unindexed_array = form.serializeArray();
             var indexed_array= {};
             
