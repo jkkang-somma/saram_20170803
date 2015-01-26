@@ -17,7 +17,7 @@ define([
     var gridId=0;
     var _glyphiconSchema=Schemas.getSchema('glyphicon');
     var _defaultGroupBtnTag='<span class="input-group-btn"></span>';
-    var _defaultBtnTag='<button class="btn btn-default btn-sm btn-success grid-btn" type="button"></button>';
+    var _defaultBtnTag='<button class="btn btn-default btn-sm btn-success grid-btn" type="button" data-toggle="tooltip" data-original-title="<%= obj.tooltip %>"></button>';
     var _gridLength=[10,25,50,100];
     
     var Grid = Backbone.View.extend({
@@ -38,7 +38,7 @@ define([
                 this.options.buttons=_btns;    
             }
             this.options.format=this.format;
-            this.currentLength=10;
+            this.currentLength=50;
             
             if (_.isUndefined(this.options.id) || _.isNull(this.options.id)){
                 this.options.id = "grid-"+(gridId++);
@@ -92,9 +92,6 @@ define([
                     } else {
                         column.visible(false);
                     }
-                
-                    
-                    
                 }
             }
     	},
@@ -211,7 +208,9 @@ define([
     	    //_buttonIcon.attr("id", id);
             _buttonIcon.addClass(_glyphiconSchema.value(name));
             
-            var _button=$(_defaultBtnTag);
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:name}));//툴팁 셋팅
+            
             _button.attr("id", id);
             _button.append(_buttonIcon);
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
@@ -236,7 +235,10 @@ define([
     	    
     	    var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
             this.buttonid[obj.name] = _btnId;
-            var _button=$(_defaultBtnTag);
+            
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:obj.tooltip}));
+            
             _button.attr("id", _btnId);
             _button.append(_buttonIcon);
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
@@ -261,7 +263,9 @@ define([
     	    });
     	    this.buttonid["search"] = _btnId;
     	    
-            var _button=$(_defaultBtnTag);
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
+            
             _button.attr("id", _btnId);
             _button.append( _grid.currentLength);
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
@@ -329,7 +333,7 @@ define([
     	    var _grid = this;
     		//필터링 초기화
             $.fn.dataTable.ext.search=[];
-            _grid.currentLength=10;
+            _grid.currentLength=50;
             
     	    this._drawButtons();
     	
@@ -401,7 +405,12 @@ define([
                     }
                 });
             }
-            this.DataTableAPI=_tableAPI;
+            this.DataTableAPI=_tableAPI;//API 셋팅
+    	    _grid.DataTableAPI.page.len( _grid.currentLength ).draw(); //page length 설정
+    	    $("#"+this.options.el).find('[data-toggle="tooltip"]').tooltip({
+                placement : 'top'
+            });
+    	    
             this.updateCSS();
     	},
     	getButton: function(name){

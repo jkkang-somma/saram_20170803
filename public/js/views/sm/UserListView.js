@@ -34,15 +34,15 @@ define([
                         return row.dept_name;
                     }}
                     , i18Common.USER.NAME_COMMUTE, i18Common.USER.JOIN_COMPANY, i18Common.USER.LEAVE_COMPANY,
-                    { "title" : i18Common.USER.PRIVILEGE, "render": function(data, type, row){
-                        var result=i18Common.CODE.PRIVILEGE_1;
-                        if (row.privilege == 3){
-                            result=i18Common.CODE.PRIVILEGE_3;
-                        } else if (row.privilege == 2){
-                            result=i18Common.CODE.PRIVILEGE_2;
-                        }
-                        return result;
-                    }},
+                    // { "title" : i18Common.USER.PRIVILEGE, "render": function(data, type, row){
+                    //     var result=i18Common.CODE.PRIVILEGE_1;
+                    //     if (row.privilege == 3){
+                    //         result=i18Common.CODE.PRIVILEGE_3;
+                    //     } else if (row.privilege == 2){
+                    //         result=i18Common.CODE.PRIVILEGE_2;
+                    //     }
+                    //     return result;
+                    // }},
                     { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
                         var result=i18Common.CODE.ADMIN_0;
                         if (row.admin > 0){
@@ -51,7 +51,7 @@ define([
                         return result;
                     }}
                 ],
-    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "privilege", "admin"],
+    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "admin"],
     		    collection:userCollection,
     		    detail:true,
     		    view:this
@@ -76,6 +76,7 @@ define([
     	    _buttons.push({//User Remove
     	        type:"custom",
     	        name:"filter",
+    	        tooltip:"사용자 유형",
     	        filterBtnText:_filterText,
     	        click:function(_grid, _button){
     	           
@@ -106,65 +107,25 @@ define([
                    });
                 }
     	    });
-    	    _buttons.push({//User Add
-    	        type:"custom",
-    	        name:"add",
-    	        click:function(){
-                    var addUserView= new AddUserView();
-                    Dialog.show({
-                        title:i18Common.DIALOG.TITLE.USER_ADD, 
-                        content:addUserView, 
-                        buttons:[{
-                            label: i18Common.DIALOG.BUTTON.ADD,
-                            cssClass: Dialog.CssClass.SUCCESS,
-                            action: function(dialogRef){// 버튼 클릭 이벤트
-                                addUserView.submitAdd().done(function(data){
-                                    grid.addRow(data);
-                                    dialogRef.close();
-                                    Dialog.show(i18Common.SUCCESS.USER.ADD);
-                                });//실패 따로 처리안함 add화면에서 처리.
-                            }
-                        }, {
-                            label: i18Common.DIALOG.BUTTON.CLOSE,
-                            action: function(dialogRef){
-                                dialogRef.close();
-                            }
-                        }]
-                        
-                    });
-                }
-    	    });
     	    
-    	    _buttons.push({//User edit
-    	        type:"custom",
-    	        name:"edit",
-    	        click:function(_grid){
-    	            var selectItem=_grid.getSelectItem();
-                    if (_.isUndefined(selectItem)){
-                        Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
-                    } else {
-                        var editUserView= new EditUserView(selectItem);
+    	    if (this.actionAuth.add){
+    	        _buttons.push({//User Add
+        	        type:"custom",
+        	        name:"add",
+        	        tooltip:"사용자 등록",
+        	        click:function(){
+                        var addUserView= new AddUserView();
                         Dialog.show({
-                            title:i18Common.DIALOG.TITLE.USER_UPDATE, 
-                            content:editUserView, 
+                            title:i18Common.DIALOG.TITLE.USER_ADD, 
+                            content:addUserView, 
                             buttons:[{
-                                label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
+                                label: i18Common.DIALOG.BUTTON.ADD,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialogRef){// 버튼 클릭 이벤트
-                                    editUserView.initializePassword().done(function(data){
-                                        grid.updateRow(data);
+                                    addUserView.submitAdd().done(function(data){
+                                        grid.addRow(data);
                                         dialogRef.close();
-                                        Dialog.show(i18Common.SUCCESS.USER.SAVE);
-                                    });//실패 따로 처리안함 add화면에서 처리.
-                                }
-                            },{
-                                label: i18Common.DIALOG.BUTTON.SAVE,
-                                cssClass: Dialog.CssClass.SUCCESS,
-                                action: function(dialogRef){// 버튼 클릭 이벤트
-                                    editUserView.submitSave().done(function(data){
-                                        grid.updateRow(data);
-                                        dialogRef.close();
-                                        Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                                        Dialog.show(i18Common.SUCCESS.USER.ADD);
                                     });//실패 따로 처리안함 add화면에서 처리.
                                 }
                             }, {
@@ -176,37 +137,88 @@ define([
                             
                         });
                     }
-                }
-    	    });
+        	    });
+    	    }
     	    
-    	    _buttons.push({//User Remove
-    	        type:"custom",
-    	        name:"remove",
-    	        click:function(_grid){
-                    var selectItem=_grid.getSelectItem();
-                    if (_.isUndefined(selectItem)){
-                        Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
-                    } else {
-                        selectItem._id="-1";
-                        var dd=Dialog.confirm({
-                            msg:i18Common.CONFIRM.USER.REMOVE, //"Do you want Delete User?",
-                            action:function(){
-                               var userModel=new UserModel(selectItem);
-                               return userModel.remove();
-                            },
-                            actionCallBack:function(res){//response schema
-                                if (res.status){
-                                    _grid.removeRow(selectItem);
-                                    Dialog.show(i18Common.SUCCESS.USER.REMOVE);
-                                }
-                            },
-                            errorCallBack:function(){
-                                //dd.close();
-                            }
-                        });
+    	    if (this.actionAuth.edit){
+        	    _buttons.push({//User edit
+        	        type:"custom",
+        	        name:"edit",
+        	        tooltip:"사용자 수정",
+        	        click:function(_grid){
+        	            var selectItem=_grid.getSelectItem();
+                        if (_.isUndefined(selectItem)){
+                            Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
+                        } else {
+                            var editUserView= new EditUserView(selectItem);
+                            Dialog.show({
+                                title:i18Common.DIALOG.TITLE.USER_UPDATE, 
+                                content:editUserView, 
+                                buttons:[{
+                                    label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
+                                    cssClass: Dialog.CssClass.SUCCESS,
+                                    action: function(dialogRef){// 버튼 클릭 이벤트
+                                        editUserView.initializePassword().done(function(data){
+                                            grid.updateRow(data);
+                                            dialogRef.close();
+                                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                                        });//실패 따로 처리안함 add화면에서 처리.
+                                    }
+                                },{
+                                    label: i18Common.DIALOG.BUTTON.SAVE,
+                                    cssClass: Dialog.CssClass.SUCCESS,
+                                    action: function(dialogRef){// 버튼 클릭 이벤트
+                                        editUserView.submitSave().done(function(data){
+                                            grid.updateRow(data);
+                                            dialogRef.close();
+                                            Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                                        });//실패 따로 처리안함 add화면에서 처리.
+                                    }
+                                }, {
+                                    label: i18Common.DIALOG.BUTTON.CLOSE,
+                                    action: function(dialogRef){
+                                        dialogRef.close();
+                                    }
+                                }]
+                                
+                            });
+                        }
                     }
-                }
-    	    });
+        	    });
+    	    }    
+    	    
+    	    
+    	    if (this.actionAuth.remove){
+        	    _buttons.push({//User Remove
+        	        type:"custom",
+        	        name:"remove",
+        	        tooltip:"사용자 삭제",
+        	        click:function(_grid){
+                        var selectItem=_grid.getSelectItem();
+                        if (_.isUndefined(selectItem)){
+                            Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
+                        } else {
+                            selectItem._id="-1";
+                            var dd=Dialog.confirm({
+                                msg:i18Common.CONFIRM.USER.REMOVE, //"Do you want Delete User?",
+                                action:function(){
+                                   var userModel=new UserModel(selectItem);
+                                   return userModel.remove();
+                                },
+                                actionCallBack:function(res){//response schema
+                                    if (res.status){
+                                        _grid.removeRow(selectItem);
+                                        Dialog.show(i18Common.SUCCESS.USER.REMOVE);
+                                    }
+                                },
+                                errorCallBack:function(){
+                                    //dd.close();
+                                }
+                            });
+                        }
+                    }
+        	    });
+    	    }
     	    
     	    //Refresh
     	    _buttons.push("refresh");

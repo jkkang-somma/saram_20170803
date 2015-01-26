@@ -79,10 +79,10 @@
     padding-bottom:5px;
     border: 1px transparent;
 }
-.panel-header h1{
+.panel-header h2{
     margin:0;
     color:white;
-    font-family: 'Orbitron';
+    font-family: 'Orbitron','Nanum Gothic';
 }
 .login-button{
     margin-right: 15px;

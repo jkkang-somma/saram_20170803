@@ -9,6 +9,7 @@ define([
 	'util',
 	'log',
 	'dialog',
+  	'data/menu',
   	'i18n!nls/common',
 	'models/sm/SessionModel',
 	'core/BaseRouter',
@@ -24,7 +25,7 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-], function($, _,  Backbone, animator, Util, log, Dialog, i18Common, SessionModel, BaseRouter,
+], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView,
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
@@ -68,44 +69,80 @@ ReportListView // report manager
 			} 
 			
 			if (Util.isNotNull(affterCallback)&&_.isFunction(affterCallback)){
-				affterCallback();
+				affterCallback(); 
 			} 
 		},
 		
 		before : function(url, next){
-			LOG.debug(url);
-			// var router=this;
-			// var session=SessionModel.getInstance();
+			var _nextURL="#"+url;
+			var router=this;
+			var sessionUser=SessionModel.getUserInfo();
 			
-			// if(!session.isLogin){
-			// 	if (url==LOGIN){// session이 없을 때 로그인화면으로 전환시 next()를 해줘야지 정상적으로 넘어감. 안그러면 계속 login으로 navigate함.
-			// 		return next();
-			// 	}
-			// 	Backbone.history.navigate(LOGIN, { trigger : true });
-			// }else{
-			// 	return next();
-			// } 
-			return next();
+			var auth=sessionUser.admin;
+			LOG.debug(_nextURL);
+			if (auth==1||_nextURL=="#"){//어드민일 경우
+				return next();
+			}
+			
+			var subMenu=_.pluck(Menu, "subMenu");
+			
+			subMenu=subMenu[0].concat(subMenu[1]);
+			var _authArr=_.pluck(subMenu, "auth");
+			var _urlArr=_.pluck(subMenu, "hashTag");
+		
+			var index= _.indexOf(_urlArr, _nextURL);
+			if (_authArr[index] <= auth){ // 권한 있을 시
+				return next();
+				LOG.debug("next");
+			} else {//권한 없을 때
+				LOG.debug("back");
+				window.history.back();
+			}
 		},
 		
 		after : function(){
 		},
 		
-		changeView : function(view){
+		changeView : function(view, url){
 			LOG.debug("Initalize changeView");
 		    if(this.currentView)
 				this.currentView.close();
 
 	        this.currentView = view;
 	        //view.initialize();
+	        if (!_.isUndefined(url)){
+	        	var sessionUser=SessionModel.getUserInfo();
+			
+				var auth=sessionUser.admin;
+				
+				var subMenu=_.pluck(Menu, "subMenu");
+				
+				subMenu=subMenu[0].concat(subMenu[1]);
+				var _urlArr=_.pluck(subMenu, "hashTag");
+				var index= _.indexOf(_urlArr, url);
+				var attrKeys=_.keys(subMenu[index]); 
+				var hasActionAuth=_.indexOf(attrKeys, "actionAuth");
+				if (hasActionAuth!=-1){
+					var actionAuth=subMenu[index].actionAuth;
+					var _configActionAuth={};
+					
+					for (var name in actionAuth){//버튼 권한별 셋팅.
+						_configActionAuth[name]=actionAuth[name]<=auth?true:false;
+					}
+					
+					view.setActionAuth(_configActionAuth);
+				}
+	        }
+	       
+	        
     		view.render();
     		animator.animate($(view.el), animator.FADE_IN);	
 		},
 		
-		showUserList : function(){
+		showUserList : function(r){
 			LOG.debug("Initalize showUserList");
 			var userListView = new UserListView();
-			this.changeView(userListView)
+			this.changeView(userListView, "#usermanager");
 		},
 		
 		showAddRawData : function(){
