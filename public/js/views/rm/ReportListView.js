@@ -70,7 +70,7 @@ define([
       // small title 
       var smallTitleTxt = $(this.el).find('#smallTitleTxt');
       smallTitleTxt.empty();
-      smallTitleTxt.text('근태보고 관리');
+      smallTitleTxt.text('근태 결재 관리');
       
       return this;
     },
