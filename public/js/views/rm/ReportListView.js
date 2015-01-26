@@ -187,6 +187,7 @@ define([
       _buttons.push({// 신규상신
     	        type:"custom",
     	        name:"add",
+    	        tooltip : "신규 상신",
     	        click:function(_grid){
                 // location.href = '#reportmanager/add';
                 var _addNewReportView = new AddNewReportView();
@@ -221,6 +222,7 @@ define([
         _buttons.push({// 결재
     	        type:"custom",
     	        name:"ok",
+    	        tooltip : "결재",
     	        click:function(_grid){
                 var selectData=_this.grid.getSelectItem();
              		if ( Util.isNotNull(selectData) ) {
@@ -272,6 +274,7 @@ define([
         _buttons.push({// detail
     	        type:"custom",
     	        name:"read",
+    	        tooltip : "상세 보기",
     	        click:function(_grid){
                 var selectData=_this.grid.getSelectItem();
              		if ( Util.isNotNull(selectData) ) {
