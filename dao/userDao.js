@@ -16,9 +16,9 @@ UserDao.prototype.selectUserList =  function () {
     var queryStr = db.getQuery('user', 'selectUserList');
     return db.queryV2(queryStr);
 };
-UserDao.prototype.selectManagerList =  function () {
+UserDao.prototype.selectManagerList =  function (id) {
     var queryStr = db.getQuery('user', 'selectManager');
-    return db.queryV2(queryStr);
+    return db.queryV2(queryStr, [id]);
 };
 UserDao.prototype.initPassword =  function (id, password) {
     var queryStr = db.getQuery('user', 'initPassword');

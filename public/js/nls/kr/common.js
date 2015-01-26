@@ -113,7 +113,7 @@ define({
                 CREATE_DATA:"근태 자료 생성",
                 COMMUTE_MANAGER:"근태 자료 조회",
                 COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
-                REPORT_MANAGER:"근태 상신"
+                REPORT_MANAGER:"근태 결재 관리"
             }
         }
     },

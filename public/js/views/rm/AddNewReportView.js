@@ -213,20 +213,24 @@ define([
     
     setManagerList: function(){
       var approvalMem = $(this.el).find('#manager_id');
+      var sessionInfo = SessionModel.getUserInfo();
       // approvalMem.css('width', '35%');
       var _userCollection = new UserCollection();
       _userCollection.url = "/user/list/manager";
-      _userCollection.fetch().done(function(result){
+      _userCollection.fetch({
+        data: {id : sessionInfo.id},
+	 			error : function(result) {
+	 				Dialog.error("데이터 조회가 실패했습니다.");
+	 			}
+      }).done(function(result){
       var arrApprovalMemData = result;
       
       // option setting
       for(var k=0; k < arrApprovalMemData.length; k++){
-        var approvalOptionHtml = "<option value='"+arrApprovalMemData[k].id+"'>"+arrApprovalMemData[k].name+"</option>";
+        var approvalOptionHtml = "<option value='"+arrApprovalMemData[k].approval_id+"'>"+arrApprovalMemData[k].approval_name+"</option>";
         approvalMem.append(approvalOptionHtml);
       }
-      
       ComboBox.createCombo(approvalMem);
-      
       });
     },
     

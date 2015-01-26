@@ -29,8 +29,8 @@ var User = function (data, isNoSchemas) {
     var _getUserList = function(){
         return UserDao.selectUserList();
     }
-    var _getManagerList = function(){
-        return UserDao.selectManagerList();
+    var _getManagerList = function(id){
+        return UserDao.selectManagerList(id);
     }
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
