@@ -11,6 +11,7 @@ define([
         'dialog',
         'datatables',
         'cmoment',
+        'i18n!nls/common',
         'core/BaseView',
         'text!templates/default/head.html',
         'text!templates/default/content.html',
@@ -24,13 +25,57 @@ define([
         'views/cm/popup/CommentUpdatePopupView',
         'text!templates/cm/searchFormTemplate.html'
 ], function(
-		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, 
+		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,
+		i18Common,
 		BaseView,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommentCollection,
 		CommentUpdatePopupView,	searchFormTemplate){
+
+	var _currentFilter=0;
+	function _getGridFilterBtn() {	// 검색 필터 
+		var STATE = i18Common.COMMENT.STATE;
+	    var _filterText=[STATE.ALL, STATE.ACCEPTING, STATE.PROCESSING, STATE.COMPLETE];
+	    return {//User Remove
+	        type:"custom",
+	        name:"filter",
+	        filterBtnText:_filterText,
+	        click:function(_grid, _button){
+	           
+	           var filters=[
+	                function(){
+	                    return true;
+	                },
+	                function(data){
+	                    var _data=data[9];
+	                    return (_data == STATE.ACCEPTING)?true:false;
+	                },
+	                function(data){
+	                    var _data=data[9];
+	                    return (_data == STATE.PROCESSING)?true:false;
+	                },
+	                function(data){
+	                    var _data=data[9];
+	                    return (_data == STATE.COMPLETE)?true:false;
+	                }
+	           ];
+	           
+               if (_currentFilter==3){
+                    _currentFilter=0;
+               } else {
+	                _currentFilter++;
+               }
+               
+               _button.html(_filterText[_currentFilter]);
+               var filteredData = _grid.filtering(function(data){
+                   var fn=filters[_currentFilter];
+                   return fn(data);
+               });
+            }
+	    };
+	}
 	
-	function _getCommentUpdateBtn(view){
+	function _getCommentUpdateBtn(view){	// comment 수정 
 		var that = view;
 		return {
 	        type:"custom",
@@ -75,7 +120,7 @@ define([
 	        }
 	    };
 	}
-
+	
 	var CommuteCommentView = BaseView.extend({
 		el:$(".main-container"),
 		setSearchParam : function(searchParam) {
@@ -142,6 +187,7 @@ define([
 		},
 		buttonInit: function(){
     	    // tool btn
+			this.gridOption.buttons.push( _getGridFilterBtn() );
     	    this.gridOption.buttons.push( _getCommentUpdateBtn(this) );
     	},
 		render: function(){
@@ -207,6 +253,7 @@ define([
 		        format: "YYYY-MM-DD",
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
+                        
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();

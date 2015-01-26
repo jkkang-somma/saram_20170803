@@ -12,6 +12,7 @@ define([
     'dialog',
     'datatables',
     'cmoment',
+    'i18n!nls/common',
     'resulttimefactory',
     'core/BaseView',
     'models/sm/SessionModel',
@@ -25,7 +26,7 @@ define([
 	'text!templates/default/datepickerChange.html',
 	'text!templates/inputForm/combobox.html',
 ], function(
-	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory, BaseView, 
+	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, i18Common, ResultTimeFactory, BaseView, 
 	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML, ComboboxHTML
 ) {
@@ -67,10 +68,11 @@ define([
 			
 		   	$(that.el).append(_.template(ComboboxHTML)({id: "commentUpdatePopupState", label: "상태"}));
 		   	
+		   	var STATE = i18Common.COMMENT.STATE;
 		   	var _stateCombo = $(that.el).find("#commentUpdatePopupState");
-		   	_stateCombo.append($("<option>접수중</option>"));
-		   	_stateCombo.append($("<option>처리중</option>"));
-		   	_stateCombo.append($("<option>처리완료</option>"));
+		   	_stateCombo.append($("<option>" + STATE.ACCEPTING + "</option>"));
+		   	_stateCombo.append($("<option>" + STATE.PROCESSING + "</option>"));
+		   	_stateCombo.append($("<option>" + STATE.COMPLETE + "</option>"));
 		   	_stateCombo.val(that.selectData.state);
 		   	
 			$(that.el).find("#commentUpdatePopupInTime").datetimepicker({
