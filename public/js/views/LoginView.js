@@ -59,6 +59,7 @@ define([
                 SessionModel.login(data).then(function(){
                     _view.app.draw();    
                 }).fail(function(e){
+                    $("#loginbtn").button('reset');
                     if (!_.isUndefined(e.user)){
                         Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg]);
             
