@@ -92,7 +92,7 @@ define([
                 });
 	            
 	            Dialog.show({
-	                title:"연차 수정", 
+	                title: (SessionModel.get("user").admin == 1)?"연차 수정" : "연차 정보", 
                     content: updateVacationPopup,
                     buttons: buttons
 	            })
