@@ -17,7 +17,6 @@ define([
 ], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
     options: {},
-    holReq : 0,
   	events: {
   	},
   	
@@ -184,6 +183,7 @@ define([
         // 휴일근무
         $(_this.el).find('#datePickerTitleTxt').text('date');
          _this.afterDate.hide();
+         _this.holReq = 0;
          $(_this.el).find('#reqHoliday').val("0 일");
           ComboBox.createCombo(selGubun);
       });
