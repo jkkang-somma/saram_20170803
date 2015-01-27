@@ -19,12 +19,10 @@ require.config({
          exports: "CryptoJS"
       },
       'cryptojs.sha256': {
-         deps: ['cryptojs.core'],
-         exports: "CryptoJS" //You can also use "CryptoJS.sha256"
+         deps: ['CryptoJS']
       },
       'cryptojs.base64': {
-         deps: ['cryptojs.core'],
-         exports: "CryptoJS" //You can also use "CryptoJS.enc.Base64"
+         deps: ['cryptojs.core']
       }
    },
    paths: {
@@ -55,9 +53,8 @@ require.config({
       
       resulttimefactory: 'lib/resultTimeFactory',
       spin:'tool/spin/spin',
-      'cryptojs.core': "tool/crypto/core-min",
-      'cryptojs.sha256': "tool/crypto/sha256-min",
-      'cryptojs.base64': "tool/crypto/enc-base64-min",
+      'cryptojs.core': "tool/crypto/core",
+      'cryptojs.sha256': "tool/crypto/sha256",
       i18n:'tool/i18n-master/i18n',
       // fittext:'tool/textillate/jquery.fittext',
       // lettering:'tool/textillate/jquery.lettering',

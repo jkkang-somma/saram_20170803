@@ -10,10 +10,10 @@ define([
             _.bindAll(this, "remove");
             _.bindAll(this, "validation");
         },
-    	validation:function(attrs){
+    	validation:function(attrs, validArr){
     	    for(var name in attrs){
     	        var value=attrs[name];
-    	        if (_.has(this.default, name)){//default에 있는 필드만 유효성 검사
+    	        if (_.isUndefined(validArr)?_.has(this.default, name):_.has(validArr, name)){//default에 있는 필드만 유효성 검사
         	        if (_.isUndefined(value) || _.isNull(value) || _.isEmpty(value)){
         	            return name + " field is require."
         	        }    
@@ -50,9 +50,8 @@ define([
             name: '',
             name_commute: '',
             dept_code: '',
-            dept_name:'',
-            join_company: null,
-            privilege : 0,
+            join_company: "",
+            leave_company:"",
             admin : 0,
         },
         

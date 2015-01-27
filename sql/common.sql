@@ -43,7 +43,7 @@ INSERT INTO `dept_code_tbl` VALUES
 
 CREATE TABLE IF NOT EXISTS `members_tbl` (
   `id` VARCHAR(45) NOT NULL COMMENT '사번',
-  `password` VARCHAR(45) NULL,
+  `password` VARCHAR(300) NULL,
   `name` VARCHAR(45) NOT NULL COMMENT '이름',
   `dept_code` VARCHAR(10) NOT NULL COMMENT '부서코드',
   `name_commute` VARCHAR(45) NOT NULL COMMENT '근태 기초자료상의 이름',

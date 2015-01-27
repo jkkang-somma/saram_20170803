@@ -24,9 +24,8 @@ define([
             dept_code: null,
             dept_name: null,
             name_commute: null,
-            join_company: "-",
-            leave_company: "-",
-            privilege: null,
+            join_company: "",
+            leave_company: "",
             admin : null,
             ip_pc : null,
             ip_office : null
@@ -107,7 +106,8 @@ define([
             type:"hidden",
             name:undefined,
             label:undefined,
-            value:undefined
+            value:undefined,
+            textKey:"name"
         },
         //SERVER response
         response:{

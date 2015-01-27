@@ -5,13 +5,14 @@ define([
 'log',
 'dialog',
 'spin',
+'cryptojs.sha256',
 'models/sm/UserModel',
 'models/sm/SessionModel',
 'text!templates/loginTemplate.html',
 'text!templates/loginPasswordSectionTemplate.html',
 'i18n!nls/common',
 'css!cs/login.css',
-], function($, _,Backbone, log, Dialog, Spin, UserModel, SessionModel, LoginHTML, LoginPasswordSectionHTML, i18nCommon){
+], function($, _,Backbone, log, Dialog, Spin, CryptoJS, UserModel, SessionModel, LoginHTML, LoginPasswordSectionHTML, i18nCommon){
     var LOG=log.getLogger('LoginView');
     var LoginView = Backbone.View.extend({
         events: {
@@ -55,11 +56,11 @@ define([
     	    if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
     	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_LOGIN_INFO);         
     	    } else {
-    	       // var _hash = new HASH(data.id);
-    	       // var _hashPassword=_hash.encode(data.password);
+    	       var hash=CryptoJS.SHA256(data.password);
+    	       var _hashPassword=hash.toString();
     	        
-    	       // data.password =_hashPassword;
-    	       // $("#loginbtn").button("loading");
+    	       data.password =_hashPassword;
+    	       $("#loginbtn").button("loading");
     	       
     	       
     	       // var opts = {
@@ -103,6 +104,10 @@ define([
     	},
     	commitPassword : function(e){
             var data = this.getFormData( this.$el.find('form'));
+            var hash=CryptoJS.SHA256(data.password);
+    	    var _hashPassword=hash.toString();
+    	    data.password =_hashPassword;
+    	    
             if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
                 Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);         
             } else {

@@ -6,6 +6,7 @@ define([
   'core/BaseView',
   'log',
   'dialog',
+  'cryptojs.sha256',
   'i18n!nls/common',
   'lib/component/form',
   'models/sm/UserModel',
@@ -13,7 +14,7 @@ define([
   'models/sm/SessionModel',
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
-], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, UserConfigModel, SessionModel, CodeCollection, container){
+], function($, _, _S, Backbone, BaseView, log, Dialog, CryptoJS, i18nCommon, Form, UserModel, UserConfigModel, SessionModel, CodeCollection, container){
     var LOG= log.getLogger("EditUserView");
     var ConfigUserView = BaseView.extend({
     	initialize:function(data){
@@ -89,6 +90,15 @@ define([
               dfd.reject();
       	    } else {
     	        _data._id="-1";
+    	        
+    	        //암호화
+    	        var hash=CryptoJS.SHA256(_data.password);
+    	        _data.password=hash.toString();
+    	        hash=CryptoJS.SHA256(_data.re_new_password);
+    	        _data.re_new_password=hash.toString();
+    	        hash=CryptoJS.SHA256(_data.new_password);
+    	        _data.new_password=hash.toString();
+    	        
     	        var userConfigModel=new UserConfigModel(_data);
     	        userConfigModel.save({},{
     	          success:function(){
