@@ -96,7 +96,6 @@ ProgressbarView){
         },
         
     	render:function(){
-    	    var that = this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
@@ -162,9 +161,9 @@ ProgressbarView){
             });
             
     	    var _gridSchema=Schemas.getSchema('grid');
-        	that.grid= new Grid(_gridSchema.getDefault(that.gridOption));
-            that.grid.render();
-            
+        	this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
+            this.grid.render();
+            this.getRawData();
             
             return this;
      	},

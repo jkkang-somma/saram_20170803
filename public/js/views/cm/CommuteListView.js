@@ -323,7 +323,7 @@ define([
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
-            
+            this.selectCommute();
 			
             return this;
      	},
