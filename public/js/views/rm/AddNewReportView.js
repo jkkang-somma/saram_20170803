@@ -359,26 +359,25 @@ define([
         if(i==1){// end date 일경우
           var selGubun = $(this.el).find('#office_code');
           var selVal = selGubun.val();
-          if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03' 
-           || 'W01'){
+          if(selVal == 'B01' || selVal == 'V02' || selVal == 'V03' || selVal == 'W01'){
             $(this.el).find('#'+essenId[i]).val(formData["start_date"]);
             formData[essenId[i]] = formData["start_date"];
           }
         } 
         if(formData[essenId[i]] == ""){
           Dialog.error(essenMsg[i]+"을(를) 입력하세요.");
-          this.thisDfd.reject();
+          // this.thisDfd.reject();
           return;
         }
       }
       var usable = (this.options.total_day > this.options.used_holiday)?this.options.total_day - this.options.used_holiday : 0;
       if(!this.isDateCompare(formData)){
           Dialog.error("기간을 잘못 입력하였습니다.");      
-          this.thisDfd.reject();
+          // this.thisDfd.reject();
           return;
       }else if(this.holReq > usable){
         Dialog.error("잔여 연차 일수를 초과 했습니다.");      
-        this.thisDfd.reject();
+        // this.thisDfd.reject();
         return;
       }else{
         var _appCollection = new ApprovalCollection();
