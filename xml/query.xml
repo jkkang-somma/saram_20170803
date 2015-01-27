@@ -640,7 +640,7 @@
 				SUM(CASE WHEN (overtime_code='2015_BA') THEN 1 ELSE 0 END) AS 'holiday_working_a',
 				SUM(CASE WHEN (overtime_code='2015_BB') THEN 1 ELSE 0 END) AS 'holiday_working_b',
 				SUM(CASE WHEN (overtime_code='2015_BC') THEN 1 ELSE 0 END) AS 'holiday_working_c'
-			FROM yescnc_db.commute_result_tbl A 
+			FROM commute_result_tbl A 
 			LEFT OUTER JOIN office_code_tbl B ON A.vacation_code = B.code
 			LEFT OUTER JOIN overtime_code_tbl C ON A.overtime_code=C.code 
 			INNER JOIN (

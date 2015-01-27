@@ -212,7 +212,12 @@ define([
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
         		    detail: true,
-        		    buttons:["search"],
+        		    buttons:["search",{
+        		    	type:"myRecord",
+				        name: "myRecord",
+				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				        tooltip: "",
+        		    }],
         		    fetch: false
         	};    		
     		this.buttonInit();
