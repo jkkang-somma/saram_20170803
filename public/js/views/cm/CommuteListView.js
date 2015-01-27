@@ -90,6 +90,7 @@ define([
 		return {
 	        type:"custom",
 	        name:"edit",
+	        tooltip:"수정",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
 	        	if ( Util.isNull(selectItem) ) {

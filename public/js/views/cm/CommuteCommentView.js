@@ -39,6 +39,7 @@ define([
 	    return {//User Remove
 	        type:"custom",
 	        name:"filter",
+	        tooltip:"처리상태",
 	        filterBtnText:_filterText,
 	        click:function(_grid, _button){
 	           
@@ -80,6 +81,7 @@ define([
 		return {
 	        type:"custom",
 	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
+	        tooltip: (SessionModel.get("user").admin == 1)?"Comment 달기" : "상세보기",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
 	        	if ( Util.isNull(selectItem) ) {
