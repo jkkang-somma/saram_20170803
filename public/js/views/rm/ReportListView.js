@@ -149,14 +149,22 @@ define([
           // ( 1:정상, 2:당일결재, 3:익일결재
            var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
            dataVal += "<div style='text-align: center;'>"
-            + "<button class='btn btn-default btn-success btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>"
-            + "<button class='btn btn-default btn-success btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
+            + "<button class='btn btn-comment-add btn btn-default btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>"
+            + "<button class='btnbtn-comment-add btn btn-default btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
             + "</div>";
             
             $('#btnApproval'+row.doc_num).click(function(evt){
+              evt.stopPropagation();
+              var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
+              $('.selected').removeClass('selected');
+      	      $currentTarget.addClass('selected');
               view.onClickApproval(row);
             });
             $('#btnDetail'+row.doc_num).click(function(evt){
+              evt.stopPropagation();
+              var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
+              $('.selected').removeClass('selected');
+      	      $currentTarget.addClass('selected');
               view.onClickDetail(row);
             });
           return dataVal;
@@ -356,6 +364,7 @@ define([
     },
     
     onSelectRow : function(evt){
+      
       var $currentTarget = $(evt.currentTarget);
       if ( $currentTarget.hasClass('selected') ) {
       	$currentTarget.removeClass('selected');
