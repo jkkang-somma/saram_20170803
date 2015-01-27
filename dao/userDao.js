@@ -30,7 +30,7 @@ UserDao.prototype.deleteUser = function(id){
 };
 UserDao.prototype.insertUser = function(user){
     var queryStr = db.getQuery('user', 'insertUser');
-    return db.queryV2(queryStr, [user.id, user.name, user.dept_code, user.name_commute, user.join_company, user.privilege, user.admin]);
+    return db.queryV2(queryStr, [user.id, user.name, user.dept_code, user.name_commute, user.join_company, 3, user.admin]);
 };
 UserDao.prototype.updateUser = function(user){
     var queryStr = db.getQuery('user', 'updateUser');

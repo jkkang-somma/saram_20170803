@@ -75,13 +75,14 @@ define([
         	       //         format:"YYYY-MM-DD",
         	       //         validation:false
         	       // },
+        	       // {
+        	       //         type:"combo",
+        	       //         name:"privilege",
+        	       //         label:i18nCommon.USER.PRIVILEGE,
+        	       //         value:_model.privilege,
+        	       //         collection:[{key:1,value:i18nCommon.CODE.PRIVILEGE_1},{key:2,value:i18nCommon.CODE.PRIVILEGE_2},{key:3,value:i18nCommon.CODE.PRIVILEGE_3}]
+        	       // },
         	        {
-        	                type:"combo",
-        	                name:"privilege",
-        	                label:i18nCommon.USER.PRIVILEGE,
-        	                value:_model.privilege,
-        	                collection:[{key:1,value:i18nCommon.CODE.PRIVILEGE_1},{key:2,value:i18nCommon.CODE.PRIVILEGE_2},{key:3,value:i18nCommon.CODE.PRIVILEGE_3}]
-        	        },{
         	                type:"combo",
         	                name:"admin",
         	                label:i18nCommon.USER.ADMIN,
@@ -109,7 +110,15 @@ define([
     	    var dfd= new $.Deferred();
     	    var _view=this,_form=this.form,_data=_form.getData();
     	    var _userModel=new UserModel(_data);
-            var _validate=_userModel.validation(_data);
+            var _validate=_userModel.validation(_data, {// 유효성 검사 필드 
+                id:"",
+                password: "", 
+                name: "",
+                name_commute: "",
+                dept_code: "",
+                join_company: "",
+                admin : 0,
+            });
             
             if(!_.isUndefined(_validate)){
                 Dialog.warning(_validate);
@@ -117,7 +126,7 @@ define([
             } else {
                 _userModel.save({},{
         	        success:function(model, xhr, options){
-        	            dfd.resolve(_data);
+        	            dfd.resolve(_.defaults(_data, _userModel.default));
         	        },
         	        error:function(model, xhr, options){
         	            var respons=xhr.responseJSON;
@@ -141,8 +150,6 @@ define([
             
             return indexed_array;
     	}
-    	
     });
-    
     return AddUserView;
 });

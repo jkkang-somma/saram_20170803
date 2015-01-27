@@ -73,13 +73,15 @@ define([
         	                label:i18nCommon.USER.LEAVE_COMPANY,
         	                value:_model.leave_company,
         	                format:"YYYY-MM-DD"
-        	        },{
-        	                type:"combo",
-        	                name:"privilege",
-        	                label:i18nCommon.USER.PRIVILEGE,
-        	                value:_model.privilege,
-        	                collection:[{key:1,value:i18nCommon.CODE.PRIVILEGE_1},{key:2,value:i18nCommon.CODE.PRIVILEGE_2},{key:3,value:i18nCommon.CODE.PRIVILEGE_3}]
-        	        },{
+        	        },
+        	       // {
+        	       //         type:"combo",
+        	       //         name:"privilege",
+        	       //         label:i18nCommon.USER.PRIVILEGE,
+        	       //         value:_model.privilege,
+        	       //         collection:[{key:1,value:i18nCommon.CODE.PRIVILEGE_1},{key:2,value:i18nCommon.CODE.PRIVILEGE_2},{key:3,value:i18nCommon.CODE.PRIVILEGE_3}]
+        	       // },
+        	        {
         	                type:"combo",
         	                name:"admin",
         	                label:i18nCommon.USER.ADMIN,
