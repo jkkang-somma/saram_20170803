@@ -182,7 +182,12 @@ define([
     
     setTableButtons : function(){
       var _this = this;
-      var _buttons = ["search"];
+      var _buttons = ["search",{
+        		    	type:"myRecord",
+				        name: "myRecord",
+				        filterColumn:["submit_name", "manager_name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				        tooltip: "",
+      }];
       
       _buttons.push({// 신규상신
     	        type:"custom",

@@ -71,7 +71,7 @@ define([
                var filteredData = _grid.filtering(function(data){
                    var fn=filters[_currentFilter];
                    return fn(data);
-               });
+               },"state");
             }
 	    };
 	}
@@ -179,7 +179,12 @@ define([
         		    collection: this.commentCollection,
         		    dataschema:["date", "name", "comment", "writer_name", "comment_date", "comment_reply", "reply_name", "comment_reply_date", "state"],
         		    detail: true,
-        		    buttons: ["search"],
+        		    buttons: ["search",{
+        		    	type:"myRecord",
+				        name: "myRecord",
+				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				        tooltip: "",
+        		    }],
         		    fetch: false
         	};    		
     		this.buttonInit();

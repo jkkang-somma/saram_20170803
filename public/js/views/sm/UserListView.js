@@ -101,10 +101,11 @@ define([
                    }
                    
                    _button.html(_filterText[_currentFilter]);
+                   _grid.setBtnText(_button, _filterText[_currentFilter]);
                    var filteredData = _grid.filtering(function(data){
                        var fn=filters[_currentFilter];
                        return fn(data);
-                   });
+                   }, "userType");
                 }
     	    });
     	    
