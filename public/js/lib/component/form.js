@@ -76,7 +76,7 @@ define([
                         var _option= data.collection[index];
                         var _code=_option.key;
                         var _text=_option.value;
-                        if (_code==data.value){
+                        if (_code==data.value || (_.isEmpty(data.value)&&index==0) ){
                             _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
                         } else {
                             _select.append("<option value='"+_code+"'>"+_text+"</option>");
@@ -88,13 +88,14 @@ define([
                         var _option= _options[index].attributes;
                         var _code=_option[data.codeKey];
                         var _text=_option[[data.textKey]];
-                        if (_code==data.value){
+                        if (_code==data.value || (_.isEmpty(data.value)&&index==0)){ //초기값 설정
                             _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
                         } else {
                             _select.append("<option value='"+_code+"'>"+_text+"</option>");
                         }
                     }
-                    _select.on('change', function(e){
+                
+                    _select.on('change', function(e){// 콤보박스 선택시 히든값 셋팅
                         var _text=$(this).find("option:selected").text();
                         if (!_.isUndefined(data.linkField)){
                             $('[data-hidden="'+data.linkField+'"]').val(_text);
@@ -108,7 +109,6 @@ define([
                     _select.selectpicker({
                         style: 'btn-primary'
                     });
-                    
                 }
                 
                 return _combo;  
@@ -118,6 +118,17 @@ define([
             getElement:function(data){
                 var _hiddenTemp=_.template(HiddenHTML);
                 var _hidden=_.noop();
+                if (_.isUndefined(data.value) || _.isEmpty(data.value)){
+                    var _options=data.collection.models;
+                    for (var index in _options){
+                        var _option= _options[index].attributes;
+                        var _text=_option[[data.textKey]];
+                        if (index==0){ //초기값 설정
+                            data.value=_text;
+                        }
+                    }
+                }
+                
                 _hidden=$(_hiddenTemp(data));
                 return _hidden;  
             }

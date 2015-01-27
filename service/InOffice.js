@@ -4,36 +4,51 @@
 var _ = require("underscore"); 
 var debug = require('debug')('InOffice');
 var Schemas = require("../schemas.js");
+var Promise = require('bluebird');
+var db = require('../lib/dbmanager.js');
+var ApprovalDao= require('../dao/approvalDao.js');
+var CommuteDao = require('../dao/commuteDao.js');
 var InOfficeDao= require('../dao/inOfficeDao.js');
 
 var InOffice = function (data) {
-    var _data=_.initial([]);
-    var schema=new Schemas('outoffice');
-    _data = schema.get(data);
-    var _get = function (fieldName) {
-        if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
-        if (_.has(_data, fieldName)){
-            return _data[fieldName];
-        } else {
-            return _.noop;
-        }
+    var _getInOfficeList = function (data) {
+        return InOfficeDao.selectInOfficeList(data);
     }
-    var _getInOfficeList = function (start, end) {
-        return InOfficeDao.selectInOfficeList(start, end);
-    }
-    var _addInOffice = function () {
-        return InOfficeDao.insertInOffice(_data);
-    }
-    var _removeInOffice = function (doc_num) {
-        return InOfficeDao.removeInOffice(doc_num);
+    var _removeInOffice = function (data) {
+         return new Promise(function(resolve, reject){
+			db.getConnection().then(function(connection){
+			    var promiseArr = [];
+			    promiseArr.push(InOfficeDao.removeInOffice(connection,data));
+                promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.approval));
+                
+                if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
+		            promiseArr.push(CommuteDao.updateCommute_t(connection, data.commute));    
+			    }
+			    
+				Promise.all(promiseArr).then(function(resultArr){
+					connection.commit(function(){
+						connection.release();
+						resolve();
+					});
+				},function(){
+					connection.rollback(function(){
+						connection.release();
+						reject();
+					});
+				}).catch(function(){
+				    connection.rollback(function(){
+				        connection.release();
+				        reject();
+				    });
+				});	
+			});
+		});
     }
     return {
-        get:_get,
         getInOfficeList:_getInOfficeList,
-        addInOffice:_addInOffice,
         remove : _removeInOffice
     }
 }
 
-module.exports = InOffice;
+module.exports = new InOffice();
 

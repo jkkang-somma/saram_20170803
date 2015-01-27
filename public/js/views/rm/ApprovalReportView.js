@@ -9,10 +9,14 @@ define([
   'resulttimefactory',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
+  'collection/vacation/OutOfficeCollection',
+  'collection/vacation/InOfficeCollection',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'models/vacation/InOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, ResultTimeFacoty, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, ResultTimeFacoty, addReportTmp,
+  ApprovalCollection, OutOfficeCollection, InOfficeCollection, ApprovalModel, OutOfficeModel, InOfficeModel
+){
   var resultTimeFactory = ResultTimeFacoty.Builder;
   var approvalReportView = BaseView.extend({
     options : {},
@@ -58,10 +62,10 @@ define([
     setAddReportDisplay : function(param){
       // table Setting
       this.setTableDisplay();
-      // display setting
-      this.setDefaultDisplay();
       // select box data setting
       this.setDataDefaultValues(param);
+      // display setting
+      this.setDefaultDisplay();
     },
     
     setTableDisplay : function() {
@@ -129,15 +133,26 @@ define([
         _this.find('#usableHoliday').val(usable + " 일");
         
         var holReq = "0";
-        if(param.office_code == "B01" || param.office_code == "W01"){
+        if(param.office_code == "B01"){
           // 휴일근무
           holReq = "0";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }else if(param.office_code == "V02" || param.office_code == "V03"){
           // 반차
           holReq = "0.5";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
+        }else if(param.office_code == "W01"){
+          // 외근
+          holReq = "0";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','block');
         }else {
           var arrInsertDate = this.getDatePariod();
           holReq = arrInsertDate.length + "";
+          $(this.el).find('#end_date').css('display','table');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }
         _this.find('#reqHoliday').val(holReq + " 일");
       }
@@ -208,25 +223,110 @@ define([
       var _approvalCollection = new ApprovalCollection(formData);
       
       if(formData.state == '결재완료'){
-        if(_this.options.office_code != 'B01'){ // 외근 / 휴가 등등
+        if(this.options.office_code != 'B01'){ // 외근 / 휴가 등등
           _this.addOutOfficeData(_approvalCollection);
         }else{                                  // 휴일 근무
-          _this.addInOfficeData(_approvalCollection);
+          this.addInOfficeData(_approvalCollection);
         }
       }else if(formData.state == '취소완료'){
-        var sendData = _this.getFormData($(_this.el).find('form'));
-        sendData["doc_num"] = _this.options["doc_num"];
-        sendData["_id"] = _this.options["doc_num"];
-        if(_this.options.office_code != 'B01'){ // 외근 / 휴가 등등
-          var outOfficeModel =new OutOfficeModel(sendData);
-          outOfficeModel.destroy();
-          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
+        
+        if(this.options.office_code != 'B01'){ // 외근 / 휴가 등등
+          this.delOutOfficeData(_approvalCollection, this.options["doc_num"]);
         }else{                                  // 휴일 근무
-          var inOfficeModel =new InOfficeModel(sendData);
-          inOfficeModel.destroy();
-          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
+          this.delInOfficeData(_approvalCollection, this.options["doc_num"]);
         }
       }
+      return dfd.promise();
+    },
+    delOutOfficeData : function(_approvalCollection, docNum){
+      var dfd = new $.Deferred();
+      var userId = this.options["submit_id"];;
+      var arrInsertDate = this.getDatePariod();
+      var resultData = {};
+      resultData.approval = _approvalCollection.toJSON();
+      
+      var outOfficeCollection = new OutOfficeCollection();
+      
+      outOfficeCollection.fetch(
+        {
+          data : {
+            start : arrInsertDate[0],
+            end : arrInsertDate[arrInsertDate.length -1]
+          },
+          success : function(result){
+            var filterCollection = new OutOfficeCollection();
+            for(var key in result.models){
+              if(result.models[key].get("doc_num") !== docNum)
+                filterCollection.add(result.models[key]);
+            }
+            
+            var results = [];     // commuteResult;
+            var promiseArr = [];
+            $.each(arrInsertDate, function(key){
+              var today = arrInsertDate[key];
+              var todayOutOfficeModels = filterCollection.where({date : today});
+              promiseArr.push(
+                resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "out", todayOutOfficeModels).done(function(result){
+                  results.push(result);
+                })
+              );
+            });
+            
+            $.when.apply($, promiseArr).then(function(){
+              resultData.commute = results;
+              outOfficeCollection.reset();
+              outOfficeCollection.save(resultData, docNum);
+              dfd.resolve(resultData); 
+            });
+          },
+        }
+      );
+      return dfd.promise();
+    },
+    
+    delInOfficeData : function(_approvalCollection, docNum){
+      var dfd = new $.Deferred();
+      var userId = this.options["submit_id"];
+      var arrInsertDate = [$(this.el).find('#start_date input').val()];
+      var resultData = {};
+      resultData.approval = _approvalCollection.toJSON();
+      
+      var inOfficeCollection = new InOfficeCollection();
+      
+      inOfficeCollection.fetch(
+        {
+          data : {
+            start : arrInsertDate[0],
+            end : arrInsertDate[arrInsertDate.length -1]
+          },
+          success : function(result){
+            var filterCollection = new InOfficeCollection();
+            for(var key  in result.models){
+              if(result.models[key].get("doc_num") !== docNum)
+                filterCollection.add(result.models[key]);
+            }
+            
+            var results = [];     // commuteResult;
+            var promiseArr = [];
+            $.each(arrInsertDate, function(key){
+              var today = arrInsertDate[key];
+              var todayInOfficeModels = filterCollection.where({date : today});
+              promiseArr.push(
+                resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "in", todayInOfficeModels).done(function(result){
+                  results.push(result);
+                })
+              );
+            });
+            
+            $.when.apply($, promiseArr).then(function(){
+              resultData.commute = results;
+              inOfficeCollection.reset();
+              inOfficeCollection.save(resultData, docNum);
+              dfd.resolve(resultData); 
+            });
+          },
+        }
+      );
       return dfd.promise();
     },
     
@@ -267,7 +367,6 @@ define([
     
     addInOfficeData : function(_approvalCollection){
       var dfd = new $.Deferred();
-
 
       
       // 날짜 개수 이용하여 날짜 구하기

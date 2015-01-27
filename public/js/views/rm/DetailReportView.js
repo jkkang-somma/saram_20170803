@@ -8,7 +8,8 @@ define([
   'text!templates/addReportTemplate.html',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalModel, OutOfficeModel){
+  'collection/rm/ApprovalCollection',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalModel, OutOfficeModel, ApprovalCollection){
   var detailReportView = BaseView.extend({
     options : {},
    
@@ -49,10 +50,10 @@ define([
     setAddReportDisplay : function(param){
       // table Setting
       this.setTableDisplay();
-      // display setting
-      this.setDefaultDisplay();
       // select box data setting
       this.setDataDefaultValues(param);
+      // display setting
+      this.setDefaultDisplay();
     },
     
     setTableDisplay : function() {
@@ -105,12 +106,23 @@ define([
         if(param.office_code == "B01"){
           // 휴일근무
           holReq = "0";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }else if(param.office_code == "V02" || param.office_code == "V03"){
           // 반차
           holReq = "0.5";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
+        }else if(param.office_code == "W01"){
+          // 외근
+          holReq = "0";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','block');
         }else {
           var arrInsertDate = this.getDatePariod();
           holReq = arrInsertDate.length + "";
+          $(this.el).find('#end_date').css('display','table');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }
         _this.find('#reqHoliday').val(holReq + " 일");
       }
@@ -196,21 +208,16 @@ define([
       formData["_id"] = this.options["doc_num"];
       formData["state"] = '취소요청';
       
-      var _approvalModel = new ApprovalModel(formData);
-      _approvalModel.idAttribute = "doc_num";
-      _approvalModel.save({},{
-      	        success:function(model, xhr, options){
-      	            // insert
-      	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
-    	              _this.thisDfd.resolve(formData);
-      	        },
-      	        error:function(model, xhr, options){
-      	            var respons=xhr.responseJSON;
-      	            Dialog.error(respons.message);
-      	            _this.thisDfd.reject();
-      	        },
-      	        wait:false
-      	    }); 
+      var approvalCollection = new ApprovalCollection(formData);
+      approvalCollection.idAttribute = "doc_num";
+      approvalCollection.save({}, this.options["doc_num"]).then(function(){
+        console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
+        _this.thisDfd.resolve(formData);
+      }, function(model,xhr, options){
+        var respons=xhr.responseJSON;
+        Dialog.error(respons.message);
+        _this.thisDfd.reject();
+      });
        return _this.thisDfd.promise();
     
       // // this.collection

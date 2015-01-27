@@ -23,8 +23,15 @@ InOfficeDao.prototype.insertInOffice =  function (connection, data) {
         ]
     ); 
 };
-InOfficeDao.prototype.removeInOffice =  function (doc_num) {
+InOfficeDao.prototype.removeInOffice =  function (connection, data) {
     var queryStr = util.format(db.getQuery('inOffice', 'deleteInOfficeList'));
-    return db.queryV2(queryStr, [doc_num]);
+     return db.queryTransaction(
+        connection,
+        queryStr,
+        data,
+        [
+            "_id"
+        ]
+    ); 
 };
 module.exports = new InOfficeDao();

@@ -43,7 +43,7 @@ INSERT INTO `dept_code_tbl` VALUES
 
 CREATE TABLE IF NOT EXISTS `members_tbl` (
   `id` VARCHAR(45) NOT NULL COMMENT '사번',
-  `password` VARCHAR(45) NULL,
+  `password` VARCHAR(300) NULL,
   `name` VARCHAR(45) NOT NULL COMMENT '이름',
   `dept_code` VARCHAR(10) NOT NULL COMMENT '부서코드',
   `name_commute` VARCHAR(45) NOT NULL COMMENT '근태 기초자료상의 이름',
@@ -352,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `approval_tbl` (
   `black_mark` VARCHAR(3) NULL COMMENT '상신.결재 상태 ( 1:정상, 2:당일결재, 3:익일결재 )',
   `start_time` VARCHAR(10) NULL COMMENT '외근인 경우 시작시간',
   `end_time` VARCHAR(10) NULL COMMENT '외근인경우 종료시간',
-  `day_count` FLOAT NULL,
+  `day_count` FLOAT NULL COMMENT '휴가 일수',
   PRIMARY KEY (`doc_num`),
   INDEX `fk_approval_tbl_office_code_tbl1_idx` (`office_code` ASC),
   CONSTRAINT `fk_approval_tbl_office_code_tbl1`

@@ -12,9 +12,17 @@ define([
                 if(model.get("id") == id){
                     return model;
                 }
-            })
+            });
+        }, save: function(data, id){
+            this.wrapper = new InOfficeCollectionWrapper(data);
+            this.wrapper.set({_id: id});
+            return this.wrapper.save();
         }
     });
     
+    var InOfficeCollectionWrapper = Backbone.Model.extend({
+       url:'/inoffice/bulk',
+       idAttribute : '_id'
+    });
     return OutOfficeCollection;
 });

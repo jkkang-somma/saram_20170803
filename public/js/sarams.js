@@ -15,6 +15,15 @@ require.config({
       'log' : {deps : ['jquery', 'util', 'log4javascript']},
       'animator' : {deps : ['jquery', 'log','util'] },
       'resulttimefactory' : { deps : ['jquery, underscore, momentjs'] },
+      'cryptojs.core': {
+         exports: "CryptoJS"
+      },
+      'cryptojs.sha256': {
+         deps: ['CryptoJS']
+      },
+      'cryptojs.base64': {
+         deps: ['cryptojs.core']
+      }
    },
    paths: {
    //    jquery: 'tool/jquery.min',
@@ -43,7 +52,9 @@ require.config({
       schemas:'lib/schemas',
       
       resulttimefactory: 'lib/resultTimeFactory',
-      
+      spin:'tool/spin/spin',
+      'cryptojs.core': "tool/crypto/core",
+      'cryptojs.sha256': "tool/crypto/sha256",
       i18n:'tool/i18n-master/i18n',
       // fittext:'tool/textillate/jquery.fittext',
       // lettering:'tool/textillate/jquery.lettering',
