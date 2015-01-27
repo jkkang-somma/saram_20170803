@@ -222,20 +222,27 @@ define([
       
       var _approvalCollection = new ApprovalCollection(formData);
       
+      var promiseArr = [];
       if(formData.state == '결재완료'){
         if(this.options.office_code != 'B01'){ // 외근 / 휴가 등등
-          _this.addOutOfficeData(_approvalCollection);
+          promiseArr.push(_this.addOutOfficeData(_approvalCollection));
         }else{                                  // 휴일 근무
-          this.addInOfficeData(_approvalCollection);
+          promiseArr.push(this.addInOfficeData(_approvalCollection));
         }
       }else if(formData.state == '취소완료'){
         
         if(this.options.office_code != 'B01'){ // 외근 / 휴가 등등
-          this.delOutOfficeData(_approvalCollection, this.options["doc_num"]);
+          promiseArr.push(this.delOutOfficeData(_approvalCollection, this.options["doc_num"]));
         }else{                                  // 휴일 근무
-          this.delInOfficeData(_approvalCollection, this.options["doc_num"]);
+          promiseArr.push(this.delInOfficeData(_approvalCollection, this.options["doc_num"]));
         }
       }
+      
+      $.when.apply($, promiseArr).then(function(){
+        dfd.reslove(_approvalCollection.models[0]);
+      }, function(){
+        dfd.reject();
+      });
       return dfd.promise();
     },
     delOutOfficeData : function(_approvalCollection, docNum){
@@ -275,8 +282,11 @@ define([
             $.when.apply($, promiseArr).then(function(){
               resultData.commute = results;
               outOfficeCollection.reset();
-              outOfficeCollection.save(resultData, docNum);
-              dfd.resolve(resultData); 
+              outOfficeCollection.save(resultData, docNum).then(function(){
+                dfd.resolve(resultData);   
+              },function(){
+                dfd.reject();
+              });
             });
           },
         }
@@ -321,8 +331,12 @@ define([
             $.when.apply($, promiseArr).then(function(){
               resultData.commute = results;
               inOfficeCollection.reset();
-              inOfficeCollection.save(resultData, docNum);
-              dfd.resolve(resultData); 
+              inOfficeCollection.save(resultData, docNum).then(function(){
+                dfd.resolve(resultData);   
+              },function(){
+                dfd.reject();
+              });
+              
             });
           },
         }

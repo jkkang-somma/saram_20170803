@@ -65,6 +65,18 @@ define([
 		return null;
 	}
 	
+	function _getTimeStr(min){
+		var hour = Math.floor(min / 60);
+		var minute = min % 60;
+		var result = "";
+		if(hour > 0)
+			result = result + hour +"시간 ";
+		
+		result = result + minute + "분";
+		
+		return result;
+	};
+	
 	// comment Cell 페이지 링크 
 	function _createCommentCell(cellData) {
 		 var data = JSON.stringify({
@@ -178,7 +190,11 @@ define([
 									return _createHistoryCell("out_time", full, "out_time_change");
      	                   		}
      	                    },
-     	                    { data : "late_time", 		"title" : "지각</br>시간"}, 
+     	                    { data : "late_time", 		"title" : "지각</br>시간",
+     	                    	render: function(data, type, full, meta){
+     	                    		return _getTimeStr(data);
+     	                    	}
+     	                    }, 
      	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
      	                   		render : function(data, type, full, meta){
      	                   			return Code.getCodeName(Code.OVERTIME, data);
