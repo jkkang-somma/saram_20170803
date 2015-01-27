@@ -2,8 +2,13 @@ define([
   'jquery',
   'underscore',
   'cmoment',
-  'collection/cm/CommuteCollection'
-], function($, _, Moment, CommuteCollection){
+  'models/cm/CommuteModel',
+  'collection/cm/CommuteCollection',
+  'collection/vacation/InOfficeCollection',
+  'collection/vacation/OutOfficeCollection'
+], function($, _, Moment,
+    CommuteModel, CommuteCollection, InOfficeCollection, OutOfficeCollection
+){
     var WORKTYPE = {
         NORMAL : "00",
         EARLY : "01",
@@ -37,7 +42,6 @@ define([
         outTimeType:        1,
         latestTime:         null,
         lateTime:           0,
-        holidayWorkTime:    0,
         lateTimeOver:       0,
         overTime:           0,
         vacationCode:       null,
@@ -48,6 +52,7 @@ define([
         outOfficeEndTime:   null,
         inTimeChange:       0,
         outnTimeChange:     0,
+        checkInOffice:      false,
 
         init : function(userId, userName, userDepartment){
             this.id = userId;
@@ -64,7 +69,6 @@ define([
             this.outTimeType = 1;
             this.latestTime = null;
             this.lateTime = 0;
-            this.holidayWorkTime = 0;
             this.lateTimeOver = 0;
             this.overTime = 0;
             this.workType = WORKTYPE.NORMAL;
@@ -76,6 +80,7 @@ define([
             this.outOfficeEndTime = null;
             this.inTimeChange = 0;
             this.outTimeChange = 0;
+            this.checkInOffice = false;
         },
         
         initToday : function(todayStr, holidayData){
@@ -91,7 +96,6 @@ define([
             this.outTimeType = 1;
             this.latestTime = null;
             this.lateTime = 0;
-            this.holidayWorkTime = 0;
             this.lateTimeOver = 0;
             this.overTime = 0;
             this.workType = WORKTYPE.NORMAL;
@@ -103,6 +107,7 @@ define([
             this.outOfficeEndTime = null;
             this.inTimeChange = 0;
             this.outTimeChange = 0;
+            this.checkInOffice = false;
         },
         
         initByModel : function(model){
@@ -180,6 +185,12 @@ define([
                 }
             }
         },
+        setInOffice : function(todayInOffice){
+            if(todayInOffice.length > 0){
+                this.checkInOffice = true;
+                this.workType = WORKTYPE.HOLIDAY;
+            }
+        },
         
         setHoliday : function(){
             var today = new Date(this.date);
@@ -237,7 +248,7 @@ define([
                 if(this.latestTime.isBefore(destTime)) this.latestTime = destTime;
         },
         
-        getLateTime : function(){
+        setLateTime : function(){
             if(!_.isNull(this.inTime)){
                 this.lateTime = this.inTime.diff(this.standardInTime,"minute");
                 this.workType = WORKTYPE.NORMAL;
@@ -250,17 +261,23 @@ define([
             this.lateTime;
         },
         
-        getHolidayWorkTimeCode : function(){
+        setHolidayWorkTimeCode : function(){
             if(!(_.isNull(this.outTime)) && !(_.isNull(this.inTime))){
-                this.holidayWorkTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
-                if (this.holidayWorkTime > 480)              this.overtimeCode =  "2015_BC";
-                else if (this.holidayWorkTime > 360)         this.overtimeCode =  "2015_BB";
-                else if (this.holidayWorkTime > 240)         this.overtimeCode =  "2015_BA";
-                this.overTime = this.holidayWorkTime;
+                this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
+                
+                if(this.checkInOffice){
+                    this.workType = "41";
+                    if (this.overTime > 480)              this.overtimeCode =  "2015_BC";
+                    else if (this.overTime > 360)         this.overtimeCode =  "2015_BB";
+                    else if (this.overTime > 240)         this.overtimeCode =  "2015_BA";
+                }else{
+                    this.workType = "40";
+                }
+                
             }
         },
         
-        getOverTimeCode : function(){
+        setOverTimeCode : function(){
             this.lateTimeOver = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
                                                     
             if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
@@ -284,33 +301,34 @@ define([
             if(!this.inTime){ // 출근기록이 없을경우
                 if(this.earliestTime){
                     this.inTime = this.earliestTime;   // 저장된 가장 이른 출입시간을 출근시간으로 표시
-                    this.inTimeType = 2;               
                 }
                  // 출근기록 없다는것 표시
+                 if(this.workType != "30")
+                    this.inTimeType = 2;              
             }
             
             if(!this.outTime){// 퇴근 기록이 없는경우
                 if(this.latestTime){
                     this.outTime = this.latestTime;// 저장된 가장 늦은 출입시간을 퇴근시간으로 표시
-                    this.outTimeType = 2;                
                 }
-                
+                if(this.workType != "30")
+                    this.outTimeType = 2;          
             }
 
             // 초과근무시간 판단 over_time
             if (this.workType == WORKTYPE.HOLIDAY){ //휴일근무인 경우
-                this.getHolidayWorkTimeCode();
+                this.setHolidayWorkTimeCode();
             } else {
-                this.getLateTime();
+                this.setLateTime();
                 if (this.outTime){
-                    this.getOverTimeCode();
+                    this.setOverTimeCode();
                 }
             }
             
             if(!this.inTime && !this.outTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
                 this.workType = WORKTYPE.ABSENTCE;
             }
-            
+           
             return {
                 id : this.id,
                 name : this.name,
@@ -381,6 +399,43 @@ define([
 			}, currentResult.id, changeHistoryCollection);
 			return dfd.promise();
         },
+        
+        modifyByInOutOfficeType : function(date, id, type, model){
+            
+            var dfd = new $.Deferred();
+            var that = this;
+            var commuteCollection = new CommuteCollection();
+            
+     		commuteCollection.fetchDate(date).done(function(result){
+         		
+         		var currentDayCommute = commuteCollection.where({id : id});
+         		if(currentDayCommute.length > 0){
+         		    currentDayCommute = currentDayCommute[0];
+         		}else {
+         		    dfd.reject({msg : "Fail to fetch commuteCollection"});
+         		    return;
+         		}
+         		
+         		that.initByModel(currentDayCommute);
+         		
+         		if(type == "in"){
+         		    var inOfficeCollection = new InOfficeCollection();
+         		    inOfficeCollection.add(model);
+         		    that.setInOffice(inOfficeCollection);
+         		}else if(type == "out"){
+         		    model.date = date;
+         		    var outOfficeCollection = new OutOfficeCollection();
+         		    outOfficeCollection.add(model);
+         		    that.setOutOffice(outOfficeCollection.where({date: that.date}));
+         		}else{
+         		    dfd.reject({msg : "Wrong type (in /out)"});
+         		}    
+         		
+         		dfd.resolve(that.getResult());
+            });
+            
+            return dfd.promise();
+        }
     };
     
     return {

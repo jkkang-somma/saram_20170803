@@ -12,14 +12,18 @@ OutOfficeDao.prototype.selectOutOfficeList =  function () {
     var queryStr = util.format(db.getQuery('outOffice', 'selectOutOfficeList'));
     return db.queryV2(queryStr);
 };
-OutOfficeDao.prototype.insertOutOffice =  function (_data) {
+OutOfficeDao.prototype.insertOutOffice =  function (connection, data) {
     var queryStr = util.format(db.getQuery('outOffice', 'insertOutOffice'));
-    var year = _data.date + "";
-    year = year.substr(0,4);
+    return db.queryTransaction(
+        connection,
+        queryStr,
+        data,
+        [
+            "year", "date", "id", "office_code", "office_code",  "memo", "doc_num", "black_mark", "start_time", "end_time"
+        ]
+    ); 
     
-    _data.black_mark = (_data.black_mark == undefined)? "" : _data.black_mark;
-    
-    return db.queryV2(queryStr, [year, _data.date, _data.id, _data.office_code, _data.office_code,  _data.memo, _data.doc_num, _data.black_mark, _data.start_time, _data.end_time]);
+    // return db.queryV2(queryStr, [year, _data.date, _data.id, _data.office_code, _data.office_code,  _data.memo, _data.doc_num, _data.black_mark, _data.start_time, _data.end_time]);
 };
 OutOfficeDao.prototype.removeOutOffice =  function (doc_num) {
     var queryStr = util.format(db.getQuery('outOffice', 'deleteOutOfficeList'));

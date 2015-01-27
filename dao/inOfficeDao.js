@@ -12,12 +12,16 @@ InOfficeDao.prototype.selectInOfficeList =  function () {
     var queryStr = util.format(db.getQuery('inOffice', 'selectInOfficeList'));
     return db.queryV2(queryStr);
 };
-InOfficeDao.prototype.insertInOffice =  function (_data) {
+InOfficeDao.prototype.insertInOffice =  function (connection, data) {
     var queryStr = util.format(db.getQuery('inOffice', 'insertInOffice'));
-    var year = _data.date + "";
-    year = year.substr(0,4);
-    
-    return db.queryV2(queryStr, [year, _data.date, _data.id, _data.doc_num]);
+    return db.queryTransaction(
+        connection,
+        queryStr,
+        data,
+        [
+            "year", "date", "id", "doc_num"
+        ]
+    ); 
 };
 InOfficeDao.prototype.removeInOffice =  function (doc_num) {
     var queryStr = util.format(db.getQuery('inOffice', 'deleteInOfficeList'));
