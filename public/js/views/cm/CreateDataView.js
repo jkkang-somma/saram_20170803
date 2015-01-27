@@ -115,6 +115,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
+    	        tooltip:"근태 생성",
     	        click:function(){
                     var createDataPopupView= new CreateDataPopupView({date : that.lastestDate});
                     
@@ -259,6 +260,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"ok",
+    	        tooltip:"저장",
     	        click:function(){
     	            Dialog.confirm({
     					msg : "근태 데이터를 서버에 저장하시겠습니까?",

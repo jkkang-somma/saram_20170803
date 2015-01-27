@@ -64,6 +64,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
+    	        tooltip:"추가",
     	        click:function(){
     	            var addHolidayPopup = new AddHolidayPopup();
     	            Dialog.show({
@@ -112,6 +113,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	    this.gridOption.buttons.push({
     	       type:"custom",
     	        name:"remove",
+    	        tooltip:"삭제",
     	        click:function(_grid){ 
     	            var selectedItem = _grid.getSelectItem();
     	            if(_.isUndefined(selectedItem)){
@@ -137,6 +139,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"wrench",
+    	        tooltip:"일괄 생성",
     	        click:function(_grid){
     	            var createHolidayPopup = new CreateHolidayPopup();
     	            Dialog.show({

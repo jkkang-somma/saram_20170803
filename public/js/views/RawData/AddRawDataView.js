@@ -83,6 +83,7 @@ AddRawDataAddPopupView, ProgressbarView){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
+    	        tooltip:"불러오기",
     	        click:function(){
     	            var addRawDataAddPopupView = new AddRawDataAddPopupView();
     	            Dialog.show({
@@ -186,6 +187,7 @@ AddRawDataAddPopupView, ProgressbarView){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"ok",
+    	        tooltip:"저장",
     	        click:function(){
     	            Dialog.confirm({
     	                msg : "출입 기록을 서버에 저장하시겠습니까?",

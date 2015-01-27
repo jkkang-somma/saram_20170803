@@ -49,10 +49,10 @@ define([
     setAddReportDisplay : function(param){
       // table Setting
       this.setTableDisplay();
-      // display setting
-      this.setDefaultDisplay();
       // select box data setting
       this.setDataDefaultValues(param);
+      // display setting
+      this.setDefaultDisplay();
     },
     
     setTableDisplay : function() {
@@ -105,12 +105,23 @@ define([
         if(param.office_code == "B01"){
           // 휴일근무
           holReq = "0";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }else if(param.office_code == "V02" || param.office_code == "V03"){
           // 반차
           holReq = "0.5";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
+        }else if(param.office_code == "W01"){
+          // 외근
+          holReq = "0";
+          $(this.el).find('#end_date').css('display','none');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','block');
         }else {
           var arrInsertDate = this.getDatePariod();
           holReq = arrInsertDate.length + "";
+          $(this.el).find('#end_date').css('display','table');
+          $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }
         _this.find('#reqHoliday').val(holReq + " 일");
       }
