@@ -144,7 +144,23 @@ define([
             var dataVal = view.getDateFormat(row.decide_date);
             return dataVal;
          }},
-         { data : "state", "title" : "처리상태"},
+         { data : "state", "title" : "처리상태", "render": function(data, type, row){
+          // data : "black_mark",
+          // ( 1:정상, 2:당일결재, 3:익일결재
+           var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
+           dataVal += "<div style='text-align: center;'>"
+            + "<button class='btn btn-default btn-success btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>"
+            + "<button class='btn btn-default btn-success btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
+            + "</div>";
+            
+            $('#btnApproval'+row.doc_num).click(function(evt){
+              view.onClickApproval(row);
+            });
+            $('#btnDetail'+row.doc_num).click(function(evt){
+              view.onClickDetail(row);
+            });
+          return dataVal;
+         }},
          {  "title" : "비고" , "render": function(data, type, row){
           // data : "black_mark",
           // ( 1:정상, 2:당일결재, 3:익일결재
@@ -224,50 +240,8 @@ define([
     	        name:"ok",
     	        tooltip : "결재",
     	        click:function(_grid){
-                var selectData=_this.grid.getSelectItem();
-             		if ( Util.isNotNull(selectData) ) {
-             		  selectData.holidayInfos = _this.holidayInfos;
-             		  var sessionInfo = SessionModel.getUserInfo();
-             		   
-             		  if(selectData.state == "상신" || selectData.state == "취소요청"){
-             		 //if(true){
-                   		 if(selectData.manager_id == sessionInfo.id){
-                   		 //if(true){
-                     		  var _approvalReportView = new ApprovalReportView();
-                         		 // data param 전달
-                         		 _approvalReportView.options = selectData;
-                         		 // Dialog
-                         		 Dialog.show({
-                                  title:"결재", 
-                                  content:_approvalReportView, 
-                                  buttons:[{
-                                      label: "확인",
-                                      cssClass: Dialog.CssClass.SUCCESS,
-                                      action: function(dialogRef){// 버튼 클릭 이벤트
-                                         _approvalReportView.onClickBtnSend(dialogRef).done(function(model){
-                                            Dialog.show("Success Approval Confirm.");
-                                              _this.grid.updateRow(model);
-                                              dialogRef.close();
-                                          });
-                                      }
-                                  }, {
-                                      label: 'Close',
-                                      action: function(dialogRef){
-                                          dialogRef.close();
-                                      }
-                                  }]
-                              });
-                   		 }else{
-             		          Dialog.warning("해당 상신 항목의 결재자가 아닙니다.");
-                   		 }
-             		    
-             		    }else{
-             		      Dialog.warning("결재 완료된 항목입니다.");
-             		    }
-                 		 
-             		} else {
-             		  Dialog.error("결재 대상을 선택해주세요.");
-             		}
+    	          var selectData=_this.grid.getSelectItem();
+    	          _this.onClickApproval(selectData);
               }
     	    }
         )
@@ -276,59 +250,9 @@ define([
     	        name:"read",
     	        tooltip : "상세 보기",
     	        click:function(_grid){
-                var selectData=_this.grid.getSelectItem();
-             		if ( Util.isNotNull(selectData) ) {
-             		  selectData.holidayInfos = _this.holidayInfos;
-             		  var _detailReportView = new DetailReportView();
-                 		 // data param 전달
-                 		 _detailReportView.options = selectData;
-                 		 
-                 		 var dialogButtons = [];
-                 		 var sessionInfo = SessionModel.getUserInfo();
-                 		 if(selectData.submit_id == sessionInfo.id && selectData.state == '결재완료'){
-                 		   dialogButtons.push({
-                          label: "취소 요청",
-                          cssClass: Dialog.CssClass.SUCCESS,
-                          action: function(dialogRef){// 버튼 클릭 이벤트
-                          
-                              var dd = Dialog.confirm({
-                                  msg:"Do you want to cancel approval?", 
-                                  action:function(){
-                                    var _dfd= new $.Deferred();
-                                      _detailReportView.onClickBtnAppCancel().done(function(model){
-                                          Dialog.show("Completed Approval Cancel.");
-                                          _this.grid.updateRow(model);
-                                          // _this.onClickClearBtn();
-                                          dialogRef.close();
-                                       });
-                                      // this.action.caller.arguments[0].close();
-                                      _dfd.resolve();
-  	                                  return _dfd.promise();
-                                  }
-                              });
-                          
-                              
-                          }
-                      });
-                 		 }
-                 		 dialogButtons.push({
-                          label: "확인",
-                          cssClass: Dialog.CssClass.SUCCESS,
-                          action: function(dialogRef){// 버튼 클릭 이벤트
-                                dialogRef.close();
-                          }
-                      });
-                 		 
-                 		 // Dialog
-                 		 Dialog.show({
-                          title:"상세보기", 
-                          content:_detailReportView, 
-                          buttons:dialogButtons
-                      });
-             		} else {
-             		  Dialog.error("항목을 선택해주세요.");
-             		}
-              }
+    	          var selectData=_this.grid.getSelectItem();
+    	          _this.onClickDetail(selectData);
+    	        }
     	    }
         );
         return _buttons;
@@ -462,10 +386,111 @@ define([
       }
     },
     onClickClearBtn : function(evt){
-      // $(this.el).find("#beforeDate").val('');
-      // $(this.el).find("#afterDate").val('');
-      // this.setReportTable(true);
       this.render();
+    },
+    onClickApproval : function(selectData){
+      var _this = this;
+      // var selectData=_this.grid.getSelectItem();
+   		if ( Util.isNotNull(selectData) ) {
+   		  selectData.holidayInfos = _this.holidayInfos;
+   		  var sessionInfo = SessionModel.getUserInfo();
+   		   
+   		  if(selectData.state == "상신" || selectData.state == "취소요청"){
+   		 //if(true){
+         		 if(selectData.manager_id == sessionInfo.id){
+         		 //if(true){
+           		  var _approvalReportView = new ApprovalReportView();
+               		 // data param 전달
+               		 _approvalReportView.options = selectData;
+               		 // Dialog
+               		 Dialog.show({
+                        title:"결재", 
+                        content:_approvalReportView, 
+                        buttons:[{
+                            label: "확인",
+                            cssClass: Dialog.CssClass.SUCCESS,
+                            action: function(dialogRef){// 버튼 클릭 이벤트
+                               _approvalReportView.onClickBtnSend(dialogRef).done(function(model){
+                                  Dialog.show("Success Approval Confirm.");
+                                    _this.grid.updateRow(model);
+                                    dialogRef.close();
+                                });
+                            }
+                        }, {
+                            label: 'Close',
+                            action: function(dialogRef){
+                                dialogRef.close();
+                            }
+                        }]
+                    });
+         		 }else{
+   		          Dialog.warning("해당 상신 항목의 결재자가 아닙니다.");
+         		 }
+   		    
+   		    }else{
+   		      Dialog.warning("결재 완료된 항목입니다.");
+   		    }
+       		 
+   		} else {
+   		  Dialog.error("결재 대상을 선택해주세요.");
+   		}
+              
+    },
+    onClickDetail : function(selectData){
+        var _this = this;
+        // var selectData=_this.grid.getSelectItem();
+     		if ( Util.isNotNull(selectData) ) {
+     		  selectData.holidayInfos = _this.holidayInfos;
+     		  var _detailReportView = new DetailReportView();
+         		 // data param 전달
+         		 _detailReportView.options = selectData;
+         		 
+         		 var dialogButtons = [];
+         		 var sessionInfo = SessionModel.getUserInfo();
+         		 if(selectData.submit_id == sessionInfo.id && selectData.state == '결재완료'){
+         		   dialogButtons.push({
+                  label: "취소 요청",
+                  cssClass: Dialog.CssClass.SUCCESS,
+                  action: function(dialogRef){// 버튼 클릭 이벤트
+                  
+                      var dd = Dialog.confirm({
+                          msg:"Do you want to cancel approval?", 
+                          action:function(){
+                            var _dfd= new $.Deferred();
+                              _detailReportView.onClickBtnAppCancel().done(function(model){
+                                  Dialog.show("Completed Approval Cancel.");
+                                  _this.grid.updateRow(model);
+                                  // _this.onClickClearBtn();
+                                  dialogRef.close();
+                               });
+                              // this.action.caller.arguments[0].close();
+                              _dfd.resolve();
+                              return _dfd.promise();
+                          }
+                      });
+                  
+                      
+                  }
+              });
+         		 }
+         		 dialogButtons.push({
+                  label: "확인",
+                  cssClass: Dialog.CssClass.SUCCESS,
+                  action: function(dialogRef){// 버튼 클릭 이벤트
+                        dialogRef.close();
+                  }
+              });
+         		 
+         		 // Dialog
+         		 Dialog.show({
+                  title:"상세보기", 
+                  content:_detailReportView, 
+                  buttons:dialogButtons
+              });
+     		} else {
+     		  Dialog.error("항목을 선택해주세요.");
+     		}
+              
     }
     
   });
