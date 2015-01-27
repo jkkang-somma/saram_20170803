@@ -17,6 +17,7 @@ define([
 ], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
     options: {},
+    holReq : 0,
   	events: {
   	},
   	
@@ -140,7 +141,8 @@ define([
       this.beforeTime=beforeTime.datetimepicker({
           pickDate: false,
           language: "ko",
-          format: "hh:mm",
+          format: "HH:mm",
+          use24hours: true,
           autoclose: true
       });
       
@@ -149,7 +151,8 @@ define([
       this.afterTime= afterTime.datetimepicker({
           pickDate: false,
           language: "ko",
-          format: "hh:mm",
+          format: "HH:mm",
+          use24hours: true,
           autoclose: true
       });
       

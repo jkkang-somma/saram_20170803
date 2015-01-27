@@ -56,7 +56,12 @@ ProgressbarView){
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search"]
+    		    buttons:["search",{
+        		    	type:"myRecord",
+				        name: "myRecord",
+				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				        tooltip: "",
+        		    }]
     		};
             
             // 수원 사업자의 경우 컬럼을 추가 

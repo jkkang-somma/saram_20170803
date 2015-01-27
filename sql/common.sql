@@ -56,7 +56,11 @@ CREATE TABLE IF NOT EXISTS `members_tbl` (
   `email` VARCHAR(200) NULL,
   `position` VARCHAR(20) NULL COMMENT '직급',
   `phone` VARCHAR(45) NULL COMMENT '전화번호',
+  `phone_office` VARCHAR(45) NULL COMMENT '사무실 내선번호',
   `approval_id` VARCHAR(45) NULL COMMENT '결재권자 ID',
+  `emergency_phone` VARCHAR(20) NULL COMMENT '비상연락망',
+  `birthday` VARCHAR(15) NULL COMMENT '생일',
+  `wedding_day` VARCHAR(15) NULL COMMENT '결혼기념일',
   PRIMARY KEY (`id`),
   INDEX `fk_members_tbl_dept_code_tbl1_idx` (`dept_code` ASC),
   CONSTRAINT `fk_members_tbl_dept_code_tbl1`

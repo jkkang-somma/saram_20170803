@@ -25,8 +25,8 @@ var CompanyAccess = function() {
 				name : user.name,
 				department : user.dept_name,
 				type : data.type,
-				ip_address : data.ip_address,
-				mac_address : data.mac_address,
+				ip_pc : data.ip_pc,
+				ip_office : data.ip_office,
 				need_confirm : need_confirm
 		};
 		
