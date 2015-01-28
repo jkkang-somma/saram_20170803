@@ -69,11 +69,10 @@ define([
 		var hour = Math.floor(min / 60);
 		var minute = min % 60;
 		var result = "";
-		if(hour > 0)
-			result = result + hour +"시간 ";
-		
-		result = result + minute + "분";
-		
+
+		result += (hour < 10 ? "0"+ hour : hour) +":";
+		result += (minute < 10 ? "0"+ minute : minute);
+
 		return result;
 	};
 	
@@ -165,16 +164,34 @@ define([
         		    column:[
      	                   	{ data : "date", 			"title" : "일자" },
      	                   	{ data : "department", 		"title" : "부서" },
-     	                   	{ data : "name", 			"title" : "이름", 
-     	                   		render: function(data, type, full, meta) {
-     	                   			return full.name + "</br>(" +full.id + ")";
-     	                   		}
-     	                   	},
+     	                   	{ data : "name", 			"title" : "이름" },
      	                   	{ data : "work_type", 	"title" : "근무</br>타입",
      	                   		render : function(data, type, full, meta){
-     	                   			return Code.getCodeName(Code.WORKTYPE, data);
+     	                   			var result = Code.getCodeName(Code.WORKTYPE, data);
+     	                   			var resultArr = result.split(/(,|_| )/);
+     	                   			if(resultArr.length > 1){
+     	                   				result = "";
+     	                   				for(var i =0; i < resultArr.length; i++){
+     	                   					if(i % 2 == 1)
+     	                   						continue;
+     	                   					
+     	                   					if(i == resultArr.length-1){
+     	                   						result += resultArr[i];
+     	                   					}else{
+     	                   						result += resultArr[i] + "<br>";
+     	                   					}
+     	                   				}
+     	                   			}
+ 	                   				return result;
+     	                   			
+     	                   			
      	                   		}
      	                   	},
+     	                   	{data: "vacation_code", title: "휴가",
+		                        "render": function (data, type, rowData, meta) {
+		                            return Code.getCodeName(Code.OFFICE, data);
+		                       }
+		                    },
      	                   	{ data : "out_office_code", 	"title" : "외근</br>정보",
      	                   		render : function(data, type, full, meta){
      	                   			return Code.getCodeName(Code.OFFICE, data);
@@ -300,14 +317,14 @@ define([
     	    $(this.el).html(_layOut);
     	    
 			var today = new Date();
-    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     	    
     	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(firstDay).format("YYYY-MM-DD")
+		        defaultDate: Moment(today).add(-7,"days").format("YYYY-MM-DD")
             });
             
             $(this.el).find("#ccmToDatePicker").datetimepicker({

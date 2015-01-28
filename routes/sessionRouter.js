@@ -18,8 +18,10 @@ var sessionResponse=function(req, res, session){
 router.route('/')
 .post(function(req, res){//만들기.
     if (req.cookies.saram) {//cookie가 있을 때.
-        if (sessionManager.validationCookie(req.cookies.saram)){
+        if (sessionManager.validationCookie(req.cookies.saram, res)){
+            debug("@@@@@@@@@@@@@@");
             sessionResponse(req, res, sessionManager.get(req.cookies.saram));
+            debug("@@@@@@@@@@@@@@");
         } else {//유효하지 않은 cookie 삭제.
             sessionManager.remove(req.cookies.saram);
             res.clearCookie("saram");
@@ -60,7 +62,7 @@ router.route('/')
                     if (user.get("password")==resultUser.get("password")){
                         debug("login success");
                         
-                        var hour = 3600000;
+                        var hour = 3600000000000;
                         var accessToken = suid(32);
                         
                         var userInfo = resultUser.data;

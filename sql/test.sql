@@ -56,6 +56,11 @@ INSERT INTO out_office_tbl VALUES ('2015','2015-01-09','071102','V03','0.5','가
 
 
 
+# 1/7 외근
+INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark, start_time, end_time) 
+VALUES ('201501-301','071201','130702','2015-01-01','2015-01-01','일괄상신','일괄결재','2015-01-02','2015-01-02','W01','결재완료', 1, '09:00', '16:00');
+INSERT INTO `out_office_tbl` (`year`, `date`, `id`, `office_code`, `day_count`, `memo`, `doc_num`, `black_mark`, `start_time`, `end_time`) 
+VALUES ('2015', '2015-01-02', '071201', 'W01', 0, '일괄등록', '201501-301', 1, '09:00', '16:00');
 
 ### 김태수 책임 ###
 # 1/7 외근

@@ -38,8 +38,8 @@ define([
             this.gridOption = {
     		    el:"addRawDataContent",
     		    id:"addRawDataTable",
-    		    column:["사번", "이름", "부서", "날짜", "시간", "출입기록"],
-    		    dataschema:["id", "name", "department", "date", "time", "type"],
+    		    column:["이름", "부서", "날짜", "시간", "출입기록"],
+    		    dataschema:["name", "department", "date", "time", "type"],
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,

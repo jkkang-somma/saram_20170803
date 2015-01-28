@@ -67,16 +67,6 @@ app.use(express_session({
     saveUninitialized:true
 }));
 
-// app.use(
-//     sass({
-//         src: __dirname + '/sass', 
-//         dest: __dirname + '/css/sass',
-//         debug: true,   
-//         outputStyle: 'expanded',
-//         prefix: '/style'    
-//     })
-// );
-
 var authError=function(next){
     var err = new Error('not Authoryty');
     err.status = 401;
@@ -91,10 +81,9 @@ app.use(function(req,res,next){
         next();
     }else{     
         if (req.cookies.saram) {//cookie가 있을 때.
-            if (sessionManager.validationCookie(req.cookies.saram)){
+            if (sessionManager.validationCookie(req.cookies.saram, res)){
                 next();
             } else {//유효하지 않은 cookie 삭제.
-            
                 sessionManager.remove(req.cookies.saram);
                 res.clearCookie("saram");
                 authError(next);
