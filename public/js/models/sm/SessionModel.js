@@ -44,7 +44,7 @@ define([
         },
         login : function(userinfo){// POST or PUT
             var dfd= new $.Deferred();
-            this.save({user:userinfo}, {
+            this.save({initPassword:false, user:userinfo}, {
                 success:function(resultModel, result, s, sd){
                     var _login=result.isLogin;
                     if ((!_.isUndefined(result.isLogin)) && _login){
