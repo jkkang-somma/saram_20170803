@@ -113,7 +113,7 @@ define([
          if(startDate.length > 8){
           var selGubun = $(_this.el).find('#office_code');
           var selVal = selGubun.val();
-          _this.holReq = 0;
+          // _this.holReq = 0;
           if(selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03'){
             var arrInsertDate = _this.getDatePariod();
             _this.holReq = arrInsertDate.length;
@@ -126,7 +126,7 @@ define([
         if(endDate.length > 8){
           var selGubun = $(_this.el).find('#office_code');
           var selVal = selGubun.val();
-          _this.holReq = 0;
+          // _this.holReq = 0;
           if(selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03'){
             var arrInsertDate = _this.getDatePariod();
             _this.holReq = arrInsertDate.length;
@@ -183,14 +183,14 @@ define([
         // 휴일근무
         $(_this.el).find('#datePickerTitleTxt').text('date');
          _this.afterDate.hide();
-         _this.holReq = 0;
+        _this.holReq = 0;
          $(_this.el).find('#reqHoliday').val("0 일");
           ComboBox.createCombo(selGubun);
       });
       
       selGubun.change(function() {
         var selVal = selGubun.val();
-        _this.holReq = 0;
+        // _this.holReq = 0;
         if(selVal == 'W01'){
           // 외근
           _this.holReq = 0;
