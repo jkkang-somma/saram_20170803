@@ -237,6 +237,8 @@ define([
         }else{                                  // 휴일 근무
           promiseArr.push(this.delInOfficeData(_approvalCollection, this.options["doc_num"]));
         }
+      } else{
+        promiseArr.push(this.updateApprovalData(_approvalCollection));
       }
       
       $.when.apply($, promiseArr).then(function(){
@@ -423,8 +425,18 @@ define([
           dfd.resolve(resultData);  
         });     
       });
+      
+      return dfd.promise();
     },
-    
+    updateApprovalData : function(_approvalCollection){
+       var dfd = new $.Deferred();
+       var resultData = this.getFormData($(this.el).find('form'));
+      _approvalCollection.save(resultData, resultData.doc_num).done(function(){
+          dfd.resolve(resultData);  
+        }); 
+        
+        return dfd.promise();
+    },
     getDatePariod : function(){
        // 날짜 개수 이용하여 날짜 구하기
       var sStart = $(this.el).find('#start_date input').val();
