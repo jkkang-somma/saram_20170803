@@ -6,12 +6,19 @@ define([
   'core/BaseView',
   'dialog',
   'comboBox',
+  'cmoment',
+  'resulttimefactory',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
+  'collection/vacation/OutOfficeCollection',
+  'collection/vacation/InOfficeCollection',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'models/vacation/InOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, addReportTmp, ApprovalCollection, ApprovalModel, OutOfficeModel, InOfficeModel){
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, ResultTimeFacoty, addReportTmp,
+  ApprovalCollection, OutOfficeCollection, InOfficeCollection, ApprovalModel, OutOfficeModel, InOfficeModel
+){
+  var resultTimeFactory = ResultTimeFacoty.Builder;
   var approvalReportView = BaseView.extend({
     options : {},
    
@@ -210,112 +217,236 @@ define([
     },
   	
   	onClickBtnSend : function(evt){
-  	  this.thisDfd = new $.Deferred();
+  	  var dfd = new $.Deferred();
   	  var _this = this;
       var formData = this.getFormData($(this.el).find('form'));
       
-      console.log(formData);
-      formData["_id"] = this.options["doc_num"];
+      var _approvalCollection = new ApprovalCollection(formData);
       
-      var _approvalModel = new ApprovalModel(formData);
-      _approvalModel.idAttribute = "doc_num";
-      _approvalModel.save({},{
-      	        success:function(model, xhr, options){
-      	            // insert
-      	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
-      	            if(formData.state == '결재완료'){
-      	              if(_this.options.office_code != 'B01'){
-          	            _this.addOutOfficeData();
-      	              }else{
-      	                // 휴일 근무
-      	                _this.addInOfficeData();
-      	              }
-      	            }else if(formData.state == '취소완료'){
-      	              var sendData = _this.getFormData($(_this.el).find('form'));
-                      sendData["doc_num"] = _this.options["doc_num"];
-                      sendData["_id"] = _this.options["doc_num"];
-      	              if(_this.options.office_code != 'B01'){
-          	           // _this.deleteOutOfficeData();
-          	           var outOfficeModel =new OutOfficeModel(sendData);
-                       outOfficeModel.destroy();
-                       _this.thisDfd.resolve(_this.getChangeFormData(sendData));
-      	              }else{
-      	                // 휴일 근무
-      	               var inOfficeModel =new InOfficeModel(sendData);
-                       inOfficeModel.destroy();
-                       _this.thisDfd.resolve(_this.getChangeFormData(sendData));
-      	              }
-    	              }else{
-      	              _this.thisDfd.resolve(_this.getChangeFormData(formData));
-      	            }
-      	        },
-      	        error:function(model, xhr, options){
-      	            var respons=xhr.responseJSON;
-      	            Dialog.error(respons.message);
-      	            _this.thisDfd.reject();
-      	        },
-      	        wait:false
-      	    }); 
-       return _this.thisDfd.promise();
-    
-      // // this.collection
+      var promiseArr = [];
+      if(formData.state == '결재완료'){
+        if(this.options.office_code != 'B01'){ // 외근 / 휴가 등등
+          promiseArr.push(_this.addOutOfficeData(_approvalCollection));
+        }else{                                  // 휴일 근무
+          promiseArr.push(this.addInOfficeData(_approvalCollection));
+        }
+      }else if(formData.state == '취소완료'){
+        
+        if(this.options.office_code != 'B01'){ // 외근 / 휴가 등등
+          promiseArr.push(this.delOutOfficeData(_approvalCollection, this.options["doc_num"]));
+        }else{                                  // 휴일 근무
+          promiseArr.push(this.delInOfficeData(_approvalCollection, this.options["doc_num"]));
+        }
+      } else{
+        promiseArr.push(this.updateApprovalData(_approvalCollection));
+      }
+      
+      $.when.apply($, promiseArr).then(function(){
+        var resultModel = new ApprovalModel(_this.options);
+        resultModel.set({state : _approvalCollection.models[0].get("state")});
+        resultModel.set({decide_date : new Date()});
+        
+        console.log(resultModel);
+        dfd.resolve(resultModel.attributes);
+      }, function(){
+        dfd.reject();
+      });
+      return dfd.promise();
     },
     
-    addOutOfficeData : function(){
-      var _this = this;
+    delOutOfficeData : function(_approvalCollection, docNum){
+      var dfd = new $.Deferred();
+      var userId = this.options["submit_id"];;
+      var arrInsertDate = this.getDatePariod();
+      var resultData = {};
+      resultData.approval = _approvalCollection.toJSON();
+      
+      var outOfficeCollection = new OutOfficeCollection();
+      
+      outOfficeCollection.fetch(
+        {
+          data : {
+            start : arrInsertDate[0],
+            end : arrInsertDate[arrInsertDate.length -1]
+          },
+          success : function(result){
+            var filterCollection = new OutOfficeCollection();
+            for(var key in result.models){
+              if(result.models[key].get("doc_num") !== docNum){
+                if(result.models[key].get("id") == userId){
+                  filterCollection.add(result.models[key]);
+                }
+              }
+            }
+            
+            var results = [];     // commuteResult;
+            var promiseArr = [];
+            $.each(arrInsertDate, function(key){
+              var today = arrInsertDate[key];
+              var todayOutOfficeModels = filterCollection.where({date : today});
+              promiseArr.push(
+                resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "out", todayOutOfficeModels).done(function(result){
+                  results.push(result);
+                }).fail(function(){
+                  /// 수정할 내용 없음
+                })
+              );
+            });
+            
+            $.when.apply($, promiseArr).always(function(){
+              if(results.length >0){
+                resultData.commute = results;  
+              }
+              outOfficeCollection.save(resultData, docNum).done(function(){
+                dfd.resolve(resultData);   
+              });     
+            });
+          },
+        }
+      );
+      return dfd.promise();
+    },
+    
+    delInOfficeData : function(_approvalCollection, docNum){
+      var dfd = new $.Deferred();
+      var userId = this.options["submit_id"];
+      var arrInsertDate = [$(this.el).find('#start_date input').val()];
+      var resultData = {};
+      resultData.approval = _approvalCollection.toJSON();
+      
+      var inOfficeCollection = new InOfficeCollection();
+      
+      inOfficeCollection.fetch(
+        {
+          data : {
+            start : arrInsertDate[0],
+            end : arrInsertDate[arrInsertDate.length -1]
+          },
+          success : function(result){
+            var filterCollection = new InOfficeCollection();
+            for(var key  in result.models){
+              if(result.models[key].get("doc_num") !== docNum){
+                if(result.models[key].get("id") == userId){
+                  filterCollection.add(result.models[key]);
+                }
+              }
+            }
+            
+            var results = [];     // commuteResult;
+            var promiseArr = [];
+            $.each(arrInsertDate, function(key){
+              var today = arrInsertDate[key];
+              var todayInOfficeModels = filterCollection.where({date : today});
+              promiseArr.push(
+                resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "in", todayInOfficeModels).done(function(result){
+                  results.push(result);
+                }).fail(function(){
+                  /// 수정할 내용 없음
+                })
+              );
+            });
+            
+            $.when.apply($, promiseArr).always(function(){
+              if(results.length >0){
+                resultData.commute = results;  
+              }
+              inOfficeCollection.save(resultData, docNum).done(function(){
+                dfd.resolve(resultData);  
+              });     
+            });
+          },
+        }
+      );
+      return dfd.promise();
+    },
+    
+    addOutOfficeData : function(_approvalCollection){
+      var dfd = new $.Deferred();
       var arrInsertDate = this.getDatePariod();
       
+      var resultData = {};
       // data 저장
-      var sendData = this.getFormData($(this.el).find('form'));
-      sendData["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
-      sendData["id"] = this.options["submit_id"];
-      sendData["doc_num"] = this.options["doc_num"];
-      sendData["memo"] = this.options["submit_comment"];
-      sendData["office_code"] = this.options["office_code"];
-      sendData["start_time"] = this.options["start_time"];
-      sendData["end_time"] = this.options["end_time"];
+      resultData.outOffice = this.getFormData($(this.el).find('form'));
+      resultData.outOffice["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
+      resultData.outOffice["id"] = this.options["submit_id"];
+      resultData.outOffice["doc_num"] = this.options["doc_num"];
+      resultData.outOffice["memo"] = this.options["submit_comment"];
+      resultData.outOffice["office_code"] = this.options["office_code"];
+      resultData.outOffice["start_time"] = this.options["start_time"];
+      resultData.outOffice["end_time"] = this.options["end_time"];
       
-      var _outOfficeModel = new OutOfficeModel(sendData);
-      _outOfficeModel.save({},{
-      	        success:function(model, xhr, options){
-      	          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
-      	        },
-      	        error:function(model, xhr, options){
-      	            var respons=xhr.responseJSON;
-      	            Dialog.error(respons.message);
-      	            _this.thisDfd.reject();
-      	        },
-      	        wait:false
-      	    }); 
+      var results = [];
+      var promiseArr = [];
+      $.each(arrInsertDate, function(key){
+        promiseArr.push(
+          resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.outOffice.id, "out", resultData.outOffice).done(function(result){
+            results.push(result);
+          }).fail(function(){
+            /// 수정할 내용 없음
+          })
+        );
+      });
+      
+      $.when.apply($, promiseArr).always(function(){
+        if(results.length >0){
+          resultData.commute = results;  
+        }
+        _approvalCollection.save(resultData, resultData.outOffice.doc_num).done(function(){
+          dfd.resolve(resultData);  
+        });     
+      });
+      
+      return dfd.promise();
     },
     
-    addInOfficeData : function(){
-      var _this = this;
+    addInOfficeData : function(_approvalCollection){
+      var dfd = new $.Deferred();
+
+      
       // 날짜 개수 이용하여 날짜 구하기
       var sStart = $(this.el).find('#start_date input').val();
       var arrInsertDate = [];
       arrInsertDate.push(sStart);
       
+      var resultData = {};
+            
       // data 저장
-      var sendData = this.getFormData($(this.el).find('form'));
-      sendData["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
-      sendData["id"] = this.options["submit_id"];
-      sendData["doc_num"] = this.options["doc_num"];
+      resultData.inOffice = this.getFormData($(this.el).find('form'));
+      resultData.inOffice["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
+      resultData.inOffice["id"] = this.options["submit_id"];
+      resultData.inOffice["doc_num"] = this.options["doc_num"];
       
-      var _inOfficeModel = new InOfficeModel(sendData);
-      _inOfficeModel.save({},{
-      	        success:function(model, xhr, options){
-      	          _this.thisDfd.resolve(_this.getChangeFormData(sendData));
-      	        },
-      	        error:function(model, xhr, options){
-      	            var respons=xhr.responseJSON;
-      	            Dialog.error(respons.message);
-      	            _this.thisDfd.reject();
-      	        },
-      	        wait:false
-      	    }); 
+      var results = [];
+      var promiseArr = [];
+      
+      $.each(arrInsertDate, function(key){
+        promiseArr.push(
+          resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.inOffice.id, "in", resultData.inOffice).done(function(result){
+            results.push(result);
+          })
+        );
+      });
+      
+      $.when.apply($, promiseArr).always(function(){
+        if(results.length >0){
+          resultData.commute = results;  
+        }
+        _approvalCollection.save(resultData, resultData.inOffice.doc_num).done(function(){
+          dfd.resolve(resultData);  
+        });     
+      });
+      
+      return dfd.promise();
     },
-    
+    updateApprovalData : function(_approvalCollection){
+       var dfd = new $.Deferred();
+       var resultData = this.getFormData($(this.el).find('form'));
+      _approvalCollection.save(resultData, resultData.doc_num).done(function(){
+          dfd.resolve(resultData);  
+        }); 
+        
+        return dfd.promise();
+    },
     getDatePariod : function(){
        // 날짜 개수 이용하여 날짜 구하기
       var sStart = $(this.el).find('#start_date input').val();

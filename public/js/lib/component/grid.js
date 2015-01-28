@@ -7,29 +7,35 @@ define([
   'log',
   'schemas',
   'dialog',
+  'models/sm/SessionModel',
   'datatables',
   'util',
   'text!templates/default/button.html',
   //'fnFindCellRowIndexes',
   'text!templates/component/grid.html',
-  ], function($, _, Backbone, log, Schemas, Dialog, Datatables, Util, ButtonHTML, GridHTML){
+  ], function($, _, Backbone, log, Schemas, Dialog, SessionModel, Datatables, Util, ButtonHTML, GridHTML){
     var LOG=log.getLogger('Grid');
     var gridId=0;
     var _glyphiconSchema=Schemas.getSchema('glyphicon');
     var _defaultGroupBtnTag='<span class="input-group-btn"></span>';
     var _defaultBtnTag='<button class="btn btn-default btn-sm btn-success grid-btn" type="button" data-toggle="tooltip" data-original-title="<%= obj.tooltip %>"></button>';
+    var _defaultBtnText='<span style="display: table-row;"></span>';
+    
     var _gridLength=[10,25,50,100];
     
     var Grid = Backbone.View.extend({
     	initialize:function(options){
     	    var grid=this;
     	    $(window).on("resize", function(){
-    	        LOG.debug("siba");
     	        grid.updateCSS(grid);     
     	    });
     	    
             this.options=options;
-            this.buttonid=[]
+            this.buttonid=[];
+            this.filterValue={
+                meRecord:0
+            };
+            this.filters={};
             
             var _btns=this.options.buttons;
             if (_.isUndefined(_btns) || _.isNull(_btns) || _btns.length <= 0){
@@ -50,8 +56,11 @@ define([
     		_.bindAll(this, 'removeRow');
     		_.bindAll(this, 'search');
     		_.bindAll(this, 'filtering');
-    		
+    		_.bindAll(this, 'setBtnText');
     		this.render();
+    	},
+    	setBtnText:function(btn, text){
+    	    btn.html($(_defaultBtnText).html(text));
     	},
     	updateCSS:function(){
     	    var width=$(window).width();
@@ -193,13 +202,22 @@ define([
                 _.isUndefined(smart)?false:smart
             ).draw();
     	},
-    	filtering:function(filter){
+    	filtering:function(filter, filterName){
     	    $.fn.dataTable.ext.search=[];
-            $.fn.dataTable.ext.search.push(
-                function( settings, data, dataIndex ) {
-                    return filter(data);
-                }
-            );
+            this.filters[filterName]=filter;
+            this._filtering();
+    	},
+    	_filtering:function(){
+    	    var _filters=this.filters;
+            $.fn.dataTable.ext.search=[];
+            for (var name in _filters){
+                $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        var fn=_filters[name];
+                        return fn(data);
+                    }
+                );
+            }
             
             this.DataTableAPI.draw();
     	},
@@ -227,7 +245,7 @@ define([
     	    
     	    var _buttonIcon;
     	    if (obj.name=="filter"){//필터 버튼일떄
-    	        _buttonIcon=obj.filterBtnText[0];
+    	        _buttonIcon=$(_defaultBtnText).html(obj.filterBtnText[0]);
     	    } else {//일반 아이콘
     	        _buttonIcon=$(ButtonHTML);
                 _buttonIcon.addClass(_glyphiconSchema.value(obj.name));
@@ -267,7 +285,7 @@ define([
             var _button=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
             
             _button.attr("id", _btnId);
-            _button.append( _grid.currentLength);
+            _button.append($(_defaultBtnText).html( _grid.currentLength));
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
             _button.click(function(){
                 var index =_.indexOf(_gridLength, _grid.currentLength);
@@ -278,7 +296,7 @@ define([
     	        }
     	        
     	        _grid.currentLength=_gridLength[index];
-    	        _button.html(_grid.currentLength);
+    	        _button.html($(_defaultBtnText).html(_grid.currentLength));
     	        _grid.DataTableAPI.page.len( _grid.currentLength ).draw();
             });
     	},
@@ -291,6 +309,72 @@ define([
     	    _btn.click(function(){
                 _grid.render();//ew.render();
             });
+    	},
+    	_createMyrecordButton:function(obj){
+    	    var _grid=this;
+    	    var filterBtnText=["나","전체"];
+    	    var userName=SessionModel.getUserInfo().name;
+    	    var userId=SessionModel.getUserInfo().id;
+    	    var filter=[
+    	        function(data){
+    	            var filterColumns=obj.filterColumn;
+    	            var configColumns=_grid.options.column;
+    	            var configColumnsNameArr=_.pluck(configColumns, "data");
+    	            
+    	            for (var index in filterColumns){
+    	                var columnName=filterColumns[index];
+    	                var findIndex=_.indexOf(configColumnsNameArr, columnName)+1;
+    	                
+    	                var value=data[findIndex];
+    	               // if (configColumns[_.indexOf(configColumnsNameArr, columnName)].render){
+    	               //     value=data[findIndex];
+    	               // } else {
+    	               //     configColumns[_.indexOf(configColumnsNameArr, columnName)].render();
+    	               // }
+    	                
+    	                var nameIndex=value.indexOf(userName);
+    	                var idIndex=value.indexOf(userId);
+    	                
+    	                if (nameIndex>=0 || idIndex>=0){
+    	                    return true;
+    	                }
+    	            }
+    	            return false;
+    	        },
+    	        function(){
+    	            return true;
+    	        }
+    	    ];
+    	    var _buttonIcon;
+    	   _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
+    	    
+    	    var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+            this.buttonid[obj.name] = _btnId;
+            
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:"검색 대상"}));
+            
+            _button.attr("id", _btnId);
+            _button.append(_buttonIcon);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
+            
+            //filter 설정
+            _grid.filterValue.myRecord=0;
+            _grid.filters.myRecord=filter[0];
+            
+            _button.click(function(){
+                var index=_grid.filterValue.myRecord;
+                if (index==(filterBtnText.length-1)){
+                    index=0;
+                } else {
+                    index++;
+                }
+                _button.html($(_defaultBtnText).html(filterBtnText[index]));
+                _grid.filterValue.myRecord=index;
+               //grid.filtering(filter[index]);
+                _grid.filters.myRecord=filter[index];
+    	        _grid._filtering();
+            })
     	},
     	_drawButtons:function(){//button draw
     	    var _grid=this;
@@ -324,6 +408,9 @@ define([
                     case "refresh" :
                         this._createRefreshButton(name);
                         break;
+                    case "myRecord" :
+                        this._createMyrecordButton(obj);
+                        break;  
     	        }
     	    }
             
@@ -406,12 +493,15 @@ define([
                 });
             }
             this.DataTableAPI=_tableAPI;//API 셋팅
-    	    _grid.DataTableAPI.page.len( _grid.currentLength ).draw(); //page length 설정
+    	    _grid.DataTableAPI.page.len( _grid.currentLength ); //page length 설정
     	    $("#"+this.options.el).find('[data-toggle="tooltip"]').tooltip({
                 placement : 'top'
             });
     	    
+    	    _grid._filtering();
             this.updateCSS();
+            
+            
     	},
     	getButton: function(name){
     	    return this.buttonid[name];

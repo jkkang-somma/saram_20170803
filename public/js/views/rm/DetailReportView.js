@@ -8,7 +8,8 @@ define([
   'text!templates/addReportTemplate.html',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalModel, OutOfficeModel){
+  'collection/rm/ApprovalCollection',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalModel, OutOfficeModel, ApprovalCollection){
   var detailReportView = BaseView.extend({
     options : {},
    
@@ -207,21 +208,16 @@ define([
       formData["_id"] = this.options["doc_num"];
       formData["state"] = '취소요청';
       
-      var _approvalModel = new ApprovalModel(formData);
-      _approvalModel.idAttribute = "doc_num";
-      _approvalModel.save({},{
-      	        success:function(model, xhr, options){
-      	            // insert
-      	            console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
-    	              _this.thisDfd.resolve(formData);
-      	        },
-      	        error:function(model, xhr, options){
-      	            var respons=xhr.responseJSON;
-      	            Dialog.error(respons.message);
-      	            _this.thisDfd.reject();
-      	        },
-      	        wait:false
-      	    }); 
+      var approvalCollection = new ApprovalCollection(formData);
+      approvalCollection.idAttribute = "doc_num";
+      approvalCollection.save({}, this.options["doc_num"]).then(function(){
+        console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
+        _this.thisDfd.resolve(formData);
+      }, function(model,xhr, options){
+        var respons=xhr.responseJSON;
+        Dialog.error(respons.message);
+        _this.thisDfd.reject();
+      });
        return _this.thisDfd.promise();
     
       // // this.collection

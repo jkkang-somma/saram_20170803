@@ -4,36 +4,53 @@
 var _ = require("underscore"); 
 var debug = require('debug')('OutOffice');
 var Schemas = require("../schemas.js");
+var Promise = require('bluebird');
+var db = require('../lib/dbmanager.js');
 var OutOfficeDao= require('../dao/outOfficeDao.js');
+var ApprovalDao= require('../dao/approvalDao.js');
+var CommuteDao = require('../dao/commuteDao.js');
 
 var OutOffice = function (data) {
-    var _data=_.initial([]);
-    var schema=new Schemas('outoffice');
-    _data = schema.get(data);
-    var _get = function (fieldName) {
-        if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
-        if (_.has(_data, fieldName)){
-            return _data[fieldName];
-        } else {
-            return _.noop;
-        }
+    var _getOutOfficeList = function (data) {
+        return OutOfficeDao.selectOutOfficeList(data);
     }
-    var _getOutOfficeList = function (start, end) {
-        return OutOfficeDao.selectOutOfficeList(start, end);
-    }
-    var _addOutOffice = function () {
-        return OutOfficeDao.insertOutOffice(_data);
-    }
-    var _remove = function (doc_num) {
-        return OutOfficeDao.removeOutOffice(doc_num);
+    var _remove = function (data) {
+        return new Promise(function(resolve, reject){
+			db.getConnection().then(function(connection){
+			    var promiseArr = [];
+			    promiseArr.push(OutOfficeDao.removeOutOffice(connection, [{_id : data._id}]));
+                promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.approval));
+                
+                if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
+		            promiseArr.push(CommuteDao.updateCommute_t(connection, data.commute));    
+			    }
+			    
+				Promise.all(promiseArr).then(function(resultArr){
+					connection.commit(function(){
+						connection.release();
+						resolve();
+					});
+				},function(err){
+					connection.rollback(function(){
+						connection.release();
+						reject();
+						throw err;
+					});
+				}).catch(function(err){
+				    connection.rollback(function(){
+				        connection.release();
+				        reject();
+				        throw err;
+				    });
+				});	
+			});
+		});
     }
     return {
-        get:_get,
         getOutOfficeList:_getOutOfficeList,
-        addOutOffice:_addOutOffice,
         remove : _remove
     }
 }
 
-module.exports = OutOffice;
+module.exports = new OutOffice();
 

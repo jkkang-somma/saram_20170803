@@ -27,9 +27,16 @@ ApprovalDao.prototype.insertApproval =  function (data) {
     ,data.submit_comment,data.start_date,data.end_date
     ,data.office_code,data.start_time,data.end_time,data.day_count]);
 };
-ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
+ApprovalDao.prototype.updateApprovalConfirm =  function (connection, data) {
     var queryStr = db.getQuery('approval', 'updateApprovalConfirm');
-    return db.queryV2(queryStr, [data.decide_comment, data.state, data.black_mark, data.doc_num]);
+    return db.queryTransaction(
+        connection,
+        queryStr,
+        data,
+        [
+            "decide_comment", "state", "black_mark", "doc_num"
+        ]
+    ); 
 };
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
     var queryStr = db.getQuery('approval_index', 'selectMaxIndexApproval');

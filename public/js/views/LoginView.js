@@ -46,7 +46,7 @@ define([
     	        Dialog.show("초기화 요청");
     	        return false;
     	    })
-    	    this.el.append(this.passwordSection);
+    	   // this.el.append(this.passwordSection);
      	},
     	
     	login : function(e){

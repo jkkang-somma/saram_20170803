@@ -175,7 +175,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                 rawDataCollection.fetch({data: selectedDate}),
                 userCollection.fetch(),
                 holidayCollection.fetch({ data : {  year : startDate.year() } }),
-                outOfficeCollection.fetch(),
+                outOfficeCollection.fetch({data : selectedDate}),
                 yesterdayCommuteCollection.fetchDate(yesterday.format(ResultTimeFactory.DATEFORMAT))
             ).done(function(){
                 
@@ -207,6 +207,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             yesterdayAttribute = filterDate[0].toJSON();
                             yesterdayAttribute.out_time = Moment(yesterdayAttribute.out_time).year(yesterdayAttribute.year);
                             yesterdayAttribute.out_time = yesterdayAttribute.out_time.toDate();
+                        }else{
+                            yesterdayAttribute.out_time = null;
                         }
                             
                         resultTimeFactory.init(userId, userName, userDepartment); //계산전 초기화
@@ -219,16 +221,16 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             
                             resultTimeFactory.initToday(todayStr, holidayData); //계산전 초기화    
                             
-                            // 휴일 판단
-                            resultTimeFactory.setHoliday();
-                            
                             // 출근 기준시간 판단
-                            var yesterdayOutTime = Moment(yesterdayAttribute.out_time);
+                            var yesterdayOutTime = _.isNull(yesterdayAttribute.out_time)? null :Moment(yesterdayAttribute.out_time);
                             resultTimeFactory.setStandardInTime(yesterdayOutTime);
                             
                             // 휴가/외근/출장 판단
                             var todayOutOffice = userOutOfficeCollection.where({date: todayStr});
                             resultTimeFactory.setOutOffice(todayOutOffice);
+                            
+                            // 휴일 판단
+                            resultTimeFactory.setHoliday();
                             
                             // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
                             var rawData = userRawDataCollection.filterDate(todayStr);

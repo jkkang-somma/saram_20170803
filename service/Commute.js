@@ -7,6 +7,7 @@ var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
 var CommuteDao = require('../dao/commuteDao.js');
 var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
+var InOfficeDao= require('../dao/inOfficeDao.js');
 var db = require('../lib/dbmanager.js');
 
 var Commute = function() {	

@@ -69,8 +69,7 @@ router.route('/appIndex/add')
 .post(function(req, res){
     debug("사용자 등록:");
     var approval = new Approval(req.body);
-    debug("ID:" + approval.get("id"));
-    
+
     approval.setApprovalIndex().then(function(e){
         debug("Complete Add Approval.");
         res.send({success:true, msg:"Complete Add Approval."})
@@ -89,10 +88,8 @@ router.route('/appIndex/add')
 router.route('/')
 .post(function(req, res){
     debug("사용자 등록:");
-    var approval = new Approval(req.body);
-    debug("ID:" + approval.get("id"));
-    
-    approval.insertApproval().then(function(e){
+    var approval = new Approval();
+    approval.insertApproval(req.body).then(function(e){
         debug("Complete Add Approval.");
         res.send({success:true, msg:"Complete Add Approval."})
     }).catch(function(e){
@@ -105,15 +102,14 @@ router.route('/')
         });
     });
 })
-router.route('/:_id')
+
+router.route('/bulk')
 .put(function(req, res) {
 	debug("###############결재 수정:");
-    var approval = new Approval(req.body);
-    debug("ID:" + approval.get("doc_num"));
-    
-    approval.updateApprovalConfirm().then(function(e){
-        debug("Complete Update Approval.");
-        res.send({success:true, msg:"Complete Update Approval."})
+    var approval = new Approval();
+    approval.updateApprovalConfirm(req.body).then(function(e){
+        debug("Complete Update Approval."); 
+        res.send({success:true, msg:"Complete Update Approval."});
     }).catch(function(e){
         debug("Error Update Approval.");
         res.status(500);
@@ -123,5 +119,6 @@ router.route('/:_id')
             error:e
         });
     });
-});;
+});
+
 module.exports = router;

@@ -2,8 +2,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'cmoment',
   'models/common/RawDataModel'
-], function($, _, Backbone, RawDataModel){
+], function($, _, Backbone, Moment ,RawDataModel){
     var RawDataCollection = Backbone.Collection.extend({
         model : RawDataModel,
         url:'/rawdata',
@@ -24,13 +25,13 @@ define([
         filterDate : function(charDate){
             return _.filter(this.models, function(model){
                 
-                var startDate = new Date(charDate + " " + "06:00:00");
-                var endDate = new Date(charDate + " " + "06:00:00");
-                endDate.setDate(endDate.getDate() + 1);
+                var startDate = Moment(charDate + " " + "06:00:00");
+                var endDate = Moment(charDate + " " + "06:00:00");
+                endDate.add(1, "days");
                 
-                var modelDate = new Date(model.get("char_date"));
+                var modelDate = Moment(model.get("char_date"));
                 
-                if(modelDate > startDate && modelDate <= endDate){
+                if(modelDate.isBetween(startDate,endDate)){
                     return model;
                 }
             

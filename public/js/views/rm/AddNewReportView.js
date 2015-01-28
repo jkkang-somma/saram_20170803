@@ -140,7 +140,8 @@ define([
       this.beforeTime=beforeTime.datetimepicker({
           pickDate: false,
           language: "ko",
-          format: "hh:mm",
+          format: "HH:mm",
+          use24hours: true,
           autoclose: true
       });
       
@@ -149,7 +150,8 @@ define([
       this.afterTime= afterTime.datetimepicker({
           pickDate: false,
           language: "ko",
-          format: "hh:mm",
+          format: "HH:mm",
+          use24hours: true,
           autoclose: true
       });
       
@@ -181,6 +183,7 @@ define([
         // 휴일근무
         $(_this.el).find('#datePickerTitleTxt').text('date');
          _this.afterDate.hide();
+         _this.holReq = 0;
          $(_this.el).find('#reqHoliday').val("0 일");
           ComboBox.createCombo(selGubun);
       });

@@ -65,6 +65,18 @@ define([
 		return null;
 	}
 	
+	function _getTimeStr(min){
+		var hour = Math.floor(min / 60);
+		var minute = min % 60;
+		var result = "";
+		if(hour > 0)
+			result = result + hour +"시간 ";
+		
+		result = result + minute + "분";
+		
+		return result;
+	};
+	
 	// comment Cell 페이지 링크 
 	function _createCommentCell(cellData) {
 		 var data = JSON.stringify({
@@ -178,7 +190,11 @@ define([
 									return _createHistoryCell("out_time", full, "out_time_change");
      	                   		}
      	                    },
-     	                    { data : "late_time", 		"title" : "지각</br>시간"}, 
+     	                    { data : "late_time", 		"title" : "지각</br>시간",
+     	                    	render: function(data, type, full, meta){
+     	                    		return _getTimeStr(data);
+     	                    	}
+     	                    }, 
      	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
      	                   		render : function(data, type, full, meta){
      	                   			return Code.getCodeName(Code.OVERTIME, data);
@@ -201,18 +217,23 @@ define([
              	    		$(row).css("background-color", "rgb(236, 131, 131)");
              	    	}
              	    	
-             	    	if(data.in_time_type != "1"){
-             	    		$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	}
+             	    	// if(data.in_time_type != "1"){
+             	    	// 	$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
+             	    	// }
              	    	
-             	    	if(data.out_time_type != "1"){
-             	    		$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	}
+             	    	// if(data.out_time_type != "1"){
+             	    	// 	$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
+             	    	// }
              	    },
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
         		    detail: true,
-        		    buttons:["search"],
+        		    buttons:["search",{
+        		    	type:"myRecord",
+				        name: "myRecord",
+				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				        tooltip: "",
+        		    }],
         		    fetch: false
         	};    		
     		this.buttonInit();
@@ -302,7 +323,7 @@ define([
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
-            
+            this.selectCommute();
 			
             return this;
      	},
