@@ -6,6 +6,7 @@ define([
   'core/BaseView',
   'dialog',
   'comboBox',
+  'cmoment',
   'resulttimefactory',
   'text!templates/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
@@ -14,7 +15,7 @@ define([
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'models/vacation/InOfficeModel',
-], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, ResultTimeFacoty, addReportTmp,
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, ResultTimeFacoty, addReportTmp,
   ApprovalCollection, OutOfficeCollection, InOfficeCollection, ApprovalModel, OutOfficeModel, InOfficeModel
 ){
   var resultTimeFactory = ResultTimeFacoty.Builder;
@@ -239,12 +240,18 @@ define([
       }
       
       $.when.apply($, promiseArr).then(function(){
-        dfd.reslove(_approvalCollection.models[0]);
+        var resultModel = new ApprovalModel(_this.options);
+        resultModel.set({state : _approvalCollection.models[0].get("state")});
+        resultModel.set({decide_date : new Date()});
+        
+        console.log(resultModel);
+        dfd.resolve(resultModel.attributes);
       }, function(){
         dfd.reject();
       });
       return dfd.promise();
     },
+    
     delOutOfficeData : function(_approvalCollection, docNum){
       var dfd = new $.Deferred();
       var userId = this.options["submit_id"];;
@@ -279,14 +286,13 @@ define([
               );
             });
             
-            $.when.apply($, promiseArr).then(function(){
-              resultData.commute = results;
-              outOfficeCollection.reset();
-              outOfficeCollection.save(resultData, docNum).then(function(){
+            $.when.apply($, promiseArr).always(function(){
+              if(results.length >0){
+                resultData.commute = results;  
+              }
+              outOfficeCollection.save(resultData, docNum).done(function(){
                 dfd.resolve(resultData);   
-              },function(){
-                dfd.reject();
-              });
+              });     
             });
           },
         }
@@ -328,15 +334,13 @@ define([
               );
             });
             
-            $.when.apply($, promiseArr).then(function(){
-              resultData.commute = results;
-              inOfficeCollection.reset();
-              inOfficeCollection.save(resultData, docNum).then(function(){
-                dfd.resolve(resultData);   
-              },function(){
-                dfd.reject();
-              });
-              
+            $.when.apply($, promiseArr).always(function(){
+              if(results.length >0){
+                resultData.commute = results;  
+              }
+              inOfficeCollection.save(resultData, docNum).done(function(){
+                dfd.resolve(resultData);  
+              });     
             });
           },
         }
@@ -365,15 +369,19 @@ define([
         promiseArr.push(
           resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.outOffice.id, "out", resultData.outOffice).done(function(result){
             results.push(result);
+          }).fail(function(){
+            /// 수정할 내용 없음
           })
         );
       });
       
-      $.when.apply($, promiseArr).then(function(){
-        resultData.commute = results;
+      $.when.apply($, promiseArr).always(function(){
+        if(results.length >0){
+          resultData.commute = results;  
+        }
         _approvalCollection.save(resultData, resultData.outOffice.doc_num).done(function(){
           dfd.resolve(resultData);  
-        });      
+        });     
       });
       
       return dfd.promise();
@@ -407,11 +415,13 @@ define([
         );
       });
       
-      $.when.apply($, promiseArr).then(function(){
-        resultData.commute = results;
+      $.when.apply($, promiseArr).always(function(){
+        if(results.length >0){
+          resultData.commute = results;  
+        }
         _approvalCollection.save(resultData, resultData.inOffice.doc_num).done(function(){
           dfd.resolve(resultData);  
-        });      
+        });     
       });
     },
     

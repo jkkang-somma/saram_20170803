@@ -413,7 +413,7 @@ define([
             var that = this;
             var commuteCollection = new CommuteCollection();
             
-     		commuteCollection.fetchDate(date).done(function(result){
+     		commuteCollection.fetchDate(date).then(function(result){
          		
          		var currentDayCommute = commuteCollection.where({id : id});
          		if(currentDayCommute.length > 0){
@@ -439,6 +439,8 @@ define([
          		}    
          		
          		dfd.resolve(that.getResult());
+            },function(){
+                dfd.reject();
             });
             
             return dfd.promise();
