@@ -125,8 +125,9 @@ define([
         _this.find('#end_time input').val(param.end_time);
         _this.find('#office_code').html("<option>"+param.office_code_name+"</option>");
         _this.find('#submit_comment').val(param.submit_comment);
-        // _this.find('#decide_comment').val(param.decide_comment);
-        
+        if(param.decide_comment != null && param.decide_comment != ""){
+          _this.find('#decide_comment').val(param.decide_comment);
+        }
         _this.find('#manager_id').html("<option>"+param.manager_name+"</option>");
         _this.find('#state').val(param.state);
         
@@ -237,6 +238,8 @@ define([
         }else{                                  // 휴일 근무
           promiseArr.push(this.delInOfficeData(_approvalCollection, this.options["doc_num"]));
         }
+      } else{
+        promiseArr.push(this.updateApprovalData(_approvalCollection));
       }
       
       $.when.apply($, promiseArr).then(function(){
@@ -433,8 +436,18 @@ define([
           dfd.resolve(resultData);  
         });     
       });
+      
+      return dfd.promise();
     },
-    
+    updateApprovalData : function(_approvalCollection){
+       var dfd = new $.Deferred();
+       var resultData = this.getFormData($(this.el).find('form'));
+      _approvalCollection.save(resultData, resultData.doc_num).done(function(){
+          dfd.resolve(resultData);  
+        }); 
+        
+        return dfd.promise();
+    },
     getDatePariod : function(){
        // 날짜 개수 이용하여 날짜 구하기
       var sStart = $(this.el).find('#start_date input').val();
