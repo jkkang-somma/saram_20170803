@@ -43,11 +43,7 @@ ProgressbarView){
     		    el:"rawDataContent",
     		    id:"rawDataTable",
     		    column:[
-   	                   	{ data : "name", 			"title" : "이름", 
- 	                   		render: function(data, type, full, meta) {
- 	                   			return full.name + "</br>(" +full.id + ")";
- 	                   		}
- 	                   	},
+   	                   	{ data : "name", 			"title" : "이름"},
  	                   	{ data : "department", 		"title" : "부서" },
  	                   	{ data : "char_date", 		"title" : "출입시간" },
  	                   	{ data : "type", 			"title" : "출입기록" }
@@ -149,7 +145,7 @@ ProgressbarView){
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(firstDay).format("YYYY-MM-DD")
+		        defaultDate: Moment(today).add(-7,"days").format("YYYY-MM-DD")
             });
             
             $(this.el).find("#rdToDatePicker").datetimepicker({
