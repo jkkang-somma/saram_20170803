@@ -152,7 +152,7 @@ define([
             var dataVal = view.getDateFormat(row.decide_date);
             return dataVal;
          }},
-         { data : "state", "title" : "처리상태", "render": function(data, type, row){
+         { "title" : "처리상태", "render": function(data, type, row){
           // data : "black_mark",
           // ( 1:정상, 2:당일결재, 3:익일결재
            var sessionInfo = SessionModel.getUserInfo();
