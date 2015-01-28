@@ -50,6 +50,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    column:[
                     {"title": "날짜", "data": "date"},
                     {"title": "이름", "data": "name"},
+                    {"title": "부서", "data": "department"},
                     {"title": "근무<br>형태", "data": "work_type",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.WORKTYPE, data);
@@ -187,7 +188,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
                     
-                    if(userDepartment.slice(0,4) === "품질검증" || userDepartment == "무소속" || userDepartment==="임원"){
+                    if( //userDepartment.slice(0,4) === "품질검증" ||
+                        userDepartment == "무소속" || userDepartment==="임원"){
+                        
                         
                     }else{
                         var yesterdayAttribute = {};

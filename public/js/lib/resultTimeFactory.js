@@ -155,7 +155,8 @@ define([
         setOutOffice : function(todayOutOffice){
             if(todayOutOffice.length > 0){
                 for (var i = 0; i <todayOutOffice.length; i++){
-                    var code = todayOutOffice[i].get("office_code");
+                    var model = todayOutOffice[i];
+                    var code = model.get("office_code");
                     var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
                     var OUTOFFICE_CODES = ["W01","W02"];
 
@@ -172,15 +173,27 @@ define([
                             case "V04": // 경조휴가
                             case "V05": // 공적휴가
                             case "V06": // 특별휴가
-                                // this.standardInTime = null;    
-                                // this.standardOutTime = null;
                                 this.workType = WORKTYPE.VACATION;
                                 break;
                         }
                     }
-
+                    
                     if(_.indexOf(OUTOFFICE_CODES, code) >= 0){
                         this.outOfficeCode = code;
+                        switch(code){
+                            case "W01": // 외근
+                                if(this.outOfficeCode == "W01"){
+                                    var startTime = Moment(model.get("start_time"), "HH:mm");
+                                    var endTime = Moment(model.get("end_time"), "HH:mm");
+                                    var compTime = Moment("09:00", "HH:mm");
+                                    if(startTime.isBefore(compTime) || startTime.isSame(compTime)){
+                                        this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
+                                    }
+                                }
+                                break;
+                            case "W02": // 출장
+                                break;
+                        }
                     }
                 }
             }else{
@@ -255,7 +268,7 @@ define([
         
         setLateTime : function(){
             if(!_.isNull(this.inTime) && !_.isNull(this.standardInTime)){
-                if(this.workType != WORKTYPE.VACATION){
+                if(this.workType != WORKTYPE.VACATION && this.outOfficeCode != "W02"){
                     this.lateTime = this.inTime.diff(this.standardInTime,"minute");
                     this.workType = WORKTYPE.NORMAL;
                     if(this.lateTime > 0 ){
@@ -331,6 +344,10 @@ define([
                 this.outTimeType = 1;              
             }
             
+            if(this.department.slice(0,4) === "품질검증"){
+                this.standardInTime = this.inTime;
+                this.standardOutTime = _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).add(9,"hours");
+            }
 
             // 초과근무시간 판단 over_time
             if (this.workType == WORKTYPE.HOLIDAY){ //휴일근무인 경우
