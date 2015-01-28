@@ -270,8 +270,11 @@ define([
           success : function(result){
             var filterCollection = new OutOfficeCollection();
             for(var key in result.models){
-              if(result.models[key].get("doc_num") !== docNum)
-                filterCollection.add(result.models[key]);
+              if(result.models[key].get("doc_num") !== docNum){
+                if(result.models[key].get("id") == userId){
+                  filterCollection.add(result.models[key]);
+                }
+              }
             }
             
             var results = [];     // commuteResult;
@@ -282,6 +285,8 @@ define([
               promiseArr.push(
                 resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "out", todayOutOfficeModels).done(function(result){
                   results.push(result);
+                }).fail(function(){
+                  /// 수정할 내용 없음
                 })
               );
             });
@@ -318,8 +323,11 @@ define([
           success : function(result){
             var filterCollection = new InOfficeCollection();
             for(var key  in result.models){
-              if(result.models[key].get("doc_num") !== docNum)
-                filterCollection.add(result.models[key]);
+              if(result.models[key].get("doc_num") !== docNum){
+                if(result.models[key].get("id") == userId){
+                  filterCollection.add(result.models[key]);
+                }
+              }
             }
             
             var results = [];     // commuteResult;
@@ -330,6 +338,8 @@ define([
               promiseArr.push(
                 resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "in", todayInOfficeModels).done(function(result){
                   results.push(result);
+                }).fail(function(){
+                  /// 수정할 내용 없음
                 })
               );
             });

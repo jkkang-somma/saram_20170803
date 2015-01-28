@@ -138,7 +138,7 @@ define([
         },
         
         setStandardInTime : function(yesterdayOutTime){
-            if(!_.isNull(this.standardInTime)){
+            if(!_.isNull(this.standardInTime) && !_.isNull(yesterdayOutTime)){
                 if(yesterdayOutTime.format(DATEFORMAT) == this.date){
                     var outTimeHour = yesterdayOutTime.hour();
                     if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
