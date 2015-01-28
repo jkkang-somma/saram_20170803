@@ -312,6 +312,8 @@ define([
                  // 출근기록 없다는것 표시
                  if(this.workType != "30")
                     this.inTimeType = 2;              
+            }else{
+                this.inTimeType = 1;              
             }
             
             if(!this.outTime){// 퇴근 기록이 없는경우
@@ -320,7 +322,10 @@ define([
                 }
                 if(this.workType != "30")
                     this.outTimeType = 2;          
+            }else{
+                this.outTimeType = 1;              
             }
+            
 
             // 초과근무시간 판단 over_time
             if (this.workType == WORKTYPE.HOLIDAY){ //휴일근무인 경우
