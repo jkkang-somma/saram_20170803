@@ -26,8 +26,10 @@ define([
     events: {
   	  "click #commuteManageTbl tbody tr": "onSelectRow",
   	  "click #btnCommuteSearch": "onClickSearchBtn",
-  	  "click #btnManagerSearch": "onClickManagerSearchBtn"
-  	},
+  	  "click #btnManagerSearch": "onClickManagerSearchBtn",
+  	  "click .list-approval-btn": "onClickListApprovalBtn",
+      "click .list-detail-btn": "onClickListDetailBtn"
+    },
    
   	initialize:function(){
   	 var _id = "reportListView_"+(_reportListView++)
@@ -149,24 +151,9 @@ define([
           // ( 1:정상, 2:당일결재, 3:익일결재
            var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
            dataVal += "<div style='text-align: center;'>"
-            + "<button class='btn btn-comment-add btn btn-default btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>"
-            + "<button class='btnbtn-comment-add btn btn-default btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
+            + "<button class='btn list-approval-btn btn-default btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>"
+            + "<button class='btn list-detail-btn btn-default btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
             + "</div>";
-            
-            $('#btnApproval'+row.doc_num).click(function(evt){
-              evt.stopPropagation();
-              var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
-              $('.selected').removeClass('selected');
-      	      $currentTarget.addClass('selected');
-              view.onClickApproval(row);
-            });
-            $('#btnDetail'+row.doc_num).click(function(evt){
-              evt.stopPropagation();
-              var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
-              $('.selected').removeClass('selected');
-      	      $currentTarget.addClass('selected');
-              view.onClickDetail(row);
-            });
           return dataVal;
          }},
          {  "title" : "비고" , "render": function(data, type, row){
@@ -402,6 +389,14 @@ define([
     onClickClearBtn : function(evt){
       this.render();
     },
+    onClickListApprovalBtn : function(evt){
+      evt.stopPropagation();
+      var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
+      $('.selected').removeClass('selected');
+      $currentTarget.addClass('selected');
+      var selectData=this.grid.getSelectItem();
+      this.onClickApproval(selectData);
+    },
     onClickApproval : function(selectData){
       var _this = this;
       // var selectData=_this.grid.getSelectItem();
@@ -449,6 +444,14 @@ define([
    		  Dialog.error("결재 대상을 선택해주세요.");
    		}
               
+    },
+    onClickListDetailBtn : function(evt){
+        evt.stopPropagation();
+        var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
+        $('.selected').removeClass('selected');
+	      $currentTarget.addClass('selected');
+	      var selectData=this.grid.getSelectItem();
+        this.onClickDetail(selectData);
     },
     onClickDetail : function(selectData){
         var _this = this;
