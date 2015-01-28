@@ -89,7 +89,7 @@ define([
     	        $(this).parent().addClass("login-input-focus");
     	    });
     	    
-    	    if (!_.isUndefined(data)){
+    	    if (!_.isUndefined(data)){//data 가 잇을 경우에는 셋팅하고 자동 로그인 
     	       this.formSection.find("#loginIdTextbox").val(data.id);
     	       this.formSection.find("#loginPasswordTextbox").val(data.password);
     	       this.login();
