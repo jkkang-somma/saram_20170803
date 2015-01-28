@@ -18,7 +18,7 @@ var OutOffice = function (data) {
         return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
 			    var promiseArr = [];
-			    promiseArr.push(OutOfficeDao.removeOutOffice(connection, data));
+			    promiseArr.push(OutOfficeDao.removeOutOffice(connection, [{_id : data._id}]));
                 promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.approval));
                 
                 if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
@@ -30,15 +30,17 @@ var OutOffice = function (data) {
 						connection.release();
 						resolve();
 					});
-				},function(){
+				},function(err){
 					connection.rollback(function(){
 						connection.release();
 						reject();
+						throw err;
 					});
-				}).catch(function(){
+				}).catch(function(err){
 				    connection.rollback(function(){
 				        connection.release();
 				        reject();
+				        throw err;
 				    });
 				});	
 			});
