@@ -207,6 +207,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             yesterdayAttribute = filterDate[0].toJSON();
                             yesterdayAttribute.out_time = Moment(yesterdayAttribute.out_time).year(yesterdayAttribute.year);
                             yesterdayAttribute.out_time = yesterdayAttribute.out_time.toDate();
+                        }else{
+                            yesterdayAttribute.out_time = null;
                         }
                             
                         resultTimeFactory.init(userId, userName, userDepartment); //계산전 초기화
@@ -220,7 +222,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             resultTimeFactory.initToday(todayStr, holidayData); //계산전 초기화    
                             
                             // 출근 기준시간 판단
-                            var yesterdayOutTime = Moment(yesterdayAttribute.out_time);
+                            var yesterdayOutTime = _.isNull(yesterdayAttribute.out_time)? null :Moment(yesterdayAttribute.out_time);
                             resultTimeFactory.setStandardInTime(yesterdayOutTime);
                             
                             // 휴가/외근/출장 판단
