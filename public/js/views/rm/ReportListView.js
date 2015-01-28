@@ -127,11 +127,17 @@ define([
          { data : "submit_name", "title" : "이름"},
          { data : "office_code_name", "title" : "구분"},
          { "title" : "근태일수", "render": function(data, type, row){
-            var dataVal = (row.day_count != null)?"<span style='float: right;'>" + row.day_count +"일</span>" : "<span style='float: right;'>-</span>";
+            var dataVal = (row.day_count != null && row.day_count != 0)?"<span style='float: right;'>" + row.day_count +"일</span>" : "<span style='float: right;'>-</span>";
             return dataVal;
          }},
          { "title" : "근태기간", "render": function(data, type, row){
-            var dataVal = row.start_date +"</br>~ " + row.end_date;
+           var dataVal = "";
+           if(row.day_count != null && row.day_count > 1){
+            dataVal = row.start_date +"</br>~ " + row.end_date; 
+           } else {
+             dataVal = row.start_date;
+           }
+            
             return dataVal;
          }},
          { "title" : "외근시간", "render": function(data, type, row){
