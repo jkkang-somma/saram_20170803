@@ -23,7 +23,8 @@ require.config({
       },
       'cryptojs.base64': {
          deps: ['cryptojs.core']
-      }
+      },
+      jqFileDownload: {deps : ['jquery']},
    },
    paths: {
    //    jquery: 'tool/jquery.min',
@@ -38,6 +39,8 @@ require.config({
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min',
       'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
+      
+      jqFileDownload: 'tool/jquery.fileDownload',
       
       dialog:'lib/dialog',
       animator:'lib/animator',

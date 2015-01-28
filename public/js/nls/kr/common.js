@@ -105,7 +105,8 @@ define({
             SM:{
                 USER:"사원 관리",
                 HOLIDAY:"휴일 관리",
-                VACATION:"연차 관리"
+                VACATION:"연차 관리",
+                REPORTCOMMUTE: "레포트"
             },
             AM:{
                 ADD_RAW_DATA:"출입 기록 등록",

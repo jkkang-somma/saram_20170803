@@ -18,7 +18,7 @@ var InOffice = function (data) {
          return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
 			    var promiseArr = [];
-			    promiseArr.push(InOfficeDao.removeInOffice(connection,data));
+			    promiseArr.push(InOfficeDao.removeInOffice(connection, [{_id : data._id }]));
                 promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.approval));
                 
                 if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){

@@ -25,6 +25,10 @@ define([
             title:i18Common.MENU.SUB.SM.VACATION, //연차 관리
             hashTag:"#vacation",
             auth:USER
+        },{
+            title:i18Common.MENU.SUB.SM.REPORTCOMMUTE, //근태 레포트 
+            hashTag:"#reportCommute",
+            auth:USER
         }]
     },{
         title:i18Common.MENU.TOP.AM,//일반관리
