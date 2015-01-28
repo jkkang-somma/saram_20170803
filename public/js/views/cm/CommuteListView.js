@@ -217,13 +217,13 @@ define([
              	    		$(row).css("background-color", "rgb(236, 131, 131)");
              	    	}
              	    	
-             	    	if(data.in_time_type != "1"){
-             	    		$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	}
+             	    	// if(data.in_time_type != "1"){
+             	    	// 	$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
+             	    	// }
              	    	
-             	    	if(data.out_time_type != "1"){
-             	    		$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	}
+             	    	// if(data.out_time_type != "1"){
+             	    	// 	$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
+             	    	// }
              	    },
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],

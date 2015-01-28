@@ -5,9 +5,9 @@ define([
   'core/BaseView',
   'grid',
   'schemas',
-  'util',
   'dialog',
   'csvParser',
+  'cmoment',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
@@ -18,10 +18,11 @@ define([
   'views/RawData/popup/AddRawDataAddPopupView',
   'views/component/ProgressbarView'
   
-], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser,
-HeadHTML, ContentHTML, LayoutHTML, 
-RawDataModel, RawDataCollection, UserModel, UserCollection,
-AddRawDataAddPopupView, ProgressbarView){
+], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, csvParser, Moment,
+    HeadHTML, ContentHTML, LayoutHTML, 
+    RawDataModel, RawDataCollection, UserModel, UserCollection,
+    AddRawDataAddPopupView, ProgressbarView
+){
     var AddRawDataView = BaseView.extend({
         el:$(".main-container"),
         
@@ -120,17 +121,17 @@ AddRawDataAddPopupView, ProgressbarView){
                                                 
                                                 var destUserInfo = that.userCollection.where({name_commute:item[1]});
                                                 
-                                                var resultDate = new Date(item[2]);
+                                                var resultDate = Moment(item[2]);
                                                 
                                                 if(destUserInfo.length == 1){ // 등록된 이름인 경우
                                                     that.rawDataCollection.add(new RawDataModel({
                                                         id : destUserInfo[0].attributes.id,
                                                         name : item[1],
                                                         department : item[0],
-                                                        time: Util.timeToString(resultDate),
-                                                        date: Util.dateToString(resultDate),
-                                                        char_date : Util.dateToString(resultDate)  + " " + Util.timeToString(resultDate) ,
-                                                        year: resultDate.getFullYear(),
+                                                        time: resultDate.format("HH:mm:SS"),
+                                                        date: resultDate.format("YYYY-MM-DD"),
+                                                        char_date : resultDate.format("YYYY-MM-DD HH:mm:SS"),
+                                                        year: resultDate.year(),
                                                         type: item[3]
                                                     }));
                                                 }else{ // 등록되지 않은 이름인경우 (사번이 없는경우)
@@ -139,10 +140,10 @@ AddRawDataAddPopupView, ProgressbarView){
                                                             id : "?",
                                                             name : item[1],
                                                             department : item[0],
-                                                            time: Util.timeToString(resultDate),
-                                                            date: Util.dateToString(resultDate),
-                                                            char_date : Util.dateToString(resultDate)  + " " + Util.timeToString(resultDate) ,
-                                                            year: resultDate.getFullYear(),
+                                                            time: resultDate.format("HH:mm:SS"),
+                                                            date: resultDate.format("YYYY-MM-DD"),
+                                                            char_date : resultDate.format("YYYY-MM-DD HH:mm:SS"),
+                                                            year: resultDate.year(),
                                                             type: item[3]
                                                         })); 
                                                         errCount++;    
