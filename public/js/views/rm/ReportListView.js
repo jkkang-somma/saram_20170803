@@ -123,7 +123,7 @@ define([
             var dataVal = view.getDateFormat(row.submit_date);
             return dataVal;
          }},
-         { data : "submit_id", "title" : "ID" },
+        // { data : "submit_id", "title" : "ID" },
          { data : "submit_name", "title" : "이름"},
          { data : "office_code_name", "title" : "구분"},
          { "title" : "근태일수", "render": function(data, type, row){

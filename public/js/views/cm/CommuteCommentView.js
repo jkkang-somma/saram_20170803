@@ -80,7 +80,7 @@ define([
        	var result = false;
        	
        	if (_filterVal != "전체"){
-       		var ss = SessionModel.get("user").name + "(" + SessionModel.get("user").id +")";
+       		var ss = SessionModel.get("user").name;
        		result = (_data == value && data[2]==ss)?true:false;
        	}else{
        		result = (_data == value)?true:false;
@@ -150,11 +150,7 @@ define([
         		    id: "commuteDataTable",
         		    column:[
         		    	   { data : "comment_date", "title" : "신청일자"},
-    			           { data : "name", "title" : "이름",
-     			        	   render: function(data, type, full, meta) {
-    			        		   return full.name + "</br>(" + full.id +")";
-    			        	   }
-    			           },
+    			           { data : "name", "title" : "이름"},
     			           { data : "date", "title" : "일자" },
     			           { data : "comment", "title" : "접수내용",
      			        	   render: function(data, type, full, meta) {
@@ -165,11 +161,7 @@ define([
     			        		   return comment;
     			        	   }
     			           },
-    			           { data : "writer_name", "title" : "작성자",
-     			        	   render: function(data, type, full, meta) {
-    			        		   return full.writer_name + "</br>(" + full.writer_id +")";
-    			        	   }
-    			           },
+    			           { data : "writer_name", "title" : "작성자" },
     			           { data : "comment_reply", "title" : "처리내용",
      			        	   render: function(data, type, full, meta) {
     			        		   var comment_reply = full.comment_reply; 
@@ -180,15 +172,7 @@ define([
     			        	   }    			        	   
     			           },
     			           { data : "comment_reply_date", "title" : "업데이트일자"},
-    			           { data : "reply_name", "title" : "답변자",
-     			        	   render: function(data, type, full, meta) {
-    			        		   if (full.reply_id == "" || full.reply_name == "") {
-    			        			   return "";
-    			        		   } else {
-    			        			   return full.reply_name + "</br>(" + full.reply_id +")";  
-    			        		   }
-    			        	   }
-    			           },
+    			           { data : "reply_name", "title" : "답변자" },
     			           { data : "state", "title" : "처리상태", "render": function(data, type, row){
 					           var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
 					           dataVal += "<div style='text-align: center;'>";
