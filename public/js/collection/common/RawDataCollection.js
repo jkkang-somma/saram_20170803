@@ -17,7 +17,7 @@ define([
         },
         filterID : function(id){
             return _.filter(this.models, function(model){
-               if(model.get("id") == id){
+               if(model.get("id") == id && model.get("need_confirm") != 2){
                    return model;
                } 
             });
