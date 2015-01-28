@@ -42,22 +42,21 @@ define([
 	        tooltip:"처리상태",
 	        filterBtnText:_filterText,
 	        click:function(_grid, _button){
-	           
+        	  
 	           var filters=[
-	                function(){
-	                    return true;
+	                function(data){
+	                    return _getClickFilterResult(data, "");
 	                },
 	                function(data){
-	                    var _data=data[9];
-	                    return (_data == STATE.ACCEPTING)?true:false;
+	                    return _getClickFilterResult(data, STATE.ACCEPTING);
 	                },
 	                function(data){
-	                    var _data=data[9];
-	                    return (_data == STATE.PROCESSING)?true:false;
+						return _getClickFilterResult(data, STATE.PROCESSING);	
+	                    // return (_data == STATE.PROCESSING)?true:false;
 	                },
 	                function(data){
-	                    var _data=data[9];
-	                    return (_data == STATE.COMPLETE)?true:false;
+						return _getClickFilterResult(data, STATE.COMPLETE);	
+	                    // return (_data == STATE.COMPLETE)?true:false;
 	                }
 	           ];
 	           
@@ -75,7 +74,19 @@ define([
             }
 	    };
 	}
-	
+	function _getClickFilterResult(data, value){
+		var _data= (value == "")? "" : data[9];
+		var _filterVal = $("#commuteDataTable_custom_myRecord_Btn").text();
+       	var result = false;
+       	
+       	if (_filterVal != "전체"){
+       		var ss = SessionModel.get("user").name + "(" + SessionModel.get("user").id +")";
+       		result = (_data == value && data[2]==ss)?true:false;
+       	}else{
+       		result = (_data == value)?true:false;
+       	}
+       	return result;
+	}
 	function _getCommentUpdateBtn(view){	// comment 수정 
 		var that = view;
 		return {
