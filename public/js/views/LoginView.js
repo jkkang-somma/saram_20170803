@@ -41,7 +41,7 @@ define([
     	initialize:function(){
             this.el=$(".main-container");
             $("body").addClass("login-body");
-             
+            
             _.bindAll(this, 'render');
             _.bindAll(this, 'close');
     	},
@@ -52,24 +52,32 @@ define([
                 return false;
             });
             this.passwordSection.find("#initPaswordBtn").click(function(){
-               // this.log
+               _view.commitPassword();
             });
             this.passwordSection.find("#initCanceleBtn").click(function(){
                 _view.render(_view.app);
             });
             this.passwordSection.find("#initRePasswordInput").bind('keydown', function(e){
                if(e.keyCode == 13) {
+                   e.preventDefault();
+                   _view.commitPassword();
                }
             });
-  
+            this.passwordSection.find("#initPasswordInput").bind('keydown', function(e){
+               if(e.keyCode == 13) {
+                   e.preventDefault();
+                   _view.commitPassword();
+               }
+            });
+            
+            this.passwordSection.find('form').submit(false);
     	},
-    	render:function(app){
-    	    var _window_size = $(window).height();
-    	    
-    	    this.el.removeClass("container");
+    	render:function(app, data){
             this.formSection=$(LoginHTML);
             this.passwordSection=$(InitPasswordHTML);
+            
             this.passwordSection.css("display", "none");
+            
     	    this.el.html(this.formSection);
     	    this.el.append(this.passwordSection);
     	    
@@ -80,13 +88,14 @@ define([
     	        $(".login-input").removeClass("login-input-focus");
     	        $(this).parent().addClass("login-input-focus");
     	    });
-    	    $("#loginIdTextbox").focus();
     	    
-    	   // this.el.find("#initPasswordBtn").click(function(){
-    	   //     Dialog.show("초기화 요청");
-    	   //     return false;
-    	   // })
-    	   // this.el.append(this.passwordSection);
+    	    if (!_.isUndefined(data)){
+    	       this.formSection.find("#loginIdTextbox").val(data.id);
+    	       this.formSection.find("#loginPasswordTextbox").val(data.password);
+    	       this.login();
+    	    }
+    	    
+    	    this.formSection.find("#loginIdTextbox").focus();
      	},
     	
     	login : function(){
@@ -107,18 +116,13 @@ define([
                     _view.app.draw();    
                 }).fail(function(e){
                     if (!_.isUndefined(e.user)){
-                        // Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg]);
-                        
                         _view.formSection.addClass("bounceOut").one(transitionEnd, function(){
                             $("#loginbtn").button('reset');
                             _view.passwordSection.find("#initIdInput").val(data.id);
                             _view.formSection.css("display", "none");
                             _view.passwordSection.addClass("fadeInLeftBig");
-                            
                             _view.passwordSection.css("display", "block");
-                          // _view.formSection.removeClass("bounceOut");
                         });;
-                        
                     } else {
                         $("#loginbtn").button('reset');
                         Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg]);
@@ -127,22 +131,44 @@ define([
             }
     	    return false;
     	},
-    	commitPassword : function(e){
+    	commitPassword : function(){
+    	    var _view=this;
             var data = this.getFormData(this.passwordSection.find('form'));
-    	    
-            if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){//validation
-                Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);         
+            if ((_.isUndefined(data.repassword)||_.isEmpty(data.repassword)) || (_.isUndefined(data.password)||_.isEmpty(data.password)) || (data.repassword!=data.password)){//validation
+                if ((data.repassword!=data.password)){//초기화 암호 입력된 값이 맞지 않을 때
+                    Dialog.warning("입력하신 비밀번호를 확인해주세요.");   
+                } else {//초기화 암호 입력 안한경우
+                    Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);   
+                }      
             } else {
                 //암호화
+                var _inputPasswordValue=data.password;
                 var hash=CryptoJS.SHA256(data.password);
         	    var _hashPassword=hash.toString();
         	    data.password =_hashPassword;
         	    
                 $("#initPaswordBtn").button("loading");
     	        var _spin=new Spin(opts).spin($("#initPaswordBtn").find(".spinIcon")[0]);
+    	        $("#initCanceleBtn").button("loading");
     	        
                 SessionModel.initPassword({id: data.id, password:data.password}).done(function(result){
-                    //Dialog.show(i18nCommon.SUCCESS.LOGIN[result.msg]);
+                    _view.passwordSection.addClass("fadeOutLeftBig").one(transitionEnd, function(){
+                        data.password=_inputPasswordValue;//암호화 안되 값 셋팅
+                        _view.render(_view.app, data);
+                    });
+                    
+                    //  _view.passwordSection.addClass("fadeOutLeftBig").one(transitionEnd, function(){
+                    //     $("#loginbtn").button('reset');
+                    //     $("#initPaswordBtn").button("reset");
+    	               // $("#initCanceleBtn").button("reset");
+    	        
+                    //     _view.formSection.find("#loginIdTextbox").val(data.id);
+                    //     //_view.formSection.find("#loginPasswordTextbox").val(data.id);
+                        
+                    //     _view.passwordSection.css("display", "none");
+                    //     _view.formSection.removeClass("bounceOut");
+                    //     _view.formSection.css("display", "block");
+                    // });;
                 }).fail(function(e){
                     Dialog.error("Init Password fail.");
                 });
