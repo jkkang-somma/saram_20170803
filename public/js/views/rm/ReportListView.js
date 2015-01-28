@@ -149,10 +149,13 @@ define([
          { data : "state", "title" : "처리상태", "render": function(data, type, row){
           // data : "black_mark",
           // ( 1:정상, 2:당일결재, 3:익일결재
+           var sessionInfo = SessionModel.getUserInfo();
            var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
-           dataVal += "<div style='text-align: center;'>"
-            + "<button class='btn list-approval-btn btn-default btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>"
-            + "<button class='btn list-detail-btn btn-default btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
+           dataVal += "<div style='text-align: center;'>";
+           if(sessionInfo.id == row.manager_id){
+            dataVal +=  "<button class='btn list-approval-btn btn-default btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+           }
+            dataVal +=  "<button class='btn list-detail-btn btn-default btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
             + "</div>";
           return dataVal;
          }},
