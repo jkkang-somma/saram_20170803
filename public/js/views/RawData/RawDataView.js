@@ -86,14 +86,27 @@ ProgressbarView){
         },
         renderTable : function(startDate, endDate){
             var that = this;
-            this.progressbar.disabledProgressbar(false);
-            this.rawDataCollection.fetch({
-                data : {start : Moment(startDate).format("YYYY-MM-DD"), end : Moment(endDate).format("YYYY-MM-DD")},
-                success: function(){
+            Dialog.loading({
+                action:function(){
+                    var dfd = new $.Deferred();
+                    that.rawDataCollection.fetch({
+                        data : {start : Moment(startDate).format("YYYY-MM-DD"), end : Moment(endDate).format("YYYY-MM-DD")},
+                        success: function(){
+                            dfd.resolve();
+                        }, error: function(){
+                            dfd.reject();
+                        }
+            	    });
+            	    return dfd.promise();
+        	    },
+        	    
+                actionCallBack:function(res){//response schema
                     that.grid.render();
-                    that.progressbar.disabledProgressbar(true);
-                }
-    	    });
+                },
+                errorCallBack:function(response){
+                    Dialog.error("데이터 조회 실패! \n ("+ response.responseJSON.message +")");
+                },
+            });
         },
         
     	render:function(){
@@ -113,7 +126,6 @@ ProgressbarView){
     	    			fromId : "rdFromDatePicker",
     	    			toId : "rdToDatePicker"
     	    		}
-    	    		
     	    	})
     	    );
     	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
@@ -134,12 +146,12 @@ ProgressbarView){
 	        
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
-            this.progressbar = new ProgressbarView();
+            // this.progressbar = new ProgressbarView();
             
     	    _layout.append(_head);
     	    _layout.append(_row);
             _layout.append(_content);
-            _layout.append(this.progressbar.render());
+            // _layout.append(this.progressbar.render());
 
     	    $(this.el).append(_layout);
     	    

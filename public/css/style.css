@@ -713,3 +713,15 @@ border: 2px dotted #2ABB9B !important;
   border-top-color: #2ABB9B;
   border-width: 5px 5px 0;
 }
+
+#commuteDataTable td.autoType{
+  background-color: rgba(250, 239, 130, 0.4);  
+}
+
+#commuteDataTable tr.absentce{
+  background-color: rgba(236, 131, 131 ,0.4);  
+}
+
+#commuteDataTable tr.absentce.selected{
+  background-color: rgba(236, 131, 131 ,1);  
+}
