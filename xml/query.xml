@@ -629,7 +629,7 @@
     	<query id="selectWorkingSummaryById">
     		SELECT 
 				id,
-				a.name ,
+				A.name ,
 				COUNT(0) AS 'total_working_day',
 				SUM(CASE WHEN (work_type=10 || work_type=11) THEN 1 ELSE 0 END) AS 'perception',
 				SUM(CASE WHEN (work_type=01 || work_type=11) THEN 1 ELSE 0 END) AS 'sick_leave',
