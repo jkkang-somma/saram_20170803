@@ -48,6 +48,17 @@ body {
     background-color: #DEEEE6;
 }
 
+.date .form-control[readonly]{
+    cursor: default;
+    background-color: #ffffff
+}
+
+.date .form-control[readonly][disabled]{
+    cursor: not-allowed;
+    background-color: #DEEEE6
+}
+
+
 
 .form-control:focus{
     border-color:#2ABB9B;

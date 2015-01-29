@@ -66,13 +66,14 @@ define([
 	}
 	
 	function _getTimeStr(min){
+		
 		var hour = Math.floor(min / 60);
 		var minute = min % 60;
 		var result = "";
-
-		result += (hour < 10 ? "0"+ hour : hour) +":";
-		result += (minute < 10 ? "0"+ minute : minute);
-
+		if(min >0){
+			result += (hour < 10 ? "0"+ hour : hour) +":";
+			result += (minute < 10 ? "0"+ minute : minute);
+		}
 		return result;
 	};
 	
