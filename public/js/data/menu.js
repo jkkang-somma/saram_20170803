@@ -28,7 +28,7 @@ define([
         },{
             title:i18Common.MENU.SUB.SM.REPORTCOMMUTE, //근태 레포트 
             hashTag:"#reportCommute",
-            auth:USER
+            auth:ADMIN
         }]
     },{
         title:i18Common.MENU.TOP.AM,//일반관리

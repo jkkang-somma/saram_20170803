@@ -23,6 +23,7 @@ define([
         absenteeism:0,
         vacation:0,
     };
+    var _firstInitialize=true;
     
     var DashBoardView = BaseView.extend({
     	initialize:function(){
@@ -65,24 +66,42 @@ define([
     	    var _view=this;
     	    this.getWorkingSummary(_view.searchParams).done(function(workingSummary){
     	        if (workingSummary.length==0){// 조회내역이 없을때
-    	            _view.workingSummary=_defaultData;
+    	            if (_firstInitialize){
+    	                var _startDate=Moment().add(-1, 'month').startOf('month').format("YYYY-MM-DD");
+                        var _endDate=Moment().add(-1, 'month').endOf('month').format("YYYY-MM-DD");
+                        var _searchParams={
+                            start:_startDate,
+                            end:_endDate
+                        };
+                        _view.searchParams=_searchParams;
+                        
+                        _firstInitialize=false;
+                        _view.render();
+    	            } else {
+    	                _view.workingSummary=_defaultData;
+    	                _view.draw();
+    	            }
     	        } else {
     	            _view.workingSummary=workingSummary[0];
+    	            _view.draw();
     	        }
-    	        _view.draw();
     	    }).fail(function(){
     	        
     	    });
      	},
      	draw:function(){
     	    var _view=this;
+     	    if (_firstInitialize){//첫 수행
+     	        _firstInitialize=false;
+     	    }
     	    var _data= _view.workingSummary;
     	    var _params=_view.searchParams;
     	    
     	    var layout=$(LayoutHTML);
     	    var _dashboardTemp=_.template(DashboardHTML);
+    	    var _configEndDateArr=_params.end.split("-");
             var defaultData={
-                top_date:"("+_params.start + " ~ "+_params.end+")"
+                top_date:_data.total_working_day==0?"자료없음":"("+_params.start + " ~ "+_configEndDateArr[0] + "-"+_configEndDateArr[1] + "-"+ _data.total_working_day +")"
             };
             
             //header
@@ -130,7 +149,7 @@ define([
     	        }, _delay);
     	    }
     	    for (var name in _data){
-    	        if (_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name]==0){
+    	        if ((_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name]==0) || name=="total_working_day"){
     	            continue;
     	        }
     	        

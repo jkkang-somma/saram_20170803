@@ -63,7 +63,7 @@ router.route('/:id')
     
 })//사용자 수정
 .put(function(req, res){
-    var user = new User(req.body);
+    var user = new User(req.body, true);
     user.editUser().then(function(result){
         res.send(result);
     }).catch(function(e){
