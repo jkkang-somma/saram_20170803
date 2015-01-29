@@ -120,7 +120,7 @@ define([
                         label: '수정',
                         action: function(dialog) {
                         	commuteUpdatePopupView.updateCommute().done(function(result){
-            					console.log(result);
+            					// console.log(result);
             					var current = result.models[0];
             					var yesterday = result.models[1];
             					current.set({idx : selectItem.idx});

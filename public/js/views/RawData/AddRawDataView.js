@@ -166,7 +166,7 @@ define([
                                         csvReader.readAsText(file, 'euc-kr');
                                         
                                     } else{
-                                        console.log("Your browser does not support File API");
+                                        //console.log("Your browser does not support File API");
                                     }
                                 }else{
                                     Dialog.error("선택된 파일이 없습니다");

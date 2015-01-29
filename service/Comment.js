@@ -38,7 +38,6 @@ var Comment = function() {
 	}
 	
 	var _updateCommentReply = function(inData) {
-		console.log(inData);
 		return new Promise(function(resolve, reject){// promise patten
 			CommentDao.updateCommentReply(inData).then(function(result) {
 				CommentDao.selectCommentByPk(inData).then(function(result) {

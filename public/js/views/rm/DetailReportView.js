@@ -84,7 +84,7 @@ define([
     },
     
     setDataDefaultValues : function(param){
-      console.log(param);
+      // console.log(param);
       var _this = $(this.el);
       if(param != undefined){
         _this.find('#submit_id').val(param.submit_name);
@@ -211,7 +211,7 @@ define([
       var approvalCollection = new ApprovalCollection(formData);
       approvalCollection.idAttribute = "doc_num";
       approvalCollection.save({}, this.options["doc_num"]).then(function(){
-        console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
+        // console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
         _this.thisDfd.resolve(formData);
       }, function(model,xhr, options){
         var respons=xhr.responseJSON;
