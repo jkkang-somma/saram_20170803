@@ -234,14 +234,6 @@ define([
              	    	if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
              	    		$(row).css("background-color", "rgb(236, 131, 131)");
              	    	}
-             	    	
-             	    	// if(data.in_time_type != "1"){
-             	    	// 	$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	// }
-             	    	
-             	    	// if(data.out_time_type != "1"){
-             	    	// 	$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	// }
              	    },
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
@@ -273,7 +265,7 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 조회"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
