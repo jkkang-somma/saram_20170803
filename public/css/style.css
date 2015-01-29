@@ -40,6 +40,14 @@ body {
 .page-header h1 small{
     color: #2ABB9B;
 }
+
+.page-header h2{
+    color: #219076;
+}
+.page-header h2 small{
+    color: #2ABB9B;
+}
+
 .form-control{
     border-color:#2ABB9B;
 }
