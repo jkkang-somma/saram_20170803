@@ -80,9 +80,7 @@ define([
      		    failCallback: function (html, url) {
      		    	Dialog.error("보고서 생성 실패");
      		    }
-     		});     		
-     		
-     		
+     		});
      	},
      	getSearchForm: function() {	// 검색 조건  
      		return {year: this.$el.find("#selectYear").val()};

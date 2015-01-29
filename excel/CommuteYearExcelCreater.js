@@ -1,15 +1,16 @@
 var Promise = require('bluebird');
 var excelbuilder = require('msexcel-builder');
 var path = require('path');
-var	excelPath = path.normalize(__dirname + '/../excel/');
-var	excelFileDirPath = path.normalize(__dirname + '/../excel/files');
+var	excelFileDirPath = path.normalize(__dirname + '/../excel/files/');
 
 var CommuteYearExcelCreater = function () {
 	
 	var _createExcel = function(year, datas) {
 		return new Promise(function(resolve, reject){// promise patten
-			var fileName = "commute_"+ year + "_" +new Date().getTime() + ".xlsx";
+			var fileName = "근태자료_"+ year + "_" +new Date().getTime() + ".xlsx";
 			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
+			
+			// sheet 기본 크기 
 			var sheet1 = workbook.createSheet('sheet1', 200, 150);
 			
 			createExcelTitle(sheet1);		
@@ -21,7 +22,7 @@ var CommuteYearExcelCreater = function () {
 				    workbook.cancel();
 				  	reject(err);
 				} else {
-					resolve(fileName);
+					resolve(excelFileDirPath + fileName);
 				}
 			});
 		});
@@ -188,7 +189,6 @@ function setLateWorkerRow(sheet, startCol, startRow, lateWorker) {
 	
 	sheet.set( startCol, startRow, lateWorker.total);
 	setDataCellStyle(sheet, startCol, startRow);
-//	sheet.border(startCol, startRow, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 }
 
 function setUsedHolidayRow(sheet, startCol, startRow, usedHoliday) {
@@ -208,7 +208,6 @@ function setUsedHolidayRow(sheet, startCol, startRow, usedHoliday) {
 	
 	sheet.set( startCol, startRow, usedHoliday.holiday);
 	setDataCellStyle(sheet, startCol, startRow);
-//	sheet.border(startCol, startRow, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 }
 
 function setOverTimeWorkeRow(sheet, startCol, startRow, overTimeWorke) {
@@ -224,7 +223,6 @@ function setOverTimeWorkeRow(sheet, startCol, startRow, overTimeWorke) {
 	}
 	sheet.set( startCol, startRow, overTimeWorke.total);
 	setDataCellStyle(sheet, startCol, startRow);
-//	sheet.border(startCol, startRow, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 }
 
 function setOverTimeWorkTypeRow(sheet, startCol, startRow, overTimeWorkType) {
@@ -254,7 +252,6 @@ function setOverTimeWorkTypeRow(sheet, startCol, startRow, overTimeWorkType) {
 	
 	sheet.set( startCol, startRow, overTimeWorkType.c_total);
 	setDataCellStyle(sheet, startCol, startRow);
-//	sheet.border(startCol, startRow, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 }
 
 
@@ -272,7 +269,6 @@ function setOverTimeWorkPayRow(sheet, startCol, startRow, overTimeWorkPay) {
 	
 	sheet.set( startCol, startRow, overTimeWorkPay.total);
 	setDataCellStyle(sheet, startCol, startRow);
-//	sheet.border(startCol, startRow, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 }
 
 
@@ -329,16 +325,11 @@ function setTitleCellStyle1(sheet, col, row, value) {
 	sheet.align(col, row, 'center');	
 }
 
-
 function setTitleCellStyle2(sheet, col, row, value) {
-	//setTitleCellStyle1(col, row, value);
 	sheet.set(col, row, value);
 	sheet.merge({col:col,row:row},{col:col,row:row+1});
 	sheet.valign(col, row, 'center');
 	sheet.align(col, row, 'center');
-	
-//	sheet.border(col, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
-//	sheet.border(col, row + 1, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
 }
 
 function setDataCellStyle(sheet, startCol, startRow) {
@@ -357,10 +348,6 @@ function setTitleOverTimeCellType1(sheet, col, row, value) {
 	setTitleCellStyle1(sheet, col, 4, 'A');
 	setTitleCellStyle1(sheet, col + 1, 4, 'B');
 	setTitleCellStyle1(sheet, col + 2, 4, 'C');
-	
-//	sheet.border(col, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
-//	sheet.border(col+1, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
-//	sheet.border(col+2, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
 }
 
 function setTitleHolidayWorkTypeCellType(sheet, col, row, value) {
@@ -372,10 +359,6 @@ function setTitleHolidayWorkTypeCellType(sheet, col, row, value) {
 	setTitleCellStyle1(sheet, col, 4, 'A');
 	setTitleCellStyle1(sheet, col + 1, 4, 'B');
 	setTitleCellStyle1(sheet, col + 2, 4, 'C');
-
-//	sheet.border(col, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
-//	sheet.border(col+1, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
-//	sheet.border(col+2, row, {left:'medium',top:'medium',right:'thin',bottom:'medium'});
 }
 
 
@@ -384,8 +367,5 @@ function setTieleBorder(sheet) {
 		sheet.border(i, 2, {left:'medium',top:'medium',right:'medium',bottom:'medium'});
 		sheet.border(i, 3, {left:'medium',top:'medium',right:'medium',bottom:'medium'});
 		sheet.border(i, 4, {left:'medium',top:'medium',right:'medium',bottom:'medium'});
-	}
-	
+	}	
 }
-
-	

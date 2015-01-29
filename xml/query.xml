@@ -101,7 +101,7 @@
 								v.year,
 								v.id,
 								v.total_day,
-								IFNULL(s.used_holiday, 0) used_holiday,
+								IFNULL(s.used_holiday, '') used_holiday,
 								v.memo
 							FROM
 								vacation_tbl v
@@ -659,9 +659,9 @@
     	<query id="selectLateWorkerReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1, 0) AS '1', IFNULL(t2.2, 0) AS '2', IFNULL(t2.3, 0) AS '3', IFNULL(t2.4, 0) AS '4', IFNULL(t2.5, 0) AS '5', IFNULL(t2.6, 0) AS '6',
-                IFNULL(t2.7, 0) AS '7', IFNULL(t2.8, 0) AS '8', IFNULL(t2.9, 0) AS '9', IFNULL(t2.10, 0) AS '10', IFNULL(t2.11, 0) AS '11', IFNULL(t2.12, 0) AS '12',
-                IFNULL(t2.total, 0) AS total
+				IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
+                IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
+                IFNULL(t2.total, '') AS total
 			FROM
 					members_tbl m
 			        LEFT JOIN (
@@ -702,10 +702,10 @@
 		<query id="selectUsedHolidayReport">
 			SELECT 
 					m.name, m.id,
-					IFNULL(t2.1, 0) AS '1', IFNULL(t2.2, 0) AS '2', IFNULL(t2.3, 0) AS '3', IFNULL(t2.4, 0) AS '4', IFNULL(t2.5, 0) AS '5', IFNULL(t2.6, 0) AS '6',
-					IFNULL(t2.7, 0) AS '7', IFNULL(t2.8, 0) AS '8', IFNULL(t2.9, 0) AS '9', IFNULL(t2.10, 0) AS '10', IFNULL(t2.11, 0) AS '11', IFNULL(t2.12, 0) AS '12',                    					
-                    IFNULL( total_day, 0) AS total_day,
-                    IFNULL( (t2.total_day - t2.used_holiday), 0) AS holiday
+					IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
+					IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',                    					
+                    IFNULL( total_day, '') AS total_day,
+                    IFNULL( (t2.total_day - t2.used_holiday), '') AS holiday
 			FROM
 				members_tbl m
 				LEFT JOIN (
@@ -727,10 +727,10 @@
 							SUM(used) AS used_holiday                            
 						FROM (
 									SELECT 
-										ifnull( SUBSTRING(o.date,6,2) , '01') AS month,
+										IFNULL( SUBSTRING(o.date,6,2) , '01') AS month,
 										v.id, 
 										v.total_day, 
-										SUM( IFNULL( o.day_count, 0)) AS used
+										SUM( o.day_count ) AS used
 									FROM 
 										vacation_tbl v
 										LEFT JOIN out_office_tbl o
@@ -746,11 +746,15 @@
     	</query>
     	
     	<query id="selectOverTimeWorkeReport">
-    		SELECT 
+			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1, 0) AS '1', IFNULL(t2.2, 0) AS '2', IFNULL(t2.3, 0) AS '3', IFNULL(t2.4, 0) AS '4', IFNULL(t2.5, 0) AS '5', IFNULL(t2.6, 0) AS '6',
-                IFNULL(t2.7, 0) AS '7', IFNULL(t2.8, 0) AS '8', IFNULL(t2.9, 0) AS '9', IFNULL(t2.10, 0) AS '10', IFNULL(t2.11, 0) AS '11', IFNULL(t2.12, 0) AS '12',
-                IFNULL(t2.total, 0) AS total
+				IFNULL( SUBSTRING( SEC_TO_TIME( t2.1 *60), 1, 5), '') AS '1', IFNULL(SUBSTRING( SEC_TO_TIME( t2.2 *60), 1, 5), '') AS '2', 
+                IFNULL(SUBSTRING( SEC_TO_TIME( t2.3 *60), 1, 5), '') AS '3', IFNULL(SUBSTRING( SEC_TO_TIME( t2.4 *60), 1, 5), '') AS '4', 
+                IFNULL(SUBSTRING( SEC_TO_TIME( t2.5 *60), 1, 5), '') AS '5', IFNULL(SUBSTRING( SEC_TO_TIME( t2.6 *60), 1, 5), '') AS '6',
+                IFNULL(SUBSTRING( SEC_TO_TIME( t2.7 *60), 1, 5), '') AS '7', IFNULL(SUBSTRING( SEC_TO_TIME( t2.8 *60), 1, 5), '') AS '8', 
+                IFNULL(SUBSTRING( SEC_TO_TIME( t2.9 *60), 1, 5), '') AS '9', IFNULL(SUBSTRING( SEC_TO_TIME( t2.10 *60), 1, 5), '') AS '10', 
+                IFNULL(SUBSTRING( SEC_TO_TIME( t2.11 *60), 1, 5), '') AS '11', IFNULL(SUBSTRING( SEC_TO_TIME( t2.12 *60), 1, 5), '') AS '12',
+                IFNULL(SUBSTRING( SEC_TO_TIME( t2.total *60), 1, 5), '') AS total
 			FROM
 					members_tbl m
 			        LEFT JOIN (
@@ -789,19 +793,19 @@
     	<query id="selectOverTimeWorkTypeReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1a, 0) AS '1a', IFNULL(t2.1b, 0) AS '1b', IFNULL(t2.1c, 0) AS '1c',
-			    IFNULL(t2.2a, 0) AS '2a', IFNULL(t2.2b, 0) AS '2b', IFNULL(t2.2c, 0) AS '2c',
-			    IFNULL(t2.3a, 0) AS '3a', IFNULL(t2.3b, 0) AS '3b', IFNULL(t2.3c, 0) AS '3c',
-			    IFNULL(t2.4a, 0) AS '4a', IFNULL(t2.4b, 0) AS '4b', IFNULL(t2.4c, 0) AS '4c',
-			    IFNULL(t2.5a, 0) AS '5a', IFNULL(t2.5b, 0) AS '5b', IFNULL(t2.5c, 0) AS '5c',
-			    IFNULL(t2.6a, 0) AS '6a', IFNULL(t2.6b, 0) AS '6b', IFNULL(t2.6c, 0) AS '6c',
-			    IFNULL(t2.7a, 0) AS '7a', IFNULL(t2.7b, 0) AS '7b', IFNULL(t2.7c, 0) AS '7c',
-			    IFNULL(t2.8a, 0) AS '8a', IFNULL(t2.8b, 0) AS '8b', IFNULL(t2.8c, 0) AS '8c',
-			    IFNULL(t2.9a, 0) AS '9a', IFNULL(t2.9b, 0) AS '9b', IFNULL(t2.9c, 0) AS '9c',
-			    IFNULL(t2.10a, 0) AS '10a', IFNULL(t2.10b, 0) AS '10b', IFNULL(t2.10c, 0) AS '10c',
-			    IFNULL(t2.11a, 0) AS '11a', IFNULL(t2.11b, 0) AS '11b', IFNULL(t2.11c, 0) AS '11c',
-			    IFNULL(t2.12a, 0) AS '12a', IFNULL(t2.12b, 0) AS '12b', IFNULL(t2.12c, 0) AS '12c',
-			    IFNULL(t2.a_total, 0) AS 'a_total', IFNULL(t2.b_total, 0) AS 'b_total', IFNULL(t2.c_total, 0) AS 'c_total'
+				IFNULL(t2.1a, '') AS '1a', IFNULL(t2.1b, '') AS '1b', IFNULL(t2.1c, '') AS '1c',
+			    IFNULL(t2.2a, '') AS '2a', IFNULL(t2.2b, '') AS '2b', IFNULL(t2.2c, '') AS '2c',
+			    IFNULL(t2.3a, '') AS '3a', IFNULL(t2.3b, '') AS '3b', IFNULL(t2.3c, '') AS '3c',
+			    IFNULL(t2.4a, '') AS '4a', IFNULL(t2.4b, '') AS '4b', IFNULL(t2.4c, '') AS '4c',
+			    IFNULL(t2.5a, '') AS '5a', IFNULL(t2.5b, '') AS '5b', IFNULL(t2.5c, '') AS '5c',
+			    IFNULL(t2.6a, '') AS '6a', IFNULL(t2.6b, '') AS '6b', IFNULL(t2.6c, '') AS '6c',
+			    IFNULL(t2.7a, '') AS '7a', IFNULL(t2.7b, '') AS '7b', IFNULL(t2.7c, '') AS '7c',
+			    IFNULL(t2.8a, '') AS '8a', IFNULL(t2.8b, '') AS '8b', IFNULL(t2.8c, '') AS '8c',
+			    IFNULL(t2.9a, '') AS '9a', IFNULL(t2.9b, '') AS '9b', IFNULL(t2.9c, '') AS '9c',
+			    IFNULL(t2.10a, '') AS '10a', IFNULL(t2.10b, '') AS '10b', IFNULL(t2.10c, '') AS '10c',
+			    IFNULL(t2.11a, '') AS '11a', IFNULL(t2.11b, '') AS '11b', IFNULL(t2.11c, '') AS '11c',
+			    IFNULL(t2.12a, '') AS '12a', IFNULL(t2.12b, '') AS '12b', IFNULL(t2.12c, '') AS '12c',
+			    IFNULL(t2.a_total, '') AS 'a_total', IFNULL(t2.b_total, '') AS 'b_total', IFNULL(t2.c_total, '') AS 'c_total'
 			FROM
 				members_tbl m
 				LEFT JOIN (    
@@ -906,9 +910,9 @@
     	<query id="selectOverTimeWorkPayReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1, 0) AS '1', IFNULL(t2.2, 0) AS '2', IFNULL(t2.3, 0) AS '3', IFNULL(t2.4, 0) AS '4', IFNULL(t2.5, 0) AS '5', IFNULL(t2.6, 0) AS '6',
-                IFNULL(t2.7, 0) AS '7', IFNULL(t2.8, 0) AS '8', IFNULL(t2.9, 0) AS '9', IFNULL(t2.10, 0) AS '10', IFNULL(t2.11, 0) AS '11', IFNULL(t2.12, 0) AS '12',
-                IFNULL(t2.total, 0) AS total
+				IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
+                IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
+                IFNULL(t2.total, '') AS total
 			FROM
 					members_tbl m
 			        LEFT JOIN (
@@ -950,19 +954,19 @@
     	<query id="selectHolidayWorkTypeReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1a, 0) AS '1a', IFNULL(t2.1b, 0) AS '1b', IFNULL(t2.1c, 0) AS '1c',
-			    IFNULL(t2.2a, 0) AS '2a', IFNULL(t2.2b, 0) AS '2b', IFNULL(t2.2c, 0) AS '2c',
-			    IFNULL(t2.3a, 0) AS '3a', IFNULL(t2.3b, 0) AS '3b', IFNULL(t2.3c, 0) AS '3c',
-			    IFNULL(t2.4a, 0) AS '4a', IFNULL(t2.4b, 0) AS '4b', IFNULL(t2.4c, 0) AS '4c',
-			    IFNULL(t2.5a, 0) AS '5a', IFNULL(t2.5b, 0) AS '5b', IFNULL(t2.5c, 0) AS '5c',
-			    IFNULL(t2.6a, 0) AS '6a', IFNULL(t2.6b, 0) AS '6b', IFNULL(t2.6c, 0) AS '6c',
-			    IFNULL(t2.7a, 0) AS '7a', IFNULL(t2.7b, 0) AS '7b', IFNULL(t2.7c, 0) AS '7c',
-			    IFNULL(t2.8a, 0) AS '8a', IFNULL(t2.8b, 0) AS '8b', IFNULL(t2.8c, 0) AS '8c',
-			    IFNULL(t2.9a, 0) AS '9a', IFNULL(t2.9b, 0) AS '9b', IFNULL(t2.9c, 0) AS '9c',
-			    IFNULL(t2.10a, 0) AS '10a', IFNULL(t2.10b, 0) AS '10b', IFNULL(t2.10c, 0) AS '10c',
-			    IFNULL(t2.11a, 0) AS '11a', IFNULL(t2.11b, 0) AS '11b', IFNULL(t2.11c, 0) AS '11c',
-			    IFNULL(t2.12a, 0) AS '12a', IFNULL(t2.12b, 0) AS '12b', IFNULL(t2.12c, 0) AS '12c',
-			    IFNULL(t2.a_total, 0) AS 'a_total', IFNULL(t2.b_total, 0) AS 'b_total', IFNULL(t2.c_total, 0) AS 'c_total'
+				IFNULL(t2.1a, '') AS '1a', IFNULL(t2.1b, '') AS '1b', IFNULL(t2.1c, '') AS '1c',
+			    IFNULL(t2.2a, '') AS '2a', IFNULL(t2.2b, '') AS '2b', IFNULL(t2.2c, '') AS '2c',
+			    IFNULL(t2.3a, '') AS '3a', IFNULL(t2.3b, '') AS '3b', IFNULL(t2.3c, '') AS '3c',
+			    IFNULL(t2.4a, '') AS '4a', IFNULL(t2.4b, '') AS '4b', IFNULL(t2.4c, '') AS '4c',
+			    IFNULL(t2.5a, '') AS '5a', IFNULL(t2.5b, '') AS '5b', IFNULL(t2.5c, '') AS '5c',
+			    IFNULL(t2.6a, '') AS '6a', IFNULL(t2.6b, '') AS '6b', IFNULL(t2.6c, '') AS '6c',
+			    IFNULL(t2.7a, '') AS '7a', IFNULL(t2.7b, '') AS '7b', IFNULL(t2.7c, '') AS '7c',
+			    IFNULL(t2.8a, '') AS '8a', IFNULL(t2.8b, '') AS '8b', IFNULL(t2.8c, '') AS '8c',
+			    IFNULL(t2.9a, '') AS '9a', IFNULL(t2.9b, '') AS '9b', IFNULL(t2.9c, '') AS '9c',
+			    IFNULL(t2.10a, '') AS '10a', IFNULL(t2.10b, '') AS '10b', IFNULL(t2.10c, '') AS '10c',
+			    IFNULL(t2.11a, '') AS '11a', IFNULL(t2.11b, '') AS '11b', IFNULL(t2.11c, '') AS '11c',
+			    IFNULL(t2.12a, '') AS '12a', IFNULL(t2.12b, '') AS '12b', IFNULL(t2.12c, '') AS '12c',
+			    IFNULL(t2.a_total, '') AS 'a_total', IFNULL(t2.b_total, '') AS 'b_total', IFNULL(t2.c_total, '') AS 'c_total'
 			FROM
 				members_tbl m
 				LEFT JOIN (    
@@ -1067,9 +1071,9 @@
     	<query id="selectHolidayWorkPayReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1, 0) AS '1', IFNULL(t2.2, 0) AS '2', IFNULL(t2.3, 0) AS '3', IFNULL(t2.4, 0) AS '4', IFNULL(t2.5, 0) AS '5', IFNULL(t2.6, 0) AS '6',
-                IFNULL(t2.7, 0) AS '7', IFNULL(t2.8, 0) AS '8', IFNULL(t2.9, 0) AS '9', IFNULL(t2.10, 0) AS '10', IFNULL(t2.11, 0) AS '11', IFNULL(t2.12, 0) AS '12',
-                IFNULL(t2.total, 0) AS total
+				IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
+                IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
+                IFNULL(t2.total, '') AS total
 			FROM
 					members_tbl m
 			        LEFT JOIN (
