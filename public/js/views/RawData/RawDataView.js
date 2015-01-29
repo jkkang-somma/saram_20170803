@@ -59,17 +59,22 @@ ProgressbarView){
 				        tooltip: "",
         		    }]
     		};
-            
-            // 수원 사업자의 경우 컬럼을 추가 
+
             var dept_code = SessionModel.getUserInfo().dept_code;
-            if ( Code.isSuwonWorker(dept_code) ) {
+            
+            // 경영지원 팀 인 경우
+            if ( dept_code == '1000' ) {
+            	this.gridOption.column.push( { data : "ip_office", 		"title" : "IP" } );
+            }
+
+            // 경영 지원팀 또는 수원 사업자의 경우 컬럼을 추가
+            if ( dept_code == '1000' || Code.isSuwonWorker(dept_code) ) {
             	this.gridOption.column.push( { data : "need_confirm", 	"title" : "확인필요",
             		render: function(data, type, full, meta) {
                			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
                		}
                	});
             }
-
     	},
         events : {
             "click #rdSearchBtn" : "getRawData"
