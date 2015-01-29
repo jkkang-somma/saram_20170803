@@ -73,40 +73,12 @@ define([
             return this;
      	},
      	onClickCreateExcelBtn: function() {
-     		
-//    		var model = new ReportModel();
-//    		model.commuteYearReportUrl().fetch(this.getSearchForm(), {
-//        		success: function(model, response) {
-//        			alert(1);
-//             	}, error : function(model, res){
-//             		alert(2);
-//             	}
-//    		});  
-     		
-//     		$.ajax({
-//     		    type: "GET",
-//     		    url: "/report/commuteYearReport",
-//     		    data: this.getSearchForm(),
-//     		    cache: false,
-//     		    success: function(response)
-//     		    {
-//     		        alert('got response');
-//     		        
-//     		    },
-//     		    error: function (XMLHttpRequest, textStatus, errorThrown) 
-//     		    {
-//     		        
-//     		    }
-//     		});     		
-//     		
-     		 
-     		$.fileDownload('/report/commuteYearReport', {
+     		var url =   "/report/commuteYearReport?year=" + this.getSearchForm().year;
+     		$.fileDownload(url, {
      		    successCallback: function (url) {
-     		 
-     		    	alert(1);
      		    },
      		    failCallback: function (html, url) {
-     		    	alert(2);
+     		    	Dialog.error("보고서 생성 실패");
      		    }
      		});     		
      		
