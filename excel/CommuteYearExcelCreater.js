@@ -1,14 +1,27 @@
 var Promise = require('bluebird');
 var excelbuilder = require('msexcel-builder');
 var path = require('path');
+var fs = require('fs');
 var	excelFileDirPath = path.normalize(__dirname + '/../excel/files/');
 
 var CommuteYearExcelCreater = function () {
-	
+
 	var _createExcel = function(year, datas) {
 		return new Promise(function(resolve, reject){// promise patten
 			var fileName = "근태자료_"+ year + "_" +new Date().getTime() + ".xlsx";
 			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
+			
+			// 파일 폴더 체크 
+			if (!fs.existsSync(excelFileDirPath)) {
+				try {
+					fs.mkdirSync(excelFileDirPath);
+				} catch(e) {
+					if ( e.code != 'EEXIST' ) {
+						console.log("Fail create excel file dir");
+						throw e;
+					}
+				}
+			}
 			
 			// sheet 기본 크기 
 			var sheet1 = workbook.createSheet('sheet1', 200, 150);
@@ -26,8 +39,6 @@ var CommuteYearExcelCreater = function () {
 				}
 			});
 		});
-		
-		
 	};
 	
 	return {
