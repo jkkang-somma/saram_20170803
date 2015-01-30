@@ -117,7 +117,7 @@ define([
           language: "ko",
           todayHighlight: true, 
           format: "YYYY-MM-DD",
-          defaultDate: Moment(new Date(lastDay - 1)).format("YYYY-MM-DD")
+          defaultDate: Moment(new Date(lastDay - 1)).add(1, 'M').format("YYYY-MM-DD")
       });
     },
     
@@ -246,7 +246,7 @@ define([
                       });
                     }
                   }, {
-                    label: 'Close',
+                    label: '닫기',
                     action: function(dialogRef){
                     dialogRef.close();
                   }
@@ -456,7 +456,7 @@ define([
                                 });
                             }
                         }, {
-                            label: 'Close',
+                            label: '닫기',
                             action: function(dialogRef){
                                 dialogRef.close();
                             }

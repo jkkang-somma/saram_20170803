@@ -157,6 +157,13 @@ define([
           $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }
         _this.find('#reqHoliday').val(holReq + " 일");
+        
+        // 휴일 근무, 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
+        if (param.office_code == 'B01' || param.office_code == 'W01' || param.office_code == 'W02' || param.office_code == 'W03') {
+        	$(this.el).find('#usableHolidayCon').hide();
+        }else {
+        	$(this.el).find('#usableHolidayCon').show();
+        }        
       }
     },
     
