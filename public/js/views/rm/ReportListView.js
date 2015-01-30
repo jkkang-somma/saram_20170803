@@ -246,7 +246,7 @@ define([
                       });
                     }
                   }, {
-                    label: 'Close',
+                    label: '닫기',
                     action: function(dialogRef){
                     dialogRef.close();
                   }
@@ -456,7 +456,7 @@ define([
                                 });
                             }
                         }, {
-                            label: 'Close',
+                            label: '닫기',
                             action: function(dialogRef){
                                 dialogRef.close();
                             }
