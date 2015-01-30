@@ -117,7 +117,7 @@ define([
           language: "ko",
           todayHighlight: true, 
           format: "YYYY-MM-DD",
-          defaultDate: Moment(new Date(lastDay - 1)).format("YYYY-MM-DD")
+          defaultDate: Moment(new Date(lastDay - 1)).add(1, 'M').format("YYYY-MM-DD")
       });
     },
     
