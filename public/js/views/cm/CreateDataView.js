@@ -49,8 +49,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    id:"createCommuteListTable",
     		    column:[
                     {"title": "날짜", "data": "date"},
-                    {"title": "이름", "data": "name"},
                     {"title": "부서", "data": "department"},
+                    {"title": "이름", "data": "name"},
                     {"title": "근무<br>형태", "data": "work_type",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.WORKTYPE, data);

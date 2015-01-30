@@ -43,8 +43,8 @@ ProgressbarView){
     		    el:"rawDataContent",
     		    id:"rawDataTable",
     		    column:[
+    		         	{ data : "department", 		"title" : "부서" },
    	                   	{ data : "name", 			"title" : "이름"},
- 	                   	{ data : "department", 		"title" : "부서" },
  	                   	{ data : "char_date", 		"title" : "출입시간" },
  	                   	{ data : "type", 			"title" : "출입기록" }
     		    ],

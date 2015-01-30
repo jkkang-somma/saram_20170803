@@ -203,20 +203,20 @@ define([
                         this.outOfficeCode = code;
                         switch(code){
                             case "W01": // 외근
-                                if(this.outOfficeCode == "W01"){
-                                    var startTime = Moment(model.get("start_time"), "HH:mm");
-                                    var endTime = Moment(model.get("end_time"), "HH:mm");
-                                    var inTimeLimit = Moment("09:00", "HH:mm");
-                                    var outTimeLimit = Moment("18:00", "HH:mm");
-                                    if(startTime.isBefore(inTimeLimit) || startTime.isSame(inTimeLimit))
-                                        this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
-                                    
-                                    if(endTime.isAfter(outTimeLimit) || endTime.isSame(outTimeLimit))
-                                        this.standardOutTime.hour(startTime.hour()).minute(startTime.minute()).second(startTime.second());
-                                }
+                            case "W03": // 종일외근
+                                var startTime = Moment(model.get("start_time"), "HH:mm");
+                                var endTime = Moment(model.get("end_time"), "HH:mm");
+                                var inTimeLimit = Moment("09:00", "HH:mm");
+                                var outTimeLimit = Moment("18:00", "HH:mm");
+                                if(startTime.isBefore(inTimeLimit) || startTime.isSame(inTimeLimit))
+                                    this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
+                                
+                                if(endTime.isAfter(outTimeLimit) || endTime.isSame(outTimeLimit))
+                                    this.standardOutTime.hour(startTime.hour()).minute(startTime.minute()).second(startTime.second());
                                 break;
                             case "W02": // 출장
                                 break;
+                            
                         }
                     }
                 }
