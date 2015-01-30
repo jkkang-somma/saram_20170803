@@ -15,6 +15,9 @@ var User = function (data, isNoSchemas) {
     } else if (!_.isUndefined(isNoSchemas)||isNoSchemas){
         _data=data;
     }
+    
+    debug(data);
+    
     var _get = function (fieldName) {
         if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
         if (_.has(_data, fieldName)){
@@ -96,7 +99,5 @@ var User = function (data, isNoSchemas) {
         configUser:_configUser
     }
 }
-
-//new app 은 싱글톤 아니고 app은 계속 생성
 module.exports = User;
 

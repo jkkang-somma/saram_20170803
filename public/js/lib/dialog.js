@@ -104,7 +104,7 @@ define([
                         message:_container,
                         type: BootstrapDialog.TYPE_DEFAULT,
                         //cssClass:CssClass.DEFAULT,
-                        closable: true, 
+                        closable: false, 
                         buttons: [],
                         });
                     if(!_.isUndefined(resultView)){
@@ -123,7 +123,7 @@ define([
                     message:_container,
                     type: BootstrapDialog.TYPE_DEFAULT,
                     //cssClass:CssClass.DEFAULT,
-                    closable: true, 
+                    closable: false,
                     buttons: []
                 });
                 
@@ -143,6 +143,7 @@ define([
                     label: i18nCommon.DIALOG.BUTTON.OK,
                     cssClass: CssClass.INFO,
                     //autospin: true,
+                    closable: false,
                     action: function(dialogRef){// 버튼 클릭 이벤트
                         var _box=$("<div class='dialog-loding'></div>");
                         dialogRef.getModalBody().html(_box);

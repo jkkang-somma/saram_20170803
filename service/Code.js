@@ -22,11 +22,16 @@ var Code = function (data) {
     var _getCodeList = function(){
         switch (category) {
             case 'dept' :
-                return _getDeptList();    
+                return _getDeptList();
+            case 'approvalUser' :
+                return _getApprovalUserList();      
         }
     }
     var _getDeptList = function(){
         return CodeDao.selectDeptList();
+    }
+    var _getApprovalUserList = function(){
+        return CodeDao.selectApprovalUserList();
     }
     return {
         getCodeList:_getCodeList
