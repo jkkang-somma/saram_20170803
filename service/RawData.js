@@ -7,7 +7,11 @@ var db = require('../lib/dbmanager.js');
 
 var RawData = function (data) {
     var _selectRawDataList = function(data){
-        return RawDataDao.selectRawDataList(data);
+    	if(_.isUndefined(data.end)){
+    		return RawDataDao.selectRawDataListV2(data);
+    	}else{
+        	return RawDataDao.selectRawDataList(data);
+    	}
     }
     var _insertRawData = function (data) {
         return new Promise(function(resolve, reject){

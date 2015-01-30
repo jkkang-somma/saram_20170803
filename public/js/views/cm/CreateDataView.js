@@ -173,7 +173,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var yesterdayCommuteCollection = new CommuteCollection();   // 선택일 전날 근태 데이터 목록
 
             $.when(
-                rawDataCollection.fetch({data: selectedDate}),
+                rawDataCollection.fetch({data: { start : selectedDate.start }}),
                 userCollection.fetch(),
                 holidayCollection.fetch({ data : {  year : startDate.year() } }),
                 outOfficeCollection.fetch({data : selectedDate}),

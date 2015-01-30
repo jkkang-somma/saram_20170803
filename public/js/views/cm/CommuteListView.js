@@ -104,7 +104,7 @@ define([
 		 });
 		 
 		 var url = "#commutemanager/comment/" + cellData.id + "/" + cellData.date;
-		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' >" + cellData.comment_count + " 건</a>";
+		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' target='_blank'>" + cellData.comment_count + " 건</a>";
 		 return aHrefStr;
 	}
 	
