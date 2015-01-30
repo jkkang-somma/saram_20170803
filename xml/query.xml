@@ -629,7 +629,7 @@
     	<query id="selectWorkingSummaryById">
     		SELECT 
 				id,
-				a.name ,
+				A.name ,
 				COUNT(0) AS 'total_working_day',
 				SUM(CASE WHEN (work_type=10 || work_type=11) THEN 1 ELSE 0 END) AS 'perception',
 				SUM(CASE WHEN (work_type=01 || work_type=11) THEN 1 ELSE 0 END) AS 'sick_leave',
@@ -723,8 +723,8 @@
 							SUM(CASE WHEN month = 10 THEN used END) AS '10',
 							SUM(CASE WHEN month = 11 THEN used END) AS '11',
 							SUM(CASE WHEN month = 12 THEN used END) AS '12',
-							total_day,
-							SUM(used) AS used_holiday                            
+							IFNULL( total_day, 0) AS total_day,
+							IFNULL( SUM(used), 0) AS used_holiday                                                        
 						FROM (
 									SELECT 
 										IFNULL( SUBSTRING(o.date,6,2) , '01') AS month,
@@ -840,7 +840,7 @@
 							) t1    
 							GROUP BY id
 					) ta
-					INNER JOIN (
+					LEFT JOIN (
 							SELECT
 								id AS tb_id,
 								SUM(CASE WHEN month = 1 THEN cnt END) AS '1b',
@@ -871,7 +871,7 @@
 							GROUP BY id
 					)tb
 					ON ta.ta_id = tb.tb_id
-					INNER JOIN (
+					LEFT JOIN (
 							SELECT
 								id AS tc_id,
 								SUM(CASE WHEN month = 1 THEN cnt END) AS '1c',
@@ -1001,7 +1001,7 @@
 							) t1    
 							GROUP BY id
 					) ta
-					INNER JOIN (
+					LEFT JOIN (
 							SELECT
 								id AS tb_id,
 								SUM(CASE WHEN month = 1 THEN cnt END) AS '1b',
@@ -1032,7 +1032,7 @@
 							GROUP BY id
 					)tb
 					ON ta.ta_id = tb.tb_id
-					INNER JOIN (
+					LEFT JOIN (
 							SELECT
 								id AS tc_id,
 								SUM(CASE WHEN month = 1 THEN cnt END) AS '1c',
