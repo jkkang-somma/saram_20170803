@@ -49,6 +49,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    id:"createCommuteListTable",
     		    column:[
                     {"title": "날짜", "data": "date"},
+                    {"title": "부서", "data": "department"},
                     {"title": "이름", "data": "name"},
                     {"title": "근무<br>형태", "data": "work_type",
                         "render": function (data, type, rowData, meta) {
@@ -172,7 +173,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var yesterdayCommuteCollection = new CommuteCollection();   // 선택일 전날 근태 데이터 목록
 
             $.when(
-                rawDataCollection.fetch({data: selectedDate}),
+                rawDataCollection.fetch({data: { start : selectedDate.start }}),
                 userCollection.fetch(),
                 holidayCollection.fetch({ data : {  year : startDate.year() } }),
                 outOfficeCollection.fetch({data : selectedDate}),
@@ -186,8 +187,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     var userId = userModel.attributes.id;
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
-                    
-                    if(userDepartment.slice(0,4) === "품질검증" || userDepartment == "무소속" || userDepartment==="임원"){
+                    if( userDepartment == "무소속" || userDepartment==="임원"){
+                        
                         
                     }else{
                         var yesterdayAttribute = {};

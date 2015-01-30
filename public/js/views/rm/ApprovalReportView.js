@@ -125,8 +125,9 @@ define([
         _this.find('#end_time input').val(param.end_time);
         _this.find('#office_code').html("<option>"+param.office_code_name+"</option>");
         _this.find('#submit_comment').val(param.submit_comment);
-        // _this.find('#decide_comment').val(param.decide_comment);
-        
+        if(param.decide_comment != null && param.decide_comment != ""){
+          _this.find('#decide_comment').val(param.decide_comment);
+        }
         _this.find('#manager_id').html("<option>"+param.manager_name+"</option>");
         _this.find('#state').val(param.state);
         
@@ -246,7 +247,7 @@ define([
         resultModel.set({state : _approvalCollection.models[0].get("state")});
         resultModel.set({decide_date : new Date()});
         
-        console.log(resultModel);
+        // console.log(resultModel);
         dfd.resolve(resultModel.attributes);
       }, function(){
         dfd.reject();

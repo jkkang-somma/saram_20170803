@@ -72,7 +72,7 @@ define([
 			if (!_.isUndefined(el)) this.el=el;
 			
 			var _content=$(ContentHTML).attr("id", this.gridOption.el);
-			console.log(_content);
+			// console.log(_content);
 			$(this.el).html(_content);
 
 			var _gridSchema=Schemas.getSchema('grid');

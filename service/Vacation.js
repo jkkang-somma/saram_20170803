@@ -94,6 +94,10 @@ var Vacation = function() {
     					continue;
     				}
     				
+    				if (result[i].dept_code == '0000') { // 임원의 경우 제회 
+    					continue
+    				}    				
+    				
     				obj = {
     						id : (result[i].id),
     						year : data.year,

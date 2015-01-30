@@ -55,8 +55,6 @@ INSERT INTO out_office_tbl VALUES ('2015','2015-01-05','150106','V03','0.5','개
 INSERT INTO out_office_tbl VALUES ('2015','2015-01-09','071102','V03','0.5','가사.','201501-024','','','');
 
 
-
-
 ### 김태수 책임 ###
 # 1/7 외근
 INSERT INTO approval_tbl (doc_num, submit_id, manager_id, submit_date, decide_date, submit_comment, decide_comment, start_date, end_date, office_code, state, black_mark, start_time, end_time) 

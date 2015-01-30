@@ -4,40 +4,47 @@ var db = require('../lib/dbmanager.js');
 
 var ReportDao = function () {
 }
-//
-//// 연차 조회 
-//VacationDao.prototype.selectVacationsByYear =  function (year) {
-//    var queryStr = db.getQuery('vacation', 'selectVacationsByYear');
-//    return db.queryV2(queryStr, [year]);
-//}
-//
-//// 연차 갯수 조회 - 해당 년도의 연차 데이터 생성 여부 체크 위해서 
-//VacationDao.prototype.selectVacatonCount =  function (year) {
-//    var queryStr = db.getQuery('vacation', 'selectVacatonCount');
-//    return db.queryV2(queryStr, [year]);
-//}
-//
-//// 연차 조회 - id 별 연차를 조회하기 위해
-//VacationDao.prototype.selectVacatonById =  function (id) {
-//    var queryStr = db.getQuery('vacation', 'selectVacationsById');
-//    return db.queryV2(queryStr, [id]);
-//}
-//
-//// vacation 1개 등록
-//VacationDao.prototype.insertVacation =  function (datas) {	
-//    var queryStr = db.getQuery('vacation', 'insertVacation');
-//    var values = [];
-//    for (var i = 0, len = datas.length; i < len; i++) {
-//    	values.push( [datas[i].id, datas[i].year, datas[i].total_day, datas[i].id, datas[i].year] );
-//    }
-//    
-//    return db.insertQuerys(queryStr, values);
-//}
-//
-////vacation 수정
-//VacationDao.prototype.updateVacation =  function (data) {
-//    var queryStr = db.getQuery('vacation', 'updateVacation');
-//    return db.queryV2(queryStr, [data.total_day, data.memo, data.id, data.year]);
-//}
-module.exports = new ReportDao();
 
+// 지각 현황
+ReportDao.prototype.selectLateWorkerReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectLateWorkerReport');
+    return db.queryV2(queryStr, [year]);
+}
+
+// 연차 사용 현황
+ReportDao.prototype.selectUsedHolidayReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectUsedHolidayReport');
+    return db.queryV2(queryStr, [year]);
+}
+
+// 잔업시간(분) 현황 ( 평일 잔업시간 )	
+ReportDao.prototype.selectOverTimeWorkeReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectOverTimeWorkeReport');
+    return db.queryV2(queryStr, [year]);
+}
+
+// 잔업 수당 타입 현황	
+ReportDao.prototype.selectOverTimeWorkTypeReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectOverTimeWorkTypeReport');
+    return db.queryV2(queryStr, [year, year, year]);
+}
+
+// 잔업 수당 금액 현황	
+ReportDao.prototype.selectOverTimeWorkPayReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectOverTimeWorkPayReport');
+    return db.queryV2(queryStr, [year]);
+}
+
+// 휴일 근무 타입 현황
+ReportDao.prototype.selectHolidayWorkTypeReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectHolidayWorkTypeReport');
+    return db.queryV2(queryStr, [year, year, year]);
+}
+
+// 휴일근무 수당 금액 현황		
+ReportDao.prototype.selectHolidayWorkPayReport =  function (year) {
+    var queryStr = db.getQuery('report', 'selectHolidayWorkPayReport');
+    return db.queryV2(queryStr, [year]);
+}
+
+module.exports = new ReportDao();

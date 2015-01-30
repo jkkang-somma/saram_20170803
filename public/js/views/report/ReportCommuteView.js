@@ -73,47 +73,20 @@ define([
             return this;
      	},
      	onClickCreateExcelBtn: function() {
-     		
-//    		var model = new ReportModel();
-//    		model.commuteYearReportUrl().fetch(this.getSearchForm(), {
-//        		success: function(model, response) {
-//        			alert(1);
-//             	}, error : function(model, res){
-//             		alert(2);
-//             	}
-//    		});  
-     		
-//     		$.ajax({
-//     		    type: "GET",
-//     		    url: "/report/commuteYearReport",
-//     		    data: this.getSearchForm(),
-//     		    cache: false,
-//     		    success: function(response)
-//     		    {
-//     		        alert('got response');
-//     		        
-//     		    },
-//     		    error: function (XMLHttpRequest, textStatus, errorThrown) 
-//     		    {
-//     		        
-//     		    }
-//     		});     		
-//     		
-     		 
-     		$.fileDownload('/report/commuteYearReport', {
+     		var url =   "/report/commuteYearReport?year=" + this.getSearchForm().year + "&isInLeaveWorker=" + this.getSearchForm().isInLeaveWorker;
+     		$.fileDownload(url, {
      		    successCallback: function (url) {
-     		 
-     		    	alert(1);
      		    },
      		    failCallback: function (html, url) {
-     		    	alert(2);
+     		    	Dialog.error("보고서 생성 실패");
      		    }
-     		});     		
-     		
-     		
+     		});
      	},
      	getSearchForm: function() {	// 검색 조건  
-     		return {year: this.$el.find("#selectYear").val()};
+     		return {
+     				year: this.$el.find("#selectYear").val(),
+     				isInLeaveWorker: ( this.$el.find("#chkleaveWorker").is(":checked")? true : false )
+     			};
      	}
     });
     

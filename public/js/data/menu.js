@@ -11,7 +11,7 @@ define([
         subMenu:[{
             title:i18Common.MENU.SUB.SM.USER, //사용자 관리
             hashTag:"#usermanager",
-            auth:USER,
+            auth:ADMIN,
             actionAuth:{
                 add:ADMIN,
                 remove:ADMIN,
@@ -28,7 +28,7 @@ define([
         },{
             title:i18Common.MENU.SUB.SM.REPORTCOMMUTE, //근태 레포트 
             hashTag:"#reportCommute",
-            auth:USER
+            auth:ADMIN
         }]
     },{
         title:i18Common.MENU.TOP.AM,//일반관리
@@ -51,6 +51,7 @@ define([
         },{
             title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
             hashTag:"#commutemanager/comment",
+            subTag:["/?/?"],
             auth:USER
         },{
             title:i18Common.MENU.SUB.AM.REPORT_MANAGER, //"근태 상신(list)",

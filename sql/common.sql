@@ -202,7 +202,9 @@ insert into work_type_code_tbl values
   ('30', '휴일'),
   ('31', '종일휴가'),
   ('40', '휴일근무_미결'),
-  ('41', '휴일근무');
+  ('41', '휴일근무'),
+  ('50', '출근기록_없음'),
+  ('51', '퇴근기록_없음');
   
 CREATE TABLE IF NOT EXISTS `office_code_tbl` (
   `code` VARCHAR(10) NOT NULL COMMENT '관리코드',
