@@ -33,7 +33,7 @@ var Approval = function (data) {
 			    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
 			        var outOfficeData = {};
 			        for(var key in data.outOffice.arrInsertDate){
-			            outOfficeData[key] = data.outOffice;
+			            outOfficeData[key] = _.clone( data.outOffice);
 			            outOfficeData[key].date = data.outOffice.arrInsertDate[key];
                         outOfficeData[key].year = outOfficeData[key].date.substr(0,4);
                         outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
@@ -43,7 +43,7 @@ var Approval = function (data) {
 			    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
 			        var inOfficeData = {};
 			        for(var inKey in data.inOffice.arrInsertDate){
-			            inOfficeData[inKey] = data.inOffice;
+			            inOfficeData[inKey] = _.clone( data.inOffice );
 			            inOfficeData[inKey].date = data.inOffice.arrInsertDate[inKey];
                         inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
                         inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
