@@ -74,7 +74,7 @@ define([
                 for (var index in _columns){
                     column=API.column(index);
                     if(index === "0"){
-                        column.visible(false);
+                        column.visible(this.options.visibleSub);
                     }else{    
                         column.visible(_.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible);
                     }
@@ -116,9 +116,6 @@ define([
     	            if (_.isObject(_column)){
     	                if (!_.isUndefined(_column.render)){
     	                    _value=_column.render({},{},rowData);
-    	                    if(_.isNull(_value)){
-    	                        _value ="";
-    	                    }
     	                } else {
     	                    _value=rowData[name];
     	                }
@@ -126,13 +123,22 @@ define([
     	            }   else {
 	                    _value=rowData[name];
 	                }
+	                
+                    if(_.isNull(_value) || _value=="null"){
+                        _value ="";
+                    }
     	            
-    	            _subTable.append(
-        	            '<tr>'
-        	                +'<td>'+_column+'</td>'
-                            +'<td>'+_value+'</td>'
-                        +'</tr>'
-        	        );
+    	            
+    	            if ((_.isObject(this.column[index])&&this.column[index].subVisible==false)||_value==""){//sub detail visible
+    	                
+    	            } else {
+        	            _subTable.append(
+            	            '<tr>'
+            	                +'<td>'+_column+'</td>'
+                                +'<td>'+_value+'</td>'
+                            +'</tr>'
+            	        );
+    	            }
     	        }
     	        
     	    }
@@ -448,7 +454,7 @@ define([
     	    }
     	    
     	    this.columns= _columns;
-    	    
+    	    this.options.collection.toJSON();
     	    //dataTable reander
     	    var _dataTable=$(GridHTML);
             $("#"+this.options.el).append(_dataTable);

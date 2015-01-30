@@ -24,11 +24,20 @@ var Schemas = function (schemaName) {
             name_commute: null,
             join_company: null,
             leave_company: null,
+            position:null,
             privilege: null,
             admin : null,
             new_password:null,
             ip_pc : null,
-            ip_office : null
+            ip_office : null,
+            email : null,
+            phone : null,
+            phone_office : null,
+            approval_id : null,
+            emergency_phone : null,
+            birthday : null,
+            wedding_day : null,
+            memo: null
         },
         auth:{
         },

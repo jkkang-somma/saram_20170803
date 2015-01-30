@@ -113,7 +113,7 @@ router.route('/')
         });
     });
 });
-//사용자 등록
+//사용자 password 변경
 router.route('/config/:id')
 .put(function(req, res){
     var user = new User(req.body,true);

@@ -25,12 +25,24 @@ define({
         NAME_COMMUTE:"식별 이름",
         JOIN_COMPANY:"입사일",
         LEAVE_COMPANY:"퇴사일",
-        PRIVILEGE:"조회 권한",
+        PRIVILEGE:"결제 권한",
         ADMIN:"관리 권한",
         PASSWORD:"비밀번호",
         NEW_PASSWORD:"New 비밀번호",
-        RE_NEW_PASSWORD:"확인 New 비밀번호"
+        RE_NEW_PASSWORD:"확인 New 비밀번호",
+        POSITION:"직급",
+        EMAIL:"이메일",
+        PHONE:"휴대전화번호",
+        APPROVAL_NAME:"결제자",
+        IP:"IP",
+        OFFICE_IP:"사무실 IP",
+        PHONE_OFFICE:"사무실 전화번호",
+        BIRTHDAY:"생일",
+        WEDDING_DAY:"결혼기념일",
+        EMERGENCY_PHONE:"비상연락망",
+        MEMO:"메모"
     },
+    
     GRID:{
         MSG:{
             NOT_SELECT_ROW:"선택된 테이터가 없습니다."
@@ -46,16 +58,25 @@ define({
     },
     
     CODE:{
-        PRIVILEGE_1:"전체",
-        PRIVILEGE_2:"부서",
-        PRIVILEGE_3:"개인",
+        PRIVILEGE_1:"결제가능",
+        PRIVILEGE_2:"결제불가",
+        PRIVILEGE_3:"결제불가",
         ADMIN_0:"사용자",
         ADMIN_1:"관리자",
         ALL:"전체",
         LEAVE_USER:"퇴사자",
-        WORKER:"근무자"
+        WORKER:"근무자",
+        POSITION:{
+            BOSS:"대표이사",
+            VICE_PRESIDENT:"부사장",
+            DIRECTOR:"부장",
+            TOP_SEAT:"수석",
+            MIDDLE_SEAT:"책임",
+            SEAT:"선임",
+            DEARI:"대리",
+            RESEARCHER:"연구원"
+        }
     },
-    
     //MSG
     SUCCESS:{
         USER:{
@@ -156,7 +177,19 @@ define({
     		PROCESSING : "처리중",
     		COMPLETE : "처리완료"
     	}
+    },
+    
+    TOOLTIP: {
+        USER:{
+            TYPE:"사용자 유형",
+            ADD:"사용자 등록",
+            EDIT:"사용자 수정",
+            REMOVE:"사용자 삭제"
+        }
+    },
+    
+    SUB_TITLE:{
+        DETAIL_INFO:"상세 정보",
+        REQUIRE_INFO:"주요 정보"
     }
-    
-    
 });
