@@ -40,6 +40,14 @@ body {
 .page-header h1 small{
     color: #2ABB9B;
 }
+
+.page-header h2{
+    color: #219076;
+}
+.page-header h2 small{
+    color: #2ABB9B;
+}
+
 .form-control{
     border-color:#2ABB9B;
 }
@@ -47,6 +55,17 @@ body {
     cursor: not-allowed;
     background-color: #DEEEE6;
 }
+
+.date .form-control[readonly]{
+    cursor: default;
+    background-color: #ffffff
+}
+
+.date .form-control[readonly][disabled]{
+    cursor: not-allowed;
+    background-color: #DEEEE6
+}
+
 .form-control:focus{
     border-color:#2ABB9B;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
@@ -754,4 +773,16 @@ border: 2px dotted #2ABB9B !important;
 .yes-panel .panel-body{
     padding-left: .5em;
     padding-right: .5em;
+}
+
+#commuteDataTable td.autoType{
+  background-color: rgba(250, 239, 130, 0.4);  
+}
+
+#commuteDataTable tr.absentce{
+  background-color: rgba(236, 131, 131 ,0.4);  
+}
+
+#commuteDataTable tr.absentce.selected{
+  background-color: rgba(236, 131, 131 ,1);  
 }

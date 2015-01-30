@@ -39,7 +39,7 @@ router.route('/')
 
 router.route('/:id')
 .get(function(req, res){	
-	console.log(111);
+	
 }).put(function(req, res){
 	
 	var session = sessionManager.get(req.cookies.saram);

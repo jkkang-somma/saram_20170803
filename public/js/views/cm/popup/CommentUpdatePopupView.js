@@ -50,6 +50,7 @@ define([
 				{
 					id: "commentUpdatePopupInTime", 
 					label : "출근시간",
+					label2 : "수정 요청 시간",
 					beforeTime:  this.selectData.before_in_time,
 					checkId : "commentUpdatePopupInTimeCheck",
 				}
@@ -59,6 +60,7 @@ define([
 				{
 					id: "commentUpdatePopupOutTime", 
 					label : "퇴근시간",
+					label2 : "수정 요청 시간",
 					beforeTime:  this.selectData.before_out_time,
 					checkId : "commentUpdatePopupOutTimeCheck",
 				}

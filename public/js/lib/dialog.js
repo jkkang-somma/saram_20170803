@@ -191,6 +191,8 @@ define([
                 }]
             }
         }
+        
+        
         BootstrapDialog.show({
             title: i18nCommon.DIALOG.TITLE.PRIMARY,
             message:config.msg,
@@ -220,12 +222,52 @@ define([
         }); 
     };
     
+    var loading=function(config){//질의형 팝업
+        BootstrapDialog.show({
+            title: "Loading",
+            type: BootstrapDialog.TYPE_PRIMARY,
+            closable: false, 
+            message : $("<div class='dialog-loding'></div>"),
+                        
+            onshown : function(dialogRef){
+                Animation.animate('.dialog-loding',Animation.FADE_IN);
+                
+                config.action().done(function(e){
+                    var res=_responseSchema.getDefault(e);
+                    Animation.animate('.dialog-loding',Animation.FADE_OUT);
+                    if (!_.isNull(res.msg)){
+                        dialogRef.getModalBody().html(res.msg); 
+                    }
+                    
+                    if ((!_.isUndefined(config.actionCallBack))&&_.isFunction(config.actionCallBack)){
+                        //validation 체크, 콜백 함수가 정의 되어있다면 해당 함수 호출
+                        var callbackFn=config.actionCallBack;
+                        callbackFn(res);
+                    }
+                    dialogRef.close();
+                }).fail(function(e){//에러 처리.
+                    var response=_responseSchema.getDefault(e);
+                    if ((!_.isUndefined(config.errorCallBack))&&_.isFunction(config.errorCallBack)){
+                        //validation 체크, 콜백 함수가 정의 되어있다면 해당 함수 호출
+                        var callbackFn=config.errorCallBack;
+                        callbackFn(response);
+                    }
+                    dialogRef.close();
+                    error(response.msg);
+                });
+            } 
+               
+        });
+    };
+     
+    
     return {
         info:info,
         error:error,
         show:show,
         warning:warning,
         confirm:confirm,
+        loading:loading,
         CssClass:CssClass
     }
 });

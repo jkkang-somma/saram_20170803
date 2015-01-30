@@ -98,8 +98,28 @@ ReportCommuteView
 				return next();
 				LOG.debug("next");
 			} else {//권한 없을 때
-				LOG.debug("back");
-				window.history.back();
+				var isSubTag= false;
+				for (var index in _urlArr){
+					var subIndex=_nextURL.indexOf(_urlArr[index]);
+					if (subIndex> -1){
+						if (!_.isUndefined(subMenu[index].subTag)){
+							var configURL=_urlArr[index]+subMenu[index].subTag;
+							var configURLTokenArr=configURL.split("/");
+							var nextURLTokenArr=_nextURL.split("/");
+			 
+							if (configURLTokenArr.length==nextURLTokenArr.length){
+								isSubTag=true;
+							}
+						};
+					}
+				}
+			 
+				if (isSubTag){
+					return next();
+				} else {
+					LOG.debug("back");
+					window.history.back();
+				}
 			}
 		},
 		

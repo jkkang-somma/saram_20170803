@@ -1,6 +1,9 @@
 <div class="container">
-    <div class="page-header">
+    <div class="page-header hidden-xs">
         <h1>근태관리 <small id="smallTitleTxt">근태결재관리</small></h1>
+    </div>
+    <div class="page-header visible-xs">
+        <h2>근태관리 <small id="smallTitleTxt">근태결재관리</small></h2>
     </div>
     <div id="dataContent">
         <!--<div id="filterContainer">-->
@@ -11,7 +14,7 @@
                             <span class="input-group-addon">
                                 from
                             </span>
-                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="beforeDate"/>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="beforeDate" readonly/>
                             <span class="input-group-addon datepickerbutton">
                                   <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -24,7 +27,7 @@
                             <span class="input-group-addon">
                                 to
                             </span>
-                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="afterDate"/>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="afterDate" readonly/>
                             <span class="input-group-addon datepickerbutton">
                                   <span class="glyphicon glyphicon-calendar"></span>
                             </span>

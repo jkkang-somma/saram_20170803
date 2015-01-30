@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `members_tbl` (
   `emergency_phone` VARCHAR(20) NULL COMMENT '비상연락망',
   `birthday` VARCHAR(15) NULL COMMENT '생일',
   `wedding_day` VARCHAR(15) NULL COMMENT '결혼기념일',
+  `memo` TEXT(1000) NULL COMMENT '메모',
   PRIMARY KEY (`id`),
   INDEX `fk_members_tbl_dept_code_tbl1_idx` (`dept_code` ASC),
   CONSTRAINT `fk_members_tbl_dept_code_tbl1`
@@ -161,7 +162,7 @@ VALUES
   ('140801','채영권','7300','채영권','2014-08-01','3','0','yk0801@yescnc.co.kr','선임','010-3471-4978','070901'),
   ('140901','김동한','7100','김동한','2014-09-11','3','0','dhkim@yescnc.co.kr','선임','010-9097-4536','060601'),
   ('141001','이창호','7100','이창호','2014-10-13','3','0','lch0622@yescnc.co.kr','연구원','010-4106-9357','060601'),
-  ('1501001','신현규','5100','신현규','2015-01-01','3','0','shinhk@yescnc.co.kr','책임','010-9588-4396','110201'),
+  ('150101','신현규','5100','신현규','2015-01-01','3','0','shinhk@yescnc.co.kr','책임','010-9588-4396','110201'),
   ('150102','장석규','5100','장석규','2015-01-01','3','0','sgjang@yescnc.co.kr','책임','010-2822-3422','110201'),
   ('150103','한보선','5100','한보선','2015-01-01','3','0','hanbs@yescnc.co.kr','책임','010-2951-3801','110201'),
   ('150104','구선모','7300','구선모','2015-01-01','3','0','smgu@yescnc.co.kr','선임','010-3205-7599','070901'),
@@ -201,7 +202,9 @@ insert into work_type_code_tbl values
   ('30', '휴일'),
   ('31', '종일휴가'),
   ('40', '휴일근무_미결'),
-  ('41', '휴일근무');
+  ('41', '휴일근무'),
+  ('50', '출근기록_없음'),
+  ('51', '퇴근기록_없음');
   
 CREATE TABLE IF NOT EXISTS `office_code_tbl` (
   `code` VARCHAR(10) NOT NULL COMMENT '관리코드',
@@ -219,6 +222,7 @@ INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('V05', '공�
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('V06', '특별휴가', 0.0);
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W01', '외근', 0.0);
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W02', '출장', 0.0);
+INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('W03', '장기외근', 0.0);
 INSERT INTO `office_code_tbl` (`code`, `name`, `day_count`) VALUES ('B01', '휴일근무', 0.0);
 
 CREATE TABLE IF NOT EXISTS `overtime_code_tbl` (

@@ -247,7 +247,7 @@ define([
         resultModel.set({state : _approvalCollection.models[0].get("state")});
         resultModel.set({decide_date : new Date()});
         
-        console.log(resultModel);
+        // console.log(resultModel);
         dfd.resolve(resultModel.attributes);
       }, function(){
         dfd.reject();

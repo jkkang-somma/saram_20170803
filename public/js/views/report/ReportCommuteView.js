@@ -73,19 +73,20 @@ define([
             return this;
      	},
      	onClickCreateExcelBtn: function() {
-     		var url =   "/report/commuteYearReport?year=" + this.getSearchForm().year;
+     		var url =   "/report/commuteYearReport?year=" + this.getSearchForm().year + "&isInLeaveWorker=" + this.getSearchForm().isInLeaveWorker;
      		$.fileDownload(url, {
      		    successCallback: function (url) {
      		    },
      		    failCallback: function (html, url) {
      		    	Dialog.error("보고서 생성 실패");
      		    }
-     		});     		
-     		
-     		
+     		});
      	},
      	getSearchForm: function() {	// 검색 조건  
-     		return {year: this.$el.find("#selectYear").val()};
+     		return {
+     				year: this.$el.find("#selectYear").val(),
+     				isInLeaveWorker: ( this.$el.find("#chkleaveWorker").is(":checked")? true : false )
+     			};
      	}
     });
     

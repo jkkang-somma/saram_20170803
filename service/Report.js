@@ -28,9 +28,11 @@ var Report = function() {
 			queryResults.push( ReportDao.selectHolidayWorkPayReport(data.year) );
 	    	
 	    	Promise.all(queryResults).then(function(result){
-				commuteYearExcelCreater.createExcel(data.year, result).then(function(excelResult) {
+				commuteYearExcelCreater.createExcel(data, result).then(function(excelResult) {
 					resolve( excelResult);
-				});
+				}).catch(function(err) {
+		        	reject(err);
+		        })
 	        }).catch(function(err) {
 	        	reject(err);
 	        })
