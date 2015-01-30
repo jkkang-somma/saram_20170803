@@ -187,9 +187,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     var userId = userModel.attributes.id;
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
-                    
-                    if( //userDepartment.slice(0,4) === "품질검증" ||
-                        userDepartment == "무소속" || userDepartment==="임원"){
+                    if( userDepartment == "무소속" || userDepartment==="임원"){
                         
                         
                     }else{
