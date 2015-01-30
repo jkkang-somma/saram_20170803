@@ -9,6 +9,7 @@ define([
   'schemas',
   'dialog',
   'cmoment',
+  'data/code',
   'models/sm/SessionModel',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
@@ -17,7 +18,12 @@ define([
   'views/rm/AddNewReportView',
   'views/rm/ApprovalReportView',
   'views/rm/DetailReportView',
-], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, SessionModel, commuteListTmp, ApprovalCollection, VacationCollection, HolidayCollection, AddNewReportView, ApprovalReportView, DetailReportView){
+], function($, _, Backbone, Util, animator, BaseView, Grid, Schemas, Dialog, Moment, Code,
+  SessionModel,
+  commuteListTmp,
+  ApprovalCollection, VacationCollection, HolidayCollection,
+  AddNewReportView, ApprovalReportView, DetailReportView
+){
    var _reportListView=0;
    var reportListView = BaseView.extend({
     el:$(".main-container"),
@@ -119,11 +125,17 @@ define([
       var formData = this.getSearchData(val, managerMode);
       var view = this;
       this.option.column=[
-         { "title" : "신청일자", "render": function(data, type, row){
+         { "title" : "신청일자",
+          "render": function(data, type, row){
             var dataVal = view.getDateFormat(row.submit_date);
             return dataVal;
-         }},
-        // { data : "submit_id", "title" : "ID" },
+          }
+         },
+         { data : "submit_dept_code", "title" : "부서",
+           render : function(data,type,row){
+             return Code.getCodeName(Code.DEPARTMENT, data);
+           }
+         },
          { data : "submit_name", "title" : "이름"},
          { data : "office_code_name", "title" : "구분"},
          { "title" : "근태일수", "render": function(data, type, row){
@@ -307,28 +319,37 @@ define([
     },
     
     getDateFormat : function(dateData){
-      var d = new Date(dateData);
-      var sDateFormat = "";
-      if (dateData == null){
-        sDateFormat = "-";
-      }else {
-        sDateFormat
-        = d.getFullYear() + "-" + this.getzFormat(d.getMonth() + 1, 2) + "-" + this.getzFormat(d.getDate(), 2)
-         + " " + this.getzFormat(d.getHours(), 2) + ":" + this.getzFormat(d.getMinutes(), 2) + ":" + this.getzFormat(d.getSeconds(), 2);
-      }
-      return sDateFormat;
-    },
-    
-    getzFormat: function(s, len){
-      var sZero = "";
-      s = s + "";
-      if(s.length < len){
-        for(var i = 0; i < (len-s.length); i++){
-          sZero += "0";
+      
+      if (!_.isNull(dateData) ) {
+        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:SS");
+        var tArr = time.split(" ");
+        if (tArr.length == 2) {
+         return tArr[0] + "</br>" + tArr[1]; 
         }
       }
-      return sZero + s;
+      return "-";
+      // var d = new Date(dateData);
+      // var sDateFormat = "";
+      // if (dateData == null){
+      //   sDateFormat = "-";
+      // }else {
+      //   sDateFormat
+      //   = d.getFullYear() + "-" + this.getzFormat(d.getMonth() + 1, 2) + "-" + this.getzFormat(d.getDate(), 2)
+      //   + " " + this.getzFormat(d.getHours(), 2) + ":" + this.getzFormat(d.getMinutes(), 2) + ":" + this.getzFormat(d.getSeconds(), 2);
+      // }
+      // return sDateFormat;
     },
+    
+    // getzFormat: function(s, len){
+    //   var sZero = "";
+    //   s = s + "";
+    //   if(s.length < len){
+    //     for(var i = 0; i < (len-s.length); i++){
+    //       sZero += "0";
+    //     }
+    //   }
+    //   return sZero + s;
+    // },
     
     getSearchData : function(val, managerMode){
       var data = {};

@@ -169,6 +169,7 @@
         	select 
 				app.doc_num, app.submit_id
 				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.submit_id) submit_name 
+				, (SELECT mem.dept_code FROM members_tbl mem WHERE mem.id = app.submit_id) submit_dept_code
 				, app.manager_id 
 				, (SELECT mem.name FROM members_tbl mem WHERE mem.id = app.manager_id) manager_name
 				, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
