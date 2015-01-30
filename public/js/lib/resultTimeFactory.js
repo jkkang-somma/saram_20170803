@@ -57,7 +57,7 @@ define([
         inTimeChange:       0,
         outnTimeChange:     0,
         checkInOffice:      false,
-
+        isSuwon: false,
         init : function(userId, userName, userDepartment){
             this.id = userId;
             this.name = userName;
@@ -85,6 +85,12 @@ define([
             this.inTimeChange = 0;
             this.outTimeChange = 0;
             this.checkInOffice = false;
+            
+            if(this.department.slice(0,4) === "품질검증"){
+                this.isSuwon = true;
+            }else{
+                this.isSuwon = false;    
+            }
         },
         
         initToday : function(todayStr, holidayData){
@@ -138,21 +144,32 @@ define([
             this.outOfficeEndTime = model.get("out_office_end_time");
             this.inTimeChange = model.get("in_time_change");
             this.outTimeChange = model.get("out_time_change");
-            
+            if(this.department.slice(0,4) === "품질검증"){
+                this.isSuwon = true;
+            }else{
+                this.isSuwon = false;    
+            }
         },
         
         setStandardInTime : function(yesterdayOutTime){
             if(!_.isNull(this.standardInTime) && !_.isNull(yesterdayOutTime)){
                 if(yesterdayOutTime.format(DATEFORMAT) == this.date){
+                    
                     var outTimeHour = yesterdayOutTime.hour();
                     if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
                     else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
                     else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
                 }
-                // else{
-                    
-                //         this.standardInTime.hour(9).minute(0).second(0);
-                // }
+            }
+        },
+        
+        setInOffice : function(todayInOffice){
+            if(todayInOffice.length > 0){
+                this.checkInOffice = true;
+                this.workType = WORKTYPE.HOLIDAY;
+            }else{
+                this.checkInOffice = false;
+                this.workType = WORKTYPE.HOLIDAY;
             }
         },
         
@@ -168,7 +185,7 @@ define([
                         this.vacationCode = code;
                         switch(code){
                             case "V02": // 오전반차
-                                this.standardOutTime.hour(13).minute(20).second(0);
+                                this.standardInTime.hour(13).minute(20).second(0);
                                 break;
                             case "V03": // 오후반차
                                 this.standardOutTime.hour(12).minute(20).second(0);
@@ -189,16 +206,13 @@ define([
                                 if(this.outOfficeCode == "W01"){
                                     var startTime = Moment(model.get("start_time"), "HH:mm");
                                     var endTime = Moment(model.get("end_time"), "HH:mm");
-                                    var compTime1 = Moment("09:00", "HH:mm");
-                                    var compTime2 = Moment("18:00", "HH:mm");
-                                    if(startTime.isBefore(compTime1) || startTime.isSame(compTime1)){
+                                    var inTimeLimit = Moment("09:00", "HH:mm");
+                                    var outTimeLimit = Moment("18:00", "HH:mm");
+                                    if(startTime.isBefore(inTimeLimit) || startTime.isSame(inTimeLimit))
                                         this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
-                                    }
                                     
-                                    if(endTime.isAfter(compTime2) || endTime.isSame(compTime2)){
+                                    if(endTime.isAfter(outTimeLimit) || endTime.isSame(outTimeLimit))
                                         this.standardOutTime.hour(startTime.hour()).minute(startTime.minute()).second(startTime.second());
-                                    }
-                                    
                                 }
                                 break;
                             case "W02": // 출장
@@ -206,17 +220,6 @@ define([
                         }
                     }
                 }
-            }else{
-                this.workType = WORKTYPE.NORMAL;
-            }
-        },
-        setInOffice : function(todayInOffice){
-            if(todayInOffice.length > 0){
-                this.checkInOffice = true;
-                this.workType = WORKTYPE.HOLIDAY;
-            }else{
-                this.checkInOffice = false;
-                this.workType = WORKTYPE.HOLIDAY;
             }
         },
         
@@ -276,63 +279,7 @@ define([
                 if(this.latestTime.isBefore(destTime)) this.latestTime = destTime;
         },
         
-        setLateTime : function(){
-            if(!_.isNull(this.inTime) && !_.isNull(this.standardInTime)){
-                if(this.workType != WORKTYPE.VACATION && this.outOfficeCode != "W02"){
-                    this.lateTime = this.inTime.diff(this.standardInTime,"minute");
-                    this.workType = WORKTYPE.NORMAL;
-                    if(this.lateTime > 0 ){
-                        this.workType = WORKTYPE.LATE;  // 지각
-                    }else{
-                        this.lateTime = 0;
-                    }
-                }
-            }
-        },
-        
-        setHolidayWorkTimeCode : function(){
-            if(!(_.isNull(this.outTime)) && !(_.isNull(this.inTime))){
-                if(this.workType == WORKTYPE.HOLIDAY){
-                    
-                    this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
-                    
-                    if(this.checkInOffice){
-                        this.workType = WORKTYPE.HOLIDAYWORK;
-                        if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
-                        else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
-                        else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
-                    }else{
-                        this.workType = WORKTYPE._HOLIDAYWORK;
-                    }
-                }
-            }
-        },
-        
-        setOverTimeCode : function(){
-            if(!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))){
-                if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.VACATION){
-                    this.lateTimeOver = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
-                                                            
-                    if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
-                        this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateTimeOver; // 초과근무 시간 (지각시간 제외)
-                        if(this.vacationCode === null || this.vacationCode === "V02"){  //
-                            if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
-                            else if(this.overTime >= 240)            this.overtimeCode =  "2015_AB";
-                            else if(this.overTime >= 120)            this.overtimeCode =  "2015_AA";
-                            else if(this.overTime <= 0)              this.overTime = 0;
-                        }
-                    }else{ // 조퇴 판정
-                        if (this.workType == WORKTYPE.LATE)
-                            this.workType = WORKTYPE.EARLY_LATE;
-                        else
-                            this.workType = WORKTYPE.EARLY;
-                    }
-                }
-            }
-        },
-
-        getResult : function(){
-            // 출퇴근시간 판단
+        setTimeType : function(){
             if(!this.inTime){ // 출근기록이 없을경우
                 if(this.earliestTime){
                     this.inTime = this.earliestTime;   // 저장된 가장 이른 출입시간을 출근시간으로 표시
@@ -353,15 +300,24 @@ define([
             }else{
                 this.outTimeType = 1;              
             }
+        },
+        
+        getResult : function(){
+            // 출퇴근시간 판단
+            this.setTimeType();
             
-            
-            if(this.department.slice(0,4) === "품질검증"){
-                this.standardInTime = this.inTime;
-                this.standardOutTime = _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).add(9,"hours");
+            if(this.isSuwon){  // 수원일 경우 로직
+                if(!_.isNull(this.intime) && !_.isNull(this.outTime)){
+                    this.standardInTime = Moment().hour(18).minute(0).second(0);
+                    
+                    if(this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)){
+                        this.standardInTime = this.inTime;    
+                    }
+                    
+                    this.standardOutTime = _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).add(9,"hours");
+                }
             }
 
-            
-            
             if(!this.inTime && !this.outTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
                 this.workType = WORKTYPE.ABSENTCE;
             }else if(!this.inTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
@@ -403,6 +359,65 @@ define([
                 in_time_change : this.inTimeChange,
                 out_time_change : this.outTimeChange
             };
+        },
+        
+        
+        setLateTime : function(){
+            if(!_.isNull(this.inTime) && !_.isNull(this.standardInTime)){
+                if(this.workType != WORKTYPE.VACATION && this.outOfficeCode != "W02"){
+                    this.lateTime = this.inTime.diff(this.standardInTime,"minute");
+                    this.workType = WORKTYPE.NORMAL;
+                    if(this.lateTime > 0 ){
+                        this.workType = WORKTYPE.LATE;  // 지각
+                    }else{
+                        this.lateTime = 0;
+                    }
+                }
+            }
+        },
+        
+        setHolidayWorkTimeCode : function(){
+            if(!(_.isNull(this.outTime)) && !(_.isNull(this.inTime))){
+                if(this.workType == WORKTYPE.HOLIDAY){
+                    this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
+                    if(this.checkInOffice){
+                        if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
+                        else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
+                        else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
+                    }
+                    this.workType = WORKTYPE.HOLIDAYWORK;
+                }
+            }
+        },
+        
+        setOverTimeCode : function(){
+            if(!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))){
+                if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.VACATION){
+                    this.lateOverTime = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
+                                                            
+                    if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
+                        this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateOverTime; // 초과근무 시간 (지각시간 제외)
+                        if(this.vacationCode === null || this.vacationCode === "V02"){  //
+                            if(this.isSuwon){ // 수원 사업장인 경우
+                                if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
+                                else if(this.overTime >= 240)            this.overtimeCode =  "2015_AB";
+                                else if(this.overTime >= 180)            this.overtimeCode =  "2015_AA";
+                                else if(this.overTime <= 0)              this.overTime = 0;
+                            }else{  // 본사인 경우
+                                if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
+                                else if(this.overTime >= 240)            this.overtimeCode =  "2015_AB";
+                                else if(this.overTime >= 120)            this.overtimeCode =  "2015_AA";
+                                else if(this.overTime <= 0)              this.overTime = 0;
+                            }
+                        }
+                    }else{ // 조퇴 판정
+                        if (this.workType == WORKTYPE.LATE)
+                            this.workType = WORKTYPE.EARLY_LATE;
+                        else
+                            this.workType = WORKTYPE.EARLY;
+                    }
+                }
+            }
         },
         
         /***************************************************
