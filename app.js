@@ -75,6 +75,13 @@ var authError=function(next){
 
 app.use(logger('dev'));
 
+// 근태서버 다운
+// app.use(function(req,res,next){
+//     res.send( res.render("error"));
+// });
+
+
+
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){
     if(req.originalUrl == "/session"||req.originalUrl == "/"){
