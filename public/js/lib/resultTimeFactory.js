@@ -307,7 +307,7 @@ define([
             this.setTimeType();
             
             if(this.isSuwon){  // 수원일 경우 로직
-                if(!_.isNull(this.intime) && !_.isNull(this.outTime)){
+                if(!_.isNull(this.inTime) && !_.isNull(this.outTime)){
                     this.standardInTime = Moment().hour(18).minute(0).second(0);
                     
                     if(this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)){
