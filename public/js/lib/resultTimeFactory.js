@@ -58,6 +58,8 @@ define([
         outnTimeChange:     0,
         checkInOffice:      false,
         isSuwon: false,
+        checkLate : true,
+        checkEarly : true,
         init : function(userId, userName, userDepartment){
             this.id = userId;
             this.name = userName;
@@ -85,7 +87,8 @@ define([
             this.inTimeChange = 0;
             this.outTimeChange = 0;
             this.checkInOffice = false;
-            
+            this.checkLate = true;
+            this.checkEarly =true;
             if(this.department.slice(0,4) === "품질검증"){
                 this.isSuwon = true;
             }else{
@@ -118,6 +121,8 @@ define([
             this.inTimeChange = 0;
             this.outTimeChange = 0;
             this.checkInOffice = false;
+            this.checkLate = true;
+            this.checkEarly =true;
         },
         
         initByModel : function(model){
@@ -144,6 +149,8 @@ define([
             this.outOfficeEndTime = model.get("out_office_end_time");
             this.inTimeChange = model.get("in_time_change");
             this.outTimeChange = model.get("out_time_change");
+            this.checkLate = true;
+            this.checkEarly =true;
             if(this.department.slice(0,4) === "품질검증"){
                 this.isSuwon = true;
             }else{
@@ -164,12 +171,14 @@ define([
         },
         
         setInOffice : function(todayInOffice){
-            if(todayInOffice.length > 0){
-                this.checkInOffice = true;
-                this.workType = WORKTYPE.HOLIDAY;
-            }else{
-                this.checkInOffice = false;
-                this.workType = WORKTYPE.HOLIDAY;
+            if(this.workType == WORKTYPE.HOLIDAY || this.workType == WORKTYPE._HOLIDAYWORK){
+                if(todayInOffice.length > 0){
+                    this.checkInOffice = true;
+                    this.workType = WORKTYPE.HOLIDAY;
+                }else{
+                    this.checkInOffice = false;
+                    this.workType = WORKTYPE.HOLIDAY;
+                }
             }
         },
         
@@ -204,15 +213,17 @@ define([
                         switch(code){
                             case "W01": // 외근
                             case "W03": // 종일외근
+                            
                                 var startTime = Moment(model.get("start_time"), "HH:mm");
                                 var endTime = Moment(model.get("end_time"), "HH:mm");
                                 var inTimeLimit = Moment("09:00", "HH:mm");
                                 var outTimeLimit = Moment("18:00", "HH:mm");
                                 if(startTime.isBefore(inTimeLimit) || startTime.isSame(inTimeLimit))
-                                    this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
-                                
+                                    // this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
+                                    this.checkLate = false;
                                 if(endTime.isAfter(outTimeLimit) || endTime.isSame(outTimeLimit))
-                                    this.standardOutTime.hour(startTime.hour()).minute(startTime.minute()).second(startTime.second());
+                                    // this.standardOutTime.hour(startTime.hour()).minute(startTime.minute()).second(startTime.second());
+                                    this.checkEarly = false;
                                 break;
                             case "W02": // 출장
                                 break;
@@ -365,12 +376,14 @@ define([
         setLateTime : function(){
             if(!_.isNull(this.inTime) && !_.isNull(this.standardInTime)){
                 if(this.workType != WORKTYPE.VACATION && this.outOfficeCode != "W02"){
-                    this.lateTime = this.inTime.diff(this.standardInTime,"minute");
-                    this.workType = WORKTYPE.NORMAL;
-                    if(this.lateTime > 0 ){
-                        this.workType = WORKTYPE.LATE;  // 지각
-                    }else{
-                        this.lateTime = 0;
+                    if(this.checkLate){
+                        this.lateTime = this.inTime.diff(this.standardInTime,"minute");
+                        this.workType = WORKTYPE.NORMAL;
+                        if(this.lateTime > 0 ){
+                            this.workType = WORKTYPE.LATE;  // 지각
+                        }else{
+                            this.lateTime = 0;
+                        }
                     }
                 }
             }
@@ -384,8 +397,11 @@ define([
                         if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
                         else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
                         else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
+                        
+                        this.workType = WORKTYPE.HOLIDAYWORK;
+                    }else{
+                        this.workType = WORKTYPE._HOLIDAYWORK;
                     }
-                    this.workType = WORKTYPE.HOLIDAYWORK;
                 }
             }
         },
@@ -401,7 +417,7 @@ define([
                             if(this.isSuwon){ // 수원 사업장인 경우
                                 if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
                                 else if(this.overTime >= 240)            this.overtimeCode =  "2015_AB";
-                                else if(this.overTime >= 180)            this.overtimeCode =  "2015_AA";
+                                else if(this.overTime >= 150)            this.overtimeCode =  "2015_AA";
                                 else if(this.overTime <= 0)              this.overTime = 0;
                             }else{  // 본사인 경우
                                 if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
@@ -411,10 +427,12 @@ define([
                             }
                         }
                     }else{ // 조퇴 판정
-                        if (this.workType == WORKTYPE.LATE)
-                            this.workType = WORKTYPE.EARLY_LATE;
-                        else
-                            this.workType = WORKTYPE.EARLY;
+                        if(this.checkEarly){
+                            if (this.workType == WORKTYPE.LATE)
+                                this.workType = WORKTYPE.EARLY_LATE;
+                            else
+                                this.workType = WORKTYPE.EARLY;
+                        }
                     }
                 }
             }
