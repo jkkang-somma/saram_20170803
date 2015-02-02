@@ -35,11 +35,10 @@ define([
 		},
      	onUpdateVacationInfo : function(opt) {	// 연차 수정
      		var data = Util.getFormJSON( $(this.el).find("form") );
-     		var reg = new RegExp('^\\d+$');
      		
-     		if (!reg.test(data.total_day)) {
+     		if ( !(data.total_day - parseFloat( data.total_day ) >= 0) ) {
      			alert("숫자만 입력 가능합니다.");
-     			return;
+     			return;     			
      		}
      		
      		var vacationModel = new VacationModel();

@@ -41,16 +41,36 @@ define([
 	
 	// 출퇴근 시간 셀 생성
 	function _createHistoryCell(cellType, cellData, change) {
+		var type;
+		var result = $("<div></div>");
+		
+		var divTag = $("<div></div>");
+		
+		if(cellType=="in_time")
+			type = cellData.in_time_type;
+		else
+			type = cellData.out_time_type;
+		
+		if(type == 2)
+			divTag.addClass("autoType");
+		
 		if (cellData[change]){
 			var data = JSON.stringify({
 				change_column : cellType,
 				idx : cellData.idx
 			});
-			var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + _getTimeCell( cellData[cellType] ) + "</a>";
-			return aHrefStr;
+			
+			var aHrefStr = $("<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'></a>");
+			aHrefStr.html(_getTimeCell( cellData[cellType] ));
+			
+			divTag.append(aHrefStr);
+			
  		} else {
- 			return _getTimeCell( cellData[cellType] );
+ 			divTag.html(_getTimeCell( cellData[cellType] ));
  		}
+ 		result.append(divTag);
+ 		
+ 		return result.html();
 		 
 	}
 	
@@ -62,7 +82,7 @@ define([
 				return tArr[0] + "</br>" + tArr[1]; 
 			}
 		}
-		return null;
+		return "";
 	}
 	
 	function _getTimeStr(min){
@@ -96,6 +116,25 @@ define([
 		 var tp = $(tpl);
 		 tp.find(".btn").attr("data", data);
 		 return tp.html();
+	}
+	
+	function _getBrString(result){
+		if(!(_.isNull(result) || _.isUndefined(result) || typeof result != "string")){
+			var resultArr = result.split(/(,|_| )/);
+			if(resultArr.length > 1){
+				result = "";
+				for(var i =0; i < resultArr.length; i++){
+					if(i % 2 == 1)
+						continue;
+					if(i == resultArr.length-1){
+						result += resultArr[i];
+					}else{
+						result += resultArr[i] + "<br>";
+					}
+				}
+			}
+		}
+		return result;
 	}
 	
 	function _getCommuteUpdateBtn(that) {
@@ -168,24 +207,7 @@ define([
      	                   	{ data : "name", 			"title" : "이름" },
      	                   	{ data : "work_type", 	"title" : "근무</br>타입",
      	                   		render : function(data, type, full, meta){
-     	                   			var result = Code.getCodeName(Code.WORKTYPE, data);
-     	                   			var resultArr = result.split(/(,|_| )/);
-     	                   			if(resultArr.length > 1){
-     	                   				result = "";
-     	                   				for(var i =0; i < resultArr.length; i++){
-     	                   					if(i % 2 == 1)
-     	                   						continue;
-     	                   					
-     	                   					if(i == resultArr.length-1){
-     	                   						result += resultArr[i];
-     	                   					}else{
-     	                   						result += resultArr[i] + "<br>";
-     	                   					}
-     	                   				}
-     	                   			}
- 	                   				return result;
-     	                   			
-     	                   			
+     	                   			return _getBrString(Code.getCodeName(Code.WORKTYPE, data));
      	                   		}
      	                   	},
      	                   	{data: "vacation_code", title: "휴가",
@@ -215,7 +237,7 @@ define([
      	                    }, 
      	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
      	                   		render : function(data, type, full, meta){
-     	                   			return Code.getCodeName(Code.OVERTIME, data);
+     	                   			return _getBrString(Code.getCodeName(Code.OVERTIME, data));
      	                   		}
      	                   	},
      	                    { data : "comment_count", "title" : "비고",
@@ -227,21 +249,12 @@ define([
      	                            }
      	                   		}
      	                     },
-     	                     {"title": "출근타입", "data": "in_time_type", visible: false},
-                    		 {"title": "퇴근타입", "data": "out_time_type" , visible: false},
              	        ],
              	    rowCallback: function(row, data){
-             	    	if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
-             	    		$(row).css("background-color", "rgb(236, 131, 131)");
-             	    	}
+             	    	if(data.work_type == 21 || data.work_type == 22) // 결근 처리
+             	    		$(row).addClass("absentce");
              	    	
-             	    	// if(data.in_time_type != "1"){
-             	    	// 	$('td:eq(5)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	// }
-             	    	
-             	    	// if(data.out_time_type != "1"){
-             	    	// 	$('td:eq(6)', row).css("background-color", "rgb(247, 198, 142)");
-             	    	// }
+             	    	$(row).find(".autoType").parent("td").addClass("autoType");
              	    },
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
@@ -273,7 +286,7 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 조회"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
@@ -307,13 +320,11 @@ define([
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    this.progressbar = new ProgressbarView();
     	    
     	    
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
-    	    _layOut.append(this.progressbar.render());
 
     	    $(this.el).html(_layOut);
     	    
@@ -335,8 +346,6 @@ define([
 		        format: "YYYY-MM-DD",
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
-            
-            this.progressbar.disabledProgressbar(true);
             
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -406,7 +415,6 @@ define([
             });
      	},
     	selectCommute: function() {
-    	    this.progressbar.disabledProgressbar(false);
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
@@ -421,16 +429,29 @@ define([
      		}
      		
             var _this = this;
-     		this.commuteCollection.fetch({ 
-     			data: data,
-	 			success: function(result) {
-	 				_this.grid.render();
-	 				_this.progressbar.disabledProgressbar(true);
-	 			},
-	 			error : function(result) {
-	 				alert("데이터 조회가 실패했습니다.");
-	 			}
-     		});     		
+            Dialog.loading({
+                action:function(){
+                    var dfd = new $.Deferred();
+                    _this.commuteCollection.fetch({ 
+		     			data: data,
+		     			success: function(){
+                            dfd.resolve();
+                        }, error: function(){
+                            dfd.reject();
+                        }
+		     		});
+		     		return dfd.promise();
+        	    },
+        	    
+                actionCallBack:function(res){//response schema
+                    _this.grid.render();
+                },
+                errorCallBack:function(response){
+                    Dialog.error("데이터 조회 실패! \n ("+ response.responseJSON.message +")");
+                },
+            });
+            
+     		  		
      		
     	}
 	});

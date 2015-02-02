@@ -30,7 +30,9 @@ var Report = function() {
 	    	Promise.all(queryResults).then(function(result){
 				commuteYearExcelCreater.createExcel(data.year, result).then(function(excelResult) {
 					resolve( excelResult);
-				});
+				}).catch(function(err) {
+		        	reject(err);
+		        })
 	        }).catch(function(err) {
 	        	reject(err);
 	        })

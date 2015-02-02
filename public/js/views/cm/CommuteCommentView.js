@@ -301,7 +301,6 @@ define([
      		
      		if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
      			data.id = this.searchParam.id;
-     			this.searchParam = null; // url 접속 - 최초 검색 후 초기화 
      		}
      		
      		if ( Util.isNull(data.startDate) ) {
@@ -325,6 +324,13 @@ define([
      			data: data,
 	 			success: function(result) {
 	 				_this.grid.render();
+	 				
+		     		if (Util.isNotNull(_this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+	 					_this.searchParam = null; // url 접속 - 최초 검색 후 초기화
+	 					
+	 					// URL 접속시 필터를 전체로 변경하기 위해 강제 크릭 
+		 				$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");	 					
+	 				}
 	 			},
 	 			error : function(result) {
 	 				alert("데이터 조회가 실패했습니다.");

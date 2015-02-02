@@ -5,10 +5,11 @@ define([
 	'util',
 	'cmoment',
 	'text!templates/default/datepicker.html',
+	'text!templates/inputForm/label.html',
 	'views/component/ProgressbarView'
 ], function(
 	$, _, Backbone, Util, Moment,
-	DatePickerHTML,
+	DatePickerHTML, LabelHTML,
 	ProgressbarView
 ) {
 	var ChangeHistoryPopupView = Backbone.View.extend({
@@ -29,7 +30,6 @@ define([
     	    			label : "시작일",
     	    			name : "startDate"
     	    		}
-    	    		
     	    	})
     	    );
     	    var _enddatePicker=$(_.template(DatePickerHTML)(
@@ -39,22 +39,24 @@ define([
     	    			label : "종료일",
     	    			name : "endDate"
     	    		}
-    	    		
     	    	})
     	    );
-
+    	    
+			
+			
             this.progressbar = new ProgressbarView();
+            var _label = $(_.template(LabelHTML)({label : "※ 종료일 다음날 6시 까지 출입 기록 필요<br> ex) 종료일이 2015-01-15 일 경우  <br> 2015-01-16 06:00 까지 출입기록 필요"}));
             
             $(this.el).append(_startdatePicker);
             $(this.el).append(_enddatePicker);
             $(this.el).append(this.progressbar.render());
+            $(this.el).append(_label);
             
             $(this.el).find("#cdStartDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD",
-		        
             });
             
             $(this.el).find("#cdEndDatePicker").datetimepicker({

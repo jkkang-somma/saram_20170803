@@ -40,6 +40,14 @@ body {
 .page-header h1 small{
     color: #2ABB9B;
 }
+
+.page-header h2{
+    color: #219076;
+}
+.page-header h2 small{
+    color: #2ABB9B;
+}
+
 .form-control{
     border-color:#2ABB9B;
 }
@@ -704,4 +712,16 @@ border: 2px dotted #2ABB9B !important;
   margin-left: -5px;
   border-top-color: #2ABB9B;
   border-width: 5px 5px 0;
+}
+
+#commuteDataTable td.autoType{
+  background-color: rgba(250, 239, 130, 0.4);  
+}
+
+#commuteDataTable tr.absentce{
+  background-color: rgba(236, 131, 131 ,0.4);  
+}
+
+#commuteDataTable tr.absentce.selected{
+  background-color: rgba(236, 131, 131 ,1);  
 }

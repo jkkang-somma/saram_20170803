@@ -17,7 +17,11 @@ define([
         ABSENTCE : "21",
         _ABSENTCE : "22",
         HOLIDAY : "30",
-        VACATION : "31"
+        VACATION : "31",
+        _HOLIDAYWORK : "40",
+        HOLIDAYWORK : "41",
+        NOTINTIME : "50",
+        NOTOUTTIME : "51"
     };
     
     var TIMEFORMAT = "HH:mm:SS";
@@ -185,10 +189,16 @@ define([
                                 if(this.outOfficeCode == "W01"){
                                     var startTime = Moment(model.get("start_time"), "HH:mm");
                                     var endTime = Moment(model.get("end_time"), "HH:mm");
-                                    var compTime = Moment("09:00", "HH:mm");
-                                    if(startTime.isBefore(compTime) || startTime.isSame(compTime)){
+                                    var compTime1 = Moment("09:00", "HH:mm");
+                                    var compTime2 = Moment("18:00", "HH:mm");
+                                    if(startTime.isBefore(compTime1) || startTime.isSame(compTime1)){
                                         this.standardInTime.hour(endTime.hour()).minute(endTime.minute()).second(endTime.second());
                                     }
+                                    
+                                    if(endTime.isAfter(compTime2) || endTime.isSame(compTime2)){
+                                        this.standardOutTime.hour(startTime.hour()).minute(startTime.minute()).second(startTime.second());
+                                    }
+                                    
                                 }
                                 break;
                             case "W02": // 출장
@@ -287,12 +297,12 @@ define([
                     this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
                     
                     if(this.checkInOffice){
-                        this.workType = "41";
+                        this.workType = WORKTYPE.HOLIDAYWORK;
                         if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
                         else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
                         else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
                     }else{
-                        this.workType = "40";
+                        this.workType = WORKTYPE._HOLIDAYWORK;
                     }
                 }
             }
@@ -344,23 +354,30 @@ define([
                 this.outTimeType = 1;              
             }
             
+            
             if(this.department.slice(0,4) === "품질검증"){
                 this.standardInTime = this.inTime;
                 this.standardOutTime = _.isNull(this.standardInTime) ? null : Moment(this.standardInTime).add(9,"hours");
             }
 
-            // 초과근무시간 판단 over_time
-            if (this.workType == WORKTYPE.HOLIDAY){ //휴일근무인 경우
-                this.setHolidayWorkTimeCode();
-            } else {
-                this.setLateTime();
-                if (this.outTime){
-                    this.setOverTimeCode();
-                }
-            }
+            
             
             if(!this.inTime && !this.outTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
                 this.workType = WORKTYPE.ABSENTCE;
+            }else if(!this.inTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
+                this.workType = WORKTYPE.NOTINTIME;
+            }else if(!this.outTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
+                this.workType = WORKTYPE.NOTOUTTIME;
+            }else{
+                // 초과근무시간 판단 over_time
+                if (this.workType == WORKTYPE.HOLIDAY){ //휴일근무인 경우
+                    this.setHolidayWorkTimeCode();
+                } else {
+                    this.setLateTime();
+                    if (this.outTime){
+                        this.setOverTimeCode();
+                    }
+                }    
             }
            
             return {
