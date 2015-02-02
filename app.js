@@ -8,6 +8,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 // var multer = require('multer');
 
+// var email=require("./node_modules/emailjs/email");
+// var emailServer=email.server.connect({
+//     user:"novles@yescnc.co.kr",
+//     password:"2952441a!",
+//     host:"webmail.yescnc.co.kr",
+//     port:25,
+//     ssl:false,
+// });
+
 var sessionManager = require('./lib/sessionManager');
 
 var index = require('./routes/index');
@@ -75,8 +84,19 @@ var authError=function(next){
 
 app.use(logger('dev'));
 
-// 근태서버 다운
+//근태서버 다운
 // app.use(function(req,res,next){
+    
+    
+//     emailServer.send({
+//       text:    "i hope this works", 
+//       from:    "novles@yescnc.co.kr", 
+//       to:      "novles@yescnc.co.kr",
+//       cc:      "novles@yescnc.co.kr",
+//       subject: "testing emailjs"
+//     }, function(err, message) {
+//         console.log(err || message);
+//         });
 //     res.send( res.render("error"));
 // });
 
