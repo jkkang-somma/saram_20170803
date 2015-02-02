@@ -28,14 +28,13 @@ define([
         'views/cm/popup/CommuteUpdatePopupView',
         'views/cm/popup/CommentPopupView',
         'views/cm/popup/ChangeHistoryPopupView',
-        'views/component/ProgressbarView',
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnNoteCellTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommuteModel, CommuteCollection,
-		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
+		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
 		searchFormTemplate, btnNoteCellTemplate){
 
 	
@@ -293,13 +292,11 @@ define([
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    this.progressbar = new ProgressbarView();
     	    
     	    
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
-    	    _layOut.append(this.progressbar.render());
 
     	    $(this.el).html(_layOut);
     	    
@@ -322,7 +319,6 @@ define([
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
             
-            this.progressbar.disabledProgressbar(true);
             
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -398,8 +394,7 @@ define([
             });
      	},
     	selectCommute: function() {
-    	    this.progressbar.disabledProgressbar(false);
-     		var data = {
+    		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
      		};
@@ -413,16 +408,53 @@ define([
      		}
      		
             var _this = this;
-     		this.commuteCollection.fetch({ 
-     			data: data,
-	 			success: function(result) {
-	 				_this.grid.render();
-	 				_this.progressbar.disabledProgressbar(true);
-	 			},
-	 			error : function(result) {
-	 				alert("데이터 조회가 실패했습니다.");
-	 			}
-     		});     		
+            Dialog.loading({
+                action:function(){
+                    var dfd = new $.Deferred();
+                    _this.commuteCollection.fetch({ 
+		     			data: data,
+		     			success: function(){
+                            dfd.resolve();
+                        }, error: function(){
+                            dfd.reject();
+                        }
+		     		});
+		     		return dfd.promise();
+        	    },
+        	    
+                actionCallBack:function(res){//response schema
+                    _this.grid.render();
+                },
+                errorCallBack:function(response){
+                    Dialog.error("데이터 조회 실패! \n ("+ response.responseJSON.message +")");
+                },
+            });
+            
+    	//     this.progressbar.disabledProgressbar(false);
+     //		var data = {
+     //		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
+     //		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
+     //		};
+     		   		
+     //		data.startDate.getText() === "" ? null : data.startDate = data.startDate.getDate().format("YYYY-MM-DD");
+     //		data.endDate.getText() === "" ? null : data.endDate = data.endDate.getDate().format("YYYY-MM-DD");
+     		
+     //		if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
+     //			Dialog.error("시작일 / 종료일을 입력해 주십시오");
+     //			return;
+     //		}
+     		
+     //       var _this = this;
+     //		this.commuteCollection.fetch({ 
+     //			data: data,
+	 			// success: function(result) {
+	 			// 	_this.grid.render();
+	 			// 	_this.progressbar.disabledProgressbar(true);
+	 			// },
+	 			// error : function(result) {
+	 			// 	alert("데이터 조회가 실패했습니다.");
+	 			// }
+     //		});     		
      		
     	}
 	});
