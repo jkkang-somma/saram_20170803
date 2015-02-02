@@ -41,48 +41,28 @@ define([
 	
 	// 출퇴근 시간 셀 생성
 	function _createHistoryCell(cellType, cellData, change) {
-		var type;
-		var result = $("<div></div>");
-		
-		var divTag = $("<div></div>");
-		
-		if(cellType=="in_time")
-			type = cellData.in_time_type;
-		else
-			type = cellData.out_time_type;
-		
-		if(type == 2)
-			divTag.addClass("autoType");
-		
 		if (cellData[change]){
 			var data = JSON.stringify({
 				change_column : cellType,
 				idx : cellData.idx
 			});
-			
-			var aHrefStr = $("<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'></a>");
-			aHrefStr.html(_getTimeCell( cellData[cellType] ));
-			
-			divTag.append(aHrefStr);
-			
+			var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + _getTimeCell( cellData[cellType] ) + "</a>";
+			return aHrefStr;
  		} else {
- 			divTag.html(_getTimeCell( cellData[cellType] ));
+ 			return _getTimeCell( cellData[cellType] );
  		}
- 		result.append(divTag);
- 		
- 		return result.html();
 		 
 	}
 	
 	// 시간 값을 두 줄로 표시 
 	function _getTimeCell(time) {
-		if (!_.isNull(time) ) {
+		if (Util.isNotNull(time) ) {
 			var tArr = time.split(" ");
 			if (tArr.length == 2) {
 				return tArr[0] + "</br>" + tArr[1]; 
 			}
 		}
-		return "";
+		return null;
 	}
 	
 	function _getTimeStr(min){
@@ -98,6 +78,7 @@ define([
 	};
 		
 	function _createCommentCell(cellData) {
+<<<<<<< HEAD
 		var data = {
 				comment_count: cellData.comment_count,
 				idx: cellData.idx,
@@ -108,20 +89,38 @@ define([
 		var tpl = _.template(btnNoteCellTemplate)(data); 
 		return tpl;
 	 }	
+=======
+		 var data = JSON.stringify({
+			 idx : cellData.idx
+		 });
+		 
+		 var url = "#commutemanager/comment/" + cellData.id + "/" + cellData.date;
+		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' >" + cellData.comment_count + " 건</a>";
+		 return aHrefStr;
+	}
+	
+	// comment Cell 추가 팝어 버튼 
+	function _createCommentCellAddBtn(cellData, tpl) {
+		 var data = JSON.stringify({
+			 idx : cellData.idx
+		 });
+		 var tp = $(tpl);
+		 tp.find(".btn").attr("data", data);
+		 return tp.html();
+	}
+>>>>>>> c61bc7c1364c2ce3661baac89f6455ceedc9b24f
 	
 	function _getBrString(result){
-		if(!(_.isNull(result) || _.isUndefined(result) || typeof result != "string")){
-			var resultArr = result.split(/(,|_| )/);
-			if(resultArr.length > 1){
-				result = "";
-				for(var i =0; i < resultArr.length; i++){
-					if(i % 2 == 1)
-						continue;
-					if(i == resultArr.length-1){
-						result += resultArr[i];
-					}else{
-						result += resultArr[i] + "<br>";
-					}
+		var resultArr = result.split(/(,|_| )/);
+		if(resultArr.length > 1){
+			result = "";
+			for(var i =0; i < resultArr.length; i++){
+				if(i % 2 == 1)
+					continue;
+				if(i == resultArr.length-1){
+					result += resultArr[i];
+				}else{
+					result += resultArr[i] + "<br>";
 				}
 			}
 		}
@@ -234,7 +233,7 @@ define([
      	                    }, 
      	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
      	                   		render : function(data, type, full, meta){
-     	                   			return _getBrString(Code.getCodeName(Code.OVERTIME, data));
+     	                   			return Code.getCodeName(Code.OVERTIME, data);
      	                   		}
      	                   	},
      	                    { data : "comment_count", "title" : "비고",
@@ -242,12 +241,13 @@ define([
      	                     		return _createCommentCell(full);
      	                   		}
      	                     },
+     	                     {"title": "출근타입", "data": "in_time_type", visible: false},
+                    		 {"title": "퇴근타입", "data": "out_time_type" , visible: false},
              	        ],
              	    rowCallback: function(row, data){
-             	    	if(data.work_type == 21 || data.work_type == 22) // 결근 처리
-             	    		$(row).addClass("absentce");
-             	    	
-             	    	$(row).find(".autoType").parent("td").addClass("autoType");
+             	    	if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
+             	    		$(row).css("background-color", "rgb(236, 131, 131)");
+             	    	}
              	    },
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
@@ -314,11 +314,13 @@ define([
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
+    	    this.progressbar = new ProgressbarView();
     	    
     	    
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
+    	    _layOut.append(this.progressbar.render());
 
     	    $(this.el).html(_layOut);
     	    
@@ -340,6 +342,8 @@ define([
 		        format: "YYYY-MM-DD",
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
+            
+            this.progressbar.disabledProgressbar(true);
             
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -415,6 +419,7 @@ define([
             });
      	},
     	selectCommute: function() {
+    	    this.progressbar.disabledProgressbar(false);
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
@@ -429,29 +434,16 @@ define([
      		}
      		
             var _this = this;
-            Dialog.loading({
-                action:function(){
-                    var dfd = new $.Deferred();
-                    _this.commuteCollection.fetch({ 
-		     			data: data,
-		     			success: function(){
-                            dfd.resolve();
-                        }, error: function(){
-                            dfd.reject();
-                        }
-		     		});
-		     		return dfd.promise();
-        	    },
-        	    
-                actionCallBack:function(res){//response schema
-                    _this.grid.render();
-                },
-                errorCallBack:function(response){
-                    Dialog.error("데이터 조회 실패! \n ("+ response.responseJSON.message +")");
-                },
-            });
-            
-     		  		
+     		this.commuteCollection.fetch({ 
+     			data: data,
+	 			success: function(result) {
+	 				_this.grid.render();
+	 				_this.progressbar.disabledProgressbar(true);
+	 			},
+	 			error : function(result) {
+	 				alert("데이터 조회가 실패했습니다.");
+	 			}
+     		});     		
      		
     	}
 	});

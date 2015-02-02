@@ -96,6 +96,13 @@ define([
     	    }
     	    
     	    this.formSection.find("#loginIdTextbox").focus();
+    	    
+    	    Dialog.info(
+    	        "근태 시스템 1월 데이터가 ERP에 등록된 데이터로 세팅 되었습니다. \n"
+    	        +"1월 중 발생한 휴가/ 휴일근무를 ERP에 등록하지 않은경우\n"
+    	        +"근태시스템에 등록이 되어있지 않을 수 있습니다\n" 
+    	        +"확인 부탁 드립니다.");
+    	    
      	},
     	
     	login : function(){

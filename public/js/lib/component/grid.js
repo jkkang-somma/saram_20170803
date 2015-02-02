@@ -464,7 +464,8 @@ define([
                 "sDom": '<"top">rt<"bottom"ip>',// _dataTable display controll
      	        "data" : this.options.collection.toJSON(),
      	        "columns" : _columns,
-     	        "rowCallback" : _.isUndefined(this.options.rowCallback) ? null : this.options.rowCallback
+     	        "rowCallback" : _.isUndefined(this.options.rowCallback) ? null : this.options.rowCallback,
+     	        "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order
      	    });
      	    
      	    //ROW click
@@ -506,9 +507,7 @@ define([
     	    
     	    _grid._filtering();
             this.updateCSS();
-            
-            
-    	},
+        },
     	getButton: function(name){
     	    return this.buttonid[name];
     	    

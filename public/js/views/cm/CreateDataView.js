@@ -21,18 +21,19 @@ define([
   'collection/sm/UserCollection',
   'collection/cm/CommuteCollection',
   'collection/vacation/OutOfficeCollection',
+  'collection/vacation/InOfficeCollection',
   'views/cm/popup/CreateDataPopupView',
   'views/cm/popup/CreateDataRemovePopupView',
   'views/component/ProgressbarView'
 ], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, Moment, ResultTimeFactory, Code,
 HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, ForminlineHTML, LabelHTML,
 CommuteModel, 
-HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection,
+HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
 CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     var resultTimeFactory = ResultTimeFactory.Builder;
     
     function dateToText(data){
-        return _.isNull(data) ? null : Moment(data).format("MM-DD<br>HH:mm:SS");
+        return _.isNull(data) ? null : Moment(data).format("MM-DD<br>HH:mm:ss");
     }
     
     var CreateDataView = BaseView.extend({
@@ -171,15 +172,16 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var holidayCollection = new HolidayCollection();            // 해당 연도 전체 휴일 목록
             var outOfficeCollection = new OutOfficeCollection();        // 휴가 / 외근 / 출장 목록
             var yesterdayCommuteCollection = new CommuteCollection();   // 선택일 전날 근태 데이터 목록
-
+            var inOfficeCollection = new InOfficeCollection();
+            
             $.when(
                 rawDataCollection.fetch({data: { start : selectedDate.start }}),
                 userCollection.fetch(),
                 holidayCollection.fetch({ data : {  year : startDate.year() } }),
                 outOfficeCollection.fetch({data : selectedDate}),
+                inOfficeCollection.fetch({data : selectedDate}),
                 yesterdayCommuteCollection.fetchDate(yesterday.format(ResultTimeFactory.DATEFORMAT))
             ).done(function(){
-                
                 var diff_days = endDate.diff(startDate, 'days');
 
                 _.each(userCollection.models, function(userModel, idx){     // 사용자별로 데이터 생성
@@ -187,23 +189,23 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     var userId = userModel.attributes.id;
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
+                    
                     if( userDepartment == "무소속" || userDepartment==="임원"){
-                        
                         
                     }else{
                         var yesterdayAttribute = {};
                         
                         var userRawDataCollection = new RawDataCollection(); // 해당 사용자의 출입기록 Collection
-                        _.each(rawDataCollection.filterID(userId), function(model){
-                            userRawDataCollection.add(model);
-                        });
+                        userRawDataCollection.add(rawDataCollection.where({id: userId}));
                         
                         var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
-                        _.each(outOfficeCollection.filterID(userId), function(model){
-                            userOutOfficeCollection.add(model);
-                        });
+                        userOutOfficeCollection.add(outOfficeCollection.where({id: userId}));
+                        
+                        var userInOfficeCollection = new InOfficeCollection();
+                        userInOfficeCollection.add(inOfficeCollection.where({id: userId}));
                         
                         var filterDate = yesterdayCommuteCollection.where({id : userId}); // 시작일 - 1의 근태 데이터
+                        
                         if(filterDate.length > 0){
                             yesterdayAttribute = filterDate[0].toJSON();
                             yesterdayAttribute.out_time = Moment(yesterdayAttribute.out_time).year(yesterdayAttribute.year);
@@ -233,6 +235,10 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             // 휴일 판단
                             resultTimeFactory.setHoliday();
                             
+                            var todayInOffice = userInOfficeCollection.where({date:todayStr});
+                            resultTimeFactory.setInOffice(todayInOffice);
+                            
+                            
                             // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
                             var rawData = userRawDataCollection.filterDate(todayStr);
                             _.each(rawData, function(rawDataModel){
@@ -251,7 +257,6 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             today.add(1, 'days');
                         }
                     }
-                    
                     view.setProgressbarPercent( (idx+1) / userCollection.models.length * 100 );
                 });
                 dfd.resolve();
