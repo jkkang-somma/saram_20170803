@@ -24,11 +24,11 @@ define([
         NOTOUTTIME : "51"
     };
     
-    var TIMEFORMAT = "HH:mm:SS";
+    var TIMEFORMAT = "HH:mm:ss";
     
     var DATEFORMAT = "YYYY-MM-DD";
     
-    var DATETIMEFORMAT = "YYYY-MM-DD HH:mm:SS";
+    var DATETIMEFORMAT = "YYYY-MM-DD HH:mm:ss";
     
     var Builder = {
         id:                 "",

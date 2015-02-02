@@ -10,8 +10,9 @@ router.route('/bulk')
     var data = req.body;
     var session = sessionManager.get(req.cookies.saram);
     if (session.user.admin == 1) {	// admin 일 경우만 생성
-	    RawData.insertRawData(data).then(function(){
+	    RawData.insertRawData(data).then(function(result){
 	    	res.send({
+	    		result: result,
 	            success:true,
 	        });
 	    }, function(errResult){

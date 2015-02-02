@@ -81,7 +81,7 @@ define([
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS",
+		        format: "YYYY-MM-DD HH:mm:ss",
 		        defaultDate: Moment(that.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
             });
             
@@ -89,7 +89,7 @@ define([
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS",
+		        format: "YYYY-MM-DD HH:mm:ss",
 		        defaultDate: Moment(that.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
             });
 

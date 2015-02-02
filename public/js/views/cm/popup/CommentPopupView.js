@@ -66,14 +66,14 @@ define([
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS"
+		        format: "YYYY-MM-DD HH:mm:ss"
             });
             
 			$(this.el).find("#commentAddPopupOutTime").datetimepicker({
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS"
+		        format: "YYYY-MM-DD HH:mm:ss"
             });
 
 			$(this.el).find("#commentAddPopupDate").attr("disabled", "true");
