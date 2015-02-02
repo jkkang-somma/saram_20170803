@@ -101,7 +101,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    collection:this.commuteCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search"]
+    		    buttons:["search"],
+    		    order:[[1,"asc"]]
     		};
     		
     		this._dialogInit();

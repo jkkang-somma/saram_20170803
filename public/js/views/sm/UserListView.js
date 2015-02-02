@@ -72,6 +72,7 @@ define([
     		    collection:userCollection,
     		    detail:true,
     		    view:this,
+    		    order:[[2, "asc"]],
     		    //visibleSub:true
     		    //gridOption
     		}
