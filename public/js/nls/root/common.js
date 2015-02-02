@@ -29,7 +29,18 @@ define({
         ADMIN:"Admin",
         PASSWORD:"Password",
         NEW_PASSWORD:"New Password",
-        RE_NEW_PASSWORD:"Re New Password"
+        RE_NEW_PASSWORD:"Re New Password",
+        POSITION:"Position",
+        EMAIL:"Email",
+        PHONE:"Phone",
+        APPROVAL_NAME:"Approval Manager",
+        IP:"IP",
+        OFFICE_IP:"Office IP",
+        PHONE_OFFICE:"Office Phone",
+        BIRTHDAY:"Birthday",
+        WEDDING_DAY:"Wedding Day",
+        EMERGENCY_PHONE:"Emergency Phone",
+        MEMO:"Memo"
     },
     GRID:{
         MSG:{
@@ -54,7 +65,17 @@ define({
         ADMIN_1:"MANAGER",
         ALL:"ALL",
         LEAVE_USER:"Leave",
-        WORKER:"Worker"
+        WORKER:"Worker",
+        POSITION:{
+            BOSS:"Boss",
+            VICE_PRESIDENT:"Vice President",
+            DIRECTOR:"Director",
+            TOP_SEAT:"Top Seat",
+            MIDDLE_SEAT:"Middle Seat",
+            SEAT:"Seat",
+            DEARI:"Deari",
+            RESEARCHER:"Researcher"
+        }
     },
     
     
@@ -150,5 +171,27 @@ define({
             SICK_LEAVE:"Sick Leave",
             ABSENTEEISM:"Absenteeism"
         }    
+    },
+    COMMENT: {
+    	STATE: {
+    		ALL : "All",
+    		ACCEPTING : "Accepting",
+    		PROCESSING : "Processing",
+    		COMPLETE : "Complete"
+    	}
+    },
+    
+    TOOLTIP: {
+        USER:{
+            TYPE:"User Type",
+            ADD:"User Add",
+            EDIT:"User Edit",
+            REMOVE:"User Remove"
+        }
+    },
+    
+    SUB_TITLE:{
+        DETAIL_INFO:"Detail Info",
+        REQUIRE_INFO:"Require Info"
     }
 });

@@ -182,10 +182,16 @@ define([
         }
         // 휴일근무
         $(_this.el).find('#datePickerTitleTxt').text('date');
-         _this.afterDate.hide();
+        _this.afterDate.hide();
         _this.holReq = 0;
-         $(_this.el).find('#reqHoliday').val("0 일");
-          ComboBox.createCombo(selGubun);
+        $(_this.el).find('#reqHoliday').val("0 일");
+        ComboBox.createCombo(selGubun);
+        
+        if ( arrGubunData.length >0) {
+        	if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03') {
+        		$(_this.el).find('#usableHolidayCon').hide();
+        	}
+        }
       });
       
       selGubun.change(function() {
@@ -210,6 +216,13 @@ define([
           _this.setTimePicker(true);
         }
         $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+        
+        // 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
+        if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03') {
+        	$(_this.el).find('#usableHolidayCon').hide();
+        }else {
+        	$(_this.el).find('#usableHolidayCon').show();
+        }        
       });
      
     },
@@ -377,7 +390,7 @@ define([
           Dialog.error("기간을 잘못 입력하였습니다.");      
           // this.thisDfd.reject();
           return;
-      }else if(this.holReq > usable){
+      }else if( !(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03') && (this.holReq > usable) ){
         Dialog.error("잔여 연차 일수를 초과 했습니다.");      
         // this.thisDfd.reject();
         return;

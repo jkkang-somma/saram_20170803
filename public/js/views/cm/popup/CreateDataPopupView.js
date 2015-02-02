@@ -28,7 +28,8 @@ define([
     	    		{
     	    			id : "cdStartDatePicker",
     	    			label : "시작일",
-    	    			name : "startDate"
+    	    			name : "startDate",
+    	    			format: "YYYY-MM-DD"
     	    		}
     	    	})
     	    );
@@ -37,7 +38,8 @@ define([
     	    		{
     	    			id : "cdEndDatePicker",
     	    			label : "종료일",
-    	    			name : "endDate"
+    	    			name : "endDate",
+    	    			format: "YYYY-MM-DD"
     	    		}
     	    	})
     	    );

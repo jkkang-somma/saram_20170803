@@ -28,7 +28,16 @@ define([
             leave_company: "",
             admin : null,
             ip_pc : null,
-            ip_office : null
+            ip_office : null,
+            position:null,
+            email:null,
+            phone:null,
+            phone_office:null,
+            approval_id:null,
+            approval_name:null,
+            emergency_phone:null,
+            wedding_day:null,
+            memo:null
         },
         auth:{
         },
@@ -46,7 +55,9 @@ define([
             search:"glyphicon-search",
             edit:"glyphicon-pencil",
             ok:"glyphicon-ok",
-            read: "glyphicon-list-alt"
+            read: "glyphicon-list-alt",
+            pulsSign:"glyphicon-plus-sign",
+            minusSign:"glyphicon-minus-sign"
         },
         
         //API
@@ -56,7 +67,8 @@ define([
             column:[],
             collection:null,
             dataschema:[],
-            buttons:[]
+            buttons:[],
+            visibleSub:false
         },
         form:{
             el:undefined,
@@ -73,14 +85,24 @@ define([
             name:undefined,
             label:undefined,
             value:undefined,
-            disabled:false
+            disabled:false,
+            group:undefined
+        },
+        text:{
+            type:"text",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            disabled:false,
+            group:undefined
         },
         password:{
             type:"input",
             name:undefined,
             label:undefined,
             value:undefined,
-            disabled:false
+            disabled:false,
+            group:undefined
         },
         date:{
             type:"date",
@@ -88,7 +110,8 @@ define([
             label:undefined,
             value:undefined,
             format:"YYYY-MM-DD",
-            disabled:false
+            disabled:false,
+            group:undefined
         },
         combo:{
             type:"combo",
@@ -100,14 +123,16 @@ define([
             collection:undefined,
             codeKey:"code",
             linkField:undefined,
-            disabled:false
+            disabled:false,
+            group:undefined
         },
         hidden:{
             type:"hidden",
             name:undefined,
             label:undefined,
             value:undefined,
-            textKey:"name"
+            textKey:"name",
+            group:undefined
         },
         //SERVER response
         response:{

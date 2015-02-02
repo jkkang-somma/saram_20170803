@@ -76,7 +76,7 @@ define([
 	
 	// 시간 값을 두 줄로 표시 
 	function _getTimeCell(time) {
-		if (Util.isNotNull(time) ) {
+		if (!_.isNull(time) ) {
 			var tArr = time.split(" ");
 			if (tArr.length == 2) {
 				return tArr[0] + "</br>" + tArr[1]; 
@@ -104,7 +104,7 @@ define([
 		 });
 		 
 		 var url = "#commutemanager/comment/" + cellData.id + "/" + cellData.date;
-		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' >" + cellData.comment_count + " 건</a>";
+		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' target='_blank'>" + cellData.comment_count + " 건</a>";
 		 return aHrefStr;
 	}
 	

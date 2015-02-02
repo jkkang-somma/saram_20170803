@@ -3,8 +3,10 @@ define([
 	'underscore',
 	'backbone',
 	'util',
+	'comboBox',
+	'cmoment',
 	'text!templates/inputForm/combobox.html',
-], function($, _, Backbone, Util,
+], function($, _, Backbone, Util, Combobox, Moment,
 ComboboxHTML) {
 	var CreateHolidayPopup = Backbone.View.extend({
 		initialize : function() {
@@ -19,14 +21,18 @@ ComboboxHTML) {
     	    
     	    var _yearCombo=$(_.template(ComboboxHTML)({id: "createHolidayCombo", label: "연도"}));
     	    $(this.el).append(_yearCombo);
+    	    var $yearCombo= $(this.el).find("#createHolidayCombo");
     	    
-    	    var today = new Date();
-    	    var year = today.getFullYear();
+    	    var today = Moment();
+    	    var year = today.year();
+    	    
     	    for(var i = -1; i< 5; i++){
-    	    	$(this.el).find("#createHolidayCombo").append($("<option>"+(year + i)+"</option>"));
+    	    	$yearCombo.append($("<option>"+(year + i)+"</option>"));
     	    }
-            
-            _yearCombo.find("select").val(year);
+    	    
+    	    $yearCombo.find("select").val(year);
+         	Combobox.createCombo($yearCombo);
+         	
             dfd.resolve();
             return dfd.promise();
 		}

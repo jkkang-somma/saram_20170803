@@ -21,13 +21,14 @@ define([
   'collection/sm/UserCollection',
   'collection/cm/CommuteCollection',
   'collection/vacation/OutOfficeCollection',
+  'collection/vacation/InOfficeCollection',
   'views/cm/popup/CreateDataPopupView',
   'views/cm/popup/CreateDataRemovePopupView',
   'views/component/ProgressbarView'
 ], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, Moment, ResultTimeFactory, Code,
 HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, ForminlineHTML, LabelHTML,
 CommuteModel, 
-HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection,
+HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
 CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     var resultTimeFactory = ResultTimeFactory.Builder;
     
@@ -49,8 +50,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    id:"createCommuteListTable",
     		    column:[
                     {"title": "날짜", "data": "date"},
-                    {"title": "이름", "data": "name"},
                     {"title": "부서", "data": "department"},
+                    {"title": "이름", "data": "name"},
                     {"title": "근무<br>형태", "data": "work_type",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.WORKTYPE, data);
@@ -171,12 +172,14 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var holidayCollection = new HolidayCollection();            // 해당 연도 전체 휴일 목록
             var outOfficeCollection = new OutOfficeCollection();        // 휴가 / 외근 / 출장 목록
             var yesterdayCommuteCollection = new CommuteCollection();   // 선택일 전날 근태 데이터 목록
-
+            var inOfficeCollection = new InOfficeCollection();
+            
             $.when(
-                rawDataCollection.fetch({data: selectedDate}),
+                rawDataCollection.fetch({data: { start : selectedDate.start }}),
                 userCollection.fetch(),
                 holidayCollection.fetch({ data : {  year : startDate.year() } }),
                 outOfficeCollection.fetch({data : selectedDate}),
+                inOfficeCollection.fetch({data : selectedDate}),
                 yesterdayCommuteCollection.fetchDate(yesterday.format(ResultTimeFactory.DATEFORMAT))
             ).done(function(){
                 
@@ -188,10 +191,9 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
                     
-                    if( //userDepartment.slice(0,4) === "품질검증" ||
-                        userDepartment == "무소속" || userDepartment==="임원"){
+                    if( userDepartment == "무소속" || userDepartment==="임원"){
                         
-                        
+                        //
                     }else{
                         var yesterdayAttribute = {};
                         
@@ -203,6 +205,11 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                         var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
                         _.each(outOfficeCollection.filterID(userId), function(model){
                             userOutOfficeCollection.add(model);
+                        });
+                        
+                        var userInOfficeCollection = new InOfficeCollection();
+                        _.each(inOfficeCollection.filterID(userId), function(model){
+                            userInOfficeCollection.add(model);
                         });
                         
                         var filterDate = yesterdayCommuteCollection.where({id : userId}); // 시작일 - 1의 근태 데이터
@@ -234,6 +241,10 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             
                             // 휴일 판단
                             resultTimeFactory.setHoliday();
+                            
+                            var todayInOffice = userInOfficeCollection.where({date:todayStr});
+                            resultTimeFactory.setInOffice(todayInOffice);
+                            
                             
                             // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
                             var rawData = userRawDataCollection.filterDate(todayStr);

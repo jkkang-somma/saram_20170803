@@ -52,6 +52,7 @@ require.config({
       monthpicker:'lib/component/monthpicker',
       grid:'lib/component/grid',
       comboBox:'lib/component/combo',
+      lodingButton:'lib/component/lodingButton',
       schemas:'lib/schemas',
       
       resulttimefactory: 'lib/resultTimeFactory',

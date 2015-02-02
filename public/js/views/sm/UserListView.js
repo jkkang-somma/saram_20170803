@@ -4,6 +4,7 @@ define([
   'backbone',
   'core/BaseView',
   'grid',
+  'lodingButton',
   'schemas',
   'i18n!nls/common',
   'dialog',
@@ -17,7 +18,7 @@ define([
   'views/sm/AddUserView',
   'views/sm/EditUserView',
   'models/sm/UserModel',
-], function($, _, Backbone, BaseView, Grid, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
+], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
     var userListCount=0;
     var _currentFilter=0;
     var UserListView = BaseView.extend({
@@ -29,32 +30,49 @@ define([
     		this.option = {
     		    el:_id+"_content",
     		    column:[
-    		        i18Common.USER.ID, i18Common.USER.NAME, 
+    		        { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
+    		        i18Common.USER.NAME, 
+                    { "title" : i18Common.USER.POSITION, data:"position"},
     		        { "title" : i18Common.USER.DEPT, "render": function(data, type, row){
                         return row.dept_name;
-                    }}
-                    , i18Common.USER.NAME_COMMUTE, i18Common.USER.JOIN_COMPANY, i18Common.USER.LEAVE_COMPANY,
-                    // { "title" : i18Common.USER.PRIVILEGE, "render": function(data, type, row){
-                    //     var result=i18Common.CODE.PRIVILEGE_1;
-                    //     if (row.privilege == 3){
-                    //         result=i18Common.CODE.PRIVILEGE_3;
-                    //     } else if (row.privilege == 2){
-                    //         result=i18Common.CODE.PRIVILEGE_2;
-                    //     }
-                    //     return result;
-                    // }},
+                    }},
+                    { "title" : i18Common.USER.NAME_COMMUTE, data:"name_commute", visible:false, subVisible:false},
+                    { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
+                    { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
                     { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
                         var result=i18Common.CODE.ADMIN_0;
                         if (row.admin > 0){
                             result=i18Common.CODE.ADMIN_1;
                         }
                         return result;
-                    }}
+                    }, visible:false, subVisible:false},
+                    { "title" : i18Common.USER.PHONE, data:"phone"},
+                    { "title" : i18Common.USER.EMAIL, data:"email"},
+                    { "title" : i18Common.USER.APPROVAL_NAME, data:"approval_name"},
+                    { "title" : "approval_id", data:"approval_id", visible:false, subVisible:false},
+                    { "title" : i18Common.USER.IP, data:"ip_pc", visible:false, subVisible:false},
+                    { "title" : i18Common.USER.OFFICE_IP, data:"ip_office", visible:false, subVisible:false},
+                    { "title" : i18Common.USER.PHONE_OFFICE, data:"phone_office", visible:false},
+                    { "title" : i18Common.USER.BIRTHDAY, data:"birthday", visible:false},
+                    { "title" : i18Common.USER.WEDDING_DAY, data:"wedding_day", visible:false}, 
+                    { "title" : i18Common.USER.EMERGENCY_PHONE, data:"emergency_phone", visible:false},
+                    { "title" : i18Common.USER.PRIVILEGE, "render": function(data, type, row){
+                        var result=i18Common.CODE.PRIVILEGE_1;
+                        if (row.privilege == 3){
+                            result=i18Common.CODE.PRIVILEGE_3;
+                        } else if (row.privilege == 2){
+                            result=i18Common.CODE.PRIVILEGE_2;
+                        }
+                        return result;
+                    }, visible:false, subVisible:false},
                 ],
-    		    dataschema:["id", "name", "dept_code", "name_commute", "join_company", "leave_company", "admin"],
+    		    dataschema:["id", "name", "position", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
+    		    "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege"
+    		    ],
     		    collection:userCollection,
     		    detail:true,
-    		    view:this
+    		    view:this,
+    		    //visibleSub:true
     		    //gridOption
     		}
     	},
@@ -76,7 +94,7 @@ define([
     	    _buttons.push({//User Remove
     	        type:"custom",
     	        name:"filter",
-    	        tooltip:"사용자 유형",
+    	        tooltip:i18Common.TOOLTIP.USER.TYPE,//"사용자 유형",
     	        filterBtnText:_filterText,
     	        click:function(_grid, _button){
     	           
@@ -113,7 +131,7 @@ define([
     	        _buttons.push({//User Add
         	        type:"custom",
         	        name:"add",
-        	        tooltip:"사용자 등록",
+        	        tooltip:i18Common.TOOLTIP.USER.ADD,//"사용자 등록",
         	        click:function(){
                         var addUserView= new AddUserView();
                         Dialog.show({
@@ -123,7 +141,18 @@ define([
                                 label: i18Common.DIALOG.BUTTON.ADD,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialogRef){// 버튼 클릭 이벤트
-                                    addUserView.submitAdd().done(function(data){
+                                    var _btn=this;
+                                    var beforEvent,affterEvent;
+                                    
+                                    beforEvent=function(){
+                                        $(_btn).data('loading-text',"<div class='spinIcon'>"+i18Common.DIALOG.BUTTON.ADD +"</div>");
+                                        $(_btn).button('loading');
+                                    }
+                                    affterEvent=function(){
+                                        $(_btn).button('reset');
+                                    }
+                                    LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
+                                    addUserView.submitAdd(beforEvent, affterEvent).done(function(data){
                                         grid.addRow(data);
                                         dialogRef.close();
                                         Dialog.show(i18Common.SUCCESS.USER.ADD);
@@ -145,7 +174,7 @@ define([
         	    _buttons.push({//User edit
         	        type:"custom",
         	        name:"edit",
-        	        tooltip:"사용자 수정",
+        	        tooltip:i18Common.TOOLTIP.USER.EDIT, //"사용자 수정",
         	        click:function(_grid){
         	            var selectItem=_grid.getSelectItem();
                         if (_.isUndefined(selectItem)){
@@ -193,7 +222,7 @@ define([
         	    _buttons.push({//User Remove
         	        type:"custom",
         	        name:"remove",
-        	        tooltip:"사용자 삭제",
+        	        tooltip:i18Common.TOOLTIP.USER.REMOVE, //"사용자 삭제",
         	        click:function(_grid){
                         var selectItem=_grid.getSelectItem();
                         if (_.isUndefined(selectItem)){

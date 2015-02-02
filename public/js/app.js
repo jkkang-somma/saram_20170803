@@ -74,28 +74,31 @@ define([
             if (!_.isUndefined(_loginView)){
                 _loginView.close();
             }
-            Code.init().then(function(){
-                $("body").removeClass("login-body");
-                LoadingView.disable(function(){
-                    _router = new MainRouter({
-                        affterCallback:function(){// mainRouter create
-                            if (_.isUndefined(_navigationView)){
-                                _navigationView= new NavigationView();
-                    		    _navigationView.render();
-                            } else {
-                                _navigationView.show();
+            
+            LoadingView.visible(function(){
+                Code.init().then(function(){
+                    $("body").removeClass("login-body");
+                    LoadingView.disable(function(){
+                        _router = new MainRouter({
+                            affterCallback:function(){// mainRouter create
+                                if (_.isUndefined(_navigationView)){
+                                    _navigationView= new NavigationView();
+                        		    _navigationView.render();
+                                } else {
+                                    _navigationView.show();
+                                }
+                                
+                                if (_initFlalg){
+                                    Backbone.history.start({root:"/"});
+                                } else {
+                                    Backbone.history.loadUrl();
+                                }
                             }
-                            
-                            if (_initFlalg){
-                                Backbone.history.start({root:"/"});
-                            } else {
-                                Backbone.history.loadUrl();
-                            }
-                        }
+                        });
                     });
+                }, function(){
+                    Dialog.error("Code Init Fail");
                 });
-            }, function(){
-                Dialog.error("Code Init Fail");
             });
         }
     });

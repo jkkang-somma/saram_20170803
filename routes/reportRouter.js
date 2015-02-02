@@ -7,8 +7,13 @@ var Report = require('../service/Report.js');
 
 router.route('/commuteYearReport')
 .get(function(req, res, next){
+	
+	var searchValObj = {
+			year : req.query.year,
+			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
+	};
 			
-	Report.getCommuteYearReport(req.query).then(function(filePullPath) {
+	Report.getCommuteYearReport(searchValObj).then(function(filePullPath) {
 
 		res.download(filePullPath, function(err) {
 			if (err) {

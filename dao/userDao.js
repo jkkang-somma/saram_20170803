@@ -30,11 +30,13 @@ UserDao.prototype.deleteUser = function(id){
 };
 UserDao.prototype.insertUser = function(user){
     var queryStr = db.getQuery('user', 'insertUser');
-    return db.queryV2(queryStr, [user.id, user.name, user.dept_code, user.name_commute, user.join_company, 3, user.admin]);
+      return db.queryV2(queryStr, [user.id, user.name, user.dept_code, user.approval_id, user.name_commute,user.join_company, user.leave_company, user.privilege, user.admin, user.position,
+        user.ip_pc, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo]);
 };
 UserDao.prototype.updateUser = function(user){
     var queryStr = db.getQuery('user', 'updateUser');
-    return db.queryV2(queryStr, [user.password, user.name, user.dept_code, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.id]);
+    return db.queryV2(queryStr, [user.password, user.name, user.dept_code, user.approval_id, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.position,
+        user.ip_pc, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.id]);
 };
 
 module.exports = new UserDao();

@@ -14,6 +14,8 @@ define([
     	initialize:function(){
     		_.bindAll(this, 'render');
     		_.bindAll(this, 'disable');
+    		_.bindAll(this, 'visible');
+    		this.isVisible=true;
     	},
     	render:function(options){
     		if (!_.isUndefined(options)){
@@ -56,11 +58,24 @@ define([
     	disable:function(callback){
     		var view=this;
 			$(this.el).fadeOut( 1000, function() {
+			//	view.isVisible=false;
     			view.close();
     			if (!_.isNull(callback)&& _.isFunction(callback)){
     				callback();
     			}
 			});
+    	},
+    	visible:function(callback){
+    		var view=this;
+    		// if (!view.isVisible){
+    		// 	view.isVisible=true;
+    			$(this.el).fadeIn( 1000, function() {
+	    			view.render();
+	    			if (!_.isNull(callback)&& _.isFunction(callback)){
+	    				callback();
+	    			}
+				});
+    	//	}
     	},
     	close:function(){
     		var view=this;
