@@ -80,6 +80,8 @@ define([
       
       $(this.el).find('#start_time input').attr('disabled',true);
       $(this.el).find('#end_time input').attr('disabled',true);
+      
+      $(this.el).find('#usableHolidayCon').css('display','none');
     
     },
     
@@ -125,6 +127,11 @@ define([
           $(this.el).find('#outsideOfficeTimeCon').css('display','none');
         }
         _this.find('#reqHoliday').val(holReq + " 일");
+        
+        if(holReq == "0"){
+          // _this.find('#reqHoliday').val(holReq + " 일");
+          $(this.el).find('#reqHoliday').parent().parent().css('display', 'none');
+        }
       }
     },
     
@@ -198,7 +205,7 @@ define([
       return sZero + s;
     },
     
-    onClickBtnAppCancel : function(){
+    onClickBtnAppCancel : function(stateVal){
   	  this.thisDfd = new $.Deferred();
   	  var _this = this;
   	  
@@ -206,7 +213,7 @@ define([
       
       console.log(formData);
       formData["_id"] = this.options["doc_num"];
-      formData["state"] = '취소요청';
+      formData["state"] = stateVal;
       
       var approvalCollection = new ApprovalCollection(formData);
       approvalCollection.idAttribute = "doc_num";
