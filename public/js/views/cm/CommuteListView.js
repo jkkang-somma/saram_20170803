@@ -272,7 +272,6 @@ define([
     	    			fromId : "ccmFromDatePicker",
     	    			toId : "ccmToDatePicker"
     	    		}
-    	    		
     	    	})
     	    );
     	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
