@@ -229,6 +229,9 @@
     			,black_mark = ?
 			where doc_num=?
     	</query>
+    	<query id="deleteApproval">
+    		delete from approval_tbl where doc_num = ?
+    	</query>
 	</group>
 	
 	<group id="approval_index">
