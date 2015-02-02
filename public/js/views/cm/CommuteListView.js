@@ -30,13 +30,13 @@ define([
         'views/cm/popup/ChangeHistoryPopupView',
         'views/component/ProgressbarView',
         'text!templates/cm/searchFormTemplate.html',
-        'text!templates/cm/btnCommentAddTemplate.html'
+        'text!templates/cm/btnNoteCellTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommuteModel, CommuteCollection,
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, ProgressbarView,
-		searchFormTemplate, btnCommentAddTemplate){
+		searchFormTemplate, btnNoteCellTemplate){
 
 	
 	// 출퇴근 시간 셀 생성
@@ -96,27 +96,18 @@ define([
 		}
 		return result;
 	};
-	
-	// comment Cell 페이지 링크 
+		
 	function _createCommentCell(cellData) {
-		 var data = JSON.stringify({
-			 idx : cellData.idx
-		 });
-		 
-		 var url = "#commutemanager/comment/" + cellData.id + "/" + cellData.date;
-		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' target='_blank'>" + cellData.comment_count + " 건</a>";
-		 return aHrefStr;
-	}
-	
-	// comment Cell 추가 팝어 버튼 
-	function _createCommentCellAddBtn(cellData, tpl) {
-		 var data = JSON.stringify({
-			 idx : cellData.idx
-		 });
-		 var tp = $(tpl);
-		 tp.find(".btn").attr("data", data);
-		 return tp.html();
-	}
+		var data = {
+				comment_count: cellData.comment_count,
+				idx: cellData.idx,
+				id: cellData.id,
+				date: cellData.date,
+				isShowEditBtn: (SessionModel.get("user").admin == 1)?true: false
+		};
+		var tpl = _.template(btnNoteCellTemplate)(data); 
+		return tpl;
+	 }	
 	
 	function _getBrString(result){
 		if(!(_.isNull(result) || _.isUndefined(result) || typeof result != "string")){
@@ -143,57 +134,63 @@ define([
 	        name:"edit",
 	        tooltip:"수정",
 	        click:function(_grid){
-	        	var selectItem =_grid.getSelectItem();
-	        	if ( Util.isNull(selectItem) ) {
-        			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
-        			return;
-	        	}
-	        	
-	            var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
-	            Dialog.show({
-	                title:"출퇴근시간 수정", 
-                    content: commuteUpdatePopupView,
-                    buttons: [{
-                        id: 'updateCommuteBtn',
-                        cssClass: Dialog.CssClass.SUCCESS,
-                        label: '수정',
-                        action: function(dialog) {
-                        	commuteUpdatePopupView.updateCommute().done(function(result){
-            					// console.log(result);
-            					var current = result.models[0];
-            					var yesterday = result.models[1];
-            					current.set({idx : selectItem.idx});
-            					that.grid.updateRow(current.attributes);
-            					var yesterdayRow = that.grid.getRowByFunction(
-            						function(idx, data, node){
-	            						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
-	            							return true;
-	            							
-	            						}else{
-	            							return false;
-	            						}
-	            					}
-	            				);
-	            				yesterday.set({idx : yesterdayRow.data().idx});
-	            				yesterdayRow.data(yesterday.attributes);
-            					
-        						Dialog.show("성공", function() {
-                    				dialog.close();
-                    			})
-            				}).fail(function(){
-
-            				});
-                        }
-                    }, {
-                        label : "취소",
-                        action : function(dialog){
-                            dialog.close();
-                        }
-                    }]
-	            })
+	        	var selectItem =_grid.getSelectItem();	        	
+	        	_openCommuteUpdatePopup(selectItem, that);
 	        }
 	    };
 	}
+	
+	// 근태 수정 팝업 열기
+	function _openCommuteUpdatePopup(selectItem, that) {
+    	if ( Util.isNull(selectItem) ) {
+			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
+			return;
+    	}
+    	
+        var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
+        Dialog.show({
+            title:"출퇴근시간 수정", 
+            content: commuteUpdatePopupView,
+            buttons: [{
+                id: 'updateCommuteBtn',
+                cssClass: Dialog.CssClass.SUCCESS,
+                label: '수정',
+                action: function(dialog) {
+                	commuteUpdatePopupView.updateCommute().done(function(result){
+    					// console.log(result);
+    					var current = result.models[0];
+    					var yesterday = result.models[1];
+    					current.set({idx : selectItem.idx});
+    					that.grid.updateRow(current.attributes);
+    					var yesterdayRow = that.grid.getRowByFunction(
+    						function(idx, data, node){
+        						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
+        							return true;
+        							
+        						}else{
+        							return false;
+        						}
+        					}
+        				);
+        				yesterday.set({idx : yesterdayRow.data().idx});
+        				yesterdayRow.data(yesterday.attributes);
+    					
+						Dialog.show("성공", function() {
+            				dialog.close();
+            			})
+    				}).fail(function(){
+
+    				});
+                }
+            }, {
+                label : "취소",
+                action : function(dialog){
+                    dialog.close();
+                }
+            }]
+        });
+	}
+	
 	var commuteListView = BaseView.extend({
         el:$(".main-container"),
     	initialize:function(){
@@ -242,11 +239,7 @@ define([
      	                   	},
      	                    { data : "comment_count", "title" : "비고",
      	                     	render: function(data, type, full, meta) {
-     	                   			if (full.comment_count) {
-     	                            	return _createCommentCell(full) + _createCommentCellAddBtn(full, btnCommentAddTemplate);
-     	                            } else {
-     	                            	return "0 건" + _createCommentCellAddBtn(full, btnCommentAddTemplate);
-     	                            }
+     	                     		return _createCommentCell(full);
      	                   		}
      	                     },
              	        ],
@@ -257,7 +250,7 @@ define([
              	    	$(row).find(".autoType").parent("td").addClass("autoType");
              	    },
         		    collection:this.commuteCollection,
-        		    dataschema:["date", "department", "id", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
+        		    dataschema:["date", "department", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
         		    detail: true,
         		    buttons:["search",{
         		    	type:"myRecord",
@@ -272,7 +265,8 @@ define([
     	events: {
         	'click #ccmSearchBtn' : 'onClickSearchBtn',
         	'click #commuteDataTable .td-in-out-time' : 'onClickOpenChangeHistoryPopup',
-        	'click #commuteDataTable .btn-comment-add' : 'onClickOpenInsertCommentPopup'
+        	'click #commuteDataTable .btn-comment-add' : 'onClickOpenInsertCommentPopup',
+        	'click #commuteDataTable .btn-commute-edit' : 'onClickOpenUpdateCommutePopup', 
     	},
     	buttonInit: function(){
     	    var that = this;
@@ -391,6 +385,12 @@ define([
                     }
                 }]
             })
+     	},
+     	onClickOpenUpdateCommutePopup: function(evt) {	// 근태 수정 팝업 
+			var data = JSON.parse( $(evt.currentTarget).attr('data') );
+     		// 0부터 시작
+        	var selectItem = this.grid.getDataAt(data.idx-1);
+        	_openCommuteUpdatePopup(selectItem, this);
      	},
      	onClickOpenChangeHistoryPopup: function(evt) {
 			var data = JSON.parse( $(evt.currentTarget).attr('data') );

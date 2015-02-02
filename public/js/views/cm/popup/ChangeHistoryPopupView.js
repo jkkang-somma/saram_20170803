@@ -42,19 +42,11 @@ define([
         		    column:[
     	                     { data : "date", "title" : "일자" },
      	                     //{ data : "id", "title" : "ID", visible: true },
-     	                     { data : "name", "title" : "이름",
-     	                    	 "render": function (data, type, full, meta) {
-     	                    		 return full.name + "</br>(" +full.id + ")";
-     	                    	}
-     	                     },
+     	                     { data : "name", "title" : "이름"},
      	                     { data : "change_before", "title" : "변경 전"},
      	                     { data : "change_after", "title" : "변경 후"},
      	                     { data : "change_date", "title" : "수정 날짜"},
-     	                     { data : "change_name", "title" : "수정자 이름",
-				"render": function (data, type, full, meta) {
-					return full.change_name + "</br>(" +full.change_id + ")";
-				}
-     	                     }
+     	                     { data : "change_name", "title" : "수정자 이름"}
              	        ],
         		    collection:this.changeHistoryCollection,
         		    detail: true,
