@@ -69,7 +69,7 @@ TextBoxHTML, DatePickerHTML
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS",
+		        format: "YYYY-MM-DD HH:mm:ss",
 		        defaultDate: Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
             });
             
@@ -77,7 +77,7 @@ TextBoxHTML, DatePickerHTML
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS",
+		        format: "YYYY-MM-DD HH:mm:ss",
 		        defaultDate: Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss")
             });
             

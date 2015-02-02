@@ -37,7 +37,7 @@ define([
 			
 			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupDate", label : "일자", value : this.selectData.date}));
 			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupDept", label : "부서", value : this.selectData.department}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupName", label : "이름", value : this.selectData.name + " ("+this.selectData.id+")"}));
+			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupName", label : "이름", value : this.selectData.name }));
 			$(this.el).append(_.template(DatePickerChangeHTML)(
 				{
 					id: "commentAddPopupInTime", 
@@ -66,14 +66,14 @@ define([
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS"
+		        format: "YYYY-MM-DD HH:mm:ss"
             });
             
 			$(this.el).find("#commentAddPopupOutTime").datetimepicker({
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS"
+		        format: "YYYY-MM-DD HH:mm:ss"
             });
 
 			$(this.el).find("#commentAddPopupDate").attr("disabled", "true");

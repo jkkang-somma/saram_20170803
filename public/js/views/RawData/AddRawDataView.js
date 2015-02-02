@@ -121,16 +121,16 @@ define([
                                                 
                                                 var destUserInfo = that.userCollection.where({name_commute:item[1]});
                                                 
-                                                var resultDate = Moment(item[2]);
+                                                var resultDate = Moment(item[2], "YYYY-MM-DD HH:mm:ss");
                                                 
                                                 if(destUserInfo.length == 1){ // 등록된 이름인 경우
                                                     that.rawDataCollection.add(new RawDataModel({
                                                         id : destUserInfo[0].attributes.id,
                                                         name : item[1],
                                                         department : item[0],
-                                                        time: resultDate.format("HH:mm:SS"),
+                                                        time: resultDate.format("HH:mm:ss"),
                                                         date: resultDate.format("YYYY-MM-DD"),
-                                                        char_date : resultDate.format("YYYY-MM-DD HH:mm:SS"),
+                                                        char_date : resultDate.format("YYYY-MM-DD HH:mm:ss"),
                                                         year: resultDate.year(),
                                                         type: item[3]
                                                     }));
@@ -140,9 +140,9 @@ define([
                                                             id : "?",
                                                             name : item[1],
                                                             department : item[0],
-                                                            time: resultDate.format("HH:mm:SS"),
+                                                            time: resultDate.format("HH:mm:ss"),
                                                             date: resultDate.format("YYYY-MM-DD"),
-                                                            char_date : resultDate.format("YYYY-MM-DD HH:mm:SS"),
+                                                            char_date : resultDate.format("YYYY-MM-DD HH:mm:ss"),
                                                             year: resultDate.year(),
                                                             type: item[3]
                                                         })); 
@@ -195,7 +195,7 @@ define([
                         action:function(){
                             var dfd = new $.Deferred();
                             that.rawDataCollection.save({
-                                success : function(){
+                                success : function(result){
                                     dfd.resolve();
                                 },
                                 error : function(){
@@ -205,6 +205,7 @@ define([
             	            return dfd;
                         },
                         actionCallBack:function(res){//response schema
+                            console.log(res.result);
                             Dialog.info("데이터 전송이 완료되었습니다.");
                         },
                         errorCallBack:function(){

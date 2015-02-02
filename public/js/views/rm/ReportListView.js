@@ -39,7 +39,7 @@ define([
     },
    
   	initialize:function(){
-  	 var _id = "reportListView_"+(_reportListView++)
+  	 var _id = "reportListView_"+(_reportListView++);
   		this.collection = new ApprovalCollection();
   		
   		// 휴가
@@ -55,7 +55,7 @@ define([
    		    detail:true,
    		    view:this
    		    //gridOption
-   		}
+   		};
   		
   		$(this.el).html('');
 	    $(this.el).empty();
@@ -89,9 +89,9 @@ define([
        var sessionInfo = SessionModel.getUserInfo();
        if(sessionInfo.privilege <= 2){
          // 결재 가능 id
-         $(this.el).find('#btnManagerSearch').css('display', 'inline-block');
+         $(_this.el).find('#btnManagerSearch').css('display', 'inline-block');
        }else{
-         $(this.el).find('#btnManagerSearch').css('display', 'none');
+         $(_this.el).find('#btnManagerSearch').css('display', 'none');
        }
       
       return this;
@@ -198,7 +198,7 @@ define([
           }
           return dataVal;
          }}
-      ]
+      ];
       
       this.option.fetchParam={
   			reset : true, 
@@ -267,7 +267,7 @@ define([
     	          _this.onClickApproval(selectData);
               }
     	    }
-        )
+        );
         _buttons.push({// detail
     	        type:"custom",
     	        name:"read",
@@ -285,7 +285,7 @@ define([
       var _this = this;
       var sessionInfo = SessionModel.getUserInfo();
       var _vacationColl = new VacationCollection();  
-      _vacationColl.url = '/vacation/list'
+      _vacationColl.url = '/vacation/list';
       _vacationColl.fetch({
         data: {id : sessionInfo.id},
 	 			error : function(result) {
@@ -323,7 +323,7 @@ define([
     getDateFormat : function(dateData){
       
       if (!_.isNull(dateData) ) {
-        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:SS");
+        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:sss");
         var tArr = time.split(" ");
         if (tArr.length == 2) {
          return tArr[0] + "</br>" + tArr[1]; 
@@ -526,7 +526,7 @@ define([
                               cssClass: Dialog.CssClass.SUCCESS,
                               action: function(dialogRef){// 버튼 클릭 이벤트
                               
-                                  var dd = Dialog.confirm({
+                                  var canceldd = Dialog.confirm({
                                       msg:"Do you want to cancel this report?", 
                                       action:function(){
                                           var _dfd= new $.Deferred();
