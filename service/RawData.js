@@ -20,7 +20,7 @@ var RawData = function (data) {
 				Promise.all([insertResult]).then(function(resultArr){
 					connection.commit(function(){
 						connection.release();
-						resolve();
+						resolve(resultArr.length);
 					});
 				},function(){
 					connection.rollback(function(){

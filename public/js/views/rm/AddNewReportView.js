@@ -366,7 +366,6 @@ define([
   	  this.thisDfd = new $.Deferred();
   	  
       var formData = this.getFormData($(this.el).find('form'));
-      // console.log(formData);
       
       var essenId = ["start_date", "end_date", "office_code", "submit_comment"];
       var essenMsg = ["기간", "기간", "구분", "메모"];
@@ -429,8 +428,6 @@ define([
       var _approvalIndexModel = new ApprovalIndexModel(docData);
       _approvalIndexModel.save({},{
       	        success:function(model, xhr, options){
-      	         // console.log("##########success");
-      	         // console.log(model);
       	          var _seq = model.attributes.seq;
       	          _seq = (_seq==null)? 1 : _seq + 1;
       	           var doc_num = docData.yearmonth + "-" + _this.getzFormat(_seq, 3);

@@ -33,7 +33,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     var resultTimeFactory = ResultTimeFactory.Builder;
     
     function dateToText(data){
-        return _.isNull(data) ? null : Moment(data).format("MM-DD<br>HH:mm:SS");
+        return _.isNull(data) ? null : Moment(data).format("MM-DD<br>HH:mm:ss");
     }
     
     var CreateDataView = BaseView.extend({
@@ -182,7 +182,6 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                 inOfficeCollection.fetch({data : selectedDate}),
                 yesterdayCommuteCollection.fetchDate(yesterday.format(ResultTimeFactory.DATEFORMAT))
             ).done(function(){
-                
                 var diff_days = endDate.diff(startDate, 'days');
 
                 _.each(userCollection.models, function(userModel, idx){     // 사용자별로 데이터 생성
@@ -193,26 +192,20 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     
                     if( userDepartment == "무소속" || userDepartment==="임원"){
                         
-                        //
                     }else{
                         var yesterdayAttribute = {};
                         
                         var userRawDataCollection = new RawDataCollection(); // 해당 사용자의 출입기록 Collection
-                        _.each(rawDataCollection.filterID(userId), function(model){
-                            userRawDataCollection.add(model);
-                        });
+                        userRawDataCollection.add(rawDataCollection.where({id: userId}));
                         
                         var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
-                        _.each(outOfficeCollection.filterID(userId), function(model){
-                            userOutOfficeCollection.add(model);
-                        });
+                        userOutOfficeCollection.add(outOfficeCollection.where({id: userId}));
                         
                         var userInOfficeCollection = new InOfficeCollection();
-                        _.each(inOfficeCollection.filterID(userId), function(model){
-                            userInOfficeCollection.add(model);
-                        });
+                        userInOfficeCollection.add(inOfficeCollection.where({id: userId}));
                         
                         var filterDate = yesterdayCommuteCollection.where({id : userId}); // 시작일 - 1의 근태 데이터
+                        
                         if(filterDate.length > 0){
                             yesterdayAttribute = filterDate[0].toJSON();
                             yesterdayAttribute.out_time = Moment(yesterdayAttribute.out_time).year(yesterdayAttribute.year);
@@ -264,7 +257,6 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                             today.add(1, 'days');
                         }
                     }
-                    
                     view.setProgressbarPercent( (idx+1) / userCollection.models.length * 100 );
                 });
                 dfd.resolve();

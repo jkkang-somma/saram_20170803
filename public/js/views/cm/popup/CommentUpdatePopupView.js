@@ -45,7 +45,7 @@ define([
             var that = this;
 
     		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
-			$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name + " ("+that.selectData.id+")"}));
+			$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name }));
 			$(that.el).append(_.template(DatePickerChangeHTML)(
 				{
 					id: "commentUpdatePopupInTime", 
@@ -81,7 +81,7 @@ define([
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS",
+		        format: "YYYY-MM-DD HH:mm:ss",
 		        defaultDate: Moment(that.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
             });
             
@@ -89,7 +89,7 @@ define([
             	pickTime: true,
 		        language: "ko",
 		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:SS",
+		        format: "YYYY-MM-DD HH:mm:ss",
 		        defaultDate: Moment(that.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
             });
 
