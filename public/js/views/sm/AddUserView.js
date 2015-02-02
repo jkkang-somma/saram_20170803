@@ -67,11 +67,14 @@ define([
         	                collection:[
         	                    {key:i18nCommon.CODE.POSITION.BOSS,value:i18nCommon.CODE.POSITION.BOSS},
         	                    {key:i18nCommon.CODE.POSITION.VICE_PRESIDENT,value:i18nCommon.CODE.POSITION.VICE_PRESIDENT},
+        	                    {key:i18nCommon.CODE.POSITION.EXECUTIVE_DIRECTOR,value:i18nCommon.CODE.POSITION.EXECUTIVE_DIRECTOR},
         	                    {key:i18nCommon.CODE.POSITION.DIRECTOR,value:i18nCommon.CODE.POSITION.DIRECTOR},
+        	                    {key:i18nCommon.CODE.POSITION.VICE_CHIEF,value:i18nCommon.CODE.POSITION.VICE_CHIEF},
+        	                    {key:i18nCommon.CODE.POSITION.SECTION__CHIEF,value:i18nCommon.CODE.POSITION.SECTION__CHIEF},
+        	                    {key:i18nCommon.CODE.POSITION.DEARI,value:i18nCommon.CODE.POSITION.DEARI},
         	                    {key:i18nCommon.CODE.POSITION.TOP_SEAT,value:i18nCommon.CODE.POSITION.TOP_SEAT},
         	                    {key:i18nCommon.CODE.POSITION.MIDDLE_SEAT,value:i18nCommon.CODE.POSITION.MIDDLE_SEAT},
         	                    {key:i18nCommon.CODE.POSITION.SEAT,value:i18nCommon.CODE.POSITION.SEAT},
-        	                    {key:i18nCommon.CODE.POSITION.DEARI,value:i18nCommon.CODE.POSITION.DEARI},
         	                    {key:i18nCommon.CODE.POSITION.RESEARCHER,value:i18nCommon.CODE.POSITION.RESEARCHER}
         	                ],
         	                group:"requireInfo"

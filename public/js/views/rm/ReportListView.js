@@ -34,11 +34,12 @@ define([
   	  "click #btnCommuteSearch": "onClickSearchBtn",
   	  "click #btnManagerSearch": "onClickManagerSearchBtn",
   	  "click .list-approval-btn": "onClickListApprovalBtn",
-      "click .list-detail-btn": "onClickListDetailBtn"
+      "click .list-detail-btn": "onClickListDetailBtn",
+      "click .list-delete-btn": "onClickListDeleteBtn"
     },
    
   	initialize:function(){
-  	 var _id = "reportListView_"+(_reportListView++)
+  	 var _id = "reportListView_"+(_reportListView++);
   		this.collection = new ApprovalCollection();
   		
   		// 휴가
@@ -54,7 +55,7 @@ define([
    		    detail:true,
    		    view:this
    		    //gridOption
-   		}
+   		};
   		
   		$(this.el).html('');
 	    $(this.el).empty();
@@ -88,9 +89,9 @@ define([
        var sessionInfo = SessionModel.getUserInfo();
        if(sessionInfo.privilege <= 2){
          // 결재 가능 id
-         $(this.el).find('#btnManagerSearch').css('display', 'inline-block');
+         $(_this.el).find('#btnManagerSearch').css('display', 'inline-block');
        }else{
-         $(this.el).find('#btnManagerSearch').css('display', 'none');
+         $(_this.el).find('#btnManagerSearch').css('display', 'none');
        }
       
       return this;
@@ -98,8 +99,8 @@ define([
     
     setDatePickerPop : function(){
       var today = new Date();
-	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-	    var lastDay = new Date(today.getFullYear(), today.getMonth()+1, 1);
+	    var firstDay = new Date(today.getFullYear(), today.getMonth()-1, 1);
+	    var lastDay = new Date(today.getFullYear()+1, today.getMonth()-1, 1);
       
       var beforeDate = $(this.el).find("#beforeDate");
       this.beforeDate=beforeDate.datetimepicker({
@@ -117,7 +118,7 @@ define([
           language: "ko",
           todayHighlight: true, 
           format: "YYYY-MM-DD",
-          defaultDate: Moment(new Date(lastDay - 1)).add(1, 'M').format("YYYY-MM-DD")
+          defaultDate: Moment(new Date(lastDay - 1)).format("YYYY-MM-DD")
       });
     },
     
@@ -170,11 +171,12 @@ define([
            var sessionInfo = SessionModel.getUserInfo();
            var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
            dataVal += "<div style='text-align: center;'>";
-           if(sessionInfo.id == row.manager_id){
-            dataVal +=  "<button class='btn list-approval-btn btn-default btn-sm' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
+           if(sessionInfo.id == row.manager_id && row.state != '결재완료' 
+                        && row.state != '취소완료' && row.state != '상신취소'){
+            dataVal +="<button class='btn list-approval-btn btn-default btn-xs' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
            }
-            dataVal +=  "<button class='btn list-detail-btn btn-default btn-sm' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>"
-            + "</div>";
+           dataVal += "<button class='btn list-detail-btn btn-default btn-xs' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>";
+           dataVal += "</div>";
           return dataVal;
          }},
          {  "title" : "비고" , "render": function(data, type, row){
@@ -196,7 +198,7 @@ define([
           }
           return dataVal;
          }}
-      ]
+      ];
       
       this.option.fetchParam={
   			reset : true, 
@@ -265,7 +267,7 @@ define([
     	          _this.onClickApproval(selectData);
               }
     	    }
-        )
+        );
         _buttons.push({// detail
     	        type:"custom",
     	        name:"read",
@@ -283,7 +285,7 @@ define([
       var _this = this;
       var sessionInfo = SessionModel.getUserInfo();
       var _vacationColl = new VacationCollection();  
-      _vacationColl.url = '/vacation/list'
+      _vacationColl.url = '/vacation/list';
       _vacationColl.fetch({
         data: {id : sessionInfo.id},
 	 			error : function(result) {
@@ -321,7 +323,7 @@ define([
     getDateFormat : function(dateData){
       
       if (!_.isNull(dateData) ) {
-        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:sss");
+        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:ss");
         var tArr = time.split(" ");
         if (tArr.length == 2) {
          return tArr[0] + "</br>" + tArr[1]; 
@@ -495,30 +497,50 @@ define([
          		 var dialogButtons = [];
          		 var sessionInfo = SessionModel.getUserInfo();
          		 if(selectData.submit_id == sessionInfo.id && selectData.state == '결재완료'){
-         		   dialogButtons.push({
-                  label: "취소 요청",
-                  cssClass: Dialog.CssClass.SUCCESS,
-                  action: function(dialogRef){// 버튼 클릭 이벤트
-                  
-                      var dd = Dialog.confirm({
-                          msg:"Do you want to cancel approval?", 
-                          action:function(){
-                            var _dfd= new $.Deferred();
-                              _detailReportView.onClickBtnAppCancel().done(function(model){
-                                  Dialog.show("Completed Approval Cancel.");
-                                  _this.grid.updateRow(model);
-                                  // _this.onClickClearBtn();
-                                  dialogRef.close();
-                               });
-                              // this.action.caller.arguments[0].close();
-                              _dfd.resolve();
-                              return _dfd.promise();
-                          }
-                      });
-                  
-                      
-                  }
-              });
+             		   dialogButtons.push({
+                              label: "취소 요청",
+                              cssClass: Dialog.CssClass.SUCCESS,
+                              action: function(dialogRef){// 버튼 클릭 이벤트
+                              
+                                  var dd = Dialog.confirm({
+                                      msg:"Do you want to cancel approval?", 
+                                      action:function(){
+                                        var _dfd= new $.Deferred();
+                                          _detailReportView.onClickBtnAppCancel('취소요청').done(function(model){
+                                              Dialog.show("Completed Approval Cancel.");
+                                              _this.grid.updateRow(model);
+                                              // _this.onClickClearBtn();
+                                              dialogRef.close();
+                                           });
+                                          // this.action.caller.arguments[0].close();
+                                          _dfd.resolve();
+                                          return _dfd.promise();
+                                      }
+                                  });
+                              }
+                          });
+         		 }
+         		 if(selectData.submit_id == sessionInfo.id && selectData.state == '상신'){
+         		     dialogButtons.push({
+                              label: "상신 취소",
+                              cssClass: Dialog.CssClass.SUCCESS,
+                              action: function(dialogRef){// 버튼 클릭 이벤트
+                              
+                                  var canceldd = Dialog.confirm({
+                                      msg:"Do you want to cancel this report?", 
+                                      action:function(){
+                                          var _dfd= new $.Deferred();
+                                          _detailReportView.onClickBtnAppCancel('상신취소').done(function(model){
+                                              Dialog.show("Completed Report Cancel.");
+                                              _this.grid.updateRow(model);
+                                              dialogRef.close();
+                                           });
+                                          _dfd.resolve();
+                                          return _dfd.promise();
+                                      }
+                                  });
+                              }
+                          });
          		 }
          		 dialogButtons.push({
                   label: "확인",

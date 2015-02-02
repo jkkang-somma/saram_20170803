@@ -45,7 +45,7 @@ define([
             var that = this;
 
     		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
-			$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name + " ("+that.selectData.id+")"}));
+			$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name }));
 			$(that.el).append(_.template(DatePickerChangeHTML)(
 				{
 					id: "commentUpdatePopupInTime", 

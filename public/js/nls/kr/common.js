@@ -69,10 +69,13 @@ define({
         POSITION:{
             BOSS:"대표이사",
             VICE_PRESIDENT:"부사장",
+            EXECUTIVE_DIRECTOR:"상무이사",
             DIRECTOR:"부장",
-            TOP_SEAT:"수석",
-            MIDDLE_SEAT:"책임",
-            SEAT:"선임",
+            VICE_CHIEF:"차장",
+            SECTION__CHIEF:"과장",
+            TOP_SEAT:"수석 연구원",
+            MIDDLE_SEAT:"책임 연구원",
+            SEAT:"선임 연구원",
             DEARI:"대리",
             RESEARCHER:"연구원"
         }

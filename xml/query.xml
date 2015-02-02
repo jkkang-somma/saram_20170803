@@ -229,6 +229,9 @@
     			,black_mark = ?
 			where doc_num=?
     	</query>
+    	<query id="deleteApproval">
+    		delete from approval_tbl where doc_num = ?
+    	</query>
 	</group>
 	
 	<group id="approval_index">
@@ -803,7 +806,9 @@
 									FROM commute_result_tbl
 									WHERE
 										year = ?
-										AND WORK_TYPE != '33'
+										AND WORK_TYPE != '30'
+										AND WORK_TYPE != '40'
+										AND WORK_TYPE != '41'
 										AND OVER_TIME != '0'
 									GROUP BY id, month                            
 							) t1    
