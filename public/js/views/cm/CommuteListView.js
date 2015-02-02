@@ -78,7 +78,6 @@ define([
 	};
 		
 	function _createCommentCell(cellData) {
-<<<<<<< HEAD
 		var data = {
 				comment_count: cellData.comment_count,
 				idx: cellData.idx,
@@ -86,29 +85,9 @@ define([
 				date: cellData.date,
 				isShowEditBtn: (SessionModel.get("user").admin == 1)?true: false
 		};
-		var tpl = _.template(btnNoteCellTemplate)(data); 
+		var tpl = _.template(btnNoteCellTemplate)(data);
 		return tpl;
-	 }	
-=======
-		 var data = JSON.stringify({
-			 idx : cellData.idx
-		 });
-		 
-		 var url = "#commutemanager/comment/" + cellData.id + "/" + cellData.date;
-		 var aHrefStr = "<a class='td-comment' data='" + data +"'  href='"+ url +"' >" + cellData.comment_count + " 건</a>";
-		 return aHrefStr;
 	}
-	
-	// comment Cell 추가 팝어 버튼 
-	function _createCommentCellAddBtn(cellData, tpl) {
-		 var data = JSON.stringify({
-			 idx : cellData.idx
-		 });
-		 var tp = $(tpl);
-		 tp.find(".btn").attr("data", data);
-		 return tp.html();
-	}
->>>>>>> c61bc7c1364c2ce3661baac89f6455ceedc9b24f
 	
 	function _getBrString(result){
 		var resultArr = result.split(/(,|_| )/);
