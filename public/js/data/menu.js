@@ -11,7 +11,7 @@ define([
         subMenu:[{
             title:i18Common.MENU.SUB.SM.USER, //사용자 관리
             hashTag:"#usermanager",
-            auth:ADMIN,
+            auth:USER,
             actionAuth:{
                 add:ADMIN,
                 remove:ADMIN,

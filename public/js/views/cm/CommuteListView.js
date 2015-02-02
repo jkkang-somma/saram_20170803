@@ -244,7 +244,8 @@ define([
 				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
 				        tooltip: "",
         		    }],
-        		    fetch: false
+        		    fetch: false,
+        		    order : [[1, "asc"]]
         	};    		
     		this.buttonInit();
     	},

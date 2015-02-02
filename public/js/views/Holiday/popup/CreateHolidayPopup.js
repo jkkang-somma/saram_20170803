@@ -30,8 +30,8 @@ ComboboxHTML) {
     	    	$yearCombo.append($("<option>"+(year + i)+"</option>"));
     	    }
     	    
-    	    $yearCombo.find("select").val(year);
-         	Combobox.createCombo($yearCombo);
+    	   $yearCombo.find("select").val(year);
+         Combobox.createCombo($yearCombo);
          	
             dfd.resolve();
             return dfd.promise();
