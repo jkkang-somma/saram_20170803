@@ -1141,6 +1141,19 @@
     	</query>
     	
     </group>
-    	
+    <group id ="message">
+    	<query id="getMessage">
+    		select * from msg_tbl;
+		</query>
+		<query id="setMessage">
+			insert into msg_tbl
+				(no, text, visible)
+			values
+				(1, ?, ?)
+			ON DUPLICATE KEY UPDATE
+        		text = ?,
+        		visible = ?
+		</query>
+	</group>
     	
 </querys>

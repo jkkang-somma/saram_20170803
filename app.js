@@ -37,6 +37,7 @@ var codeV2 = require('./routes/codeRouterV2');
 var companyAccess = require('./routes/companyAccessRouter');
 var dashboard = require('./routes/dashboardRouter');
 var report = require('./routes/reportRouter');
+var message = require('./routes/messageRouter');
 
 //var error = require('./routes/error');
 
@@ -104,7 +105,7 @@ app.use(logger('dev'));
 
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){
-    if(req.originalUrl == "/session"||req.originalUrl == "/"){
+    if(req.originalUrl == "/session"||req.originalUrl == "/" || req.originalUrl.split("?")[0] == "/message"){
         next();
     }else{     
         if (req.cookies.saram) {//cookie가 있을 때.
@@ -141,6 +142,7 @@ app.use('/codev2', codeV2);
 app.use('/companyAccess', companyAccess);
 app.use('/dashboard', dashboard);
 app.use('/report', report);
+app.use('/message', message);
 
 
 

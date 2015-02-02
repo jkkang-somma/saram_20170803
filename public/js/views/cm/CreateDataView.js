@@ -101,7 +101,8 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    collection:this.commuteCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search"]
+    		    buttons:["search"],
+    		    order:[[1,"asc"]]
     		};
     		
     		this._dialogInit();
@@ -190,7 +191,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
                     
-                    if( userDepartment == "무소속" || userDepartment==="임원"){
+                    if( userDepartment == "무소속" || userDepartment==="임원" || userId == "000000"){
                         
                     }else{
                         var yesterdayAttribute = {};

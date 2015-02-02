@@ -57,7 +57,8 @@ define([
             ok:"glyphicon-ok",
             read: "glyphicon-list-alt",
             pulsSign:"glyphicon-plus-sign",
-            minusSign:"glyphicon-minus-sign"
+            minusSign:"glyphicon-minus-sign",
+            setting:"glyphicon-cog"
         },
         
         //API

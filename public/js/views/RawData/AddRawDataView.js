@@ -43,7 +43,8 @@ define([
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search"]
+    		    buttons:["search"],
+    		    order:[[3,"asc"], [4,"asc"]]
     		};
     		
     		this._buttonInit();

@@ -21,6 +21,8 @@ drop table if exists holiday_tbl;
 drop table if exists approval_index_tbl;
 drop table if exists black_mark_tbl;
 
+drop table if exists msg_tbl;
+
 CREATE TABLE IF NOT EXISTS `dept_code_tbl` (
   `code` VARCHAR(10) NOT NULL COMMENT '부서 코드',
   `name` VARCHAR(45) NOT NULL COMMENT '부서 이름',
@@ -347,8 +349,8 @@ COMMENT = '근태에 대한 comment ';
 
 CREATE TABLE IF NOT EXISTS `approval_tbl` (
   `doc_num` VARCHAR(45) NOT NULL COMMENT '문서번호 (201501-001)',
-  `submit_id` VARCHAR(45) NOT NULL COMMENT '결제 요청자 사번\n',
-  `manager_id` VARCHAR(45) NOT NULL COMMENT '결제권자 사번',
+  `submit_id` VARCHAR(45) NOT NULL COMMENT '결재 요청자 사번\n',
+  `manager_id` VARCHAR(45) NOT NULL COMMENT '결재권자 사번',
   `submit_date` DATETIME NOT NULL COMMENT '상신일자',
   `decide_date` DATETIME NULL COMMENT '결재일자',
   `submit_comment` VARCHAR(300) NULL COMMENT '상신 메모',
@@ -356,7 +358,7 @@ CREATE TABLE IF NOT EXISTS `approval_tbl` (
   `start_date` VARCHAR(12) NULL COMMENT '근태 시작일',
   `end_date` VARCHAR(12) NULL COMMENT '근태 종료일',
   `office_code` VARCHAR(10) NOT NULL,
-  `state` VARCHAR(45) NOT NULL COMMENT '처리 상태 ( 상신 / 결제완료 / 반려 / 보류 )',
+  `state` VARCHAR(45) NOT NULL COMMENT '처리 상태 ( 상신 / 결재완료 / 반려 / 보류 )',
   `black_mark` VARCHAR(3) NULL COMMENT '상신.결재 상태 ( 1:정상, 2:당일결재, 3:익일결재 )',
   `start_time` VARCHAR(10) NULL COMMENT '외근인 경우 시작시간',
   `end_time` VARCHAR(10) NULL COMMENT '외근인경우 종료시간',
@@ -445,3 +447,13 @@ CREATE TABLE IF NOT EXISTS `black_mark_tbl` (
   PRIMARY KEY (`year`))
 ENGINE = InnoDB
 COMMENT = '벌점 관리';
+
+CREATE TABLE IF NOT EXISTS `msg_tbl` (
+  `no` int(10) COMMENT '공지사항',
+  `text` TEXT(1000) NOT NULL COMMENT '공지사항',
+  `visible` TINYINT(4) NULL COMMENT 'visible',
+  PRIMARY KEY (`no`))
+ENGINE = InnoDB
+COMMENT = '공지사항 테이블';
+
+insert into msg_tbl(no,text,visible) values(1,"test",0);
