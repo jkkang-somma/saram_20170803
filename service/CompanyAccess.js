@@ -14,7 +14,7 @@ var CompanyAccess = function() {
 		var need_confirm = 1; // 1: 정상 , 2: 확인 필요
 		
 		var hasIp = false;
-		if (user.ip_pc == data.ip_pc || user.ip_office == data.ip_office) {
+		if (user.ip_pc == data.ip_office || user.ip_office == data.ip_office) {
 //		if (user.ip_office == data.ip_office) {
 			hasIp = true;
 		}
