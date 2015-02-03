@@ -8,13 +8,14 @@ define([
 'cryptojs.sha256',
 'models/sm/UserModel',
 'models/sm/SessionModel',
+'models/MessageModel',
 'text!templates/login/loginTemplate.html',
 'text!templates/login/loginPasswordSectionTemplate.html',
 'text!templates/login/initPasswordTemplate.html',
 'text!templates/login/findPasswordSectionTemplate.html',
 'i18n!nls/common',
 'css!cs/login.css',
-], function($, _,Backbone, log, Dialog, Spin, CryptoJS, UserModel, SessionModel, LoginHTML, LoginPasswordSectionHTML 
+], function($, _,Backbone, log, Dialog, Spin, CryptoJS, UserModel, SessionModel, MessageModel, LoginHTML, LoginPasswordSectionHTML 
 , InitPasswordHTML, FindPasswordSectionHTML
 , i18nCommon){
     var opts = {
@@ -157,11 +158,16 @@ define([
     	    
     	    this.formSection.find("#loginIdTextbox").focus();
     	    
-    	    Dialog.info(
-    	        "근태 시스템 1월 데이터가 ERP에 등록된 데이터로 세팅 되었습니다. \n"
-    	        +"1월 중 발생한 휴가/ 휴일근무를 ERP에 등록하지 않은경우\n"
-    	        +"근태시스템에 등록이 되어있지 않을 수 있습니다\n" 
-    	        +"확인 부탁 드립니다.");
+    	    var messageModel = new MessageModel();
+    	    messageModel.fetch({
+    	        success : function(result){
+    	            if(result.get("visible") == 1){
+    	                Dialog.info( result.get("text") );      
+                	       
+    	            }
+    	            
+    	        }
+    	    })
      	},
     	
     	login : function(){

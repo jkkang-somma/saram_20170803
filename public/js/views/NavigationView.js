@@ -12,19 +12,13 @@ define([
   'models/sm/SessionModel',
   'models/common/RawDataModel',
   'views/sm/ConfigUserView',
+  'views/AdminSettingView'
 ], function($, _, Backbone, animator,Dialog, i18Common, 
-		BaseView, navigation, Menu, Code, SessionModel, RawDataModel, ConfigUserView){
+		BaseView, navigation, Menu, Code,
+		SessionModel, RawDataModel,
+		ConfigUserView, AdminSettingView
+){
   
-    
-        // <li class="dropdown">
-        //   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">일반 관리<span class="caret"></span></a>
-        //   <ul class="dropdown-menu" role="menu">
-        //     <li><a href="#usermanager">사원 관리</a></li>
-        //     <li><a href="#holidaymanager">휴일 관리</a></li>
-        //     <li><a href="#vacation">연차 관리</a></li>
-        //     <!--li class="divider"></li-->
-        //   </ul>
-        // </li>
   var NavigationView = BaseView.extend({
     el: "#mainNavigation",
   	initialize:function(){
@@ -72,6 +66,11 @@ define([
         	$(this.el).find('#accessOut').remove();
         }
         
+        if(_auth == 1){
+            $("#setting").html('<span class="glyphicon glyphicon-cog"></span> 설정');    
+        }else{
+            $(this.el).find('#setting').remove();
+        }
         $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);
         animator.animate(this.el, animator.FADE_IN_DOWN);
     },
@@ -79,7 +78,8 @@ define([
 		'click #logout': 'logout',
 		'click #userConifg' :'userConifg',
 		'click #accessIn' : 'accessIn',
-		'click #accessOut' : 'accessOut'
+		'click #accessOut' : 'accessOut',
+		'click #setting' : 'setting'
     },
     show:function(){
       var _view=this;
@@ -114,11 +114,14 @@ define([
             
         });
 	},
+	
 	accessIn: function() {	// 출근 기록
 		var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'출근(수원)'}, {
     		success: function(model, response) {
-    			Dialog.show("출근 등록 되었습니다.");
+    			Dialog.show(
+    			    "출근 등록 되었습니다.\n"
+    			    + "출근시간 : " + response.data.char_date );
          	}, error : function(model, res){
          		Dialog.error("출근 등록이 실패했습니다.");
          	}
@@ -128,11 +131,28 @@ define([
 		var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'퇴근(수원)'}, {
     		success: function(model, response) {
-    			Dialog.show("퇴근 등록 되었습니다.");
+    		    Dialog.show(
+    			    "퇴근 등록 되었습니다.\n"
+    			    + "퇴근시간 : " + response.data.char_date );
          	}, error : function(model, res){
          		Dialog.error("퇴근 등록이 실패했습니다.");
          	}
 		});
+	},
+	
+	setting:function(){
+	    var adminSettingView=new AdminSettingView();
+		Dialog.show({
+            title:"관리자 설정", 
+            content:adminSettingView, 
+            buttons:[{
+                label: i18Common.DIALOG.BUTTON.CLOSE,
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+            
+        });
 	}
   });
   return NavigationView;

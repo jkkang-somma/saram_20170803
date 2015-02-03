@@ -38,14 +38,15 @@ var CommuteYearExcelCreater = function () {
 	var COL_HOLIDAY_WORK_PAY =  135;
 	var COL_HOLIDAY_WORK_PAY_END =  147;
 
-	function _createExcelTitle(sheet) {
+	function _createExcelTitle(sheet, searchValObj) {
 
-		_setTitleCellStyle(sheet, 1, 1, " 기준년도 ")
+		_setTitleCellStyle(sheet, 1, 1, " 검색기간 ")
 //		for (var i = 1, len = 200; i < len; i++) {
 //			_setTitleCellStyle(sheet, i, 1, i);
 //		}
 
-		_setTitleCellStyle(sheet, 2, 1, " 2015년 ");
+		sheet.merge({col:2, row:1},{col:4, row:1});
+		_setTitleCellStyle(sheet, 2, 1, (searchValObj.startDate + " ~ " + searchValObj.endDate) );
 
 		sheet.merge({col:COL_DEPT, row:2},{col:COL_DEPT, row:4});
 		_setTitleCellStyle(sheet, COL_DEPT, 2, " 부서 ");
@@ -376,7 +377,7 @@ var CommuteYearExcelCreater = function () {
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
-			var fileName = "근태자료_"+ searchValObj.year + "_" +new Date().getTime() + ".xlsx";
+			var fileName = "근태자료_"+ searchValObj.startDate + "_" + searchValObj.endDate + "_" +new Date().getTime() + ".xlsx";
 			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
 			
 			// 파일 폴더 체크 
@@ -394,7 +395,7 @@ var CommuteYearExcelCreater = function () {
 			// sheet 기본 크기 
 			var sheet1 = workbook.createSheet('sheet1', 200, 150);
 			
-			_createExcelTitle(sheet1);		
+			_createExcelTitle(sheet1, searchValObj);		
 			_createExcelData(sheet1, searchValObj, datas);
 
 			// Save it

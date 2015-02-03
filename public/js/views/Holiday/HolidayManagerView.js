@@ -51,7 +51,8 @@ CreateHolidayPopup, AddHolidayPopup){
     		    collection:this.holidayCollection,
     		    detail: true,
     		    fetch:false,
-    		    buttons:["search"]
+    		    buttons:["search"],
+    		    order: [[1,"asc"]]
     		};
     		
             this._buttonInit();

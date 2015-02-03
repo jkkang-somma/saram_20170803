@@ -28,6 +28,7 @@ var codeV2 = require('./routes/codeRouterV2');
 var companyAccess = require('./routes/companyAccessRouter');
 var dashboard = require('./routes/dashboardRouter');
 var report = require('./routes/reportRouter');
+var message = require('./routes/messageRouter');
 
 
 var debug = require('debug')('APP');
@@ -65,7 +66,7 @@ app.use(logger('dev'));
 
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){
-    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/"];
+    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/", "/message"];
     var pathname = url.parse(req.url).pathname;
     if(_.indexOf(passURLArr, pathname) > -1){
         next();
@@ -104,6 +105,7 @@ app.use('/codev2', codeV2);
 app.use('/companyAccess', companyAccess);
 app.use('/dashboard', dashboard);
 app.use('/report', report);
+app.use('/message', message);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .

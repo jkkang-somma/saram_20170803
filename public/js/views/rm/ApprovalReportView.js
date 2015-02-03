@@ -194,7 +194,7 @@ define([
       if(indexed_array.state == '결재완료'){
         // black_mark 값 설정 1: 정상 , 2: 당일 결재 , 3: 익일결재
         var _today = new Date();
-        var sToday = _today.getFullYear() + "-" + this.getzFormat(_today.getMonth()+1, 2) + "-" + _today.getDate();
+        var sToday = _today.getFullYear() + "-" + this.getzFormat(_today.getMonth()+1, 2) + "-" + this.getzFormat(_today.getDate(), 2);
         _today = new Date(sToday.substr(0,4),sToday.substr(5,2)-1,sToday.substr(8,2));
         var sStart = $(this.el).find('#start_date input').val();
         var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
@@ -253,6 +253,7 @@ define([
         var resultModel = new ApprovalModel(_this.options);
         resultModel.set({state : _approvalCollection.models[0].get("state")});
         resultModel.set({decide_date : new Date()});
+        resultModel.set({black_mark : formData.black_mark});
         
         dfd.resolve(resultModel.attributes);
       }, function(){

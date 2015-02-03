@@ -12,23 +12,23 @@ var commuteYearExcelCreater = require('../excel/CommuteYearExcelCreater.js');
 
 var Report = function() {	
 
-	var _getCommuteYearReport = function(data) {
+	var _getCommuteYearReport = function(selObj) {
 		
 	    return new Promise(function(resolve, reject){// promise patten
 
 			var queryResults = [];
 			
 			queryResults.push( UserDao.selectUserList() );
-			queryResults.push( ReportDao.selectLateWorkerReport(data.year) );
-			queryResults.push( ReportDao.selectUsedHolidayReport(data.year) );
-			queryResults.push( ReportDao.selectOverTimeWorkeReport(data.year) );
-			queryResults.push( ReportDao.selectOverTimeWorkTypeReport(data.year) );
-			queryResults.push( ReportDao.selectOverTimeWorkPayReport(data.year) );
-			queryResults.push( ReportDao.selectHolidayWorkTypeReport(data.year) );
-			queryResults.push( ReportDao.selectHolidayWorkPayReport(data.year) );
+			queryResults.push( ReportDao.selectLateWorkerReport(selObj) );
+			queryResults.push( ReportDao.selectUsedHolidayReport(selObj) );
+			queryResults.push( ReportDao.selectOverTimeWorkeReport(selObj) );
+			queryResults.push( ReportDao.selectOverTimeWorkTypeReport(selObj) );
+			queryResults.push( ReportDao.selectOverTimeWorkPayReport(selObj) );
+			queryResults.push( ReportDao.selectHolidayWorkTypeReport(selObj) );
+			queryResults.push( ReportDao.selectHolidayWorkPayReport(selObj) );
 	    	
 	    	Promise.all(queryResults).then(function(result){
-				commuteYearExcelCreater.createExcel(data, result).then(function(excelResult) {
+				commuteYearExcelCreater.createExcel(selObj, result).then(function(excelResult) {
 					resolve( excelResult);
 				}).catch(function(err) {
 		        	reject(err);

@@ -323,7 +323,7 @@ define([
     getDateFormat : function(dateData){
       
       if (!_.isNull(dateData) ) {
-        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:sss");
+        var time = Moment(dateData).format("YYYY-MM-DD HH:mm:ss");
         var tArr = time.split(" ");
         if (tArr.length == 2) {
          return tArr[0] + "</br>" + tArr[1]; 

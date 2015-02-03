@@ -16,7 +16,6 @@ define([
   'jqFileDownload',
   'models/sm/SessionModel',
   'models/report/ReportModel',
-  'views/component/ProgressbarView',
   'text!templates/report/searchFormTemplate.html'
 ], function($,
 		_,
@@ -31,7 +30,6 @@ define([
 		JqFileDownload,
 		SessionModel,
 		ReportModel,
-		ProgressbarView,
 		searchFormTemplate){
 	
 //	// 검색 조건 년도 
@@ -62,11 +60,9 @@ define([
 
     	    
     	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear() });
-    	    this.progressbar = new ProgressbarView();
     	    
     	    _layOut.append(_head);
     	    _layOut.append(searchForm);
-    	    _layOut.append(this.progressbar.render());
     	      	    
     	    $(this.el).html(_layOut);
 

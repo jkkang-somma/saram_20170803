@@ -6,45 +6,45 @@ var ReportDao = function () {
 }
 
 // 지각 현황
-ReportDao.prototype.selectLateWorkerReport =  function (year) {
+ReportDao.prototype.selectLateWorkerReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectLateWorkerReport');
-    return db.queryV2(queryStr, [year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 // 연차 사용 현황
-ReportDao.prototype.selectUsedHolidayReport =  function (year) {
+ReportDao.prototype.selectUsedHolidayReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectUsedHolidayReport');
-    return db.queryV2(queryStr, [year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 // 잔업시간(분) 현황 ( 평일 잔업시간 )	
-ReportDao.prototype.selectOverTimeWorkeReport =  function (year) {
+ReportDao.prototype.selectOverTimeWorkeReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectOverTimeWorkeReport');
-    return db.queryV2(queryStr, [year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 // 잔업 수당 타입 현황	
-ReportDao.prototype.selectOverTimeWorkTypeReport =  function (year) {
+ReportDao.prototype.selectOverTimeWorkTypeReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectOverTimeWorkTypeReport');
-    return db.queryV2(queryStr, [year, year, year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate, selObj.year, selObj.startDate, selObj.endDate, selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 // 잔업 수당 금액 현황	
-ReportDao.prototype.selectOverTimeWorkPayReport =  function (year) {
+ReportDao.prototype.selectOverTimeWorkPayReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectOverTimeWorkPayReport');
-    return db.queryV2(queryStr, [year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 // 휴일 근무 타입 현황
-ReportDao.prototype.selectHolidayWorkTypeReport =  function (year) {
+ReportDao.prototype.selectHolidayWorkTypeReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectHolidayWorkTypeReport');
-    return db.queryV2(queryStr, [year, year, year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate, selObj.year, selObj.startDate, selObj.endDate, selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 // 휴일근무 수당 금액 현황		
-ReportDao.prototype.selectHolidayWorkPayReport =  function (year) {
+ReportDao.prototype.selectHolidayWorkPayReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectHolidayWorkPayReport');
-    return db.queryV2(queryStr, [year]);
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
 }
 
 module.exports = new ReportDao();
