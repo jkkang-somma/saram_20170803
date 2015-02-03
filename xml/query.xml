@@ -770,9 +770,10 @@
 										ON v.id = o.id AND v.year = o.year
 									WHERE
 										v.year = ?
+										AND o.office_code IN ('V01', 'V02', 'V03')
 									GROUP BY month, v.id, v.total_day                       
 						) t1    
-						GROUP BY id, total_day                
+						GROUP BY id, total_day
 				) t2
 			ON m.id = t2.id  
 			ORDER BY m.name	
