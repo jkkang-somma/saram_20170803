@@ -77,6 +77,7 @@ define({
             MIDDLE_SEAT:"책임 연구원",
             SEAT:"선임 연구원",
             DEARI:"대리",
+            WORKER:"사원",
             RESEARCHER:"연구원"
         }
     },
@@ -97,7 +98,8 @@ define({
             INIT_PASSWORD_PUT:"초기화 정보를 입력해 주세요.",
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
-            INIT_PASSWORD:"비밀번호를 설정해주세요."
+            INIT_PASSWORD:"비밀번호를 설정해주세요.",
+            FIND_PASSWORD_PUT:"사용자 정보를 입력해 주세요."
         },
         USER:{
             NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지않습니다."
@@ -194,5 +196,30 @@ define({
     SUB_TITLE:{
         DETAIL_INFO:"상세 정보",
         REQUIRE_INFO:"주요 정보"
+    },
+    
+    //로그인
+    LOGIN_VIEW:{
+        TITLE:"Yescnc 근태관리 시스템",
+        ID_PLACEHOLDER:"아이디",
+        PASSWORD_PLACEHOLDER:"비밀번호",
+        LOGIN_SATUS_BTN:"로그인중..",
+        LOGIN_BTN:"로그인",
+        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  ",
+        FIND_PASSWORD_TEXT_A:"비밀번호 찾기"
+    },
+    INIT_PASSWORD_VIEW:{
+        TITLE:"비밀번호 설정",
+        NEW_PASSWORD_PLACEHOLDER:"새 비밀번호",
+        RE_PASSWORD_PLACEHOLDER:"비밀번호 확인",
+        INIT_PASSWORD_STATUS_BTN:"비밀번호 저장중..",
+        INIT_PASSWORD_BTN:"비밀번호 저장"
+    },
+     FIND_PASSWORD_VIEW:{
+        TITLE:"비밀번호 찾기",
+        EMAIL_PLACEHOLDER:"E-mail",
+        FIND_PASSWORD_STATUS_BTN:"찾는중..",
+        FIND_PASSWORD_BTN:"비밀번호 찾기",
+        FIND_TEXT_INFO:"※  아이디와 가입하실때 등록한 이메일를 입력해주세요."
     }
 });

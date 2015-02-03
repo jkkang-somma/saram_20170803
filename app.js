@@ -1,24 +1,15 @@
+//lib config
 var express = require('express');
 var express_session= require("express-session");
-//var favicon = require('serve-favicon');
-
+var _= require("underscore");  
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// var multer = require('multer');
+var url = require("url");
 
-// var email=require("./node_modules/emailjs/email");
-// var emailServer=email.server.connect({
-//     user:"novles@yescnc.co.kr",
-//     password:"2952441a!",
-//     host:"webmail.yescnc.co.kr",
-//     port:25,
-//     ssl:false,
-// });
-
+//lib router config
 var sessionManager = require('./lib/sessionManager');
-
 var index = require('./routes/index');
 var user = require('./routes/userRouter');
 var session = require('./routes/sessionRouter');
@@ -38,38 +29,19 @@ var companyAccess = require('./routes/companyAccessRouter');
 var dashboard = require('./routes/dashboardRouter');
 var report = require('./routes/reportRouter');
 
-//var error = require('./routes/error');
 
-
-//var sass = require('node-sass-middleware')
+var debug = require('debug')('APP');
 var app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-
-// set bodyParser(Body Limit 50mb)
 app.use(bodyParser.urlencoded({limit: '80mb', extended: true}));
 app.use(bodyParser.json({limit: '80mb'}));
 app.use(bodyParser({limit : '80mb'}));
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-//session manager setup
-
-/*var sessionStore = new SessionStore({
-    host: 'localhost',
-    user: 'sangheepark',
-    password : '',
-    port : 3306,
-    database:'c9'
-});*/
-
 app.use(express_session({
     secret:"express-saram",
     //store : sessionStore,
@@ -84,27 +56,18 @@ var authError=function(next){
 
 app.use(logger('dev'));
 
-//근태서버 다운
+// //근태서버 다운
 // app.use(function(req,res,next){
     
-    
-//     emailServer.send({
-//       text:    "i hope this works", 
-//       from:    "novles@yescnc.co.kr", 
-//       to:      "novles@yescnc.co.kr",
-//       cc:      "novles@yescnc.co.kr",
-//       subject: "testing emailjs"
-//     }, function(err, message) {
-//         console.log(err || message);
-//         });
-//     res.send( res.render("error"));
 // });
 
 
 
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){
-    if(req.originalUrl == "/session"||req.originalUrl == "/"){
+    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/"];
+    var pathname = url.parse(req.url).pathname;
+    if(_.indexOf(passURLArr, pathname) > -1){
         next();
     }else{     
         if (req.cookies.saram) {//cookie가 있을 때.
@@ -121,8 +84,8 @@ app.use(function(req,res,next){
     }
 });
 
-var debug = require('debug')('APP');
-// route page
+
+// route link
 app.use('/', index);
 app.use('/user', user);
 app.use('/session', session);
@@ -141,11 +104,6 @@ app.use('/codev2', codeV2);
 app.use('/companyAccess', companyAccess);
 app.use('/dashboard', dashboard);
 app.use('/report', report);
-
-
-
-//app.use('/error', error);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .

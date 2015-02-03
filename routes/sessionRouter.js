@@ -1,5 +1,7 @@
 var express = require('express');
 var _ = require("underscore"); 
+var fs = require('fs');
+
 var sessionManager = require('../lib/sessionManager');
 var Session = require('../service/Session');
 var debug = require('debug')('sessionRouter');
@@ -7,6 +9,26 @@ var router = express.Router();
 var User = require('../service/User.js');
 var encryptor = require('../lib/encryptor.js');
 var suid =  require('rand-token').suid;
+var _baseURL="https://yescnc-sangheepark.c9.io";
+
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var mailDefaultOptions = {
+    from: 'novles@yescnc.co.kr', // sender address 
+    //to: 'novles@yescnc.co.kr',
+    // subject: 'Hello ✔', // Subject line 
+    // text: 'Hello world ✔', // plaintext body 
+    // html: '<b>Hello world ✔</b>' // html body 
+};
+var transport = nodemailer.createTransport(smtpTransport({
+    host: 'webmail.yescnc.co.kr',
+    port: 25,
+    auth: {
+        user: 'novles@yescnc.co.kr',
+        pass: '2952441a!'
+    }
+}));
+
 
 var sessionResponse=function(req, res, session){
     if (_.isUndefined(session)||_.isNull(session)){
@@ -19,9 +41,7 @@ router.route('/')
 .post(function(req, res){//만들기.
     if (req.cookies.saram) {//cookie가 있을 때.
         if (sessionManager.validationCookie(req.cookies.saram, res)){
-            debug("@@@@@@@@@@@@@@");
             sessionResponse(req, res, sessionManager.get(req.cookies.saram));
-            debug("@@@@@@@@@@@@@@");
         } else {//유효하지 않은 cookie 삭제.
             sessionManager.remove(req.cookies.saram);
             res.clearCookie("saram");
@@ -99,6 +119,92 @@ router.route('/')
     });
     res.clearCookie("saram");
     res.send({});
+});
+
+
+
+router.route('/findPassword')
+.put(function(req, res){//만들기.
+   var user = new User(req.body.user);
+    user.findPassword().then(function(result){
+        // error 없을 시 아래 수행.
+         fs.readFile(__dirname + '../../public/templates/login/requetInitPassword.html', 'utf8', function(err, html){
+            if(err){
+                debug(err);
+                //throw new Error(err);
+                res.status(500);
+                res.send({
+                    success:false,
+                    message: err,
+                    error:{}
+                });
+            }else{
+                //html read
+                var temp=_.template(html);
+                var data={
+                    name:result.name,
+                    token:"ax1ax1",
+                    id:result.id,
+                    baseURL:_baseURL
+                };
+                var sendHTML=temp(data);
+                var mailOptions=_.defaults(mailDefaultOptions, {
+                    to:result.email,
+                    subject:"Yescnc 근태관리 시스템(비밀번호 초기화 요청 페이지)",
+                    html:sendHTML,
+					text:""
+                });
+                transport.sendMail(mailOptions, function(error, info){
+                    if(error){//메일 보내기 실패시 
+                        debug(error);
+                        res.status(500);
+                        res.send({
+                            success:false,
+                            message: error,
+                            error:{}
+                        });
+                    }else{
+                        res.send({msg:"SUCCESS_REQUEST_FIND_PASSWORD"});
+                    }
+                });
+            }
+        });
+       // res.send(result);
+    }).catch(function(e){
+        debug("Exception:" + e);;
+        res.status(500);
+        res.send({
+            success:false,
+            message: e,
+            error:{}
+        });
+    });
+});
+
+router.route('/resetPassword')
+.get(function(req, res){
+    var params=req.query;
+    var user = new User(params);
+    fs.readFile(__dirname + '../../public/templates/login/successInitPassword.html', 'utf8', function(err, html){
+        if(err){
+            debug(err);
+                res.status(500);
+                res.send({
+                    success:false,
+                    message: {},
+                    error:{}
+                });
+        }else{
+            //html read
+            var temp=_.template(html);
+            var data={
+                name:user.get("name"),
+                baseURL:_baseURL
+            };
+            var sendHTML=temp(data);
+            res.send(sendHTML);
+        }
+    });
 });
 
 module.exports = router;

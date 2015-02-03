@@ -35,7 +35,7 @@ define([
             type: BootstrapDialog.TYPE_DANGER,
             closable: true, 
             buttons: [{
-                label: 'Close',
+                label: i18nCommon.DIALOG.BUTTON.CLOSE,
                 cssClass: CssClass.ERROR,
                 action: function(dialogRef){
                     dialogRef.close();
@@ -53,7 +53,7 @@ define([
             type: BootstrapDialog.TYPE_WARNING,
             closable: true, 
             buttons: [{
-                label: 'Close',
+                label: i18nCommon.DIALOG.BUTTON.CLOSE,
                 cssClass: CssClass.WARNING,
                 action: function(dialogRef){
                     dialogRef.close();
@@ -72,7 +72,7 @@ define([
             type: BootstrapDialog.TYPE_DEFAULT,
             closable: true, 
             buttons: [{
-                label: 'Close',
+                label: i18nCommon.DIALOG.BUTTON.CLOSE,
                 cssClass: CssClass.SUCCESS,
                 action: function(dialogRef){
                     dialogRef.close();
@@ -192,33 +192,12 @@ define([
             }
         }
         
-        
         BootstrapDialog.show({
             title: i18nCommon.DIALOG.TITLE.PRIMARY,
             message:config.msg,
             type: BootstrapDialog.TYPE_PRIMARY,
             closable: true, 
             buttons: _btns
-                
-            //     {
-            //     icon: config.icon,
-            //     label: config.label,
-            //     cssClass: 'btn-primary',
-            //     autospin: true,
-            //     action: function(dialogRef){
-            //         dialogRef.enableButtons(false);
-            //         dialogRef.setClosable(false);
-            //         dialogRef.getModalBody().html('Delete.......');
-            //         setTimeout(function(){
-            //             dialogRef.close();
-            //         }, 5000);
-            //     }
-            // }, {
-            //     label: 'Close',
-            //     action: function(dialogRef){
-            //         dialogRef.close();
-            //     }
-            // }]
         }); 
     };
     

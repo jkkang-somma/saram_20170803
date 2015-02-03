@@ -119,12 +119,13 @@ define([
             label:undefined,
             value:undefined,
             code:undefined,
-            textKey:"name",
-            collection:undefined,
-            codeKey:"code",
-            linkField:undefined,
-            disabled:false,
-            group:undefined
+            textKey:"name", 
+            collection:undefined, //binding collection
+            codeKey:"code", //code key
+            linkField:undefined, // value값 셋팅 hidden field
+            disabled:false, // 활성화 유무
+            group:undefined, // 그룹 네임
+            firstBlank:false //공백 로우
         },
         hidden:{
             type:"hidden",
