@@ -226,6 +226,8 @@ define([
                                     this.checkEarly = false;
                                 break;
                             case "W02": // 출장
+                                this.checkLate = false;
+                                this.checkEarly = false;
                                 break;
                             
                         }
@@ -330,7 +332,9 @@ define([
             }
 
             if(!this.inTime && !this.outTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
-                this.workType = WORKTYPE.ABSENTCE;
+                if(this.outOfficeCode!=="W02"){
+                    this.workType = WORKTYPE.ABSENTCE;
+                }
             }else if(!this.inTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
                 this.workType = WORKTYPE.NOTINTIME;
             }else if(!this.outTime && !(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){
