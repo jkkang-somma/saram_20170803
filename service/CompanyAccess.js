@@ -7,6 +7,7 @@ var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
 var RawDataDao= require('../dao/rawDataDao.js');
 var UserDao= require('../dao/userDao.js');
+var Moment = require("moment");
 
 var CompanyAccess = function() {	
 
@@ -32,11 +33,12 @@ var CompanyAccess = function() {
 						type : data.type,
 						ip_pc : data.ip_pc,
 						ip_office : data.ip_office,
-						need_confirm : need_confirm
+						need_confirm : need_confirm,
+						char_date : Moment().format("YYYY-MM-DD HH:mm:ss")
 				};
 				
 				RawDataDao.insertRawDataCompanyAccess(insertDataObj).then(function(inResult) {
-					resolve(inResult);
+					resolve({dbResult : inResult, data : insertDataObj});
 	    		}).catch(function(e){
 	                reject(e);
 	            });

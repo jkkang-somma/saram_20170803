@@ -176,7 +176,7 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var inOfficeCollection = new InOfficeCollection();
             
             $.when(
-                rawDataCollection.fetch({data: { start : selectedDate.start }}),
+                rawDataCollection.fetch({data: { start : selectedDate.start, end:endDate.add(1,"days").format(ResultTimeFactory.DATEFORMAT) }}),
                 userCollection.fetch(),
                 holidayCollection.fetch({ data : {  year : startDate.year() } }),
                 outOfficeCollection.fetch({data : selectedDate}),
