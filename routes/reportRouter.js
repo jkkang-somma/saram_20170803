@@ -9,7 +9,9 @@ router.route('/commuteYearReport')
 .get(function(req, res, next){
 	
 	var searchValObj = {
-			year : req.query.year,
+			year : req.query.startDate.substring(0, 4),
+			startDate : req.query.startDate,
+			endDate : req.query.endDate,
 			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
 	};
 			

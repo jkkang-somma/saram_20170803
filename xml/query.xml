@@ -72,7 +72,7 @@
   			INSERT INTO commute_base_tbl 
   				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm)
   			VALUES
-  				(year(now()), ? , ?, ?, now(), ?, ?, ?, ?)
+  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?)
         </query>
         
         <query id="selectRawDataList">
@@ -722,7 +722,8 @@
 									FROM 
 										commute_result_tbl
 									WHERE
-										year = ? 
+										year = ?
+										AND date BETWEEN ? AND ? 
 										AND (work_type = '10' || work_type = '11')
 									GROUP BY id, month
 							) t1    
@@ -770,6 +771,7 @@
 										ON v.id = o.id AND v.year = o.year
 									WHERE
 										v.year = ?
+										AND o.date BETWEEN ? AND ?
 										AND o.office_code IN ('V01', 'V02', 'V03')
 									GROUP BY month, v.id, v.total_day                       
 						) t1    
@@ -815,6 +817,7 @@
 									FROM commute_result_tbl
 									WHERE
 										year = ?
+										AND date BETWEEN ? AND ?
 										AND WORK_TYPE != '30'
 										AND WORK_TYPE != '40'
 										AND WORK_TYPE != '41'
@@ -869,6 +872,7 @@
 							commute_result_tbl
 						WHERE 
 							year = ?
+							AND date BETWEEN ? AND ?
 							AND overtime_code = '2015_AA'
 						GROUP BY id, month                         
 					) t1    
@@ -900,6 +904,7 @@
 								commute_result_tbl
 							WHERE 
 								year = ?
+								AND date BETWEEN ? AND ?
 								AND overtime_code = '2015_AB'
 							GROUP BY id, month                         
 						) t1    
@@ -931,6 +936,7 @@
 								commute_result_tbl
 							WHERE 
 								year = ?
+								AND date BETWEEN ? AND ?
 								AND overtime_code = '2015_AC'
 							GROUP BY id, month                         
 						) t1    
@@ -975,6 +981,7 @@
 									ON c.overtime_code = o.code
 								WHERE 
 									c.year = ?
+									AND c.date BETWEEN ? AND ?
 									AND c.overtime_code IN ('2015_AA', '2015_AB','2015_AC')
 								GROUP BY id, month                         
 						) t1    
@@ -1027,6 +1034,7 @@
 							commute_result_tbl
 						WHERE 
 							year = ?
+							AND date BETWEEN ? AND ?
 							AND overtime_code = '2015_BA'
 						GROUP BY id, month                         
 					) t1    
@@ -1058,6 +1066,7 @@
 							commute_result_tbl
 						WHERE 
 							year = ?
+							AND date BETWEEN ? AND ?
 							AND overtime_code = '2015_BB'
 						GROUP BY id, month                         
 					) t1    
@@ -1089,6 +1098,7 @@
 								commute_result_tbl
 							WHERE
 								year = ?
+								AND date BETWEEN ? AND ?
 								AND overtime_code = '2015_BC'
 							GROUP BY id, month
 						) t1
@@ -1134,6 +1144,7 @@
 										on c.overtime_code = o.code
 									WHERE 
 										c.year = ?
+										AND c.date BETWEEN ? AND ?
 										AND c.overtime_code IN ('2015_BA', '2015_BB','2015_BC')
 									GROUP BY id, month                         
 							) t1    
