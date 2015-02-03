@@ -156,6 +156,12 @@ define([
             }else{
                 this.isSuwon = false;    
             }
+            
+            if(this.workType == WORKTYPE.HOLIDAYWORK){
+                this.checkInOffice = true;
+            }else{
+                this.checkInOffice = false;
+            }
         },
         
         setStandardInTime : function(yesterdayOutTime){
@@ -341,7 +347,7 @@ define([
                 this.workType = WORKTYPE.NOTOUTTIME;
             }else{
                 // 초과근무시간 판단 over_time
-                if (this.workType == WORKTYPE.HOLIDAY){ //휴일근무인 경우
+                if (this.workType == WORKTYPE.HOLIDAY || this.workType == WORKTYPE.HOLIDAYWORK){ //휴일근무인 경우
                     this.setHolidayWorkTimeCode();
                 } else {
                     this.setLateTime();
@@ -395,17 +401,15 @@ define([
         
         setHolidayWorkTimeCode : function(){
             if(!(_.isNull(this.outTime)) && !(_.isNull(this.inTime))){
-                if(this.workType == WORKTYPE.HOLIDAY){
-                    this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
-                    if(this.checkInOffice){
-                        if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
-                        else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
-                        else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
-                        
-                        this.workType = WORKTYPE.HOLIDAYWORK;
-                    }else{
-                        this.workType = WORKTYPE._HOLIDAYWORK;
-                    }
+                this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
+                if(this.checkInOffice){
+                    if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
+                    else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
+                    else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
+                    
+                    this.workType = WORKTYPE.HOLIDAYWORK;
+                }else{
+                    this.workType = WORKTYPE._HOLIDAYWORK;
                 }
             }
         },
