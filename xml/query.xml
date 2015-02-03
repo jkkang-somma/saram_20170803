@@ -829,118 +829,115 @@
     	<query id="selectOverTimeWorkTypeReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1a, '') AS '1a', IFNULL(t2.1b, '') AS '1b', IFNULL(t2.1c, '') AS '1c',
-			    IFNULL(t2.2a, '') AS '2a', IFNULL(t2.2b, '') AS '2b', IFNULL(t2.2c, '') AS '2c',
-			    IFNULL(t2.3a, '') AS '3a', IFNULL(t2.3b, '') AS '3b', IFNULL(t2.3c, '') AS '3c',
-			    IFNULL(t2.4a, '') AS '4a', IFNULL(t2.4b, '') AS '4b', IFNULL(t2.4c, '') AS '4c',
-			    IFNULL(t2.5a, '') AS '5a', IFNULL(t2.5b, '') AS '5b', IFNULL(t2.5c, '') AS '5c',
-			    IFNULL(t2.6a, '') AS '6a', IFNULL(t2.6b, '') AS '6b', IFNULL(t2.6c, '') AS '6c',
-			    IFNULL(t2.7a, '') AS '7a', IFNULL(t2.7b, '') AS '7b', IFNULL(t2.7c, '') AS '7c',
-			    IFNULL(t2.8a, '') AS '8a', IFNULL(t2.8b, '') AS '8b', IFNULL(t2.8c, '') AS '8c',
-			    IFNULL(t2.9a, '') AS '9a', IFNULL(t2.9b, '') AS '9b', IFNULL(t2.9c, '') AS '9c',
-			    IFNULL(t2.10a, '') AS '10a', IFNULL(t2.10b, '') AS '10b', IFNULL(t2.10c, '') AS '10c',
-			    IFNULL(t2.11a, '') AS '11a', IFNULL(t2.11b, '') AS '11b', IFNULL(t2.11c, '') AS '11c',
-			    IFNULL(t2.12a, '') AS '12a', IFNULL(t2.12b, '') AS '12b', IFNULL(t2.12c, '') AS '12c',
-			    IFNULL(t2.a_total, '') AS 'a_total', IFNULL(t2.b_total, '') AS 'b_total', IFNULL(t2.c_total, '') AS 'c_total'
+				IFNULL(ta.1a, '') AS '1a', IFNULL(tb.1b, '') AS '1b', IFNULL(tc.1c, '') AS '1c',
+				IFNULL(ta.2a, '') AS '2a', IFNULL(tb.2b, '') AS '2b', IFNULL(tc.2c, '') AS '2c',
+				IFNULL(ta.3a, '') AS '3a', IFNULL(tb.3b, '') AS '3b', IFNULL(tc.3c, '') AS '3c',
+				IFNULL(ta.4a, '') AS '4a', IFNULL(tb.4b, '') AS '4b', IFNULL(tc.4c, '') AS '4c',
+				IFNULL(ta.5a, '') AS '5a', IFNULL(tb.5b, '') AS '5b', IFNULL(tc.5c, '') AS '5c',
+				IFNULL(ta.6a, '') AS '6a', IFNULL(tb.6b, '') AS '6b', IFNULL(tc.6c, '') AS '6c',
+				IFNULL(ta.7a, '') AS '7a', IFNULL(tb.7b, '') AS '7b', IFNULL(tc.7c, '') AS '7c',
+				IFNULL(ta.8a, '') AS '8a', IFNULL(tb.8b, '') AS '8b', IFNULL(tc.8c, '') AS '8c',
+				IFNULL(ta.9a, '') AS '9a', IFNULL(tb.9b, '') AS '9b', IFNULL(tc.9c, '') AS '9c',
+				IFNULL(ta.10a, '') AS '10a', IFNULL(tb.10b, '') AS '10b', IFNULL(tc.10c, '') AS '10c',
+				IFNULL(ta.11a, '') AS '11a', IFNULL(tb.11b, '') AS '11b', IFNULL(tc.11c, '') AS '11c',
+				IFNULL(ta.12a, '') AS '12a', IFNULL(tb.12b, '') AS '12b', IFNULL(tc.12c, '') AS '12c',
+				IFNULL(ta.a_total, '') AS 'a_total', IFNULL(tb.b_total, '') AS 'b_total', IFNULL(tc.c_total, '') AS 'c_total'
 			FROM
 				members_tbl m
-				LEFT JOIN (    
-					SELECT *
+				LEFT JOIN (
+					SELECT
+						id,
+						SUM(CASE WHEN month = 1 THEN cnt END) AS '1a',
+						SUM(CASE WHEN month = 2 THEN cnt END) AS '2a',
+						SUM(CASE WHEN month = 3 THEN cnt END) AS '3a',
+						SUM(CASE WHEN month = 4 THEN cnt END) AS '4a',
+						SUM(CASE WHEN month = 5 THEN cnt END) AS '5a',
+						SUM(CASE WHEN month = 6 THEN cnt END) AS '6a',
+						SUM(CASE WHEN month = 7 THEN cnt END) AS '7a',
+						SUM(CASE WHEN month = 8 THEN cnt END) AS '8a',
+						SUM(CASE WHEN month = 9 THEN cnt END) AS '9a',
+						SUM(CASE WHEN month = 10 THEN cnt END) AS '10a',
+						SUM(CASE WHEN month = 11 THEN cnt END) AS '11a',
+						SUM(CASE WHEN month = 12 THEN cnt END) AS '12a',
+						SUM(cnt) AS a_total
 					FROM (
-							SELECT
-								id AS ta_id,
-								SUM(CASE WHEN month = 1 THEN cnt END) AS '1a',
-								SUM(CASE WHEN month = 2 THEN cnt END) AS '2a',
-								SUM(CASE WHEN month = 3 THEN cnt END) AS '3a',
-								SUM(CASE WHEN month = 4 THEN cnt END) AS '4a',
-								SUM(CASE WHEN month = 5 THEN cnt END) AS '5a',
-								SUM(CASE WHEN month = 6 THEN cnt END) AS '6a',
-								SUM(CASE WHEN month = 7 THEN cnt END) AS '7a',
-								SUM(CASE WHEN month = 8 THEN cnt END) AS '8a',
-								SUM(CASE WHEN month = 9 THEN cnt END) AS '9a',
-								SUM(CASE WHEN month = 10 THEN cnt END) AS '10a',
-								SUM(CASE WHEN month = 11 THEN cnt END) AS '11a',
-								SUM(CASE WHEN month = 12 THEN cnt END) AS '12a',
-								SUM(cnt) AS a_total
-							FROM (
-								SELECT
+						SELECT
+						id, 
+						SUBSTRING(date,6,2) AS month,
+						count(id) AS cnt
+						FROM 
+							commute_result_tbl
+						WHERE 
+							year = ?
+							AND overtime_code = '2015_AA'
+						GROUP BY id, month                         
+					) t1    
+					GROUP BY id
+				) ta
+		        ON m.id = ta.id
+				LEFT JOIN (
+						SELECT
+							id,
+							SUM(CASE WHEN month = 1 THEN cnt END) AS '1b',
+							SUM(CASE WHEN month = 2 THEN cnt END) AS '2b',
+							SUM(CASE WHEN month = 3 THEN cnt END) AS '3b',
+							SUM(CASE WHEN month = 4 THEN cnt END) AS '4b',
+							SUM(CASE WHEN month = 5 THEN cnt END) AS '5b',
+							SUM(CASE WHEN month = 6 THEN cnt END) AS '6b',
+							SUM(CASE WHEN month = 7 THEN cnt END) AS '7b',
+							SUM(CASE WHEN month = 8 THEN cnt END) AS '8b',
+							SUM(CASE WHEN month = 9 THEN cnt END) AS '9b',
+							SUM(CASE WHEN month = 10 THEN cnt END) AS '10b',
+							SUM(CASE WHEN month = 11 THEN cnt END) AS '11b',
+							SUM(CASE WHEN month = 12 THEN cnt END) AS '12b',
+							SUM(cnt) AS b_total
+						FROM (
+							SELECT 
 								id, 
 								SUBSTRING(date,6,2) AS month,
 								count(id) AS cnt
-								FROM 
-									commute_result_tbl
-								WHERE 
-									year = ?
-									AND overtime_code = '2015_AA'
-								GROUP BY id, month                         
-							) t1    
-							GROUP BY id
-					) ta
-					LEFT JOIN (
-							SELECT
-								id AS tb_id,
-								SUM(CASE WHEN month = 1 THEN cnt END) AS '1b',
-								SUM(CASE WHEN month = 2 THEN cnt END) AS '2b',
-								SUM(CASE WHEN month = 3 THEN cnt END) AS '3b',
-								SUM(CASE WHEN month = 4 THEN cnt END) AS '4b',
-								SUM(CASE WHEN month = 5 THEN cnt END) AS '5b',
-								SUM(CASE WHEN month = 6 THEN cnt END) AS '6b',
-								SUM(CASE WHEN month = 7 THEN cnt END) AS '7b',
-								SUM(CASE WHEN month = 8 THEN cnt END) AS '8b',
-								SUM(CASE WHEN month = 9 THEN cnt END) AS '9b',
-								SUM(CASE WHEN month = 10 THEN cnt END) AS '10b',
-								SUM(CASE WHEN month = 11 THEN cnt END) AS '11b',
-								SUM(CASE WHEN month = 12 THEN cnt END) AS '12b',
-								SUM(cnt) AS b_total
-							FROM (
-								SELECT 
-									id, 
-									SUBSTRING(date,6,2) AS month,
-									count(id) AS cnt
-								FROM 
-									commute_result_tbl
-								WHERE 
-									year = ?
-									AND overtime_code = '2015_AB'
-								GROUP BY id, month                         
-							) t1    
-							GROUP BY id
-					)tb
-					ON ta.ta_id = tb.tb_id
-					LEFT JOIN (
-							SELECT
-								id AS tc_id,
-								SUM(CASE WHEN month = 1 THEN cnt END) AS '1c',
-								SUM(CASE WHEN month = 2 THEN cnt END) AS '2c',
-								SUM(CASE WHEN month = 3 THEN cnt END) AS '3c',
-								SUM(CASE WHEN month = 4 THEN cnt END) AS '4c',
-								SUM(CASE WHEN month = 5 THEN cnt END) AS '5c',
-								SUM(CASE WHEN month = 6 THEN cnt END) AS '6c',
-								SUM(CASE WHEN month = 7 THEN cnt END) AS '7c',
-								SUM(CASE WHEN month = 8 THEN cnt END) AS '8c',
-								SUM(CASE WHEN month = 9 THEN cnt END) AS '9c',
-								SUM(CASE WHEN month = 10 THEN cnt END) AS '10c',
-								SUM(CASE WHEN month = 11 THEN cnt END) AS '11c',
-								SUM(CASE WHEN month = 12 THEN cnt END) AS '12c',
-								SUM(cnt) AS c_total
-							FROM (
-								SELECT 
-									id, 
-									SUBSTRING(date,6,2) AS month,
-									COUNT(id) AS cnt
-								FROM 
-									commute_result_tbl
-								WHERE 
-									year = ?
-									AND overtime_code = '2015_AC'
-								GROUP BY id, month                         
-							) t1    
-							GROUP BY id
-					)tc
-					ON ta.ta_id = tc.tc_id
-				)t2
-			ON m.id = t2.ta_id
-			ORDER BY m.name
+							FROM 
+								commute_result_tbl
+							WHERE 
+								year = ?
+								AND overtime_code = '2015_AB'
+							GROUP BY id, month                         
+						) t1    
+						GROUP BY id
+				)tb
+				ON m.id = tb.id
+				LEFT JOIN (
+						SELECT
+							id,
+							SUM(CASE WHEN month = 1 THEN cnt END) AS '1c',
+							SUM(CASE WHEN month = 2 THEN cnt END) AS '2c',
+							SUM(CASE WHEN month = 3 THEN cnt END) AS '3c',
+							SUM(CASE WHEN month = 4 THEN cnt END) AS '4c',
+							SUM(CASE WHEN month = 5 THEN cnt END) AS '5c',
+							SUM(CASE WHEN month = 6 THEN cnt END) AS '6c',
+							SUM(CASE WHEN month = 7 THEN cnt END) AS '7c',
+							SUM(CASE WHEN month = 8 THEN cnt END) AS '8c',
+							SUM(CASE WHEN month = 9 THEN cnt END) AS '9c',
+							SUM(CASE WHEN month = 10 THEN cnt END) AS '10c',
+							SUM(CASE WHEN month = 11 THEN cnt END) AS '11c',
+							SUM(CASE WHEN month = 12 THEN cnt END) AS '12c',
+							SUM(cnt) AS c_total
+						FROM (
+							SELECT 
+								id, 
+								SUBSTRING(date,6,2) AS month,
+								COUNT(id) AS cnt
+							FROM 
+								commute_result_tbl
+							WHERE 
+								year = ?
+								AND overtime_code = '2015_AC'
+							GROUP BY id, month                         
+						) t1    
+						GROUP BY id
+				)tc
+				ON m.id = tc.id
+				ORDER BY m.name
     	</query>
     	
     	<query id="selectOverTimeWorkPayReport">
@@ -950,39 +947,39 @@
                 IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
                 IFNULL(t2.total, '') AS total
 			FROM
-					members_tbl m
-			        LEFT JOIN (
-							SELECT
-								id,
-								SUM(CASE WHEN month = 1 THEN overtime_pay END) AS '1',
-								SUM(CASE WHEN month = 2 THEN overtime_pay END) AS '2',
-								SUM(CASE WHEN month = 3 THEN overtime_pay END) AS '3',
-								SUM(CASE WHEN month = 4 THEN overtime_pay END) AS '4',
-								SUM(CASE WHEN month = 5 THEN overtime_pay END) AS '5',
-								SUM(CASE WHEN month = 6 THEN overtime_pay END) AS '6',
-								SUM(CASE WHEN month = 7 THEN overtime_pay END) AS '7',
-								SUM(CASE WHEN month = 8 THEN overtime_pay END) AS '8',
-								SUM(CASE WHEN month = 9 THEN overtime_pay END) AS '9',
-								SUM(CASE WHEN month = 10 THEN overtime_pay END) AS '10',
-								SUM(CASE WHEN month = 11 THEN overtime_pay END) AS '11',
-								SUM(CASE WHEN month = 12 THEN overtime_pay END) AS '12',
-                                SUM(overtime_pay) AS total
-							FROM (
-									SELECT 
-									c.id, 
-									SUBSTRING(c.date, 6, 2) AS month,
-									SUM( o.overtime_pay ) AS overtime_pay
-									FROM 
-										commute_result_tbl c
-										LEFT JOIN overtime_code_tbl o
-										ON c.overtime_code = o.code
-									WHERE 
-										c.year = ?
-										AND c.overtime_code IN ('2015_AA', '2015_AB','2015_AC')
-									GROUP BY id, month                         
-							) t1    
-							GROUP BY id                
-			        ) t2
+				members_tbl m
+		        LEFT JOIN (
+						SELECT
+							id,
+							SUM(CASE WHEN month = 1 THEN overtime_pay END) AS '1',
+							SUM(CASE WHEN month = 2 THEN overtime_pay END) AS '2',
+							SUM(CASE WHEN month = 3 THEN overtime_pay END) AS '3',
+							SUM(CASE WHEN month = 4 THEN overtime_pay END) AS '4',
+							SUM(CASE WHEN month = 5 THEN overtime_pay END) AS '5',
+							SUM(CASE WHEN month = 6 THEN overtime_pay END) AS '6',
+							SUM(CASE WHEN month = 7 THEN overtime_pay END) AS '7',
+							SUM(CASE WHEN month = 8 THEN overtime_pay END) AS '8',
+							SUM(CASE WHEN month = 9 THEN overtime_pay END) AS '9',
+							SUM(CASE WHEN month = 10 THEN overtime_pay END) AS '10',
+							SUM(CASE WHEN month = 11 THEN overtime_pay END) AS '11',
+							SUM(CASE WHEN month = 12 THEN overtime_pay END) AS '12',
+                               SUM(overtime_pay) AS total
+						FROM (
+								SELECT 
+								c.id, 
+								SUBSTRING(c.date, 6, 2) AS month,
+								SUM( o.overtime_pay ) AS overtime_pay
+								FROM 
+									commute_result_tbl c
+									LEFT JOIN overtime_code_tbl o
+									ON c.overtime_code = o.code
+								WHERE 
+									c.year = ?
+									AND c.overtime_code IN ('2015_AA', '2015_AB','2015_AC')
+								GROUP BY id, month                         
+						) t1    
+						GROUP BY id                
+		        ) t2
 			ON m.id = t2.id
 			ORDER BY m.name
     	</query>
@@ -990,118 +987,115 @@
     	<query id="selectHolidayWorkTypeReport">
 			SELECT 
 				m.name, m.id,
-				IFNULL(t2.1a, '') AS '1a', IFNULL(t2.1b, '') AS '1b', IFNULL(t2.1c, '') AS '1c',
-			    IFNULL(t2.2a, '') AS '2a', IFNULL(t2.2b, '') AS '2b', IFNULL(t2.2c, '') AS '2c',
-			    IFNULL(t2.3a, '') AS '3a', IFNULL(t2.3b, '') AS '3b', IFNULL(t2.3c, '') AS '3c',
-			    IFNULL(t2.4a, '') AS '4a', IFNULL(t2.4b, '') AS '4b', IFNULL(t2.4c, '') AS '4c',
-			    IFNULL(t2.5a, '') AS '5a', IFNULL(t2.5b, '') AS '5b', IFNULL(t2.5c, '') AS '5c',
-			    IFNULL(t2.6a, '') AS '6a', IFNULL(t2.6b, '') AS '6b', IFNULL(t2.6c, '') AS '6c',
-			    IFNULL(t2.7a, '') AS '7a', IFNULL(t2.7b, '') AS '7b', IFNULL(t2.7c, '') AS '7c',
-			    IFNULL(t2.8a, '') AS '8a', IFNULL(t2.8b, '') AS '8b', IFNULL(t2.8c, '') AS '8c',
-			    IFNULL(t2.9a, '') AS '9a', IFNULL(t2.9b, '') AS '9b', IFNULL(t2.9c, '') AS '9c',
-			    IFNULL(t2.10a, '') AS '10a', IFNULL(t2.10b, '') AS '10b', IFNULL(t2.10c, '') AS '10c',
-			    IFNULL(t2.11a, '') AS '11a', IFNULL(t2.11b, '') AS '11b', IFNULL(t2.11c, '') AS '11c',
-			    IFNULL(t2.12a, '') AS '12a', IFNULL(t2.12b, '') AS '12b', IFNULL(t2.12c, '') AS '12c',
-			    IFNULL(t2.a_total, '') AS 'a_total', IFNULL(t2.b_total, '') AS 'b_total', IFNULL(t2.c_total, '') AS 'c_total'
+				IFNULL(ta.1a, '') AS '1a', IFNULL(tb.1b, '') AS '1b', IFNULL(tc.1c, '') AS '1c',
+				IFNULL(ta.2a, '') AS '2a', IFNULL(tb.2b, '') AS '2b', IFNULL(tc.2c, '') AS '2c',
+				IFNULL(ta.3a, '') AS '3a', IFNULL(tb.3b, '') AS '3b', IFNULL(tc.3c, '') AS '3c',
+				IFNULL(ta.4a, '') AS '4a', IFNULL(tb.4b, '') AS '4b', IFNULL(tc.4c, '') AS '4c',
+				IFNULL(ta.5a, '') AS '5a', IFNULL(tb.5b, '') AS '5b', IFNULL(tc.5c, '') AS '5c',
+				IFNULL(ta.6a, '') AS '6a', IFNULL(tb.6b, '') AS '6b', IFNULL(tc.6c, '') AS '6c',
+				IFNULL(ta.7a, '') AS '7a', IFNULL(tb.7b, '') AS '7b', IFNULL(tc.7c, '') AS '7c',
+				IFNULL(ta.8a, '') AS '8a', IFNULL(tb.8b, '') AS '8b', IFNULL(tc.8c, '') AS '8c',
+				IFNULL(ta.9a, '') AS '9a', IFNULL(tb.9b, '') AS '9b', IFNULL(tc.9c, '') AS '9c',
+				IFNULL(ta.10a, '') AS '10a', IFNULL(tb.10b, '') AS '10b', IFNULL(tc.10c, '') AS '10c',
+				IFNULL(ta.11a, '') AS '11a', IFNULL(tb.11b, '') AS '11b', IFNULL(tc.11c, '') AS '11c',
+				IFNULL(ta.12a, '') AS '12a', IFNULL(tb.12b, '') AS '12b', IFNULL(tc.12c, '') AS '12c',
+				IFNULL(ta.a_total, '') AS 'a_total', IFNULL(tb.b_total, '') AS 'b_total', IFNULL(tc.c_total, '') AS 'c_total'
 			FROM
 				members_tbl m
-				LEFT JOIN (    
-					SELECT *
+	            LEFT JOIN (
+	            	SELECT
+						id,
+						SUM(CASE WHEN month = 1 THEN cnt END) AS '1a',
+						SUM(CASE WHEN month = 2 THEN cnt END) AS '2a',
+						SUM(CASE WHEN month = 3 THEN cnt END) AS '3a',
+						SUM(CASE WHEN month = 4 THEN cnt END) AS '4a',
+						SUM(CASE WHEN month = 5 THEN cnt END) AS '5a',
+						SUM(CASE WHEN month = 6 THEN cnt END) AS '6a',
+						SUM(CASE WHEN month = 7 THEN cnt END) AS '7a',
+						SUM(CASE WHEN month = 8 THEN cnt END) AS '8a',
+						SUM(CASE WHEN month = 9 THEN cnt END) AS '9a',
+						SUM(CASE WHEN month = 10 THEN cnt END) AS '10a',
+						SUM(CASE WHEN month = 11 THEN cnt END) AS '11a',
+						SUM(CASE WHEN month = 12 THEN cnt END) AS '12a',
+						SUM(cnt) AS a_total
 					FROM (
+						SELECT 
+							id, 
+							SUBSTRING(date,6,2) AS month,
+							COUNT(id) AS cnt
+						FROM 
+							commute_result_tbl
+						WHERE 
+							year = ?
+							AND overtime_code = '2015_BA'
+						GROUP BY id, month                         
+					) t1    
+					GROUP BY id
+				) ta
+		        ON m.id = ta.id
+				LEFT JOIN (
+					SELECT
+						id,
+						SUM(CASE WHEN month = 1 THEN cnt END) AS '1b',
+						SUM(CASE WHEN month = 2 THEN cnt END) AS '2b',
+						SUM(CASE WHEN month = 3 THEN cnt END) AS '3b',
+						SUM(CASE WHEN month = 4 THEN cnt END) AS '4b',
+						SUM(CASE WHEN month = 5 THEN cnt END) AS '5b',
+						SUM(CASE WHEN month = 6 THEN cnt END) AS '6b',
+						SUM(CASE WHEN month = 7 THEN cnt END) AS '7b',
+						SUM(CASE WHEN month = 8 THEN cnt END) AS '8b',
+						SUM(CASE WHEN month = 9 THEN cnt END) AS '9b',
+						SUM(CASE WHEN month = 10 THEN cnt END) AS '10b',
+						SUM(CASE WHEN month = 11 THEN cnt END) AS '11b',
+						SUM(CASE WHEN month = 12 THEN cnt END) AS '12b',
+						SUM(cnt) AS b_total
+					FROM (
+						SELECT 
+							id, 
+							SUBSTRING(date,6,2) AS month,
+							COUNT(id) AS cnt
+						FROM 
+							commute_result_tbl
+						WHERE 
+							year = ?
+							AND overtime_code = '2015_BB'
+						GROUP BY id, month                         
+					) t1    
+					GROUP BY id
+				)tb
+				ON m.id = tb.id
+				LEFT JOIN (
+						SELECT
+							id,
+							SUM(CASE WHEN month = 1 THEN cnt END) AS '1c',
+							SUM(CASE WHEN month = 2 THEN cnt END) AS '2c',
+							SUM(CASE WHEN month = 3 THEN cnt END) AS '3c',
+							SUM(CASE WHEN month = 4 THEN cnt END) AS '4c',
+							SUM(CASE WHEN month = 5 THEN cnt END) AS '5c',
+							SUM(CASE WHEN month = 6 THEN cnt END) AS '6c',
+							SUM(CASE WHEN month = 7 THEN cnt END) AS '7c',
+							SUM(CASE WHEN month = 8 THEN cnt END) AS '8c',
+							SUM(CASE WHEN month = 9 THEN cnt END) AS '9c',
+							SUM(CASE WHEN month = 10 THEN cnt END) AS '10c',
+							SUM(CASE WHEN month = 11 THEN cnt END) AS '11c',
+							SUM(CASE WHEN month = 12 THEN cnt END) AS '12c',
+							SUM(cnt) AS c_total
+						FROM (
 							SELECT
-								id AS ta_id,
-								SUM(CASE WHEN month = 1 THEN cnt END) AS '1a',
-								SUM(CASE WHEN month = 2 THEN cnt END) AS '2a',
-								SUM(CASE WHEN month = 3 THEN cnt END) AS '3a',
-								SUM(CASE WHEN month = 4 THEN cnt END) AS '4a',
-								SUM(CASE WHEN month = 5 THEN cnt END) AS '5a',
-								SUM(CASE WHEN month = 6 THEN cnt END) AS '6a',
-								SUM(CASE WHEN month = 7 THEN cnt END) AS '7a',
-								SUM(CASE WHEN month = 8 THEN cnt END) AS '8a',
-								SUM(CASE WHEN month = 9 THEN cnt END) AS '9a',
-								SUM(CASE WHEN month = 10 THEN cnt END) AS '10a',
-								SUM(CASE WHEN month = 11 THEN cnt END) AS '11a',
-								SUM(CASE WHEN month = 12 THEN cnt END) AS '12a',
-								SUM(cnt) AS a_total
-							FROM (
-								SELECT 
-									id, 
-									SUBSTRING(date,6,2) AS month,
-									COUNT(id) AS cnt
-								FROM 
-									commute_result_tbl
-								WHERE 
-									year = ?
-									AND overtime_code = '2015_BA'
-								GROUP BY id, month                         
-							) t1    
-							GROUP BY id
-					) ta
-					LEFT JOIN (
-							SELECT
-								id AS tb_id,
-								SUM(CASE WHEN month = 1 THEN cnt END) AS '1b',
-								SUM(CASE WHEN month = 2 THEN cnt END) AS '2b',
-								SUM(CASE WHEN month = 3 THEN cnt END) AS '3b',
-								SUM(CASE WHEN month = 4 THEN cnt END) AS '4b',
-								SUM(CASE WHEN month = 5 THEN cnt END) AS '5b',
-								SUM(CASE WHEN month = 6 THEN cnt END) AS '6b',
-								SUM(CASE WHEN month = 7 THEN cnt END) AS '7b',
-								SUM(CASE WHEN month = 8 THEN cnt END) AS '8b',
-								SUM(CASE WHEN month = 9 THEN cnt END) AS '9b',
-								SUM(CASE WHEN month = 10 THEN cnt END) AS '10b',
-								SUM(CASE WHEN month = 11 THEN cnt END) AS '11b',
-								SUM(CASE WHEN month = 12 THEN cnt END) AS '12b',
-								SUM(cnt) AS b_total
-							FROM (
-								SELECT 
-									id, 
-									SUBSTRING(date,6,2) AS month,
-									COUNT(id) AS cnt
-								FROM 
-									commute_result_tbl
-								WHERE 
-									year = ?
-									AND overtime_code = '2015_BB'
-								GROUP BY id, month                         
-							) t1    
-							GROUP BY id
-					)tb
-					ON ta.ta_id = tb.tb_id
-					LEFT JOIN (
-							SELECT
-								id AS tc_id,
-								SUM(CASE WHEN month = 1 THEN cnt END) AS '1c',
-								SUM(CASE WHEN month = 2 THEN cnt END) AS '2c',
-								SUM(CASE WHEN month = 3 THEN cnt END) AS '3c',
-								SUM(CASE WHEN month = 4 THEN cnt END) AS '4c',
-								SUM(CASE WHEN month = 5 THEN cnt END) AS '5c',
-								SUM(CASE WHEN month = 6 THEN cnt END) AS '6c',
-								SUM(CASE WHEN month = 7 THEN cnt END) AS '7c',
-								SUM(CASE WHEN month = 8 THEN cnt END) AS '8c',
-								SUM(CASE WHEN month = 9 THEN cnt END) AS '9c',
-								SUM(CASE WHEN month = 10 THEN cnt END) AS '10c',
-								SUM(CASE WHEN month = 11 THEN cnt END) AS '11c',
-								SUM(CASE WHEN month = 12 THEN cnt END) AS '12c',
-								SUM(cnt) AS c_total
-							FROM (
-								SELECT 
-									id, 
-									SUBSTRING(date,6,2) AS month,
-									COUNT(id) AS cnt
-								FROM 
-									commute_result_tbl
-								WHERE 
-									year = ?
-									AND overtime_code = '2015_BC'
-								GROUP BY id, month                         
-							) t1    
-							GROUP BY id
-					)tc
-					ON ta.ta_id = tc.tc_id
-				)t2
-			ON m.id = t2.ta_id
-			ORDER BY m.name
+								id,
+								SUBSTRING(date,6,2) AS month,
+								COUNT(id) AS cnt
+							FROM 
+								commute_result_tbl
+							WHERE
+								year = ?
+								AND overtime_code = '2015_BC'
+							GROUP BY id, month
+						) t1
+						GROUP BY id
+				)tc
+				ON m.id = tc.id
+				ORDER BY m.name
     	</query>
 
     	<query id="selectHolidayWorkPayReport">
