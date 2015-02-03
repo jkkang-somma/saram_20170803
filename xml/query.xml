@@ -47,6 +47,15 @@
         	WHERE id=?
         </query>
         <query id="deleteUser">delete from members_tbl where id=?</query>
+        <query id="selectUserByIp">
+	        SELECT 
+	        	* 
+	        FROM 
+	        	members_tbl
+			WHERE 
+				id = ?
+				AND ( ip_pc = ? OR ip_office = ?);
+        </query>        
     </group>
     <group id="rawData">
         <query id="insertRawData">
@@ -83,7 +92,6 @@
         	where
         		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") &gt; str_to_date(?,"%Y-%m-%d");
         </query>
-        
     </group>
     
     <group id="holiday">
