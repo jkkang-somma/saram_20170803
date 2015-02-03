@@ -119,7 +119,9 @@ define([
 		var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'출근(수원)'}, {
     		success: function(model, response) {
-    			Dialog.show("출근 등록 되었습니다.");
+    			Dialog.show(
+    			    "출근 등록 되었습니다.\n"
+    			    + "출근시간 : " + response.data.char_date );
          	}, error : function(model, res){
          		Dialog.error("출근 등록이 실패했습니다.");
          	}
@@ -129,7 +131,9 @@ define([
 		var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'퇴근(수원)'}, {
     		success: function(model, response) {
-    			Dialog.show("퇴근 등록 되었습니다.");
+    		    Dialog.show(
+    			    "퇴근 등록 되었습니다.\n"
+    			    + "퇴근시간 : " + response.data.char_date );
          	}, error : function(model, res){
          		Dialog.error("퇴근 등록이 실패했습니다.");
          	}

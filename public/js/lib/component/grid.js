@@ -470,13 +470,8 @@ define([
      	    
      	    //ROW click
      	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
-                // if ( $(this).hasClass('selected') ) {
-                //     $(this).removeClass('selected');
-                // }
-                // else {
-                    _dataTable.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
-                // }
+                _dataTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
             } );
             
             //dataTableAPI

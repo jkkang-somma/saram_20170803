@@ -44,7 +44,7 @@ define([
     		    detail: true,
     		    fetch: false,
     		    buttons:["search"],
-    		    order:[[3,"asc"], [4,"asc"]]
+    		    order:[[3,"desc"], [4,"desc"]]
     		};
     		
     		this._buttonInit();
