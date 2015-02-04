@@ -16,13 +16,13 @@ HolidayCollection){
     	{ date: "03-01", memo : "삼일절",       lunar : false,  _3days : false},
     	{ date: "05-05", memo : "어린이날",     lunar : false,  _3days : false},
     	{ date: "06-06", memo : "현충일",       lunar : false,  _3days : false},
-    	{ date: "08-15", memo : "광복절",		lunar : false,  _3days : false},
-    	{ date: "10-03", memo : "개천절",		lunar : false,  _3days : false},
-    	{ date: "10-09", memo : "한글날",		lunar : false,  _3days : false},
-    	{ date: "12-25", memo : "성탄절",		lunar : false,  _3days : false},
-    	{ date: "01-01", memo : "설날",		    lunar : true,   _3days : true },
-    	{ date: "04-08", memo : "석가탄신일",	lunar : true,   _3days : false},
-    	{ date: "08-15", memo : "추석",		    lunar : true,   _3days : true },
+    	{ date: "08-15", memo : "광복절",	    lunar : false,  _3days : false},
+    	{ date: "10-03", memo : "개천절",	    lunar : false,  _3days : false},
+    	{ date: "10-09", memo : "한글날",	    lunar : false,  _3days : false},
+    	{ date: "12-25", memo : "성탄절",	    lunar : false,  _3days : false},
+    	{ date: "01-01", memo : "설날",	    	lunar : true,   _3days : true },
+    	{ date: "04-08", memo : "석가탄신일",   lunar : true,   _3days : false},
+    	{ date: "08-15", memo : "추석",	    	lunar : true,   _3days : true },
     ];
     
    function _getYearData(){
@@ -55,7 +55,7 @@ HolidayCollection){
 				childs:[{
 					type:"combo",
 					name:"year",
-					label:i18nCommon.HOLIDAY_MANAGER.CREATE.YEAR,
+					label:i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.FORM.YEAR,
 					value:today.year(),
 					collection: _getYearData()
 				}]

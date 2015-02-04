@@ -13,6 +13,7 @@ define([
         'cmoment',
         'core/BaseView',
         'data/code',
+        'i18n!nls/common',
         'text!templates/default/head.html',
         'text!templates/default/content.html',
         'text!templates/default/right.html',
@@ -31,7 +32,7 @@ define([
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnNoteCellTemplate.html'
 ], function(
-		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code,
+		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommuteModel, CommuteCollection,
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
@@ -90,11 +91,11 @@ define([
 		
 	function _createCommentCell(cellData) {
 		var data = {
-				comment_count: cellData.comment_count,
-				idx: cellData.idx,
-				id: cellData.id,
-				date: cellData.date,
-				isShowEditBtn: (SessionModel.get("user").admin == 1)?true: false
+			comment_count: cellData.comment_count,
+			idx: cellData.idx,
+			id: cellData.id,
+			date: cellData.date,
+			isShowEditBtn: (SessionModel.get("user").admin == 1)?true: false
 		};
 		var tpl = _.template(btnNoteCellTemplate)(data);
 		return tpl;
@@ -121,7 +122,7 @@ define([
 		return {
 	        type:"custom",
 	        name:"edit",
-	        tooltip:"수정",
+	        tooltip:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.TOOLTIP,
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();	        	
 	        	_openCommuteUpdatePopup(selectItem, that);
@@ -132,18 +133,18 @@ define([
 	// 근태 수정 팝업 열기
 	function _openCommuteUpdatePopup(selectItem, that) {
     	if ( Util.isNull(selectItem) ) {
-			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
+			Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_SELECTED);
 			return;
     	}
     	
         var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
         Dialog.show({
-            title:"출퇴근시간 수정", 
+            title:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.TITLE, 
             content: commuteUpdatePopupView,
             buttons: [{
                 id: 'updateCommuteBtn',
                 cssClass: Dialog.CssClass.SUCCESS,
-                label: '수정',
+                label: i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.BUTTON.MODIFY,
                 action: function(dialog) {
                 	commuteUpdatePopupView.updateCommute().done(function(result){
     					// console.log(result);
@@ -164,7 +165,7 @@ define([
         				yesterday.set({idx : yesterdayRow.data().idx});
         				yesterdayRow.data(yesterday.attributes);
     					
-						Dialog.show("성공", function() {
+						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
             			})
     				}).fail(function(){
@@ -172,7 +173,7 @@ define([
     				});
                 }
             }, {
-                label : "취소",
+                label : i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.BUTTON.CANCEL,
                 action : function(dialog){
                     dialog.close();
                 }
@@ -188,51 +189,49 @@ define([
         		    el:"commute_content",
         		    id:"commuteDataTable",
         		    column:[
-     	                   	{ data : "date", 			"title" : "일자" },
-     	                   	{ data : "department", 		"title" : "부서" },
-     	                   	{ data : "name", 			"title" : "이름" },
-     	                   	{ data : "work_type", 	"title" : "근무</br>타입",
+     	                   	{ data : "date", 			"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.DATE },
+     	                   	{ data : "department", 		"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.DEPARTMENT },
+     	                   	{ data : "name", 			"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.NAME },
+     	                   	{ data : "work_type", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.WORKT_TYPE,
      	                   		render : function(data, type, full, meta){
      	                   			return _getBrString(Code.getCodeName(Code.WORKTYPE, data));
      	                   		}
      	                   	},
-     	                   	{data: "vacation_code", title: "휴가",
+     	                   	{data: "vacation_code", title: i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.VACATION,
 		                        "render": function (data, type, rowData, meta) {
 		                            return Code.getCodeName(Code.OFFICE, data);
 		                       }
 		                    },
-     	                   	{ data : "out_office_code", 	"title" : "외근</br>정보",
+     	                   	{ data : "out_office_code", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.OUT_OFFICE,
      	                   		render : function(data, type, full, meta){
      	                   			return Code.getCodeName(Code.OFFICE, data);
      	                   		}
      	                   	},
-     	                   	{ data : "in_time", "title" : "출근</br>시간",
+     	                   	{ data : "in_time", "title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.IN_TIME,
      	                   		render: function(data, type, full, meta) {
    	                    			return  _createHistoryCell("in_time", full,"in_time_change" );
      	                   		}
      	                    },
-     	                    { data : "out_time", "title" : "퇴근</br>시간",
+     	                    { data : "out_time", "title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.OUT_TIME,
      	                    	render: function(data, type, full, meta) {
 									return _createHistoryCell("out_time", full, "out_time_change");
      	                   		}
      	                    },
-     	                    { data : "late_time", 		"title" : "지각</br>시간",
+     	                    { data : "late_time", 		"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.LATE_TIME,
      	                    	render: function(data, type, full, meta){
      	                    		return _getTimeStr(data);
      	                    	}
      	                    }, 
-     	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
+     	                   	{ data : "overtime_code", 		"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.OVERTIME_CODE,
      	                   		render : function(data, type, full, meta){
      	                   			return _createHistoryCell("overtime_code", full, "overtime_code_change");
      	                   		}
      	                   	},
-     	                    { data : "comment_count", "title" : "비고",
+     	                    { data : "comment_count", "title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.MEMO,
      	                     	render: function(data, type, full, meta) {
      	                     		return _createCommentCell(full);
      	                   		}
      	                     },
-     	                     {"title": "출근타입", "data": "in_time_type", visible: false},
-                    		 {"title": "퇴근타입", "data": "out_time_type" , visible: false},
              	        ],
              	    rowCallback: function(row, data){
              	    	if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
@@ -271,7 +270,12 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 조회"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault(
+    	    	{
+    	    		title:i18nCommon.COMMUTE_RESULT_LIST.TITLE,
+    	    		subTitle:i18nCommon.COMMUTE_RESULT_LIST.SUB_TITLE
+    	    	}
+   	    	)));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
@@ -295,7 +299,7 @@ define([
     	    var _searchBtn = $(_.template(RowButtonHTML)({
     	            obj: {
     	                id: "ccmSearchBtn",
-    	                label: "검색"
+    	                label: i18nCommon.COMMUTE_RESULT_LIST.SEARCH_BTN,
     	            }
     	        })
 	        );
@@ -350,27 +354,27 @@ define([
             var commentPopupView = new CommentPopupView(selectItem);
             var that = this;
             Dialog.show({
-                title:"Comment 등록", 
+                title: i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.TITLE, 
                 content: commentPopupView,
                 buttons: [{
                     id: 'updateCommuteBtn',
                     cssClass: Dialog.CssClass.SUCCESS,
-                    label: '수정',
+                    label: i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.BUTTON.ADD,
                     action: function(dialog) {
                     	commentPopupView.insertComment({
                     		success: function(model, response) {
-                    			Dialog.show("성공", function() {
+                    			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function() {
                     				dialog.close();
                     				selectItem.comment_count++;	 // comment 수 증가 
                     				that.grid.updateRow(selectItem, selectItem.idx -1 );	// index 0부터 시작 
                     			});
                          	}, error : function(model, res){
-                         		Dialog.show("업데이트가 실패했습니다.");
+                         		Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_FAIL);
                          	}
                         });
                     }
                 }, {
-                    label : "취소",
+                    label : i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.BUTTON.CANCEL,
                     action : function(dialog){
                         dialog.close();
                     }
@@ -394,11 +398,23 @@ define([
 			};
         	
             var changeHistoryPopupView = new ChangeHistoryPopupView(searchData);
+            var title = "";
+            switch(data.change_column){
+            	case "in_time" :
+            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_IN;
+            		break;
+            	case "out_time" :
+            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OUT;
+            		break;
+            	case "overtime_code" :
+            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OVER;
+            		break;
+            }
             Dialog.show({
-                title: ( (data.change_column == "in_time")? "출근 시간 변경 이력":"퇴근 시간 변경 이력" ), 
+                title: title, 
                 content: changeHistoryPopupView,
                 buttons: [{
-                    label : "취소",
+                    label : i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
                     action : function(dialog){
                         dialog.close();
                     }
@@ -415,7 +431,7 @@ define([
      		data.endDate.getText() === "" ? null : data.endDate = data.endDate.getDate().format("YYYY-MM-DD");
      		
      		if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     			Dialog.error("시작일 / 종료일을 입력해 주십시오");
+     			Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
      			return;
      		}
      		
@@ -438,7 +454,7 @@ define([
                     _this.grid.render();
                 },
                 errorCallBack:function(response){
-                    Dialog.error("데이터 조회 실패! \n ("+ response.responseJSON.message +")");
+                    Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.GET_DATA_FAIL);
                 },
             });
             
