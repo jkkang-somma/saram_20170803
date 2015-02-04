@@ -26,7 +26,11 @@ define([
 		afterRender: function(){
 			var that = this;
 			this.el.find("#btnCreateExcel").click(function(){
-				var url =   "/report/commuteYearReport?year=" + that.getSearchForm().year + "&isInLeaveWorker=" + that.getSearchForm().isInLeaveWorker;
+				if (that.getSearchForm() == null) {
+					return;
+				}
+				
+				var url =   "/report/commuteYearReport?startDate=" + that.getSearchForm().startDate + "&endDate="+ that.getSearchForm().endDate +"&isInLeaveWorker=" + that.getSearchForm().isInLeaveWorker;
 	     		$.fileDownload(url, {
 	     		    successCallback: function (url) {
 	     		    },
@@ -54,13 +58,37 @@ define([
          	var searchForm = _.template( searchFormTemplate )();
          	el.append(searchForm);
          	
-         	var startYear = 2000;
-			var endYear= new Date().getFullYear();
-			
-			for (; startYear <= endYear; endYear--) {
-				el.find("#selectYear").append($("<option>"+endYear+"</option>"));
-			}
-         	ComboBox.createCombo(el.find("#selectYear"));
+//         	var startYear = 2000;
+//			var endYear= new Date().getFullYear();
+//			
+//			for (; startYear <= endYear; endYear--) {
+//				el.find("#selectYear").append($("<option>"+endYear+"</option>"));
+//			}
+//         	ComboBox.createCombo(el.find("#selectYear"));
+         	
+         	
+    	    var startDate = new Date(new Date().getFullYear(), 0, 1);
+    	    var endDate = new Date(new Date().getFullYear(), 11, 31);
+    	    
+    	    $(this.el).find("#startDate").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD",
+		        defaultDate: Moment(startDate).format("YYYY-MM-DD")
+            });
+            
+            $(this.el).find("#endDate").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+		        format: "YYYY-MM-DD",
+		        defaultDate: Moment(endDate).format("YYYY-MM-DD")
+            });
+            
+         	
+         	
+         	
          	
          	this.messageModel.fetch({
          		success : function(){
@@ -74,11 +102,22 @@ define([
          	
             return dfd.promise();
 		},
-     	getSearchForm: function() {	// 검색 조건  
-     		return {
- 				year: this.el.find("#selectYear").val(),
+     	getSearchForm: function() {	// 검색 조건
+     		var selDataObj = {
+ 				startDate: this.el.find("#startDate").val(),
+ 				endDate: this.el.find("#endDate").val(),
  				isInLeaveWorker: ( this.el.find("#chkleaveWorker").is(":checked")? true : false )
  			};
+
+     		if (selDataObj.startDate == "" || selDataObj.endDate == "" ) {
+     			Dialog.warning("날짜를 입력하시기 바랍니다.");
+     			return null;
+     		}else if (selDataObj.startDate.substring(0, 4) != selDataObj.endDate.substring(0, 4) ) {
+     			Dialog.warning("동일한 해(년) 기간을 선택해주시기 바랍니다.");
+     			return null;     			
+     		}
+     		
+     		return selDataObj;
      	},
      	
      	getMessageForm: function() {

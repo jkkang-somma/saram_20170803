@@ -1,0 +1,26 @@
+<div class="panel panel-default login-form-section animated bounceIn">
+    <div class="panel-header">
+        <h2><%= title%></h2>
+    </div>    
+    <div class="panel-body">
+        <form role="form">
+            <div class="form-group">
+                <div class="input-group login-input">
+                    <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-user"></span>
+                    </span>
+                    <input type="text" class="form-control" id="loginIdTextbox" placeholder="<%= idPlaceholder%>" name="id">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group login-input">
+                    <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-lock"></span>
+                    </span>
+                    <input type="password" class="form-control" id="loginPasswordTextbox" placeholder="<%= passwordPlaceholder%>" name="password">
+                </div>
+            </div>
+            <button class="btn btn-sm btn-success pull-right login-button login-btn" id="loginbtn" data-loading-text="<div class='spinIcon'><%= loginSatusBtn%></div>"><%= loginBtn%> <span class="glyphicon glyphicon-chevron-right" style="top: 2px;"></span> </td>
+        </form>
+    </div>
+</div>

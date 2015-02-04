@@ -74,6 +74,7 @@ define({
             VICE_CHIEF:"차장",
             SECTION__CHIEF:"과장",
             DEARI:"대리",
+            WORKER:"사원",
             TOP_SEAT:"수석 연구원",
             MIDDLE_SEAT:"책임 연구원",
             SEAT:"선임 연구원",
@@ -99,7 +100,8 @@ define({
             INIT_PASSWORD_PUT:"Init password.",
             DO_NOT_FOUND_USER:"Not valid account.",
             NOT_EQULES_PASSWORD:"Not valid account.",
-            INIT_PASSWORD:"Initialize password."
+            INIT_PASSWORD:"Initialize password.",
+            FIND_PASSWORD_PUT:"Check your find Login Info."
         },
         USER:{
             NOT_EQULES_CONFIG_PASSWORD:"Not valid new password."
@@ -196,5 +198,30 @@ define({
     SUB_TITLE:{
         DETAIL_INFO:"Detail Info",
         REQUIRE_INFO:"Require Info"
+    },
+    
+    //로그인
+    LOGIN_VIEW:{
+        TITLE:"Yescnc Attendance Management",
+        ID_PLACEHOLDER:"ID",
+        PASSWORD_PLACEHOLDER:"PASSWORD",
+        LOGIN_SATUS_BTN:"login..",
+        LOGIN_BTN:"LOGIN",
+        FIND_PASSWORD_TEXT:"for get me password ",
+        FIND_PASSWORD_TEXT_A:"here"
+    },
+    INIT_PASSWORD_VIEW:{
+        TITLE:"Password Cofing",
+        NEW_PPASSWORD_PLACEHOLDER:"New Password",
+        RE_PPASSWORD_PLACEHOLDER:"Re Password",
+        INIT_PASSWORD_STATUS_BTN:"Save..",
+        INIT_PASSWORD_BTN:"Save Password"
+    },
+    FIND_PASSWORD_VIEW:{
+        TITLE:"Password Find`",
+        EMAIL_PLACEHOLDER:"E-mail",
+        FIND_PASSWORD_STATUS_BTN:"finding..",
+        FIND_PASSWORD_BTN:"Find Password",
+        FIND_TEXT_INFO:"※  Check you are Login Info."
     }
 });

@@ -9,12 +9,10 @@
         </query>
         <query id="selectIdByUser">
         	SELECT 
-        		m.*, d.name AS dept_name 
-        	FROM 
-        		members_tbl m
-        		LEFT JOIN dept_code_tbl d ON d.code = m.dept_code
-        	WHERE 
-        		m.id=?
+        		id, name, position,  dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
+        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password
+        	FROM members_tbl A
+        	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
@@ -726,7 +724,8 @@
 									FROM 
 										commute_result_tbl
 									WHERE
-										year = ? 
+										year = ?
+										AND date BETWEEN ? AND ? 
 										AND (work_type = '10' || work_type = '11')
 									GROUP BY id, month
 							) t1    
@@ -774,6 +773,7 @@
 										ON v.id = o.id AND v.year = o.year
 									WHERE
 										v.year = ?
+										AND o.date BETWEEN ? AND ?
 										AND o.office_code IN ('V01', 'V02', 'V03')
 									GROUP BY month, v.id, v.total_day                       
 						) t1    
@@ -819,6 +819,7 @@
 									FROM commute_result_tbl
 									WHERE
 										year = ?
+										AND date BETWEEN ? AND ?
 										AND WORK_TYPE != '30'
 										AND WORK_TYPE != '40'
 										AND WORK_TYPE != '41'
@@ -873,6 +874,7 @@
 							commute_result_tbl
 						WHERE 
 							year = ?
+							AND date BETWEEN ? AND ?
 							AND overtime_code = '2015_AA'
 						GROUP BY id, month                         
 					) t1    
@@ -904,6 +906,7 @@
 								commute_result_tbl
 							WHERE 
 								year = ?
+								AND date BETWEEN ? AND ?
 								AND overtime_code = '2015_AB'
 							GROUP BY id, month                         
 						) t1    
@@ -935,6 +938,7 @@
 								commute_result_tbl
 							WHERE 
 								year = ?
+								AND date BETWEEN ? AND ?
 								AND overtime_code = '2015_AC'
 							GROUP BY id, month                         
 						) t1    
@@ -979,6 +983,7 @@
 									ON c.overtime_code = o.code
 								WHERE 
 									c.year = ?
+									AND c.date BETWEEN ? AND ?
 									AND c.overtime_code IN ('2015_AA', '2015_AB','2015_AC')
 								GROUP BY id, month                         
 						) t1    
@@ -1031,6 +1036,7 @@
 							commute_result_tbl
 						WHERE 
 							year = ?
+							AND date BETWEEN ? AND ?
 							AND overtime_code = '2015_BA'
 						GROUP BY id, month                         
 					) t1    
@@ -1062,6 +1068,7 @@
 							commute_result_tbl
 						WHERE 
 							year = ?
+							AND date BETWEEN ? AND ?
 							AND overtime_code = '2015_BB'
 						GROUP BY id, month                         
 					) t1    
@@ -1093,6 +1100,7 @@
 								commute_result_tbl
 							WHERE
 								year = ?
+								AND date BETWEEN ? AND ?
 								AND overtime_code = '2015_BC'
 							GROUP BY id, month
 						) t1
@@ -1138,6 +1146,7 @@
 										on c.overtime_code = o.code
 									WHERE 
 										c.year = ?
+										AND c.date BETWEEN ? AND ?
 										AND c.overtime_code IN ('2015_BA', '2015_BB','2015_BC')
 									GROUP BY id, month                         
 							) t1    
