@@ -495,7 +495,7 @@ define([
                 }
             }
 
-            if(this.checkEarly && this.isEarly){
+            if(this.checkEarly && isEarly){
                 if (this.workType == WORKTYPE.LATE)
                     this.workType = WORKTYPE.EARLY_LATE;
                 else
