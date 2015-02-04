@@ -9,12 +9,10 @@
         </query>
         <query id="selectIdByUser">
         	SELECT 
-        		m.*, d.name AS dept_name 
-        	FROM 
-        		members_tbl m
-        		LEFT JOIN dept_code_tbl d ON d.code = m.dept_code
-        	WHERE 
-        		m.id=?
+        		id, name, position,  dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
+        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password
+        	FROM members_tbl A
+        	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
@@ -286,6 +284,7 @@
 							c.out_time_type,
 							c.in_time_change,
 							c.out_time_change,
+							c.overtime_code_change,
 							c.comment_count,
 							c.overtime_code,
 							c.vacation_code,
@@ -347,7 +346,8 @@
 				out_office_start_time = ?,
 				out_office_end_time = ?,
 				in_time_change = ?,
-				out_time_change =?
+				out_time_change =?,
+				overtime_code_change =?
 			WHERE
 				id = ? AND date = ?
         </query>
@@ -373,7 +373,8 @@
 				out_office_end_time,
 				out_office_start_time,
 				in_time_change,
-				out_time_change
+				out_time_change,
+				overtime_code_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -401,7 +402,8 @@
 				out_office_end_time,
 				out_office_start_time,
 				in_time_change,
-				out_time_change
+				out_time_change,
+				overtime_code_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -689,9 +691,26 @@
     </group>
     
     <group id ="report">
+    	
+    	<query id="selectReportUsers">
+			SELECT
+    			m.id, 
+    			m.name,
+                p.name AS position_name,
+			    m.dept_code,
+			    d.name AS dept_name
+			FROM 
+				members_tbl m
+				INNER JOIN dept_code_tbl d
+			    ON d.code = m.dept_code
+				INNER JOIN position_code_tbl p
+			    ON p.code = m.position_code
+			ORDER BY m.dept_code, m.position_code, m.name
+    	</query>
+    	
     	<query id="selectLateWorkerReport">
 			SELECT 
-				m.name, m.id,
+				m.dept_code, m.position, m.name, m.id,
 				IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
                 IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
                 IFNULL(t2.total, '') AS total
@@ -730,12 +749,12 @@
 							GROUP BY id                
 			        ) t2
 			ON m.id = t2.id
-			ORDER BY m.name
+			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
 			    	
 		<query id="selectUsedHolidayReport">
 			SELECT 
-					m.name, m.id,
+					m.dept_code, m.position, m.name, m.id,
 					IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
 					IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',                    					
                     IFNULL( total_day, '') AS total_day,
@@ -778,12 +797,12 @@
 						GROUP BY id, total_day
 				) t2
 			ON m.id = t2.id  
-			ORDER BY m.name	
+			ORDER BY m.dept_code, m.position_code, m.name	
     	</query>
     	
     	<query id="selectOverTimeWorkeReport">
 			SELECT 
-				m.name, m.id,
+				m.dept_code, m.position, m.name, m.id,
 				IFNULL( SUBSTRING( SEC_TO_TIME( t2.1 *60), 1, 5), '') AS '1', IFNULL(SUBSTRING( SEC_TO_TIME( t2.2 *60), 1, 5), '') AS '2', 
                 IFNULL(SUBSTRING( SEC_TO_TIME( t2.3 *60), 1, 5), '') AS '3', IFNULL(SUBSTRING( SEC_TO_TIME( t2.4 *60), 1, 5), '') AS '4', 
                 IFNULL(SUBSTRING( SEC_TO_TIME( t2.5 *60), 1, 5), '') AS '5', IFNULL(SUBSTRING( SEC_TO_TIME( t2.6 *60), 1, 5), '') AS '6',
@@ -827,11 +846,11 @@
 							GROUP BY id                
 			        ) t2
 			ON m.id = t2.id
-			ORDER BY m.name
+			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	<query id="selectOverTimeWorkTypeReport">
 			SELECT 
-				m.name, m.id,
+				m.dept_code, m.position, m.name, m.id,
 				IFNULL(ta.1a, '') AS '1a', IFNULL(tb.1b, '') AS '1b', IFNULL(tc.1c, '') AS '1c',
 				IFNULL(ta.2a, '') AS '2a', IFNULL(tb.2b, '') AS '2b', IFNULL(tc.2c, '') AS '2c',
 				IFNULL(ta.3a, '') AS '3a', IFNULL(tb.3b, '') AS '3b', IFNULL(tc.3c, '') AS '3c',
@@ -943,12 +962,12 @@
 						GROUP BY id
 				)tc
 				ON m.id = tc.id
-				ORDER BY m.name
+				ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectOverTimeWorkPayReport">
 			SELECT 
-				m.name, m.id,
+				m.dept_code, m.position, m.name, m.id,
 				IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
                 IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
                 IFNULL(t2.total, '') AS total
@@ -988,12 +1007,12 @@
 						GROUP BY id                
 		        ) t2
 			ON m.id = t2.id
-			ORDER BY m.name
+			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectHolidayWorkTypeReport">
 			SELECT 
-				m.name, m.id,
+				m.dept_code, m.position, m.name, m.id,
 				IFNULL(ta.1a, '') AS '1a', IFNULL(tb.1b, '') AS '1b', IFNULL(tc.1c, '') AS '1c',
 				IFNULL(ta.2a, '') AS '2a', IFNULL(tb.2b, '') AS '2b', IFNULL(tc.2c, '') AS '2c',
 				IFNULL(ta.3a, '') AS '3a', IFNULL(tb.3b, '') AS '3b', IFNULL(tc.3c, '') AS '3c',
@@ -1105,12 +1124,12 @@
 						GROUP BY id
 				)tc
 				ON m.id = tc.id
-				ORDER BY m.name
+				ORDER BY m.dept_code, m.position_code, m.name
     	</query>
 
     	<query id="selectHolidayWorkPayReport">
 			SELECT 
-				m.name, m.id,
+				m.dept_code, m.position, m.name, m.id,
 				IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
                 IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
                 IFNULL(t2.total, '') AS total
@@ -1151,7 +1170,7 @@
 							GROUP BY id                
 			        ) t2
 			ON m.id = t2.id
-			ORDER BY m.name
+			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
     </group>
