@@ -27,7 +27,7 @@ define([
 		    if(_.isNull(data.date)){
 			    this.date = "2015-01-01";
 		    }else{
-		        this.date = Moment(data.date, resultTimeFactory.DATEFORMAT).add(1,"days").format(resultTimeFactory.DATEFORMAT);
+		        this.date = Moment(data.date, ResultTimeFactory.DATEFORMAT).add(1,"days").format(ResultTimeFactory.DATEFORMAT);
 		    }
 			
 		},
