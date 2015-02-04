@@ -48,7 +48,7 @@ require.config({
       log:'lib/debug',
       util:'lib/util',
       csvParser:'lib/csvParser',
-      
+      validator:'lib/validator',
       monthpicker:'lib/component/monthpicker',
       grid:'lib/component/grid',
       comboBox:'lib/component/combo',

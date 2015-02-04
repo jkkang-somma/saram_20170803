@@ -101,7 +101,10 @@ define({
             DO_NOT_FOUND_USER:"Not valid account.",
             NOT_EQULES_PASSWORD:"Not valid account.",
             INIT_PASSWORD:"Initialize password.",
-            FIND_PASSWORD_PUT:"Check your find Login Info."
+            FIND_PASSWORD_PUT:"Check your find Login Info.",
+            NOT_VALID_EMAIL:"Not valid Email.",
+            ERROR_FIND_PASSWORD_SEND_MAIL:"Fail Request find Password.",
+            NOT_EQULES_EMAIL:"Worng Email Info."
         },
         USER:{
             NOT_EQULES_CONFIG_PASSWORD:"Not valid new password."
@@ -207,8 +210,7 @@ define({
         PASSWORD_PLACEHOLDER:"PASSWORD",
         LOGIN_SATUS_BTN:"login..",
         LOGIN_BTN:"LOGIN",
-        FIND_PASSWORD_TEXT:"for get me password ",
-        FIND_PASSWORD_TEXT_A:"here"
+        FIND_PASSWORD_TEXT:"for get me password "
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"Password Cofing",
