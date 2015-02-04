@@ -194,5 +194,25 @@ define({
     SUB_TITLE:{
         DETAIL_INFO:"상세 정보",
         REQUIRE_INFO:"주요 정보"
+    },
+    
+    HOLIDAY_MANAGER:{
+        ADD:{
+            DATE: "날짜",
+            MEMO: "내용",
+        },
+        CREATE:{
+            YEAR: "연도"
+        }
+    },
+    
+    CREATE_RAW_DATA : {
+        CREATE:{
+            START_DATE : "시작일",
+            END_DATE : "종료일",
+            TIP : "참고사항",
+            TIP_TEXT : "※ 종료일 다음날 6시 까지 출입 기록 필요\n ex) 종료일이 2015-01-15 일 경우  \n 2015-01-16 06:00 까지 출입기록 필요",
+            DATE_ERR_MSG : "시작일이 종료일보다 큽니다."
+        }
     }
 });

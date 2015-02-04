@@ -114,6 +114,15 @@ define([
             disabled:false,
             group:undefined
         },
+        datetime:{
+            type:"date",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            format:"YYYY-MM-DD",
+            disabled:false,
+            group:undefined
+        },
         combo:{
             type:"combo",
             name:undefined,

@@ -286,6 +286,7 @@
 							c.out_time_type,
 							c.in_time_change,
 							c.out_time_change,
+							c.overtime_code_change,
 							c.comment_count,
 							c.overtime_code,
 							c.vacation_code,
@@ -347,7 +348,8 @@
 				out_office_start_time = ?,
 				out_office_end_time = ?,
 				in_time_change = ?,
-				out_time_change =?
+				out_time_change =?,
+				overtime_code_change =?
 			WHERE
 				id = ? AND date = ?
         </query>
@@ -373,7 +375,8 @@
 				out_office_end_time,
 				out_office_start_time,
 				in_time_change,
-				out_time_change
+				out_time_change,
+				overtime_code_change
         	FROM
         		commute_result_tbl
         	WHERE
@@ -401,7 +404,8 @@
 				out_office_end_time,
 				out_office_start_time,
 				in_time_change,
-				out_time_change
+				out_time_change,
+				overtime_code_change
         	FROM
         		commute_result_tbl
         	WHERE

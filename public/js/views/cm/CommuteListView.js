@@ -40,15 +40,25 @@ define([
 	
 	// 출퇴근 시간 셀 생성
 	function _createHistoryCell(cellType, cellData, change) {
+		var text = null; 
+		if(cellType == "overtime_code")
+ 			text = Code.getCodeName(Code.OVERTIME, cellData[cellType]);
+ 		else
+ 			text = _getTimeCell( cellData[cellType] );
+ 			
+ 		if(_.isNull(text)){
+ 			text = "-";	
+ 		}
+ 		
 		if (cellData[change]){
 			var data = JSON.stringify({
 				change_column : cellType,
 				idx : cellData.idx
 			});
-			var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + _getTimeCell( cellData[cellType] ) + "</a>";
+			var aHrefStr = "<a class='td-in-out-time' data='" + data +"'  href='-' onclick='return false'>" + text + "</a>";	
 			return aHrefStr;
  		} else {
- 			return _getTimeCell( cellData[cellType] );
+ 			return text;
  		}
 		 
 	}
@@ -59,6 +69,8 @@ define([
 			var tArr = time.split(" ");
 			if (tArr.length == 2) {
 				return tArr[0] + "</br>" + tArr[1]; 
+			}else{
+				return time;
 			}
 		}
 		return null;
@@ -211,7 +223,7 @@ define([
      	                    }, 
      	                   	{ data : "overtime_code", 		"title" : "초과</br>근무",
      	                   		render : function(data, type, full, meta){
-     	                   			return Code.getCodeName(Code.OVERTIME, data);
+     	                   			return _createHistoryCell("overtime_code", full, "overtime_code_change");
      	                   		}
      	                   	},
      	                    { data : "comment_count", "title" : "비고",
@@ -430,32 +442,7 @@ define([
                 },
             });
             
-    	//     this.progressbar.disabledProgressbar(false);
-     //		var data = {
-     //		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
-     //		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
-     //		};
-     		   		
-     //		data.startDate.getText() === "" ? null : data.startDate = data.startDate.getDate().format("YYYY-MM-DD");
-     //		data.endDate.getText() === "" ? null : data.endDate = data.endDate.getDate().format("YYYY-MM-DD");
-     		
-     //		if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     //			Dialog.error("시작일 / 종료일을 입력해 주십시오");
-     //			return;
-     //		}
-     		
-     //       var _this = this;
-     //		this.commuteCollection.fetch({ 
-     //			data: data,
-	 			// success: function(result) {
-	 			// 	_this.grid.render();
-	 			// 	_this.progressbar.disabledProgressbar(true);
-	 			// },
-	 			// error : function(result) {
-	 			// 	alert("데이터 조회가 실패했습니다.");
-	 			// }
-     //		});     		
-     		
+
     	}
 	});
 	return commuteListView;

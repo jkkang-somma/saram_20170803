@@ -95,8 +95,7 @@ define([
         	                value:_model.dept_name,
         	                collection:deptCodeCollection,
         	                group:"requireInfo"
-        	        },
-        	        {
+        	        },{
         	                type:"combo",
         	                name:"approval_id",
         	                label:i18nCommon.USER.APPROVAL_NAME,
