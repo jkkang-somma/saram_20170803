@@ -387,7 +387,7 @@ define({
     
     COMMUTE_RESULT_LIST : {
         TITLE : "근태 관리",
-        SUBTITLE : "근태 자료 조회",
+        SUB_TITLE : "근태 자료 조회",
         SEARCH_BTN : "검색",
         GRID_COL_NAME : {
             DATE: "날짜",

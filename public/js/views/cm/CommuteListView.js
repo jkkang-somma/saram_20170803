@@ -235,7 +235,9 @@ define([
              	        ],
              	    rowCallback: function(row, data){
              	    	if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
-             	    		$(row).css("background-color", "rgb(236, 131, 131)");
+             	    		$(row).addClass("absentce");
+             	    	}else{
+             	    		$(row).removeClass("absentce");
              	    	}
              	    },
         		    collection:this.commuteCollection,
