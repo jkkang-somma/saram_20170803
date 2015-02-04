@@ -33,6 +33,7 @@ define([
                 if(!_.isUndefined(data.disabled)&&data.disabled){
                     var result=$(_input);
                     result.find("input").attr("readOnly", "readOnly");
+
                     return result;
                 }
                 return $(_input);
@@ -72,10 +73,35 @@ define([
                 var _datePicker=_.noop();
                 _datePicker=$(_dateTemp(data));
                 
-                 _datePicker.find("#"+data.id).datetimepicker({
+                _datePicker.find("#"+data.id).datetimepicker({
                    pickTime: false,
                    format: data.format
                 });
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    $(_datePicker).find("input").attr("disabled", "true");
+                }
+                
+                 
+                return _datePicker; 
+            }
+        },
+        datetime:{
+            getElement:function(data){
+                var _dateTemp=_.template(DatePickerHTML);
+                var _datePicker=_.noop();
+                _datePicker=$(_dateTemp(data));
+                
+                _datePicker.find("#"+data.id).datetimepicker({
+                   pickTime: true,
+                   format: data.format
+                });
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    $(_datePicker).find("input").attr("disabled", "true");
+                }
+                
+                 
                 return _datePicker; 
             }
         },
@@ -90,6 +116,10 @@ define([
                 var _option,_code,_text;
                 
                 if (_.isArray(data.collection)){ // 콤보 데이터가 array 일경우
+                
+                    if (data.firstBlank){
+                        _select.append("<option value=''></option>");
+                    }
                     for (var index in data.collection){
                         _option= data.collection[index];
                         _code=_option.key;
@@ -102,11 +132,20 @@ define([
                     }
                 } else { // 콤보 데이터가 collection 일경우 
                     
+                    if (data.firstBlank){
+                        if (_.isUndefined(data.value)){
+                            _select.append("<option selected='selected' value=''>-</option>");
+                        } else {
+                            _select.append("<option value=''>-</option>");
+                        }
+                        
+                    }
+                    
                     for (var index in _options){
                         _option= _options[index].attributes;
                         _code=_option[data.codeKey];
                         _text=_option[[data.textKey]];
-                        if (_code==data.value || (_.isEmpty(data.value)&&index==0)){ //초기값 설정
+                        if (_code==data.value || (_.isEmpty(data.value)&&index==0&&!data.firstBlank)){ //초기값 설정
                             _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
                         } else {
                             _select.append("<option value='"+_code+"'>"+_text+"</option>");
@@ -150,7 +189,7 @@ define([
                 _hidden=$(_hiddenTemp(data));
                 return _hidden;  
             }
-        }
+        },
     };
     var Form = Backbone.View.extend({
         initialize:function(options){
@@ -249,7 +288,10 @@ define([
             return dfd.promise();
         },
         getData: function() {
+            var disabled = this.form.find(':input:disabled').removeAttr('disabled');
             var unindexed_array = this.form.serializeArray();
+            disabled.attr('disabled', 'disabled');
+            
             var indexed_array= {};
             
             $.map(unindexed_array, function(n, i){

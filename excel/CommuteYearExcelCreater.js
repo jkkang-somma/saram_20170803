@@ -6,50 +6,60 @@ var	excelFileDirPath = path.normalize(__dirname + '/../excel/files/');
 
 var CommuteYearExcelCreater = function () {
 
-	var COL_DEPT = 1;	// 부서	
-	var COL_NAME = 2;	// 이름
-	var COL_LEAVE_COMPANY = 3;	// 퇴사
+	var COL_DEPT = 1;	// 부서
+	var COL_DEPT_WIDTH = 13;
+	
+	var COL_POSITION = 2 // 직급
+	var COL_POSITION_WIDTH = 13;
+	
+	var COL_NAME = 3;	// 이름
+	var COL_LEAVE_COMPANY = 4;	// 퇴사
 
 	// 지각 현황
-	var COL_LATE_WORKER = 4;
-	var COL_LATE_WORKER_END = 16;
+	var COL_LATE_WORKER = 5;
+	var COL_LATE_WORKER_END = 17;
 
 	//연차 사용 현황
-	var COL_USED_HOLIDAY = 17;
-	var COL_USED_HOLIDAY_END = 30;
+	var COL_USED_HOLIDAY = 18;
+	var COL_USED_HOLIDAY_END = 31;
 
 	//잔업시간(분) 현황 ( 평일 잔업시간 )
-	var COL_OVER_TIME_WORKE = 31;
-	var COL_OVER_TIME_WORKE_END = 43;
+	var COL_OVER_TIME_WORKE = 32;
+	var COL_OVER_TIME_WORKE_END = 44;
 
 	// 잔업 수당 타입 현황
-	var COL_OVER_TIME_WORK_TYPE = 44;
-	var COL_OVER_TIME_WORK_TYPE_END = 82;
+	var COL_OVER_TIME_WORK_TYPE = 45;
+	var COL_OVER_TIME_WORK_TYPE_END = 83;
 
 	//잔업 수당 금액 현황
-	var COL_OVER_TIME_WORK_PAY	= 83;
-	var COL_OVER_TIME_WORK_PAY_END	= 95;
+	var COL_OVER_TIME_WORK_PAY	= 84;
+	var COL_OVER_TIME_WORK_PAY_END	= 96;
 
 	//휴일 근무 타입 현황
-	var COL_HOLIDAY_WORK_TYPE =  96;
-	var COL_HOLIDAY_WORK_TYPE_END =  134;
+	var COL_HOLIDAY_WORK_TYPE =  97;
+	var COL_HOLIDAY_WORK_TYPE_END =  135;
 
 	//휴일근무 수당 금액 현황
-	var COL_HOLIDAY_WORK_PAY =  135;
-	var COL_HOLIDAY_WORK_PAY_END =  147;
+	var COL_HOLIDAY_WORK_PAY =  136;
+	var COL_HOLIDAY_WORK_PAY_END =  148;
 
-	function _createExcelTitle(sheet) {
+	function _createExcelTitle(sheet, searchValObj) {
 
-		_setTitleCellStyle(sheet, 1, 1, " 기준년도 ")
+		_setTitleCellStyle(sheet, 1, 1, " 검색기간 ")
 //		for (var i = 1, len = 200; i < len; i++) {
 //			_setTitleCellStyle(sheet, i, 1, i);
 //		}
 
-		_setTitleCellStyle(sheet, 2, 1, " 2015년 ");
+		sheet.merge({col:2, row:1},{col:4, row:1});
+		_setTitleCellStyle(sheet, 2, 1, (searchValObj.startDate + " ~ " + searchValObj.endDate) );
 
 		sheet.merge({col:COL_DEPT, row:2},{col:COL_DEPT, row:4});
-		_setTitleCellStyle(sheet, COL_DEPT, 2, " 부서 ");
+		sheet.width(COL_DEPT, COL_DEPT_WIDTH);
+		_setTitleCellStyle(sheet, COL_DEPT, 2, " 부서 ");		
 		
+		sheet.merge({col:COL_POSITION, row:2},{col:COL_POSITION, row:4});
+		sheet.width(COL_POSITION, COL_POSITION_WIDTH);
+		_setTitleCellStyle(sheet, COL_POSITION, 2, " 직급 ");
 
 		sheet.merge({col:COL_NAME, row:2},{col:COL_NAME, row:4});
 		_setTitleCellStyle(sheet, COL_NAME, 2, " 사원명 ");
@@ -120,6 +130,10 @@ var CommuteYearExcelCreater = function () {
 		_setTieleBorder(sheet);		
 	}
 
+	/**
+	 * 엑셀 데이터 생성
+	 * 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함
+	 */
 	function _createExcelData(sheet, searchValObj, datas){
 		
 		var users = datas[0],
@@ -155,13 +169,23 @@ var CommuteYearExcelCreater = function () {
 				currentRow++;
 			}
 			
+			// 부서
 			sheet.set(COL_DEPT, currentRow, user.dept_name);
+			_setDataCellStyle(sheet, COL_DEPT, currentRow);
 			sheet.border(COL_DEPT, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});		
 			
+			
+			// 이름
+			sheet.set(COL_POSITION, currentRow, user.position_name);
+			_setDataCellStyle(sheet, COL_POSITION, currentRow);
+			sheet.border(COL_POSITION, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});
+			
+			// 이름
 			sheet.set(COL_NAME, currentRow, user.name);
 			_setDataCellStyle(sheet, COL_NAME, currentRow);
 			sheet.border(COL_NAME, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});
 			
+			// 퇴사일 
 			sheet.set(COL_LEAVE_COMPANY, currentRow, user.leave_company);
 			_setDataCellStyle(sheet, COL_LEAVE_COMPANY, currentRow);
 			sheet.border(COL_LEAVE_COMPANY, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});
@@ -376,7 +400,7 @@ var CommuteYearExcelCreater = function () {
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
-			var fileName = "근태자료_"+ searchValObj.year + "_" +new Date().getTime() + ".xlsx";
+			var fileName = "근태자료_"+ searchValObj.startDate + "_" + searchValObj.endDate + "_" +new Date().getTime() + ".xlsx";
 			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
 			
 			// 파일 폴더 체크 
@@ -394,7 +418,7 @@ var CommuteYearExcelCreater = function () {
 			// sheet 기본 크기 
 			var sheet1 = workbook.createSheet('sheet1', 200, 150);
 			
-			_createExcelTitle(sheet1);		
+			_createExcelTitle(sheet1, searchValObj);		
 			_createExcelData(sheet1, searchValObj, datas);
 
 			// Save it

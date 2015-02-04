@@ -66,7 +66,7 @@ define([
         	                name:"position",
         	                label:i18nCommon.USER.POSITION,
         	                value:_model.position,
-        	                collection:[
+        	                collection:[            
         	                    {key:i18nCommon.CODE.POSITION.BOSS,value:i18nCommon.CODE.POSITION.BOSS},
         	                    {key:i18nCommon.CODE.POSITION.VICE_PRESIDENT,value:i18nCommon.CODE.POSITION.VICE_PRESIDENT},
         	                    {key:i18nCommon.CODE.POSITION.EXECUTIVE_DIRECTOR,value:i18nCommon.CODE.POSITION.EXECUTIVE_DIRECTOR},
@@ -74,6 +74,7 @@ define([
         	                    {key:i18nCommon.CODE.POSITION.VICE_CHIEF,value:i18nCommon.CODE.POSITION.VICE_CHIEF},
         	                    {key:i18nCommon.CODE.POSITION.SECTION__CHIEF,value:i18nCommon.CODE.POSITION.SECTION__CHIEF},
         	                    {key:i18nCommon.CODE.POSITION.DEARI,value:i18nCommon.CODE.POSITION.DEARI},
+        	                    {key:i18nCommon.CODE.POSITION.WORKER,value:i18nCommon.CODE.POSITION.WORKER},
         	                    {key:i18nCommon.CODE.POSITION.TOP_SEAT,value:i18nCommon.CODE.POSITION.TOP_SEAT},
         	                    {key:i18nCommon.CODE.POSITION.MIDDLE_SEAT,value:i18nCommon.CODE.POSITION.MIDDLE_SEAT},
         	                    {key:i18nCommon.CODE.POSITION.SEAT,value:i18nCommon.CODE.POSITION.SEAT},
@@ -95,14 +96,14 @@ define([
         	                value:_model.dept_name,
         	                collection:deptCodeCollection,
         	                group:"requireInfo"
-        	        },
-        	        {
+        	        },{
         	                type:"combo",
         	                name:"approval_id",
         	                label:i18nCommon.USER.APPROVAL_NAME,
         	                value:_model.approval_id,
         	                collection:approvalUserCodeCollection,
         	                group:"requireInfo",
+        	                firstBlank:true,
         	                linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
         	        },{
         	                type:"hidden",
