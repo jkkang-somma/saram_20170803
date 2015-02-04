@@ -94,6 +94,9 @@ form .form-group:last-child {
         padding-left: .5em;
         padding-right: .5em;
     }
+    .form-text-harf label {
+        width : 100%;
+    }
 }
 @media (max-width: 399px) {
     .form-group-harf {
@@ -441,6 +444,11 @@ background-color: #e0e0e0;
 .navbar-inverse .navbar-brand {
     color:#29BB9B;
 	transition: color .5s;
+	width: 120px;
+	height: 49px;
+	margin-left: 10px;
+	margin-top: 3px;
+	background: url('img/yes_logo_white.png') no-repeat center center;
 }
 
 .navbar-inverse .navbar-brand:hover {

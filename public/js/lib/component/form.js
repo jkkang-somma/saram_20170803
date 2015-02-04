@@ -33,6 +33,7 @@ define([
                 if(!_.isUndefined(data.disabled)&&data.disabled){
                     var result=$(_input);
                     result.find("input").attr("readOnly", "readOnly");
+
                     return result;
                 }
                 return $(_input);
@@ -72,10 +73,35 @@ define([
                 var _datePicker=_.noop();
                 _datePicker=$(_dateTemp(data));
                 
-                 _datePicker.find("#"+data.id).datetimepicker({
+                _datePicker.find("#"+data.id).datetimepicker({
                    pickTime: false,
                    format: data.format
                 });
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    $(_datePicker).find("input").attr("disabled", "true");
+                }
+                
+                 
+                return _datePicker; 
+            }
+        },
+        datetime:{
+            getElement:function(data){
+                var _dateTemp=_.template(DatePickerHTML);
+                var _datePicker=_.noop();
+                _datePicker=$(_dateTemp(data));
+                
+                _datePicker.find("#"+data.id).datetimepicker({
+                   pickTime: true,
+                   format: data.format
+                });
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    $(_datePicker).find("input").attr("disabled", "true");
+                }
+                
+                 
                 return _datePicker; 
             }
         },
@@ -163,7 +189,7 @@ define([
                 _hidden=$(_hiddenTemp(data));
                 return _hidden;  
             }
-        }
+        },
     };
     var Form = Backbone.View.extend({
         initialize:function(options){
@@ -262,7 +288,10 @@ define([
             return dfd.promise();
         },
         getData: function() {
+            var disabled = this.form.find(':input:disabled').removeAttr('disabled');
             var unindexed_array = this.form.serializeArray();
+            disabled.attr('disabled', 'disabled');
+            
             var indexed_array= {};
             
             $.map(unindexed_array, function(n, i){

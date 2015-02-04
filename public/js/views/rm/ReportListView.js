@@ -171,8 +171,10 @@ define([
            var sessionInfo = SessionModel.getUserInfo();
            var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
            dataVal += "<div style='text-align: center;'>";
-           if(sessionInfo.id == row.manager_id && row.state != '결재완료' 
-                        && row.state != '취소완료' && row.state != '상신취소'){
+          // if(sessionInfo.id == row.manager_id && row.state != '결재완료' 
+          //               && row.state != '취소완료' && row.state != '상신취소'){
+          if(sessionInfo.id == row.manager_id && 
+                        (row.state == '상신' || row.state == '취소요청')){
             dataVal +="<button class='btn list-approval-btn btn-default btn-xs' id='btnApproval"+row.doc_num+"'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span></button>";
            }
            dataVal += "<button class='btn list-detail-btn btn-default btn-xs' id='btnDetail"+row.doc_num+"'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>";

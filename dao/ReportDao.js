@@ -5,6 +5,12 @@ var db = require('../lib/dbmanager.js');
 var ReportDao = function () {
 }
 
+// 레포트 유저 리스트 
+ReportDao.prototype.selectReportUsers =  function () {
+    var queryStr = db.getQuery('report', 'selectReportUsers');
+    return db.queryV2(queryStr, []);
+}
+
 // 지각 현황
 ReportDao.prototype.selectLateWorkerReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectLateWorkerReport');

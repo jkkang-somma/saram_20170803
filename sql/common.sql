@@ -266,6 +266,7 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   `over_time` INT NULL COMMENT '초과근무 시간 ( 분 )',
   `in_time_change` TINYINT NULL DEFAULT 0 COMMENT '출근시간 수정 Count',
   `out_time_change` TINYINT NULL DEFAULT 0 COMMENT '퇴근시간 수정 Count',
+  `overtime_code_change` TINYINT NULL DEFAULT 0 COMMENT '초과근무 수정 Count',
   `comment_count` TINYINT NULL DEFAULT 0 COMMENT 'Comment Count',
   `out_office_start_time` DATETIME NULL COMMENT '외근인 경우 외근 시작시간',
   `out_office_end_time` DATETIME NULL COMMENT '외근인 경우 외근 종료시간',

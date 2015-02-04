@@ -205,7 +205,7 @@ define({
     
     //로그인
     LOGIN_VIEW:{
-        TITLE:"Yescnc 근태관리 시스템",
+        TITLE:"YESCNC 근태관리 시스템",
         ID_PLACEHOLDER:"아이디",
         PASSWORD_PLACEHOLDER:"비밀번호",
         LOGIN_SATUS_BTN:"로그인중..",
@@ -225,5 +225,25 @@ define({
         FIND_PASSWORD_STATUS_BTN:"찾는중..",
         FIND_PASSWORD_BTN:"비밀번호 찾기",
         FIND_TEXT_INFO:"※  아이디와 가입하실때 등록한 이메일를 입력해주세요."
+    },
+    
+    HOLIDAY_MANAGER:{
+        ADD:{
+            DATE: "날짜",
+            MEMO: "내용",
+        },
+        CREATE:{
+            YEAR: "연도"
+        }
+    },
+    
+    CREATE_RAW_DATA : {
+        CREATE:{
+            START_DATE : "시작일",
+            END_DATE : "종료일",
+            TIP : "참고사항",
+            TIP_TEXT : "※ 종료일 다음날 6시 까지 출입 기록 필요\n ex) 종료일이 2015-01-15 일 경우  \n 2015-01-16 06:00 까지 출입기록 필요",
+            DATE_ERR_MSG : "시작일이 종료일보다 큽니다."
+        }
     }
 });
