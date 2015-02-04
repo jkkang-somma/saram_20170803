@@ -104,8 +104,8 @@ define([
 		},
      	getSearchForm: function() {	// 검색 조건
      		var selDataObj = {
- 				startDate: this.el.find("#startDate").val(),
- 				endDate: this.el.find("#endDate").val(),
+ 				startDate: this.el.find('input[name="startDate"]').val(),
+ 				endDate: this.el.find('input[name="endDate"]').val(),
  				isInLeaveWorker: ( this.el.find("#chkleaveWorker").is(":checked")? true : false )
  			};
 

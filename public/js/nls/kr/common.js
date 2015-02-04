@@ -200,7 +200,7 @@ define({
     
     //로그인
     LOGIN_VIEW:{
-        TITLE:"Yescnc 근태관리 시스템",
+        TITLE:"YESCNC 근태관리 시스템",
         ID_PLACEHOLDER:"아이디",
         PASSWORD_PLACEHOLDER:"비밀번호",
         LOGIN_SATUS_BTN:"로그인중..",
