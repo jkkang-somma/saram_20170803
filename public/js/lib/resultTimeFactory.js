@@ -55,7 +55,8 @@ define([
         outOfficeStartTime: null,
         outOfficeEndTime:   null,
         inTimeChange:       0,
-        outnTimeChange:     0,
+        outTimeChange:     0,
+        overtimeCodeChange : 0,
         checkInOffice:      false,
         isSuwon: false,
         checkLate : true,
@@ -86,6 +87,7 @@ define([
             this.outOfficeEndTime = null;
             this.inTimeChange = 0;
             this.outTimeChange = 0;
+            this.overtimeCodeChange = 0;
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly =true;
@@ -120,6 +122,7 @@ define([
             this.outOfficeEndTime = null;
             this.inTimeChange = 0;
             this.outTimeChange = 0;
+            this.overtimeCodeChange = 0;
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly =true;
@@ -149,6 +152,7 @@ define([
             this.outOfficeEndTime = model.get("out_office_end_time");
             this.inTimeChange = model.get("in_time_change");
             this.outTimeChange = model.get("out_time_change");
+            this.overtimeCodeChange = model.get("overtime_code_change");
             this.checkLate = true;
             this.checkEarly =true;
             if(this.department.slice(0,4) === "품질검증"){
@@ -167,7 +171,6 @@ define([
         setStandardInTime : function(yesterdayOutTime){
             if(!_.isNull(this.standardInTime) && !_.isNull(yesterdayOutTime)){
                 if(yesterdayOutTime.format(DATEFORMAT) == this.date){
-                    
                     var outTimeHour = yesterdayOutTime.hour();
                     if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
                     else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
@@ -354,9 +357,7 @@ define([
                     this.workType = WORKTYPE.NOTOUTTIME;
                 }else{
                     this.setLateTime();
-                    if (this.outTime){
-                        this.setOverTimeCode();
-                    }
+                    this.setOverTimeCode();
                 }    
             }else{
                 if (this.workType == WORKTYPE.HOLIDAY || this.workType == WORKTYPE.HOLIDAYWORK || this.workType == WORKTYPE._HOLIDAYWORK) //휴일근무인 경우
@@ -384,7 +385,8 @@ define([
                 out_office_start_time : _.isNull(this.outOfficeStartTime) ? null : Moment(this.outOfficeStartTime).format(DATETIMEFORMAT),
                 out_office_end_time : _.isNull(this.outOfficeEndTime) ? null : Moment(this.outOfficeEndTime).format(DATETIMEFORMAT),
                 in_time_change : this.inTimeChange,
-                out_time_change : this.outTimeChange
+                out_time_change : this.outTimeChange,
+                overtime_code_change : this.overtimeCodeChange
             };
         },
         
@@ -426,12 +428,13 @@ define([
                                                             
                     if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
                         this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateOverTime; // 초과근무 시간 (지각시간 제외)
-                        if(this.vacationCode === null || this.vacationCode === "V02"){  //
+                        if((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0){  // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
                             if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
-                            else if(this.overTime >= 240)            this.overtimeCode =  "2015_AB";
-                            else if(this.overTime >= 150)            this.overtimeCode =  "2015_AA";
-                            else if(this.overTime <= 0)              this.overTime = 0;
+                            else if(this.overTime >= 240)            this.overtimeCode = "2015_AB";
+                            else if(this.overTime >= 120)            this.overtimeCode = "2015_AA";
+                            else                                     this.overtimeCode = null;
                         }
+                        if(this.overtime <0)                        this.overtime= 0;
                     }else{ // 조퇴 판정
                         if(this.checkEarly){
                             if (this.workType == WORKTYPE.LATE)
@@ -459,15 +462,21 @@ define([
  			
  			if(!_.isNull(inData.changeInTime)){
  				this.inTime = Moment(inData.changeInTime);
- 				this.inTimeChange = this.inTimeChange + 1; 
+ 				this.inTimeChange += 1; 
  			}
  			
  			if(!_.isNull(inData.changeOutTime)){
  				this.outTime = Moment(inData.changeOutTime);
- 				this.outTimeChange = this.outTimeChange + 1;
+ 				this.outTimeChange += 1;
  			}
  			
  			var currentResult = this.getResult();
+ 			
+ 			if(!_.isNull(inData.changeOvertimeCode)){
+ 			    currentResult.overtime_code = inData.changeOvertimeCode;
+ 				currentResult.overtime_code_change += 1;
+ 			}
+ 			
  			resultCommuteCollection.add(currentResult);
             if(destCommuteCollection.length == 2){
                 var nextDayCommute = destCommuteCollection.models[1];		

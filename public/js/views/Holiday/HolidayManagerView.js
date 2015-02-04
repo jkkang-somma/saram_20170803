@@ -23,19 +23,7 @@ HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, InlineFormHTML, Com
 HolidayCollection, HolidayModel,
 CreateHolidayPopup, AddHolidayPopup){
 
-    var holidays = [
-    	{ date: "01-01", memo : "신정",         lunar : false,  _3days : false}, 
-    	{ date: "03-01", memo : "삼일절",       lunar : false,  _3days : false},
-    	{ date: "05-05", memo : "어린이날",     lunar : false,  _3days : false},
-    	{ date: "06-06", memo : "현충일",       lunar : false,  _3days : false},
-    	{ date: "08-15", memo : "광복절",		lunar : false,  _3days : false},
-    	{ date: "10-03", memo : "개천절",		lunar : false,  _3days : false},
-    	{ date: "10-09", memo : "한글날",		lunar : false,  _3days : false},
-    	{ date: "12-25", memo : "성탄절",		lunar : false,  _3days : false},
-    	{ date: "01-01", memo : "설날",		    lunar : true,   _3days : true },
-    	{ date: "04-08", memo : "석가탄신일",	lunar : true,   _3days : false},
-    	{ date: "08-15", memo : "추석",		    lunar : true,   _3days : true },
-    ];
+    
     
     var holidayManagerView = BaseView.extend({
         el:".main-container",
@@ -76,28 +64,17 @@ CreateHolidayPopup, AddHolidayPopup){
                             cssClass: Dialog.CssClass.SUCCESS,
                             label: '추가',
                             action: function(dialog) {
-                                var datepicker = dialog.getModalBody().find("#ahDatePicker");
-                                
-                                var date = datepicker.data("DateTimePicker").getDate().toDate();
-                                var month = date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : date.getMonth()+1;
-                                var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-                                
-                                var memo = dialog.getModalBody().find("#addHolidayMemo").val();
-                                
-                                var holidayModel = new HolidayModel({ date: month+"-"+day , memo : memo, year: date.getFullYear()});
-                                
-                                holidayModel.save({}, {
-                                    success : function(){
+                                addHolidayPopup.addHoliday().then(
+                                    function(){
+                                        dialog.close();
                                         Dialog.info("휴일이 추가되었습니다.");
                                         that._renderTable();
+                                    }, function(){
                                         dialog.close();
-                                    }, error : function(){
-                                        Dialog.info("휴일 추가 실패! ㅠㅠ");
+                                        Dialog.error("휴일 추가 실패! ㅠㅠ");
                                         that._renderTable();
-                                        dialog.close();
                                     }
-                                });
-
+                                );
                             }
                         }, {
                             label : "취소",
@@ -151,25 +128,17 @@ CreateHolidayPopup, AddHolidayPopup){
                             cssClass: Dialog.CssClass.SUCCESS,
                             label: '생성',
                             action: function(dialog) {
-                                var year = dialog.getModalBody().find("#createHolidayCombo").val();
-                                var newHolidayCollection = new HolidayCollection();
-                                
-                                for(var key in holidays){
-                                    holidays[key].year = year;
-                                    newHolidayCollection.add(holidays[key]);
-                                }
-                                
-                                newHolidayCollection.save({
-                                    success : function(){
+                                createHolidayPopup.createHoliday().then(
+                                    function(){
                                         Dialog.info("공휴일 생성이 완료되었습니다.");
                                         that._renderTable();
                                         dialog.close();
                                     },
-                                    error : function(){
+                                    function(){
                                         Dialog.error("공휴일 생성 실패!");
+                                        dialog.close();
                                     }
-                                });
-                                return false;
+                                )
                             }
                         }, {
                             label : "취소",
@@ -201,7 +170,7 @@ CreateHolidayPopup, AddHolidayPopup){
     	    var _yearComboLabel = $(_.template(LabelHTML)({label:"연도"}));
     	    var _yearCombo = $(_.template(ComboBoxHTML)({id:"holidayYearCombo", label:""}));
     	    
-        
+            
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));

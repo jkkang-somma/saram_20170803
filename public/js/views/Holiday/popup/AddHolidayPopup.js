@@ -2,10 +2,15 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'cmoment',
 	'util',
+	'i18n!nls/common',
+  	'lib/component/form',
+  	'models/common/HolidayModel',
 	'text!templates/default/datepicker.html',
 	'text!templates/inputForm/textbox.html',
-], function($, _, Backbone, Util,
+], function($, _, Backbone, Moment, Util, i18nCommon, Form,
+HolidayModel,
 DatePickerHTML, TextBoxHTML) {
 	var CreateHolidayPopup = Backbone.View.extend({
 		initialize : function() {
@@ -15,29 +20,49 @@ DatePickerHTML, TextBoxHTML) {
 			var dfd= new $.Deferred();
             if (!_.isUndefined(el)) this.el=el;
     	    
-    	    var _datepicker=$(_.template(DatePickerHTML)(
-    	    	{ obj : 
-    	    		{
-    	    			id : "ahDatePicker",
-    	    			label : "날짜",
-    	    			name : "startDate"
-    	    		}
-    	    		
-    	    	})
-    	    );
+    	    var _view = this;
+    	   
+            var _form = new Form({
+    	        el:_view.el,
+    	        form:undefined,
+    	        childs:[{
+	                type:"date",
+	                name:"ahDatePicker",
+	                label:i18nCommon.HOLIDAY_MANAGER.ADD.DATE,
+	                format:"YYYY-MM-DD",
+    	        },{
+	                type:"text",
+	                name:"addHolidayMemo",
+	                label:i18nCommon.HOLIDAY_MANAGER.ADD.MEMO,
+    	        }]
+    	    });
     	    
-    	    var _textbox=$(_.template(TextBoxHTML)({id: "addHolidayMemo", label: "내용", value : ""}));
-            $(this.el).append(_datepicker);
-            $(this.el).append(_textbox);
+    	    _form.render().done(function(){
+    	        _view.form=_form;
+    	        dfd.resolve();
+    	    }).fail(function(){
+    	        dfd.reject();
+    	    });  
+            return dfd.promise();
+		},
+		
+		addHoliday : function(){
+			var dfd = new $.Deferred();
+			var _data = this.form.getData();
+			console.log(_data);
+			
+            var date = Moment(_data.ahDatePicker)
+            var memo = _data.addHolidayMemo;
             
-            $(this.el).find("#ahDatePicker").datetimepicker({
-            	pickTime: false,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD"
+            var holidayModel = new HolidayModel({ date: date.format("MM-DD") , memo : memo, year: date.year()});
+            
+            holidayModel.save({}, {
+				success : function(result){
+					dfd.resolve(result);
+				}, error : function(err){
+					dfd.reject(err);
+				}
             });
-            
-            dfd.resolve();
             return dfd.promise();
 		}
 	});

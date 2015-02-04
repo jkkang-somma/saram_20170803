@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-@import url(https://fonts.googleapis.com/css?family=Great+Vibes|Orbitron|Audiowide);
+/*@import url(https://fonts.googleapis.com/css?family=Great+Vibes|Orbitron|Audiowide);*/
 body {
   overflow:auto;
   font-family: 'Nanum Gothic';
@@ -93,6 +93,9 @@ form .form-group:last-child {
     .form-text-harf {
         padding-left: .5em;
         padding-right: .5em;
+    }
+    .form-text-harf label {
+        width : 100%;
     }
 }
 @media (max-width: 399px) {

@@ -42,6 +42,21 @@ define([
             
             return dfd.promise();
         },
+        findPassword:function(userInfo){
+            var dfd= new $.Deferred();
+            this.save({user:userInfo}, {
+                url: "/session/findPassword",
+                success:function(resultModel, result, s, sd){
+                    dfd.resolve(result);
+                },
+                error:function(e){
+                    Dialog.error(e.msg);
+                    dfd.reject();
+                }
+            });
+            
+            return dfd.promise();
+        },
         login : function(userinfo){// POST or PUT
             var dfd= new $.Deferred();
             this.save({initPassword:false, user:userinfo}, {

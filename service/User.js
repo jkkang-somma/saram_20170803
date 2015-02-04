@@ -86,6 +86,23 @@ var User = function (data, isNoSchemas) {
             });
         });
     };
+    var _findPassword=function(){
+        var _user=this;
+        return new Promise(function(resolve, reject){// promise patten
+            _getUser().then(function(currentData){
+                debug(currentData[0]);
+                if (currentData[0].email!=_data.email){ //입력받은 이메일이 적확하지 않을 때.
+                    debug("_configUser ERROR:Not equls Email");
+                    throw new Error("NOT_EQULES_EMAIL");
+                } else {
+                    resolve(currentData[0]);
+                }
+            }).catch(function(e){//Connection Error
+               debug("_getUser ERROR:"+e.message);
+               reject(e);
+            });
+        });
+    };
     return {
         get:_get,
         getUser:_getUser,
@@ -96,7 +113,8 @@ var User = function (data, isNoSchemas) {
         remove:_removeUser,
         addUser:_addUser,
         editUser:_editUser,
-        configUser:_configUser
+        configUser:_configUser,
+        findPassword:_findPassword
     }
 }
 module.exports = User;
