@@ -5,6 +5,7 @@ define([
 'log',
 'dialog',
 'spin',
+'validator',
 'cryptojs.sha256',
 'models/sm/UserModel',
 'models/sm/SessionModel',
@@ -15,7 +16,7 @@ define([
 'text!templates/login/findPasswordSectionTemplate.html',
 'i18n!nls/common',
 'css!cs/login.css',
-], function($, _,Backbone, log, Dialog, Spin, CryptoJS, UserModel, SessionModel, MessageModel, LoginHTML, LoginPasswordSectionHTML 
+], function($, _,Backbone, log, Dialog, Spin, _V, CryptoJS, UserModel, SessionModel, MessageModel, LoginHTML, LoginPasswordSectionHTML 
 , InitPasswordHTML, FindPasswordSectionHTML
 , i18nCommon){
     var opts = {
@@ -72,32 +73,45 @@ define([
                }
             });
             
-        //     this.loginPasswordSection.find("#findPasswordBtn").click(function(e){
-        //          e.preventDefault();
-        //         _view.formSection.addClass("bounceOut");
-        //         _view.passwordSection.addClass("fadeOutLeftBig");
-        //         _view.loginPasswordSection.addClass("fadeOutRightBig");
+            this.loginPasswordSection.find("#findPasswordBtn").click(function(e){
+                 e.preventDefault();
+                _view.formSection.addClass("bounceOut");
+                _view.passwordSection.addClass("fadeOutLeftBig");
+                _view.loginPasswordSection.addClass("fadeOutRightBig");
                 
-        //         setTimeout(function timeoutTimeout() {
-        //             _view.formSection.css("display", "none");
-        //             _view.passwordSection.css("display", "none");
-        //             _view.loginPasswordSection.css("display", "none");
+                setTimeout(function timeoutTimeout() {
+                    _view.formSection.css("display", "none");
+                    _view.passwordSection.css("display", "none");
+                    _view.loginPasswordSection.css("display", "none");
                     
-        //             _view.findPasswordSection.css("display", "block");
-        //             _view.findPasswordSection.addClass("fadeInLeftBig");
-        //         }, 300);
+                    _view.findPasswordSection.css("display", "block");
+                    _view.findPasswordSection.addClass("fadeInLeftBig");
+                }, 300);
                 
-    	   //     return false;
-    	   // });
+    	        return false;
+    	    });
     	    
-    	   // this.findPasswordSection.find("#findCloseBtn").click(function(){
-        //         _view.render(_view.app);
-        //     });
+    	    this.findPasswordSection.find("#findCloseBtn").click(function(){
+                _view.render(_view.app);
+            });
             
-        //     this.findPasswordSection.find("#findPasswordBtn").click(function(){
-        //         _view.findPassword();
-        //     });
+            this.findPasswordSection.find("#findPasswordBtn").click(function(){
+                _view.findPassword();
+            });
+            this.findPasswordSection.find("#findIdInput").bind('keydown', function(e){
+               if(e.keyCode == 13) {
+                   e.preventDefault();
+                   _view.findPassword();
+               }
+            });
+            this.findPasswordSection.find("#findEmailInput").bind('keydown', function(e){
+               if(e.keyCode == 13) {
+                   e.preventDefault();
+                   _view.findPassword();
+               }
+            });
             
+            this.findPasswordSection.find('form').submit(false);
             this.passwordSection.find('form').submit(false);
     	},
     	render:function(app, data){
@@ -119,28 +133,27 @@ define([
             }));
             
             
-            // this.loginPasswordSection=$(_.template(LoginPasswordSectionHTML)({//비밀번호 찾기 텍스트 창
-            //     text:i18nCommon.LOGIN_VIEW.FIND_PASSWORD_TEXT,
-            //     findPasswordText:i18nCommon.LOGIN_VIEW.FIND_PASSWORD_TEXT_A
-            // }));
+            this.loginPasswordSection=$(_.template(LoginPasswordSectionHTML)({//비밀번호 찾기 텍스트 창
+                text:i18nCommon.LOGIN_VIEW.FIND_PASSWORD_TEXT
+            }));
             
-            // this.findPasswordSection=$(_.template(FindPasswordSectionHTML)({//비밀번호 찾기 창
-            //     title:i18nCommon.FIND_PASSWORD_VIEW.TITLE,
-            //     idPlaceholder:i18nCommon.LOGIN_VIEW.ID_PLACEHOLDER,
-            //     emailPlaceholder:i18nCommon.FIND_PASSWORD_VIEW.EMAIL_PLACEHOLDER,
-            //     findPasswordStatusBtn:i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_STATUS_BTN,
-            //     findPasswordBtn:i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_BTN,
-            //     closeBtn:i18nCommon.DIALOG.BUTTON.CLOSE,
-            //     findTextInfo:i18nCommon.FIND_PASSWORD_VIEW.FIND_TEXT_INFO
-            // }));
+            this.findPasswordSection=$(_.template(FindPasswordSectionHTML)({//비밀번호 찾기 창
+                title:i18nCommon.FIND_PASSWORD_VIEW.TITLE,
+                idPlaceholder:i18nCommon.LOGIN_VIEW.ID_PLACEHOLDER,
+                emailPlaceholder:i18nCommon.FIND_PASSWORD_VIEW.EMAIL_PLACEHOLDER,
+                findPasswordStatusBtn:i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_STATUS_BTN,
+                findPasswordBtn:i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_BTN,
+                closeBtn:i18nCommon.DIALOG.BUTTON.CLOSE,
+                findTextInfo:i18nCommon.FIND_PASSWORD_VIEW.FIND_TEXT_INFO
+            }));
             
             this.passwordSection.css("display", "none");
-           // this.findPasswordSection.css("display", "none");
+            this.findPasswordSection.css("display", "none");
             
     	    this.el.html(this.formSection);
-    	    //this.el.append(this.loginPasswordSection);
+    	    this.el.append(this.loginPasswordSection);
     	    this.el.append(this.passwordSection);
-    	   // this.el.append(this.findPasswordSection);
+    	    this.el.append(this.findPasswordSection);
     	    
     	    this.addClickEvent();
     	    
@@ -189,7 +202,7 @@ define([
                 }).fail(function(e){
                     if (!_.isUndefined(e.user)){
                         
-                       // _view.loginPasswordSection.addClass("fadeOutRightBig");
+                        _view.loginPasswordSection.addClass("fadeOutRightBig");
                         _view.formSection.addClass("bounceOut").one(transitionEnd, function(){
                             $("#loginbtn").button('reset');
                             _view.passwordSection.find("#initIdInput").val(data.id);
@@ -242,37 +255,55 @@ define([
             if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.email)||_.isEmpty(data.email))){//validation
                 Dialog.warning(i18nCommon.WARNING.LOGIN.FIND_PASSWORD_PUT);   
             } else {
-              
-                _view.findPasswordSection.find("#findPasswordBtn").button("loading");
-    	        var _spin=new Spin(opts).spin(_view.findPasswordSection.find("#findPasswordBtn").find(".spinIcon")[0]);
-    	        _view.findPasswordSection.find("#findCloseBtn").button("loading");
-    	        
-                SessionModel.findPassword({id: data.id, email:data.email}).done(function(result){
-                    
-					Dialog.show("비밀번호 초기화 요청 메일이 발송되었습니다.",function(){
-                        window.location="/";
-					});
-					
-					//_view.findPasswordSection.addClass("fadeOutLeftBig").one(transitionEnd, function(){
-					//	 _view.render(_view.app);
-					//});
-                }).fail(function(e){
-                    Dialog.error(e.message);
-                    _view.findPasswordSection.find("#findCloseBtn").button("reset");
-                });
+                
+                var validateObject=_V.validate([
+                    {
+                        validator:_V.number,
+                        value:data.id,
+                        message:"아이디가 올바르지 않습니다."
+                    },
+                    {
+                        validator:_V.email,
+                        value:data.email,
+                        message:"이메일이 올바르지 않습니다." 
+                    }
+                ]);
+                
+                if (validateObject.isValid){//Email 유효성 검사
+                    _view.findPasswordSection.find("#findPasswordBtn").button("loading");
+        	        var _spin=new Spin(opts).spin(_view.findPasswordSection.find("#findPasswordBtn").find(".spinIcon")[0]);
+        	        _view.findPasswordSection.find("#findCloseBtn").button("loading");
+        	        
+                    SessionModel.findPassword({id: data.id, email:data.email}).done(function(result){
+                        
+    					Dialog.show(i18nCommon.SUCCESS.LOGIN[result.message],function(){
+    					    
+                            // _view.findPasswordSection.find("#findPasswordBtn").button("reset");
+                            // _view.findPasswordSection.find("#findCloseBtn").button("reset");
+                            window.location="http://webmail.yescnc.co.kr";
+                            //_view.findPasswordSection.find("#findCloseBtn").trigger("click");
+    					});
+                    }).fail(function(e){
+                        Dialog.warning(i18nCommon.WARNING.LOGIN[e.message]);
+                        _view.findPasswordSection.find("#findPasswordBtn").button("reset");
+                        _view.findPasswordSection.find("#findCloseBtn").button("reset");
+                    });
+                } else {
+                    Dialog.warning(validateObject.message);   
+                }
             }
             return false;
     	},
     	close:function(){// 창 다 닫기
             this.formSection.removeClass("bounceIn");
             this.passwordSection.removeClass("fadeInRightBig");
-            //this.loginPasswordSection.removeClass("fadeInRightBig");
-            //this.findPasswordSection.removeClass("fadeUpRightBig");
+            this.loginPasswordSection.removeClass("fadeInRightBig");
+            this.findPasswordSection.removeClass("fadeUpRightBig");
             
             this.formSection.addClass("bounceOut");
             this.passwordSection.addClass("fadeOutRightBig");
-            //this.loginPasswordSection.addClass("fadeOutRightBig");
-            //this.findPasswordSection.removeClass("fadeDownRightBig");
+            this.loginPasswordSection.addClass("fadeOutRightBig");
+            this.findPasswordSection.removeClass("fadeDownRightBig");
     	},
     	getFormData: function(form) {
            // form.find(':input:disabled').removeAttr('disabled');

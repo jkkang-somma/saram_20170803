@@ -89,7 +89,8 @@ define({
             ADD:"사용자를 등록하였습니다."
         },
         LOGIN:{
-            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다."
+            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다.",
+            SUCCESS_REQUEST_FIND_PASSWORD:"비밀번호 초기화 요청 메일이 발송되었습니다."
         }
     },
     WARNING:{
@@ -99,7 +100,10 @@ define({
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
             INIT_PASSWORD:"비밀번호를 설정해주세요.",
-            FIND_PASSWORD_PUT:"사용자 정보를 입력해 주세요."
+            FIND_PASSWORD_PUT:"사용자 정보를 입력해 주세요.",
+            NOT_VALID_EMAIL:"유효하지 않은 이메일 입니다.",
+            ERROR_FIND_PASSWORD_SEND_MAIL:"비밀번호 찾기 실패하였습니다.",
+            NOT_EQULES_EMAIL:"유효하지 않은 이메일 입니다."
         },
         USER:{
             NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지않습니다."
@@ -116,6 +120,7 @@ define({
         USER_EDIT_VIEW:{
             FAIL_RENDER:"사용자 정보를 받아오지 못하였습니다.",
         }
+        
     },
     CONFIRM:{
         USER:{
@@ -205,8 +210,7 @@ define({
         PASSWORD_PLACEHOLDER:"비밀번호",
         LOGIN_SATUS_BTN:"로그인중..",
         LOGIN_BTN:"로그인",
-        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  ",
-        FIND_PASSWORD_TEXT_A:"비밀번호 찾기"
+        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  "
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"비밀번호 설정",
