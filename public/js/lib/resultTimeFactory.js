@@ -461,14 +461,16 @@ define([
         },
         
         setHolidayWorkTimeCode : function(){
-            this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
-            if(this.checkInOffice){
-                if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
-                else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
-                else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
-                this.workType = WORKTYPE.HOLIDAYWORK;
-            }else{
-                this.workType = WORKTYPE._HOLIDAYWORK;
+            if(!(_.isNull(this.outTime))){
+                this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
+                if(this.checkInOffice){
+                    if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
+                    else if (this.overTime >= 360)         this.overtimeCode =  "2015_BB";
+                    else if (this.overTime >= 240)         this.overtimeCode =  "2015_BA";
+                    this.workType = WORKTYPE.HOLIDAYWORK;
+                }else{
+                    this.workType = WORKTYPE._HOLIDAYWORK;
+                }
             }
         },
         
