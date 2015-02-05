@@ -49,9 +49,8 @@ define([
                 success:function(resultModel, result, s, sd){
                     dfd.resolve(result);
                 },
-                error:function(e){
-                    Dialog.error(e.msg);
-                    dfd.reject();
+                error:function(e, result){
+                    dfd.reject(result.responseJSON);
                 }
             });
             

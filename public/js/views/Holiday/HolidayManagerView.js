@@ -6,6 +6,7 @@ define([
   'grid',
   'schemas',
   'dialog',
+  'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/default/right.html',
@@ -18,12 +19,10 @@ define([
   'models/common/HolidayModel',
   'views/Holiday/popup/CreateHolidayPopup',
   'views/Holiday/popup/AddHolidayPopup',
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog,
+], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, i18nCommon,
 HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, InlineFormHTML, ComboBoxHTML, LabelHTML,
 HolidayCollection, HolidayModel,
 CreateHolidayPopup, AddHolidayPopup){
-
-    
     
     var holidayManagerView = BaseView.extend({
         el:".main-container",
@@ -34,7 +33,10 @@ CreateHolidayPopup, AddHolidayPopup){
     		this.gridOption = {
     		    el:"holidayList_content",
     		    id:"holidayListTable",
-    		    column:["날짜", "내용"],
+    		    column:[
+    		        i18nCommon.HOLIDAY_MANAGER.GRID_COL_NAME.DATE,
+    		        i18nCommon.HOLIDAY_MANAGER.GRID_COL_NAME.MEMO
+    		    ],
     		    dataschema:["date", "memo"],
     		    collection:this.holidayCollection,
     		    detail: true,
@@ -53,31 +55,30 @@ CreateHolidayPopup, AddHolidayPopup){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
-    	        tooltip:"추가",
+    	        tooltip:i18nCommon.HOLIDAY_MANAGER.ADD_DIALOG.TOOLTIP,
     	        click:function(){
     	            var addHolidayPopup = new AddHolidayPopup();
     	            Dialog.show({
-    	                title:"휴일 추가", 
+    	                title:i18nCommon.HOLIDAY_MANAGER.ADD_DIALOG.TITLE, 
                         content:addHolidayPopup, 
                         buttons: [{
                             id: 'addHolidayBtn',
                             cssClass: Dialog.CssClass.SUCCESS,
-                            label: '추가',
+                            label: i18nCommon.HOLIDAY_MANAGER.ADD_DIALOG.BUTTON.ADD,
                             action: function(dialog) {
                                 addHolidayPopup.addHoliday().then(
                                     function(){
                                         dialog.close();
-                                        Dialog.info("휴일이 추가되었습니다.");
                                         that._renderTable();
+                                        Dialog.info(i18nCommon.HOLIDAY_MANAGER.MSG.HOLIDAY_ADD_COMPLETE);
                                     }, function(){
-                                        dialog.close();
-                                        Dialog.error("휴일 추가 실패! ㅠㅠ");
-                                        that._renderTable();
+                                        dialog.close(i18nCommon.HOLIDAY_MANAGER.MSG.HOLIDAY_ADD_FAIL);
+                                        Dialog.error();
                                     }
                                 );
                             }
                         }, {
-                            label : "취소",
+                            label : i18nCommon.HOLIDAY_MANAGER.ADD_DIALOG.BUTTON.CANCEL,
                             action : function(dialog){
                                 dialog.close();
                             }
@@ -91,11 +92,11 @@ CreateHolidayPopup, AddHolidayPopup){
     	    this.gridOption.buttons.push({
     	       type:"custom",
     	        name:"remove",
-    	        tooltip:"삭제",
+    	        tooltip: i18nCommon.HOLIDAY_MANAGER.REMOVE_DIALOG.TOOLTIP,
     	        click:function(_grid){ 
     	            var selectedItem = _grid.getSelectItem();
     	            if(_.isUndefined(selectedItem)){
-    	                Dialog.error("선택된 데이터가 없습니다!");
+    	                Dialog.error(i18nCommon.HOLIDAY_MANAGER.REMOVE_DIALOG.MSG.NOTING_SELECTED);
     	                return;
     	            }
     	            selectedItem["_date"] = selectedItem.date;
@@ -103,10 +104,10 @@ CreateHolidayPopup, AddHolidayPopup){
     	            selectHolidayModel.destroy({
     	                success : function(){
     	                    that._renderTable();
-    	                    Dialog.info("삭제되었습니다.");    
+    	                    Dialog.info(i18nCommon.HOLIDAY_MANAGER.REMOVE_DIALOG.MSG.HOLIDAY_REMOVE_COMPLETE);    
     	                },
     	                error : function(){
-    	                    Dialog.error("삭제 실패");    
+    	                    Dialog.error(i18nCommon.HOLIDAY_MANAGER.REMOVE_DIALOG.MSG.HOLIDAY_REMOVE_FAIL);    
     	                }
     	            });
     	        }
@@ -117,31 +118,31 @@ CreateHolidayPopup, AddHolidayPopup){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"wrench",
-    	        tooltip:"일괄 생성",
+    	        tooltip:i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.TOOLTIP,
     	        click:function(_grid){
     	            var createHolidayPopup = new CreateHolidayPopup();
     	            Dialog.show({
-    	                title:"공휴일 생성", 
+    	                title:i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.TITLE, 
                         content:createHolidayPopup, 
                         buttons: [{
                             id: 'createHolidayBtn',
                             cssClass: Dialog.CssClass.SUCCESS,
-                            label: '생성',
+                            label: i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.BUTTON.CREATE,
                             action: function(dialog) {
                                 createHolidayPopup.createHoliday().then(
                                     function(){
-                                        Dialog.info("공휴일 생성이 완료되었습니다.");
+                                        Dialog.info(i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.MSG.HOLIDAY_CREATE_COMPLETE);
                                         that._renderTable();
                                         dialog.close();
                                     },
                                     function(){
-                                        Dialog.error("공휴일 생성 실패!");
+                                        Dialog.error(i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.MSG.HOLIDAY_CREATE_FAIL);
                                         dialog.close();
                                     }
                                 )
                             }
                         }, {
-                            label : "취소",
+                            label : i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.BUTTON.CANCEL,
                             action : function(dialog){
                                 dialog.close();
                             }
@@ -161,13 +162,13 @@ CreateHolidayPopup, AddHolidayPopup){
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"휴일 관리 ", subTitle:"휴일 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18nCommon.HOLIDAY_MANAGER.TITLE, subTitle:i18nCommon.HOLIDAY_MANAGER.SUB_TITLE})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
 
             var _inlineForm=$(InlineFormHTML).attr("id", "holidayForm");
-    	    var _yearComboLabel = $(_.template(LabelHTML)({label:"연도"}));
+    	    var _yearComboLabel = $(_.template(LabelHTML)({label:i18nCommon.HOLIDAY_MANAGER.COMBO_LABEL}));
     	    var _yearCombo = $(_.template(ComboBoxHTML)({id:"holidayYearCombo", label:""}));
     	    
             

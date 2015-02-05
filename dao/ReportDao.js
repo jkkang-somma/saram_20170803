@@ -20,7 +20,7 @@ ReportDao.prototype.selectLateWorkerReport =  function (selObj) {
 // 연차 사용 현황
 ReportDao.prototype.selectUsedHolidayReport =  function (selObj) {
     var queryStr = db.getQuery('report', 'selectUsedHolidayReport');
-    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
+    return db.queryV2(queryStr, [selObj.startDate, selObj.endDate, selObj.year]);
 }
 
 // 잔업시간(분) 현황 ( 평일 잔업시간 )	

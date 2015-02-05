@@ -3,11 +3,12 @@ define([
 	'underscore',
 	'backbone',
 	'util',
+	'i18n!nls/common',
 	'text!templates/inputForm/file.html',
 	'text!templates/component/progressbar.html',
 	'views/component/ProgressbarView',
 ], function(
-	$, _, Backbone, Util,
+	$, _, Backbone, Util, i18nCommon,
 	FileFormHTML, ProgressbarHTML,
 	ProgressbarView
 ) {
@@ -28,7 +29,7 @@ define([
     	        this.el=el;
     	    }
     	    this.progressBar= new ProgressbarView();
-    	    var _fileForm=$(_.template(FileFormHTML)({label : "출입 기록 (CSV)", id:"AddRawDataFileForm", accept:".csv"}));
+    	    var _fileForm=$(_.template(FileFormHTML)({label : i18nCommon.ADD_RAW_DATA.ADD_DIALOG.FORM.FILE, id:"AddRawDataFileForm", accept:".csv"}));
     	    
             $(this.el).append(_fileForm);
             $(this.el).append(this.progressBar.render());
