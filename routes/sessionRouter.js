@@ -214,8 +214,14 @@ router.route('/resetPassword')
                     name:user.name,
                     baseURL:_baseURL
                 };
-                var sendHTML=temp(data);
-                res.send(sendHTML);
+                var _user = new User({id:user.id, password:""},true);
+                _user.initPassword().then(function(){
+                    var sendHTML=temp(data);
+                    res.send(sendHTML);
+                }).catch(function(e){
+                    debug("Exception:" + e);
+                    res.send(res.render("apiError",{baseURL:_baseURL, message:"서버 오류 발생 관리자에게 문의해주세요."}));
+                });
             }
         });
     }

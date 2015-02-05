@@ -32,7 +32,10 @@ define([
     		    column:[
     		        { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
     		        i18Common.USER.NAME, 
-                    { "title" : i18Common.USER.POSITION, data:"position"},
+                    { "title" : i18Common.USER.POSITION, render:function(data, type, row) {
+                        return row.position_name;
+                    }},
+                    // { "title" : i18Common.USER.POSITION, data:"position_code", visible:false, subVisible:false},
     		        { "title" : i18Common.USER.DEPT, "render": function(data, type, row){
                         return row.dept_name;
                     }},
@@ -66,7 +69,7 @@ define([
                         return result;
                     }, visible:false, subVisible:false},
                 ],
-    		    dataschema:["id", "name", "position", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
+    		    dataschema:["id", "name", "position_code", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
     		    "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege"
     		    ],
     		    collection:userCollection,

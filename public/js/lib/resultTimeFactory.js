@@ -516,8 +516,6 @@ define([
                     this.workType = WORKTYPE.EARLY_LATE;
                 else
                     this.workType = WORKTYPE.EARLY;
-            }else{
-                this.workType = WORKTYPE.NORMAL;
             }
         },
         

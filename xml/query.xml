@@ -2,21 +2,23 @@
     <group id="user">
         <query id="selectUserList">
         	SELECT 
-        		id, name, position,  dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo
-        	FROM members_tbl A
-        	ORDER BY name
+				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
+				ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
+				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
+			FROM members_tbl A
+			ORDER BY name
         </query>
         <query id="selectIdByUser">
         	SELECT 
-        		id, name, position,  dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password
+        		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
+        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
-        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position, ip_pc, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
@@ -32,7 +34,7 @@
         		leave_company=?,
         		privilege=?,
         		admin=?,
-        		position=?,
+        		position_code=?,
         		ip_pc=?,
         		ip_office=?,
         		email=?,
@@ -656,6 +658,7 @@
     	
         <query id="selectDeptList">SELECT code, name FROM dept_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
+        <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
     </group>
     <group id ="dashboard">
     	<query id="getWorktypeCode">
