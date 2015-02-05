@@ -2,21 +2,23 @@
     <group id="user">
         <query id="selectUserList">
         	SELECT 
-        		id, name, position,  dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo
-        	FROM members_tbl A
-        	ORDER BY name
+				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
+				ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
+				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
+			FROM members_tbl A
+			ORDER BY name
         </query>
         <query id="selectIdByUser">
         	SELECT 
-        		id, name, position,  dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password
+        		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
+        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
-        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position, ip_pc, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
@@ -32,7 +34,7 @@
         		leave_company=?,
         		privilege=?,
         		admin=?,
-        		position=?,
+        		position_code=?,
         		ip_pc=?,
         		ip_office=?,
         		email=?,
@@ -187,7 +189,8 @@
     		from 
     			approval_tbl app
 			where
-				doc_num = ?
+				doc_num = ? 
+				AND state != '상신취소'
 		</query>
         <query id="selectApprovalListWhere">
         	select 
@@ -202,8 +205,9 @@
 				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
 				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
-			where (DATE(start_date) between DATE(?) AND DATE(?)) 
-				OR (DATE(end_date)  between DATE(?) AND DATE(?))
+			where ((DATE(start_date) between DATE(?) AND DATE(?)) 
+				OR (DATE(end_date)  between DATE(?) AND DATE(?)))
+				AND state != '상신취소'
 			ORDER BY doc_num desc
     	</query>
     	<query id="selectApprovalByManager">
@@ -220,6 +224,7 @@
 			from  approval_tbl app 
 			where app.manager_id = ? and (state = '상신' or state = '취소요청')
 				and ((DATE(start_date) between DATE(?) AND DATE(?)) OR (DATE(end_date)  between DATE(?) AND DATE(?)))
+				AND state != '상신취소'
 			ORDER BY doc_num desc
     	</query>
     	<query id="insertApproval">
@@ -653,6 +658,7 @@
     	
         <query id="selectDeptList">SELECT code, name FROM dept_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
+        <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
     </group>
     <group id ="dashboard">
     	<query id="getWorktypeCode">

@@ -28,8 +28,5 @@ var CodeV2 = function() {
 		getWorktypeCode : _getWorktypeCode
 	}
 } 
-
-
-//new app 은 싱글톤 아니고 app은 계속 생성
 module.exports = new CodeV2();
 

@@ -16,6 +16,8 @@ CodeDao.prototype.selectApprovalUserList =  function () {
     var queryStr = db.getQuery('code', 'selectApprovalUserList');
     return db.queryV2(queryStr);
 };
-
-
+CodeDao.prototype.selectPositionList =  function () {
+    var queryStr = db.getQuery('code', 'selectPositionList');
+    return db.queryV2(queryStr);
+};
 module.exports = new CodeDao();

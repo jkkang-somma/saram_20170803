@@ -28,7 +28,8 @@ define([
     	    
     	    var deptCodeCollection= new CodeCollection("dept");
     	    var approvalUserCodeCollection= new CodeCollection("approvalUser");
-    	    $.when(deptCodeCollection.fetch(),approvalUserCodeCollection.fetch()).done(function(){
+    	    var positionCodeCollection= new CodeCollection("position");
+    	    $.when(deptCodeCollection.fetch(),approvalUserCodeCollection.fetch(), positionCodeCollection.fetch()).done(function(){
                 var _model=_view.model.attributes;
         	    var _form = new Form({
         	        el:_view.el,
@@ -60,23 +61,17 @@ define([
         	        },
         	        {
         	                type:"combo",
-        	                name:"position",
+        	                name:"position_code",
         	                label:i18nCommon.USER.POSITION,
-        	                value:_model.position,
-        	                collection:[
-        	                    {key:i18nCommon.CODE.POSITION.BOSS,value:i18nCommon.CODE.POSITION.BOSS},
-        	                    {key:i18nCommon.CODE.POSITION.VICE_PRESIDENT,value:i18nCommon.CODE.POSITION.VICE_PRESIDENT},
-        	                    {key:i18nCommon.CODE.POSITION.EXECUTIVE_DIRECTOR,value:i18nCommon.CODE.POSITION.EXECUTIVE_DIRECTOR},
-        	                    {key:i18nCommon.CODE.POSITION.DIRECTOR,value:i18nCommon.CODE.POSITION.DIRECTOR},
-        	                    {key:i18nCommon.CODE.POSITION.VICE_CHIEF,value:i18nCommon.CODE.POSITION.VICE_CHIEF},
-        	                    {key:i18nCommon.CODE.POSITION.SECTION__CHIEF,value:i18nCommon.CODE.POSITION.SECTION__CHIEF},
-        	                    {key:i18nCommon.CODE.POSITION.DEARI,value:i18nCommon.CODE.POSITION.DEARI},
-        	                    {key:i18nCommon.CODE.POSITION.WORKER,value:i18nCommon.CODE.POSITION.WORKER},
-        	                    {key:i18nCommon.CODE.POSITION.TOP_SEAT,value:i18nCommon.CODE.POSITION.TOP_SEAT},
-        	                    {key:i18nCommon.CODE.POSITION.MIDDLE_SEAT,value:i18nCommon.CODE.POSITION.MIDDLE_SEAT},
-        	                    {key:i18nCommon.CODE.POSITION.SEAT,value:i18nCommon.CODE.POSITION.SEAT},
-        	                    {key:i18nCommon.CODE.POSITION.RESEARCHER,value:i18nCommon.CODE.POSITION.RESEARCHER}
-        	                ],
+        	                value:_model.position_code,
+        	                collection:positionCodeCollection,
+        	                group:"requireInfo",
+        	                linkField:"position_name"
+        	        },{
+        	                type:"hidden",
+        	                name:"position_name",
+        	                value:_model.position_name,
+        	                collection:positionCodeCollection,
         	                group:"requireInfo"
         	        },
         	        {
@@ -108,6 +103,7 @@ define([
         	                name:"approval_name",
         	                value:_model.approval_name,
         	                group:"requireInfo",
+        	                firstBlank:true,
         	                collection:approvalUserCodeCollection,
         	        },
         	       {

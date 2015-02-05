@@ -138,7 +138,6 @@ define([
                         } else {
                             _select.append("<option value=''>-</option>");
                         }
-                        
                     }
                     
                     for (var index in _options){
@@ -180,9 +179,14 @@ define([
                     for (var index in _options){
                         var _option= _options[index].attributes;
                         var _text=_option[[data.textKey]];
-                        if (index==0){ //초기값 설정
-                            data.value=_text;
+                        if (data.firstBlank){
+                            data.value="";
+                        } else {
+                            if (index==0){ //초기값 설정
+                                data.value=_text;
+                            }
                         }
+                        
                     }
                 }
                 

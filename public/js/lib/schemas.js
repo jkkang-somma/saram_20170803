@@ -30,6 +30,8 @@ define([
             ip_pc : null,
             ip_office : null,
             position:null,
+            position_code:null,
+            position_name:null,
             email:null,
             phone:null,
             phone_office:null,
@@ -140,10 +142,10 @@ define([
         hidden:{
             type:"hidden",
             name:undefined,
-            label:undefined,
             value:undefined,
             textKey:"name",
-            group:undefined
+            group:undefined,
+            firstBlank:false //공백 로우
         },
         //SERVER response
         response:{
