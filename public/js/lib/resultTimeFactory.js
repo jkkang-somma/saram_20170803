@@ -61,6 +61,8 @@ define([
         isSuwon: false,
         checkLate : true,
         checkEarly : true,
+        // earlyTime : 0,
+        // notPayOverTime :0,
         init : function(userId, userName, userDepartment){
             this.id = userId;
             this.name = userName;
@@ -91,6 +93,8 @@ define([
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly =true;
+            // this.earlyTime = 0;
+            // this.notPayOverTime =0;
             if(this.department.slice(0,4) === "품질검증"){
                 this.isSuwon = true;
             }else{
@@ -126,6 +130,8 @@ define([
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly =true;
+            // this.earlyTime = 0;
+            // this.notPayOverTime =0;
         },
         
         initByModel : function(model){
@@ -155,6 +161,8 @@ define([
             this.overtimeCodeChange = model.get("overtime_code_change");
             this.checkLate = true;
             this.checkEarly =true;
+            // this.earlyTime = model.get("early_time");
+            // this.notPayOverTime =model.get("not_pay_over_time");
             if(this.department.slice(0,4) === "품질검증"){
                 this.isSuwon = true;
             }else{
@@ -438,7 +446,9 @@ define([
                 out_office_end_time : _.isNull(this.outOfficeEndTime) ? null : Moment(this.outOfficeEndTime).format(DATETIMEFORMAT),
                 in_time_change : this.inTimeChange,
                 out_time_change : this.outTimeChange,
-                overtime_code_change : this.overtimeCodeChange
+                overtime_code_change : this.overtimeCodeChange,
+                // early_time : this.earlyTime,
+                // not_pay_over_time : this.notPayOverTime,
             };
         },
         
@@ -474,24 +484,30 @@ define([
             }
         },
         
-        setOverTimeCode : function(){
+        setOverTimeCode : function(){ // 평일 초과근무 계산
             var isEarly = false;
             if(!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))){
-                if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.VACATION){
-                    this.lateOverTime = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
-                                                            
-                    if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
-                        this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateOverTime; // 초과근무 시간 (지각시간 제외)
-                        if((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0){  // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
-                            if(this.overTime >= 360)                 this.overtimeCode = "2015_AC";
-                            else if(this.overTime >= 240)            this.overtimeCode = "2015_AB";
-                            else if(this.overTime >= 120)            this.overtimeCode = "2015_AA";
-                            else                                     this.overtimeCode = null;
+                this.lateOverTime = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
+                                                        
+                if(this.outTime.diff(this.standardOutTime,"minute") >= 0) {
+                    this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateOverTime; // 초과근무 시간 (지각시간 제외)
+                    if((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0){  // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
+                        if(this.overTime >= 360){
+                            this.overtimeCode = "2015_AC";
+                            // this.notPayOverTime = this.overTime - 360;
+                        } else if(this.overTime >= 240){
+                            this.overtimeCode = "2015_AB";   
+                        } else if(this.overTime >= 120){
+                            this.overtimeCode = "2015_AA";   
+                        } else {
+                            this.overtimeCode = null;
                         }
-                        if(this.overtime <0)                         this.overtime= 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
-                    } else {
-                        isEarly = true;
                     }
+                    if(this.overtime <0){
+                        this.overtime= 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
+                    }                         
+                } else {
+                    isEarly = true;
                 }
             }
 
