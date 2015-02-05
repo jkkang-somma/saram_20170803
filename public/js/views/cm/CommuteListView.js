@@ -152,19 +152,20 @@ define([
     					var yesterday = result.models[1];
     					current.set({idx : selectItem.idx});
     					that.grid.updateRow(current.attributes);
-    					var yesterdayRow = that.grid.getRowByFunction(
-    						function(idx, data, node){
-        						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
-        							return true;
-        							
-        						}else{
-        							return false;
-        						}
-        					}
-        				);
-        				yesterday.set({idx : yesterdayRow.data().idx});
-        				yesterdayRow.data(yesterday.attributes);
-    					
+    					if(!_.isUndefined(yesterday)){
+	    					var yesterdayRow = that.grid.getRowByFunction(
+	    						function(idx, data, node){
+	        						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
+	        							return true;
+	        							
+	        						}else{
+	        							return false;
+	        						}
+	        					}
+	        				);
+	        				yesterday.set({idx : yesterdayRow.data().idx});
+	        				yesterdayRow.data(yesterday.attributes);
+    					}
 						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
             			})
