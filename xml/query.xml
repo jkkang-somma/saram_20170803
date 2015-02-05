@@ -757,8 +757,8 @@
 					m.dept_code, m.position, m.name, m.id,
 					IFNULL(t2.1, '') AS '1', IFNULL(t2.2, '') AS '2', IFNULL(t2.3, '') AS '3', IFNULL(t2.4, '') AS '4', IFNULL(t2.5, '') AS '5', IFNULL(t2.6, '') AS '6',
 					IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',                    					
-                    IFNULL( total_day, '') AS total_day,
-                    IFNULL( (t2.total_day - t2.used_holiday), '') AS holiday
+                    IF( total_day = 0, '',  total_day ) AS total_day,
+                    IF( (t2.total_day - t2.used_holiday) = 0, '' , t2.total_day - t2.used_holiday) AS holiday
 			FROM
 				members_tbl m
 				LEFT JOIN (
@@ -788,10 +788,10 @@
 										vacation_tbl v
 										LEFT JOIN out_office_tbl o
 										ON v.id = o.id AND v.year = o.year
-									WHERE
-										v.year = ?
 										AND o.date BETWEEN ? AND ?
 										AND o.office_code IN ('V01', 'V02', 'V03')
+									WHERE
+										v.year = ?
 									GROUP BY month, v.id, v.total_day                       
 						) t1    
 						GROUP BY id, total_day
