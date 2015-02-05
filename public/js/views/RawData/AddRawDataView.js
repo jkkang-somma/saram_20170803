@@ -8,6 +8,7 @@ define([
   'dialog',
   'csvParser',
   'cmoment',
+  'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
@@ -18,7 +19,7 @@ define([
   'views/RawData/popup/AddRawDataAddPopupView',
   'views/component/ProgressbarView'
   
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, csvParser, Moment,
+], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, csvParser, Moment, i18nCommon,
     HeadHTML, ContentHTML, LayoutHTML, 
     RawDataModel, RawDataCollection, UserModel, UserCollection,
     AddRawDataAddPopupView, ProgressbarView
@@ -38,7 +39,13 @@ define([
             this.gridOption = {
     		    el:"addRawDataContent",
     		    id:"addRawDataTable",
-    		    column:["부서", "이름", "날짜", "시간", "출입기록"],
+    		    column:[
+    		        i18nCommon.ADD_RAW_DATA.GRID_COL_NAME.DEPARTMENT,
+    		        i18nCommon.ADD_RAW_DATA.GRID_COL_NAME.NAME,
+    		        i18nCommon.ADD_RAW_DATA.GRID_COL_NAME.DATE,
+    		        i18nCommon.ADD_RAW_DATA.GRID_COL_NAME.TIME,
+    		        i18nCommon.ADD_RAW_DATA.GRID_COL_NAME.TYPE
+    		    ],
     		    dataschema:[ "department", "name", "date", "time", "type"],
     		    collection:this.rawDataCollection,
     		    detail: true,
@@ -53,7 +60,7 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"출입 기록 등록"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18nCommon.ADD_RAW_DATA.TITLE, subTitle:i18nCommon.ADD_RAW_DATA.SUB_TITLE})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
@@ -85,16 +92,16 @@ define([
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
-    	        tooltip:"불러오기",
+    	        tooltip:i18nCommon.ADD_RAW_DATA.ADD_DIALOG.TOOLTIP,
     	        click:function(){
     	            var addRawDataAddPopupView = new AddRawDataAddPopupView();
     	            Dialog.show({
-    	                title:"출입 기록 파일 등록", 
+    	                title:i18nCommon.ADD_RAW_DATA.ADD_DIALOG.TITLE, 
                         content:addRawDataAddPopupView, 
                         buttons: [{
                             id: 'rawDataCommitBtn',
                             cssClass: Dialog.CssClass.SUCCESS,
-                            label: '등록',
+                            label: i18nCommon.ADD_RAW_DATA.ADD_DIALOG.BUTTON.ADD,
                             action: function(dialog) {
                                 var fileForm = dialog.getModalBody().find("input");
 
@@ -155,11 +162,11 @@ define([
                                             dialog.close();
                                             that.grid.render();
                                             
-                                            if(errCount > 0){ // 사번이 없는 데이터가 있을경우 갯수를 표시한다.
-                                                Dialog.error("분석되지 않은 데이터가 있습니다.\n 데이터를 확인하세요");
+                                            if(errCount > 0){ // 사번이 없는 데이터가 있을경우
+                                                Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_FAIL);
                                                 that._disabledOkBtn(true);
                                             }else{
-                                                Dialog.info("파일 분석이 완료 되었습니다.");
+                                                Dialog.info(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_COMPLETE);
                                                 that._disabledOkBtn(false);
                                             }
 
@@ -167,14 +174,14 @@ define([
                                         csvReader.readAsText(file, 'euc-kr');
                                         
                                     } else{
-                                        console.log("Your browser does not support File API");
+                                        Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.FILE_API_ERR);
                                     }
                                 }else{
-                                    Dialog.error("선택된 파일이 없습니다");
+                                    Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.NOT_SELECT_FILE);
                                 }
                             }
                         }, {
-                            label: '취소',
+                            label: i18nCommon.ADD_RAW_DATA.ADD_DIALOG.BUTTON.CANCEL,
                             action: function(dialog) {
                                 dialog.close();
                             }
@@ -189,10 +196,10 @@ define([
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"ok",
-    	        tooltip:"저장",
+    	        tooltip:i18nCommon.ADD_RAW_DATA.COMMIT_DIALOG.TOOLTIP,
     	        click:function(){
     	            Dialog.confirm({
-    	                msg : "출입 기록을 서버에 저장하시겠습니까?",
+    	                msg : i18nCommon.ADD_RAW_DATA.COMMIT_DIALOG.MESSAGE,
                         action:function(){
                             var dfd = new $.Deferred();
                             that.rawDataCollection.save({
@@ -206,11 +213,10 @@ define([
             	            return dfd;
                         },
                         actionCallBack:function(res){//response schema
-                            console.log(res.result);
-                            Dialog.info("데이터 전송이 완료되었습니다.");
+                            Dialog.info(i18nCommon.ADD_RAW_DATA.COMMIT_DIALOG.MSG.COMMIT_COMPLET);
                         },
                         errorCallBack:function(){
-                            Dialog.error("데이터 전송 실패!");
+                            Dialog.error(i18nCommon.ADD_RAW_DATA.COMMIT_DIALOG.MSG.COMMIT_FAIL);
                         },
     					
     	            });

@@ -46,7 +46,7 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 			
 			var _view=this;
 			var overtimeCodes = Code.getCodes(Code.OVERTIME);
-			var comboItem = [{key:" ", value:" "}];
+			var comboItem = [{key:"", value:" "}];
 			var selectedCode = null;
     	    for(var key in overtimeCodes){
     	    	comboItem.push({key:overtimeCodes[key].code, value:overtimeCodes[key].name});
@@ -56,53 +56,53 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 		        form:undefined,
 		        group:[{
 	                name:"destInfo",
-	                label:"수정 대상",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.GROUP_DEST,
 	                initOpen:true
 	            },{
 	                name:"modifyItem",
-	                label:"수정내역",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.GROUP_NEW,
 	                initOpen:true
 	            }],
 		        
 		        childs:[{
 	                type:"input",
 	                name:"date",
-	                label:"날짜",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.DATE,
 	                value:this.selectData.date,
 	                group:"destInfo",
 	                disabled:true
 	        	}, {
 	        		type:"input",
 	                name:"department",
-	                label:"부서",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.DEPARTMENT,
 	                value:this.selectData.department,
 	                group:"destInfo",
 	                disabled:true
 	        	}, {
 	        		type:"input",
 	                name:"name",
-	                label:"이름",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.NAME,
 	                value:this.selectData.name,
 	                group:"destInfo",
 	                disabled:true
 	        	}, {
 	                type:"datetime",
 	                name:"inTime",
-	                label:"출근시간",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.IN_TIME,
 	                value:_.isNull(this.selectData.in_time) ? null : Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss"),
 	                format:"YYYY-MM-DD HH:mm:ss",
 	                group:"modifyItem"
 	        	}, {
 	                type:"datetime",
 	                name:"outTime",
-	                label:"퇴근시간",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.OUT_TIME,
 	                value:_.isNull(this.selectData.out_time) ? null : Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss"),
 	                format:"YYYY-MM-DD HH:mm:ss",
 	                group:"modifyItem"
 	        	}, {
 	                type:"combo",
 	                name:"overtime",
-	                label:"초과근무",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.OVER_TIME,
 	                value:this.selectData.overtime_code,
 	                collection:comboItem,
 	                group:"modifyItem"
@@ -123,32 +123,63 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 			var dfd= new $.Deferred();
      		var data = this.getInsertData(); 
      		if (data === null) {
-     			return;
-     		}     		
-     		
-     		data._id = this.selectData.id;	
-     		
-     		var commuteCollection = new CommuteCollection();
-     		
-     		commuteCollection.fetch({ 
-     			data: {
-     				id : data.id,
-     				startDate : data.date,	
-     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
-     			},success : function(resultCollection){
-     				resultTimeFactory.modifyByCollection( // commute_result 수정
-     					resultCollection,
-     					{ changeInTime : data.in_time, changeOutTime : data.out_time, changeOvertimeCode : data.overtime_code},
-     					data.changeHistoryCollection
-     				).done(function(resultCommuteCollection){ // commute_result, changeHistroy 수정 성공!
-	     				dfd.resolve(resultCommuteCollection);		
-     				}).fail(function(){
-     					dfd.reject();
-     				});
-     			},error : function(){
-     				dfd.reject();
-     			}
-     		});		
+     			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_CHANGED);
+     			dfd.reject();
+     		}else{
+				var message = "";
+				_.each(data.changeHistoryCollection.models, function(model){
+					switch(model.get("change_column")){
+						case "in_time":
+							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.IN_TIME_MSG;
+							break;
+						case "out_time":
+							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OUT_TIME_MSG;
+							break;
+						case "overtime_code":
+							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OVER_TIME_MSG;
+							break;
+					}
+					message = message + "[ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
+				});
+				
+				message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OVER_TIME_MSG_MEMO;
+				
+				data._id = this.selectData.id;	
+	     		var commuteCollection = new CommuteCollection();
+	     		
+	     		Dialog.confirm({
+					msg : message,
+					action:function(){
+						var actionDfd = new $.Deferred();
+						commuteCollection.fetch({ 
+			     			data: {
+			     				id : data.id,
+			     				startDate : data.date,	
+			     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
+			     			},success : function(resultCollection){
+			     				resultTimeFactory.modifyByCollection( // commute_result 수정
+			     					resultCollection,
+			     					{ changeInTime : data.in_time, changeOutTime : data.out_time, changeOvertimeCode : data.overtime_code},
+			     					data.changeHistoryCollection
+			     				).done(function(result){ // commute_result, changeHistroy 수정 성공!
+				     				actionDfd.resolve(result);		
+			     				}).fail(function(){
+			     					actionDfd.reject();		
+			     				});
+			     			},error : function(){
+			     				actionDfd.reject();	
+			     			}
+			     		});
+	    	            return actionDfd.promise();
+	                },
+	                actionCallBack:function(res){//response schema
+						dfd.resolve(res);	
+	                },
+	                errorCallBack:function(){
+	                	dfd.reject();
+	                },
+	            });
+     		}
      		
      		return dfd.promise();
 			
@@ -161,7 +192,7 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
      			id : this.selectData.id,
      			in_time : data.inTime,
      			out_time : data.outTime,
-     			overtime_code : data.overtime
+     			overtime_code : data.overtime=="" ? null : data.overtime
      		};
 			
      		var userId = SessionModel.get("user").id;
@@ -191,7 +222,6 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 			}
 			
 			if (newData.changeHistoryCollection.length === 0) {
-				Dialog.show("변경된 사항이 없습니다.");
 				return null;
 			}
 			

@@ -15,6 +15,7 @@ define([
     'i18n!nls/common',
     'resulttimefactory',
     'core/BaseView',
+    'lib/component/form',
     'models/sm/SessionModel',
     'models/cm/CommentModel',
     'models/cm/CommuteModel',
@@ -26,7 +27,7 @@ define([
 	'text!templates/default/datepickerChange.html',
 	'text!templates/inputForm/combobox.html',
 ], function(
-	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, i18Common, ResultTimeFactory, BaseView, 
+	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, i18nCommon, ResultTimeFactory, BaseView, Form,
 	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML, ComboboxHTML
 ) {
@@ -42,6 +43,8 @@ define([
 			var dfd= new $.Deferred();
 			
 			if (!_.isUndefined(el)) this.el=el;
+		
+		    
             var that = this;
 
     		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
@@ -70,7 +73,7 @@ define([
 			
 		   	$(that.el).append(_.template(ComboboxHTML)({id: "commentUpdatePopupState", label: "상태"}));
 		   	
-		   	var STATE = i18Common.COMMENT.STATE;
+		   	var STATE = i18nCommon.COMMENT.STATE;
 		   	var _stateCombo = $(that.el).find("#commentUpdatePopupState");
 		   	_stateCombo.append($("<option>" + STATE.ACCEPTING + "</option>"));
 		   	_stateCombo.append($("<option>" + STATE.PROCESSING + "</option>"));

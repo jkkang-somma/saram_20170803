@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var url = require("url");
 
+
 //lib router config
 var sessionManager = require('./lib/sessionManager');
 var index = require('./routes/index');
@@ -53,7 +54,7 @@ var authError=function(next){
     var err = new Error('not Authoryty');
     err.status = 401;
     next(err);
-}
+};
 
 app.use(logger('dev'));
 
@@ -61,8 +62,6 @@ app.use(logger('dev'));
 // app.use(function(req,res,next){
     
 // });
-
-
 
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){

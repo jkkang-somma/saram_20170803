@@ -262,6 +262,7 @@ CREATE TABLE IF NOT EXISTS `commute_result_tbl` (
   `vacation_code` VARCHAR(10) NULL COMMENT '휴가정보 (V01 ~ V06)',
   `out_office_code` VARCHAR(10) NULL COMMENT '외근, 출장 정보 (W01 ~ W02)',
   `overtime_code` VARCHAR(10) NULL COMMENT '야근수당 정보 ( 2015_AA ~ 2015_BC )',
+  `early_time` INT NULL COMMENT '일찍온 시간 ( 분 )',
   `late_time` INT NULL COMMENT '지각 시간 ( 분 )',
   `over_time` INT NULL COMMENT '초과근무 시간 ( 분 )',
   `in_time_change` TINYINT NULL DEFAULT 0 COMMENT '출근시간 수정 Count',

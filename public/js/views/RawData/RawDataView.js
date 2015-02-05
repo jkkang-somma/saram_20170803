@@ -10,6 +10,7 @@ define([
   'csvParser',
   'cmoment',
   'data/code',
+  'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
@@ -23,7 +24,7 @@ define([
   'models/sm/UserModel',
   'collection/sm/UserCollection',
   'views/component/ProgressbarView',
-], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment, Code,
+], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment, Code, i18nCommon,
 HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 SessionModel, RawDataModel, RawDataCollection,UserModel, UserCollection,
 ProgressbarView){
@@ -43,10 +44,10 @@ ProgressbarView){
     		    el:"rawDataContent",
     		    id:"rawDataTable",
     		    column:[
-    		         	{ data : "department", 		"title" : "부서" },
-   	                   	{ data : "name", 			"title" : "이름"},
- 	                   	{ data : "char_date", 		"title" : "출입시간" },
- 	                   	{ data : "type", 			"title" : "출입기록" }
+    		         	{ data : "department", 		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.DEPARTMENT },
+   	                   	{ data : "name", 			"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NAME },
+ 	                   	{ data : "char_date", 		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TIME },
+ 	                   	{ data : "type", 			"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TYPE }
     		    ],
     		    dataschema:["name", "department", "char_date", "type"],
     		    collection:this.rawDataCollection,
@@ -63,17 +64,18 @@ ProgressbarView){
     		};
 
             var dept_code = SessionModel.getUserInfo().dept_code;
+            var admin = SessionModel.getUserInfo().admin;
             
             // 경영지원 팀 인 경우
-            if ( dept_code == '1000' ) {
-            	this.gridOption.column.push( { data : "ip_office", 		"title" : "IP" } );
+            if ( dept_code == '1000' || admin == 1 ) {
+            	this.gridOption.column.push( { data : "ip_office", 		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP } );
             }
 
             // 경영 지원팀 또는 수원 사업자의 경우 컬럼을 추가
-            if ( dept_code == '1000' || Code.isSuwonWorker(dept_code) ) {
-            	this.gridOption.column.push( { data : "need_confirm", 	"title" : "확인필요",
+            if ( dept_code == '1000' || Code.isSuwonWorker(dept_code) || admin == 1) {
+            	this.gridOption.column.push( { data : "need_confirm", 	"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NEED_CONFIRM,
             		render: function(data, type, full, meta) {
-               			return (full.need_confirm == 1)? "정상" : "확인 필요" ;
+               			return (full.need_confirm == 1)? i18nCommon.RAW_DATA_LIST.MSG.OK : i18nCommon.RAW_DATA_LIST.MSG.NOK ;
                		}
                	});
             }
@@ -106,7 +108,7 @@ ProgressbarView){
                     that.grid.render();
                 },
                 errorCallBack:function(response){
-                    Dialog.error("데이터 조회 실패! \n ("+ response.responseJSON.message +")");
+                    Dialog.error( i18nCommon.RAW_DATA_LIST.MSG.LOADING_FAIL );
                 },
             });
         },
@@ -115,7 +117,10 @@ ProgressbarView){
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"출입 기록 조회"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({
+	            title:i18nCommon.RAW_DATA_LIST.TITLE,
+	            subTitle:i18nCommon.RAW_DATA_LIST.SUB_TITLE })
+    	    ));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
@@ -140,7 +145,7 @@ ProgressbarView){
     	    var _searchBtn = $(_.template(RowButtonHTML)({
     	            obj: {
     	                id: "rdSearchBtn",
-    	                label: "검색"
+    	                label: i18nCommon.RAW_DATA_LIST.SEARCH_BTN
     	            }
     	        })
 	        );

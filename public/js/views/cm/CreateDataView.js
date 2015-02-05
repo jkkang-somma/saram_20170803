@@ -9,6 +9,7 @@ define([
   'cmoment',
   'resulttimefactory',
   'data/code',
+  'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
@@ -25,13 +26,12 @@ define([
   'views/cm/popup/CreateDataPopupView',
   'views/cm/popup/CreateDataRemovePopupView',
   'views/component/ProgressbarView'
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, Moment, ResultTimeFactory, Code,
-HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, ForminlineHTML, LabelHTML,
-CommuteModel, 
-HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
-CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
-    var resultTimeFactory = ResultTimeFactory.Builder;
-    
+], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, Moment, ResultTimeFactory, Code, i18nCommon,
+    HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, ForminlineHTML, LabelHTML,
+    CommuteModel, 
+    HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
+    CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView
+){
     function dateToText(data){
         return _.isNull(data) ? null : Moment(data).format("MM-DD<br>HH:mm:ss");
     }
@@ -49,55 +49,57 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     		    el:"createCommuteListContent",
     		    id:"createCommuteListTable",
     		    column:[
-                    {"title": "날짜", "data": "date"},
-                    {"title": "부서", "data": "department"},
-                    {"title": "이름", "data": "name"},
-                    {"title": "근무<br>형태", "data": "work_type",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.DATE,       "data": "date"},
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.DEPARTMENT, "data": "department"},
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.NAME,       "data": "name"},
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.WORK_TYPE,  "data": "work_type",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.WORKTYPE, data);
                        }
                     },
-                    {"title": "출근<br>기준", "data": "standard_in_time",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.STDIN_TIME, "data": "standard_in_time",
                         "render": function (data, type, rowData, meta) {
                             return dateToText(data);
                        }
                     },
-                    {"title": "출근<br>시간", "data": "in_time",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.IN_TIME,    "data": "in_time",
                         "render": function (data, type, rowData, meta) {
                             return dateToText(data);
                        }
                     },
-                    {"title": "지각<br>(분)", "data": "late_time"},
-                    {"title": "퇴근<br>기준", "data": "standard_out_time",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.LATE_TIME,  "data": "late_time"},
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.STDOUT_TIME, "data": "standard_out_time",
                         "render": function (data, type, rowData, meta) {
                             return dateToText(data);
                        }
                     },
-                    {"title": "퇴근<br>시간", "data": "out_time",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.OUT_TIME,   "data": "out_time",
                         "render": function (data, type, rowData, meta) {
                             return dateToText(data);
                             
                        }
                     },
-                    {"title": "초과근무<br>(분)", "data": "over_time"},
-                    {"title": "초과근무", "data": "overtime_code",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.OVER_TIME,  "data": "over_time"},
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.OVERTIME_CODE, "data": "overtime_code",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.OVERTIME, data);
                         }
                     },
-                    {"title": "근태", "data": "vacation_code",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.VACATION, "data": "vacation_code",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.OFFICE, data);
-
                         }
                     },
-                    {"title": "외근<br>출장", "data": "out_office_code",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.OUT_OFFICE_CODE, "data": "out_office_code",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.OFFICE, data);
                         }
                     },
     		    ],
-    		    dataschema:["date", "name", "in_time", "out_time", "work_type", "standard_in_time" ,"standard_out_time", "late_time", "over_time", "overtime_code", "vacation_code", "out_office_code"],
+    		    dataschema:[
+    		        "date", "name", "in_time", "out_time", "work_type", "standard_in_time" ,"standard_out_time",
+    		        "late_time", "over_time", "overtime_code", "vacation_code", "out_office_code"
+    		    ],
     		    collection:this.commuteCollection,
     		    detail: true,
     		    fetch: false,
@@ -118,38 +120,37 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"add",
-    	        tooltip:"근태 생성",
+    	        tooltip:i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.TOOLTIP,
     	        click:function(){
                     var createDataPopupView= new CreateDataPopupView({date : that.lastestDate});
                     
                     Dialog.show({
-                        title:"근태 데이터 생성", 
+                        title:i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.TITLE, 
                         content:createDataPopupView, 
                         buttons: [{
                             id: 'createDataCreateBtn',
                             cssClass: Dialog.CssClass.SUCCESS,
-                            label: '데이터 생성',
+                            label: i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.BUTTON.CREATE,
                             action: function(dialog) {
                                 Dialog.confirm({
-                        			msg : "근태 데이터를 생성하시겠습니까?",
+                        			msg : i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.ASK,
                         			action:function(){
                         	            return createDataPopupView.createData();
                                     },
                                     actionCallBack:function(result){
-                                        console.log(result);
                                         that.commuteCollection.reset();
                                         that.commuteCollection.add(result);
                                         that.grid.render();
                                         dialog.close();
-                                        Dialog.show("데이터 생성 완료!");    
+                                        Dialog.show(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.MSG.CREATE_DATA_COMPLETE);    
                                     },
                                     errorCallBack:function(response){
-                                        Dialog.error("데이터 생성실패!");
+                                        Dialog.error(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.MSG.CREATE_DATA_CANCEL);
                                     },
                                 });  
                             }
                         }, {
-                            label : "취소",
+                            label : i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.BUTTON.CANCEL,
                             action: function(dialog){
                                 dialog.close();
                             }
@@ -163,10 +164,10 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
     	    this.gridOption.buttons.push({
     	        type:"custom",
     	        name:"ok",
-    	        tooltip:"저장",
+    	        tooltip:i18nCommon.CREATE_COMMUTE_RESULT.COMMIT_DIALOG.TOOLTIP,
     	        click:function(){
     	            Dialog.confirm({
-    					msg : "근태 데이터를 서버에 저장하시겠습니까?",
+    					msg : i18nCommon.CREATE_COMMUTE_RESULT.COMMIT_DIALOG.MESSAGE,
     					action:function(){
                             var dfd = new $.Deferred();
                             that.commuteCollection.save({
@@ -181,10 +182,10 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
                         },
                         actionCallBack:function(res){//response schema
     	                    that._setLabel();
-    	                    Dialog.info("데이터 전송이 완료되었습니다.");
+    	                    Dialog.info(i18nCommon.CREATE_COMMUTE_RESULT.COMMIT_DIALOG.MSG.COMMIT_DATA_COMPLETE);
                         },
                         errorCallBack:function(response){
-    	                    Dialog.error("데이터 전송 실패! \n ("+ response.responseJSON.message +")");
+    	                    Dialog.error(i18nCommon.CREATE_COMMUTE_RESULT.COMMIT_DIALOG.MSG.COMMIT_DATA_FAIL);
                         },
     	            });
     	        }
@@ -195,7 +196,12 @@ CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView){
             var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리 ", subTitle:"근태 자료 생성"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault(
+    	        {
+    	            title:i18nCommon.CREATE_COMMUTE_RESULT.TITLE,
+    	            subTitle:i18nCommon.CREATE_COMMUTE_RESULT.SUB_TITLE
+    	        })
+    	    ));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
