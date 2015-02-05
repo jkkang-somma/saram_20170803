@@ -187,7 +187,8 @@
     		from 
     			approval_tbl app
 			where
-				doc_num = ?
+				doc_num = ? 
+				AND state != '상신취소'
 		</query>
         <query id="selectApprovalListWhere">
         	select 
@@ -202,8 +203,9 @@
 				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
 				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
-			where (DATE(start_date) between DATE(?) AND DATE(?)) 
-				OR (DATE(end_date)  between DATE(?) AND DATE(?))
+			where ((DATE(start_date) between DATE(?) AND DATE(?)) 
+				OR (DATE(end_date)  between DATE(?) AND DATE(?)))
+				AND state != '상신취소'
 			ORDER BY doc_num desc
     	</query>
     	<query id="selectApprovalByManager">
@@ -220,6 +222,7 @@
 			from  approval_tbl app 
 			where app.manager_id = ? and (state = '상신' or state = '취소요청')
 				and ((DATE(start_date) between DATE(?) AND DATE(?)) OR (DATE(end_date)  between DATE(?) AND DATE(?)))
+				AND state != '상신취소'
 			ORDER BY doc_num desc
     	</query>
     	<query id="insertApproval">
