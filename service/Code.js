@@ -24,7 +24,9 @@ var Code = function (data) {
             case 'dept' :
                 return _getDeptList();
             case 'approvalUser' :
-                return _getApprovalUserList();      
+                return _getApprovalUserList();
+            case 'position' :
+                return _getPositionList();        
         }
     }
     var _getDeptList = function(){
@@ -32,6 +34,9 @@ var Code = function (data) {
     }
     var _getApprovalUserList = function(){
         return CodeDao.selectApprovalUserList();
+    }
+    var _getPositionList = function(){
+        return CodeDao.selectPositionList();
     }
     return {
         getCodeList:_getCodeList

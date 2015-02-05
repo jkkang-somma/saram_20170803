@@ -71,11 +71,11 @@ define([
             });
         },
         draw:function(){
-            if (!_.isUndefined(_loginView)){
-                _loginView.close();
-            }
+            // if (!_.isUndefined(_loginView)){
+            //     _loginView.close();
+            // }
             
-            LoadingView.visible(function(){
+           // LoadingView.visible(function(){
                 Code.init().then(function(){
                     $("body").removeClass("login-body");
                     LoadingView.disable(function(){
@@ -99,7 +99,7 @@ define([
                 }, function(){
                     Dialog.error("Code Init Fail");
                 });
-            });
+            //});
         }
     });
     return App;
