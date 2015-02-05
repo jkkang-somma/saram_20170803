@@ -24,7 +24,12 @@ define([
 	var resultTimeFactory = ResultTimeFactory.Builder;
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(data) {
-			this.date = data.date;
+		    if(_.isNull(data.date)){
+			    this.date = "2015-01-01";
+		    }else{
+		        this.date = Moment(data.date, ResultTimeFactory.DATEFORMAT).add(1,"days").format(ResultTimeFactory.DATEFORMAT);
+		    }
+			
 		},
 		render : function(el) {
 			var dfd= new $.Deferred();
@@ -33,27 +38,28 @@ define([
     	        this.el=el;
     	    }
     	    var _view = this;
+    	    
     	    var _form = new Form({
     	        el:_view.el,
     	        form:undefined,
     	         childs:[{
 	                type:"date",
 	                name:"startDate",
-	                label:i18nCommon.CREATE_RAW_DATA.CREATE.START_DATE,
-	                value: _.isNull(this.date) ? "2015-01-01" : Moment(this.date).add(1,'days'),
+	                label:i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.FORM.START_DATE,
+	                value: this.date,
 	                format:"YYYY-MM-DD",
 	                disabled:true,
     	        }, {
 	                type:"date",
 	                name:"endDate",
-	                label:i18nCommon.CREATE_RAW_DATA.CREATE.END_DATE,
+	                label:i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.FORM.END_DATE,
 	                format:"YYYY-MM-DD",
     	        }, {
     	        	type:"text",
     	        	name:"memo",
-    	        	label:i18nCommon.CREATE_RAW_DATA.CREATE.TIP,
+    	        	label:i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.FORM.TIP,
     	        	disabled:true,
-    	        	value: i18nCommon.CREATE_RAW_DATA.CREATE.TIP_TEXT
+    	        	value: i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.FORM.TIP_TEXT
     	        }]
     	    });
     	    
@@ -77,7 +83,7 @@ define([
             var yesterday = Moment(startDate).subtract(1, 'days');
             
             if(startDate.isAfter(endDate)){
-                Dialog.error(i18nCommon.CREATE_RAW_DATA.CREATE.DATE_ERR_MSG);
+                Dialog.error(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.DATE_ERR_MSG);
                 dfd.reject();
             }
             
@@ -115,7 +121,7 @@ define([
                         var yesterdayAttribute = {};
                         
                         var userRawDataCollection = new RawDataCollection(); // 해당 사용자의 출입기록 Collection
-                        userRawDataCollection.add(rawDataCollection.where({id: userId}));
+                        userRawDataCollection.add(rawDataCollection.filterID(userId));
                         
                         var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
                         userOutOfficeCollection.add(outOfficeCollection.where({id: userId}));
@@ -143,16 +149,13 @@ define([
                             
                             resultTimeFactory.initToday(todayStr, holidayData); //계산전 초기화    
                             
-                            // 출근 기준시간 판단
-                            var yesterdayOutTime = _.isNull(yesterdayAttribute.out_time)? null :Moment(yesterdayAttribute.out_time);
-                            resultTimeFactory.setStandardInTime(yesterdayOutTime);
+                            // 휴일 판단
+                            resultTimeFactory.setHoliday();
                             
                             // 휴가/외근/출장 판단
                             var todayOutOffice = userOutOfficeCollection.where({date: todayStr});
                             resultTimeFactory.setOutOffice(todayOutOffice);
                             
-                            // 휴일 판단
-                            resultTimeFactory.setHoliday();
                             
                             var todayInOffice = userInOfficeCollection.where({date:todayStr});
                             resultTimeFactory.setInOffice(todayInOffice);
@@ -165,6 +168,12 @@ define([
                                 var type  = rawDataModel.get("type");
                                 resultTimeFactory.checkTime(destTime, type);   
                             });
+                            
+                            
+                            // 출근 기준시간 판단
+                            var yesterdayOutTime = _.isNull(yesterdayAttribute.out_time)? null :Moment(yesterdayAttribute.out_time);
+                            resultTimeFactory.setStandardTime(yesterdayOutTime);
+                            
                             
                             // 결과 저장
                             var result = resultTimeFactory.getResult();

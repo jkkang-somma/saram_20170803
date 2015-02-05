@@ -102,8 +102,8 @@ define([
             this.year = Moment(todayStr, DATETIMEFORMAT);
             this.year = this.year.year();
             this.date = todayStr;
-            this.standardInTime = Moment(todayStr).hour(9).minute(0).second(0);
-            this.standardOutTime = Moment(todayStr).hour(18).minute(0).second(0);
+            this.standardInTime = null;
+            this.standardOutTime = null;
             this.earliestTime = null;
             this.inTime = null;
             this.inTimeType = 1;
@@ -168,30 +168,25 @@ define([
             }
         },
         
-        setStandardInTime : function(yesterdayOutTime){
-            if(!_.isNull(this.standardInTime) && !_.isNull(yesterdayOutTime)){
-                if(yesterdayOutTime.format(DATEFORMAT) == this.date){
-                    var outTimeHour = yesterdayOutTime.hour();
-                    if(outTimeHour >= 3)        this.standardInTime.hour(13).minute(20).second(0);
-                    else if(outTimeHour >= 2)   this.standardInTime.hour(11).minute(0).second(0);
-                    else if(outTimeHour >= 1)   this.standardInTime.hour(10).minute(0).second(0);
-                }
+        setHoliday : function(){    // 오늘이 휴일인지 여부 판단
+            var today = Moment(this.date);
+            if(this.holidayData.length > 0 || today.day() === 0 || today.day() === 6){ // 휴일일 경우 work_type 바꿈
+                this.workType = WORKTYPE.HOLIDAY;
             }
         },
         
-        setInOffice : function(todayInOffice){
-            if(this.workType == WORKTYPE.HOLIDAY || this.workType == WORKTYPE._HOLIDAYWORK){
-                if(todayInOffice.length > 0){
+        setInOffice : function(todayInOffice){ // 휴일근무 여부 판단 (checkInOffice)
+            if(this.workType == WORKTYPE.HOLIDAY || this.workType == WORKTYPE._HOLIDAYWORK){ 
+                this.workType = WORKTYPE.HOLIDAY;
+                if(todayInOffice.length > 0){ // 휴일근무 결재가 된 상태일때만 휴일근무 계산 로직에 들어감
                     this.checkInOffice = true;
-                    this.workType = WORKTYPE.HOLIDAY;
                 }else{
                     this.checkInOffice = false;
-                    this.workType = WORKTYPE.HOLIDAY;
                 }
             }
         },
         
-        setOutOffice : function(todayOutOffice){
+        setOutOffice : function(todayOutOffice){ // 오늘의 vacationCode, outOfficeCode 설정
             if(todayOutOffice.length > 0){
                 for (var i = 0; i <todayOutOffice.length; i++){
                     var model = todayOutOffice[i];
@@ -202,12 +197,6 @@ define([
                     if(_.indexOf(VACATION_CODES, code) >= 0){
                         this.vacationCode = code;
                         switch(code){
-                            case "V02": // 오전반차
-                                this.standardInTime.hour(13).minute(20).second(0);
-                                break;
-                            case "V03": // 오후반차
-                                this.standardOutTime.hour(12).minute(20).second(0);
-                                break;
                             case "V01": // 연차휴가
                             case "V04": // 경조휴가
                             case "V05": // 공적휴가
@@ -241,16 +230,6 @@ define([
             }
         },
         
-        setHoliday : function(){
-            var today = Moment(this.date);
-            if(this.holidayData.length > 0 || today.day() === 0 || today.day() === 6){ // 휴일일 경우 work_type 바꿈
-                this.workType = WORKTYPE.HOLIDAY;
-                this.standardInTime = null;  
-                this.standardOutTime = null;  
-                this.inTime = null;  
-                this.outTime = null; 
-            }
-        },
         
         checkTime : function(destTime, type){
             type = type.slice(0,2);
@@ -297,6 +276,101 @@ define([
                 if(this.latestTime.isBefore(destTime)) this.latestTime = destTime;
         },
         
+        setStandardTime : function(yesterdayOutTime){
+            if(this.workType != WORKTYPE.HOLIDAY){
+            
+                if(this.isSuwon){
+                    var isFlexable = true;
+                    var morningWorkTime = 4;
+                    var eveningWorkTime = 4;
+                    var dayWorkTime = 9;
+                    this.standardInTime = Moment(this.date, DATEFORMAT).hour(10).minute(0).second(0);
+                    this.standardOutTime = Moment(this.date, DATEFORMAT).hour(19).minute(0).second(0);     
+                    
+                    if(!_.isNull(yesterdayOutTime)){
+                        if(yesterdayOutTime.format(DATEFORMAT) == this.date){ // 전일 퇴근시간에 따른 다음날 출근 기준시간.
+                            var suOutTimeHour = yesterdayOutTime.hour();
+                            if (suOutTimeHour >= 3){ // 3시 이후 퇴근
+                                this.standardInTime.hour(14).minute(0).second(0);
+                                this.standardOutTime.hour(18).minute(0).second(0);
+                                morningWorkTime -= 4;
+                                dayWorkTime -= 4;
+                                isFlexable = false;
+                            } else if (suOutTimeHour >= 2){ // 2시 이후 퇴근
+                                this.standardInTime.hour(12).minute(0).second(0);
+                                this.standardOutTime.hour(18).minute(0).second(0);
+                                morningWorkTime -= 2;
+                                dayWorkTime -= 2;
+                                isFlexable = false;
+                            } else if (suOutTimeHour >= 1){ // 1시 이후 퇴근
+                                this.standardInTime.hour(11).minute(0).second(0); 
+                                this.standardOutTime.hour(18).minute(0).second(0);
+                                morningWorkTime -= 1;
+                                dayWorkTime -= 1;
+                                isFlexable = false;
+                            }
+                            if (outTimeHour >= 10){
+                                this.checkLate = false;
+                                this.checkEarly = false;
+                                return;
+                            }
+                        }
+                    }
+
+                    switch(this.vacationCode){
+                        case "V02" : // 오전반차인경우 14:00 지각 체크;
+                            this.standardInTime.hour(14).minute(0).second(0);
+                            this.standardOutTime = Moment(this.standardInTime).add(eveningWorkTime,"hours");
+                            break;
+                        case "V03" : // 오후반차인경우
+                            if(!_.isNull(this.inTime)){
+                                if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
+                                    this.standardInTime = Moment(this.inTime);
+                            }
+                            this.standardOutTime = Moment(this.standardInTime).add(morningWorkTime,"hours");
+                            
+                            break;
+                        default :
+                            if(!_.isNull(this.inTime)){
+                                if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
+                                    this.standardInTime = Moment(this.inTime);
+                            }
+                            this.standardOutTime = Moment(this.standardInTime).add(dayWorkTime,"hours");    
+                            break;
+                    }
+                    
+                }else{ // 본사 기준 StandardTime 설정
+                    this.standardInTime = Moment(this.date, DATEFORMAT).hour(9).minute(0).second(0);
+                    this.standardOutTime = Moment(this.date, DATEFORMAT).hour(18).minute(0).second(0);
+                    if(!_.isNull(yesterdayOutTime)){
+                        if(yesterdayOutTime.format(DATEFORMAT) == this.date){
+                            var outTimeHour = yesterdayOutTime.hour();
+                            if (outTimeHour >= 3){
+                                this.standardInTime.hour(13).minute(20).second(0); // 3시 이후 퇴근
+                            } else if(outTimeHour >= 2){
+                                this.standardInTime.hour(11).minute(0).second(0);  //
+                            } else if(outTimeHour >= 1){
+                                this.standardInTime.hour(10).minute(0).second(0);
+                            }   
+                            if(outTimeHour >= 10){
+                                this.checkLate = false;
+                                this.checkEarly = false;
+                                return;
+                            }
+                        }
+                    }
+                    switch(this.vacationCode){
+                        case "V02": // 오전반차
+                            this.standardInTime.hour(13).minute(20).second(0);
+                            break;
+                        case "V03": // 오후반차
+                            this.standardOutTime.hour(12).minute(20).second(0);
+                            break;
+                    }
+                }
+            }
+        },
+        
         setTimeType : function(){
             if(!this.inTime){ // 출근기록이 없을경우
                 if(this.earliestTime){
@@ -320,48 +394,26 @@ define([
             }
         },
         
-        checkSuwonStandardTime : function(){
-            if(this.vacationCode == "V02"){ // 오전반차인경우에만 14:00 으로 지각시간체크
-                this.standardInTime.hour(14).minute(00).second(0);
-            }else{
-                this.standardInTime.hour(10).minute(0).second(0);
-                if(this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) // 지각기준보다 일찍왔을경우 기준시간 변경
-                    this.standardInTime = Moment(this.inTime);       
-            }
-            
-            
-            if(this.vacationCode == "V03")  // 오후 반차인 경우에는 출근 기준시간 + 4시간 근무
-                this.standardOutTime = Moment(this.standardInTime).add(4,"hours");
-            else if(this.vacationCode == "V02") // 오전 반차인 경우에도 출근기준시간 + 4시간 근무
-                this.standardOutTime = Moment(this.standardInTime).add(4,"hours");
-            else // 이외의 경우에는 출근기준시간 + 9시간 근무
-                this.standardOutTime = Moment(this.standardInTime).add(9,"hours");
-        },
-        
         getResult : function(){
             // 출퇴근시간 판단
             this.setTimeType();
             
-            if(this.isSuwon && !_.isNull(this.inTime) && !_.isNull(this.outTime)){ // 수원근무 사용자인 경우 StandardTime 세팅
-                this.checkSuwonStandardTime();
-            }
 
-            if(!(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY)){ // 휴일 / 휴가가 아닌경우
-                if(!this.inTime && !this.outTime){ // 출퇴근 기록이 없으면 결근
+            if(!(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY ||this.workType == WORKTYPE.HOLIDAYWORK || this.workType == WORKTYPE._HOLIDAYWORK)){ // 휴일 / 휴가가 아닌경우
+                if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
                     if(this.outOfficeCode!=="W02"){ // 출장 체크
                         this.workType = WORKTYPE.ABSENTCE;
                     }
-                }else if(!this.inTime){
+                }else if(!this.inTime && this.checkLate){
                     this.workType = WORKTYPE.NOTINTIME;
-                }else if(!this.outTime){
+                }else if(!this.outTime && this.checkEarly){
                     this.workType = WORKTYPE.NOTOUTTIME;
                 }else{
                     this.setLateTime();
                     this.setOverTimeCode();
                 }    
             }else{
-                if (this.workType == WORKTYPE.HOLIDAY || this.workType == WORKTYPE.HOLIDAYWORK || this.workType == WORKTYPE._HOLIDAYWORK) //휴일근무인 경우
-                    this.setHolidayWorkTimeCode();
+                this.setHolidayWorkTimeCode();
             }
            
             return {
@@ -392,23 +444,24 @@ define([
         
         
         setLateTime : function(){
-            if(!_.isNull(this.inTime) && !_.isNull(this.standardInTime)){
-                if(this.workType != WORKTYPE.VACATION && this.outOfficeCode != "W02"){
-                    if(this.checkLate){
-                        this.lateTime = this.inTime.diff(this.standardInTime,"minute");
-                        this.workType = WORKTYPE.NORMAL;
-                        if(this.lateTime > 0 ){
-                            this.workType = WORKTYPE.LATE;  // 지각
-                        }else{
-                            this.lateTime = 0;
-                        }
+            if(this.workType != WORKTYPE.VACATION && this.outOfficeCode != "W02"){
+                if(this.checkLate){
+                    this.lateTime = this.inTime.diff(this.standardInTime,"minute");
+                    this.workType = WORKTYPE.NORMAL;
+                    if(this.lateTime > 0 ){
+                        this.workType = WORKTYPE.LATE;  // 지각
+                    }else{
+                        this.lateTime = 0;
                     }
+                }else{
+                    this.workType = WORKTYPE.NORMAL;
+                    this.lateTime = 0;
                 }
             }
         },
         
         setHolidayWorkTimeCode : function(){
-            if(!(_.isNull(this.outTime)) && !(_.isNull(this.inTime))){
+            if(!(_.isNull(this.outTime))){
                 this.overTime = this.outTime.diff(this.inTime,"minute"); // 휴일근무 시간
                 if(this.checkInOffice){
                     if (this.overTime >= 480)              this.overtimeCode =  "2015_BC";
@@ -422,6 +475,7 @@ define([
         },
         
         setOverTimeCode : function(){
+            var isEarly = false;
             if(!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))){
                 if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.VACATION){
                     this.lateOverTime = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간 (millisecond)
@@ -434,16 +488,20 @@ define([
                             else if(this.overTime >= 120)            this.overtimeCode = "2015_AA";
                             else                                     this.overtimeCode = null;
                         }
-                        if(this.overtime <0)                        this.overtime= 0;
-                    }else{ // 조퇴 판정
-                        if(this.checkEarly){
-                            if (this.workType == WORKTYPE.LATE)
-                                this.workType = WORKTYPE.EARLY_LATE;
-                            else
-                                this.workType = WORKTYPE.EARLY;
-                        }
+                        if(this.overtime <0)                         this.overtime= 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
+                    } else {
+                        isEarly = true;
                     }
                 }
+            }
+
+            if(this.checkEarly && isEarly){
+                if (this.workType == WORKTYPE.LATE)
+                    this.workType = WORKTYPE.EARLY_LATE;
+                else
+                    this.workType = WORKTYPE.EARLY;
+            }else{
+                this.workType = WORKTYPE.NORMAL;
             }
         },
         
@@ -483,7 +541,7 @@ define([
      			this.initByModel(nextDayCommute);
      			
      			if(currentResult.out_time)
-                	this.setStandardInTime(Moment(currentResult.out_time));
+                	this.setStandardTime(Moment(currentResult.out_time));
                 var yesterdayResult = this.getResult();
                 
     			resultCommuteCollection.add(yesterdayResult);    

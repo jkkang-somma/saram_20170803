@@ -89,7 +89,8 @@ define({
             ADD:"사용자를 등록하였습니다."
         },
         LOGIN:{
-            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다."
+            SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다.",
+            SUCCESS_REQUEST_FIND_PASSWORD:"비밀번호 초기화 요청 메일이 발송되었습니다."
         }
     },
     WARNING:{
@@ -99,7 +100,10 @@ define({
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
             INIT_PASSWORD:"비밀번호를 설정해주세요.",
-            FIND_PASSWORD_PUT:"사용자 정보를 입력해 주세요."
+            FIND_PASSWORD_PUT:"사용자 정보를 입력해 주세요.",
+            NOT_VALID_EMAIL:"유효하지 않은 이메일 입니다.",
+            ERROR_FIND_PASSWORD_SEND_MAIL:"비밀번호 찾기 실패하였습니다.",
+            NOT_EQULES_EMAIL:"유효하지 않은 이메일 입니다."
         },
         USER:{
             NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지않습니다."
@@ -116,6 +120,7 @@ define({
         USER_EDIT_VIEW:{
             FAIL_RENDER:"사용자 정보를 받아오지 못하였습니다.",
         }
+        
     },
     CONFIRM:{
         USER:{
@@ -205,8 +210,7 @@ define({
         PASSWORD_PLACEHOLDER:"비밀번호",
         LOGIN_SATUS_BTN:"로그인중..",
         LOGIN_BTN:"로그인",
-        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  ",
-        FIND_PASSWORD_TEXT_A:"비밀번호 찾기"
+        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  "
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"비밀번호 설정",
@@ -224,22 +228,252 @@ define({
     },
     
     HOLIDAY_MANAGER:{
-        ADD:{
-            DATE: "날짜",
-            MEMO: "내용",
+        TITLE : "휴일 관리",
+        SUB_TITLE : "휴일 관리",
+        COMBO_LABEL : "연도",
+        GRID_COL_NAME : {
+            DATE : "날짜",
+            MEMO : "내용"
         },
-        CREATE:{
-            YEAR: "연도"
+        ADD_DIALOG : {
+            TITLE : "휴일 추가",
+            TOOLTIP : "추가",
+            BUTTON : {
+                ADD :"추가",
+                CANCEL:"취소"
+            },
+            MSG : {
+                HOLIDAY_ADD_COMPLETE : "휴일이 추가되었습니다.",
+                HOLIDAY_ADD_FAIL : "휴일 추가 실패! ㅠㅠ"
+            },
+            FORM:{
+                DATE: "날짜",
+                MEMO: "내용",
+            },
+        },
+        REMOVE_DIALOG : {
+            TOOLTIP : "삭제",
+            MSG : {
+                NOTING_SELECTED : "선택된 데이터가 없습니다!",
+                HOLIDAY_REMOVE_COMPLETE : "휴일이 삭제되었습니다. ㅠㅠ",
+                HOLIDAY_REMOVE_FAIL : "휴일 삭제 실패!"
+            }
+        },
+        
+        CREATE_DIALOG : {
+            TITLE : "공휴일 생성",
+            TOOLTIP : "일괄 생성",
+            BUTTON : {
+                CREATE :"생성",
+                CANCEL :"취소"
+            },
+            MSG : {
+                HOLIDAY_CREATE_COMPLETE : "공휴일 생성이 완료되었습니다.",
+                HOLIDAY_CREATE_FAIL : "공휴일 생성 실패!"
+            },
+            FORM:{
+                YEAR: "연도"
+            }
+        }
+        
+    },
+
+    
+    ADD_RAW_DATA : {
+        TITLE : "근태 관리",
+        SUB_TITLE:"출입 기록 등록",
+        GRID_COL_NAME : {
+            DEPARTMENT : "부서",
+            NAME : "이름",
+            DATE : "날짜",
+            TIME : "시간",
+            TYPE : "출입기록"
+        },
+        ADD_DIALOG : {
+            TITLE : "출입 기록 파일 등록",
+            TOOLTIP : "불러오기",
+            BUTTON : {
+                ADD : "등록",
+                CANCEL : "취소"
+            },
+            FORM :{
+                FILE : "출입 기록 (CSV)"
+            },
+            MSG : {
+                ANALYZE_FAIL : "분석되지 않은 데이터가 있습니다.\n 데이터를 확인하세요",
+                ANALYZE_COMPLETE : "파일 분석이 완료 되었습니다.",
+                FILE_API_ERR : "해당 브라우저에서 파일 API를 지원하지 않습니다.",
+                NOT_SELECT_FILE : "선택된 파일이 없습니다"
+                
+            }
+        },
+        COMMIT_DIALOG : {
+            MESSAGE : "출입 기록을 서버에 저장하시겠습니까?",
+            TOOLTIP : "저장",
+            MSG : {
+                COMMIT_COMPLET : "데이터 전송이 완료되었습니다.",
+                COMMIT_FAIL : "데이터 전송 실패!"
+            }
         }
     },
     
-    CREATE_RAW_DATA : {
-        CREATE:{
-            START_DATE : "시작일",
-            END_DATE : "종료일",
-            TIP : "참고사항",
-            TIP_TEXT : "※ 종료일 다음날 6시 까지 출입 기록 필요\n ex) 종료일이 2015-01-15 일 경우  \n 2015-01-16 06:00 까지 출입기록 필요",
-            DATE_ERR_MSG : "시작일이 종료일보다 큽니다."
+    RAW_DATA_LIST : {
+        TITLE : "근태 관리",
+        SUB_TITLE : "출입 기록 조회",
+        SEARCH_BTN : "검색",
+        GRID_COL_NAME : {
+            DEPARTMENT : "부서",
+            NAME : "이름",
+            TIME : "출입시간",
+            TYPE : "출입기록",
+            IP : "IP",
+            NEED_CONFIRM : "확인필요",
+        },
+        MSG :{
+            NOK : "확인필요",
+            OK : "정상",
+            LOADING_FAIL : "데이터 조회 실패!"
+        },
+        
+    },
+        
+    CREATE_COMMUTE_RESULT : {
+        TITLE : "근태 관리",
+        SUB_TITLE : "근태 자료 생성",
+        GRID_COL_NAME : {
+            DATE: "날짜",
+            DEPARTMENT: "부서",
+            NAME: "이름",
+            WORK_TYPE: "근무<br>형태",
+            STDIN_TIME: "출근<br>기준",
+            IN_TIME: "출근<br>시간",
+            LATE_TIME: "지각<br>(분)",
+            STDOUT_TIME: "퇴근<br>기준",
+            OUT_TIME: "퇴근<br>시간",
+            OVER_TIME: "초과근무<br>(분)",
+            OVERTIME_CODE: "초과근무",
+            VACATION_CODE: "근태",
+            OUT_OFFICE_CODE: "외근<br>출장"
+        },
+        CREATE_DIALOG :{
+            TOOLTIP : "근태 생성",
+            TITLE : "근태 데이터 생성",
+            ASK : "근태 데이터를 생성하시겠습니까?",
+            FORM : {
+                START_DATE : "시작일",
+                END_DATE : "종료일",
+                TIP : "참고사항",
+                TIP_TEXT : "※ 종료일 다음날 6시 까지 출입 기록 필요\n ex) 종료일이 2015-01-15 일 경우  \n 2015-01-16 06:00 까지 출입기록 필요",
+                DATE_ERR_MSG : "시작일이 종료일보다 큽니다."
+            },
+            BUTTON : {
+                CREATE : "데이터 생성",
+                CANCEL : "취소",
+            },
+            MSG : {
+                CREATE_DATA_COMPLETE : "데이터 생성 완료!",
+                CREATE_DATA_FAIL : "데이터 생성 실패!"
+            }
+        },
+        COMMIT_DIALOG : {
+            TOOLTIP : "저장",
+            MESSAGE : "근태 데이터를 서버에 저장하시겠습니까?",
+            MSG : {
+                COMMIT_DATA_COMPLETE : "데이터 전송이 완료되었습니다.",
+                COMMIT_DATA_FAIL : "데이터 전송 실패!"
+            },
+        }
+    }, 
+    
+    COMMUTE_RESULT_LIST : {
+        TITLE : "근태 관리",
+        SUB_TITLE : "근태 자료 조회",
+        SEARCH_BTN : "검색",
+        GRID_COL_NAME : {
+            DATE: "날짜",
+            DEPARTMENT: "부서",
+            NAME: "이름",
+            WORK_TYPE: "근무<br>타입",
+            VACATION: "휴가",
+            OUT_OFFICE: "외근<br>정보",
+            IN_TIME: "출근<br>시간",
+            OUT_TIME: "퇴근<br>시간",
+            LATE_TIME: "지각<br>시간",
+            OVERTIME_CODE: "초과<br>근무",
+            MEMO: "비고"
+        },
+        MSG : {
+            DATE_SELECT_ERROR : "시작일 /종료일을 입력해 주십시오",
+            GET_DATA_FAIL : "데이터 조회 실패!",
+        },
+        UPDATE_DIALOG :{
+            TOOLTIP: "수정",
+            TITLE : "출퇴근시간 수정",
+            BUTTON :{
+                MODIFY : "수정",
+                CANCEL : "취소",
+            },
+            FORM :{
+                GROUP_DEST: "수정 대상",
+                DATE : "날짜",
+                DEPARTMENT : "부서",
+                NAME : "이름",
+                
+                GROUP_NEW : "수정 내역",
+                IN_TIME:"출근시간",
+                OUT_TIME: "퇴근시간",
+                OVER_TIME : "초과근무",
+                
+                
+            },
+            MSG : {
+                IN_TIME_MSG : "출근시간",
+                OUT_TIME_MSG : "퇴근시간",
+                OVER_TIME_MSG : "초과근무",
+                OVER_TIME_MSG_MEMO :
+                "※ 초과근무를 변경할경우 이후 출퇴근시간 수정, 결재, 결재 취소시에 <br> " 
+                +"변경된 초과근무가 반영되지 않습니다.<br>"
+                +"수정 사항이 정확합니까?",
+                NOTING_SELECTED : "사원을 선택하여 주시기 바랍니다.",
+                UPDATE_COMPLETE : "근태 정보가 수정되었습니다.",
+                NOTING_CHANGED : "변경된 내용이 없습니다."
+            }
+        },
+        COMMENT_DIALOG : {
+            TITLE : "COMMENT 등록",
+            BUTTON : {
+                ADD : "등록",
+                CANCEL : "취소",
+            },
+            FORM : {
+                GROUP_DEST : "근태정보",
+                DATE : "날짜",
+                DEPARTMENT : "부서",
+                NAME : "이름",
+                
+                GROUP_NEW : "수정 요청 사항",
+                IN_TIME_BEFORE:"현재 출근시간",
+                OUT_TIME_BEFORE: "현재 퇴근시간",
+                IN_TIME_AFTER:"수정 요청 시간",
+                OUT_TIME_AFTER: "수정 요청 시간",
+                COMMENT : "Comment",
+            },
+            MSG : {
+
+                COMMENT_ADD_COMPLETE : "COMMENT를 등록했습니다.",
+                COMMENT_ADD_FAIL : "COMMENT 등록 실패!",
+                EMPTY_COMMENT_ERR : "COMMENT에 내용을 입력해주세요",
+            },
+           
+        },
+        
+        CHANGE_HISTORY_DIALOG : {
+            TITLE_IN : "출근 시간 변경 이력",
+            TITLE_OUT : "퇴근 시간 변경 이력",
+            TITLE_OVER : "초과근무 변경 이력",
+            BUTTON : {
+                CANCEL : "취소",
+            },
         }
     }
 });

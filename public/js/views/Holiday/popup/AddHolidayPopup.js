@@ -28,12 +28,12 @@ DatePickerHTML, TextBoxHTML) {
     	        childs:[{
 	                type:"date",
 	                name:"ahDatePicker",
-	                label:i18nCommon.HOLIDAY_MANAGER.ADD.DATE,
+	                label:i18nCommon.HOLIDAY_MANAGER.ADD_DIALOG.FORM.DATE,
 	                format:"YYYY-MM-DD",
     	        },{
 	                type:"text",
 	                name:"addHolidayMemo",
-	                label:i18nCommon.HOLIDAY_MANAGER.ADD.MEMO,
+	                label:i18nCommon.HOLIDAY_MANAGER.ADD_DIALOG.FORM.MEMO,
     	        }]
     	    });
     	    

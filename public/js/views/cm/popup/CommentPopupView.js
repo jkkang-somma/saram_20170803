@@ -13,6 +13,7 @@ define([
     'datatables',
     'cmoment',
     'i18n!nls/common',
+    'lib/component/form',
     'core/BaseView',
     'models/cm/CommentModel',
 	'text!templates/inputForm/textbox.html',
@@ -20,7 +21,7 @@ define([
 	'text!templates/default/datepickerChange.html',
 ], function(
 	$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, 
-	i18Common,
+	i18nCommon, Form,
 	BaseView,
 	CommentModel,
 	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML
@@ -34,53 +35,83 @@ define([
 			var dfd= new $.Deferred();
 			
 			if (!_.isUndefined(el)) this.el=el;
-			
-			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupDate", label : "일자", value : this.selectData.date}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupDept", label : "부서", value : this.selectData.department}));
-			$(this.el).append(_.template(TextBoxHTML)({id: "commentAddPopupName", label : "이름", value : this.selectData.name }));
-			$(this.el).append(_.template(DatePickerChangeHTML)(
-				{
-					id: "commentAddPopupInTime", 
-					label : "출근시간",
-					label2 : "수정 요청 시간",
-					beforeTime:  this.selectData.in_time,
-					checkId : "",
-					
-				}
-			));
-			
-			$(this.el).append(_.template(DatePickerChangeHTML)(
-				{
-					id: "commentAddPopupOutTime", 
-					label : "퇴근시간",
-					label2 : "수정 요청 시간",
-					beforeTime:  this.selectData.out_time,
-					checkId : "",
-				}
-			));
-			
-			$(this.el).append(_.template(TextAreaHTML)({id: "commentAddPopupComment", label : "Comment"}));
-			
-
-			$(this.el).find("#commentAddPopupInTime").datetimepicker({
-            	pickTime: true,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:ss"
-            });
-            
-			$(this.el).find("#commentAddPopupOutTime").datetimepicker({
-            	pickTime: true,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:ss"
-            });
-
-			$(this.el).find("#commentAddPopupDate").attr("disabled", "true");
-			$(this.el).find("#commentAddPopupDept").attr("disabled", "true");
-			$(this.el).find("#commentAddPopupName").attr("disabled", "true");
-			
-            dfd.resolve();
+				var _view=this;
+			var _form = new Form({
+		        el:_view.el,
+		        form:undefined,
+		        group:[{
+	                name:"destInfo",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.GROUP_DEST,
+	                initOpen:true
+	            },{
+	                name:"modifyItem",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.GROUP_NEW,
+	                initOpen:true
+	            }],
+		        
+		        childs:[{
+	                type:"input",
+	                name:"date",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.DATE,
+	                value:this.selectData.date,
+	                group:"destInfo",
+	                disabled:true
+	        	}, {
+	        		type:"input",
+	                name:"department",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.DEPARTMENT,
+	                value:this.selectData.department,
+	                group:"destInfo",
+	                disabled:true
+	        	}, {
+	        		type:"input",
+	                name:"name",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.NAME,
+	                value:this.selectData.name,
+	                group:"destInfo",
+	                disabled:true
+	        	}, {
+	        		type:"input",
+	                name:"inTimeBefore",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.IN_TIME_BEFORE,
+	                value:this.selectData.in_time,
+	                group:"modifyItem",
+	                disabled:true
+	        	}, {
+	                type:"datetime",
+	                name:"inTimeAfter",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.IN_TIME_AFTER,
+	                format:"YYYY-MM-DD HH:mm:ss",
+	                group:"modifyItem"
+	        	}, {
+	        		type:"input",
+	                name:"outTimeBefore",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.OUT_TIME_BEFORE,
+	                value:this.selectData.out_time,
+	                group:"modifyItem",
+	                disabled:true
+	        	}, {
+	                type:"datetime",
+	                name:"outTimeAfter",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.OUT_TIME_AFTER,
+	                format:"YYYY-MM-DD HH:mm:ss",
+	                group:"modifyItem"
+	        	},{
+        		  	type:"text",
+	                name:"comment",
+	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.COMMENT,
+	                group:"modifyItem"
+		        }]
+		    });
+		    
+		    _form.render().done(function(){
+		        _view.form=_form;
+		        dfd.resolve();
+		    }).fail(function(){
+		        dfd.reject();
+		    });  
+		    
+		
             return dfd.promise();			
 		},
 		insertComment: function(opt) {
@@ -91,35 +122,33 @@ define([
 				return;
 			}
 			
-			inData["state"] = i18Common.COMMENT.STATE.ACCEPTING;
+			inData["state"] = i18nCommon.COMMENT.STATE.ACCEPTING;
 			var commentModel = new CommentModel();
 			commentModel.save(inData, opt);
 		},
 		getInsertData: function() {
-			var inTimeDatePicker = $(this.el).find("#commentAddPopupInTime").data("DateTimePicker");
-			var outTimeDatePicker = $(this.el).find("#commentAddPopupOutTime").data("DateTimePicker");
-			var commentTextArea = $(this.el).find("#commentAddPopupComment");
+			var data = this.form.getData();
 			
      		var newData = {
-     			comment : commentTextArea.val(),
+     			comment : data.comment,
      			date: this.selectData.date,
      			id: this.selectData.id,
      			year : this.selectData.year
      		};
      		
-     		if(inTimeDatePicker.getText()!==""){
-     			newData.want_in_time = inTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss");
+     		if(data.inTimeAfter != ""){
+     			newData.want_in_time = data.inTimeAfter;
      		}
      		
-     		if(outTimeDatePicker.getText()!==""){
-     			newData.want_out_time = outTimeDatePicker.getDate().format("YYYY-MM-DD HH:mm:ss");
+     		if(data.outTimeAfter != ""){
+     			newData.want_out_time = data.outTimeAfter;
      		}
      		
      		newData.before_in_time = this.selectData.in_time;
      		newData.before_out_time = this.selectData.out_time;
 
      		if (newData.comment.length == 0) {
-     			alert("Comment를 입력해주시기 바랍니다.");
+     			Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.EMPTY_COMMENT_ERR);
      			return null;
      		}
 			return newData;
