@@ -294,6 +294,8 @@
 							c.overtime_code,
 							c.vacation_code,
 							c.out_office_code,
+							c.early_time,
+							c.not_pay_over_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -327,9 +329,9 @@
         		out_time, over_time, overtime_code, vacation_code, standard_in_time,
         		standard_out_time, work_type, year,
         		in_time_type, out_time_type, out_office_start_time, out_office_end_time,
-        		in_time_change, out_time_change)
+        		in_time_change, out_time_change, early_time, not_pay_over_time)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         
         <query id="updateCommuteResult">
@@ -352,7 +354,9 @@
 				out_office_end_time = ?,
 				in_time_change = ?,
 				out_time_change =?,
-				overtime_code_change =?
+				overtime_code_change =?,
+				early_time =?,
+				not_pay_over_time=?
 			WHERE
 				id = ? AND date = ?
         </query>
@@ -379,7 +383,9 @@
 				out_office_start_time,
 				in_time_change,
 				out_time_change,
-				overtime_code_change
+				overtime_code_change,
+				early_time,
+				not_pay_over_time
         	FROM
         		commute_result_tbl
         	WHERE
@@ -408,7 +414,9 @@
 				out_office_start_time,
 				in_time_change,
 				out_time_change,
-				overtime_code_change
+				overtime_code_change,
+				early_time,
+				not_pay_over_time
         	FROM
         		commute_result_tbl
         	WHERE

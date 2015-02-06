@@ -43,7 +43,8 @@ define([
             holiday_working_a:undefined,
             holiday_working_b:undefined,
             holiday_working_c:undefined,
-            total_overtiem_pay:undefined
+            total_overtiem_pay:undefined,
+
         },
     });
     return WorkingSummaryModel;

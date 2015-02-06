@@ -283,21 +283,30 @@ define([
     	    this._defatulInputGroup.css({display:"table"});
     	    
     	    _defaultSearchInput.on('keyup',function(key){
-    	        console.log(key);
-    	         _grid.search(this.value,false,true);          
+    	        if(key.keyCode == 13)
+    	            _grid.search(this.value,false,true);          
     	    });
     	    
+    	    var _buttonIcon=$(ButtonHTML);
+            _buttonIcon.addClass(_glyphiconSchema.value("search"));
+            
+    	    var _btnTmp=_.template(_defaultBtnTag);
+    	    
     	    var _btnId=this.options.id +"_"+ name +"_Btn";
-    	    var _btn=this._crteateDefaultButton(_btnId, name);
     	    this.buttonid["search"] = _btnId;
+
+    	    var _btn=$(_btnTmp({tooltip:"검색"}));//툴팁 셋팅
+    	    _btn.attr("id", _btnId);
+    	    _btn.append(_buttonIcon);
+    	    this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_btn));  
+    	    
     	    _btn.click(function(){
-                _grid.search(this.value,false,true);      
+                _grid.search(_defaultSearchInput.val(),false,true);      
             });
             
     	    var _rowNumBtnId=this.options.id +"_row_Btn";
     	    this.buttonid["row"] = _rowNumBtnId;
     	    
-            var _btnTmp=_.template(_defaultBtnTag);
             var _rowButton=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
             
             _rowButton.attr("id", _rowNumBtnId);
