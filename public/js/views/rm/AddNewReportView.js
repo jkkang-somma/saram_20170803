@@ -185,6 +185,7 @@ define([
         _this.afterDate.hide();
         _this.holReq = 0;
         $(_this.el).find('#reqHoliday').val("0 일");
+        $(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
         ComboBox.createCombo(selGubun);
         
         if ( arrGubunData.length >0) {
@@ -218,11 +219,27 @@ define([
         $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
         
         // 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
-        if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03') {
+        if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03'
+           || selVal == 'V04' || selVal == 'V05' || selVal == 'V06') {
         	$(_this.el).find('#usableHolidayCon').hide();
         }else {
         	$(_this.el).find('#usableHolidayCon').show();
-        }        
+        }   
+        
+        // 신청연차일수 감추기
+        if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03'
+           || selVal == 'V04' || selVal == 'V05' || selVal == 'V06') {
+        	$(_this.el).find('#usableHolidayCon').hide();
+        }else {
+        	$(_this.el).find('#usableHolidayCon').show();
+        }  
+        
+        if(_this.holReq == 0){
+          // _this.find('#reqHoliday').val(holReq + " 일");
+          $(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
+        }else{
+          $(_this.el).find('#reqHoliday').parent().parent().css('display', 'block');
+        }
       });
      
     },
