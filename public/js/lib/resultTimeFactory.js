@@ -61,8 +61,8 @@ define([
         isSuwon: false,
         checkLate : true,
         checkEarly : true,
-        // earlyTime : 0,
-        // notPayOverTime :0,
+        earlyTime : 0,
+        notPayOverTime :0,
         init : function(userId, userName, userDepartment){
             this.id = userId;
             this.name = userName;
@@ -93,8 +93,8 @@ define([
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly =true;
-            // this.earlyTime = 0;
-            // this.notPayOverTime =0;
+            this.earlyTime = 0;
+            this.notPayOverTime =0;
             if(this.department.slice(0,4) === "품질검증"){
                 this.isSuwon = true;
             }else{
@@ -130,8 +130,8 @@ define([
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly =true;
-            // this.earlyTime = 0;
-            // this.notPayOverTime =0;
+            this.earlyTime = 0;
+            this.notPayOverTime =0;
         },
         
         initByModel : function(model){
@@ -147,8 +147,8 @@ define([
             this.inTimeType = model.get("in_time_type");
             this.outTimeType = model.get("out_time_type");
             this.lateTime = model.get("late_time");
-            // this.holidayWorkTime = model.get("holidayWorkTime");
-            // this.lateTimeOver = model.get("lateTimeOver");
+            this.holidayWorkTime = model.get("holidayWorkTime");
+            this.lateTimeOver = model.get("lateTimeOver");
             this.overTime = model.get("over_time");
             this.workType = model.get("work_type");
             this.vacationCode= model.get("vacation_code");
@@ -161,8 +161,8 @@ define([
             this.overtimeCodeChange = model.get("overtime_code_change");
             this.checkLate = true;
             this.checkEarly =true;
-            // this.earlyTime = model.get("early_time");
-            // this.notPayOverTime =model.get("not_pay_over_time");
+            this.earlyTime = model.get("early_time");
+            this.notPayOverTime =model.get("not_pay_over_time");
             if(this.department.slice(0,4) === "품질검증"){
                 this.isSuwon = true;
             }else{
@@ -194,51 +194,6 @@ define([
             }
         },
         
-        setOutOffice : function(todayOutOffice){ // 오늘의 vacationCode, outOfficeCode 설정
-            if(todayOutOffice.length > 0){
-                for (var i = 0; i <todayOutOffice.length; i++){
-                    var model = todayOutOffice[i];
-                    var code = model.get("office_code");
-                    var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
-                    var OUTOFFICE_CODES = ["W01","W02"];
-
-                    if(_.indexOf(VACATION_CODES, code) >= 0){
-                        this.vacationCode = code;
-                        switch(code){
-                            case "V01": // 연차휴가
-                            case "V04": // 경조휴가
-                            case "V05": // 공적휴가
-                            case "V06": // 특별휴가
-                                this.workType = WORKTYPE.VACATION;
-                                break;
-                        }
-                    }
-                    
-                    if(_.indexOf(OUTOFFICE_CODES, code) >= 0){
-                        this.outOfficeCode = code;
-                        switch(code){
-                            case "W01": // 외근
-                            case "W03": // 종일외근
-                                var startTime = Moment(model.get("start_time"), "HH:mm");
-                                var endTime = Moment(model.get("end_time"), "HH:mm");
-                                var inTimeLimit = Moment("09:00", "HH:mm");
-                                var outTimeLimit = Moment("18:00", "HH:mm");
-                                if(startTime.isBefore(inTimeLimit) || startTime.isSame(inTimeLimit))
-                                    this.checkLate = false;
-                                if(endTime.isAfter(outTimeLimit) || endTime.isSame(outTimeLimit))
-                                    this.checkEarly = false;
-                                break;
-                            case "W02": // 출장
-                                this.checkLate = false;
-                                this.checkEarly = false;
-                                break;
-                        }
-                    }
-                }
-            }
-        },
-        
-        
         checkTime : function(destTime, type){
             type = type.slice(0,2);
             if(type == "출근" && this.date == destTime.format(DATEFORMAT)){ // 출근 기록일 경우
@@ -259,34 +214,40 @@ define([
                 this.setLatestTime(destTime);
             }
         },
-        
         setEarliestTime : function(destTime){
-            if(_.isNull(this.earliestTime)) this.earliestTime = destTime;
+            if(_.isNull(this.earliestTime))
+                this.earliestTime = destTime;
             else
-                if(this.earliestTime.isAfter(destTime)) this.earliestTime = destTime;
+                if(this.earliestTime.isAfter(destTime))
+                    this.earliestTime = destTime;
         },
         
         setInTime : function(destTime){
-            if(_.isNull(this.inTime)) this.inTime = destTime;
+            if(_.isNull(this.inTime))
+                this.inTime = destTime;
             else
-                if(this.inTime.isAfter(destTime)) this.inTime = destTime;
+                if(this.inTime.isAfter(destTime))
+                    this.inTime = destTime;
         },
         
         setOutTime : function(destTime){
-            if(_.isNull(this.outTime)) this.outTime = destTime;
+            if(_.isNull(this.outTime))
+                this.outTime = destTime;
             else
-                if(this.outTime.isBefore(destTime)) this.outTime = destTime;
+                if(this.outTime.isBefore(destTime))
+                    this.outTime = destTime;
         },
         
         setLatestTime : function(destTime){
-            if(_.isNull(this.latestTime)) this.latestTime = destTime;
+            if(_.isNull(this.latestTime))
+                this.latestTime = destTime;
             else
-                if(this.latestTime.isBefore(destTime)) this.latestTime = destTime;
+                if(this.latestTime.isBefore(destTime))
+                    this.latestTime = destTime;
         },
         
         setStandardTime : function(yesterdayOutTime){
             if(this.workType != WORKTYPE.HOLIDAY){
-            
                 if(this.isSuwon){
                     var isFlexable = true;
                     var morningWorkTime = 4;
@@ -295,7 +256,7 @@ define([
                     this.standardInTime = Moment(this.date, DATEFORMAT).hour(10).minute(0).second(0);
                     this.standardOutTime = Moment(this.date, DATEFORMAT).hour(19).minute(0).second(0);     
                     
-                    if(!_.isNull(yesterdayOutTime)){
+                    if(!_.isNull(yesterdayOutTime) || !_.isUndefined(yesterdayOutTime)){
                         if(yesterdayOutTime.format(DATEFORMAT) == this.date){ // 전일 퇴근시간에 따른 다음날 출근 기준시간.
                             var suOutTimeHour = yesterdayOutTime.hour();
                             if (suOutTimeHour >= 3){ // 3시 이후 퇴근
@@ -317,6 +278,7 @@ define([
                                 dayWorkTime -= 1;
                                 isFlexable = false;
                             }
+                            
                             if (outTimeHour >= 10){
                                 this.checkLate = false;
                                 this.checkEarly = false;
@@ -379,6 +341,55 @@ define([
             }
         },
         
+         
+        setOutOffice : function(todayOutOffice){ // 오늘의 vacationCode, outOfficeCode 설정
+            if(todayOutOffice.length > 0){
+                for (var i = 0; i <todayOutOffice.length; i++){
+                    var model = todayOutOffice[i];
+                    var code = model.get("office_code");
+                    var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
+                    var OUTOFFICE_CODES = ["W01","W02"];
+
+                    if(_.indexOf(VACATION_CODES, code) >= 0){
+                        this.vacationCode = code;
+                        switch(code){
+                            case "V01": // 연차휴가
+                            case "V04": // 경조휴가
+                            case "V05": // 공적휴가
+                            case "V06": // 특별휴가
+                                this.workType = WORKTYPE.VACATION;
+                                break;
+                        }
+                    }
+                    
+                    if(_.indexOf(OUTOFFICE_CODES, code) >= 0){
+                        this.outOfficeCode = code;
+                        switch(code){
+                            case "W01": // 외근
+                            case "W03": // 종일외근
+                                var startTime = Moment(model.get("start_time"), "HH:mm");
+                                var endTime = Moment(model.get("end_time"), "HH:mm");
+                                // var inTimeLimit = Moment("09:00", "HH:mm");
+                                // var outTimeLimit = Moment("18:00", "HH:mm");
+                                // if(startTime.isBefore(inTimeLimit) || startTime.isSame(inTimeLimit))
+                                //     this.checkLate = false;
+                                // if(endTime.isAfter(outTimeLimit) || endTime.isSame(outTimeLimit))
+                                //     this.checkEarly = false;
+                                if(startTime.isBefore(this.standardInTime) || startTime.isSame(this.standardInTime))
+                                    this.checkLate = false;
+                                if(endTime.isAfter(this.standardOutTime) || endTime.isSame(this.standardOutTime))
+                                    this.checkEarly = false;
+                                break;
+                            case "W02": // 출장
+                                this.checkLate = false;
+                                this.checkEarly = false;
+                                break;
+                        }
+                    }
+                }
+            }
+        },
+        
         setTimeType : function(){
             if(!this.inTime){ // 출근기록이 없을경우
                 if(this.earliestTime){
@@ -421,7 +432,8 @@ define([
                     this.setOverTimeCode();
                 }    
             }else{
-                this.setHolidayWorkTimeCode();
+                if(this.workType != WORKTYPE.VACATION)
+                    this.setHolidayWorkTimeCode();
             }
            
             return {
@@ -447,8 +459,8 @@ define([
                 in_time_change : this.inTimeChange,
                 out_time_change : this.outTimeChange,
                 overtime_code_change : this.overtimeCodeChange,
-                // early_time : this.earlyTime,
-                // not_pay_over_time : this.notPayOverTime,
+                early_time : this.earlyTime,
+                not_pay_over_time : this.notPayOverTime,
             };
         },
         
@@ -494,7 +506,6 @@ define([
                     if((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0){  // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
                         if(this.overTime >= 360){
                             this.overtimeCode = "2015_AC";
-                            // this.notPayOverTime = this.overTime - 360;
                         } else if(this.overTime >= 240){
                             this.overtimeCode = "2015_AB";   
                         } else if(this.overTime >= 120){
@@ -520,15 +531,16 @@ define([
         },
         
         /***************************************************
-        // destCollection (length = 2, today, yesterday)
+        // destCollection (length = 3[yesterday, today, tomorrow])
         // inData{ changeInTime, changeOutTime }
-        // return resultCommuteCollection(today,yesterday);
+        // return resultCommuteCollection(today,tomorrow);
         ****************************************************/
         modifyByCollection: function(destCommuteCollection, inData, changeHistoryCollection){
             var dfd = new $.Deferred();
             var resultCommuteCollection = new CommuteCollection();
-		 			
- 			var currentDayCommute = destCommuteCollection.models[0];
+		    
+		    var yesterdayCommute = destCommuteCollection.models[0];
+ 			var currentDayCommute = destCommuteCollection.models[1];
  			
  			this.initByModel(currentDayCommute);
  			
@@ -542,6 +554,8 @@ define([
  				this.outTimeChange += 1;
  			}
  			
+ 			this.setStandardTime(yesterdayCommute.get("out_time"));
+ 			
  			var currentResult = this.getResult();
  			
  			if(!_.isNull(inData.changeOvertimeCode)){
@@ -550,12 +564,14 @@ define([
  			}
  			
  			resultCommuteCollection.add(currentResult);
-            if(destCommuteCollection.length == 2){
-                var nextDayCommute = destCommuteCollection.models[1];		
+            if(destCommuteCollection.length == 3){
+                var nextDayCommute = destCommuteCollection.models[2];		
      			this.initByModel(nextDayCommute);
      			
-     			if(currentResult.out_time)
+     			if(currentResult.out_time){
                 	this.setStandardTime(Moment(currentResult.out_time));
+                	// todo : outoffice 설정
+     			}
                 var yesterdayResult = this.getResult();
                 
     			resultCommuteCollection.add(yesterdayResult);    

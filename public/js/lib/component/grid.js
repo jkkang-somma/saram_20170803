@@ -275,7 +275,7 @@ define([
     	},
     	_createSearchButton:function(name){
     	    var _grid=this;
-    	    var _btnId=this.options.id +"_"+ name +"_Btn";
+    	    
     	    
     	    var _defaultSearchInput=$('<input type="text" class="form-control" placeholder="Search">');
     	    _defaultSearchInput.addClass('yes-form-control');
@@ -283,17 +283,27 @@ define([
     	    this._defatulInputGroup.css({display:"table"});
     	    
     	    _defaultSearchInput.on('keyup',function(key){
+    	        console.log(key);
     	         _grid.search(this.value,false,true);          
     	    });
+    	    
+    	    var _btnId=this.options.id +"_"+ name +"_Btn";
+    	    var _btn=this._crteateDefaultButton(_btnId, name);
     	    this.buttonid["search"] = _btnId;
+    	    _btn.click(function(){
+                _grid.search(this.value,false,true);      
+            });
+            
+    	    var _rowNumBtnId=this.options.id +"_row_Btn";
+    	    this.buttonid["row"] = _rowNumBtnId;
     	    
             var _btnTmp=_.template(_defaultBtnTag);
-            var _button=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
+            var _rowButton=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
             
-            _button.attr("id", _btnId);
-            _button.append($(_defaultBtnText).html( _grid.currentLength));
-            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
-            _button.click(function(){
+            _rowButton.attr("id", _rowNumBtnId);
+            _rowButton.append($(_defaultBtnText).html( _grid.currentLength));
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_rowButton));  
+            _rowButton.click(function(){
                 var index =_.indexOf(_gridLength, _grid.currentLength);
     	        if (index==3){
     	            index=0;
@@ -302,7 +312,7 @@ define([
     	        }
     	        
     	        _grid.currentLength=_gridLength[index];
-    	        _button.html($(_defaultBtnText).html(_grid.currentLength));
+    	        _rowButton.html($(_defaultBtnText).html(_grid.currentLength));
     	        _grid.DataTableAPI.page.len( _grid.currentLength ).draw();
             });
     	},

@@ -155,7 +155,7 @@ define([
 			commuteCollection.fetch({ 
      			data: {
      				id : this.selectData.id,
-     				startDate : this.selectData.date,	
+     				startDate : Moment(this.selectData.date).add(-1, 'days').format("YYYY-MM-DD"),	
      				endDate : Moment(this.selectData.date).add(1, 'days').format("YYYY-MM-DD"),
      			},
      			success : function(resultCollection){

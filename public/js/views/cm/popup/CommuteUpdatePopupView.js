@@ -154,7 +154,7 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 						commuteCollection.fetch({ 
 			     			data: {
 			     				id : data.id,
-			     				startDate : data.date,	
+			     				startDate : Moment(data.date).add(-1, 'days').format("YYYY-MM-DD"),	
 			     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
 			     			},success : function(resultCollection){
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
