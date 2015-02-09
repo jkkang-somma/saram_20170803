@@ -285,27 +285,21 @@ define([
                             }
                         }
                     }
-
-                    switch(this.vacationCode){
-                        case "V02" : // 오전반차인경우 14:00 지각 체크;      근무시간 : 14:00~ 18:00;
-                            this.standardInTime.hour(14).minute(0).second(0);
-                            this.standardOutTime = Moment(this.standardInTime).add(eveningWorkTime,"hours");
-                            break;
-                        case "V03" : // 오후반차인경우, 근무시간 : stdInTime ~ morningWorkTime
-                            if(!_.isNull(this.inTime)){
-                                if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
-                                    this.standardInTime = Moment(this.inTime);
-                            }
-                            this.standardOutTime = Moment(this.standardInTime).add(morningWorkTime,"hours");
-                            
-                            break;
-                        default :
-                            if(!_.isNull(this.inTime)){
-                                if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
-                                    this.standardInTime = Moment(this.inTime);
-                            }
-                            this.standardOutTime = Moment(this.standardInTime).add(dayWorkTime,"hours");
-                            break;
+                    if(this.vacationCode == "V02"){
+                        this.standardInTime.hour(14).minute(0).second(0);
+                        this.standardOutTime = Moment(this.standardInTime).add(eveningWorkTime,"hours");
+                    }else if(this.vacationCode == "V03"){
+                        if(!_.isNull(this.inTime)){
+                            if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
+                                this.standardInTime = Moment(this.inTime);
+                        }
+                        this.standardOutTime = Moment(this.standardInTime).add(morningWorkTime,"hours");
+                    }else{
+                        if(!_.isNull(this.inTime)){
+                            if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
+                                this.standardInTime = Moment(this.inTime);
+                        }
+                        this.standardOutTime = Moment(this.standardInTime).add(dayWorkTime,"hours");
                     }
                     
                 }else{ // 본사 기준 StandardTime 설정
