@@ -168,12 +168,6 @@ define([
             }else{
                 this.isSuwon = false;    
             }
-            
-            if(this.workType == WORKTYPE.HOLIDAYWORK){
-                this.checkInOffice = true;
-            }else{
-                this.checkInOffice = false;
-            }
         },
         
         setHoliday : function(){    // 오늘이 휴일인지 여부 판단
@@ -217,8 +211,9 @@ define([
                     if(that.latestTime.isBefore(destTime))
                         that.latestTime = destTime;
             };
-            
-            _.each(rawDataCollection, function(rawDataModel){
+
+            for(var key in rawDataCollection){
+                var rawDataModel = rawDataCollection[key];
                 if(rawDataModel.get("need_confirm") == 1){
                     var destTime = Moment(rawDataModel.get("char_date"));
                     var type  = rawDataModel.get("type");
@@ -241,8 +236,8 @@ define([
                         setEarliestTime(destTime);
                         setLatestTime(destTime);
                     }
-                }
-            });
+                }   
+            }
             
             this.setTimeType();
         },
@@ -271,7 +266,7 @@ define([
         },
         
         setStandardTime : function(yesterdayOutTime){
-            if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.HOLIDAYWORK){
+            if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.HOLIDAYWORK || this.workType != WORKTYPE._HOLIDAYWORK){
                 if(this.isSuwon){
                     var isFlexable = true;
                     var morningWorkTime = 4;
@@ -420,9 +415,6 @@ define([
         
         
         getResult : function(){
-            // 출퇴근시간 판단
-            
-            
             if(!(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY ||this.workType == WORKTYPE.HOLIDAYWORK || this.workType == WORKTYPE._HOLIDAYWORK)){ // 휴일 / 휴가가 아닌경우
                 if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
                     if(this.outOfficeCode!="W02"){ // 출장 체크
@@ -572,53 +564,89 @@ define([
         ****************************************************/
         modifyByCollection: function(destCommuteCollection, inData, changeHistoryCollection){
             var dfd = new $.Deferred();
+            var that = this;
+            
             var resultCommuteCollection = new CommuteCollection();
-		    
+            
 		    var yesterdayCommute = destCommuteCollection.models[0];
  			var currentDayCommute = destCommuteCollection.models[1];
  			
  			this.initByModel(currentDayCommute);
- 			
- 			if(!_.isNull(inData.changeInTime)){
- 				this.inTime = Moment(inData.changeInTime);
- 				this.inTimeChange += 1; 
- 			}
- 			
- 			if(!_.isNull(inData.changeOutTime)){
- 				this.outTime = Moment(inData.changeOutTime);
- 				this.outTimeChange += 1;
- 			}
-            var yesterdayOutTime = yesterdayCommute.get("out_time");
- 			this.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, this.DATETIMEFORMAT));
- 			
- 			var currentResult = this.getResult();
- 			
- 			if(!_.isNull(inData.changeOvertimeCode)){
- 			    currentResult.overtime_code = inData.changeOvertimeCode;
- 				currentResult.overtime_code_change += 1;
- 			}
- 			
- 			resultCommuteCollection.add(currentResult);
-            if(destCommuteCollection.length == 3){
-                var nextDayCommute = destCommuteCollection.models[2];		
-     			this.initByModel(nextDayCommute);
-     			
-     			if(currentResult.out_time){
-                	this.setStandardTime(Moment(currentResult.out_time), this.DATETIMEFORMAT);
+            
+            var selectedDate = {
+                start: currentDayCommute.get("date"),
+                end: Moment(currentDayCommute.get("date"), this.DATEFORMAT).add(1,"days").format(this.DATEFORMAT)
+            };
+                    
+            var inOfficeCollection = new InOfficeCollection();
+            var outOfficeCollection = new OutOfficeCollection();
+            
+            $.when(
+                outOfficeCollection.fetch({data : selectedDate}),
+                inOfficeCollection.fetch({data : selectedDate})
+            ).done(function(){
+                if(!_.isNull(inData.changeInTime)){
+     				that.inTime = Moment(inData.changeInTime);
+     				that.inTimeChange += 1; 
      			}
-                var yesterdayResult = this.getResult();
+     			
+     			if(!_.isNull(inData.changeOutTime)){
+     				that.outTime = Moment(inData.changeOutTime);
+     				that.outTimeChange += 1;
+     			}
+                var yesterdayOutTime = yesterdayCommute.get("out_time");
+     			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, that.DATETIMEFORMAT));
+
+                var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
+                userOutOfficeCollection.add(outOfficeCollection.where({id: that.id}));
+                        
+                var userInOfficeCollection = new InOfficeCollection();
+                userInOfficeCollection.add(inOfficeCollection.where({id: that.id}));
                 
-    			resultCommuteCollection.add(yesterdayResult);    
-            }
- 			
-			resultCommuteCollection.save({
-			    success : function(){
-			        dfd.resolve(resultCommuteCollection);
-			    }, error: function(){
-			        dfd.reject();
-			    }
-			}, currentResult.id, changeHistoryCollection);
-			return dfd.promise();
+                // 휴일근무 판단
+                var todayInOffice = userInOfficeCollection.where({date:selectedDate.start});
+                that.setInOffice(todayInOffice);
+                
+                // 휴가/외근/출장 판단
+                var todayOutOffice = userOutOfficeCollection.where({date: selectedDate.start});
+                that.setOutOffice(todayOutOffice);
+                
+     			var currentResult = that.getResult();
+     			
+     			if(!_.isNull(inData.changeOvertimeCode)){
+     			    currentResult.overtime_code = inData.changeOvertimeCode;
+     				currentResult.overtime_code_change += 1;
+     			}
+     			
+     			resultCommuteCollection.add(currentResult);
+                if(destCommuteCollection.length == 3){
+                    var nextDayCommute = destCommuteCollection.models[2];		
+         			that.initByModel(nextDayCommute);
+         			
+         			if(currentResult.out_time){
+                    	that.setStandardTime(Moment(currentResult.out_time), that.DATETIMEFORMAT);
+         			}
+         			var tomorrowInOffice = userInOfficeCollection.where({date:selectedDate.end});
+                    that.setInOffice(tomorrowInOffice);
+                    
+                    var tomorrowOutOffice = userOutOfficeCollection.where({date:selectedDate.end});
+                    that.setOutOffice(tomorrowOutOffice);
+                    
+                    var tomorrowResult = that.getResult();
+                    
+        			resultCommuteCollection.add(tomorrowResult);    
+                }
+     			
+    			resultCommuteCollection.save({
+    			    success : function(){
+    			        dfd.resolve(resultCommuteCollection);
+    			    }, error: function(){
+    			        dfd.reject();
+    			    }
+    			}, currentResult.id, changeHistoryCollection);        
+            });
+    
+ 			return dfd.promise();
         },
         
         modifyByInOutOfficeType : function(date, id, type, model){
@@ -626,6 +654,7 @@ define([
             var dfd = new $.Deferred();
             var that = this;
             var commuteCollection = new CommuteCollection();
+            
             
      		commuteCollection.fetchDate(date).then(function(result){
          		var currentDayCommute = commuteCollection.where({id : id});
