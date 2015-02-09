@@ -243,8 +243,33 @@ define([
                     }
                 }
             });
+            
+            this.setTimeType();
         },
             
+        setTimeType : function(){
+            if(!this.inTime){ // 출근기록이 없을경우
+                if(this.earliestTime){
+                    this.inTime = this.earliestTime;   // 저장된 가장 이른 출입시간을 출근시간으로 표시
+                }
+                 // 출근기록 없다는것 표시
+                 if(this.workType != "30")
+                    this.inTimeType = 2;              
+            }else{
+                this.inTimeType = 1;              
+            }
+            
+            if(!this.outTime){// 퇴근 기록이 없는경우
+                if(this.latestTime){
+                    this.outTime = this.latestTime;// 저장된 가장 늦은 출입시간을 퇴근시간으로 표시
+                }
+                if(this.workType != "30")
+                    this.outTimeType = 2;          
+            }else{
+                this.outTimeType = 1;              
+            }
+        },
+        
         setStandardTime : function(yesterdayOutTime){
             if(this.workType != WORKTYPE.HOLIDAY || this.workType != WORKTYPE.HOLIDAYWORK){
                 if(this.isSuwon){
@@ -389,32 +414,10 @@ define([
             }
         },
         
-        setTimeType : function(){
-            if(!this.inTime){ // 출근기록이 없을경우
-                if(this.earliestTime){
-                    this.inTime = this.earliestTime;   // 저장된 가장 이른 출입시간을 출근시간으로 표시
-                }
-                 // 출근기록 없다는것 표시
-                 if(this.workType != "30")
-                    this.inTimeType = 2;              
-            }else{
-                this.inTimeType = 1;              
-            }
-            
-            if(!this.outTime){// 퇴근 기록이 없는경우
-                if(this.latestTime){
-                    this.outTime = this.latestTime;// 저장된 가장 늦은 출입시간을 퇴근시간으로 표시
-                }
-                if(this.workType != "30")
-                    this.outTimeType = 2;          
-            }else{
-                this.outTimeType = 1;              
-            }
-        },
         
         getResult : function(){
             // 출퇴근시간 판단
-            this.setTimeType();
+            
             
             if(!(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY ||this.workType == WORKTYPE.HOLIDAYWORK || this.workType == WORKTYPE._HOLIDAYWORK)){ // 휴일 / 휴가가 아닌경우
                 if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
