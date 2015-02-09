@@ -398,9 +398,9 @@ define([
                             case "W01": // 외근
                                 var startTime = Moment(model.get("start_time"), "HH:mm");
                                 var endTime = Moment(model.get("end_time"), "HH:mm");
-                                if(startTime.isBefore(this.standardInTime) || startTime.isSame(this.standardInTime))
+                                if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
                                     this.checkLate = false;
-                                if(endTime.isAfter(this.standardOutTime) || endTime.isSame(this.standardOutTime))
+                                if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
                                     this.checkEarly = false;
                                 break;
                             case "W02": // 출장

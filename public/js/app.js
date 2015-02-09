@@ -46,7 +46,7 @@ define([
                         
                         $(document).unbind('ajaxError');
                         //_app.start();
-                        window.location="/";
+                        window.location="http://yescnctest.cafe24app.com";
                     });
                 } else if (xhr.status == 404){
                     Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
