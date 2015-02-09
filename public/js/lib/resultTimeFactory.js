@@ -401,7 +401,6 @@ define([
                         this.outOfficeCode = code;
                         switch(code){
                             case "W01": // 외근
-                            case "W03": // 종일외근
                                 var startTime = Moment(model.get("start_time"), "HH:mm");
                                 var endTime = Moment(model.get("end_time"), "HH:mm");
                                 if(startTime.isBefore(this.standardInTime) || startTime.isSame(this.standardInTime))
