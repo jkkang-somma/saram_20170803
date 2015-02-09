@@ -262,19 +262,19 @@ define([
                                 this.standardInTime.hour(14).minute(0).second(0);
                                 this.standardOutTime.hour(18).minute(0).second(0);
                                 morningWorkTime -= 4;
-                                dayWorkTime -= 4;
+                                dayWorkTime -= 5;
                                 isFlexable = false;
                             } else if (suOutTimeHour >= 2){ // 2시 이후 퇴근
                                 this.standardInTime.hour(12).minute(0).second(0);
                                 this.standardOutTime.hour(18).minute(0).second(0);
                                 morningWorkTime -= 2;
-                                dayWorkTime -= 2;
+                                dayWorkTime -= 3;
                                 isFlexable = false;
                             } else if (suOutTimeHour >= 1){ // 1시 이후 퇴근
                                 this.standardInTime.hour(11).minute(0).second(0); 
                                 this.standardOutTime.hour(18).minute(0).second(0);
                                 morningWorkTime -= 1;
-                                dayWorkTime -= 1;
+                                dayWorkTime -= 2;
                                 isFlexable = false;
                             }
                             
@@ -287,11 +287,11 @@ define([
                     }
 
                     switch(this.vacationCode){
-                        case "V02" : // 오전반차인경우 14:00 지각 체크;
+                        case "V02" : // 오전반차인경우 14:00 지각 체크;      근무시간 : 14:00~ 18:00;
                             this.standardInTime.hour(14).minute(0).second(0);
                             this.standardOutTime = Moment(this.standardInTime).add(eveningWorkTime,"hours");
                             break;
-                        case "V03" : // 오후반차인경우
+                        case "V03" : // 오후반차인경우, 근무시간 : stdInTime ~ morningWorkTime
                             if(!_.isNull(this.inTime)){
                                 if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
                                     this.standardInTime = Moment(this.inTime);
@@ -304,7 +304,7 @@ define([
                                 if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
                                     this.standardInTime = Moment(this.inTime);
                             }
-                            this.standardOutTime = Moment(this.standardInTime).add(dayWorkTime,"hours");    
+                            this.standardOutTime = Moment(this.standardInTime).add(dayWorkTime,"hours");
                             break;
                     }
                     
@@ -424,7 +424,7 @@ define([
             
             if(!(this.workType == WORKTYPE.VACATION || this.workType==WORKTYPE.HOLIDAY ||this.workType == WORKTYPE.HOLIDAYWORK || this.workType == WORKTYPE._HOLIDAYWORK)){ // 휴일 / 휴가가 아닌경우
                 if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
-                    if(this.outOfficeCode!=="W02"){ // 출장 체크
+                    if(this.outOfficeCode!="W02"){ // 출장 체크
                         this.workType = WORKTYPE.ABSENTCE;
                     }
                 }else if(!this.inTime && this.checkLate){
