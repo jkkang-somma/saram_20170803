@@ -282,9 +282,12 @@ define([
     	    this._defatulInputGroup.append(_defaultSearchInput);
     	    this._defatulInputGroup.css({display:"table"});
     	    
-    	    _defaultSearchInput.on('keyup',function(key){
-    	        if(key.keyCode == 13)
-    	            _grid.search(this.value,false,true);          
+    	    _defaultSearchInput.keydown(function(e){
+    	        if(e.keyCode == 13){
+    	            e.preventDefault();
+    	            _grid.search(this.value,false,true);
+    	            return false;
+    	        }
     	    });
     	    
     	    var _buttonIcon=$(ButtonHTML);
