@@ -321,8 +321,13 @@ define([
                         this.standardOutTime = Moment(this.standardInTime).add(morningWorkTime,"hours");
                     }else{
                         if(!_.isNull(this.inTime)){
-                            if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
-                                this.standardInTime = Moment(this.inTime);
+                            if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && isFlexable){ // 지각기준보다 일찍왔을경우 기준시간 변경
+                                if(this.inTime.hour() < 7){
+                                    this.standardInTime.hour(7).minute(0).second(0);
+                                }else{
+                                    this.standardInTime = Moment(this.inTime);
+                                }
+                            }
                         }
                         this.standardOutTime = Moment(this.standardInTime).add(dayWorkTime,"hours");
                     }
