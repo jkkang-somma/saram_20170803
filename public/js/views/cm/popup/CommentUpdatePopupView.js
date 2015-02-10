@@ -161,7 +161,7 @@ define([
      			success : function(resultCollection){
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
-						data,
+						{ changeInTime : data.changeInTime, changeOutTime : data.changeOutTime},
 						data.changeHistoryCollection
 					).done(function(resultCommuteCollection){ // commute_result 수정 성공!
 						dfd.resolve(resultCommuteCollection);		
