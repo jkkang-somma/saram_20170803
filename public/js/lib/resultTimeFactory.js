@@ -383,34 +383,35 @@ define([
                     }
                 }
                 
-                if(this.isSuwon){
-                    if(this.vacationCode == "V02"){
-                        this.standardInTime.hour(14).minute(0).second(0);
-                        this.standardOutTime = Moment(this.standardInTime).add(this.eveningWorkTime,"hours");
-                    }else if(this.vacationCode == "V03"){
-                        if(!_.isNull(this.inTime)){
-                            if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
+            }
+            
+             if(this.isSuwon){
+                if(this.vacationCode == "V02"){
+                    this.standardInTime.hour(14).minute(0).second(0);
+                    this.standardOutTime = Moment(this.standardInTime).add(this.eveningWorkTime,"hours");
+                }else if(this.vacationCode == "V03"){
+                    if(!_.isNull(this.inTime)){
+                        if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexable) // 지각기준보다 일찍왔을경우 기준시간 변경
+                            this.standardInTime = Moment(this.inTime);
+                    }
+                    this.standardOutTime = Moment(this.standardInTime).add(this.morningWorkTime,"hours");
+                }else{
+                    if(!_.isNull(this.inTime)){
+                        if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexable){ // 지각기준보다 일찍왔을경우 기준시간 변경
+                            if(this.inTime.hour() < 7){
+                                this.standardInTime.hour(7).minute(0).second(0);
+                            }else{
                                 this.standardInTime = Moment(this.inTime);
-                        }
-                        this.standardOutTime = Moment(this.standardInTime).add(this.morningWorkTime,"hours");
-                    }else{
-                        if(!_.isNull(this.inTime)){
-                            if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexable){ // 지각기준보다 일찍왔을경우 기준시간 변경
-                                if(this.inTime.hour() < 7){
-                                    this.standardInTime.hour(7).minute(0).second(0);
-                                }else{
-                                    this.standardInTime = Moment(this.inTime);
-                                }
                             }
                         }
-                        this.standardOutTime = Moment(this.standardInTime).add(this.dayWorkTime,"hours");
                     }
-                }else{
-                    if(this.vacationCode == "V02"){
-                        this.standardInTime.hour(13).minute(20).second(0);
-                    }else if( this.vacationcCode == "V03"){
-                        this.standardOutTime.hour(12).minute(20).second(0);
-                    }
+                    this.standardOutTime = Moment(this.standardInTime).add(this.dayWorkTime,"hours");
+                }
+            }else{
+                if(this.vacationCode == "V02"){
+                    this.standardInTime.hour(13).minute(20).second(0);
+                }else if( this.vacationcCode == "V03"){
+                    this.standardOutTime.hour(12).minute(20).second(0);
                 }
             }
         },
