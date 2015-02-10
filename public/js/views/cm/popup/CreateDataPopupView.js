@@ -29,6 +29,7 @@ define([
 		    }else{
 		        this.date = Moment(data.date, ResultTimeFactory.DATEFORMAT).add(1,"days").format(ResultTimeFactory.DATEFORMAT);
 		    }
+		    
 		  
 		},
 		render : function(el) {
