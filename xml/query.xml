@@ -689,7 +689,12 @@
 				SUM(CASE WHEN (overtime_code='2015_AC') THEN 1 ELSE 0 END) AS 'night_working_c',
 				SUM(CASE WHEN (overtime_code='2015_BA') THEN 1 ELSE 0 END) AS 'holiday_working_a',
 				SUM(CASE WHEN (overtime_code='2015_BB') THEN 1 ELSE 0 END) AS 'holiday_working_b',
-				SUM(CASE WHEN (overtime_code='2015_BC') THEN 1 ELSE 0 END) AS 'holiday_working_c'
+				SUM(CASE WHEN (overtime_code='2015_BC') THEN 1 ELSE 0 END) AS 'holiday_working_c',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN 0 ELSE over_time END) AS 'total_over_time',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN over_time ELSE 0 END) AS 'total_holiday_over_time',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN 0 ELSE not_pay_over_time END) AS 'over_over_time',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN not_pay_over_time ELSE 0 END) AS 'over_holiday_over_time',
+				SUM(early_time) AS 'total_early_time'
 			FROM commute_result_tbl A 
 			LEFT OUTER JOIN office_code_tbl B ON A.vacation_code = B.code
 			LEFT OUTER JOIN overtime_code_tbl C ON A.overtime_code=C.code 
