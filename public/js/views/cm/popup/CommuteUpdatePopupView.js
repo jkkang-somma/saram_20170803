@@ -23,16 +23,11 @@ define([
     'models/cm/ChangeHistoryModel',
     'collection/cm/CommuteCollection',
     'collection/cm/ChangeHistoryCollection',
-    'text!templates/inputForm/textbox.html',
-    'text!templates/default/datepicker.html',
-    'text!templates/inputForm/combobox.html',
-        
 ], function(
 $, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory, ComboBox,
 BaseView, Code, i18nCommon, Form,
 SessionModel,
-CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection,
-TextBoxHTML, DatePickerHTML , ComboboxHTML
+CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
 	var CommuteUpdatePopupView = Backbone.View.extend({
