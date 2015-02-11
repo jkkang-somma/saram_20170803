@@ -16,7 +16,9 @@ define([
   'text!templates/default/combo.html',
   'text!templates/default/hidden.html',
   'text!templates/default/group.html',
-  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML){
+  'text!templates/default/checkBox.html'
+  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
+		  CheckBoxHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -194,6 +196,21 @@ define([
                 return _hidden;  
             }
         },
+        checkBox:{
+            getElement:function(data){
+                var _CheckBoxTemp=_.template(CheckBoxHTML);
+                var _checkBox=_.noop();
+                _checkBox=_CheckBoxTemp(data);
+                
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    var result=$(_checkBox);
+                    result.find("input").attr("readOnly", "readOnly");
+
+                    return result;
+                }
+                return $(_checkBox);
+            }
+        }
     };
     var Form = Backbone.View.extend({
         initialize:function(options){
@@ -301,6 +318,11 @@ define([
             $.map(unindexed_array, function(n, i){
                 indexed_array[n['name']] = n['value'];
             });
+            
+            this.form.find(":checkbox").each(function() {
+            	indexed_array[this.name] = this.checked;
+            });
+            
             return indexed_array;
         }
    });

@@ -715,6 +715,7 @@
 			SELECT
     			m.id, 
     			m.name,
+    			m.leave_company,
                 p.name AS position_name,
 			    m.dept_code,
 			    d.name AS dept_name
@@ -1210,10 +1211,19 @@
     	
     	<query id="selectReportCommuteResultTbl">
 			SELECT 
-				m.dept_code, m.position, m.name, m.id,
+    			m.id, 
+    			m.name,
+                m.leave_company,
+                p.name AS position_name,
+			    m.dept_code,
+			    d.name AS dept_name,
 			    c.*
 			FROM
 				members_tbl m
+				INNER JOIN dept_code_tbl d
+			    ON d.code = m.dept_code
+				INNER JOIN position_code_tbl p
+			    ON p.code = m.position_code
 			    LEFT JOIN (
 					SELECT
 						c.year,
@@ -1221,13 +1231,16 @@
 						c.id,
 						c.department,
 						c.name,
-						c.standard_in_time,
-						c.standard_out_time,
-						c.in_time,
-						c.out_time,
+						IFNULL( date_format(c.standard_in_time, '%Y-%m-%d %T'), NULL) AS standard_in_time,
+						IFNULL( date_format(c.standard_out_time, '%Y-%m-%d %T'), NULL) AS standard_out_time,
+						IFNULL( date_format(c.in_time, '%Y-%m-%d %T'), NULL) AS in_time,
+                        IFNULL( date_format(c.out_time, '%Y-%m-%d %T'), NULL) AS out_time,
 						c.in_time_type,
+                        IF (c.in_time_type = 1, '정상출근', '자동셋팅') AS in_time_type_name,  
 						c.out_time_type,
+                        IF (c.out_time_type = 1, '정상퇴근', '자동셋팅') AS out_time_type_name,  
 						c.work_type,
+                        wt.name AS work_type_name,
 						c.vacation_code,
 						vc.name AS vacation_name,
 						c.out_office_code,
@@ -1250,6 +1263,8 @@
 						 on vc.code = c.vacation_code
 						 left join overtime_code_tbl ov
 						 on ov.code = c.overtime_code
+                         left join work_type_code_tbl wt
+                         on wt.code = c.work_type
 					WHERE
 						c.year = ?
 						AND c.date BETWEEN ? AND ?

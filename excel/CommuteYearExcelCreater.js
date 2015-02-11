@@ -45,57 +45,57 @@ var CommuteYearExcelCreater = function () {
 
 	function _createExcelTitle(sheet, searchValObj) {
 
-		_setTitleCellStyle(sheet, 1, 1, " 검색기간 ")
+		_setBaseCell(sheet, 1, 1, " 검색기간 ")
 //		for (var i = 1, len = 200; i < len; i++) {
-//			_setTitleCellStyle(sheet, i, 1, i);
+//			_setTitleCell(sheet, i, 1, i);
 //		}
 
 		sheet.merge({col:2, row:1},{col:4, row:1});
-		_setTitleCellStyle(sheet, 2, 1, (searchValObj.startDate + " ~ " + searchValObj.endDate) );
+		_setBaseCell(sheet, 2, 1, (searchValObj.startTime + " ~ " + searchValObj.endTime) );
 
 		sheet.merge({col:COL_DEPT, row:2},{col:COL_DEPT, row:4});
 		sheet.width(COL_DEPT, COL_DEPT_WIDTH);
-		_setTitleCellStyle(sheet, COL_DEPT, 2, " 부서 ");		
+		_setTitleCell(sheet, COL_DEPT, 2, " 부서 ");		
 		
 		sheet.merge({col:COL_POSITION, row:2},{col:COL_POSITION, row:4});
 		sheet.width(COL_POSITION, COL_POSITION_WIDTH);
-		_setTitleCellStyle(sheet, COL_POSITION, 2, " 직급 ");
+		_setTitleCell(sheet, COL_POSITION, 2, " 직급 ");
 
 		sheet.merge({col:COL_NAME, row:2},{col:COL_NAME, row:4});
-		_setTitleCellStyle(sheet, COL_NAME, 2, " 사원명 ");
+		_setTitleCell(sheet, COL_NAME, 2, " 사원명 ");
 		
 		sheet.merge({col:COL_LEAVE_COMPANY, row:2},{col:COL_LEAVE_COMPANY, row:4});
-		_setTitleCellStyle(sheet, COL_LEAVE_COMPANY, 2, " 퇴사일 ");
+		_setTitleCell(sheet, COL_LEAVE_COMPANY, 2, " 퇴사일 ");
 		
 
 		// 지각 현황 
 		sheet.merge({col:COL_LATE_WORKER, row:2},{col:COL_LATE_WORKER_END, row:2});
-		_setTitleCellStyle(sheet, COL_LATE_WORKER, 2, " 지각현황 ");		
+		_setTitleCell(sheet, COL_LATE_WORKER, 2, " 지각현황 ");		
 		for (var i = 0, len = 11; i <= len; i++) {
-			_setTitleMergeStyle(sheet, COL_LATE_WORKER + i, 3, i+1);
+			_setTitleMergeCell(sheet, COL_LATE_WORKER + i, 3, i+1);
 		}
-		_setTitleMergeStyle(sheet, COL_LATE_WORKER_END, 3, ' 합계 ');
+		_setTitleMergeCell(sheet, COL_LATE_WORKER_END, 3, ' 합계 ');
 
 		// 연차 사용 현황 
 		sheet.merge({col:COL_USED_HOLIDAY, row:2},{col:COL_USED_HOLIDAY_END, row:2});
-		_setTitleCellStyle(sheet, COL_USED_HOLIDAY, 2, " 연차 사용 현황 ");
+		_setTitleCell(sheet, COL_USED_HOLIDAY, 2, " 연차 사용 현황 ");
 		for (var i = 0, len = 11; i <= len; i++) {
-			_setTitleMergeStyle(sheet, COL_USED_HOLIDAY + i, 3, i+1);		
+			_setTitleMergeCell(sheet, COL_USED_HOLIDAY + i, 3, i+1);		
 		}
-		_setTitleMergeStyle(sheet, COL_USED_HOLIDAY_END - 1, 3, ' 가용 ');
-		_setTitleMergeStyle(sheet, COL_USED_HOLIDAY_END, 3, ' 잔여 ');
+		_setTitleMergeCell(sheet, COL_USED_HOLIDAY_END - 1, 3, ' 가용 ');
+		_setTitleMergeCell(sheet, COL_USED_HOLIDAY_END, 3, ' 잔여 ');
 
 		//잔업시간(분) 현황 (평일 잔업시간)
 		sheet.merge({col:COL_OVER_TIME_WORKE, row:2},{col:COL_OVER_TIME_WORKE_END, row:2});
-		_setTitleCellStyle(sheet, COL_OVER_TIME_WORKE, 2, " 잔업시간(분) 현황 ( 평일 잔업시간 ) ");
+		_setTitleCell(sheet, COL_OVER_TIME_WORKE, 2, " 잔업시간(분) 현황 ( 평일 잔업시간 ) ");
 		for (var i = 0, len = 11; i <= len; i++) {
-			_setTitleMergeStyle(sheet, COL_OVER_TIME_WORKE + i, 3, i+1);
+			_setTitleMergeCell(sheet, COL_OVER_TIME_WORKE + i, 3, i+1);
 		}
-		_setTitleMergeStyle(sheet, COL_OVER_TIME_WORKE_END, 3, ' 합계 ');
+		_setTitleMergeCell(sheet, COL_OVER_TIME_WORKE_END, 3, ' 합계 ');
 
 		//잔업 수당 타입 현황
 		sheet.merge({col:COL_OVER_TIME_WORK_TYPE, row:2},{col:COL_OVER_TIME_WORK_TYPE_END, row:2});
-		_setTitleCellStyle(sheet, COL_OVER_TIME_WORK_TYPE, 2, " 잔업 수당 타입 현황 ");
+		_setTitleCell(sheet, COL_OVER_TIME_WORK_TYPE, 2, " 잔업 수당 타입 현황 ");
 		for (var i = 0, len = 11; i <= len; i++) {
 			_setTitleABCCellType(sheet, COL_OVER_TIME_WORK_TYPE + (3*i), 3, i+1);
 		}
@@ -103,15 +103,15 @@ var CommuteYearExcelCreater = function () {
 
 		//잔업 수당 금액 현황
 		sheet.merge({col:COL_OVER_TIME_WORK_PAY, row:2},{col:COL_OVER_TIME_WORK_PAY_END, row:2});
-		_setTitleCellStyle(sheet, COL_OVER_TIME_WORK_PAY, 2, " 잔업 수당 금액 현황 ");
+		_setTitleCell(sheet, COL_OVER_TIME_WORK_PAY, 2, " 잔업 수당 금액 현황 ");
 		for (var i = 0, len = 11; i <= len; i++) {
-			_setTitleMergeStyle(sheet, COL_OVER_TIME_WORK_PAY + i, 3, i+1);
+			_setTitleMergeCell(sheet, COL_OVER_TIME_WORK_PAY + i, 3, i+1);
 		}
-		_setTitleMergeStyle(sheet, COL_OVER_TIME_WORK_PAY_END, 3, ' 전체 ');
+		_setTitleMergeCell(sheet, COL_OVER_TIME_WORK_PAY_END, 3, ' 전체 ');
 
 		//휴일 근무 타입 현황
 		sheet.merge({col:COL_HOLIDAY_WORK_TYPE, row:2},{col:COL_HOLIDAY_WORK_TYPE_END,row:2});
-		_setTitleCellStyle(sheet, COL_HOLIDAY_WORK_TYPE, 2, " 휴일 근무 타입 현황 ");
+		_setTitleCell(sheet, COL_HOLIDAY_WORK_TYPE, 2, " 휴일 근무 타입 현황 ");
 		for (var i = 0, len = 11; i <= len; i++) {
 			_setTitleABCCellType(sheet, COL_HOLIDAY_WORK_TYPE + (3*i), 3, i+1);
 		}
@@ -120,11 +120,11 @@ var CommuteYearExcelCreater = function () {
 
 		//휴일근무 수당 금액 현황
 		sheet.merge({col:COL_HOLIDAY_WORK_PAY, row:2},{col:COL_HOLIDAY_WORK_PAY_END, row:2});
-		_setTitleCellStyle(sheet, COL_HOLIDAY_WORK_PAY, 2, " 휴일근무 수당 금액 현황 ");
+		_setTitleCell(sheet, COL_HOLIDAY_WORK_PAY, 2, " 휴일근무 수당 금액 현황 ");
 		for (var i = 0, len = 11; i <= len; i++) {
-			_setTitleMergeStyle(sheet, COL_HOLIDAY_WORK_PAY + i, 3, i+1);
+			_setTitleMergeCell(sheet, COL_HOLIDAY_WORK_PAY + i, 3, i+1);
 		}
-		_setTitleMergeStyle(sheet, COL_HOLIDAY_WORK_PAY_END, 3, ' 전체 ');
+		_setTitleMergeCell(sheet, COL_HOLIDAY_WORK_PAY_END, 3, ' 전체 ');
 		sheet.border(COL_HOLIDAY_WORK_PAY_END, 3, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 		
 		_setTieleBorder(sheet);		
@@ -359,13 +359,20 @@ var CommuteYearExcelCreater = function () {
 		sheet.border(startCol, startRow, {left:'thin',top:'thin',right:'medium',bottom:'thin'});
 	}
 
-	function _setTitleCellStyle(sheet, col, row, value) {
+	function _setBaseCell(sheet, col, row, value) {
+		sheet.set(col, row, value);
+		sheet.valign(col, row, 'center');
+		sheet.align(col, row, 'center');	
+	}
+		
+	
+	function _setTitleCell(sheet, col, row, value) {
 		sheet.set(col, row, value);
 		sheet.valign(col, row, 'center');
 		sheet.align(col, row, 'center');	
 	}
 
-	function _setTitleMergeStyle(sheet, col, row, value) {
+	function _setTitleMergeCell(sheet, col, row, value) {
 		sheet.set(col, row, value);
 		sheet.merge({col:col,row:row},{col:col,row:row+1});
 		sheet.valign(col, row, 'center');
@@ -385,9 +392,9 @@ var CommuteYearExcelCreater = function () {
 		sheet.valign(col, row, 'center');
 		sheet.align(col, row, 'center');
 		
-		_setTitleCellStyle(sheet, col, 4, 'A');
-		_setTitleCellStyle(sheet, col + 1, 4, 'B');
-		_setTitleCellStyle(sheet, col + 2, 4, 'C');
+		_setTitleCell(sheet, col, 4, 'A');
+		_setTitleCell(sheet, col + 1, 4, 'B');
+		_setTitleCell(sheet, col + 2, 4, 'C');
 	}
 
 	function _setTieleBorder(sheet) {
@@ -400,7 +407,7 @@ var CommuteYearExcelCreater = function () {
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
-			var fileName = "근태자료_"+ searchValObj.startDate + "_" + searchValObj.endDate + "_" +new Date().getTime() + ".xlsx";
+			var fileName = "근태자료_"+ searchValObj.startTime + "_" + searchValObj.endTime + "_" +new Date().getTime() + ".xlsx";
 			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
 			
 			// 파일 폴더 체크 

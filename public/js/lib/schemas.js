@@ -154,6 +154,15 @@ define([
             group:undefined,
             firstBlank:false //공백 로우
         },
+        checkBox:{
+            type:"checkBox",
+            name:undefined,
+            label:undefined,
+            checkLabel:undefined,
+            value:undefined,
+            disabled:false,
+            group:undefined
+        },
         //SERVER response
         response:{
             status:true,// 정상:true, 비정상:flase
