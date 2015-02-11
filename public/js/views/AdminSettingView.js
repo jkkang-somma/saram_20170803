@@ -8,6 +8,8 @@ define([
 	'dialog',
 	'models/MessageModel',
 	'models/sm/SessionModel',
+	'i18n!nls/common',
+	'lib/component/form',
 	'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/inputForm/combobox.html',
@@ -16,6 +18,7 @@ define([
 ], function($, _, Backbone, Util, Moment,
 	ComboBox, Dialog,
 	MessageModel, SessionModel,
+	i18nCommon, Form,
 	TextBoxHTML, TextAreaHTML, ComboboxHTML, RowButtonHTML, searchFormTemplate
 ) {
 	var AdminSettingView = Backbone.View.extend({
@@ -52,51 +55,69 @@ define([
     	
 		render : function(el) {
 			var dfd= new $.Deferred();
-			var that = this;
          	this.el = el;
          	
-         	var searchForm = _.template( searchFormTemplate )();
-         	el.append(searchForm);
-         	
-//         	var startYear = 2000;
-//			var endYear= new Date().getFullYear();
-//			
-//			for (; startYear <= endYear; endYear--) {
-//				el.find("#selectYear").append($("<option>"+endYear+"</option>"));
-//			}
-//         	ComboBox.createCombo(el.find("#selectYear"));
-         	
-         	
-    	    var startDate = new Date(new Date().getFullYear(), 0, 1);
-    	    var endDate = new Date(new Date().getFullYear(), 11, 31);
-    	    
-    	    $(this.el).find("#startDate").datetimepicker({
-            	pickTime: false,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(startDate).format("YYYY-MM-DD")
-            });
-            
-            $(this.el).find("#endDate").datetimepicker({
-            	pickTime: false,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(endDate).format("YYYY-MM-DD")
-            });
-            
-         	
-         	
-         	
-         	
+         	var _view = this;
+       
          	this.messageModel.fetch({
          		success : function(){
-         			el.find("#msgTextArea").val(that.messageModel.get("text"));
-         			if(that.messageModel.get("visible") == 1){
-         				el.find("#chkMsgVisible").prop("checked", true);		
-         			};
-					dfd.resolve(that);		
+         			  	var _form = new Form({
+				        el:_view.el,
+				        form:undefined,
+				        group:[{
+			                name:"reportGroup",
+			                label:"통계 자료 생성",
+			                initOpen:true
+			            },{
+			                name:"memoGroup",
+			                label:"공지 사항 설정",
+			                initOpen:true
+			            }],
+				        
+				        childs:[{
+				        	type:"datetime",
+			                name:"startTime",
+			                label:"시작일",
+			                value:Moment().startOf('year').format("YYYY-MM-DD"),
+			                format:"YYYY-MM-DD",
+			                group:"reportGroup"
+			        	}, {
+			                type:"datetime",
+			                name:"endTime",
+			                label:"종료일",
+			                value:Moment().startOf('year').format("YYYY-MM-DD"),
+			                format:"YYYY-MM-DD",
+			                group:"reportGroup"
+			        	}, {
+			        		type:"combo",
+			                name:"overtime",
+			                label:"자료 선택",
+			                collection:[
+			                	{key:1,value:"Commute Report"},
+			                	{key:0,value:"Raw Data Report"}
+			                	],
+			                group:"reportGroup"
+			        	}, {
+			        		type:"text",
+			                name:"memo",
+			                label: "공지사항",
+			                value: _view.messageModel.get("text"),
+			                group:"memoGroup"
+				        }]
+				    });
+		         	
+		         	_form.render().done(function(result){
+	        	        _view.form=_form;
+	        	        dfd.resolve(_view);
+	        	    }).fail(function(){
+	        	        dfd.reject();
+	        	    });
+		         	
+         			// el.find("#msgTextArea").val(that.messageModel.get("text"));
+     //    			if(that.messageModel.get("visible") == 1){
+     //    				el.find("#chkMsgVisible").prop("checked", true);		
+     //    			};
+					// dfd.resolve(that);		
          		}
          	});
          	

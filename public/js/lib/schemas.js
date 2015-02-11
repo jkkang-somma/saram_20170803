@@ -91,6 +91,13 @@ define([
             disabled:false,
             group:undefined
         },
+        checkbox:{
+            type:"checkbox",
+            name:undefined,
+            label:undefined,
+            checked:false,
+            group:undefined
+        },
         text:{
             type:"text",
             name:undefined,
