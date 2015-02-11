@@ -53,4 +53,12 @@ ReportDao.prototype.selectHolidayWorkPayReport =  function (selObj) {
     return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
 }
 
+
+// commute_result_tbl 테이블 	
+ReportDao.prototype.selectReportCommuteResultTbl =  function (selObj) {
+    var queryStr = db.getQuery('report', 'selectReportCommuteResultTbl');
+    return db.queryV2(queryStr, [selObj.year, selObj.startDate, selObj.endDate]);
+}
+
+
 module.exports = new ReportDao();
