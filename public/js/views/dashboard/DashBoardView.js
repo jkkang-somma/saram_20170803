@@ -191,11 +191,12 @@ define([
     	        timeout(_data[name], name);
     	        
     	    }
-	        timeout(getMinTimeString(_data.total_over_time)+"("+_data.over_over_time+")", "total_over_time");
+    	    
+	       // timeout(getMinTimeString(_data.total_over_time)+"("+_data.over_over_time+")", "total_over_time");
 	        
-	        timeout(getMinTimeString(_data.total_holiday_over_time)+"("+_data.over_holiday_over_time+")", "total_holiday_over_time");
+	       // timeout(getMinTimeString(_data.total_holiday_over_time)+"("+_data.over_holiday_over_time+")", "total_holiday_over_time");
 	        
-	        timeout(getMinTimeString(_data.total_early_time), "total_early_time");
+	       // timeout(getMinTimeString(_data.total_early_time), "total_early_time");
     	    
     	    //button monthpicker 
             new Monthpicker({
