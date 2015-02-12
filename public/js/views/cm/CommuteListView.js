@@ -163,8 +163,10 @@ define([
 	        						}
 	        					}
 	        				);
-	        				yesterday.set({idx : yesterdayRow.data().idx});
-	        				yesterdayRow.data(yesterday.attributes);
+	        				if(!_.isUndefined(yesterdayRow.data().idx)){
+	        					yesterday.set({idx : yesterdayRow.data().idx});
+		        				yesterdayRow.data(yesterday.attributes);
+	        				}
     					}
 						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
@@ -193,7 +195,7 @@ define([
      	                   	{ data : "date", 			"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.DATE },
      	                   	{ data : "department", 		"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.DEPARTMENT },
      	                   	{ data : "name", 			"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.NAME },
-     	                   	{ data : "work_type", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.WORKT_TYPE,
+     	                   	{ data : "work_type", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.WORK_TYPE,
      	                   		render : function(data, type, full, meta){
      	                   			return _getBrString(Code.getCodeName(Code.WORKTYPE, data));
      	                   		}

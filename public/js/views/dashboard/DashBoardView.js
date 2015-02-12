@@ -14,6 +14,18 @@ define([
   'text!templates/default/head.html',
   ], function($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, LayoutHTML, DashboardHTML, HeadHTML){
     var LOG=log.getLogger('DashBoardView');
+    function getMinTimeString (data){
+        var hour = Math.floor(data / 60);
+        var min = Math.floor(data % 60);
+        var result ="";
+        if(hour > 0){
+            result += hour + "시간 ";
+        }
+        result += min + "분";
+        
+        return result;
+    }
+	        
     var _defaultData={
         id:"",
         name:"",
@@ -100,6 +112,9 @@ define([
     	    var layout=$(LayoutHTML);
     	    var _dashboardTemp=_.template(DashboardHTML);
     	    var _configEndDateArr=_params.end.split("-");
+    	    if(String(_data.total_working_day).length <= 1){
+    	        _data.total_working_day = "0" + _data.total_working_day;
+    	    }
             var defaultData={
                 top_date:_data.total_working_day==0?"자료없음":"("+_params.start + " ~ "+_configEndDateArr[0] + "-"+_configEndDateArr[1] + "-"+ _data.total_working_day +")"
             };
@@ -127,10 +142,17 @@ define([
     	    var getUnit=function(key){
     	        var result;
     	        switch (key){
-    	            case "TOTAL_OVERTIEM_PAY":
+    	           case "TOTAL_OVERTIEM_PAY":
     	                result=i18Common.UNIT.WON;
     	                break;    
-    	            default:
+    	           case "TOTAL_OVER_TIME":
+    	           case "TOTAL_HOLIDAY_OVER_TIME":
+    	           case "OVER_OVER_TIME":
+    	           case "OVER_HOLIDAY_OVER_TIME":
+    	           case "TOTAL_EARLY_TIME":
+    	                result ="";
+    	                break;
+    	           default:
     	                if (key =="ID" || key == "NAME"){
     	                    result="";
     	                } else {
@@ -138,27 +160,46 @@ define([
     	                }
     	        }
     	        return result;
-    	    }
+    	    };
+    	    
     	    var _validField=["NIGHT_WORKING_A","NIGHT_WORKING_B","NIGHT_WORKING_C","HOLIDAY_WORKING_A","HOLIDAY_WORKING_B","HOLIDAY_WORKING_C"];
+    	    var _disableField=["total_working_day", "total_over_time", "total_holiday_over_time", "over_over_time", "over_holiday_over_time","total_early_time"];
     	    var timeout=function(data, name){
+    	        
+    	        _delay=_delay+200;
+    	        
     	        setTimeout(function(){
     	            _action=!_action;
     	            var rowTmp=_.template(_defaultRowHTML);
-        	        var row=rowTmp({value:data[name]+getUnit(name.toUpperCase()), lavel:i18Common.DASHBOARD.WORKING_SUMMARY[name.toUpperCase()], action:_action?"fadeInLeftBig":"fadeInUp"});
+        	        var row=rowTmp(
+        	            {
+        	                value:data+getUnit(name.toUpperCase()),
+        	                lavel:i18Common.DASHBOARD.WORKING_SUMMARY[name.toUpperCase()],
+        	                action:_action?"fadeInLeftBig":"fadeInUp"
+        	            }
+        	        );
+        	        
         	        dashboard.append(row);
     	        }, _delay);
-    	    }
+    	    };
+    	    
     	    for (var name in _data){
-    	        if ((_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name]==0) || name=="total_working_day"){
+    	        if ( (_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name]==0) || _.indexOf(_disableField,name) > -1){
     	            continue;
     	        }
     	        
-    	        timeout(_data, name);
-    	        _delay=_delay+200;
+    	        timeout(_data[name], name);
+    	        
     	    }
     	    
+	       // timeout(getMinTimeString(_data.total_over_time)+"("+_data.over_over_time+")", "total_over_time");
+	        
+	       // timeout(getMinTimeString(_data.total_holiday_over_time)+"("+_data.over_holiday_over_time+")", "total_holiday_over_time");
+	        
+	       // timeout(getMinTimeString(_data.total_early_time), "total_early_time");
+    	    
     	    //button monthpicker 
-            var monthpicker=new Monthpicker({
+            new Monthpicker({
                 el:".btn-group", 
                 callBack:function(value){
                     var _startDate=Moment(value, "YYYY-MM").startOf('month').format("YYYY-MM-DD");

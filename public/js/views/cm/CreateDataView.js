@@ -85,7 +85,7 @@ define([
                             return Code.getCodeName(Code.OVERTIME, data);
                         }
                     },
-                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.VACATION, "data": "vacation_code",
+                    {"title": i18nCommon.CREATE_COMMUTE_RESULT.GRID_COL_NAME.VACATION_CODE, "data": "vacation_code",
                         "render": function (data, type, rowData, meta) {
                             return Code.getCodeName(Code.OFFICE, data);
                         }

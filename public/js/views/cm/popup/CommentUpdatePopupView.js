@@ -155,13 +155,13 @@ define([
 			commuteCollection.fetch({ 
      			data: {
      				id : this.selectData.id,
-     				startDate : this.selectData.date,	
+     				startDate : Moment(this.selectData.date).add(-1, 'days').format("YYYY-MM-DD"),	
      				endDate : Moment(this.selectData.date).add(1, 'days').format("YYYY-MM-DD"),
      			},
      			success : function(resultCollection){
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
-						data,
+						{ changeInTime : data.changeInTime, changeOutTime : data.changeOutTime},
 						data.changeHistoryCollection
 					).done(function(resultCommuteCollection){ // commute_result 수정 성공!
 						dfd.resolve(resultCommuteCollection);		

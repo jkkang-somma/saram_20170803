@@ -15,6 +15,10 @@ define([
         commuteYearReportUrl: function() {
           	this.url = this.urlRoot + "/commuteYearReport";
         	return this;
+        },
+        commuteResultTblUrl: function() {
+          	this.url = this.urlRoot + "/commuteResultTblReport";
+        	return this;
         }
     });
     

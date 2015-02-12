@@ -29,7 +29,8 @@ define([
 		    }else{
 		        this.date = Moment(data.date, ResultTimeFactory.DATEFORMAT).add(1,"days").format(ResultTimeFactory.DATEFORMAT);
 		    }
-			
+		    
+		  
 		},
 		render : function(el) {
 			var dfd= new $.Deferred();
@@ -152,28 +153,21 @@ define([
                             // 휴일 판단
                             resultTimeFactory.setHoliday();
                             
-                            // 휴가/외근/출장 판단
-                            var todayOutOffice = userOutOfficeCollection.where({date: todayStr});
-                            resultTimeFactory.setOutOffice(todayOutOffice);
+                            // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
+                            var rawData = userRawDataCollection.filterDate(todayStr);
+                            resultTimeFactory.checkTime(rawData);   
                             
+                            // 출근 기준시간 판단
+                            var yesterdayOutTime = _.isNull(yesterdayAttribute.out_time)? null :Moment(yesterdayAttribute.out_time, resultTimeFactory.DATETIMEFORMAT);
+                            resultTimeFactory.setStandardTime(yesterdayOutTime);
                             
+                            // 휴일근무 판단
                             var todayInOffice = userInOfficeCollection.where({date:todayStr});
                             resultTimeFactory.setInOffice(todayInOffice);
                             
-                            
-                            // 당일 사용자의 출입기록을 보고 출근 / 퇴근/  가장 빠른,늦은시간 출입 기록을 구한다
-                            var rawData = userRawDataCollection.filterDate(todayStr);
-                            _.each(rawData, function(rawDataModel){
-                                var destTime = Moment(rawDataModel.get("char_date"));
-                                var type  = rawDataModel.get("type");
-                                resultTimeFactory.checkTime(destTime, type);   
-                            });
-                            
-                            
-                            // 출근 기준시간 판단
-                            var yesterdayOutTime = _.isNull(yesterdayAttribute.out_time)? null :Moment(yesterdayAttribute.out_time);
-                            resultTimeFactory.setStandardTime(yesterdayOutTime);
-                            
+                            // 휴가/외근/출장 판단
+                            var todayOutOffice = userOutOfficeCollection.where({date: todayStr});
+                            resultTimeFactory.setOutOffice(todayOutOffice);
                             
                             // 결과 저장
                             var result = resultTimeFactory.getResult();

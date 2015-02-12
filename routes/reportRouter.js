@@ -9,9 +9,9 @@ router.route('/commuteYearReport')
 .get(function(req, res, next){
 	
 	var searchValObj = {
-			year : req.query.startDate.substring(0, 4),
-			startDate : req.query.startDate,
-			endDate : req.query.endDate,
+			year : req.query.startTime.substring(0, 4),
+			startTime : req.query.startTime,
+			endTime : req.query.endTime,
 			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
 	};
 			
@@ -31,8 +31,36 @@ router.route('/commuteYearReport')
 		});
 	}).catch(function(err) {
 		next(err);
-	});
+	});	
+});
+
+router.route('/commuteResultTblReport')
+.get(function(req, res, next){
 	
+	var searchValObj = {
+			year : req.query.startTime.substring(0, 4),
+			startTime : req.query.startTime,
+			endTime : req.query.endTime,
+			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
+	};
+			
+	Report.gettCommuteResultTblReport(searchValObj).then(function(filePullPath) {
+
+		res.download(filePullPath, function(err) {
+			if (err) {
+				console.log("excel download fail");
+				next(err);
+			} else {				
+				fs.unlink(filePullPath, function (err) {
+				  if (err)  throw next(err);
+				  
+				});
+				
+			}
+		});
+	}).catch(function(err) {
+		next(err);
+	});	
 });
 
 module.exports = router;

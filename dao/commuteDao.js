@@ -36,6 +36,7 @@ CommuteDao.prototype.insertCommute = function(connection, data){
             "vacation_code", "standard_in_time", "standard_out_time", "work_type",
             "year",	"in_time_type", "out_time_type", "out_office_start_time",
             "out_office_end_time", "in_time_change", "out_time_change",
+            "early_time", "not_pay_over_time"
         ]
     ); 
 }
@@ -50,7 +51,8 @@ CommuteDao.prototype.updateCommute_t = function(connection, data){
             "in_time", "late_time", "out_office_code", "out_time","over_time", 
             "overtime_code", "vacation_code", "standard_in_time","standard_out_time", 
             "work_type", "in_time_type", "out_time_type", "out_office_start_time",
-            "out_office_end_time", "in_time_change", "out_time_change", "overtime_code_change", "id", "date"
+            "out_office_end_time", "in_time_change", "out_time_change", "overtime_code_change",
+            "early_time", "not_pay_over_time", "id", "date"
         ]
     ); 
 }

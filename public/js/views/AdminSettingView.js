@@ -8,6 +8,8 @@ define([
 	'dialog',
 	'models/MessageModel',
 	'models/sm/SessionModel',
+	'i18n!nls/common',
+	'lib/component/form',
 	'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/inputForm/combobox.html',
@@ -16,6 +18,7 @@ define([
 ], function($, _, Backbone, Util, Moment,
 	ComboBox, Dialog,
 	MessageModel, SessionModel,
+	i18nCommon, Form,
 	TextBoxHTML, TextAreaHTML, ComboboxHTML, RowButtonHTML, searchFormTemplate
 ) {
 	var AdminSettingView = Backbone.View.extend({
@@ -26,11 +29,24 @@ define([
 		afterRender: function(){
 			var that = this;
 			this.el.find("#btnCreateExcel").click(function(){
-				if (that.getSearchForm() == null) {
+				
+				var _formObj = that.getSearchForm(); 				
+				if ( _formObj == null) {
 					return;
 				}
 				
-				var url =   "/report/commuteYearReport?startDate=" + that.getSearchForm().startDate + "&endDate="+ that.getSearchForm().endDate +"&isInLeaveWorker=" + that.getSearchForm().isInLeaveWorker;
+				var url = "";
+				if (_formObj.reportType == "commuteYear") {
+					url = "/report/commuteYearReport";
+				} else if (_formObj.reportType == "commuteResult"){
+					url = "/report/commuteResultTblReport";
+				} else {
+					new Error("Error: Invalid report type.");
+				}
+				
+				url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker;
+				
+				
 	     		$.fileDownload(url, {
 	     		    successCallback: function (url) {
 	     		    },
@@ -52,67 +68,109 @@ define([
     	
 		render : function(el) {
 			var dfd= new $.Deferred();
-			var that = this;
          	this.el = el;
          	
-         	var searchForm = _.template( searchFormTemplate )();
-         	el.append(searchForm);
-         	
-//         	var startYear = 2000;
-//			var endYear= new Date().getFullYear();
-//			
-//			for (; startYear <= endYear; endYear--) {
-//				el.find("#selectYear").append($("<option>"+endYear+"</option>"));
-//			}
-//         	ComboBox.createCombo(el.find("#selectYear"));
-         	
-         	
-    	    var startDate = new Date(new Date().getFullYear(), 0, 1);
-    	    var endDate = new Date(new Date().getFullYear(), 11, 31);
-    	    
-    	    $(this.el).find("#startDate").datetimepicker({
-            	pickTime: false,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(startDate).format("YYYY-MM-DD")
-            });
-            
-            $(this.el).find("#endDate").datetimepicker({
-            	pickTime: false,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(endDate).format("YYYY-MM-DD")
-            });
-            
-         	
-         	
-         	
-         	
+         	var _view = this;
+       
          	this.messageModel.fetch({
          		success : function(){
-         			el.find("#msgTextArea").val(that.messageModel.get("text"));
-         			if(that.messageModel.get("visible") == 1){
-         				el.find("#chkMsgVisible").prop("checked", true);		
-         			};
-					dfd.resolve(that);		
+         			  	var _form = new Form({
+				        el:_view.el,
+				        form:undefined,
+				        group:[{
+			                name:"reportGroup",
+			                label:"통계 자료 생성",
+			                initOpen:true
+			            },{
+			                name:"memoGroup",
+			                label:"공지 사항 설정",
+			                initOpen:true
+			            }],
+				        
+				        childs:[{
+				        	type:"datetime",
+			                name:"startTime",
+			                label:"시작일",
+			                value:Moment().startOf('year').format("YYYY-MM-DD"),
+			                format:"YYYY-MM-DD",
+			                group:"reportGroup"
+			        	}, {
+			                type:"datetime",
+			                name:"endTime",
+			                label:"종료일",
+			                value:Moment().endOf('year').format("YYYY-MM-DD"),
+			                format:"YYYY-MM-DD",
+			                group:"reportGroup"
+			        	}, {
+			        		type:"combo",
+			                name:"reportType",
+			                label:"자료 선택",
+			                collection:[
+			                            {key:"commuteYear",value:"근태 보고서"},
+			                            {key:"commuteResult",value:"근태 DB 자료"}
+			                	],
+			                group:"reportGroup"
+			        	}, {
+			        		type:"checkBox",
+			                name:"chkleaveWorker",
+			                label:"&nbsp",
+			                checkLabel: '퇴사자 포함',
+			                value: false,
+			                group:"reportGroup"
+			        	}, {
+			        		type:"text",
+			                name:"msgTextArea",
+			                label: "공지사항",
+			                value: _view.messageModel.get("text"),
+			                group:"memoGroup"
+				        }, {
+			        		type:"checkBox",
+			                name:"chkMsgVisible",
+			                label:"&nbsp",
+			                checkLabel: '공지 표시',
+			                value:  (_view.messageModel.get("visible") == 1)?true:false ,
+			                group:"memoGroup"
+				        }]
+				    });
+
+		         	_form.render().done(function(result){
+	        	        _view.form=_form;
+
+	        	        var tmpl = '<button id="btnCreateExcel" class="btn btn-success btn-block " type="button">Excel 생성</button>';
+	        	        _view.el.find("#form_0_reportGroup_0").append(tmpl);
+	        	        
+	        	        var tmpl = '<button id="btnCreateMsg" class="btn btn-success btn-block " type="button">공지 설정</button>';
+	        	        _view.el.find("#form_0_memoGroup_1").append(tmpl);	        	        
+	        	        
+	        	        dfd.resolve(_view);
+	        	    }).fail(function(){
+	        	        dfd.reject();
+	        	    });
+		         	
+         			// el.find("#msgTextArea").val(that.messageModel.get("text"));
+     //    			if(that.messageModel.get("visible") == 1){
+     //    				el.find("#chkMsgVisible").prop("checked", true);		
+     //    			};
+					// dfd.resolve(that);		
          		}
          	});
          	
             return dfd.promise();
 		},
      	getSearchForm: function() {	// 검색 조건
+
+     		var _view=this,_form=this.form,_data=_form.getData();
      		var selDataObj = {
- 				startDate: this.el.find('input[name="startDate"]').val(),
- 				endDate: this.el.find('input[name="endDate"]').val(),
- 				isInLeaveWorker: ( this.el.find("#chkleaveWorker").is(":checked")? true : false )
+     			reportType: _data.reportType,
+ 				startTime: _data.startTime,
+ 				endTime: _data.endTime,
+ 				isInLeaveWorker: _data.chkleaveWorker
  			};
 
-     		if (selDataObj.startDate == "" || selDataObj.endDate == "" ) {
+     		if (selDataObj.startTime == "" || selDataObj.endTime == "" ) {
      			Dialog.warning("날짜를 입력하시기 바랍니다.");
      			return null;
-     		}else if (selDataObj.startDate.substring(0, 4) != selDataObj.endDate.substring(0, 4) ) {
+     		}else if (selDataObj.startTime.substring(0, 4) != selDataObj.endTime.substring(0, 4) ) {
      			Dialog.warning("동일한 해(년) 기간을 선택해주시기 바랍니다.");
      			return null;     			
      		}
@@ -121,9 +179,10 @@ define([
      	},
      	
      	getMessageForm: function() {
+     		var _view=this,_form=this.form,_data=_form.getData();
      		return {
- 				text: this.el.find("#msgTextArea").val(),
- 				visible: ( this.el.find("#chkMsgVisible").is(":checked")? true : false )
+ 				text: _data.msgTextArea,
+ 				visible: _data.chkMsgVisible
  			};
      	}
 	});

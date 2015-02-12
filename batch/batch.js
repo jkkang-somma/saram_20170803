@@ -25,8 +25,8 @@ DBBatchJobExecuter.prototype.doTableEntries = function(theResults){
                 var tableName = destTableName;
                 db.queryV2('SHOW CREATE TABLE ' + tableName).then(
                     function(createTableQryResult){
-                        that.dropQuery += "DROP TABLE IF EXISTS " + tableName + "\n\n";
-                        that.createQuery += createTableQryResult[0]["Create Table"] + "\n\n";
+                        that.dropQuery += "DROP TABLE IF EXISTS " + tableName + ";\n\n";
+                        that.createQuery += createTableQryResult[0]["Create Table"] + ";\n\n";
                         resolve();
                     }
                 );    
