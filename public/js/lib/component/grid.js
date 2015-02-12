@@ -26,8 +26,15 @@ define([
     var Grid = Backbone.View.extend({
     	initialize:function(options){
     	    var grid=this;
-    	    $(window).on("resize", function(){
-    	        grid.updateCSS(grid);     
+    	    
+    	    
+    	    var lastWidth = $(window).width();
+    	    $(window).on("resize", function(e){
+    	        if($(window).width()!=lastWidth){
+    	            LOG.debug(lastWidth);
+    	            LOG.debug($(window).width());
+    	            grid.updateCSS(grid);     
+                }
     	    });
     	    
             this.options=options;
@@ -79,7 +86,7 @@ define([
                         column.visible(_.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible);
                     }
                 }
-            } else if ( width  < 768) {
+            } else if ( width  < 767) {
                 
                 // API.column(index).visible(true);
                  for (var index in _columns){

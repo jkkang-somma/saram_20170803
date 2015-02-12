@@ -20,4 +20,18 @@ CodeDao.prototype.selectPositionList =  function () {
     var queryStr = db.getQuery('code', 'selectPositionList');
     return db.queryV2(queryStr);
 };
+CodeDao.prototype.getOfficeCode =  function () {
+    var queryStr = util.format(db.getQuery('code', 'getOfficeCode'));
+    return db.queryV2(queryStr);
+};
+
+CodeDao.prototype.getOvertimeCode =  function () {
+    var queryStr = util.format(db.getQuery('code', 'getOvertimeCode'));
+    return db.queryV2(queryStr);
+};
+
+CodeDao.prototype.getWorktypeCode =  function () {
+    var queryStr = util.format(db.getQuery('code', 'getWorktypeCode'));
+    return db.queryV2(queryStr);
+};
 module.exports = new CodeDao();
