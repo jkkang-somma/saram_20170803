@@ -10,6 +10,7 @@ var CommuteYearExcelCreater = function () {
 	    	 		{ col: "name" , 			name: " 이름 ", 			width: 13},
 	    	 		{ col: "position_name", 	name:   " 직급 ", 		width: 13},
 	    	 		{ col: "leave_company", 	name:   " 퇴사일  ", 		width: 13},
+	    	 		{ col: "date",				name: " 일자 ", 			width: 19},
 	    	 		{ col: "standard_in_time", 	name: " 출근 기준시각 ", 		width: 19},
 	    	 		{ col: "standard_out_time", name: " 퇴근 기준 시각 ", 	width: 19},
 	    	 		{ col: "in_time", 			name: " 출근 시각 ", 		width: 19},
