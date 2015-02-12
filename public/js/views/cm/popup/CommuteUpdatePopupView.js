@@ -117,6 +117,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 		updateCommute: function() {
 			var dfd= new $.Deferred();
      		var data = this.getInsertData(); 
+     		var changeData = { };
      		if (data === null) {
      			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_CHANGED);
      			dfd.reject();
@@ -126,12 +127,15 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 					switch(model.get("change_column")){
 						case "in_time":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.IN_TIME_MSG;
+							changeData.changeInTime = data.in_time;
 							break;
 						case "out_time":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OUT_TIME_MSG;
+							changeData.changeOutTime = data.out_time;
 							break;
 						case "overtime_code":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OVER_TIME_MSG;
+							changeData.changeOvertimeCode = data.overtime_code;
 							break;
 					}
 					message = message + "[ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
@@ -154,7 +158,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			     			},success : function(resultCollection){
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
 			     					resultCollection,
-			     					{ changeInTime : data.in_time, changeOutTime : data.out_time, changeOvertimeCode : _.isNull(data.overtime_code) ? "" : data.overtime_code},
+			     					changeData,
 			     					data.changeHistoryCollection
 			     				).done(function(result){ // commute_result, changeHistroy 수정 성공!
 				     				actionDfd.resolve(result);		

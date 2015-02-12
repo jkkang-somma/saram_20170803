@@ -360,7 +360,7 @@ define([
                         var model = todayOutOffice[i];
                         var code = model.get("office_code");
                         var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
-                        var OUTOFFICE_CODES = ["W01","W02"];
+                        var OUTOFFICE_CODES = ["W01","W02", "W03"];
     
                         if(_.indexOf(VACATION_CODES, code) >= 0){
                             this.vacationCode = code;
@@ -388,13 +388,13 @@ define([
                                     }
                                     break;
                                 case "W02": // 출장
+                                case "W03": // 장기외근
                                     this.checkLate = false;
                                     this.checkEarly = false;
                                     break;
                             }
                         }
                     }
-                    
                 }
                 
                 // 휴가 / flaxible 에 의한 Std In/Out 조정
@@ -602,12 +602,12 @@ define([
                 outOfficeCollection.fetch({data : selectedDate}),
                 inOfficeCollection.fetch({data : selectedDate})
             ).done(function(){
-                if(!_.isNull(inData.changeInTime)){
+                if(!_.isUndefined(inData.changeInTime)){
      				that.inTime = Moment(inData.changeInTime);
      				that.inTimeChange += 1; 
      			}
      			
-     			if(!_.isNull(inData.changeOutTime)){
+     			if(!_.isUndefined(inData.changeOutTime)){
      				that.outTime = Moment(inData.changeOutTime);
      				that.outTimeChange += 1;
      			}
@@ -630,7 +630,7 @@ define([
                 
      			var currentResult = that.getResult();
      			
-     			if(!_.isNull(inData.changeOvertimeCode) && !_.isUndefined(inData.changeOvertimeCode)){
+     			if(!_.isUndefined(inData.changeOvertimeCode)){
      			    currentResult.overtime_code = inData.changeOvertimeCode == "" ? null : inData.changeOvertimeCode;
      				currentResult.overtime_code_change += 1;
      			}
