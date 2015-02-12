@@ -107,7 +107,7 @@ define([
 			                label:"자료 선택",
 			                collection:[
 			                            {key:"commuteYear",value:"근태 보고서"},
-			                            {key:"commuteResult",value:"Commute Result 테이블 보고서"}
+			                            {key:"commuteResult",value:"근태 DB 자료"}
 			                	],
 			                group:"reportGroup"
 			        	}, {

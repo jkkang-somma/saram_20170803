@@ -631,7 +631,7 @@ define([
      			var currentResult = that.getResult();
      			
      			if(!_.isNull(inData.changeOvertimeCode) && !_.isUndefined(inData.changeOvertimeCode)){
-     			    currentResult.overtime_code = inData.changeOvertimeCode;
+     			    currentResult.overtime_code = inData.changeOvertimeCode == "" ? null : inData.changeOvertimeCode;
      				currentResult.overtime_code_change += 1;
      			}
      			

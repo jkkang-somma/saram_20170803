@@ -154,7 +154,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			     			},success : function(resultCollection){
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
 			     					resultCollection,
-			     					{ changeInTime : data.in_time, changeOutTime : data.out_time, changeOvertimeCode : data.overtime_code},
+			     					{ changeInTime : data.in_time, changeOutTime : data.out_time, changeOvertimeCode : _.isNull(data.overtime_code) ? "" : data.overtime_code},
 			     					data.changeHistoryCollection
 			     				).done(function(result){ // commute_result, changeHistroy 수정 성공!
 				     				actionDfd.resolve(result);		
@@ -187,7 +187,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
      			id : this.selectData.id,
      			in_time : data.inTime,
      			out_time : data.outTime,
-     			overtime_code : data.overtime=="" ? null : data.overtime
+     			overtime_code : data.overtime
      		};
 			
      		var userId = SessionModel.get("user").id;
