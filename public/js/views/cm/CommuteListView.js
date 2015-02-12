@@ -163,8 +163,10 @@ define([
 	        						}
 	        					}
 	        				);
-	        				yesterday.set({idx : yesterdayRow.data().idx});
-	        				yesterdayRow.data(yesterday.attributes);
+	        				if(!_.isUndefined(yesterdayRow.data().idx)){
+	        					yesterday.set({idx : yesterdayRow.data().idx});
+		        				yesterdayRow.data(yesterday.attributes);
+	        				}
     					}
 						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
