@@ -295,15 +295,15 @@ define([
             return false;
     	},
     	close:function(){// 창 다 닫기
-            this.formSection.removeClass("bounceIn");
-            this.passwordSection.removeClass("fadeInRightBig");
-            this.loginPasswordSection.removeClass("fadeInRightBig");
-            this.findPasswordSection.removeClass("fadeUpRightBig");
+           // this.formSection.removeClass("bounceIn");
+           // this.passwordSection.removeClass("fadeInRightBig");
+            //this.loginPasswordSection.removeClass("fadeInRightBig");
+           // this.findPasswordSection.removeClass("fadeUpRightBig");
             
             this.formSection.addClass("bounceOut");
             this.passwordSection.addClass("fadeOutRightBig");
-            this.loginPasswordSection.addClass("fadeOutRightBig");
-            this.findPasswordSection.removeClass("fadeDownRightBig");
+            //his.loginPasswordSection.addClass("fadeOutRightBig");
+           // this.findPasswordSection.removeClass("fadeDownRightBig");
     	},
     	getFormData: function(form) {
            // form.find(':input:disabled').removeAttr('disabled');

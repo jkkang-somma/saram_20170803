@@ -8,7 +8,7 @@ define([
   'dialog',
   'cmoment',
   'resulttimefactory',
-  'data/code',
+  'code',
   'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',

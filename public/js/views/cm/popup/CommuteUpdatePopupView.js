@@ -15,7 +15,7 @@ define([
     'resulttimefactory',
     'comboBox',
     'core/BaseView',
-    'data/code',
+    'code',
 	'i18n!nls/common',
 	'lib/component/form',
     'models/sm/SessionModel',

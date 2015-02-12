@@ -9,7 +9,7 @@ define([
   'schemas',
   'dialog',
   'cmoment',
-  'data/code',
+  'code',
   'models/sm/SessionModel',
   'text!templates/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',

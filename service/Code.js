@@ -11,33 +11,24 @@ var Code = function (data) {
     var _data=_.initial([]);
     var schema=new Schemas('code');
     _data = schema.get(data);
-    var _get = function (fieldName) {
-        if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
-        if (_.has(_data, fieldName)){
-            return _data[fieldName];
-        } else {
-            return _.noop;
-        }
-    }
+    
     var _getCodeList = function(){
         switch (category) {
             case 'dept' :
-                return _getDeptList();
+                return CodeDao.selectDeptList();
             case 'approvalUser' :
-                return _getApprovalUserList();
+                return CodeDao.selectApprovalUserList();
             case 'position' :
-                return _getPositionList();        
+                return CodeDao.selectPositionList();
+            case 'office' :
+                return CodeDao.getOfficeCode();
+            case 'workType' :
+                return CodeDao.getWorktypeCode();
+            case 'overTime' :
+                return CodeDao.getOvertimeCode();
         }
     }
-    var _getDeptList = function(){
-        return CodeDao.selectDeptList();
-    }
-    var _getApprovalUserList = function(){
-        return CodeDao.selectApprovalUserList();
-    }
-    var _getPositionList = function(){
-        return CodeDao.selectPositionList();
-    }
+    
     return {
         getCodeList:_getCodeList
     }

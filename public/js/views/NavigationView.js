@@ -8,7 +8,7 @@ define([
   'core/BaseView',
   'text!templates/navigation.html',
   'data/menu',
-  'data/code',
+  'code',
   'models/sm/SessionModel',
   'models/common/RawDataModel',
   'views/sm/ConfigUserView',
