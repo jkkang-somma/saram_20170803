@@ -9,11 +9,13 @@ router.route("/")
 .post(function(req,res,next){
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
-	
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	console.log("login IP : " + ip);
+
 	var inData = {
 			type : req.body.type,
 			ip_pc : '',
-			ip_office : req.ip
+			ip_office : ip
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {
