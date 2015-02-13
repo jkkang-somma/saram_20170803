@@ -9,6 +9,7 @@ router.route("/")
 .post(function(req,res,next){
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
+
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	console.log("login IP : " + ip);
 

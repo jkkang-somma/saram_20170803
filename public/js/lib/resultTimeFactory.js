@@ -96,7 +96,11 @@ define([
             this.earlyTime = 0;
             this.notPayOverTime =0;
             if(this.department.slice(0,4) === "품질검증"){
-                this.isSuwon = true;
+                if(this.department == "품질검증총괄"){
+                    this.isSuwon = false;    
+                }else{
+                    this.isSuwon = true;
+                }
             }else{
                 this.isSuwon = false;    
             }
@@ -164,7 +168,11 @@ define([
             this.earlyTime = model.get("early_time");
             this.notPayOverTime =model.get("not_pay_over_time");
             if(this.department.slice(0,4) === "품질검증"){
-                this.isSuwon = true;
+                if(this.department == "품질검증총괄"){
+                    this.isSuwon = false;    
+                }else{
+                    this.isSuwon = true;
+                }
             }else{
                 this.isSuwon = false;    
             }

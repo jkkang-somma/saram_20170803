@@ -50,7 +50,7 @@ define([
    		this.option = {
    		    el:_id+"_content",
    		    column:[],
-            dataschema:["submit_date", "submit_id", "submit_name", "office_code_name", "day_count", "end_date", "manager_name", "decide_date", "state"],
+          dataschema:["submit_date", "submit_dept_code", "submit_name", "office_code_name", "commute_date", "commute_time", "decide_date", "state", "black_mark"],
    		    collection:this.collection,
    		    detail:true,
    		    view:this
