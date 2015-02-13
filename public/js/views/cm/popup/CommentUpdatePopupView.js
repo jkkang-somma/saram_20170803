@@ -161,7 +161,7 @@ define([
      			success : function(resultCollection){
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
-						{ changeInTime : data.changeInTime, changeOutTime : data.changeOutTime},
+						data,
 						data.changeHistoryCollection
 					).done(function(resultCommuteCollection){ // commute_result 수정 성공!
 						dfd.resolve(resultCommuteCollection);		
@@ -196,14 +196,17 @@ define([
 	            });
 			}else{
 				var message = "";
+				var changeData = {};
 				_.each(inData.changeHistoryCollection.models, function(model){
 					if(model.get("change_column") == "in_time"){
 						message = message + "출근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
+						changeData.changeInTime = inData.changeInTime;
 					}else{
 						message = message + "퇴근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
+						changeData.changeOutTime = inData.changeOutTime;
 					}
 				});
-					
+				changeData.changeHistoryCollection = inData.changeHistoryCollection;
 				message = message + "\n수정내용이 정확합니까?";
 				Dialog.confirm({
 					msg : message,
@@ -212,7 +215,7 @@ define([
 						that.saveComment(inData).done(
                     		function(result){
                     			var commentResult = result;
-                    			that.saveCommute(inData).done(function(result){
+                    			that.saveCommute(changeData).done(function(result){
                     				actionDfd.resolve(commentResult);
 								});
                     		}

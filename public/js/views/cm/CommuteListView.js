@@ -12,7 +12,7 @@ define([
         'datatables',
         'cmoment',
         'core/BaseView',
-        'data/code',
+        'code',
         'i18n!nls/common',
         'text!templates/default/head.html',
         'text!templates/default/content.html',

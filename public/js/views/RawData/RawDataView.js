@@ -9,7 +9,7 @@ define([
   'dialog',
   'csvParser',
   'cmoment',
-  'data/code',
+  'code',
   'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
@@ -80,9 +80,6 @@ ProgressbarView){
                	});
             }
     	},
-        events : {
-            "click #rdSearchBtn" : "getRawData"
-        },
         getRawData : function(){
             var startDate = $(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate();
             var endDate = $(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate();
@@ -114,6 +111,7 @@ ProgressbarView){
         },
         
     	render:function(){
+    	    var _view= this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layout=$(LayoutHTML);
@@ -149,6 +147,10 @@ ProgressbarView){
     	            }
     	        })
 	        );
+	        
+	        _searchBtn.click(function(e){
+	            _view.getRawData();
+	        });
 	        _btnContainer.append(_searchBtn);
 	        
     	    _row.append(_datepickerRange);

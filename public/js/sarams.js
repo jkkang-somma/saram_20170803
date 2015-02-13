@@ -54,6 +54,7 @@ require.config({
       comboBox:'lib/component/combo',
       lodingButton:'lib/component/lodingButton',
       schemas:'lib/schemas',
+      code:'lib/code',
       
       resulttimefactory: 'lib/resultTimeFactory',
       spin:'tool/spin/spin',

@@ -353,48 +353,49 @@ define([
         },
         
         setOutOffice : function(todayOutOffice){ // 오늘의 vacationCode, outOfficeCode 설정
-            if(!this.isHoliday()){
-                this.workType = WORKTYPE.NORMAL;
-                if(todayOutOffice.length > 0){
-                    for (var i = 0; i <todayOutOffice.length; i++){
-                        var model = todayOutOffice[i];
-                        var code = model.get("office_code");
-                        var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
-                        var OUTOFFICE_CODES = ["W01","W02"];
-    
-                        if(_.indexOf(VACATION_CODES, code) >= 0){
-                            this.vacationCode = code;
-                            switch(code){
-                                case "V01": // 연차휴가
-                                case "V04": // 경조휴가
-                                case "V05": // 공적휴가
-                                case "V06": // 특별휴가
-                                    this.workType = WORKTYPE.VACATION;
-                                    break;
-                            }
-                        }
-                        
-                        if(_.indexOf(OUTOFFICE_CODES, code) >= 0){
-                            this.outOfficeCode = code;
-                            switch(this.outOfficeCode){
-                                case "W01": // 외근
-                                    if(!this.isSuwon){
-                                        var startTime = Moment(model.get("start_time"), "HH:mm");
-                                        var endTime = Moment(model.get("end_time"), "HH:mm");
-                                        if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
-                                            this.checkLate = false;
-                                        if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
-                                            this.checkEarly = false;
-                                    }
-                                    break;
-                                case "W02": // 출장
-                                    this.checkLate = false;
-                                    this.checkEarly = false;
-                                    break;
-                            }
-                        }
+            if(todayOutOffice.length > 0){
+                for (var i = 0; i <todayOutOffice.length; i++){
+                    var model = todayOutOffice[i];
+                    var code = model.get("office_code");
+                    var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
+                    var OUTOFFICE_CODES = ["W01","W02", "W03"];
+                    if(_.indexOf(VACATION_CODES, code) >= 0){
+                        this.vacationCode = code;
                     }
                     
+                    if(_.indexOf(OUTOFFICE_CODES, code) >= 0){
+                        this.outOfficeCode = code;
+                    }
+                }
+            }
+            
+            if(!this.isHoliday()){
+                this.workType = WORKTYPE.NORMAL;
+                switch(this.vacationCode){
+                    case "V01": // 연차휴가
+                    case "V04": // 경조휴가
+                    case "V05": // 공적휴가
+                    case "V06": // 특별휴가
+                        this.workType = WORKTYPE.VACATION;
+                        break;
+                }
+                
+                switch(this.outOfficeCode){
+                    case "W01": // 외근
+                        if(!this.isSuwon){
+                            var startTime = Moment(model.get("start_time"), "HH:mm");
+                            var endTime = Moment(model.get("end_time"), "HH:mm");
+                            if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
+                                this.checkLate = false;
+                            if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
+                                this.checkEarly = false;
+                        }
+                        break;
+                    case "W02": // 출장
+                    case "W03": // 장기외근
+                        this.checkLate = false;
+                        this.checkEarly = false;
+                        break;
                 }
                 
                 // 휴가 / flaxible 에 의한 Std In/Out 조정
@@ -427,7 +428,14 @@ define([
                         this.standardOutTime.hour(12).minute(20).second(0);
                     }
                 }
+            }else{
+                if(_.isNull(this.inTime) && _.isNull(this.outTime)){
+                    this.outOfficeCode = null;
+                    this.vacationCode = null;
+                }
             }
+            
+            
         },
         
         
@@ -602,12 +610,12 @@ define([
                 outOfficeCollection.fetch({data : selectedDate}),
                 inOfficeCollection.fetch({data : selectedDate})
             ).done(function(){
-                if(!_.isNull(inData.changeInTime)){
+                if(!_.isUndefined(inData.changeInTime)){
      				that.inTime = Moment(inData.changeInTime);
      				that.inTimeChange += 1; 
      			}
      			
-     			if(!_.isNull(inData.changeOutTime)){
+     			if(!_.isUndefined(inData.changeOutTime)){
      				that.outTime = Moment(inData.changeOutTime);
      				that.outTimeChange += 1;
      			}
@@ -630,7 +638,7 @@ define([
                 
      			var currentResult = that.getResult();
      			
-     			if(!_.isNull(inData.changeOvertimeCode) && !_.isUndefined(inData.changeOvertimeCode)){
+     			if(!_.isUndefined(inData.changeOvertimeCode)){
      			    currentResult.overtime_code = inData.changeOvertimeCode == "" ? null : inData.changeOvertimeCode;
      				currentResult.overtime_code_change += 1;
      			}
