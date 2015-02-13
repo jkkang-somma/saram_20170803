@@ -151,7 +151,12 @@ define([
           $(this.el).find('#end_date').css('display','none');
           $(this.el).find('#outsideOfficeTimeCon').css('display','block');
         }else {
-          var arrInsertDate = this.getDatePariod();
+          var arrInsertDate;
+          if(param.office_code == "W03"){
+            arrInsertDate = this.getDatePariod(true);
+          }else{
+            arrInsertDate = this.getDatePariod(false);
+          }
           holReq = arrInsertDate.length + "";
           $(this.el).find('#end_date').css('display','table');
           $(this.el).find('#outsideOfficeTimeCon').css('display','none');
@@ -264,8 +269,15 @@ define([
     
     delOutOfficeData : function(_approvalCollection, docNum){
       var dfd = new $.Deferred();
-      var userId = this.options["submit_id"];;
-      var arrInsertDate = this.getDatePariod();
+      var userId = this.options["submit_id"];
+      var arrInsertDate;
+      
+      if(this.options["office_code"] == "W03"){
+        arrInsertDate = this.getDatePariod(true);
+      }else{
+        arrInsertDate = this.getDatePariod(false);
+      }
+      
       var resultData = {};
       resultData.approval = _approvalCollection.toJSON();
       
@@ -370,7 +382,12 @@ define([
     
     addOutOfficeData : function(_approvalCollection){
       var dfd = new $.Deferred();
-      var arrInsertDate = this.getDatePariod();
+      var arrInsertDate;
+      if(this.options["office_code"] == "W03"){
+        arrInsertDate = this.getDatePariod(true);
+      }else{
+        arrInsertDate = this.getDatePariod(false);
+      }
       
       var resultData = {};
       // data 저장
@@ -455,7 +472,7 @@ define([
         
         return dfd.promise();
     },
-    getDatePariod : function(){
+    getDatePariod : function(getHoliday){
        // 날짜 개수 이용하여 날짜 구하기
       var sStart = $(this.el).find('#start_date input').val();
       var sEnd = $(this.el).find('#end_date input').val();
@@ -472,7 +489,7 @@ define([
         for(var i=0; i<=compareVal; i++){
           var dt = start.valueOf() + (i*day);
           var resDate = new Date(dt);
-          if(resDate.getDay() != 0 && resDate.getDay() != 6){
+          if((resDate.getDay() != 0 && resDate.getDay() != 6) || getHoliday){
             // 주말이 아닌 날짜
             var isPush = true;
             for(var j=0; j<holidayInfos.length; j++){
