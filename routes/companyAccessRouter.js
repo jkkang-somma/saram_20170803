@@ -9,7 +9,7 @@ router.route("/")
 .post(function(req,res,next){
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
-	
+	debug(req);
 	var inData = {
 			type : req.body.type,
 			ip_pc : '',
