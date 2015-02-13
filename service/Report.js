@@ -42,12 +42,18 @@ var Report = function() {
 	var _gettCommuteResultTblReport = function(selObj) {		
 	    return new Promise(function(resolve, reject){// promise patten
 
+	    	console.log("Report service : _gettCommuteResultTblReport");
+	    	
 			var queryResults = [];
 			
+			console.log("Report service : DB 조회 시작 ");
 			// 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함 
 			queryResults.push( ReportDao.selectReportCommuteResultTbl(selObj) );
 	    	
 	    	Promise.all(queryResults).then(function(result){
+	    		
+	    		console.log("Report service : DB 조회 완료 ");
+	    		
 	    		commuteResultExcelCreater.createExcel(selObj, result).then(function(excelResult) {
 					resolve( excelResult);
 				}).catch(function(err) {
