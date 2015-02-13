@@ -200,13 +200,13 @@ define([
 				_.each(inData.changeHistoryCollection.models, function(model){
 					if(model.get("change_column") == "in_time"){
 						message = message + "출근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
-						changeData.changInTime = inData.in_time;
+						changeData.changeInTime = inData.changeInTime;
 					}else{
 						message = message + "퇴근시간 [ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
-						changeData.changOutTime = inData.out_time;
+						changeData.changeOutTime = inData.changeOutTime;
 					}
 				});
-					
+				changeData.changeHistoryCollection = inData.changeHistoryCollection;
 				message = message + "\n수정내용이 정확합니까?";
 				Dialog.confirm({
 					msg : message,
