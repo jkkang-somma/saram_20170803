@@ -32,31 +32,30 @@ var CommuteYearExcelCreater = function () {
 //	    	 		{ col: "not_pay_over_time", name: " 야간 근무 (분) ", 		width: 17}
 //	    	 ];
 
-	var colInfos = [
-	    	 		{ dept_name : "  부서  ", 			width: 13},
-	    	 		{ name" , 			name: " 이름 ", 			width: 13},
-	    	 		{ position_name", 	name:   " 직급 ", 		width: 13},
-	    	 		{ leave_company", 	name:   " 퇴사일  ", 		width: 13},
-	    	 		{ date",				name: " 일자 ", 			width: 19},
-	    	 		{ standard_in_time", 	name: " 출근 기준시각 ", 		width: 19},
-	    	 		{ standard_out_time", name: " 퇴근 기준 시각 ", 	width: 19},
-	    	 		{ in_time", 			name: " 출근 시각 ", 		width: 19},
-	    	 		{ out_time", 			name: " 퇴근 시각 ", 		width: 19},
-	    	 		{ in_time_type_name", 	name: " 출근시간 구분  ", 	width: 13},
-	    	 		{ out_time_type_name", 	name: " 퇴근시간 구분  ", 	width: 13},
-	    	 		{ work_type_name", 		name: " 근무 형태 ", 		width: 13},
-	    	 		{ vacation_name", 	name: " 휴가정보  ", 		width: 11},
-	    	 		{ out_office_name", 	name: " 외근, 출장 정보  ", 	width: 17},
-	    	 		{ overtime_name", 	name: " 야근수당 정보  ", 	width: 17},
-	    	 		{ late_time", 		name: " 지각 시간 ( 분 ) ", 	width: 17},
-	    	 		{ over_time", 		name: " 초과근무 시간 ( 분 ) ", width: 17},
-	    	 		{ in_time_change", 	name: " 출근시간 수정 Count ", width: 17},
-	    	 		{ out_time_change", 	name: " 퇴근시간 수정 Count ", width: 17},
-	    	 		{ comment_count", 	name: " Comment Count ", width: 17},
-	    	 		{ overtime_code_change", name: " 초과근무 수정 Count ", width: 17},
-	    	 		{ early_time", 		name: " 조기 출근 ( 분 ) ", 		width: 17},
-	    	 		{ col: "not_pay_over_time", name: " 야간 근무 (분) ", 		width: 17}
-	    	 ];	
+	var headerInfo = { dept_name : "  부서  ",
+	    	 		 name: " 이름 ",
+	    	 		position_name :   " 직급 ",
+	    	 		leave_company :   " 퇴사일  ",
+	    	 		date : " 일자 ",
+	    	 		standard_in_time : " 출근 기준시각 ",
+	    	 		standard_out_time : " 퇴근 기준 시각 ",
+	    	 		in_time : " 출근 시각 ",
+	    	 		out_time : " 퇴근 시각 ",
+	    	 		in_time_type_name : " 출근시간 구분  ",
+	    	 		out_time_type_name : " 퇴근시간 구분  ",
+	    	 		work_type_name : " 근무 형태 ",
+	    	 		vacation_name : " 휴가정보  ",
+	    	 		out_office_name : " 외근, 출장 정보  ",
+	    	 		overtime_name : " 야근수당 정보  ",
+	    	 		late_time : " 지각 시간 ( 분 ) ",
+	    	 		over_time : " 초과근무 시간 ( 분 ) ",
+	    	 		in_time_change : " 출근시간 수정 Count ",
+	    	 		out_time_change : " 퇴근시간 수정 Count ",
+	    	 		comment_count : " Comment Count ",
+	    	 		overtime_code_change : " 초과근무 수정 Count ",
+	    	 		early_time : " 조기 출근 ( 분 ) ",
+	    	 		not_pay_over_time : " 야간 근무 (분) "
+	};	
 	
 	function _createExcelTitle(sheet, searchValObj) {
 		_setBaseCell(sheet, 1, 1, " 검색기간 ");
@@ -148,8 +147,18 @@ var CommuteYearExcelCreater = function () {
 				
 				csvStream.pipe(writableStream);
 				
+				//title
+				csvStream.write( headerInfo );
+				
 				var commuteResults = datas[0];
-				for (var i = 0, len = commuteResults.length; i < len; i++) {						
+				for (var i = 0, len = commuteResults.length; i < len; i++) {
+					
+					if ( !searchValObj.isInLeaveWorker ){
+						if (commuteResults[i].leave_company != null && commuteResults[i].leave_company != "") {
+							continue;
+						}
+					}					
+					
 					csvStream.write( commuteResults[i] );
 				}
 				csvStream.end();				
