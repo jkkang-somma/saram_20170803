@@ -6,6 +6,7 @@ define([
 	'cmoment',
 	'comboBox',
 	'dialog',
+	'jqFileDownload',
 	'models/MessageModel',
 	'models/sm/SessionModel',
 	'i18n!nls/common',
@@ -17,6 +18,7 @@ define([
 	'text!templates/report/searchFormTemplate.html'
 ], function($, _, Backbone, Util, Moment,
 	ComboBox, Dialog,
+	JqFileDownload,
 	MessageModel, SessionModel,
 	i18nCommon, Form,
 	TextBoxHTML, TextAreaHTML, ComboboxHTML, RowButtonHTML, searchFormTemplate
@@ -135,7 +137,7 @@ define([
 
 		         	_form.render().done(function(result){
 	        	        _view.form=_form;
-	        	        
+
 	        	        var panels = _view.el.find('.panel-body');
 	        	        var tmpl = '<button id="btnCreateExcel" class="btn btn-success btn-block " type="button">Excel 생성</button>';
 	        	        $(panels[0]).append(tmpl);
