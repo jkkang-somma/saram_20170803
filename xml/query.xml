@@ -664,7 +664,7 @@
     			work_type_code_tbl
     	</query>
     	
-        <query id="selectDeptList">SELECT code, name FROM dept_code_tbl</query>
+        <query id="selectDeptList">SELECT code, name, area FROM dept_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
     </group>
