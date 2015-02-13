@@ -367,8 +367,6 @@ define([
                         this.outOfficeCode = code;
                     }
                 }
-            }else{
-                return;
             }
             
             if(!this.isHoliday()){
