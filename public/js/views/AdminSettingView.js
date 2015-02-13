@@ -135,12 +135,13 @@ define([
 
 		         	_form.render().done(function(result){
 	        	        _view.form=_form;
-
-	        	        var tmpl = '<button id="btnCreateExcel" class="btn btn-success btn-block " type="button">Excel 생성</button>';
-	        	        _view.el.find("#form_0_reportGroup_0").append(tmpl);
 	        	        
-	        	        var tmpl = '<button id="btnCreateMsg" class="btn btn-success btn-block " type="button">공지 설정</button>';
-	        	        _view.el.find("#form_0_memoGroup_1").append(tmpl);	        	        
+	        	        var panels = _view.el.find('.panel-body');
+	        	        var tmpl = '<button id="btnCreateExcel" class="btn btn-success btn-block " type="button">Excel 생성</button>';
+	        	        $(panels[0]).append(tmpl);
+	        	        
+	        	        tmpl = '<button id="btnCreateMsg" class="btn btn-success btn-block " type="button">공지 설정</button>';
+	        	        $(panels[1]).append(tmpl);	        	        
 	        	        
 	        	        dfd.resolve(_view);
 	        	    }).fail(function(){
