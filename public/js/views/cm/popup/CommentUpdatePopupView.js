@@ -151,6 +151,7 @@ define([
 		saveCommute : function(data){
 			// 이틀치 Commute 데이터 가져옴
 			var dfd = new $.Deferred();
+			var that = this;
 			var commuteCollection = new CommuteCollection();
 			commuteCollection.fetch({ 
      			data: {
@@ -159,10 +160,17 @@ define([
      				endDate : Moment(this.selectData.date).add(1, 'days').format("YYYY-MM-DD"),
      			},
      			success : function(resultCollection){
+     				var idx;
+     				for(idx =0; idx < resultCollection.length; idx ++){
+     					if(resultCollection.models[idx].get("date") == that.selectData.date){
+     						return;
+     					}
+     				}
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
 						data,
-						data.changeHistoryCollection
+						data.changeHistoryCollection,
+						idx
 					).done(function(resultCommuteCollection){ // commute_result 수정 성공!
 						dfd.resolve(resultCommuteCollection);		
      				}).fail(function(){

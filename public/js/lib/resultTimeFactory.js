@@ -432,7 +432,7 @@ define([
                 }else{
                     if(this.vacationCode == "V02"){
                         this.standardInTime.hour(13).minute(20).second(0);
-                    }else if( this.vacationcCode == "V03"){
+                    }else if( this.vacationCode == "V03"){
                         this.standardOutTime.hour(12).minute(20).second(0);
                     }
                 }
@@ -595,14 +595,24 @@ define([
         // inData{ changeInTime, changeOutTime }
         // return resultCommuteCollection(today,tomorrow);
         ****************************************************/
-        modifyByCollection: function(destCommuteCollection, inData, changeHistoryCollection){
+        modifyByCollection: function(destCommuteCollection, inData, changeHistoryCollection, todayIdx){
             var dfd = new $.Deferred();
             var that = this;
             
             var resultCommuteCollection = new CommuteCollection();
             
-		    var yesterdayCommute = destCommuteCollection.models[0];
- 			var currentDayCommute = destCommuteCollection.models[1];
+		    
+ 			var currentDayCommute = destCommuteCollection.models[todayIdx];
+ 			var yesterdayCommute = null;
+ 			var nextDayCommute = null;
+ 			
+ 			if(todayIdx != 0){
+ 			    yesterdayCommute = destCommuteCollection.models[todayIdx -1];
+ 			}
+ 			
+ 			if(todayIdx +1 < destCommuteCollection.length){
+ 			    nextDayCommute = destCommuteCollection.models[todayIdx +1];
+ 			}
  			
  			this.initByModel(currentDayCommute);
             
@@ -627,7 +637,11 @@ define([
      				that.outTime = Moment(inData.changeOutTime);
      				that.outTimeChange += 1;
      			}
-                var yesterdayOutTime = yesterdayCommute.get("out_time");
+     			
+                var yesterdayOutTime = null;
+                if(!_.isNull(yesterdayCommute)){
+                    yesterdayOutTime = yesterdayCommute.get("out_time");
+                }
      			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, that.DATETIMEFORMAT));
 
                 var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
@@ -652,8 +666,8 @@ define([
      			}
      			
      			resultCommuteCollection.add(currentResult);
-                if(destCommuteCollection.length == 3){
-                    var nextDayCommute = destCommuteCollection.models[2];		
+                if(!_.isNull(nextDayCommute)){
+                    		
          			that.initByModel(nextDayCommute);
          			
          			if(currentResult.out_time){
