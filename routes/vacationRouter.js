@@ -7,7 +7,9 @@ var sessionManager = require('../lib/sessionManager');
 router.route('/')
 .get(function(req, res, next){
 	Vacation.getVacation(req.query).then(function(result) {
-		console.log(result);
+		for (idx in result) {
+			console.log(result[idx]);
+		}
 		return res.send(result);
 	}).catch(function(err) {
 		next(err);
