@@ -112,13 +112,13 @@
 			SELECT 
 				m.id, 
 			    m.name,
-			    (SELECT name FROM dept_code_tbl where code = m.dept_code) dept_name,
+			    (SELECT name FROM dept_code_tbl where code = m.dept_code) AS dept_name,
 			    m.join_company,
 				t2.year,
 				t2.id,
 				t2.total_day,
 				t2.used_holiday,
-			    (t2.total_day - t2.used_holiday) holiday,
+			    (t2.total_day - t2.used_holiday) AS holiday,
 			    IFNULL(t2.memo, '') AS memo
 			FROM
 				members_tbl m
@@ -127,7 +127,7 @@
 								v.year,
 								v.id,
 								v.total_day,
-								IFNULL(s.used_holiday, 0) used_holiday,
+								IFNULL(s.used_holiday, 0) AS used_holiday,
 								v.memo
 							FROM
 								vacation_tbl v
