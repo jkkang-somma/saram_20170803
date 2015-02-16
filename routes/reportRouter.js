@@ -51,6 +51,7 @@ router.route('/commuteResultTblReport')
 	Report.gettCommuteResultTblReport(searchValObj).then(function(filePullPath) {
 
 		console.log("엑셀 다운로드 시작  1");
+		console.log(filePullPath);
 		res.download(filePullPath, function(err) {
 			console.log("엑셀 다운로드 시작 2");
 			
