@@ -432,7 +432,7 @@ define([
                 }else{
                     if(this.vacationCode == "V02"){
                         this.standardInTime.hour(13).minute(20).second(0);
-                    }else if( this.vacationcCode == "V03"){
+                    }else if( this.vacationCode == "V03"){
                         this.standardOutTime.hour(12).minute(20).second(0);
                     }
                 }

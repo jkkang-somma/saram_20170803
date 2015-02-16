@@ -13,7 +13,7 @@ router.route("/")
 	var inData = {
 			type : req.body.type,
 			ip_pc : '',
-			ip_office : req.ip
+			ip_office : req.get("x-forwarded-for")
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {
