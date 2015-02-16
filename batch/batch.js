@@ -5,24 +5,45 @@ var Promise = require("bluebird");
 // var debug = require('debug')('BatchJob');
 // var exec = require('exec');
 
-var dbArr = ["members_tbl",
-"dept_code_tbl",
-"position_code_tbl",
-"vacation_tbl",
-"commute_base_tbl",
-"out_office_tbl",
-"in_office_tbl",
-"approval_tbl",
-"comment_tbl",
-"change_history_tbl",
-"commute_result_tbl",
-"overtime_code_tbl",
-"work_type_code_tbl",
-"office_code_tbl",
-"holiday_tbl",
-"approval_index_tbl",
-"black_mark_tbl",
-"msg_tbl"];
+var createDbArr =[
+    "dept_code_tbl",
+    "position_code_tbl",
+    "members_tbl",
+    "vacation_tbl",
+    "commute_base_tbl",
+    "office_code_tbl",
+    "overtime_code_tbl",
+    "work_type_code_tbl",
+    "approval_tbl",
+    "out_office_tbl",
+    "in_office_tbl",
+    "commute_result_tbl",
+    "comment_tbl",
+    "change_history_tbl",
+    "holiday_tbl",
+    "approval_index_tbl",
+    "black_mark_tbl",
+    "msg_tbl"];
+
+var dbArr = [
+    "members_tbl",
+    "dept_code_tbl",
+    "position_code_tbl",
+    "vacation_tbl",
+    "commute_base_tbl",
+    "out_office_tbl",
+    "in_office_tbl",
+    "approval_tbl",
+    "comment_tbl",
+    "change_history_tbl",
+    "commute_result_tbl",
+    "overtime_code_tbl",
+    "work_type_code_tbl",
+    "office_code_tbl",
+    "holiday_tbl",
+    "approval_index_tbl",
+    "black_mark_tbl",
+    "msg_tbl"];
 
 
 var DBBatchJobExecuter = function(){
@@ -30,7 +51,7 @@ var DBBatchJobExecuter = function(){
     // this.createQuery = "";
     // this.dropQuery = "";
     this.result = {};
-    
+    this.backup = "";
     for(var idx =0; idx < dbArr.length ; idx++){
         this.result[dbArr[idx]] = {};  
     }
@@ -116,15 +137,24 @@ DBBatchJobExecuter.prototype.doTableEntries = function(tables){
 
 DBBatchJobExecuter.prototype.saveFile = function(){
     var filename = moment().format("YYYYMMDD_HHmmss") + ".sql";
-    for(var key in this.result){
-        this.backup += this.result[key].dropQuery;
+    for(var idx1 in dbArr){
+        if(!_.isUndefined(this.result[dbArr[idx1]].dropQuery)){
+            this.backup += this.result[dbArr[idx1]].dropQuery;    
+        }
     }
-    for(var key in this.result){
-        this.backup += this.result[key].createQuery;
+    
+    for(var idx2 in createDbArr){
+        if(!_.isUndefined(this.result[createDbArr[idx2]].createQuery)){
+            this.backup += this.result[createDbArr[idx2]].createQuery;
+        }
     }
-    for(var key in this.result){
-        this.backup += this.result[key].insertQuery;
+    
+    for(var idx3 in createDbArr){
+        if(!_.isUndefined(this.result[dbArr[idx3]].insertQuery)){
+            this.backup += this.result[dbArr[idx3]].insertQuery;
+        }
     }
+    
     return require('fs').writeFile(filename, this.backup);
 };
 
@@ -135,9 +165,8 @@ DBBatchJobExecuter.prototype.backupDb = function(){
     db.getConnection().then(function(connection){
         that.getTables().then(function(result){
             Promise.all(that.doTableEntries(result)).then(function(){
-              that.saveFile().done(function(){
+                that.saveFile();
                 console.log("DB Schedule End :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));      
-              });
             });
         }).catch( function(err) {
             console.log('Something went away', err);
