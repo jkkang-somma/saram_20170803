@@ -15,7 +15,7 @@ var server = app.listen(app.get('port'), function() {
     
     //batchJob
     debug("StartBatchJob");
-    schedule.scheduleJob('43 4 * * *', function(){
+    schedule.scheduleJob('* * * * *', function(){
         batch.backupDb();
     });
 });
