@@ -127,7 +127,7 @@
 								v.year,
 								v.id,
 								v.total_day,
-								IFNULL(s.used_holiday, '') AS  used_holiday,
+								s.used_holiday,
 								v.memo
 							FROM
 								vacation_tbl v
