@@ -11,7 +11,6 @@ router.route("/")
 	var user = session.user;
 
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-	console.log("login IP : " + ip);
 
 	var inData = {
 			type : req.body.type,
