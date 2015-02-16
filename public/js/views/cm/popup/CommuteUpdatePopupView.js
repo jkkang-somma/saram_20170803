@@ -158,9 +158,9 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
 			     			},success : function(resultCollection){
 			     				var idx;
-			     				for(idx =0; idx < resultCollection.length; idx ++){
+			     				for(idx =0; idx < resultCollection.length; idx++){
 			     					if(resultCollection.models[idx].get("date") == that.selectData.date){
-			     						return;
+			     						break;
 			     					}
 			     				}
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
