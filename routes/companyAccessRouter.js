@@ -16,7 +16,6 @@ router.route("/")
 	var inData = {
 			type : req.body.type,
 			ip_pc : '',
-			ip_office : req.get("x-forwarded-for")
 			ip_office : ip
 	};
 	
