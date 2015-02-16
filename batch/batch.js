@@ -5,19 +5,44 @@ var Promise = require("bluebird");
 // var debug = require('debug')('BatchJob');
 // var exec = require('exec');
 
+var dbArr = ["members_tbl",
+"dept_code_tbl",
+"position_code_tbl",
+"vacation_tbl",
+"commute_base_tbl",
+"out_office_tbl",
+"in_office_tbl",
+"approval_tbl",
+"comment_tbl",
+"change_history_tbl",
+"commute_result_tbl",
+"overtime_code_tbl",
+"work_type_code_tbl",
+"office_code_tbl",
+"holiday_tbl",
+"approval_index_tbl",
+"black_mark_tbl",
+"msg_tbl"];
+
+
 var DBBatchJobExecuter = function(){
-    this.insertQuery = "";  
-    this.createQuery = "";
-    this.dropQuery = "";
+    // this.insertQuery = "";  
+    // this.createQuery = "";
+    // this.dropQuery = "";
+    this.result = {};
+    
+    for(var idx =0; idx < dbArr.length ; idx++){
+        this.result[dbArr[idx]] = {};  
+    }
+    console.log(this.result);
 };
 
 DBBatchJobExecuter.prototype.getTables = function(){
     return db.queryV2('SHOW TABLES');
 };
 
-DBBatchJobExecuter.prototype.doTableEntries = function(theResults){
+DBBatchJobExecuter.prototype.doTableEntries = function(tables){
     var that = this;
-    var tables = theResults;
     var tableDefinitionGetters = [];
     
     for(var key in tables){
@@ -27,8 +52,8 @@ DBBatchJobExecuter.prototype.doTableEntries = function(theResults){
                 var tableName = destTableName;
                 db.queryV2('SHOW CREATE TABLE ' + tableName).then(
                     function(createTableQryResult){
-                        that.dropQuery += "DROP TABLE IF EXISTS " + tableName + ";\n\n";
-                        that.createQuery += createTableQryResult[0]["Create Table"] + ";\n\n";
+                        that.result[tableName].dropQuery = "drop table if exists " + tableName +";\n\n";
+                        that.result[tableName].createQuery = createTableQryResult[0]["Create Table"] + ";\n\n";
                         resolve();
                     }
                 );    
@@ -78,7 +103,7 @@ DBBatchJobExecuter.prototype.doTableEntries = function(theResults){
                             queryItem = queryItem.slice(0,-1);
                             queryItem += ";\n\n";
                             query += queryItem;
-                            that.insertQuery += query;
+                            that.result[tableName].insertQuery = query;
                         }
                         resolve();
                     }
@@ -91,7 +116,15 @@ DBBatchJobExecuter.prototype.doTableEntries = function(theResults){
 
 DBBatchJobExecuter.prototype.saveFile = function(){
     var filename = moment().format("YYYYMMDD_HHmmss") + ".sql";
-    this.backup = this.dropQuery + this.createQuery + this.insertQuery;
+    for(var key in this.result){
+        this.backup += this.result[key].dropQuery;
+    }
+    for(var key in this.result){
+        this.backup += this.result[key].createQuery;
+    }
+    for(var key in this.result){
+        this.backup += this.result[key].insertQuery;
+    }
     return require('fs').writeFile(filename, this.backup);
 };
 
@@ -102,21 +135,19 @@ DBBatchJobExecuter.prototype.backupDb = function(){
     db.getConnection().then(function(connection){
         that.getTables().then(function(result){
             Promise.all(that.doTableEntries(result)).then(function(){
-              that.saveFile();
+              that.saveFile().done(function(){
+                console.log("DB Schedule End :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));      
+              });
             });
         }).catch( function(err) {
             console.log('Something went away', err);
         }).finally( function() {
             connection.release();
-            console.log("DB Schedule End :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));
         });    
     });
 };
 
 module.exports = new DBBatchJobExecuter();
-
-
-
 
 // var DBBatchJobExecuter = function(){
     
