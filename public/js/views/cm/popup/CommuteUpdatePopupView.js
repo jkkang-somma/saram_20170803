@@ -166,7 +166,8 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
 			     					resultCollection,
 			     					changeData,
-			     					data.changeHistoryCollection
+			     					data.changeHistoryCollection,
+			     					idx
 			     				).done(function(result){ // commute_result, changeHistroy 수정 성공!
 				     				actionDfd.resolve(result);		
 			     				}).fail(function(){
