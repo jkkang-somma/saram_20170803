@@ -199,7 +199,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
      			id : this.selectData.id,
      			in_time : data.inTime,
      			out_time : data.outTime,
-     			overtime_code : data.overtime
+     			overtime_code : data.overtime == "" ? null : data.overtime
      		};
 			
      		var userId = SessionModel.get("user").id;
