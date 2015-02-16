@@ -117,6 +117,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 		updateCommute: function() {
 			var dfd= new $.Deferred();
      		var data = this.getInsertData(); 
+     		var that = this;
      		var changeData = { };
      		if (data === null) {
      			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_CHANGED);
@@ -156,10 +157,17 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			     				startDate : Moment(data.date).add(-1, 'days').format("YYYY-MM-DD"),	
 			     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
 			     			},success : function(resultCollection){
+			     				var idx;
+			     				for(idx =0; idx < resultCollection.length; idx++){
+			     					if(resultCollection.models[idx].get("date") == that.selectData.date){
+			     						break;
+			     					}
+			     				}
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
 			     					resultCollection,
 			     					changeData,
-			     					data.changeHistoryCollection
+			     					data.changeHistoryCollection,
+			     					idx
 			     				).done(function(result){ // commute_result, changeHistroy 수정 성공!
 				     				actionDfd.resolve(result);		
 			     				}).fail(function(){
@@ -191,7 +199,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
      			id : this.selectData.id,
      			in_time : data.inTime,
      			out_time : data.outTime,
-     			overtime_code : data.overtime
+     			overtime_code : data.overtime == "" ? null : data.overtime
      		};
 			
      		var userId = SessionModel.get("user").id;
