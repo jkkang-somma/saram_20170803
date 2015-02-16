@@ -32,7 +32,8 @@ var CommuteYearExcelCreater = function () {
 //	    	 		{ col: "not_pay_over_time", name: " 야간 근무 (분) ", 		width: 17}
 //	    	 ];
 
-	var headerInfo = { dept_name : "  부서  ",
+	// \ufeff -> BOM 설정 
+	var headerInfo = { dept_name : "\ufeff  부서  ",
 	    	 		 name: " 이름 ",
 	    	 		position_name :   " 직급 ",
 	    	 		leave_company :   " 퇴사일  ",
