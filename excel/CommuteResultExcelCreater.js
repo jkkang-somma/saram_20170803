@@ -32,7 +32,8 @@ var CommuteYearExcelCreater = function () {
 //	    	 		{ col: "not_pay_over_time", name: " 야간 근무 (분) ", 		width: 17}
 //	    	 ];
 
-	var headerInfo = { dept_name : "  부서  ",
+	// \ufeff -> BOM 설정 
+	var headerInfo = { dept_name : "\ufeff  부서  ",
 	    	 		 name: " 이름 ",
 	    	 		position_name :   " 직급 ",
 	    	 		leave_company :   " 퇴사일  ",
@@ -57,63 +58,63 @@ var CommuteYearExcelCreater = function () {
 	    	 		not_pay_over_time : " 야간 근무 (분) "
 	};	
 	
-	function _createExcelTitle(sheet, searchValObj) {
-		_setBaseCell(sheet, 1, 1, " 검색기간 ");
+	// function _createExcelTitle(sheet, searchValObj) {
+	// 	_setBaseCell(sheet, 1, 1, " 검색기간 ");
 
-		sheet.merge({col:2, row:1},{col:4, row:1});
-		_setBaseCell(sheet, 2, 1, (searchValObj.startTime + " ~ " + searchValObj.endTime) );
+	// 	sheet.merge({col:2, row:1},{col:4, row:1});
+	// 	_setBaseCell(sheet, 2, 1, (searchValObj.startTime + " ~ " + searchValObj.endTime) );
 
-		for (var i = 0, len = colInfos.length; i < len; i++) {
-			_setTitleCell(sheet, i+1, 3, colInfos[i].name, colInfos[i].width)
-		}
+	// 	for (var i = 0, len = colInfos.length; i < len; i++) {
+	// 		_setTitleCell(sheet, i+1, 3, colInfos[i].name, colInfos[i].width)
+	// 	}
 		
-	}
+	// }
 
-	/**
-	 * 엑셀 데이터 생성
-	 * 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함
-	 */
-	function _createExcelData(sheet, searchValObj, datas){
+	// /**
+	//  * 엑셀 데이터 생성
+	//  * 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함
+	//  */
+	// function _createExcelData(sheet, searchValObj, datas){
 		
-		var commuteResults = datas[0],
-			currentRow = 3;
+	// 	var commuteResults = datas[0],
+	// 		currentRow = 3;
 		
-		console.log("3-1. 엑셀 데이터  길이 :  " + commuteResults.length);
-		for (var i = 0, len = commuteResults.length; i < len; i++) {
-			var commuteResult = commuteResults[i];
+	// 	console.log("3-1. 엑셀 데이터  길이 :  " + commuteResults.length);
+	// 	for (var i = 0, len = commuteResults.length; i < len; i++) {
+	// 		var commuteResult = commuteResults[i];
 			
-			if ( !searchValObj.isInLeaveWorker ){
-				if (commuteResult.leave_company != null && commuteResult.leave_company != "") {
-					continue;
-				}
-			}
+	// 		if ( !searchValObj.isInLeaveWorker ){
+	// 			if (commuteResult.leave_company != null && commuteResult.leave_company != "") {
+	// 				continue;
+	// 			}
+	// 		}
 			
-			console.log("3-2. 엑셀 데이터 생성  중:  " + i);
+	// 		console.log("3-2. 엑셀 데이터 생성  중:  " + i);
 			
-			currentRow++;
+	// 		currentRow++;
 			
-			for (var k =  0, kLen = colInfos.length; k < kLen; k++) {
-				_setDataCell(sheet, k + 1, currentRow, commuteResult[colInfos[k].col] );
-			}
-		}
-	}
+	// 		for (var k =  0, kLen = colInfos.length; k < kLen; k++) {
+	// 			_setDataCell(sheet, k + 1, currentRow, commuteResult[colInfos[k].col] );
+	// 		}
+	// 	}
+	// }
 
-	function _setBaseCell(sheet, col, row, value) {
-		sheet.set(col, row, value);
-		sheet.valign(col, row, 'center');
-		sheet.align(col, row, 'center');	
-	}
+	// function _setBaseCell(sheet, col, row, value) {
+	// 	sheet.set(col, row, value);
+	// 	sheet.valign(col, row, 'center');
+	// 	sheet.align(col, row, 'center');	
+	// }
 	
-	function _setTitleCell(sheet, col, row, value, width) {
-		_setBaseCell(sheet, col, row, value);
-		sheet.border(col, row, {left:'medium',top:'medium',right:'medium',bottom:'medium'});		
-		sheet.width(col, width);	
-	}
+	// function _setTitleCell(sheet, col, row, value, width) {
+	// 	_setBaseCell(sheet, col, row, value);
+	// 	sheet.border(col, row, {left:'medium',top:'medium',right:'medium',bottom:'medium'});		
+	// 	sheet.width(col, width);	
+	// }
 	
-	function _setDataCell(sheet, col, row, value) {
-		_setBaseCell(sheet, col, row, value);
-		sheet.border(col, row, {left:'thin',top:'thin',right:'thin',bottom:'thin'});		
-	}
+	// function _setDataCell(sheet, col, row, value) {
+	// 	_setBaseCell(sheet, col, row, value);
+	// 	sheet.border(col, row, {left:'thin',top:'thin',right:'thin',bottom:'thin'});		
+	// }
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
