@@ -6,8 +6,6 @@ var batch = require('./batch/batch');
 
 app.set('port', process.env.PORT);
 
-process.env.DEBUG = "*";
-
 // app.set('port', 80);
 // app.set('port', 8001);
 var server = app.listen(app.get('port'), function() {
@@ -18,7 +16,7 @@ var server = app.listen(app.get('port'), function() {
     
     //batchJob
     debug("StartBatchJob");
-    schedule.scheduleJob('* * * * *', function(){
+    schedule.scheduleJob('43 4 * * *', function(){
         batch.backupDb();
     });
 });
