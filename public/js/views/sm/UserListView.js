@@ -108,11 +108,11 @@ define([
     	                },
     	                function(data){
     	                    var _data=data[6];
-    	                    return _.isEmpty(_data);
+    	                    return !_.isEmpty(_data);
     	                },
     	                function(data){
     	                    var _data=data[6];
-    	                    return !_.isEmpty(_data);
+    	                    return _.isEmpty(_data);
     	                }
     	           ];
     	           

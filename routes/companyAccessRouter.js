@@ -11,11 +11,10 @@ router.route("/")
 	var user = session.user;
 
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-	console.log("login IP : " + ip);
-
+	
 	var inData = {
 			type : req.body.type,
-			ip_pc : '',
+			ip_pc : ip,		// ip_pc , ip_office 동일 IP로 셋팅 
 			ip_office : ip
 	};
 	
