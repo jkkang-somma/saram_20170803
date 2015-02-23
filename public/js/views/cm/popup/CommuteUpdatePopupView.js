@@ -197,8 +197,8 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
      		var newData = {
      			date : this.selectData.date,
      			id : this.selectData.id,
-     			in_time : data.inTime,
-     			out_time : data.outTime,
+     			in_time : data.inTime == "" ? null : data.inTime,
+     			out_time : data.outTime == "" ? null : data.outTime,
      			overtime_code : data.overtime == "" ? null : data.overtime
      		};
 			
