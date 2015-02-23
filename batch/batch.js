@@ -118,7 +118,7 @@ DBBatchJobExecuter.prototype.doTableEntries = function(tables){
                                 }
                             }
                             queryItem = queryItem.slice(0,-1);
-                            queryItem += "),";
+                            queryItem += "),\n";
                         }
                         if(queryItem != ""){
                             queryItem = queryItem.slice(0,-1);

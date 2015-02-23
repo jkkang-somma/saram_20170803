@@ -116,7 +116,7 @@ define([
 	},
 	
 	accessIn: function() {	// 출근 기록
-		var model = new RawDataModel();
+	    var model = new RawDataModel();
 		model.companyAccessUrl().save({type:'출근(수원)'}, {
     		success: function(model, response) {
     			Dialog.show(
