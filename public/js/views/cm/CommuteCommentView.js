@@ -133,7 +133,7 @@ define([
                 });
 	            
 	            Dialog.show({
-	                title:"Comment 입력", 
+	                title:"Comment 처리", 
                     content: commentUpdatePopupView,
                     buttons: buttons
 	            });
