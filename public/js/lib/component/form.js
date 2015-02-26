@@ -161,6 +161,10 @@ define([
                     });
                 }
                 
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    _select.attr("disabled", "true");
+                }
+                
                 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {//모바일 처리.
                     _select.selectpicker('mobile');
                 } else {
