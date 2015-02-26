@@ -1247,14 +1247,14 @@
 						oc.name AS out_office_name,
 						c.overtime_code,
 						ov.name AS overtime_name,
-						c.late_time,
-						c.over_time,
+                        IF(c.late_time = 0, '', SUBSTRING( SEC_TO_TIME( c.late_time *60), 1, 5) ) AS late_time,
+                        IF(c.over_time = 0, '', SUBSTRING( SEC_TO_TIME( c.over_time *60), 1, 5) ) AS over_time,
 						c.in_time_change,
 						c.out_time_change,
 						c.comment_count,
 						c.overtime_code_change,
-						c.early_time,
-						c.not_pay_over_time
+						IF(c.early_time = 0, '', SUBSTRING( SEC_TO_TIME( c.early_time *60), 1, 5) ) as early_time,
+                        IF(c.not_pay_over_time = 0, '', SUBSTRING( SEC_TO_TIME( c.not_pay_over_time *60), 1, 5) ) AS not_pay_over_time
 					FROM 
 						 commute_result_tbl c
 						 left join office_code_tbl oc
