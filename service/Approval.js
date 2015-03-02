@@ -123,20 +123,19 @@ var Approval = function (data) {
                     var sendHTML=temp(data);
                     ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
                         
-                        var cc = "";
+                        var cc = [];
                         console.log(result);
                         for(var idx in result){
                             if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                cc = '"'+result[idx].name+'" <' +result[idx].email + '>,'; 
+                                cc.push({name : result[idx].name, address: result[idx].email});
                             }
                         }
-                        
                         
                         console.log(cc);
                         
                         var mailOptions=_.defaults(mailDefaultOptions, {
                             to: 'carran@yescnc.co.kr',
-                            cc: 'carran@naver.com',
+                            cc: [{name : "안정길", address:"carran@naver.com"}],
                             subject:"[근태 보고] " + data.name + " " + data.code_name,
                             html:sendHTML,
                         	text:""
