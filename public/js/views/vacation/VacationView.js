@@ -40,13 +40,13 @@ define([
 	
 //	// 검색 조건 년도 
 	function _getFormYears() {
-		var startYear = 2000;
-		var endYear= new Date().getFullYear() + 1;
 		var years = [];
 		
-		for (; startYear <= endYear; endYear--) {
-			years.push(endYear);
-		}
+		var today = new Date();
+	    var year = today.getFullYear();
+	    for(var i = -1; i< 5; i++){
+            years.push(year + i);
+        }
 		return  years;
 	}
 	
@@ -168,7 +168,7 @@ define([
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
-
+ 
     	    var isShowCreateBtn = false;
     	    if (SessionModel.get("user").admin == 1 ) {
     	    	isShowCreateBtn = true;

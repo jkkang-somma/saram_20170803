@@ -11,6 +11,7 @@ define([
         'dialog',
         'datatables',
         'cmoment',
+        'lib/component/form',
         'i18n!nls/common',
         'core/BaseView',
         'text!templates/default/head.html',
@@ -26,7 +27,7 @@ define([
         'text!templates/cm/searchFormTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,
-		i18Common,
+		Form, i18Common, 
 		BaseView,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommentCollection,
@@ -132,7 +133,7 @@ define([
                 });
 	            
 	            Dialog.show({
-	                title:"Comment 입력", 
+	                title:"Comment 처리", 
                     content: commentUpdatePopupView,
                     buttons: buttons
 	            });

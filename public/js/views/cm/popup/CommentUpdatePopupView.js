@@ -35,6 +35,7 @@ define([
 	var CommentPopupView = Backbone.View.extend({
 		initialize : function(data) {
 			this.selectData = data;
+			console.log(this.selectData);
 		},
 		events :{
 			"click label input[type='checkbox']" : "setDatapickerDisable"
@@ -42,84 +43,139 @@ define([
 		render: function(el) {
 			var dfd= new $.Deferred();
 			
+			var STATE = i18nCommon.COMMENT.STATE;
+		   	// _stateCombo.append($("<option>" + STATE.ACCEPTING + "</option>"));
+		   	// _stateCombo.append($("<option>" + STATE.PROCESSING + "</option>"));
+		   	// _stateCombo.append($("<option>" + STATE.COMPLETE + "</option>"));
+		   	
 			if (!_.isUndefined(el)) this.el=el;
-		
+			var _view=this;
+			var _form = new Form({
+		        el:_view.el,
+		        form:undefined,
+		        group:[{
+	                name:"destGroup",
+	                label:"Comment 정보",
+	                initOpen:true
+	            },{
+	                name:"modifyGroup",
+	                label:"수정 요청사항",
+	                initOpen:true
+	            },{
+	                name:"managerGroup",
+	                label:"처리내용",
+	                initOpen:true
+	            }],
+		        
+		        childs:[{
+	                type:"input",
+	                name:"date",
+	                label:"일자",
+	                value:this.selectData.date,
+	                disabled : true,
+	                group:"destGroup",
+	        	}, {
+	        		type:"input",
+	                name:"name",
+	                label:"이름",
+	                disabled : true,
+	                value:this.selectData.name,
+	                group:"destGroup",
+	        	}, {
+	        		type:"input",
+	                name:"writer",
+	                label:"Comment 작성자",
+	                value:this.selectData.writer_name,
+	                group:"destGroup",
+	                disabled:true
+	        	}, {
+        		  	type:"text",
+	                name:"comment",
+	                label:"접수내용",
+	                value:this.selectData.comment,
+	                disabled:true,
+	                group:"modifyGroup"
+	        	}, {
+        		  	type:"text",
+	                name:"comment_reply",
+	                label:"답변",
+	                value:this.selectData.comment_reply,
+	                disabled: this.selectData.state == "처리완료" || SessionModel.get("user").admin == 0,
+	                group:"managerGroup"
+	        	}, {
+	                type:"combo",
+	                name:"state",
+	                label:"처리상태",
+	                value:this.selectData.state,
+	                collection:[
+	                	{key : STATE.ACCEPTING, value : STATE.ACCEPTING},
+	                	{key : STATE.PROCESSING, value : STATE.PROCESSING},
+	                	{key : STATE.COMPLETE, value : STATE.COMPLETE}
+	                ],
+	                disabled: this.selectData.state == "처리완료" || SessionModel.get("user").admin == 0,
+	                group:"managerGroup",
+		        }]
+		    });
 		    
-            var that = this;
-
-    		$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupDate", label : "일자", value : that.selectData.date}));
-			$(that.el).append(_.template(TextBoxHTML)({id: "commentUpdatePopupName", label : "이름", value : that.selectData.name }));
-			$(that.el).append(_.template(DatePickerChangeHTML)(
-				{
-					id: "commentUpdatePopupInTime", 
-					label : "출근시간",
-					label2 : "수정 요청 시간",
-					beforeTime:  this.selectData.before_in_time,
-					checkId : "commentUpdatePopupInTimeCheck",
+		    _form.render().done(function(){
+		        _view.form=_form;
+		        console.log(_form);
+		        var modyfyGroup = _form.groupElements[1].find(".panel-body");
+		        modyfyGroup.prepend(_.template(DatePickerChangeHTML)(
+					{
+						id: "commentUpdatePopupOutTime", 
+						label : "퇴근시간",
+						label2 : "수정 요청 시간",
+						beforeTime:  _view.selectData.before_out_time,
+						checkId : "commentUpdatePopupOutTimeCheck",
+					}
+				));
+				
+		        modyfyGroup.prepend(_.template(DatePickerChangeHTML)(
+					{
+						id: "commentUpdatePopupInTime", 
+						label : "출근시간",
+						label2 : "수정 요청 시간",
+						beforeTime:  _view.selectData.before_in_time,
+						checkId : "commentUpdatePopupInTimeCheck",
+					}
+				));
+				
+				modyfyGroup.find("#commentUpdatePopupInTime").datetimepicker({
+	            	pickTime: true,
+			        language: "ko",
+			        todayHighlight: true,
+			        format: "YYYY-MM-DD HH:mm:ss",
+			        defaultDate: Moment(_view.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
+	            });
+	            
+				modyfyGroup.find("#commentUpdatePopupOutTime").datetimepicker({
+	            	pickTime: true,
+			        language: "ko",
+			        todayHighlight: true,
+			        format: "YYYY-MM-DD HH:mm:ss",
+			        defaultDate: Moment(_view.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
+	            });
+	            
+		        // 일반 사용자는 단순 읽기만 
+		        
+				if (SessionModel.get("user").admin == 0) {
+					$(_view.el).find("[type='checkbox']").css("display","none");
+				}else{
+					 $(_view.el).find("[type='checkbox']").click(function(){
+					 	_view.setDatapickerDisable();
+					 });
 				}
-			));
+				_view.setDatapickerDisable();
+				
+		        dfd.resolve();
+		    }).fail(function(){
+		        dfd.reject();
+		    });  
+		    
 			
-			$(that.el).append(_.template(DatePickerChangeHTML)(
-				{
-					id: "commentUpdatePopupOutTime", 
-					label : "퇴근시간",
-					label2 : "수정 요청 시간",
-					beforeTime:  this.selectData.before_out_time,
-					checkId : "commentUpdatePopupOutTimeCheck",
-				}
-			));
-			$(that.el).append(_.template(TextAreaHTML)({id: "commentUpdatePopupComment", label : "접수내용"}));
-			$(that.el).append(_.template(TextAreaHTML)({id: "commentUpdatePopupReply", label : "처리내용"}));
 			
-		   	$(that.el).append(_.template(ComboboxHTML)({id: "commentUpdatePopupState", label: "상태"}));
-		   	
-		   	var STATE = i18nCommon.COMMENT.STATE;
-		   	var _stateCombo = $(that.el).find("#commentUpdatePopupState");
-		   	_stateCombo.append($("<option>" + STATE.ACCEPTING + "</option>"));
-		   	_stateCombo.append($("<option>" + STATE.PROCESSING + "</option>"));
-		   	_stateCombo.append($("<option>" + STATE.COMPLETE + "</option>"));
-		   	_stateCombo.val(that.selectData.state);
-		   	
-			$(that.el).find("#commentUpdatePopupInTime").datetimepicker({
-            	pickTime: true,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:ss",
-		        defaultDate: Moment(that.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
-            });
-            
-			$(that.el).find("#commentUpdatePopupOutTime").datetimepicker({
-            	pickTime: true,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD HH:mm:ss",
-		        defaultDate: Moment(that.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
-            });
-
-			$(that.el).find("#commentUpdatePopupDate").attr("disabled", "true");
-			$(that.el).find("#commentUpdatePopupName").attr("disabled", "true");
-			$(that.el).find("#commentUpdatePopupComment").val(that.selectData.comment);
-			$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
-			
-			$(that.el).find("#commentUpdatePopupReply").val(that.selectData.comment_reply);
-			
-			// 일반 사용자는 단순 읽기만 가능
-			if (SessionModel.get("user").admin == 0 || $(this.el).find("#commentUpdatePopupState").val() == "처리완료") {
-				$(that.el).find("#commentUpdatePopupInTime input").attr("disabled","true");
-				$(that.el).find("#commentUpdatePopupOutTime input").attr("disabled","true");
-				$(that.el).find("#commentUpdatePopupComment").attr("disabled", "true");
-				$(that.el).find("#commentUpdatePopupReply").attr("disabled", "true");
-				$(that.el).find("#commentUpdatePopupState").prop("disabled", true);
-				$(that.el).find("[type='checkbox']").css("display","none");
-			}else{
-				 $(that.el).find("[type='checkbox']").click(function(){
-				 	that.setDatapickerDisable();
-				 });
-			}
-			that.setDatapickerDisable();
-    		dfd.resolve();
-	    		
-			return dfd.promise();			
+            return dfd.promise();
 		},
 		
 		setDatapickerDisable : function(){
@@ -242,13 +298,14 @@ define([
 			return dfd.promise();
 		},
 		getInsertData: function() {
+			var data = this.form.getData();
      		var newData = {
      			id: this.selectData.id,
      			year: this.selectData.year,
      			date: this.selectData.date,
      			seq: this.selectData.seq,
-     			comment_reply: $(this.el).find("#commentUpdatePopupReply").val(),
-     			state: $(this.el).find("#commentUpdatePopupState").val(),
+     			comment_reply: data.comment_reply,
+     			state: data.state,
      			changeInTime: null,
      			changeOutTime : null,
      			changeHistoryCollection : new ChangeHistoryCollection(),

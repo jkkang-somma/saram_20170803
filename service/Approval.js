@@ -12,7 +12,31 @@ var InOfficeDao= require('../dao/inOfficeDao.js');
 var Promise = require('bluebird');
 var db = require('../lib/dbmanager.js');
 
+var fs = require('fs');
+var path = require("path");
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var mailDefaultOptions = {
+    from: 'webmaster@yescnc.co.kr', // sender address 
+    //to: 'novles@yescnc.co.kr',
+    // subject: 'Hello', // Subject line 
+    // text: 'Hello world', // plaintext body 
+    // html: '<b>Hello world </b>' // html body 
+};
+var transport = nodemailer.createTransport(smtpTransport({
+    host: 'webmail.yescnc.co.kr',
+    port: 25,
+    secure: false,
+    auth: {
+        user: 'webmaster@yescnc.co.kr',
+        pass: 'Yes112233'
+    },
+    connectionTimeout:10000
+}));
+
+
 var Approval = function (data) {
+    var that = this;
     var _getApprovalList = function (doc_num) {
         return ApprovalDao.selectApprovalList(doc_num);
     }
@@ -30,6 +54,7 @@ var Approval = function (data) {
 			db.getConnection().then(function(connection){
 			    var promiseArr = [];
 			    promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.data));
+			    
 			    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
 			        var outOfficeData = {};
 			        for(var key in data.outOffice.arrInsertDate){
@@ -38,8 +63,15 @@ var Approval = function (data) {
                         outOfficeData[key].year = outOfficeData[key].date.substr(0,4);
                         outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
 			        }
+			        
+			        if(data.outOffice.state == "결재완료"){
+			            console.log(data.outOffice.doc_num);
+			            promiseArr.push(_sendOutofficeEmail(data.outOffice.doc_num));
+			        }
+			        
 			        promiseArr.push(OutOfficeDao.insertOutOffice(connection, outOfficeData));
 			    }
+			    
 			    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
 			        var inOfficeData = {};
 			        for(var inKey in data.inOffice.arrInsertDate){
@@ -50,14 +82,14 @@ var Approval = function (data) {
 			        }
 			        promiseArr.push(InOfficeDao.insertInOffice(connection, inOfficeData));
 			    }
+			    
 			    if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
 		            promiseArr.push(CommuteDao.updateCommute_t(connection, data.commute));    
 			    }
-			    
+                
 				Promise.all(promiseArr).then(function(resultArr){
 					connection.commit(function(){
-						connection.release();
-						resolve();
+					    resolve();
 					});
 				},function(){
 					connection.rollback(function(){
@@ -73,6 +105,56 @@ var Approval = function (data) {
 			});
 		});
     };
+    
+    var _sendOutofficeEmail = function(doc_num){
+        return new Promise(function(resolve, reject){
+            ApprovalDao.getApprovalMailData(doc_num).then(function(data){
+                if(data.length == 1 ){
+                    data = data[0];
+                }
+                
+                if(data.start_date == data.end_date){
+                    data.end_date = null;
+                }
+                
+    	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
+                    var temp=_.template(html);
+                    var sendHTML=temp(data);
+                    ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
+                        console.log(sendHTML);
+                        console.log(result);
+                        
+                        var mailOptions=_.defaults(mailDefaultOptions, {
+                            to: 'carran@yescnc.co.kr',
+                            subject:"Yescnc 근태관리 시스템(결제 알림)",
+                            html:sendHTML,
+                        	text:""
+                        });
+                        
+                        transport.sendMail(mailOptions, function(error, info){
+                            if(error){//메일 보내기 실패시 
+                                console.log(error);
+                                reject();
+                            }else{
+                                console.log("success");
+                                reject();
+                                // resolve();
+                            }
+                        });    
+                    });
+                    
+                
+                }).catch(SyntaxError, function (e) {
+                    console.log("file contains invalid file");
+                    reject();
+                }).error(function (e) {
+                    console.log(e);
+                    reject();
+                });    
+    	    });
+        });
+    };
+    
     var _getApprovalIndex = function (yearmonth) {
         return ApprovalDao.selectApprovalIndex(yearmonth);
     };
