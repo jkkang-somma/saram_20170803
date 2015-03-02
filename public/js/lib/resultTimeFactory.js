@@ -265,7 +265,7 @@ define([
                     this.inTime = this.earliestTime;   // 저장된 가장 이른 출입시간을 출근시간으로 표시
                 }
                  // 출근기록 없다는것 표시
-                 if(this.workType != "30")
+                 if(this.workType != WORKTYPE.HOLIDAY)
                     this.inTimeType = 2;              
             }else{
                 this.inTimeType = 1;              
@@ -275,7 +275,7 @@ define([
                 if(this.latestTime){
                     this.outTime = this.latestTime;// 저장된 가장 늦은 출입시간을 퇴근시간으로 표시
                 }
-                if(this.workType != "30")
+                if(this.workType != WORKTYPE.HOLIDAY)
                     this.outTimeType = 2;          
             }else{
                 this.outTimeType = 1;              
@@ -385,6 +385,8 @@ define([
                     case "V05": // 공적휴가
                     case "V06": // 특별휴가
                         this.workType = WORKTYPE.VACATION;
+                        this.inTimeType = 1;            
+                        this.outTimeType = 1;            
                         break;
                 }
                 
@@ -400,6 +402,8 @@ define([
                         }
                         break;
                     case "W02": // 출장
+                        this.inTimeType = 1;            
+                        this.outTimeType = 1;            
                     case "W03": // 장기외근
                         this.checkLate = false;
                         this.checkEarly = false;
@@ -470,6 +474,9 @@ define([
                 }
             }
            
+           if(_.isNull(this.tinTimeType)){
+               console.log(this);
+           }
             return {
                 id : this.id,
                 name : this.name,
