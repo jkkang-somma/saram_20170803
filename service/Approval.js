@@ -18,7 +18,9 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var mailDefaultOptions = {
     from: 'webmaster@yescnc.co.kr', // sender address 
-    //to: '"김성식" <novles@yescnc.co.kr>,',
+    to: [
+        { name: "김성식", address: "sskim@yescnc.co.kr"},
+        { name :"김은영", address: "eykim@yescnc.co.kr"}]
     // subject: 'Hello', // Subject line 
     // text: 'Hello world', // plaintext body 
     // html: '<b>Hello world </b>' // html body 
@@ -134,11 +136,10 @@ var Approval = function (data) {
                         console.log(cc);
                         
                         var mailOptions=_.defaults(mailDefaultOptions, {
-                            to: 'carran@yescnc.co.kr',
-                            cc: [{name : "안정길", address:"carran@naver.com"}],
-                            subject:"[근태 보고] " + data.name + " " + data.code_name,
+                            subject:"[근태보고] " + data.name + "_" + data.code_name,
                             html:sendHTML,
-                        	text:""
+                        	text:"",
+                            cc: cc
                         });
                         
                         transport.sendMail(mailOptions, function(error, info){
@@ -146,9 +147,7 @@ var Approval = function (data) {
                                 console.log(error);
                                 reject();
                             }else{
-                                console.log("success");
-                                reject();
-                                // resolve();
+                                resolve();
                             }
                         });    
                     });
