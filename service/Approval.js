@@ -18,7 +18,7 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var mailDefaultOptions = {
     from: 'webmaster@yescnc.co.kr', // sender address 
-    //to: 'novles@yescnc.co.kr',
+    //to: '"김성식" <novles@yescnc.co.kr>,',
     // subject: 'Hello', // Subject line 
     // text: 'Hello world', // plaintext body 
     // html: '<b>Hello world </b>' // html body 
@@ -33,6 +33,7 @@ var transport = nodemailer.createTransport(smtpTransport({
     },
     connectionTimeout:10000
 }));
+
 
 
 var Approval = function (data) {
@@ -121,12 +122,22 @@ var Approval = function (data) {
                     var temp=_.template(html);
                     var sendHTML=temp(data);
                     ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
-                        console.log(sendHTML);
+                        
+                        var cc = "";
                         console.log(result);
+                        for(var idx in result){
+                            if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
+                                cc = '"'+result[idx].name+'" <' +result[idx].email + '>,'; 
+                            }
+                        }
+                        
+                        
+                        console.log(cc);
                         
                         var mailOptions=_.defaults(mailDefaultOptions, {
                             to: 'carran@yescnc.co.kr',
-                            subject:"Yescnc 근태관리 시스템(결제 알림)",
+                            cc: 'carran@naver.com',
+                            subject:"[근태 보고] " + data.name + " " + data.code_name,
                             html:sendHTML,
                         	text:""
                         });
