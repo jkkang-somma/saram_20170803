@@ -4,7 +4,7 @@ var app = require('./app');
 var schedule = require('node-schedule');
 var batch = require('./batch/batch');
 
-app.set('port', 8002);
+app.set('port', 80);
 var server = app.listen(app.get('port'), function() {
     debug("==================================================================================================================");
     debug("================================================ Welcome to Saram ================================================");
