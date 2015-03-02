@@ -243,6 +243,38 @@
     	<query id="deleteApproval">
     		delete from approval_tbl where doc_num = ?
     	</query>
+    	
+    	<query id="getApprovalMailData">
+    		SELECT
+				a.doc_num,
+				a.submit_id,
+				m.name as name,
+				a.start_date,
+				a.end_date,
+				a.state,
+				a.office_code,
+				o.name as code_name,
+				m.dept_code as dept_code,
+				d.name as dept_name
+			FROM 
+				approval_tbl a
+				left join members_tbl m on a.submit_id = m.id
+				left join office_code_tbl o on a.office_code = o.code
+				left join dept_code_tbl d on a.office_code = d.code
+			WHERE
+				doc_num = ?
+    	</query>
+    	
+    	<query id="getApprovalMailingList">
+    		SELECT
+				name,
+				email
+			FROM
+				members_tbl
+			WHERE
+				dept_code = ?
+    	</query>
+    	
 	</group>
 	
 	<group id="approval_index">

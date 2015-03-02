@@ -38,6 +38,18 @@ ApprovalDao.prototype.updateApprovalConfirm =  function (connection, data) {
         ]
     ); 
 };
+
+
+ApprovalDao.prototype.getApprovalMailData =  function (doc_num) {
+    var queryStr = db.getQuery('approval', 'getApprovalMailData');
+    return db.queryV2(queryStr, [doc_num]);
+};
+
+ApprovalDao.prototype.getApprovalMailingList =  function (dept_code) {
+    var queryStr = db.getQuery('approval', 'getApprovalMailingList');
+    return db.queryV2(queryStr, [dept_code]);
+};
+
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
     var queryStr = db.getQuery('approval_index', 'selectMaxIndexApproval');
     return db.queryV2(queryStr, [yearmonth]);
@@ -50,4 +62,7 @@ ApprovalDao.prototype.updateMaxIndex =  function (data) {
     var queryStr = db.getQuery('approval_index', 'updateMaxIndex');
     return db.queryV2(queryStr, [data.yearmonth]);
 };
+
+
+
 module.exports = new ApprovalDao();

@@ -16,7 +16,7 @@ var _baseURL="http://210.220.205.57";
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var mailDefaultOptions = {
-    from: 'novles@yescnc.co.kr', // sender address 
+    from: 'webmaster@yescnc.co.kr', // sender address 
     //to: 'novles@yescnc.co.kr',
     // subject: 'Hello', // Subject line 
     // text: 'Hello world', // plaintext body 
@@ -26,8 +26,8 @@ var transport = nodemailer.createTransport(smtpTransport({
     host: 'webmail.yescnc.co.kr',
     port: 25,
     auth: {
-        user: 'novles@yescnc.co.kr',
-        pass: '2952441a!'
+        user: 'webmaster@yescnc.co.kr',
+        pass: 'Yes112233'
     },
     connectionTimeout:10000
 }));

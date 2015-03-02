@@ -93,7 +93,7 @@ var User = function (data, isNoSchemas) {
                 if (_.isUndefined(currentData[0])){
                     throw new Error("DO_NOT_FOUND_USER");
                 }
-                if (currentData[0].email!=_data.email){ //입력받은 이메일이 적확하지 않을 때.
+                if (currentData[0].email!=_data.email){ //입력받은 이메일이 정확하지 않을 때.
                     debug("_configUser ERROR:Not equls Email");
                     throw new Error("NOT_EQULES_EMAIL");
                 } else {
@@ -105,6 +105,7 @@ var User = function (data, isNoSchemas) {
             });
         });
     };
+    
     return {
         get:_get,
         getUser:_getUser,
