@@ -3,7 +3,7 @@
         <query id="selectUserList">
         	SELECT 
 				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-				ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
+				ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
 				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
 			FROM members_tbl A
 			ORDER BY name
@@ -11,14 +11,14 @@
         <query id="selectIdByUser">
         	SELECT 
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
+        		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
         		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
-        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
@@ -36,6 +36,7 @@
         		admin=?,
         		position_code=?,
         		ip_pc=?,
+        		mac=?,
         		ip_office=?,
         		email=?,
         		phone=?,
@@ -52,9 +53,8 @@
 	        	* 
 	        FROM 
 	        	members_tbl
-			WHERE 
-				id = ?
-				AND ( ip_pc = ? OR ip_office = ?);
+			WHERE id = ?
+			AND ip_office = ?
         </query>        
     </group>
     <group id="rawData">
@@ -70,9 +70,9 @@
         </query>
         <query id="insertRawDataCompanyAccess">
   			INSERT INTO commute_base_tbl 
-  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm)
+  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm, mac)
   			VALUES
-  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?)
+  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?, ?)
         </query>
         
         <query id="selectRawDataList">
@@ -255,7 +255,8 @@
 				a.office_code,
 				o.name as code_name,
 				m.dept_code as dept_code,
-				d.name as dept_name
+				d.name as dept_name,
+				a.submit_comment
 			FROM 
 				approval_tbl a
 				left join members_tbl m on a.submit_id = m.id
