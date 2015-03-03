@@ -7,6 +7,7 @@ var CompanyAccess = require("../service/CompanyAccess.js");
 
 router.route("/")
 .post(function(req,res,next){
+	console.log(req);
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
 
