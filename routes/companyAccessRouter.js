@@ -12,9 +12,10 @@ router.route("/")
 
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	var inData = {
-			type : req.body.type,
-			ip_pc : ip,		// ip_pc , ip_office 동일 IP로 셋팅 
-			ip_office : ip
+		type : req.body.type,
+		ip_pc : req.body.ip,
+		mac : req.body.mac,
+		ip_office : req.ip
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {

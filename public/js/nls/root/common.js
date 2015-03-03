@@ -40,7 +40,8 @@ define({
         BIRTHDAY:"Birthday",
         WEDDING_DAY:"Wedding Day",
         EMERGENCY_PHONE:"Emergency Phone",
-        MEMO:"Memo"
+        MEMO:"Memo",
+        MAC:"Mac"
     },
     GRID:{
         MSG:{
