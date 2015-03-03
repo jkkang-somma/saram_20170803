@@ -9,6 +9,7 @@ define([
   'dialog',
   'i18n!nls/common',
   'code',
+  'fastclick',
   'router',
   'models/sm/SessionModel',
   'views/LoadingView',
@@ -17,7 +18,7 @@ define([
   'cmoment', 
   'bootstrap-datetimepicker',
   'css!tool/bootstrap-select/css/bootstrap-select.css',
-], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
+], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, Fastclick, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
     var _loadingView;
     var _saram;
@@ -34,6 +35,7 @@ define([
             
             $.ajaxSetup({ cache: false });
             
+            Fastclick.attach(document.body);
             var _app=this;
             
             //Global Error Handle

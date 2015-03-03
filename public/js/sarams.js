@@ -55,15 +55,13 @@ require.config({
       lodingButton:'lib/component/lodingButton',
       schemas:'lib/schemas',
       code:'lib/code',
+      fastclick:'lib/fastclick',
       
       resulttimefactory: 'lib/resultTimeFactory',
       spin:'tool/spin/spin',
       'cryptojs.core': "tool/crypto/core",
       'cryptojs.sha256': "tool/crypto/sha256",
       i18n:'tool/i18n-master/i18n',
-      // fittext:'tool/textillate/jquery.fittext',
-      // lettering:'tool/textillate/jquery.lettering',
-      // textillate:'tool/textillate/jquery.textillate',
       templates:'../templates',
       cs:'../css'
    },

@@ -181,6 +181,12 @@ define([
         	                label:i18nCommon.USER.IP,
         	                value:_model.ip_pc,
         	                group:"detailInfo"
+        	        },{
+        	                type:"input",
+        	                name:"mac",
+        	                label:i18nCommon.USER.MAC,
+        	                value:_model.mac,
+        	                group:"detailInfo"
         	        },
         	         {
         	                type:"input",

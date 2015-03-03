@@ -30,6 +30,7 @@ var Schemas = function (schemaName) {
             admin : null,
             new_password:null,
             ip_pc : null,
+            mac:null,
             ip_office : null,
             email : null,
             phone : null,

@@ -40,7 +40,8 @@ define({
         BIRTHDAY:"생일",
         WEDDING_DAY:"결혼기념일",
         EMERGENCY_PHONE:"비상연락망",
-        MEMO:"메모"
+        MEMO:"메모",
+        MAC:"Mac"
     },
     
     GRID:{
