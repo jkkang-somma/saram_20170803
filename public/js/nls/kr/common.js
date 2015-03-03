@@ -332,6 +332,7 @@ define({
             TYPE : "출입기록",
             IP : "IP",
             NEED_CONFIRM : "확인필요",
+            MAC:"Mac"
         },
         MSG :{
             NOK : "확인필요",
