@@ -16,15 +16,7 @@ var fs = require('fs');
 var path = require("path");
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
-var mailDefaultOptions = {
-    from: 'webmaster@yescnc.co.kr', // sender address 
-    to: [
-        { name: "김성식", address: "sskim@yescnc.co.kr"},
-        { name :"김은영", address: "eykim@yescnc.co.kr"}]
-    // subject: 'Hello', // Subject line 
-    // text: 'Hello world', // plaintext body 
-    // html: '<b>Hello world </b>' // html body 
-};
+
 var transport = nodemailer.createTransport(smtpTransport({
     host: 'webmail.yescnc.co.kr',
     port: 25,
@@ -39,19 +31,18 @@ var transport = nodemailer.createTransport(smtpTransport({
 
 
 var Approval = function (data) {
-    var that = this;
     var _getApprovalList = function (doc_num) {
         return ApprovalDao.selectApprovalList(doc_num);
-    }
+    };
     var _getApprovalListWhere = function (startDate, endDate, managerId) {
         if(managerId != undefined && managerId != ""){
             return ApprovalDao.selectApprovalByManager(managerId, startDate, endDate);
         }
         return ApprovalDao.selectApprovalListWhere(startDate, endDate);
-    }
+    };
     var _insertApproval = function (data) {
         return ApprovalDao.insertApproval(data);
-    }
+    };
     var _updateApprovalConfirm = function(data) {
         return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
@@ -133,14 +124,16 @@ var Approval = function (data) {
                             }
                         }
                         
-                        console.log(cc);
-                        
-                        var mailOptions=_.defaults(mailDefaultOptions, {
+                        var mailOptions= {
+                            from: 'webmaster@yescnc.co.kr', // sender address 
+                            to: [
+                                { name: "김성식", address: "sskim@yescnc.co.kr"},
+                                { name :"김은영", address: "eykim@yescnc.co.kr"}],
                             subject:"[근태보고] " + data.name + "_" + data.code_name,
                             html:sendHTML,
                         	text:"",
                             cc: cc
-                        });
+                        };
                         
                         transport.sendMail(mailOptions, function(error, info){
                             if(error){//메일 보내기 실패시 
@@ -193,6 +186,5 @@ var Approval = function (data) {
     };
 };
 
-//new app 은 싱글톤 아니고 app은 계속 생성
 module.exports = Approval;
 
