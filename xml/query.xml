@@ -36,7 +36,6 @@
         		admin=?,
         		position_code=?,
         		ip_pc=?,
-        		mac=?,
         		ip_office=?,
         		email=?,
         		phone=?,
