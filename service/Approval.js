@@ -58,11 +58,6 @@ var Approval = function (data) {
                         outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
 			        }
 			        
-			        if(data.outOffice.state == "결재완료"){
-			            console.log(data.outOffice.doc_num);
-			            promiseArr.push(_sendOutofficeEmail(data.outOffice.doc_num));
-			        }
-			        
 			        promiseArr.push(OutOfficeDao.insertOutOffice(connection, outOfficeData));
 			    }
 			    
@@ -103,24 +98,24 @@ var Approval = function (data) {
     var _sendOutofficeEmail = function(doc_num){
         return new Promise(function(resolve, reject){
             ApprovalDao.getApprovalMailData(doc_num).then(function(data){
-                if(data.length == 1 ){
+                if(data.length == 1 )
                     data = data[0];
-                }
                 
-                if(data.start_date == data.end_date){
+                if(data.start_date == data.end_date)
                     data.end_date = null;
-                }
                 
     	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
                     var temp=_.template(html);
                     var sendHTML=temp(data);
+                    
                     ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
-                        
                         var cc = [];
-                        console.log(result);
-                        for(var idx in result){
-                            if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                cc.push({name : result[idx].name, address: result[idx].email});
+                        if(data.dept_code != "5100" && data.dept_code != "5200"){
+                            for(var idx in result){
+                                if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
+                                    console.log(result[idx]);
+                                    cc.push({name : result[idx].name, address: result[idx].email});
+                                }
                             }
                         }
                         
@@ -128,7 +123,8 @@ var Approval = function (data) {
                             from: 'webmaster@yescnc.co.kr', // sender address 
                             to: [
                                 { name: "김성식", address: "sskim@yescnc.co.kr"},
-                                { name :"김은영", address: "eykim@yescnc.co.kr"}],
+                                { name :"김은영", address: "eykim@yescnc.co.kr"},
+                                ],
                             subject:"[근태보고] " + data.name + "_" + data.code_name,
                             html:sendHTML,
                         	text:"",
@@ -144,8 +140,6 @@ var Approval = function (data) {
                             }
                         });    
                     });
-                    
-                
                 }).catch(SyntaxError, function (e) {
                     console.log("file contains invalid file");
                     reject();
@@ -154,6 +148,7 @@ var Approval = function (data) {
                     reject();
                 });    
     	    });
+    	    
         });
     };
     
@@ -182,7 +177,8 @@ var Approval = function (data) {
         updateApprovalConfirm:_updateApprovalConfirm,
         getApprovalIndex:_getApprovalIndex,
         setApprovalIndex:_setApprovalIndex,
-        updateApprovalIndex:_updateApprovalIndex
+        updateApprovalIndex:_updateApprovalIndex,
+        sendOutofficeEmail:_sendOutofficeEmail
     };
 };
 
