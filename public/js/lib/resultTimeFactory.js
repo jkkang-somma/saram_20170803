@@ -414,13 +414,13 @@ define([
                 if(this.isSuwon){
                     if(this.vacationCode == "V02"){
                         this.standardInTime.hour(14).minute(0).second(0);
-                        this.standardOutTime = Moment(this.standardInTime).add(this.eveningWorkTime,"hours");
+                        this.standardOutTime = Moment(this.standardInTime).add(_.isUndefined(this.eveningWorkTime)? 4 : this.eveningWorkTime,"hours");
                     }else if(this.vacationCode == "V03"){
                         if(!_.isNull(this.inTime)){
                             if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexible) // 지각기준보다 일찍왔을경우 기준시간 변경
                                 this.standardInTime = Moment(this.inTime);
                         }
-                        this.standardOutTime = Moment(this.standardInTime).add(this.morningWorkTime,"hours");
+                        this.standardOutTime = Moment(this.standardInTime).add(_.isUndefined(this.morningWorkTime)? 4 : this.morningWorkTime,"hours");
                     }else{
                         if(!_.isNull(this.inTime)){
                             if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexible){ // 지각기준보다 일찍왔을경우 기준시간 변경
