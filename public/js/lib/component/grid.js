@@ -214,6 +214,8 @@ define([
                 _.isUndefined(regex)?false:regex,
                 _.isUndefined(smart)?false:smart
             ).draw();
+            
+            this._filtering();
     	},
     	filtering:function(filter, filterName){
     	    $.fn.dataTable.ext.search=[];
@@ -221,6 +223,7 @@ define([
             this._filtering();
     	},
     	_filtering:function(){
+    	    
     	    var _filters=this.filters;
             $.fn.dataTable.ext.search=[];
             for (var name in _filters){
