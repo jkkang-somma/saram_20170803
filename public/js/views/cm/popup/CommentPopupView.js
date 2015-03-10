@@ -81,7 +81,7 @@ define([
 	                type:"datetime",
 	                name:"inTimeAfter",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.IN_TIME_AFTER,
-	                format:"YYYY-MM-DD HH:mm:ss",
+	                format:"YYYY-MM-DD HH:mm",
 	                group:"modifyItem"
 	        	}, {
 	        		type:"input",
@@ -94,7 +94,7 @@ define([
 	                type:"datetime",
 	                name:"outTimeAfter",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.OUT_TIME_AFTER,
-	                format:"YYYY-MM-DD HH:mm:ss",
+	                format:"YYYY-MM-DD HH:mm",
 	                group:"modifyItem"
 	        	},{
         		  	type:"text",

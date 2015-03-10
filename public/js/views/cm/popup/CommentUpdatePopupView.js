@@ -145,16 +145,16 @@ define([
 	            	pickTime: true,
 			        language: "ko",
 			        todayHighlight: true,
-			        format: "YYYY-MM-DD HH:mm:ss",
-			        defaultDate: Moment(_view.selectData.want_in_time).format("YYYY-MM-DD HH:mm:ss")
+			        format: "YYYY-MM-DD HH:mm",
+			        defaultDate: Moment(_view.selectData.want_in_time).format("YYYY-MM-DD HH:mm")
 	            });
 	            
 				modyfyGroup.find("#commentUpdatePopupOutTime").datetimepicker({
 	            	pickTime: true,
 			        language: "ko",
 			        todayHighlight: true,
-			        format: "YYYY-MM-DD HH:mm:ss",
-			        defaultDate: Moment(_view.selectData.want_out_time).format("YYYY-MM-DD HH:mm:ss")
+			        format: "YYYY-MM-DD HH:mm",
+			        defaultDate: Moment(_view.selectData.want_out_time).format("YYYY-MM-DD HH:mm")
 	            });
 	            
 		        // 일반 사용자는 단순 읽기만 
@@ -321,7 +321,7 @@ define([
      		var checkResult = this.getDatapickerDisable();
      		
      		if(checkResult.inCheck){
-     			newData.changeInTime = $(this.el).find("#commentUpdatePopupInTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm:ss");
+     			newData.changeInTime = $(this.el).find("#commentUpdatePopupInTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm");
      			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId);
      			if (inChangeModel)
 					newData.changeHistoryCollection.add(inChangeModel);
@@ -329,7 +329,7 @@ define([
      		}
      		
      		if(checkResult.outCheck){
-     			newData.changeOutTime = $(this.el).find("#commentUpdatePopupOutTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm:ss");
+     			newData.changeOutTime = $(this.el).find("#commentUpdatePopupOutTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm");
      			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId);
      			if (outChangeModel)
 					newData.changeHistoryCollection.add(outChangeModel);

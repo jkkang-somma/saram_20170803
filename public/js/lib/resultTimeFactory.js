@@ -28,7 +28,7 @@ define([
     
     var DATEFORMAT = "YYYY-MM-DD";
     
-    var DATETIMEFORMAT = "YYYY-MM-DD HH:mm:ss";
+    var DATETIMEFORMAT = "YYYY-MM-DD HH:mm";
     
     var Builder = {
         id:                 "",
@@ -232,7 +232,7 @@ define([
             for(var key in rawDataCollection){
                 var rawDataModel = rawDataCollection[key];
                 if(rawDataModel.get("need_confirm") == 1){
-                    var destTime = Moment(rawDataModel.get("char_date"));
+                    var destTime = Moment(rawDataModel.get("char_date")).second(0);
                     var type  = rawDataModel.get("type");
                     type = type.slice(0,2);
                     
