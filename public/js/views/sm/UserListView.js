@@ -107,12 +107,13 @@ define([
     	                    return true;
     	                },
     	                function(data){
-    	                    var _data=data[6];
-    	                    return !_.isEmpty(_data);
+    	                    var _joinDate=data[6];
+    	                    var _levDate=data[7];
+    	                    return (!_.isEmpty(_joinDate))&&(_.isEmpty(_levDate));
     	                },
     	                function(data){
-    	                    var _data=data[6];
-    	                    return _.isEmpty(_data);
+    	                    var _levDate=data[7];
+    	                    return !_.isEmpty(_levDate);
     	                }
     	           ];
     	           
