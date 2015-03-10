@@ -116,7 +116,7 @@ define([
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
                     
-                    if( userDepartment == "무소속" || userDepartment==="임원" || userId == "000000"){
+                    if( userDepartment == "무소속" || userDepartment==="임원" || userId == "000000" || !_.isNull(userModel.attributes.leave_company)){
                         
                     }else{
                         var yesterdayAttribute = {};
