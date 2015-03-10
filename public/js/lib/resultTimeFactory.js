@@ -375,6 +375,9 @@ define([
                         this.outOfficeCode = code;
                     }
                 }
+            }else{
+                this.vacationCode = null;
+                this.outOfficeCode = null;
             }
             
             if(!this.isHoliday()){
