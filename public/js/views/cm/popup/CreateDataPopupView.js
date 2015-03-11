@@ -115,8 +115,13 @@ define([
                     var userId = userModel.attributes.id;
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
+                    var leaveCompany = userModel.attributes.leave_company;
                     
-                    if( userDepartment == "무소속" || userDepartment==="임원" || userId == "000000" || !_.isNull(userModel.attributes.leave_company)){
+                    if( userDepartment == "무소속"
+                        || userDepartment == "임원"
+                        || !_.isNull(leaveCompany)
+                        || leaveCompany == ""
+                        || userName.slice(0,3) == "테스트"){
                         
                     }else{
                         var yesterdayAttribute = {};
