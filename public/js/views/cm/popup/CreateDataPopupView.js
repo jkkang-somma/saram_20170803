@@ -116,7 +116,9 @@ define([
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
                     var leaveCompany = userModel.attributes.leave_company;
-                    
+                    if(_.isString(leaveCompany)){
+						leaveCompany = leaveCompany.trim();
+					}
                     if( userDepartment == "무소속"
                         || userDepartment == "임원"
                         || !_.isNull(leaveCompany)
