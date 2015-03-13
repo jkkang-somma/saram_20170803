@@ -84,15 +84,15 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 	                type:"datetime",
 	                name:"inTime",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.IN_TIME,
-	                value:_.isNull(this.selectData.in_time) ? null : Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss"),
-	                format:"YYYY-MM-DD HH:mm:ss",
+	                value:_.isNull(this.selectData.in_time) ? null : Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm"),
+	                format:"YYYY-MM-DD HH:mm",
 	                group:"modifyItem"
 	        	}, {
 	                type:"datetime",
 	                name:"outTime",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.OUT_TIME,
-	                value:_.isNull(this.selectData.out_time) ? null : Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss"),
-	                format:"YYYY-MM-DD HH:mm:ss",
+	                value:_.isNull(this.selectData.out_time) ? null : Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm"),
+	                format:"YYYY-MM-DD HH:mm",
 	                group:"modifyItem"
 	        	}, {
 	                type:"combo",

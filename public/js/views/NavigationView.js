@@ -62,7 +62,7 @@ define([
         
         // 수원 근로자가 아닌 경우 출퇴근 기능 삭제
         var dept_code = SessionModel.getUserInfo().dept_code;
-        if ( !Code.isSuwonWorker(dept_code) || isMobile.any()) { 
+        if ( !Code.isSuwonWorker(dept_code)|| isOnLoginModule&&isMobile.any()&&Code.isSuwonWorker(dept_code)) { 
         	$(this.el).find('#accessIn').remove();
         	$(this.el).find('#accessOut').remove();
         }
@@ -119,51 +119,75 @@ define([
 	accessIn: function() {	// 출근 기록
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
-            var status=LoginModule.status;
-            if (status==2){
-                clearInterval(myVar);
-                var info=LoginModule.registIpInfos();
-                var obj = JSON.parse(info)
-                obj.type='출근(수원)';
-                var model = new RawDataModel();
-                model.companyAccessUrl().save(
-                    obj, 
-                    {
-                        success: function(model, response) {
-                            Dialog.show("출근 등록 되었습니다.\n"+ "출근시간 : " + response.data.char_date );
-                        }, 
-                        error : function(model, res){
-                            Dialog.error("출근 등록이 실패했습니다.");
-                        }
-                });
+            var obj={};
+            if (isOnLoginModule||!isMobile.any()){
+                var status=LoginModule.status;
+                if (status==2){
+                        clearInterval(myVar);
+                        var info=LoginModule.registIpInfos();
+                        obj = JSON.parse(info);
+                        
+                } else {
+                    clearInterval(myVar);
+                    Dialog.error("로긴 정보가 올바르지 않습니다.");
+                }
             } else {
                 clearInterval(myVar);
-                Dialog.error("로긴 정보가 올바르지 않습니다.");
+                obj.mac='';
+                obj.ip_pc='';
             }
+            
+            obj.type='출근(수원)';
+            var model = new RawDataModel();
+            model.companyAccessUrl().save(obj,{
+                success: function(model, response) {
+                    Dialog.show("출근 등록 되었습니다.\n"+ "출근시간 : " + response.data.char_date );
+                }, 
+                error : function(model, res){
+                    Dialog.error("출근 등록이 실패했습니다.");
+                }
+            });
         }
 	},
+	
+	
+	
+// 		type : req.body.type,
+// 		ip_pc : req.body.ip,
+// 		mac : req.body.mac,
+// 		ip_office : req.ip
+	
 	accessOut: function() { // 퇴근 기록
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
-            var status=LoginModule.status;
-            if (status==2){
+            var obj={};
+            if (isOnLoginModule||!isMobile.any()){
+                var status=LoginModule.status;
+                if (status==2){
+                        clearInterval(myVar);
+                        var info=LoginModule.registIpInfos();
+                        obj = JSON.parse(info);
+                        
+                } else {
                     clearInterval(myVar);
-                    var info=LoginModule.registIpInfos();
-                    var obj = JSON.parse(info);
-                    obj.type='퇴근(수원)';
-                    var model = new RawDataModel();
-                    model.companyAccessUrl().save(obj, {
-                        success: function(model, response) {
-                            Dialog.show("퇴근 등록 되었습니다.\n퇴근시간 : " + response.data.char_date );
-                        }, 
-                        error : function(model, res){
-                            Dialog.error("퇴근 등록이 실패했습니다.");
-                        }
-                    });
+                    Dialog.error("로긴 정보가 올바르지 않습니다.");
+                }
             } else {
                 clearInterval(myVar);
-                Dialog.error("로긴 정보가 올바르지 않습니다.");
+                obj.mac='';
+                obj.ip_pc='';
             }
+            
+            obj.type='퇴근(수원)';
+            var model = new RawDataModel();
+            model.companyAccessUrl().save(obj, {
+                success: function(model, response) {
+                    Dialog.show("퇴근 등록 되었습니다.\n퇴근시간 : " + response.data.char_date );
+                }, 
+                error : function(model, res){
+                    Dialog.error("퇴근 등록이 실패했습니다.");
+                }
+            });
         }
 	},
 	

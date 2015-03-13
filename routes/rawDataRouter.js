@@ -30,8 +30,6 @@ router.route('/bulk')
             message: "관리자 등급만 생성이 가능합니다.",
         });
 	}
-    
-    
 });
 
 

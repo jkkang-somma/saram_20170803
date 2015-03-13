@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
 <head>
     <title>YesCNC 근태관리 시스템</title>
@@ -22,6 +22,7 @@
     <script src="js/tool/bootstrap-select/js/bootstrap-select.js"></script>
     <script src="https://www.java.com/js/deployJava.js"></script>
     <script>
+    var isOnLoginModule= false;
     var isMobile = {
         Android: function() {
             return navigator.userAgent.match(/Android/i);
@@ -42,18 +43,21 @@
             return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
         }
     };
-    if (!isMobile.any()){
-        var attributes = { id:'LoginModule',code:'LoginModule',  width:1, height:1} ;
-        var parameters = {java_status_events: 'true', jnlp_href: 'LoginModule.jnlp'} ;
-        deployJava.runApplet(attributes, parameters, '1.7');
-        
-        //applet display 속성 none로 설정시 크롬에서 해당 모듈 인지 못해서 다운 됨.
-        document.getElementById('deployJavaPlugin').style.position="fixed"; 
-        document.getElementById('LoginModule').style.position="fixed";
-        document.getElementById('LoginModule').style.top="-20";  
-        document.getElementById('LoginModule').style.width='0';
-        document.getElementById('LoginModule').style.height='0';
-    } 
+    
+    if (isOnLoginModule){
+        if (!isMobile.any()){
+            var attributes = { id:'LoginModule',code:'LoginModule',  width:1, height:1} ;
+            var parameters = {java_status_events: 'true', jnlp_href: 'LoginModule.jnlp'} ;
+            deployJava.runApplet(attributes, parameters, '1.7');
+            
+            //applet display 속성 none로 설정시 크롬에서 해당 모듈 인지 못해서 다운 됨.
+            document.getElementById('deployJavaPlugin').style.position="fixed"; 
+            document.getElementById('LoginModule').style.position="fixed";
+            document.getElementById('LoginModule').style.top="-20";  
+            document.getElementById('LoginModule').style.width='0';
+            document.getElementById('LoginModule').style.height='0';
+        } 
+    }
     </script>
     
     <script data-main="js/sarams" src="js/tool/require/require.js"></script>

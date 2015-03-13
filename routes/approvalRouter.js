@@ -104,6 +104,12 @@ router.route('/bulk')
     approval.updateApprovalConfirm(req.body).then(function(e){
         debug("Complete Update Approval."); 
         res.send({success:true, msg:"Complete Update Approval."});
+        
+        if(req.body.outOffice.state == "결재완료"){
+            console.log();
+            approval.sendOutofficeEmail(req.body.outOffice.doc_num);
+        }
+        
     }).catch(function(e){
         debug("Error Update Approval.");
         res.status(500);
