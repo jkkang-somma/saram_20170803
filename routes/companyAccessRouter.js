@@ -14,7 +14,7 @@ router.route("/")
 
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	console.log("#############");
-	console.log(req.headers['x-forwarded-for'];
+	console.log(req.headers['x-forwarded-for']);
 	console.log(req.connection.remoteAddress);
 
 	var inData = {
