@@ -23,7 +23,9 @@ var CompanyAccess = function() {
 				var need_confirm = 1; // 1: 정상 , 2: 확인 필요				
 				if (result.length == 0) {	// 조회 값이 없는 경우 
 					need_confirm = 2;
-				} else {
+				} 
+				/*
+				else {
 					var _user=result[0];
 					var resultMac =_user.mac;
 					var requestMac=data.mac;
@@ -43,6 +45,7 @@ var CompanyAccess = function() {
 						need_confirm=2;
 					}
 				}
+				*/
 			
 				var insertDataObj = {
 						id : user.id,
