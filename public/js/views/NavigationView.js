@@ -120,7 +120,7 @@ define([
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
-            if (isOnLoginModule||!isMobile.any()){
+            if (isOnLoginModule){
                 var status=LoginModule.status;
                 if (status==2){
                         clearInterval(myVar);
@@ -161,7 +161,7 @@ define([
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
-            if (isOnLoginModule||!isMobile.any()){
+            if (isOnLoginModule){
                 var status=LoginModule.status;
                 if (status==2){
                         clearInterval(myVar);
