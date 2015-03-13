@@ -20,7 +20,8 @@ RawDataDao.prototype.insertRawData =  function (connection, data) {
 // 툴퇴근 정보 등록 
 RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
     var queryStr = db.getQuery('rawData', 'insertRawDataCompanyAccess');
-    return db.queryV2(queryStr, [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm]);
+    console.log(data.char_date);
+    return db.queryV2(queryStr, [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm, data.mac]);
 }
 
 RawDataDao.prototype.selectRawDataList =  function (data) {

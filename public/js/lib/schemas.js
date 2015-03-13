@@ -28,6 +28,7 @@ define([
             leave_company: "",
             admin : null,
             ip_pc : null,
+            mac:null,
             ip_office : null,
             position:null,
             position_code:null,
