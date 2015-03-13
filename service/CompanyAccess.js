@@ -47,11 +47,11 @@ var CompanyAccess = function() {
 						name : user.name,
 						department : user.dept_name,
 						type : data.type,
-						ip_pc : data.ip_pc.toString(),
+						ip_pc : data.ip_pc==null?null:data.ip_pc.toString(),
 						ip_office : data.ip_office,
 						need_confirm : need_confirm,
 						char_date : Moment().format("YYYY-MM-DD HH:mm:ss"),
-						mac:data.mac.toString()
+						mac:data.mac==null?null:data.mac.toString()
 				};
 				
 				RawDataDao.insertRawDataCompanyAccess(insertDataObj).then(function(inResult) {
