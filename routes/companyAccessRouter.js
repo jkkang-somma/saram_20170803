@@ -16,7 +16,7 @@ router.route("/")
 		type : req.body.type,
 		ip_pc : _.isEmpty(req.body.ip)?null:req.body.ip,
 		mac : _.isEmpty(req.body.mac)?null:req.body.mac,
-		ip_office : req.ip
+		ip_office : ip
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {
