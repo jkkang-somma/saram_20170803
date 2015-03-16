@@ -628,7 +628,7 @@ define([
             
             var selectedDate = {
                 start: currentDayCommute.get("date"),
-                end: Moment(currentDayCommute.get("date"), this.DATEFORMAT).add(1,"days").format(this.DATEFORMAT)
+                end: Moment(currentDayCommute.get("date"), DATEFORMAT).add(1,"days").format(DATEFORMAT)
             };
                     
             var inOfficeCollection = new InOfficeCollection();
@@ -652,7 +652,7 @@ define([
                 if(!_.isNull(yesterdayCommute)){
                     yesterdayOutTime = yesterdayCommute.get("out_time");
                 }
-     			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, that.DATETIMEFORMAT));
+     			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, DATETIMEFORMAT));
 
                 var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
                 userOutOfficeCollection.add(outOfficeCollection.where({id: that.id}));
@@ -681,7 +681,7 @@ define([
          			that.initByModel(nextDayCommute);
          			
          			if(currentResult.out_time){
-                    	that.setStandardTime(Moment(currentResult.out_time), that.DATETIMEFORMAT);
+                    	that.setStandardTime(Moment(currentResult.out_time), DATETIMEFORMAT);
          			}
          			var tomorrowInOffice = userInOfficeCollection.where({date:selectedDate.end});
                     that.setInOffice(tomorrowInOffice);
