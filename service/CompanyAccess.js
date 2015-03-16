@@ -24,22 +24,24 @@ var CompanyAccess = function() {
 				if (result.length == 0) {	// 조회 값이 없는 경우 
 					need_confirm = 2;
 				} else {
-				  var _user=result[0];
-				  var resultMac =_user.mac;
-				  var requestMac=data.mac;
-				  var eqFlag=false;
-				  for (var i=0; i < requestMac.length; i++){
-				    
-				    if (resultMac==requestMac[i]){
-				      eqFlag=true;
-				      break;
-				    }
-				  }
-				  if (eqFlag){
-				    need_confirm=1;
-				  } else {
-				    need_confirm=2;
-				  }
+					var _user=result[0];
+					var resultMac =_user.mac;
+					var requestMac=data.mac;
+					var eqFlag=false;
+					if (!_.isNull(data.mac)){
+						for (var i=0; i < requestMac.length; i++){
+						    if (resultMac==requestMac[i]){
+						      eqFlag=true;
+						      break;
+						    }
+						}
+					}
+				  
+					if (eqFlag){
+						need_confirm=1;
+					} else {
+						need_confirm=2;
+					}
 				}
 			
 				var insertDataObj = {
@@ -47,11 +49,11 @@ var CompanyAccess = function() {
 						name : user.name,
 						department : user.dept_name,
 						type : data.type,
-						ip_pc : data.ip_pc.toString(),
+						ip_pc : data.ip_pc==null?null:data.ip_pc.toString(),
 						ip_office : data.ip_office,
 						need_confirm : need_confirm,
 						char_date : Moment().format("YYYY-MM-DD HH:mm:ss"),
-						mac:data.mac.toString()
+						mac:data.mac==null?null:data.mac.toString()
 				};
 				
 				RawDataDao.insertRawDataCompanyAccess(insertDataObj).then(function(inResult) {
