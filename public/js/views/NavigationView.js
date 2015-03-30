@@ -27,11 +27,10 @@ define([
   		_.bindAll(this, 'hide');
   	},  	
     render: function(){
-       $(this.el).append(navigation);
-       
+        $(this.el).append(navigation);
         var _auth= SessionModel.getUserInfo().admin;
         var _liTag='<li class="dropdown"></li>';     
-        var _aTag='<a href="#" class="dropdown-toggle needsclick" data-toggle="dropdown" role="button" aria-expanded="false"></a>';
+        var _aTag='<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>';
         var _subUlTag='<ul class="dropdown-menu" role="menu"></ul>';
         var _subliTag="<li></li>";
         

@@ -72,8 +72,8 @@ DBBatchJobExecuter.prototype.doTableEntries = function(tables){
                 var tableName = destTableName;
                 db.queryV2('SHOW CREATE TABLE ' + tableName).then(
                     function(createTableQryResult){
-                        that.result[tableName].dropQuery = "drop table if exists " + tableName +";\n\n";
-                        that.result[tableName].createQuery = createTableQryResult[0]["Create Table"] + ";\n\n";
+                        that.result[tableName]["dropQuery"] = "drop table if exists " + tableName +";\n\n";
+                        that.result[tableName]["createQuery"] = createTableQryResult[0]["Create Table"] + ";\n\n";
                         resolve();
                     }
                 );    
@@ -123,7 +123,7 @@ DBBatchJobExecuter.prototype.doTableEntries = function(tables){
                             queryItem = queryItem.slice(0,-1);
                             queryItem += ";\n\n";
                             query += queryItem;
-                            that.result[tableName].insertQuery = query;
+                            that.result[tableName]["insertQuery"] = query;
                         }
                         resolve();
                     }
