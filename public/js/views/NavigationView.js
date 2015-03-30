@@ -162,18 +162,6 @@ define([
 // 		ip_office : req.ip
 	
 	accessOut: function() { // 퇴근 기록
-<<<<<<< HEAD
-		var model = new RawDataModel();
-		model.companyAccessUrl().save({type:'퇴근(수원)'}, {
-    		success: function(model, response) {
-    		    Dialog.show(
-    			    "퇴근 등록 되었습니다.\n"
-    			    + "퇴근시간 : " + response.data.char_date );
-         	}, error : function(model, res){
-         		Dialog.error("퇴근 등록이 실패했습니다.");
-         	}
-		});
-=======
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
@@ -205,7 +193,6 @@ define([
                 }
             });
         }
->>>>>>> 217aae1cd6b643a74f8c41325a05cb31ab6bb73c
 	},
 	
 	setting:function(){
