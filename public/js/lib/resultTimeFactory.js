@@ -457,7 +457,11 @@ define([
         getResult : function(){
             if(!( this.workType == WORKTYPE.VACATION || this.isHoliday() )){ // 휴일 / 휴가가 아닌경우
                 if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
-                    if(this.outOfficeCode!="W02"){ // 출장 체크
+                    if((this.outOfficeCode=="W02")){ // 출장 체크
+                        this.workType = WORKTYPE.NORMAL;
+                    }else if(this.standardInTime.isAfter(this.standardOutTime)){
+                        this.workType = WORKTYPE.NORMAL;
+                    }else{
                         this.workType = WORKTYPE.ABSENTCE;
                     }
                 }else if(!this.inTime && this.checkLate){
