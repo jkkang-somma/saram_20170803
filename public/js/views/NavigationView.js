@@ -60,13 +60,10 @@ define([
         }
         
         // 수원 근로자가 아닌 경우 출퇴근 기능 삭제
-<<<<<<< HEAD
-        var ip_office = SessionModel.getUserInfo().ip_office;
-        if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) ) { 
-=======
         var dept_code = SessionModel.getUserInfo().dept_code;
-        if ( !Code.isSuwonWorker(dept_code)|| isOnLoginModule&&isMobile.any()&&Code.isSuwonWorker(dept_code)) { 
->>>>>>> 217aae1cd6b643a74f8c41325a05cb31ab6bb73c
+	var ip_office = SessionModel.getUserInfo().ip_office;
+        if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office)
+         || isOnLoginModule&&isMobile.any()) { 
         	$(this.el).find('#accessIn').remove();
         	$(this.el).find('#accessOut').remove();
         }
