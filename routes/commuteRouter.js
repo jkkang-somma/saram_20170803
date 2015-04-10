@@ -15,11 +15,13 @@ router.route('/')
 				res.send(result);
 			});
 		}else{
-			Commute.getCommute(req.query, function(result) {
+			Commute.getCommute(req.query).then(function(result) {
 				try{
-					debug("######################");
+					debug("END DB Query");
 					debug(process.memoryUsage());
-					res.json(result);
+					res.send(result);
+					debug("End Response Send");
+					debug(process.memoryUsage());
 				}catch(err){
 					debug(err);
 				}

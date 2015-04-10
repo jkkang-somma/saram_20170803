@@ -12,12 +12,9 @@ var db = require('../lib/dbmanager.js');
 
 var Commute = function() {	
 
-	var _getCommute = function(data, callback) {
-		CommuteDao.selectCommute(data).then(function(result) {
-			debug("######################");
-			debug(process.memoryUsage());
-			return callback(result);
-		});
+	var _getCommute = function(data) {
+		return CommuteDao.selectCommute(data);
+			
 	};
 	
 	var _insertCommute = function(data){
