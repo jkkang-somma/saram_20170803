@@ -18,8 +18,8 @@ router.route('/')
 				debug("Success get Commute");
 				try{
 					debug(result.length);
-					res.write(result);
-					res.end();
+					res.json(result);
+					
 					//res.send(result);
 				}catch(err){
 					debug(err);
