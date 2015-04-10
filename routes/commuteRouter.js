@@ -15,6 +15,7 @@ router.route('/')
 			});
 		}else{
 			Commute.getCommute(req.query, function(result) {
+				debug("Success get Commute");
 				return res.send(result);
 			});
 		}
