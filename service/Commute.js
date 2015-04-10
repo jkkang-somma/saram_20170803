@@ -14,7 +14,8 @@ var Commute = function() {
 
 	var _getCommute = function(data, callback) {
 		CommuteDao.selectCommute(data).then(function(result) {
-			debug("Success selectCommute");
+			debug("######################");
+			debug(process.memoryUsage());
 			return callback(result);
 		});
 	};

@@ -8,6 +8,8 @@ var sessionManager = require('../lib/sessionManager');
 router.route('/')
 .get(function(req, res){
 	if(_.isUndefined(req.query.date)){
+		debug("######################");
+		debug(process.memoryUsage());
 		if(!_.isUndefined(req.query.id)){
 			Commute.getCommuteByID(req.query).then(function(result){
 				res.send(result);
@@ -15,6 +17,8 @@ router.route('/')
 		}else{
 			Commute.getCommute(req.query, function(result) {
 				try{
+					debug("######################");
+					debug(process.memoryUsage());
 					res.send(result);
 				}catch(err){
 					debug(err);
