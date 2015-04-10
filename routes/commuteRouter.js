@@ -19,7 +19,7 @@ router.route('/')
 				try{
 					debug("######################");
 					debug(process.memoryUsage());
-					res.send(result);
+					res.json(result);
 				}catch(err){
 					debug(err);
 				}
