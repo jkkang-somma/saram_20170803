@@ -18,7 +18,6 @@ router.route('/workingSummary')
         userId:_userId
     };
     
-    debug(params);
     _dashboard.getWorkingSummary(params).then(function(result){
         res.send(result);
     }).catch(function(e){

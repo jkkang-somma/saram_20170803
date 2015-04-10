@@ -3,27 +3,36 @@ var _ = require('underscore');
 var debug = require('debug')('commuteRouter');
 var router = express.Router();
 var Commute = require('../service/Commute.js');
-var Promise = require('bluebird');
 var sessionManager = require('../lib/sessionManager');
+
 router.route('/')
 .get(function(req, res){
-	debug(req.query);
 	if(_.isUndefined(req.query.date)){
+		debug("######################");
+		debug(process.memoryUsage());
 		if(!_.isUndefined(req.query.id)){
 			Commute.getCommuteByID(req.query).then(function(result){
-				return res.send(result);
+				res.send(result);
 			});
 		}else{
-			Commute.getCommute(req.query, function(result) {
-				return res.send(result);
+			Commute.getCommute(req.query).then(function(result) {
+				try{
+					debug("END DB Query");
+					debug(result.toString().length);
+					res.send(result);
+					debug("End Response Send");
+				}catch(err){
+					debug(err);
+				}
+				
 			});
 		}
 	}else{
 		Commute.getCommuteDate(req.query.date).then(function(result){
-			return res.send(result);	
+			res.send(result);	
 		});
 	}
-})
+});
 
 router.route('/bulk')
 .post(function(req, res){
@@ -71,7 +80,7 @@ router.route('/lastiestdate')
 .get(function(req,res){
 	Commute.getLastiestDate().then(function(result){
 		res.send(result);
-	})
+	});
 });
 
 router.route('/:id')

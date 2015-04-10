@@ -8,14 +8,12 @@ var ChangeHistoryDao = function () {
 // 변경 이력 조회 
 ChangeHistoryDao.prototype.selectChangeHistory =  function (data) {
 	var queryStr = db.getQuery('changeHistory', 'selectChangeHistory');
-    debug(queryStr);
     return db.queryV2(queryStr, [data.id, data.date, data.change_column]);
 }
 
 //퇴퇴근 변경 이력 조회 
 ChangeHistoryDao.prototype.selectInOutChangeCount =  function (data) {
 	var queryStr = db.getQuery('changeHistory', 'selectInOutChangeCount');
-    debug(queryStr);
     return db.queryV2(queryStr, [data.year, data.id, data.date, data.year, data.id, data.date]);
 }
 

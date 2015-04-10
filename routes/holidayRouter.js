@@ -11,17 +11,12 @@ router.route('/')
     var holiday = new Holiday({year:req.query.year});
     
     holiday.getHolidayList().done(function(result){
-        debug(result);
         res.send(result);    
     });
     
 }).post(function(req, res){
     // Insert user infomation (PUT)
-    debug(req.body);
-     
     var holiday = new Holiday(req.body);
-    debug(req.body);
-    
     var result = holiday.insertHoliday();
     
     if(_.isArray(result)){
@@ -49,8 +44,6 @@ router.route('/bulk')
 
 router.route('/:date')
 .delete(function(req,res){
-    debug(req.params.date);
-    
     var holiday = new Holiday({date: req.params.date});
     
     holiday.deleteHoliday().then(function(){
