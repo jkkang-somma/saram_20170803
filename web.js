@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+process.env.DEBUG = "*";
 var debug = require('debug')('start.js');
 var app = require('./app');
 var schedule = require('node-schedule');
