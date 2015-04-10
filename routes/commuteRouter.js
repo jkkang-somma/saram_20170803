@@ -20,8 +20,10 @@ router.route('/')
 					debug("END DB Query");
 					debug(process.memoryUsage());
 					debug(_.keys(result));
-					debug(result.length);
+					debug(Object.keys(result).length);
+					
 					res.send(result);
+					
 					debug("End Response Send");
 					debug(process.memoryUsage());
 				}catch(err){
