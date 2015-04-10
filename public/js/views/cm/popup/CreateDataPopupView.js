@@ -123,8 +123,7 @@ define([
 					}
                     if( userDepartment == "무소속"
                         || userDepartment == "임원"
-                        || !_.isNull(leaveCompany)
-                        || leaveCompany != ""
+                        || (!_.isNull(leaveCompany) && leaveCompany != "")
                         || userName.slice(0,3) == "테스트"){
                         
                     }else{

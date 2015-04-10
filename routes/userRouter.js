@@ -96,13 +96,12 @@ router.route('/:id')
 //사용자 등록
 router.route('/')
 .post(function(req, res){
-    debug("사용자 등록:");
     var user = new User(req.body);
     debug("ID:" + user.get("id"));
     
     user.addUser().then(function(e){
         debug("Complete Add User.");
-        res.send({success:true, msg:"Complete Add User."})
+        res.send({success:true, msg:"Complete Add User."});
     }).catch(function(e){
         debug("Error Add User.");
         res.status(500);

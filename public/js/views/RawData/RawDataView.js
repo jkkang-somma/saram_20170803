@@ -81,15 +81,19 @@ ProgressbarView){
                	});
             }
             
-             // 경영지원 팀 인 경우
+            // 경영지원 팀 인 경우
             // if ( dept_code == '1000' || admin == 1 ) {
             // 	this.gridOption.column.push( { data : "mac",		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.MAC } );
             // }
     	},
         getRawData : function(){
-            var startDate = $(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate();
-            var endDate = $(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate();
-            this.renderTable(startDate, endDate);
+            var startDate = Moment($(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate());
+            var endDate = Moment($(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate());
+            if(endDate.diff(startDate, 'days') > 31){
+                Dialog.warning("검색 기간이 초과되었습니다. (최대 31일)");
+            }else{
+                this.renderTable(startDate, endDate);
+            }
         },
         renderTable : function(startDate, endDate){
             var that = this;
@@ -97,7 +101,7 @@ ProgressbarView){
                 action:function(){
                     var dfd = new $.Deferred();
                     that.rawDataCollection.fetch({
-                        data : {start : Moment(startDate).format("YYYY-MM-DD"), end : Moment(endDate).format("YYYY-MM-DD")},
+                        data : {start : startDate.format("YYYY-MM-DD"), end : endDate.format("YYYY-MM-DD")},
                         success: function(){
                             dfd.resolve();
                         }, error: function(){

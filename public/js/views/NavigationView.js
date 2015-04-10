@@ -27,11 +27,10 @@ define([
   		_.bindAll(this, 'hide');
   	},  	
     render: function(){
-       $(this.el).append(navigation);
-       
+        $(this.el).append(navigation);
         var _auth= SessionModel.getUserInfo().admin;
         var _liTag='<li class="dropdown"></li>';     
-        var _aTag='<a href="#" class="dropdown-toggle needsclick" data-toggle="dropdown" role="button" aria-expanded="false"></a>';
+        var _aTag='<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>';
         var _subUlTag='<ul class="dropdown-menu" role="menu"></ul>';
         var _subliTag="<li></li>";
         
@@ -62,7 +61,9 @@ define([
         
         // 수원 근로자가 아닌 경우 출퇴근 기능 삭제
         var dept_code = SessionModel.getUserInfo().dept_code;
-        if ( !Code.isSuwonWorker(dept_code)|| isOnLoginModule&&isMobile.any()&&Code.isSuwonWorker(dept_code)) { 
+	var ip_office = SessionModel.getUserInfo().ip_office;
+        if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office)
+         || isOnLoginModule&&isMobile.any()) { 
         	$(this.el).find('#accessIn').remove();
         	$(this.el).find('#accessOut').remove();
         }

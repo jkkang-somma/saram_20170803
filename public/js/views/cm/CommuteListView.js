@@ -428,17 +428,26 @@ define([
      	},
     	selectCommute: function() {
     		var data = {
-     		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
-     		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
+     		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate()),
+     		    endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate())
      		};
-     		   		
-     		data.startDate.getText() === "" ? null : data.startDate = data.startDate.getDate().format("YYYY-MM-DD");
-     		data.endDate.getText() === "" ? null : data.endDate = data.endDate.getDate().format("YYYY-MM-DD");
      		
-     		if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     			Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
+     		if(data.startDate.isAfter(data.endDate)){
+     			Dialog.warning("시작일자가 종료일자보다 큽니다.");
      			return;
      		}
+     		
+     		if(data.endDate.diff(data.startDate, 'days') > 31){
+                Dialog.warning("검색 기간이 초과되었습니다. (최대 31일)");
+                return;
+     		}
+     		
+     		data.startDate = data.startDate.format("YYYY-MM-DD");
+     		data.endDate = data.endDate.format("YYYY-MM-DD");
+     		// if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
+     		// 	Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
+     		// 	return;
+     		// }
      		
             var _this = this;
             Dialog.loading({

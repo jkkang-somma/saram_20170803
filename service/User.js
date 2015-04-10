@@ -16,8 +16,6 @@ var User = function (data, isNoSchemas) {
         _data=data;
     }
     
-    debug(data);
-    
     var _get = function (fieldName) {
         if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
         if (_.has(_data, fieldName)){
@@ -25,27 +23,26 @@ var User = function (data, isNoSchemas) {
         } else {
             return _.noop;
         }
-    }
+    };
     var _getUser = function () {//select user;
         return UserDao.selectIdByUser(_data.id);
-    }
+    };
     var _getUserList = function(){
         return UserDao.selectUserList();
-    }
+    };
     var _getManagerList = function(id){
         return UserDao.selectManagerList(id);
-    }
+    };
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
-    }
+    };
     var _removeUser=function(){
         return UserDao.deleteUser(_data.id);
-    }
+    };
     var _addUser=function(){
        return UserDao.insertUser(_data); 
-    }
+    };
     var _editUser=function(){
-        var _user=this;
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
                 debug(currentData);
@@ -61,7 +58,7 @@ var User = function (data, isNoSchemas) {
                reject(e);
             });
         });
-    }
+    };
     var _configUser=function(){
         var _user=this;
         return new Promise(function(resolve, reject){// promise patten

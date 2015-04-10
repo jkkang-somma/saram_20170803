@@ -7,7 +7,6 @@ var Promise = require('bluebird');
 var sessionManager = require('../lib/sessionManager');
 router.route('/')
 .get(function(req, res){
-	debug(req.query);
 	if(_.isUndefined(req.query.date)){
 		if(!_.isUndefined(req.query.id)){
 			Commute.getCommuteByID(req.query).then(function(result){
@@ -15,12 +14,8 @@ router.route('/')
 			});
 		}else{
 			Commute.getCommute(req.query, function(result) {
-				debug("Success get Commute");
 				try{
-					debug(result.length);
-					res.json(result);
-					
-					//res.send(result);
+					res.send(result);
 				}catch(err){
 					debug(err);
 				}

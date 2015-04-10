@@ -456,8 +456,12 @@ define([
         
         getResult : function(){
             if(!( this.workType == WORKTYPE.VACATION || this.isHoliday() )){ // 휴일 / 휴가가 아닌경우
-                if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
-                    if(this.outOfficeCode!="W02"){ // 출장 체크
+                if(this.standardInTime.isAfter(this.standardOutTime)){
+                    this.workType = WORKTYPE.NORMAL;
+                }else if(!this.inTime && !this.outTime && this.checkLate && this.checkEarly){ // 출퇴근 기록이 없으면 결근
+                    if((this.outOfficeCode=="W02")){ // 출장 체크
+                        this.workType = WORKTYPE.NORMAL;
+                    }else{
                         this.workType = WORKTYPE.ABSENTCE;
                     }
                 }else if(!this.inTime && this.checkLate){
@@ -628,7 +632,7 @@ define([
             
             var selectedDate = {
                 start: currentDayCommute.get("date"),
-                end: Moment(currentDayCommute.get("date"), this.DATEFORMAT).add(1,"days").format(this.DATEFORMAT)
+                end: Moment(currentDayCommute.get("date"), DATEFORMAT).add(1,"days").format(DATEFORMAT)
             };
                     
             var inOfficeCollection = new InOfficeCollection();
@@ -652,7 +656,7 @@ define([
                 if(!_.isNull(yesterdayCommute)){
                     yesterdayOutTime = yesterdayCommute.get("out_time");
                 }
-     			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, that.DATETIMEFORMAT));
+     			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, DATETIMEFORMAT));
 
                 var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
                 userOutOfficeCollection.add(outOfficeCollection.where({id: that.id}));
@@ -681,7 +685,7 @@ define([
          			that.initByModel(nextDayCommute);
          			
          			if(currentResult.out_time){
-                    	that.setStandardTime(Moment(currentResult.out_time), that.DATETIMEFORMAT);
+                    	that.setStandardTime(Moment(currentResult.out_time), DATETIMEFORMAT);
          			}
          			var tomorrowInOffice = userInOfficeCollection.where({date:selectedDate.end});
                     that.setInOffice(tomorrowInOffice);
