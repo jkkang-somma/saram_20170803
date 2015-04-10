@@ -19,14 +19,7 @@ router.route('/')
 				try{
 					debug("END DB Query");
 					debug(result.length);
-					if(result.length > 1000){
-						for(var i=0; i<result.length; i++){
-							res.write(result[i].toString);
-						}
-						res.end();
-					}else{
-						res.send(result);
-					}
+					res.send(result);
 					debug("End Response Send");
 				}catch(err){
 					debug(err);
