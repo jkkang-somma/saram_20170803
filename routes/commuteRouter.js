@@ -18,14 +18,8 @@ router.route('/')
 			Commute.getCommute(req.query).then(function(result) {
 				try{
 					debug("END DB Query");
-					debug(process.memoryUsage());
-					debug(_.keys(result));
-					debug(Object.keys(result).length);
-					
 					res.send(result);
-					
 					debug("End Response Send");
-					debug(process.memoryUsage());
 				}catch(err){
 					debug(err);
 				}

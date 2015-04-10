@@ -11,12 +11,10 @@ var InOfficeDao= require('../dao/inOfficeDao.js');
 var db = require('../lib/dbmanager.js');
 
 var Commute = function() {	
-
 	var _getCommute = function(data) {
 		return CommuteDao.selectCommute(data);
 			
 	};
-	
 	var _insertCommute = function(data){
 		return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
