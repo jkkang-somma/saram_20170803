@@ -17,6 +17,7 @@ router.route('/')
 			Commute.getCommute(req.query, function(result) {
 				debug("Success get Commute");
 				try{
+					debug(result.length);
 					res.send(result);
 				}catch(err){
 					debug(err);
