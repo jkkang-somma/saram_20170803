@@ -35,7 +35,6 @@ router.route('/bulk')
 
 router.route("/")
 .get(function(req, res){
-    debug(req.query);
     RawData.selectRawDataList(req.query).then(function(result){
         res.send(result);
     });
