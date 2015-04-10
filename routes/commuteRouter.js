@@ -18,7 +18,9 @@ router.route('/')
 				debug("Success get Commute");
 				try{
 					debug(result.length);
-					res.send(result);
+					res.write(result);
+					res.end();
+					//res.send(result);
 				}catch(err){
 					debug(err);
 				}
