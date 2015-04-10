@@ -21,7 +21,7 @@ router.route('/')
 					debug(result.length);
 					if(result.length > 1000){
 						for(var i=0; i<result.length; i++){
-							res.write(result[i]);
+							res.write(result[i].toString);
 						}
 						res.end();
 					}else{
