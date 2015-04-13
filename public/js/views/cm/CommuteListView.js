@@ -87,7 +87,7 @@ define([
 			result += (minute < 10 ? "0"+ minute : minute);
 		}
 		return result;
-	};
+	}
 		
 	function _createCommentCell(cellData) {
 		var data = {
@@ -170,7 +170,7 @@ define([
     					}
 						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
-            			})
+            			});
     				}).fail(function(){
 
     				});
@@ -322,8 +322,7 @@ define([
     	    $(this.el).html(_layOut);
     	    
 			var today = new Date();
-    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    	    
+
     	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
@@ -384,7 +383,7 @@ define([
                         dialog.close();
                     }
                 }]
-            })
+            });
      	},
      	onClickOpenUpdateCommutePopup: function(evt) {	// 근태 수정 팝업 
 			var data = JSON.parse( $(evt.currentTarget).attr('data') );

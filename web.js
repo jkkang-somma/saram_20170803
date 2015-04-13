@@ -4,6 +4,11 @@ var debug = require('debug')('start.js');
 var app = require('./app');
 var schedule = require('node-schedule');
 var batch = require('./batch/batch');
+var memwatch = require('memwatch');
+
+memwatch.on('leak', function(info){
+  console.error('Memory leak detected : ' + info);
+});
 
 app.set('port', 8002);
 var server = app.listen(app.get('port'), function() {
