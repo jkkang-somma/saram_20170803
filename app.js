@@ -58,6 +58,11 @@ var authError=function(next){
 
 app.use(logger('dev'));
 
+// Server Memory Check
+app.use(function(req,res,next){
+    debug("CurrentMemory : " + process.memoryUsage());   
+    next();
+});
 // //근태서버 다운
 // app.use(function(req,res,next){
     
