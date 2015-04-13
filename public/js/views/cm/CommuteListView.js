@@ -436,8 +436,8 @@ define([
      			return;
      		}
      		
-     		if(data.endDate.diff(data.startDate, 'days') > 31){
-                Dialog.warning("검색 기간이 초과되었습니다. (최대 31일)");
+     		if(data.endDate.diff(data.startDate, 'days') > 92){
+                Dialog.warning("검색 기간이 초과되었습니다. (최대 3개월)");
                 return;
      		}
      		
