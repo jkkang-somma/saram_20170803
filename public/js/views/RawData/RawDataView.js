@@ -89,11 +89,12 @@ ProgressbarView){
         getRawData : function(){
             var startDate = Moment($(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate());
             var endDate = Moment($(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate());
-            if(endDate.diff(startDate, 'days') > 31){
-                Dialog.warning("검색 기간이 초과되었습니다. (최대 31일)");
-            }else{
-                this.renderTable(startDate, endDate);
-            }
+            //if(endDate.diff(startDate, 'days') > 31){
+                //Dialog.warning("검색 기간이 초과되었습니다. (최대 31일)");
+            //}else{
+                //this.renderTable(startDate, endDate);
+            //}
+			this.renderTable(startDate, endDate);
         },
         renderTable : function(startDate, endDate){
             var that = this;

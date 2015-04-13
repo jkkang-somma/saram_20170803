@@ -19,6 +19,8 @@ router.route('/')
 				try{
 					debug("END DB Query");
 					debug(result.length);
+					debug("######################");
+					debug(process.memoryUsage());
 					res.send(result);
 					debug("End Response Send");
 				}catch(err){

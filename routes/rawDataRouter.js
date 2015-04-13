@@ -9,8 +9,13 @@ router.route('/bulk')
 .post(function(req, res){
     var data = req.body;
     var session = sessionManager.get(req.cookies.saram);
+	debug("######################");
+	debug(process.memoryUsage());
     if (session.user.admin == 1) {	// admin 일 경우만 생성
 	    RawData.insertRawData(data).then(function(result){
+			debug("END DB Query");
+			debug("######################");
+			debug(process.memoryUsage());
 	    	res.send({
 	    		result: result,
 	            success:true,
