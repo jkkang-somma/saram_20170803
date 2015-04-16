@@ -436,13 +436,10 @@ define([
      			return;
      		}
      		
-     		
-     		data.startDate = data.startDate.format("YYYY-MM-DD");
-     		data.endDate = data.endDate.format("YYYY-MM-DD");
-     		// if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     		// 	Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
-     		// 	return;
-     		// }
+     		if(data.endDate.diff(data.startDate, 'days') > 92){
+                Dialog.warning("검색 기간이 초과되었습니다. (최대 3개월)");
+                return;
+     		}
      		
             var _this = this;
             Dialog.loading({
