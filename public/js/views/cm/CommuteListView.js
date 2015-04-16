@@ -87,7 +87,7 @@ define([
 			result += (minute < 10 ? "0"+ minute : minute);
 		}
 		return result;
-	};
+	}
 		
 	function _createCommentCell(cellData) {
 		var data = {
@@ -170,7 +170,7 @@ define([
     					}
 						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
-            			})
+            			});
     				}).fail(function(){
 
     				});
@@ -322,8 +322,7 @@ define([
     	    $(this.el).html(_layOut);
     	    
 			var today = new Date();
-    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    	    
+
     	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
@@ -384,7 +383,7 @@ define([
                         dialog.close();
                     }
                 }]
-            })
+            });
      	},
      	onClickOpenUpdateCommutePopup: function(evt) {	// 근태 수정 팝업 
 			var data = JSON.parse( $(evt.currentTarget).attr('data') );
@@ -428,17 +427,26 @@ define([
      	},
     	selectCommute: function() {
     		var data = {
-     		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker"),
-     		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker")
+     		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate()),
+     		    endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate())
      		};
-     		   		
-     		data.startDate.getText() === "" ? null : data.startDate = data.startDate.getDate().format("YYYY-MM-DD");
-     		data.endDate.getText() === "" ? null : data.endDate = data.endDate.getDate().format("YYYY-MM-DD");
      		
-     		if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     			Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
+     		if(data.startDate.isAfter(data.endDate)){
+     			Dialog.warning("시작일자가 종료일자보다 큽니다.");
      			return;
      		}
+     		
+     		if(data.endDate.diff(data.startDate, 'days') > 92){
+                Dialog.warning("검색 기간이 초과되었습니다. (최대 3개월)");
+                return;
+     		}
+     		
+     		data.startDate = data.startDate.format("YYYY-MM-DD");
+     		data.endDate = data.endDate.format("YYYY-MM-DD");
+     		// if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
+     		// 	Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
+     		// 	return;
+     		// }
      		
             var _this = this;
             Dialog.loading({
