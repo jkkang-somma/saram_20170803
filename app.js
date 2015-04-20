@@ -60,7 +60,8 @@ app.use(logger('dev'));
 
 // Server Memory Check
 app.use(function(req,res,next){
-    debug("CurrentMemory : " + process.memoryUsage());   
+    debug("CurrentMemory ");
+    debug(process.memoryUsage());   
     next();
 });
 // //근태서버 다운
