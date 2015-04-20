@@ -376,7 +376,27 @@ define([
       
       return true;
   	},
-  	
+  	isSelectHoliday : function(){
+  	  var isHoli = false; // true: 쉬는 날, false : 평일
+  	  
+  	  var sStart = $(this.el).find('#start_date input').val();
+      var start = new Date(sStart.substr(0,4),sStart.substr(5,2)-1,sStart.substr(8,2));
+      
+      var holidayInfos = this.options.holidayInfos;
+      if(start.getDay() == 0 || start.getDay() == 6){
+        isHoli = true;
+      }else{
+         for(var j=0; j<holidayInfos.length; j++){
+          var sDate = this.getDateFormat(start);
+          if(holidayInfos[j].date == sDate){
+            isHoli = true;
+            break;
+          }
+        }
+      }
+      
+  	  return isHoli;
+  	},
   	onClickBtnSend : function(evt){
   	  this.dialogRef = evt;
   	  var _this = this;
@@ -402,6 +422,19 @@ define([
           return;
         }
       }
+      
+      if(selVal == 'B01'){// 휴일 근무일경우
+        if (!this.isSelectHoliday()) {
+          Dialog.error("선택 날짜는 휴일이 아닙니다.");      
+          return;
+        }
+      }else if(selVal == 'V02' || selVal == 'V03'){// 오전/오후 반차일경우
+        if (this.isSelectHoliday()) {
+          Dialog.error("선택 날짜는 근무 하는 날이 아닙니다.");  
+          return;
+        }
+      }
+      
       var usable = (this.options.total_day > this.options.used_holiday)?this.options.total_day - this.options.used_holiday : 0;
       if(!this.isDateCompare(formData)){
           Dialog.error("기간을 잘못 입력하였습니다.");      
