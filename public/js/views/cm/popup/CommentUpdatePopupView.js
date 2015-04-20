@@ -25,11 +25,10 @@ define([
     'text!templates/inputForm/textbox.html',
 	'text!templates/inputForm/textarea.html',
 	'text!templates/default/datepickerChange.html',
-	'text!templates/inputForm/combobox.html',
 ], function(
 	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, i18nCommon, ResultTimeFactory, BaseView, Form,
 	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
-	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML, ComboboxHTML
+	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
 	var CommentPopupView = Backbone.View.extend({

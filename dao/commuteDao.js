@@ -7,8 +7,11 @@ var CommuteDao = function () {
 
 // 근태자료관리 조회 
 CommuteDao.prototype.selectCommute =  function (data) {
-	var queryStr = db.getQuery('commute', 'selectCommute');
-    return db.queryV2(queryStr, [data.startDate, data.endDate]);
+    if(data.dept == "전체"){
+        return db.queryV2(db.getQuery('commute', 'selectCommuteAll'), [data.startDate, data.endDate]);    
+    }else{
+        return db.queryV2(db.getQuery('commute', 'selectCommute'), [data.startDate, data.endDate, data.dept]);    
+    }
 }
 CommuteDao.prototype.selectCommuteByID = function(data){
     var queryStr = db.getQuery('commute', 'selectCommuteByID');
