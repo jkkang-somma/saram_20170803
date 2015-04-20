@@ -119,6 +119,7 @@ define([
                                             var result = csvParser.csvToArr(event.target.result, ",");
                                             that.rawDataCollection.reset();
                                             var errCount = 0;
+                                            var errList = [];
                                             for(var i = 1; i < result.length; i++){ // 제목줄을 빼기 위해서 1부터 시작
                                                 addRawDataAddPopupView.setProgresPercent(i / result.length * 100);
                                                 var item = result[i];
@@ -154,7 +155,8 @@ define([
                                                             year: resultDate.year(),
                                                             type: item[3]
                                                         })); 
-                                                        errCount++;    
+                                                        errCount++;
+                                                        errList.push(item);
                                                     }
                                                 }
                                             }
@@ -163,7 +165,7 @@ define([
                                             that.grid.render();
                                             
                                             if(errCount > 0){ // 사번이 없는 데이터가 있을경우
-                                                Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_FAIL);
+                                                Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_FAIL + "\n" +errList);
                                                 that._disabledOkBtn(true);
                                             }else{
                                                 Dialog.info(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_COMPLETE);

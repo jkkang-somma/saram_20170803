@@ -25,8 +25,11 @@ RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
 }
 
 RawDataDao.prototype.selectRawDataList =  function (data) {
-    var queryStr = db.getQuery('rawData', 'selectRawDataList');
-    return db.queryV2(queryStr, [data.start, data.end]);
+    if(data.dept == "전체")
+        return db.queryV2(db.getQuery('rawData', 'selectRawDataListAll'), [data.start, data.end]);
+    else
+        return db.queryV2(db.getQuery('rawData', 'selectRawDataList'), [data.start, data.end, data.dept]);
+    
 }
 
 RawDataDao.prototype.selectRawDataListV2 =  function (data) {

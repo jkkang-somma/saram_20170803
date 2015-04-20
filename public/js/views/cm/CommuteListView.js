@@ -20,9 +20,10 @@ define([
         'text!templates/default/button.html',
         'text!templates/layout/default.html',      
         'text!templates/default/row.html',
-        'text!templates/default/datepickerRange.html',
+        'text!templates/default/rowdatepickerRange.html',
         'text!templates/default/rowbuttoncontainer.html',
         'text!templates/default/rowbutton.html',
+        'text!templates/default/rowcombo.html',
         'models/sm/SessionModel',
         'models/cm/CommuteModel',
         'collection/cm/CommuteCollection',
@@ -33,7 +34,7 @@ define([
         'text!templates/cm/btnNoteCellTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
+		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
 		SessionModel, CommuteModel, CommuteCollection,
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
 		searchFormTemplate, btnNoteCellTemplate){
@@ -308,9 +309,17 @@ define([
     	            }
     	        })
 	        );
+	        var _combo = $(_.template(RowComboHTML)({
+    	            obj : {
+    	                id : "ccmCombo",
+    	                label : "부서"
+    	            }
+    	        })
+	        );
 	        _btnContainer.append(_searchBtn);
 	        
     	    _row.append(_datepickerRange);
+    	    _row.append(_combo);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    
@@ -318,6 +327,7 @@ define([
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
+    	    
 
     	    $(this.el).html(_layOut);
     	    
@@ -339,6 +349,12 @@ define([
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
             
+            var dept = Code.getCodes(Code.DEPARTMENT);
+            $(this.el).find("#ccmCombo").append("<option>"+"전체"+"</option>");
+     	    for(var i=0; i < dept.length; i++){
+     	        $(this.el).find("#ccmCombo").append("<option>"+dept[i].name+"</option>");
+     	    }
+     	    $(this.el).find("#ccmCombo").val(SessionModel.getUserInfo().dept_name);
             
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -428,7 +444,8 @@ define([
     	selectCommute: function() {
     		var data = {
      		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate()),
-     		    endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate())
+     		    endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate()),
+     		    dept : $(this.el).find("#ccmCombo").val()
      		};
      		
      		if(data.startDate.isAfter(data.endDate)){
