@@ -30,14 +30,11 @@ router.route('/bulk')
             message: "관리자 등급만 생성이 가능합니다.",
         });
 	}
-    
-    
 });
 
 
 router.route("/")
 .get(function(req, res){
-    debug(req.query);
     RawData.selectRawDataList(req.query).then(function(result){
         res.send(result);
     });

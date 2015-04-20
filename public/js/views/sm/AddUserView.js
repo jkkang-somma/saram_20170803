@@ -7,9 +7,10 @@ define([
   'dialog',
   'i18n!nls/common',
   'lib/component/form',
+  'code',
   'models/sm/UserModel',
   'collection/common/CodeCollection',
-], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, CodeCollection){
+], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, UserModel, CodeCollection){
     var LOG= log.getLogger("AddUserView");
     var AddUserView = BaseView.extend({
     	initialize:function(){
@@ -26,10 +27,10 @@ define([
     	        this.el=el;
     	    }
     	    
-    	    var deptCodeCollection= new CodeCollection("dept");
+    	    var deptCodeCollection=Code.getCollection(Code.DEPARTMENT);
     	    var approvalUserCodeCollection= new CodeCollection("approvalUser");
-    	    var positionCodeCollection= new CodeCollection("position");
-    	    $.when(deptCodeCollection.fetch(),approvalUserCodeCollection.fetch(), positionCodeCollection.fetch()).done(function(){
+    	    var positionCodeCollection= Code.getCollection(Code.POSITION);
+    	    $.when(approvalUserCodeCollection.fetch()).done(function(){
                 var _model=_view.model.attributes;
         	    var _form = new Form({
         	        el:_view.el,
@@ -179,6 +180,12 @@ define([
         	                name:"ip_pc",
         	                label:i18nCommon.USER.IP,
         	                value:_model.ip_pc,
+        	                group:"detailInfo"
+        	        },{
+        	                type:"input",
+        	                name:"mac",
+        	                label:i18nCommon.USER.MAC,
+        	                value:_model.mac,
         	                group:"detailInfo"
         	        },
         	         {

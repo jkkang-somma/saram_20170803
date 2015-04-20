@@ -26,8 +26,15 @@ define([
     var Grid = Backbone.View.extend({
     	initialize:function(options){
     	    var grid=this;
-    	    $(window).on("resize", function(){
-    	        grid.updateCSS(grid);     
+    	    
+    	    
+    	    var lastWidth = $(window).width();
+    	    $(window).on("resize", function(e){
+    	        if($(window).width()!=lastWidth){
+    	            LOG.debug(lastWidth);
+    	            LOG.debug($(window).width());
+    	            grid.updateCSS(grid);     
+                }
     	    });
     	    
             this.options=options;
@@ -79,7 +86,7 @@ define([
                         column.visible(_.isUndefined(this.columns[index].visible) ? true : this.columns[index].visible);
                     }
                 }
-            } else if ( width  < 768) {
+            } else if ( width  < 767) {
                 
                 // API.column(index).visible(true);
                  for (var index in _columns){
@@ -207,6 +214,8 @@ define([
                 _.isUndefined(regex)?false:regex,
                 _.isUndefined(smart)?false:smart
             ).draw();
+            
+            this._filtering();
     	},
     	filtering:function(filter, filterName){
     	    $.fn.dataTable.ext.search=[];
@@ -214,6 +223,7 @@ define([
             this._filtering();
     	},
     	_filtering:function(){
+    	    
     	    var _filters=this.filters;
             $.fn.dataTable.ext.search=[];
             for (var name in _filters){
@@ -275,25 +285,47 @@ define([
     	},
     	_createSearchButton:function(name){
     	    var _grid=this;
-    	    var _btnId=this.options.id +"_"+ name +"_Btn";
+    	    
     	    
     	    var _defaultSearchInput=$('<input type="text" class="form-control" placeholder="Search">');
     	    _defaultSearchInput.addClass('yes-form-control');
     	    this._defatulInputGroup.append(_defaultSearchInput);
     	    this._defatulInputGroup.css({display:"table"});
     	    
-    	    _defaultSearchInput.on('keyup',function(key){
-    	         _grid.search(this.value,false,true);          
+    	    _defaultSearchInput.keydown(function(e){
+    	        if(e.keyCode == 13){
+    	            e.preventDefault();
+    	            _grid.search(this.value,false,true);
+    	            return false;
+    	        }
     	    });
-    	    this.buttonid["search"] = _btnId;
     	    
-            var _btnTmp=_.template(_defaultBtnTag);
-            var _button=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
+    	    var _buttonIcon=$(ButtonHTML);
+            _buttonIcon.addClass(_glyphiconSchema.value("search"));
             
-            _button.attr("id", _btnId);
-            _button.append($(_defaultBtnText).html( _grid.currentLength));
-            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));  
-            _button.click(function(){
+    	    var _btnTmp=_.template(_defaultBtnTag);
+    	    
+    	    var _btnId=this.options.id +"_"+ name +"_Btn";
+    	    this.buttonid["search"] = _btnId;
+
+    	    var _btn=$(_btnTmp({tooltip:"검색"}));//툴팁 셋팅
+    	    _btn.attr("id", _btnId);
+    	    _btn.append(_buttonIcon);
+    	    this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_btn));  
+    	    
+    	    _btn.click(function(){
+                _grid.search(_defaultSearchInput.val(),false,true);      
+            });
+            
+    	    var _rowNumBtnId=this.options.id +"_row_Btn";
+    	    this.buttonid["row"] = _rowNumBtnId;
+    	    
+            var _rowButton=$(_btnTmp({tooltip:"표시수"}));//툴팁 셋팅
+            
+            _rowButton.attr("id", _rowNumBtnId);
+            _rowButton.append($(_defaultBtnText).html( _grid.currentLength));
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_rowButton));  
+            _rowButton.click(function(){
                 var index =_.indexOf(_gridLength, _grid.currentLength);
     	        if (index==3){
     	            index=0;
@@ -302,7 +334,7 @@ define([
     	        }
     	        
     	        _grid.currentLength=_gridLength[index];
-    	        _button.html($(_defaultBtnText).html(_grid.currentLength));
+    	        _rowButton.html($(_defaultBtnText).html(_grid.currentLength));
     	        _grid.DataTableAPI.page.len( _grid.currentLength ).draw();
             });
     	},

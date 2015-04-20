@@ -28,6 +28,7 @@ define([
             leave_company: "",
             admin : null,
             ip_pc : null,
+            mac:null,
             ip_office : null,
             position:null,
             position_code:null,
@@ -91,6 +92,13 @@ define([
             disabled:false,
             group:undefined
         },
+        checkbox:{
+            type:"checkbox",
+            name:undefined,
+            label:undefined,
+            checked:false,
+            group:undefined
+        },
         text:{
             type:"text",
             name:undefined,
@@ -146,6 +154,15 @@ define([
             textKey:"name",
             group:undefined,
             firstBlank:false //공백 로우
+        },
+        checkBox:{
+            type:"checkBox",
+            name:undefined,
+            label:undefined,
+            checkLabel:undefined,
+            value:undefined,
+            disabled:false,
+            group:undefined
         },
         //SERVER response
         response:{

@@ -25,7 +25,6 @@ var outOffice = require('./routes/outofficeRouter');
 var inOffice = require('./routes/inofficeRouter');
 var officeCode = require('./routes/officeCodeRouter');
 var comment = require('./routes/commentRouter');
-var codeV2 = require('./routes/codeRouterV2');
 var companyAccess = require('./routes/companyAccessRouter');
 var dashboard = require('./routes/dashboardRouter');
 var report = require('./routes/reportRouter');
@@ -37,6 +36,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 
 app.use(bodyParser.urlencoded({limit: '80mb', extended: true}));
 app.use(bodyParser.json({limit: '80mb'}));
@@ -58,6 +58,11 @@ var authError=function(next){
 
 app.use(logger('dev'));
 
+// Server Memory Check
+app.use(function(req,res,next){
+    debug("CurrentMemory : " + process.memoryUsage());   
+    next();
+});
 // //근태서버 다운
 // app.use(function(req,res,next){
     
@@ -100,7 +105,6 @@ app.use('/outOffice',outOffice);
 app.use('/inOffice',inOffice);
 app.use('/officeCode',officeCode);
 app.use('/comment', comment);
-app.use('/codev2', codeV2);
 app.use('/companyAccess', companyAccess);
 app.use('/dashboard', dashboard);
 app.use('/report', report);
@@ -114,7 +118,6 @@ app.use(function(req, res, next) {//위에 라우터에까지 안걸리면 404 �
 });
 
 app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따로 에러 처리 안되고 쓰로우 되면 여기 탐.
-    debug("Not Catch Error");
     debug(err);
     console.log("Error : " + err.message);
     res.status(err.status || 500);

@@ -8,7 +8,8 @@ define([
   'bootstrap',
   'dialog',
   'i18n!nls/common',
-  'data/code',
+  'code',
+  'fastclick',
   'router',
   'models/sm/SessionModel',
   'views/LoadingView',
@@ -17,7 +18,7 @@ define([
   'cmoment', 
   'bootstrap-datetimepicker',
   'css!tool/bootstrap-select/css/bootstrap-select.css',
-], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
+], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, Fastclick, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
     var _loadingView;
     var _saram;
@@ -34,6 +35,7 @@ define([
             
             $.ajaxSetup({ cache: false });
             
+            Fastclick.attach(document.body);
             var _app=this;
             
             //Global Error Handle
@@ -71,11 +73,11 @@ define([
             });
         },
         draw:function(){
-            // if (!_.isUndefined(_loginView)){
-            //     _loginView.close();
-            // }
+            if (!_.isUndefined(_loginView)){
+                _loginView.close();
+            }
             
-           // LoadingView.visible(function(){
+            LoadingView.visible(function(){
                 Code.init().then(function(){
                     $("body").removeClass("login-body");
                     LoadingView.disable(function(){
@@ -99,7 +101,7 @@ define([
                 }, function(){
                     Dialog.error("Code Init Fail");
                 });
-            //});
+            });
         }
     });
     return App;

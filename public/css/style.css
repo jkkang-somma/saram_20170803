@@ -97,6 +97,9 @@ form .form-group:last-child {
     .form-text-harf label {
         width : 100%;
     }
+    .form-text-harf label.checkbox-inline {
+        width : 0%;
+    }
 }
 @media (max-width: 399px) {
     .form-group-harf {

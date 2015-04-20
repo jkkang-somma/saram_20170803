@@ -1,4 +1,5 @@
 var express = require('express');
+var _ = require('underscore');
 var debug = require('debug')('rawDataRouter');
 var Promise = require('bluebird');
 var router = express.Router();
@@ -9,11 +10,13 @@ router.route("/")
 .post(function(req,res,next){
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
-	
+
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	var inData = {
-			type : req.body.type,
-			ip_pc : '',
-			ip_office : req.ip
+		type : req.body.type,
+		ip_pc : _.isEmpty(req.body.ip)?null:req.body.ip,
+		mac : _.isEmpty(req.body.mac)?null:req.body.mac,
+		ip_office : ip
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {

@@ -12,11 +12,10 @@ var Moment = require("moment");
 var CompanyAccess = function() {	
 
 	var _setAccess = function(data, user) {
-		
 		return new Promise(function(resolve, reject){
 			var selDataObj = {
 					id: user.id,
-					ip_pc: data.ip_office,		// ip_office 값으로 체크 -> 추후 ip_pc로 변경 될수 있음    
+					//ip_pc: data.ip_office,		// ip_office 값으로 체크 -> 추후 ip_pc로 변경 될수 있음    
 					ip_office: data.ip_office	// ip_office 값으로 체크
 			};
 
@@ -24,6 +23,25 @@ var CompanyAccess = function() {
 				var need_confirm = 1; // 1: 정상 , 2: 확인 필요				
 				if (result.length == 0) {	// 조회 값이 없는 경우 
 					need_confirm = 2;
+				} else {
+					var _user=result[0];
+					var resultMac =_user.mac;
+					var requestMac=data.mac;
+					var eqFlag=false;
+					if (!_.isNull(data.mac)){
+						for (var i=0; i < requestMac.length; i++){
+						    if (resultMac==requestMac[i]){
+						      eqFlag=true;
+						      break;
+						    }
+						}
+					}
+				  
+					if (eqFlag){
+						need_confirm=1;
+					} else {
+						need_confirm=2;
+					}
 				}
 			
 				var insertDataObj = {
@@ -31,10 +49,11 @@ var CompanyAccess = function() {
 						name : user.name,
 						department : user.dept_name,
 						type : data.type,
-						ip_pc : data.ip_pc,
+						ip_pc : data.ip_pc==null?null:data.ip_pc.toString(),
 						ip_office : data.ip_office,
 						need_confirm : need_confirm,
-						char_date : Moment().format("YYYY-MM-DD HH:mm:ss")
+						char_date : Moment().format("YYYY-MM-DD HH:mm:ss"),
+						mac:data.mac==null?null:data.mac.toString()
 				};
 				
 				RawDataDao.insertRawDataCompanyAccess(insertDataObj).then(function(inResult) {
@@ -46,7 +65,6 @@ var CompanyAccess = function() {
 			});
 		});
 	}
-	
 	return {
 		setAccess : _setAccess
 	}

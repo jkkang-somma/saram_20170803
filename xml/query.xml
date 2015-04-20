@@ -3,7 +3,7 @@
         <query id="selectUserList">
         	SELECT 
 				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-				ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
+				ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
 				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
 			FROM members_tbl A
 			ORDER BY name
@@ -11,14 +11,14 @@
         <query id="selectIdByUser">
         	SELECT 
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
-        		ip_pc, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
+        		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
         		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
-        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
@@ -36,6 +36,7 @@
         		admin=?,
         		position_code=?,
         		ip_pc=?,
+        		mac=?,
         		ip_office=?,
         		email=?,
         		phone=?,
@@ -52,9 +53,8 @@
 	        	* 
 	        FROM 
 	        	members_tbl
-			WHERE 
-				id = ?
-				AND ( ip_pc = ? OR ip_office = ?);
+			WHERE id = ?
+			AND ip_office = ?
         </query>        
     </group>
     <group id="rawData">
@@ -70,9 +70,9 @@
         </query>
         <query id="insertRawDataCompanyAccess">
   			INSERT INTO commute_base_tbl 
-  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm)
+  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm, mac)
   			VALUES
-  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?)
+  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?, ?)
         </query>
         
         <query id="selectRawDataList">
@@ -112,13 +112,13 @@
 			SELECT 
 				m.id, 
 			    m.name,
-			    (SELECT name FROM dept_code_tbl where code = m.dept_code) dept_name,
+			    (SELECT name FROM dept_code_tbl where code = m.dept_code) AS dept_name,
 			    m.join_company,
 				t2.year,
 				t2.id,
 				t2.total_day,
 				t2.used_holiday,
-			    (t2.total_day - t2.used_holiday) holiday,
+			    (t2.total_day - t2.used_holiday) AS holiday,
 			    IFNULL(t2.memo, '') AS memo
 			FROM
 				members_tbl m
@@ -127,7 +127,7 @@
 								v.year,
 								v.id,
 								v.total_day,
-								IFNULL(s.used_holiday, '') used_holiday,
+								IFNULL(s.used_holiday, 0) AS used_holiday,
 								v.memo
 							FROM
 								vacation_tbl v
@@ -243,6 +243,39 @@
     	<query id="deleteApproval">
     		delete from approval_tbl where doc_num = ?
     	</query>
+    	
+    	<query id="getApprovalMailData">
+    		SELECT
+				a.doc_num,
+				a.submit_id,
+				m.name as name,
+				a.start_date,
+				a.end_date,
+				a.state,
+				a.office_code,
+				o.name as code_name,
+				m.dept_code as dept_code,
+				d.name as dept_name,
+				a.submit_comment
+			FROM 
+				approval_tbl a
+				left join members_tbl m on a.submit_id = m.id
+				left join office_code_tbl o on a.office_code = o.code
+				left join dept_code_tbl d on a.office_code = d.code
+			WHERE
+				doc_num = ?
+    	</query>
+    	
+    	<query id="getApprovalMailingList">
+    		SELECT
+				name,
+				email
+			FROM
+				members_tbl
+			WHERE
+				dept_code = ?
+    	</query>
+    	
 	</group>
 	
 	<group id="approval_index">
@@ -283,9 +316,9 @@
 							w.name AS work_type_name,
 							c.late_time,
 							c.over_time,
-							IFNULL( date_format(c.in_time, '%Y-%m-%d %T'), NULL) AS in_time,
+							IFNULL( date_format(c.in_time, '%Y-%m-%d %H:%i'), NULL) AS in_time,
 							c.in_time_type,
-							IFNULL( date_format(c.out_time, '%Y-%m-%d %T'), NULL) AS out_time,
+							IFNULL( date_format(c.out_time, '%Y-%m-%d %H:%i'), NULL) AS out_time,
 							c.out_time_type,
 							c.in_time_change,
 							c.out_time_change,
@@ -294,6 +327,8 @@
 							c.overtime_code,
 							c.vacation_code,
 							c.out_office_code,
+							c.early_time,
+							c.not_pay_over_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -327,9 +362,9 @@
         		out_time, over_time, overtime_code, vacation_code, standard_in_time,
         		standard_out_time, work_type, year,
         		in_time_type, out_time_type, out_office_start_time, out_office_end_time,
-        		in_time_change, out_time_change)
+        		in_time_change, out_time_change, early_time, not_pay_over_time)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         
         <query id="updateCommuteResult">
@@ -352,7 +387,9 @@
 				out_office_end_time = ?,
 				in_time_change = ?,
 				out_time_change =?,
-				overtime_code_change =?
+				overtime_code_change =?,
+				early_time =?,
+				not_pay_over_time=?
 			WHERE
 				id = ? AND date = ?
         </query>
@@ -379,7 +416,9 @@
 				out_office_start_time,
 				in_time_change,
 				out_time_change,
-				overtime_code_change
+				overtime_code_change,
+				early_time,
+				not_pay_over_time
         	FROM
         		commute_result_tbl
         	WHERE
@@ -408,7 +447,9 @@
 				out_office_start_time,
 				in_time_change,
 				out_time_change,
-				overtime_code_change
+				overtime_code_change,
+				early_time,
+				not_pay_over_time
         	FROM
         		commute_result_tbl
         	WHERE
@@ -656,7 +697,7 @@
     			work_type_code_tbl
     	</query>
     	
-        <query id="selectDeptList">SELECT code, name FROM dept_code_tbl</query>
+        <query id="selectDeptList">SELECT code, name, area FROM dept_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
     </group>
@@ -681,7 +722,12 @@
 				SUM(CASE WHEN (overtime_code='2015_AC') THEN 1 ELSE 0 END) AS 'night_working_c',
 				SUM(CASE WHEN (overtime_code='2015_BA') THEN 1 ELSE 0 END) AS 'holiday_working_a',
 				SUM(CASE WHEN (overtime_code='2015_BB') THEN 1 ELSE 0 END) AS 'holiday_working_b',
-				SUM(CASE WHEN (overtime_code='2015_BC') THEN 1 ELSE 0 END) AS 'holiday_working_c'
+				SUM(CASE WHEN (overtime_code='2015_BC') THEN 1 ELSE 0 END) AS 'holiday_working_c',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN 0 ELSE over_time END) AS 'total_over_time',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN over_time ELSE 0 END) AS 'total_holiday_over_time',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN 0 ELSE not_pay_over_time END) AS 'over_over_time',
+				SUM(CASE WHEN (work_type=40 || work_type=41) THEN not_pay_over_time ELSE 0 END) AS 'over_holiday_over_time',
+				SUM(early_time) AS 'total_early_time'
 			FROM commute_result_tbl A 
 			LEFT OUTER JOIN office_code_tbl B ON A.vacation_code = B.code
 			LEFT OUTER JOIN overtime_code_tbl C ON A.overtime_code=C.code 
@@ -702,6 +748,7 @@
 			SELECT
     			m.id, 
     			m.name,
+    			m.leave_company,
                 p.name AS position_name,
 			    m.dept_code,
 			    d.name AS dept_name
@@ -711,6 +758,8 @@
 			    ON d.code = m.dept_code
 				INNER JOIN position_code_tbl p
 			    ON p.code = m.position_code
+			WHERE 
+				m.dept_code != '0000'
 			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
@@ -755,6 +804,8 @@
 							GROUP BY id                
 			        ) t2
 			ON m.id = t2.id
+			WHERE 
+				m.dept_code != '0000'
 			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
 			    	
@@ -802,7 +853,9 @@
 						) t1    
 						GROUP BY id, total_day
 				) t2
-			ON m.id = t2.id  
+			ON m.id = t2.id
+			WHERE 
+				m.dept_code != '0000'
 			ORDER BY m.dept_code, m.position_code, m.name	
     	</query>
     	
@@ -852,6 +905,8 @@
 							GROUP BY id                
 			        ) t2
 			ON m.id = t2.id
+			WHERE 
+				m.dept_code != '0000'
 			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	<query id="selectOverTimeWorkTypeReport">
@@ -968,7 +1023,9 @@
 						GROUP BY id
 				)tc
 				ON m.id = tc.id
-				ORDER BY m.dept_code, m.position_code, m.name
+			WHERE 
+				m.dept_code != '0000'
+			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectOverTimeWorkPayReport">
@@ -1012,7 +1069,9 @@
 						) t1    
 						GROUP BY id                
 		        ) t2
-			ON m.id = t2.id
+				ON m.id = t2.id
+			WHERE 
+				m.dept_code != '0000'
 			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
@@ -1130,7 +1189,9 @@
 						GROUP BY id
 				)tc
 				ON m.id = tc.id
-				ORDER BY m.dept_code, m.position_code, m.name
+			WHERE 
+				m.dept_code != '0000'
+			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
 
     	<query id="selectHolidayWorkPayReport">
@@ -1140,45 +1201,112 @@
                 IFNULL(t2.7, '') AS '7', IFNULL(t2.8, '') AS '8', IFNULL(t2.9, '') AS '9', IFNULL(t2.10, '') AS '10', IFNULL(t2.11, '') AS '11', IFNULL(t2.12, '') AS '12',
                 IFNULL(t2.total, '') AS total
 			FROM
-					members_tbl m
-			        LEFT JOIN (
-							SELECT
-								id,
-								SUM(CASE WHEN month = 1 THEN overtime_pay END) AS '1',
-								SUM(CASE WHEN month = 2 THEN overtime_pay END) AS '2',
-								SUM(CASE WHEN month = 3 THEN overtime_pay END) AS '3',
-								SUM(CASE WHEN month = 4 THEN overtime_pay END) AS '4',
-								SUM(CASE WHEN month = 5 THEN overtime_pay END) AS '5',
-								SUM(CASE WHEN month = 6 THEN overtime_pay END) AS '6',
-								SUM(CASE WHEN month = 7 THEN overtime_pay END) AS '7',
-								SUM(CASE WHEN month = 8 THEN overtime_pay END) AS '8',
-								SUM(CASE WHEN month = 9 THEN overtime_pay END) AS '9',
-								SUM(CASE WHEN month = 10 THEN overtime_pay END) AS '10',
-								SUM(CASE WHEN month = 11 THEN overtime_pay END) AS '11',
-								SUM(CASE WHEN month = 12 THEN overtime_pay END) AS '12',
-                                SUM(overtime_pay) AS total
-							FROM (
-									SELECT 
-										c.id, 
-										SUBSTRING(c.date, 6, 2) AS month,
-										SUM( o.overtime_pay ) AS overtime_pay
+				members_tbl m
+		        LEFT JOIN (
+						SELECT
+							id,
+							SUM(CASE WHEN month = 1 THEN overtime_pay END) AS '1',
+							SUM(CASE WHEN month = 2 THEN overtime_pay END) AS '2',
+							SUM(CASE WHEN month = 3 THEN overtime_pay END) AS '3',
+							SUM(CASE WHEN month = 4 THEN overtime_pay END) AS '4',
+							SUM(CASE WHEN month = 5 THEN overtime_pay END) AS '5',
+							SUM(CASE WHEN month = 6 THEN overtime_pay END) AS '6',
+							SUM(CASE WHEN month = 7 THEN overtime_pay END) AS '7',
+							SUM(CASE WHEN month = 8 THEN overtime_pay END) AS '8',
+							SUM(CASE WHEN month = 9 THEN overtime_pay END) AS '9',
+							SUM(CASE WHEN month = 10 THEN overtime_pay END) AS '10',
+							SUM(CASE WHEN month = 11 THEN overtime_pay END) AS '11',
+							SUM(CASE WHEN month = 12 THEN overtime_pay END) AS '12',
+                               SUM(overtime_pay) AS total
+						FROM (
+								SELECT 
+									c.id, 
+									SUBSTRING(c.date, 6, 2) AS month,
+									SUM( o.overtime_pay ) AS overtime_pay
 
-									FROM 
-										commute_result_tbl c
-										LEFT JOIN overtime_code_tbl o
-										on c.overtime_code = o.code
-									WHERE 
-										c.year = ?
-										AND c.date BETWEEN ? AND ?
-										AND c.overtime_code IN ('2015_BA', '2015_BB','2015_BC')
-									GROUP BY id, month                         
-							) t1    
-							GROUP BY id                
-			        ) t2
-			ON m.id = t2.id
+								FROM 
+									commute_result_tbl c
+									LEFT JOIN overtime_code_tbl o
+									on c.overtime_code = o.code
+								WHERE 
+									c.year = ?
+									AND c.date BETWEEN ? AND ?
+									AND c.overtime_code IN ('2015_BA', '2015_BB','2015_BC')
+								GROUP BY id, month                         
+						) t1    
+						GROUP BY id                
+		        ) t2
+				ON m.id = t2.id
+			WHERE 
+				m.dept_code != '0000'
 			ORDER BY m.dept_code, m.position_code, m.name
     	</query>
     	
+    	<query id="selectReportCommuteResultTbl">
+			SELECT 
+    			m.id, 
+    			m.name,
+                m.leave_company,
+                p.name AS position_name,
+			    m.dept_code,
+			    d.name AS dept_name,
+			    c.*
+			FROM
+				members_tbl m
+				INNER JOIN dept_code_tbl d
+			    ON d.code = m.dept_code
+				INNER JOIN position_code_tbl p
+			    ON p.code = m.position_code
+			    LEFT JOIN (
+					SELECT
+						c.year,
+						c.date,
+						c.id,
+						c.department,
+						c.name,
+						IFNULL( date_format(c.standard_in_time, '%Y-%m-%d %T'), NULL) AS standard_in_time,
+						IFNULL( date_format(c.standard_out_time, '%Y-%m-%d %T'), NULL) AS standard_out_time,
+						IFNULL( date_format(c.in_time, '%Y-%m-%d %T'), NULL) AS in_time,
+                        IFNULL( date_format(c.out_time, '%Y-%m-%d %T'), NULL) AS out_time,
+						c.in_time_type,
+                        IF (c.in_time_type = 1, '정상출근', '자동셋팅') AS in_time_type_name,  
+						c.out_time_type,
+                        IF (c.out_time_type = 1, '정상퇴근', '자동셋팅') AS out_time_type_name,  
+						c.work_type,
+                        wt.name AS work_type_name,
+						c.vacation_code,
+						vc.name AS vacation_name,
+						c.out_office_code,
+						oc.name AS out_office_name,
+						c.overtime_code,
+						ov.name AS overtime_name,
+                        IF(c.late_time = 0, '', SUBSTRING( SEC_TO_TIME( c.late_time *60), 1, 5) ) AS late_time,
+                        IF(c.over_time = 0, '', SUBSTRING( SEC_TO_TIME( c.over_time *60), 1, 5) ) AS over_time,
+						c.in_time_change,
+						c.out_time_change,
+						c.comment_count,
+						c.overtime_code_change,
+						IF(c.early_time = 0, '', SUBSTRING( SEC_TO_TIME( c.early_time *60), 1, 5) ) as early_time,
+                        IF(c.not_pay_over_time = 0, '', SUBSTRING( SEC_TO_TIME( c.not_pay_over_time *60), 1, 5) ) AS not_pay_over_time
+					FROM 
+						 commute_result_tbl c
+						 left join office_code_tbl oc
+						 on oc.code = c.out_office_code
+						 left join office_code_tbl vc
+						 on vc.code = c.vacation_code
+						 left join overtime_code_tbl ov
+						 on ov.code = c.overtime_code
+                         left join work_type_code_tbl wt
+                         on wt.code = c.work_type
+					WHERE
+						c.year = ?
+						AND c.date BETWEEN ? AND ?
+				) c
+			    ON m.id = c.id
+		    WHERE 
+		    	m.dept_code != '0000'
+		    ORDER BY m.dept_code, m.position_code, m.name, c.date
+    	</query>
     </group>
     <group id ="message">
     	<query id="getMessage">

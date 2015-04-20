@@ -16,8 +16,6 @@ var User = function (data, isNoSchemas) {
         _data=data;
     }
     
-    debug(data);
-    
     var _get = function (fieldName) {
         if (_.isNull(fieldName) || _.isUndefined(fieldName)) return _.noop();
         if (_.has(_data, fieldName)){
@@ -25,27 +23,26 @@ var User = function (data, isNoSchemas) {
         } else {
             return _.noop;
         }
-    }
+    };
     var _getUser = function () {//select user;
         return UserDao.selectIdByUser(_data.id);
-    }
+    };
     var _getUserList = function(){
         return UserDao.selectUserList();
-    }
+    };
     var _getManagerList = function(id){
         return UserDao.selectManagerList(id);
-    }
+    };
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
-    }
+    };
     var _removeUser=function(){
         return UserDao.deleteUser(_data.id);
-    }
+    };
     var _addUser=function(){
        return UserDao.insertUser(_data); 
-    }
+    };
     var _editUser=function(){
-        var _user=this;
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
                 debug(currentData);
@@ -61,7 +58,7 @@ var User = function (data, isNoSchemas) {
                reject(e);
             });
         });
-    }
+    };
     var _configUser=function(){
         var _user=this;
         return new Promise(function(resolve, reject){// promise patten
@@ -93,7 +90,7 @@ var User = function (data, isNoSchemas) {
                 if (_.isUndefined(currentData[0])){
                     throw new Error("DO_NOT_FOUND_USER");
                 }
-                if (currentData[0].email!=_data.email){ //입력받은 이메일이 적확하지 않을 때.
+                if (currentData[0].email!=_data.email){ //입력받은 이메일이 정확하지 않을 때.
                     debug("_configUser ERROR:Not equls Email");
                     throw new Error("NOT_EQULES_EMAIL");
                 } else {
@@ -105,6 +102,7 @@ var User = function (data, isNoSchemas) {
             });
         });
     };
+    
     return {
         get:_get,
         getUser:_getUser,

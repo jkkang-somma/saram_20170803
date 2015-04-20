@@ -40,7 +40,8 @@ define({
         BIRTHDAY:"생일",
         WEDDING_DAY:"결혼기념일",
         EMERGENCY_PHONE:"비상연락망",
-        MEMO:"메모"
+        MEMO:"메모",
+        MAC:"Mac"
     },
     
     GRID:{
@@ -175,6 +176,9 @@ define({
             HOLIDAY_WORKING_A:"휴일 근무 A",
             HOLIDAY_WORKING_B:"휴일 근무 B",
             HOLIDAY_WORKING_C:"휴일 근무 C",
+            TOTAL_OVER_TIME: "초과 근무 시간",
+            TOTAL_HOLIDAY_OVER_TIME: "휴일 근무 시간",
+            TOTAL_EARLY_TIME: "조기 출근 시간",
             PERCEPTION:"지각",
             SICK_LEAVE:"조퇴",
             ABSENTEEISM:"결근"
@@ -328,6 +332,7 @@ define({
             TYPE : "출입기록",
             IP : "IP",
             NEED_CONFIRM : "확인필요",
+            MAC:"Mac"
         },
         MSG :{
             NOK : "확인필요",

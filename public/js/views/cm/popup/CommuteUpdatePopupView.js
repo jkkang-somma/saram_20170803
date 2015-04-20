@@ -15,7 +15,7 @@ define([
     'resulttimefactory',
     'comboBox',
     'core/BaseView',
-    'data/code',
+    'code',
 	'i18n!nls/common',
 	'lib/component/form',
     'models/sm/SessionModel',
@@ -23,16 +23,11 @@ define([
     'models/cm/ChangeHistoryModel',
     'collection/cm/CommuteCollection',
     'collection/cm/ChangeHistoryCollection',
-    'text!templates/inputForm/textbox.html',
-    'text!templates/default/datepicker.html',
-    'text!templates/inputForm/combobox.html',
-        
 ], function(
 $, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, ResultTimeFactory, ComboBox,
 BaseView, Code, i18nCommon, Form,
 SessionModel,
-CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection,
-TextBoxHTML, DatePickerHTML , ComboboxHTML
+CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
 	var CommuteUpdatePopupView = Backbone.View.extend({
@@ -89,15 +84,15 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 	                type:"datetime",
 	                name:"inTime",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.IN_TIME,
-	                value:_.isNull(this.selectData.in_time) ? null : Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss"),
-	                format:"YYYY-MM-DD HH:mm:ss",
+	                value:_.isNull(this.selectData.in_time) ? null : Moment(this.selectData.in_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm"),
+	                format:"YYYY-MM-DD HH:mm",
 	                group:"modifyItem"
 	        	}, {
 	                type:"datetime",
 	                name:"outTime",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.OUT_TIME,
-	                value:_.isNull(this.selectData.out_time) ? null : Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm:ss"),
-	                format:"YYYY-MM-DD HH:mm:ss",
+	                value:_.isNull(this.selectData.out_time) ? null : Moment(this.selectData.out_time).year(this.selectData.year).format("YYYY-MM-DD HH:mm"),
+	                format:"YYYY-MM-DD HH:mm",
 	                group:"modifyItem"
 	        	}, {
 	                type:"combo",
@@ -122,6 +117,8 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 		updateCommute: function() {
 			var dfd= new $.Deferred();
      		var data = this.getInsertData(); 
+     		var that = this;
+     		var changeData = { };
      		if (data === null) {
      			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_CHANGED);
      			dfd.reject();
@@ -131,12 +128,15 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 					switch(model.get("change_column")){
 						case "in_time":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.IN_TIME_MSG;
+							changeData.changeInTime = data.in_time;
 							break;
 						case "out_time":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OUT_TIME_MSG;
+							changeData.changeOutTime = data.out_time;
 							break;
 						case "overtime_code":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OVER_TIME_MSG;
+							changeData.changeOvertimeCode = data.overtime_code;
 							break;
 					}
 					message = message + "[ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
@@ -154,13 +154,20 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
 						commuteCollection.fetch({ 
 			     			data: {
 			     				id : data.id,
-			     				startDate : data.date,	
+			     				startDate : Moment(data.date).add(-1, 'days').format("YYYY-MM-DD"),	
 			     				endDate : Moment(data.date).add(1, 'days').format("YYYY-MM-DD"),
 			     			},success : function(resultCollection){
+			     				var idx;
+			     				for(idx =0; idx < resultCollection.length; idx++){
+			     					if(resultCollection.models[idx].get("date") == that.selectData.date){
+			     						break;
+			     					}
+			     				}
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
 			     					resultCollection,
-			     					{ changeInTime : data.in_time, changeOutTime : data.out_time, changeOvertimeCode : data.overtime_code},
-			     					data.changeHistoryCollection
+			     					changeData,
+			     					data.changeHistoryCollection,
+			     					idx
 			     				).done(function(result){ // commute_result, changeHistroy 수정 성공!
 				     				actionDfd.resolve(result);		
 			     				}).fail(function(){
@@ -190,9 +197,9 @@ TextBoxHTML, DatePickerHTML , ComboboxHTML
      		var newData = {
      			date : this.selectData.date,
      			id : this.selectData.id,
-     			in_time : data.inTime,
-     			out_time : data.outTime,
-     			overtime_code : data.overtime=="" ? null : data.overtime
+     			in_time : data.inTime == "" ? null : data.inTime,
+     			out_time : data.outTime == "" ? null : data.outTime,
+     			overtime_code : data.overtime == "" ? null : data.overtime
      		};
 			
      		var userId = SessionModel.get("user").id;

@@ -1,90 +1,90 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'util',
-  'schemas',
-  'grid',
-  'dialog',
-  'datatables',
-  'core/BaseView',
-  'text!templates/default/head.html',
-  'text!templates/default/content.html',
-  'text!templates/default/right.html',
-  'text!templates/default/button.html',
-  'text!templates/layout/default.html',
-  'jqFileDownload',
-  'models/sm/SessionModel',
-  'models/report/ReportModel',
-  'text!templates/report/searchFormTemplate.html'
-], function($,
-		_,
-		Backbone, 
-		Util, 
-		Schemas,
-		Grid,
-		Dialog,
-		Datatables,
-		BaseView,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
-		JqFileDownload,
-		SessionModel,
-		ReportModel,
-		searchFormTemplate){
+// define([
+//   'jquery',
+//   'underscore',
+//   'backbone',
+//   'util',
+//   'schemas',
+//   'grid',
+//   'dialog',
+//   'datatables',
+//   'core/BaseView',
+//   'text!templates/default/head.html',
+//   'text!templates/default/content.html',
+//   'text!templates/default/right.html',
+//   'text!templates/default/button.html',
+//   'text!templates/layout/default.html',
+//   'jqFileDownload',
+//   'models/sm/SessionModel',
+//   'models/report/ReportModel',
+//   'text!templates/report/searchFormTemplate.html'
+// ], function($,
+// 		_,
+// 		Backbone, 
+// 		Util, 
+// 		Schemas,
+// 		Grid,
+// 		Dialog,
+// 		Datatables,
+// 		BaseView,
+// 		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
+// 		JqFileDownload,
+// 		SessionModel,
+// 		ReportModel,
+// 		searchFormTemplate){
 	
-//	// 검색 조건 년도 
-	function _getFormYears() {
-		var startYear = 2000;
-		var endYear= new Date().getFullYear() + 1;
-		var years = [];
+// //	// 검색 조건 년도 
+// 	function _getFormYears() {
+// 		var startYear = 2000;
+// 		var endYear= new Date().getFullYear() + 1;
+// 		var years = [];
 		
-		for (; startYear <= endYear; endYear--) {
-			years.push(endYear);
-		}
-		return  years;
-	}
+// 		for (; startYear <= endYear; endYear--) {
+// 			years.push(endYear);
+// 		}
+// 		return  years;
+// 	}
 	
-	var ReportCommuteView = BaseView.extend({
-        el:$(".main-container"),
-    	events: {
-    		'click #btnCreateExcel' : 'onClickCreateExcelBtn'
-    	},
-    	render:function(){
-    	    var _headSchema=Schemas.getSchema('headTemp');
-    	    var _headTemp=_.template(HeadHTML);
-    	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"일반 관리", subTitle:"레포트"})));
+// 	var ReportCommuteView = BaseView.extend({
+//         el:$(".main-container"),
+//     	events: {
+//     		'click #btnCreateExcel' : 'onClickCreateExcelBtn'
+//     	},
+//     	render:function(){
+//     	    var _headSchema=Schemas.getSchema('headTemp');
+//     	    var _headTemp=_.template(HeadHTML);
+//     	    var _layOut=$(LayoutHTML);
+//     	    var _head=$(_headTemp(_headSchema.getDefault({title:"일반 관리", subTitle:"레포트"})));
     	    
-    	    _head.addClass("no-margin");
-    	    _head.addClass("relative-layout");
+//     	    _head.addClass("no-margin");
+//     	    _head.addClass("relative-layout");
 
     	    
-    	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear() });
+//     	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear() });
     	    
-    	    _layOut.append(_head);
-    	    _layOut.append(searchForm);
+//     	    _layOut.append(_head);
+//     	    _layOut.append(searchForm);
     	      	    
-    	    $(this.el).html(_layOut);
+//     	    $(this.el).html(_layOut);
 
-            return this;
-     	},
-     	onClickCreateExcelBtn: function() {
-     		var url =   "/report/commuteYearReport?year=" + this.getSearchForm().year + "&isInLeaveWorker=" + this.getSearchForm().isInLeaveWorker;
-     		$.fileDownload(url, {
-     		    successCallback: function (url) {
-     		    },
-     		    failCallback: function (html, url) {
-     		    	Dialog.error("보고서 생성 실패");
-     		    }
-     		});
-     	},
-     	getSearchForm: function() {	// 검색 조건  
-     		return {
-     				year: this.$el.find("#selectYear").val(),
-     				isInLeaveWorker: ( this.$el.find("#chkleaveWorker").is(":checked")? true : false )
-     			};
-     	}
-    });
+//             return this;
+//      	},
+//      	onClickCreateExcelBtn: function() {
+//      		var url =   "/report/commuteYearReport?year=" + this.getSearchForm().year + "&isInLeaveWorker=" + this.getSearchForm().isInLeaveWorker;
+//      		$.fileDownload(url, {
+//      		    successCallback: function (url) {
+//      		    },
+//      		    failCallback: function (html, url) {
+//      		    	Dialog.error("보고서 생성 실패");
+//      		    }
+//      		});
+//      	},
+//      	getSearchForm: function() {	// 검색 조건  
+//      		return {
+//      				year: this.$el.find("#selectYear").val(),
+//      				isInLeaveWorker: ( this.$el.find("#chkleaveWorker").is(":checked")? true : false )
+//      			};
+//      	}
+//     });
     
-    return ReportCommuteView;
-});
+//     return ReportCommuteView;
+// });
