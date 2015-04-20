@@ -73,7 +73,7 @@ define([
         		  	type:"text",
 	                name:"memo",
 	                label:"Memo",
-	                value:this.selectData.comment_reply,
+	                value:this.selectData.memo,
 	                disabled: SessionModel.get("user").admin == 0,
 	                group:"vacationGroup"
 		        }]
