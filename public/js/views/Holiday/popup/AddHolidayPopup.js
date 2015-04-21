@@ -8,10 +8,11 @@ define([
   	'lib/component/form',
   	'models/common/HolidayModel',
 	'text!templates/default/datepicker.html',
-	'text!templates/inputForm/textbox.html',
-], function($, _, Backbone, Moment, Util, i18nCommon, Form,
-HolidayModel,
-DatePickerHTML, TextBoxHTML) {
+], function(
+	$, _, Backbone, Moment, Util, i18nCommon, Form,
+	HolidayModel,
+	DatePickerHTML
+) {
 	var CreateHolidayPopup = Backbone.View.extend({
 		initialize : function() {
 

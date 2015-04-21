@@ -16,8 +16,6 @@ define([
         'i18n!nls/common',
         'text!templates/default/head.html',
         'text!templates/default/content.html',
-        'text!templates/default/right.html',
-        'text!templates/default/button.html',
         'text!templates/layout/default.html',      
         'text!templates/default/row.html',
         'text!templates/default/rowdatepickerRange.html',
@@ -34,7 +32,7 @@ define([
         'text!templates/cm/btnNoteCellTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
+		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
 		SessionModel, CommuteModel, CommuteCollection,
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
 		searchFormTemplate, btnNoteCellTemplate){

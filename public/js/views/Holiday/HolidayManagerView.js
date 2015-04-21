@@ -9,13 +9,7 @@ define([
   'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-//   'text!templates/default/right.html',
-//   'text!templates/default/button.html',
   'text!templates/layout/default.html',
-//   'text!templates/inputForm/forminline.html',
-//   'text!templates/inputForm/combobox.html',
-//   'text!templates/inputForm/label.html',
-  
   'text!templates/default/row.html',
   'text!templates/default/rowcombo.html',
   
@@ -23,14 +17,12 @@ define([
   'models/common/HolidayModel',
   'views/Holiday/popup/CreateHolidayPopup',
   'views/Holiday/popup/AddHolidayPopup',
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, i18nCommon,
-HeadHTML, ContentHTML, 
-// RightBoxHTML, ButtonHTML,
-LayoutHTML,
-//InlineFormHTML, ComboBoxHTML, LabelHTML,
-RowHTML, RowComboHTML,
-HolidayCollection, HolidayModel,
-CreateHolidayPopup, AddHolidayPopup){
+], function(
+    $, _, Backbone, BaseView, Grid, Schemas, Dialog, i18nCommon,
+    HeadHTML, ContentHTML, LayoutHTML,RowHTML, RowComboHTML,
+    HolidayCollection, HolidayModel,
+    CreateHolidayPopup, AddHolidayPopup
+){
     
     var holidayManagerView = BaseView.extend({
         el:".main-container",
@@ -175,11 +167,6 @@ CreateHolidayPopup, AddHolidayPopup){
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
 
-        //     var _inlineForm=$(InlineFormHTML).attr("id", "holidayForm");
-    	   // var _yearComboLabel = $(_.template(LabelHTML)({label:i18nCommon.HOLIDAY_MANAGER.COMBO_LABEL}));
-    	   // var _yearCombo = $(_.template(ComboBoxHTML)({id:"holidayYearCombo", label:""}));
-    	    
-            
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -192,10 +179,6 @@ CreateHolidayPopup, AddHolidayPopup){
 	        );
 	        
     	    _row.append(_combo);
-    	    
-	        
-    	   // _inlineForm.append(_yearComboLabel);
-    	   // _inlineForm.append(_yearCombo);
     	    
     	    _layOut.append(_head);
     	    _layOut.append(_row);

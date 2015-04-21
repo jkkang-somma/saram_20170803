@@ -6,11 +6,8 @@ define([
 	'lib/component/form',
 	'models/sm/SessionModel',
 	'models/vacation/VacationModel',
-	'text!templates/inputForm/textbox.html',
-	'text!templates/inputForm/textarea.html',
 ], function($, _, Backbone, Util, Form,
-	SessionModel,VacationModel,
-	TextBoxHTML, TextAreaHTML
+	SessionModel,VacationModel
 ) {
 	
 	var UpdateVacationPopup = Backbone.View.extend({

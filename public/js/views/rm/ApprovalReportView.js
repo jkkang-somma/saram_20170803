@@ -8,7 +8,7 @@ define([
   'comboBox',
   'cmoment',
   'resulttimefactory',
-  'text!templates/addReportTemplate.html',
+  'text!templates/report/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'collection/vacation/OutOfficeCollection',
   'collection/vacation/InOfficeCollection',

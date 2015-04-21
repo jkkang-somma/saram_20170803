@@ -8,7 +8,7 @@ define([
   'comboBox',
   'cmoment',
   'models/sm/SessionModel',
-  'text!templates/addReportTemplate.html',
+  'text!templates/report/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
   'collection/common/OfficeCodeCollection',
   'collection/sm/UserCollection',
