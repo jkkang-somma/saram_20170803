@@ -10,7 +10,6 @@ define([
   'core/BaseView',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-
   'text!templates/layout/default.html',
   'text!templates/default/row.html',
   'text!templates/default/rowbuttoncontainer.html',
@@ -143,7 +142,7 @@ define([
     	},
     	events: {
     		'click #btnCreateData' : 'onClickCreateDataBtn',
-        	'click #btnSearch' : 'onClickSearchBtn',
+        	"change #vcCombo" : 'selectVacation',
         	'click #vacationDataTable .td-used-holiday' : 'onClickUsedHolidayPopup',
     	},
     	buttonInit: function(){
@@ -185,20 +184,12 @@ define([
     	            obj: {id: "vcBtnContainer"}
     	        })
     	    );
-    	    var _searchBtn = $(_.template(RowButtonHTML)({
-    	            obj: { id: "btnSearch", label: "조회" }
-    	        })
-	        );
 	        
 	        var _combo = $(_.template(RowComboHTML)({
     	            obj : { id : "vcCombo", label : "연도"}
     	        })
 	        );
 	        
-	        _btnContainer.append(_searchBtn);
-	        
-    	    _row.append(_combo);
-    	    
     	    if(isShowCreateBtn){
 	        	var _createBtn = $(_.template(RowButtonHTML)({
 	    	            obj: { id: "btnCreateData", label: "자료생성"}
@@ -207,6 +198,7 @@ define([
 		        _btnContainer.append(_createBtn);
 	        }
 	        
+	        _row.append(_combo);
     	    _row.append(_btnContainer);
     	    
     	    _layOut.append(_head);
@@ -257,9 +249,6 @@ define([
         			});
 				}
 			});
-     	},
-     	onClickSearchBtn: function(evt) {
-     		this.selectVacation();
      	},
      	getSearchForm: function() {	// 검색 조건  
      		return {year: this.$el.find("#vcCombo").val()};
