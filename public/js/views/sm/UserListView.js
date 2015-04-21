@@ -11,14 +11,12 @@ define([
   'models/sm/SessionModel',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/right.html',
-  'text!templates/default/button.html',
   'text!templates/layout/default.html',
   'collection/sm/UserCollection',
   'views/sm/AddUserView',
   'views/sm/EditUserView',
   'models/sm/UserModel',
-], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
+], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
     var userListCount=0;
     var _currentFilter=0;
     var UserListView = BaseView.extend({

@@ -9,20 +9,20 @@ define([
   'i18n!nls/common',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/right.html',
-  'text!templates/default/button.html',
   'text!templates/layout/default.html',
-  'text!templates/inputForm/forminline.html',
-  'text!templates/inputForm/combobox.html',
-  'text!templates/inputForm/label.html',
+  'text!templates/default/row.html',
+  'text!templates/default/rowcombo.html',
+  
   'collection/common/HolidayCollection',
   'models/common/HolidayModel',
   'views/Holiday/popup/CreateHolidayPopup',
   'views/Holiday/popup/AddHolidayPopup',
-], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, i18nCommon,
-HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML, InlineFormHTML, ComboBoxHTML, LabelHTML,
-HolidayCollection, HolidayModel,
-CreateHolidayPopup, AddHolidayPopup){
+], function(
+    $, _, Backbone, BaseView, Grid, Schemas, Dialog, i18nCommon,
+    HeadHTML, ContentHTML, LayoutHTML,RowHTML, RowComboHTML,
+    HolidayCollection, HolidayModel,
+    CreateHolidayPopup, AddHolidayPopup
+){
     
     var holidayManagerView = BaseView.extend({
         el:".main-container",
@@ -48,7 +48,7 @@ CreateHolidayPopup, AddHolidayPopup){
             this._buttonInit();
     	},
     	events : {
-            "change #holidayYearCombo" : "_renderTable"
+            "change #hoCombo" : "_renderTable"
         },
     	_addAddBtn: function(){
     	    var that = this;
@@ -83,7 +83,7 @@ CreateHolidayPopup, AddHolidayPopup){
                                 dialog.close();
                             }
                         }]
-    	            })
+    	            });
     	        }
     	    });
     	},
@@ -139,7 +139,7 @@ CreateHolidayPopup, AddHolidayPopup){
                                         Dialog.error(i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.MSG.HOLIDAY_CREATE_FAIL);
                                         dialog.close();
                                     }
-                                )
+                                );
                             }
                         }, {
                             label : i18nCommon.HOLIDAY_MANAGER.CREATE_DIALOG.BUTTON.CANCEL,
@@ -167,20 +167,21 @@ CreateHolidayPopup, AddHolidayPopup){
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
 
-            var _inlineForm=$(InlineFormHTML).attr("id", "holidayForm");
-    	    var _yearComboLabel = $(_.template(LabelHTML)({label:i18nCommon.HOLIDAY_MANAGER.COMBO_LABEL}));
-    	    var _yearCombo = $(_.template(ComboBoxHTML)({id:"holidayYearCombo", label:""}));
-    	    
-            
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
     	    
-    	    _inlineForm.append(_yearComboLabel);
-    	    _inlineForm.append(_yearCombo);
+    	    	
+        	var _row=$(RowHTML);
+	        var _combo = $(_.template(RowComboHTML)({
+    	            obj : { id : "hoCombo", label : "연도"}
+    	        })
+	        );
+	        
+    	    _row.append(_combo);
     	    
     	    _layOut.append(_head);
-    	    _layOut.append(_inlineForm);
+    	    _layOut.append(_row);
     	    _layOut.append(_content);
     	    
     	    $(this.el).html(_layOut);
@@ -194,13 +195,13 @@ CreateHolidayPopup, AddHolidayPopup){
      	    var today = new Date();
     	    var year = today.getFullYear();
     	    for(var i = -1; i< 5; i++){
-                $(this.el).find("#holidayYearCombo").append($("<option>"+(year + i)+"</option>"));
+                $(this.el).find("#hoCombo").append($("<option>"+(year + i)+"</option>"));
             }
-    	    $(this.el).find("#holidayYearCombo").val(year);
+    	    $(this.el).find("#hoCombo").val(year);
      	},
      	_renderTable: function(){
             var that=this;
-            var _yearCombo = $(this.el).find("#holidayYearCombo");
+            var _yearCombo = $(this.el).find("#hoCombo");
             var year = _yearCombo.val();
             this.holidayCollection.fetch({
                 data : {  

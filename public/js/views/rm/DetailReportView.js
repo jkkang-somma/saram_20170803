@@ -5,7 +5,7 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
-  'text!templates/addReportTemplate.html',
+  'text!templates/report/addReportTemplate.html',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'collection/rm/ApprovalCollection',
@@ -215,16 +215,38 @@ define([
       formData["_id"] = this.options["doc_num"];
       formData["state"] = stateVal;
       
-      var approvalCollection = new ApprovalCollection(formData);
-      approvalCollection.idAttribute = "doc_num";
-      approvalCollection.save({}, this.options["doc_num"]).then(function(){
-        // console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
-        _this.thisDfd.resolve(formData);
-      }, function(model,xhr, options){
-        var respons=xhr.responseJSON;
-        Dialog.error(respons.message);
-        _this.thisDfd.reject();
-      });
+      var _appCollection = new ApprovalCollection();
+      _appCollection.url = "/approval/info";
+      var _thisData = {doc_num : this.options["doc_num"]};
+      
+      _appCollection.fetch({
+     			reset : true, 
+     			data: _thisData,
+     			error : function(result) {
+     				Dialog.error("데이터 조회가 실패했습니다.");
+     				_this.thisDfd.reject();
+     			}
+     		})
+        .done(function(result){
+            var resultVal = result[0].state;
+            if(resultVal == '상신'){
+                var approvalCollection = new ApprovalCollection(formData);
+                approvalCollection.idAttribute = "doc_num";
+                approvalCollection.save({}, _this.options["doc_num"]).then(function(){
+                  // console.log("SUCCESS UPDATE APPROVAL!!!!!!!");
+                  _this.thisDfd.resolve(formData);
+                }, function(model,xhr, options){
+                  var respons=xhr.responseJSON;
+                  Dialog.error(respons.message);
+                  _this.thisDfd.reject();
+                });
+            } else {
+                Dialog.error("결재가 완료된 항목입니다.");
+                _this.thisDfd.reject({div_fail : true});
+            }
+
+        });
+     
        return _this.thisDfd.promise();
     
       // // this.collection

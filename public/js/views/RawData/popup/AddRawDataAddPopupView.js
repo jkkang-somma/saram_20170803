@@ -4,12 +4,11 @@ define([
 	'backbone',
 	'util',
 	'i18n!nls/common',
-	'text!templates/inputForm/file.html',
-	'text!templates/component/progressbar.html',
+	'text!templates/default/file.html',
 	'views/component/ProgressbarView',
 ], function(
 	$, _, Backbone, Util, i18nCommon,
-	FileFormHTML, ProgressbarHTML,
+	FileFormHTML,
 	ProgressbarView
 ) {
 	var ChangeHistoryPopupView = Backbone.View.extend({
@@ -33,7 +32,7 @@ define([
     	    
             $(this.el).append(_fileForm);
             $(this.el).append(this.progressBar.render());
-			$(this.el).find("#AddRawDataFileForm").change(this.test)
+			$(this.el).find("#AddRawDataFileForm").change(this.test);
 			
             dfd.resolve();
             return dfd.promise();
