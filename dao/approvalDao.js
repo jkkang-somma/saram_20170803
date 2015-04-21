@@ -39,6 +39,10 @@ ApprovalDao.prototype.updateApprovalConfirm =  function (connection, data) {
     ); 
 };
 
+ApprovalDao.prototype.selectApprovalListById =  function (data) {
+    var queryStr = db.getQuery('approval', 'selectApprovalListById');
+    return db.queryV2(queryStr, [data.id, data.year]);
+};
 
 ApprovalDao.prototype.getApprovalMailData =  function (doc_num) {
     var queryStr = db.getQuery('approval', 'getApprovalMailData');

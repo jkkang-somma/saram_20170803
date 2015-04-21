@@ -10,9 +10,8 @@ router.route('/list')
 .get(function(req, res){
     // Get user infomation list (GET)
     var approval = new Approval();
-    var result;
     if(req.query.startDate == '' || req.query.endDate == ''){
-        result = approval.getApprovalList().then(function(result){
+        approval.getApprovalList().then(function(result){
             debug("Complete Select Approval List.");
             res.send(result);    
         }).catch(function(e){
@@ -24,8 +23,12 @@ router.route('/list')
                 error:e
             });
         });
+    }else if(req.query.id && req.query.year){
+        approval.getApprovalListById(req.query).then(function(result){
+            res.send(result);
+        });
     }else{
-        result = approval.getApprovalListWhere(req.query.startDate, req.query.endDate, req.query.managerId).then(function(result){
+        approval.getApprovalListWhere(req.query.startDate, req.query.endDate, req.query.managerId).then(function(result){
             debug("Complete Select Approval List Where.");
             res.send(result);    
         }).catch(function(e){
@@ -45,7 +48,7 @@ router.route('/appIndex')
 .get(function(req, res){
     // Get user infomation list (GET)
     var approval = new Approval();
-    var result = approval.getApprovalIndex(req.query.yearmonth).then(function(result){
+    approval.getApprovalIndex(req.query.yearmonth).then(function(result){
         debug("Complete Select Approval List Where.");
         res.send(result);    
     }).catch(function(e){
@@ -86,7 +89,7 @@ router.route('/appIndex/add')
 
     approval.setApprovalIndex().then(function(e){
         debug("Complete Add Approval.");
-        res.send({success:true, msg:"Complete Add Approval."})
+        res.send({success:true, msg:"Complete Add Approval."});
     }).catch(function(e){
         debug("Error Add Approval.");
         res.status(500);
@@ -103,7 +106,7 @@ router.route('/')
     var approval = new Approval();
     approval.insertApproval(req.body).then(function(e){
         debug("Complete Add Approval.");
-        res.send({success:true, msg:"Complete Add Approval."})
+        res.send({success:true, msg:"Complete Add Approval."});
     }).catch(function(e){
         debug("Error Add Approval.");
         res.status(500);
@@ -113,7 +116,7 @@ router.route('/')
             error:e
         });
     });
-})
+});
 
 router.route('/bulk')
 .put(function(req, res) {

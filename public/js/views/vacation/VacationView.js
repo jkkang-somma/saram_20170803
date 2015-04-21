@@ -10,45 +10,34 @@ define([
   'core/BaseView',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/right.html',
-  'text!templates/default/button.html',
   'text!templates/layout/default.html',
+  'text!templates/default/row.html',
+  'text!templates/default/rowbuttoncontainer.html',
+  'text!templates/default/rowbutton.html',
+  'text!templates/default/rowcombo.html',
   'models/sm/SessionModel',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
   'views/component/ProgressbarView',
   'views/vacation/popup/UpdateVacationPopup',
+  'views/vacation/popup/UsedHolidayListPopup',
   'text!templates/vacation/vacationInfoPopupTemplate.html',
-  'text!templates/vacation/searchFormTemplate.html'
-], function($,
-		_,
-		Backbone, 
-		Util, 
-		Schemas,
-		Grid,
-		Dialog,
-		Datatables,
-		BaseView,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
-		SessionModel,
-		VacationModel, 
-		VacationCollection,
-		ProgressbarView,
-		UpdateVacationPopup,
-		vacationInfoPopupTemplate,
-		searchFormTemplate){
+  'text!templates/vacation/searchFormTemplate.html',
+  'text!templates/vacation/vacationlist.html'
+], function(
+	$, _, Backbone, Util, Schemas,
+	Grid, Dialog, Datatables,
+	BaseView,
+	HeadHTML, ContentHTML, LayoutHTML,
+	RowHTML, RowButtonContainerHTML, RowButtonHTML, RowComboHTML,
+
+	SessionModel, VacationModel, 
+	VacationCollection, 
 	
-//	// 검색 조건 년도 
-	function _getFormYears() {
-		var years = [];
-		
-		var today = new Date();
-	    var year = today.getFullYear();
-	    for(var i = -1; i< 5; i++){
-            years.push(year + i);
-        }
-		return  years;
-	}
+	ProgressbarView,
+	
+	UpdateVacationPopup, UsedHolidayListPopup,
+	vacationInfoPopupTemplate, searchFormTemplate, vacationListTemplate){
 	
 	// 휴가 편집 버튼 
 	function _getVacationUpdateBtn(that) {
@@ -96,7 +85,7 @@ define([
 	                title: (SessionModel.get("user").admin == 1)?"연차 수정" : "연차 정보", 
                     content: updateVacationPopup,
                     buttons: buttons
-	            })
+	            });
 	        }
 	    };
 	}
@@ -113,7 +102,18 @@ define([
              	            { data : "dept_name", 		"title" : "부서" },
                             { data : "name", 			"title" : "이름"},
                             { data : "total_day", 		"title" : "연차 휴가" },
-                            { data : "used_holiday", 	"title" : "사용 일수" },
+                            { data : "used_holiday", 	"title" : "사용 일수",
+                            	render: function(data, type, full, meta){
+									var obj = {
+										id : full.id,
+										year : full.year,
+										name: full.name,
+										used_holiday : full.used_holiday
+									};
+									var tpl = _.template(vacationListTemplate)(obj);
+									return tpl;
+                            	}
+                            },
                             { data : "holiday", 		"title" : "휴가 잔여 일수"},
                             { data : "memo", 			"title" : "Memo",
       			        	   render: function(data, type, full, meta) {
@@ -136,12 +136,14 @@ define([
         		    }],
         		    fetch: false,
         		    order:[[3, "asc"]]
-        	};    		
+        	};
+        
     		this.buttonInit();
     	},
     	events: {
     		'click #btnCreateData' : 'onClickCreateDataBtn',
-        	'click #btnSearch' : 'onClickSearchBtn'
+        	"change #vcCombo" : 'selectVacation',
+        	'click #vacationDataTable .td-used-holiday' : 'onClickUsedHolidayPopup',
     	},
     	buttonInit: function(){
     	    var that = this;
@@ -174,18 +176,45 @@ define([
     	    	isShowCreateBtn = true;
     	    }
     	    
-    	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear(), isShowCreateBtn: isShowCreateBtn});
-
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    this.progressbar = new ProgressbarView();
+    	    	
+        	var _row=$(RowHTML);
+    	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
+    	            obj: {id: "vcBtnContainer"}
+    	        })
+    	    );
+	        
+	        var _combo = $(_.template(RowComboHTML)({
+    	            obj : { id : "vcCombo", label : "연도"}
+    	        })
+	        );
+	        
+    	    if(isShowCreateBtn){
+	        	var _createBtn = $(_.template(RowButtonHTML)({
+	    	            obj: { id: "btnCreateData", label: "자료생성"}
+	    	        })
+		        );	
+		        _btnContainer.append(_createBtn);
+	        }
+	        
+	        _row.append(_combo);
+    	    _row.append(_btnContainer);
     	    
     	    _layOut.append(_head);
-    	    _layOut.append(searchForm);
+			_layOut.append(_row);
     	    _layOut.append(_content);
     	    _layOut.append(this.progressbar.render());
-    	      	    
+    	    
     	    $(this.el).html(_layOut);
 
+			var today = new Date();
+		    var year = today.getFullYear();
+			for(var i=-1; i < 5; i++){
+     	        $(this.el).find("#vcCombo").append("<option>"+(year + i)+"</option>");
+     	    }
+     	    $(this.el).find("#vcCombo").val(year);
+     	    
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
@@ -221,12 +250,24 @@ define([
 				}
 			});
      	},
-     	onClickSearchBtn: function(evt) {
-     		this.selectVacation();
-     	},
      	getSearchForm: function() {	// 검색 조건  
-     		return {year: this.$el.find("#selectYear").val()};
-     	}
+     		return {year: this.$el.find("#vcCombo").val()};
+     	},
+     	onClickUsedHolidayPopup: function(evt) {
+			var data = JSON.parse( $(evt.currentTarget).attr('data') );
+			
+            var changeHistoryPopupView = new UsedHolidayListPopup(data);
+            Dialog.show({
+                title: "사용 휴가 리스트 ("+data.name+")", 
+                content: changeHistoryPopupView,
+                buttons: [{
+                    label : "닫기",
+                    action : function(dialog){
+                        dialog.close();
+                    }
+                }]
+            });
+     	},
     });
     return VacationView;
 });
