@@ -18,7 +18,7 @@ define([
   'models/sm/SessionModel',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
-  'views/component/ProgressbarView',
+  //'views/component/ProgressbarView',
   'views/vacation/popup/UpdateVacationPopup',
   'views/vacation/popup/UsedHolidayListPopup',
   'text!templates/vacation/vacationInfoPopupTemplate.html',
@@ -34,7 +34,7 @@ define([
 	SessionModel, VacationModel, 
 	VacationCollection, 
 	
-	ProgressbarView,
+	// ProgressbarView,
 	
 	UpdateVacationPopup, UsedHolidayListPopup,
 	vacationInfoPopupTemplate, searchFormTemplate, vacationListTemplate){
@@ -151,16 +151,29 @@ define([
     	    this.gridOption.buttons.push(_getVacationUpdateBtn(that));
     	},
     	selectVacation: function() {
-            var _this = this;
-     		this.vacationCollection.fetch({ 
-     			data: _this.getSearchForm(),
-	 			success: function(result) {
-	 				_this.grid.render();
-	 			},
-	 			error : function(result) {
-	 				alert("데이터 조회가 실패했습니다.");
-	 			}
-     		});            
+    		var _this = this;
+    		Dialog.loading({
+                action:function(){
+                    var dfd = new $.Deferred();
+                    _this.vacationCollection.fetch({ 
+		     			data: _this.getSearchForm(),
+			 			success: function(result) {
+			 				dfd.resolve();
+			 			},
+			 			error : function(result) {
+			 				dfd.reject();
+			 			}
+		     		});
+		     		return dfd.promise();
+        	    },
+        	    
+                actionCallBack:function(res){//response schema
+                    _this.grid.render();
+                },
+                errorCallBack:function(response){
+                    Dialog.error("데이터 조회가 실패했습니다.");
+                },
+            });
     	},
     	render:function(){
     	    var _headSchema=Schemas.getSchema('headTemp');
@@ -177,7 +190,6 @@ define([
     	    }
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    this.progressbar = new ProgressbarView();
     	    	
         	var _row=$(RowHTML);
     	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
@@ -204,7 +216,6 @@ define([
     	    _layOut.append(_head);
 			_layOut.append(_row);
     	    _layOut.append(_content);
-    	    _layOut.append(this.progressbar.render());
     	    
     	    $(this.el).html(_layOut);
 
@@ -226,29 +237,31 @@ define([
       		var _this = this;
      		var inData = this.getSearchForm();
      		
-     		this.progressbar.disabledProgressbar(false);
-     		
-			var vacationModel = new VacationModel();
-     		vacationModel.save(inData, {
-				success: function(model, response) {
-					_this.progressbar.disabledProgressbar(true);
-					
-					if (Util.isNull( response["error"] )) {
-						var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
-	        			Dialog.show(msg, function() {
-	        				_this.selectVacation();
-	        			});
-					} else {
-						Dialog.warning("Error: " + response["error"]);
-					}
-				},
-				error: function(model, res) {
-					_this.progressbar.disabledProgressbar(true);
-        			Dialog.show("데이터 생성 실패", function() {
+     		Dialog.loading({
+                action:function(){
+                    var dfd = new $.Deferred();
+                    var vacationModel = new VacationModel();
+		     		vacationModel.save(inData, {
+						success: function(model, response) {
+							dfd.resolve(response);
+						},
+						error: function(model, res) {
+		        			dfd.reject();
+						}
+					});
+		     		return dfd.promise();
+        	    },
+                actionCallBack:function(response){//response schema
+					var msg = "전체 : " + response.totalCount + " / 성공: " +response.successCount + " /실패 : " + response.failCount; 
+        			Dialog.show(msg, function() {
         				_this.selectVacation();
         			});
-				}
-			});
+                },
+                errorCallBack:function(response){
+                    Dialog.warning("Error: " + response["error"]);
+                },
+            });
+			
      	},
      	getSearchForm: function() {	// 검색 조건  
      		return {year: this.$el.find("#vcCombo").val()};

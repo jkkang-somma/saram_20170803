@@ -114,7 +114,6 @@ var Approval = function (data) {
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    console.log(result[idx]);
                                     cc.push({name : result[idx].name, address: result[idx].email});
                                 }
                             }
@@ -134,7 +133,6 @@ var Approval = function (data) {
                         
                         transport.sendMail(mailOptions, function(error, info){
                             if(error){//메일 보내기 실패시 
-                                console.log(error);
                                 reject();
                             }else{
                                 resolve();
