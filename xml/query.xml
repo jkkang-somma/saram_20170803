@@ -217,6 +217,17 @@
 				AND state != '상신취소'
 			ORDER BY doc_num desc
     	</query>
+    	<query id="selectApprovalListById">
+    		select
+				submit_id, office_code, start_date, end_date, submit_comment, day_count
+			from
+				approval_tbl 
+			where 
+				submit_id = ? 
+				AND YEAR(STR_TO_DATE(start_date, '%Y-%m-%d')) = ?
+			    AND state = "결재완료" 
+			    AND office_code like "v%"
+    	</query>
     	<query id="selectApprovalByManager">
         	select 
 				app.doc_num, app.submit_id
@@ -282,7 +293,6 @@
 			WHERE
 				dept_code = ?
     	</query>
-    	
 	</group>
 	
 	<group id="approval_index">

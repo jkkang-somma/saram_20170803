@@ -12,6 +12,7 @@ OutOfficeDao.prototype.selectOutOfficeList =  function () {
     var queryStr = util.format(db.getQuery('outOffice', 'selectOutOfficeList'));
     return db.queryV2(queryStr);
 };
+
 OutOfficeDao.prototype.insertOutOffice =  function (connection, data) {
     var queryStr = util.format(db.getQuery('outOffice', 'insertOutOffice'));
     return db.queryTransaction(
@@ -22,8 +23,6 @@ OutOfficeDao.prototype.insertOutOffice =  function (connection, data) {
             "year", "date", "id", "office_code", "office_code",  "memo", "doc_num", "black_mark", "start_time", "end_time"
         ]
     ); 
-    
-    // return db.queryV2(queryStr, [year, _data.date, _data.id, _data.office_code, _data.office_code,  _data.memo, _data.doc_num, _data.black_mark, _data.start_time, _data.end_time]);
 };
 OutOfficeDao.prototype.removeOutOffice =  function (connection, data) {
     var queryStr = util.format(db.getQuery('outOffice', 'deleteOutOfficeList'));
@@ -36,4 +35,6 @@ OutOfficeDao.prototype.removeOutOffice =  function (connection, data) {
         ]
     ); 
 };
+
+
 module.exports = new OutOfficeDao();

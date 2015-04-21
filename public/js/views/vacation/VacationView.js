@@ -18,8 +18,10 @@ define([
   'collection/vacation/VacationCollection',
   'views/component/ProgressbarView',
   'views/vacation/popup/UpdateVacationPopup',
+  'views/vacation/popup/UsedHolidayListPopup',
   'text!templates/vacation/vacationInfoPopupTemplate.html',
-  'text!templates/vacation/searchFormTemplate.html'
+  'text!templates/vacation/searchFormTemplate.html',
+  'text!templates/vacation/vacationlist.html'
 ], function($,
 		_,
 		Backbone, 
@@ -35,8 +37,10 @@ define([
 		VacationCollection,
 		ProgressbarView,
 		UpdateVacationPopup,
+		UsedHolidayListPopup,
 		vacationInfoPopupTemplate,
-		searchFormTemplate){
+		searchFormTemplate,
+		vacationListTemplate){
 	
 //	// 검색 조건 년도 
 	function _getFormYears() {
@@ -96,7 +100,7 @@ define([
 	                title: (SessionModel.get("user").admin == 1)?"연차 수정" : "연차 정보", 
                     content: updateVacationPopup,
                     buttons: buttons
-	            })
+	            });
 	        }
 	    };
 	}
@@ -113,7 +117,18 @@ define([
              	            { data : "dept_name", 		"title" : "부서" },
                             { data : "name", 			"title" : "이름"},
                             { data : "total_day", 		"title" : "연차 휴가" },
-                            { data : "used_holiday", 	"title" : "사용 일수" },
+                            { data : "used_holiday", 	"title" : "사용 일수",
+                            	render: function(data, type, full, meta){
+									var obj = {
+										id : full.id,
+										year : full.year,
+										name: full.name,
+										used_holiday : full.used_holiday
+									};
+									var tpl = _.template(vacationListTemplate)(obj);
+									return tpl;
+                            	}
+                            },
                             { data : "holiday", 		"title" : "휴가 잔여 일수"},
                             { data : "memo", 			"title" : "Memo",
       			        	   render: function(data, type, full, meta) {
@@ -141,7 +156,8 @@ define([
     	},
     	events: {
     		'click #btnCreateData' : 'onClickCreateDataBtn',
-        	'click #btnSearch' : 'onClickSearchBtn'
+        	'click #btnSearch' : 'onClickSearchBtn',
+        	'click #vacationDataTable .td-used-holiday' : 'onClickUsedHolidayPopup',
     	},
     	buttonInit: function(){
     	    var that = this;
@@ -226,7 +242,22 @@ define([
      	},
      	getSearchForm: function() {	// 검색 조건  
      		return {year: this.$el.find("#selectYear").val()};
-     	}
+     	},
+     	onClickUsedHolidayPopup: function(evt) {
+			var data = JSON.parse( $(evt.currentTarget).attr('data') );
+			
+            var changeHistoryPopupView = new UsedHolidayListPopup(data);
+            Dialog.show({
+                title: "사용 휴가 리스트 ("+data.name+")", 
+                content: changeHistoryPopupView,
+                buttons: [{
+                    label : "닫기",
+                    action : function(dialog){
+                        dialog.close();
+                    }
+                }]
+            });
+     	},
     });
     return VacationView;
 });
