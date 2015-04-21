@@ -10,9 +10,12 @@ define([
   'core/BaseView',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
-  'text!templates/default/right.html',
-  'text!templates/default/button.html',
+
   'text!templates/layout/default.html',
+  'text!templates/default/row.html',
+  'text!templates/default/rowbuttoncontainer.html',
+  'text!templates/default/rowbutton.html',
+  'text!templates/default/rowcombo.html',
   'models/sm/SessionModel',
   'models/vacation/VacationModel',
   'collection/vacation/VacationCollection',
@@ -22,37 +25,20 @@ define([
   'text!templates/vacation/vacationInfoPopupTemplate.html',
   'text!templates/vacation/searchFormTemplate.html',
   'text!templates/vacation/vacationlist.html'
-], function($,
-		_,
-		Backbone, 
-		Util, 
-		Schemas,
-		Grid,
-		Dialog,
-		Datatables,
-		BaseView,
-		HeadHTML, ContentHTML, RightBoxHTML, ButtonHTML, LayoutHTML,
-		SessionModel,
-		VacationModel, 
-		VacationCollection,
-		ProgressbarView,
-		UpdateVacationPopup,
-		UsedHolidayListPopup,
-		vacationInfoPopupTemplate,
-		searchFormTemplate,
-		vacationListTemplate){
+], function(
+	$, _, Backbone, Util, Schemas,
+	Grid, Dialog, Datatables,
+	BaseView,
+	HeadHTML, ContentHTML, LayoutHTML,
+	RowHTML, RowButtonContainerHTML, RowButtonHTML, RowComboHTML,
+
+	SessionModel, VacationModel, 
+	VacationCollection, 
 	
-//	// 검색 조건 년도 
-	function _getFormYears() {
-		var years = [];
-		
-		var today = new Date();
-	    var year = today.getFullYear();
-	    for(var i = -1; i< 5; i++){
-            years.push(year + i);
-        }
-		return  years;
-	}
+	ProgressbarView,
+	
+	UpdateVacationPopup, UsedHolidayListPopup,
+	vacationInfoPopupTemplate, searchFormTemplate, vacationListTemplate){
 	
 	// 휴가 편집 버튼 
 	function _getVacationUpdateBtn(that) {
@@ -151,7 +137,8 @@ define([
         		    }],
         		    fetch: false,
         		    order:[[3, "asc"]]
-        	};    		
+        	};
+        
     		this.buttonInit();
     	},
     	events: {
@@ -190,18 +177,52 @@ define([
     	    	isShowCreateBtn = true;
     	    }
     	    
-    	    var searchForm = _.template( searchFormTemplate )( {formYears: _getFormYears(), nowYear: new Date().getFullYear(), isShowCreateBtn: isShowCreateBtn});
-
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    this.progressbar = new ProgressbarView();
+    	    	
+        	var _row=$(RowHTML);
+    	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
+    	            obj: {id: "vcBtnContainer"}
+    	        })
+    	    );
+    	    var _searchBtn = $(_.template(RowButtonHTML)({
+    	            obj: { id: "btnSearch", label: "조회" }
+    	        })
+	        );
+	        
+	        var _combo = $(_.template(RowComboHTML)({
+    	            obj : { id : "vcCombo", label : "연도"}
+    	        })
+	        );
+	        
+	        _btnContainer.append(_searchBtn);
+	        
+    	    _row.append(_combo);
+    	    
+    	    if(isShowCreateBtn){
+	        	var _createBtn = $(_.template(RowButtonHTML)({
+	    	            obj: { id: "btnCreateData", label: "자료생성"}
+	    	        })
+		        );	
+		        _btnContainer.append(_createBtn);
+	        }
+	        
+    	    _row.append(_btnContainer);
     	    
     	    _layOut.append(_head);
-    	    _layOut.append(searchForm);
+			_layOut.append(_row);
     	    _layOut.append(_content);
     	    _layOut.append(this.progressbar.render());
-    	      	    
+    	    
     	    $(this.el).html(_layOut);
 
+			var today = new Date();
+		    var year = today.getFullYear();
+			for(var i=-1; i < 5; i++){
+     	        $(this.el).find("#vcCombo").append("<option>"+(year + i)+"</option>");
+     	    }
+     	    $(this.el).find("#vcCombo").val(year);
+     	    
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
@@ -241,7 +262,7 @@ define([
      		this.selectVacation();
      	},
      	getSearchForm: function() {	// 검색 조건  
-     		return {year: this.$el.find("#selectYear").val()};
+     		return {year: this.$el.find("#vcCombo").val()};
      	},
      	onClickUsedHolidayPopup: function(evt) {
 			var data = JSON.parse( $(evt.currentTarget).attr('data') );
