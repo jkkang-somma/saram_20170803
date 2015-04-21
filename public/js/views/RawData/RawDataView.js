@@ -197,13 +197,11 @@ ProgressbarView){
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
             
-            console.log(SessionModel.getUserInfo());
             var dept = Code.getCodes(Code.DEPARTMENT);
             $(this.el).find("#rdCombo").append("<option>"+"전체"+"</option>");
      	    for(var i=0; i < dept.length; i++){
      	        $(this.el).find("#rdCombo").append("<option>"+dept[i].name+"</option>");
      	    }
-     	    
      	    $(this.el).find("#rdCombo").val(SessionModel.getUserInfo().dept_name);
      	    
     	    var _gridSchema=Schemas.getSchema('grid');
