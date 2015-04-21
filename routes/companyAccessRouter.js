@@ -12,6 +12,7 @@ router.route("/")
 	var user = session.user;
 
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
 	var inData = {
 		type : req.body.type,
 		ip_pc : _.isEmpty(req.body.ip)?null:req.body.ip,
