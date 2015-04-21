@@ -536,6 +536,11 @@ define([
                                               Dialog.show("Completed Report Cancel.");
                                               _this.grid.updateRow(model);
                                               dialogRef.close();
+                                           }).fail(function(failReason){
+                                             if(failReason.div_fail){
+                                               _this.setReportTable(true, false);
+                                               dialogRef.close();
+                                             }
                                            });
                                           _dfd.resolve();
                                           return _dfd.promise();

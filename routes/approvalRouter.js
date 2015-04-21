@@ -60,6 +60,26 @@ router.route('/appIndex')
     
 });
 
+router.route('/info')
+.get(function(req, res){
+    // Get user infomation list (GET)
+    var approval = new Approval();
+    var doc_num = req.query.doc_num;
+    var result = approval.getApprovalList(doc_num).then(function(result){
+        debug("Complete Select Approval List Where.");
+        res.send(result);    
+    }).catch(function(e){
+        debug("Error Select Approval List Where.");
+        res.status(500);
+        res.send({
+            success:false,
+            message: e.message,
+            error:e
+        });
+    });
+    
+});
+
 router.route('/appIndex/add')
 .post(function(req, res){
     var approval = new Approval(req.body);
