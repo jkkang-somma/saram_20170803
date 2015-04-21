@@ -51,7 +51,7 @@ var CommuteYearExcelCreater = function () {
 //		}
 
 		sheet.merge({col:2, row:1},{col:4, row:1});
-		_setBaseCell(sheet, 2, 1, (searchValObj.startTime + " ~ " + searchValObj.endTime) );
+		_setBaseCell(sheet, 2, 1, (" " + searchValObj.startTime + " ~ " + searchValObj.endTime + "	") );
 
 		sheet.merge({col:COL_DEPT, row:2},{col:COL_DEPT, row:4});
 		sheet.width(COL_DEPT, COL_DEPT_WIDTH);
