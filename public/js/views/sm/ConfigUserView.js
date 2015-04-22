@@ -39,28 +39,28 @@ define([
     	                name:"id",
     	                label:i18nCommon.USER.ID,
     	                value:_model.id,
-    	                disabled:true
+    	                disabled:true,
     	        },{
     	                type:"input",
     	                name:"name",
     	                label:i18nCommon.USER.NAME,
     	                value:_model.name,
-    	                disabled:true
+    	                disabled:true,
     	        },{
     	                type:"password",
     	                name:"password",
     	                label:i18nCommon.USER.PASSWORD,
-    	                value:_model.password
+    	                value:_model.password,
     	        },{
     	                type:"password",
     	                name:"new_password",
     	                label:i18nCommon.USER.NEW_PASSWORD,
-    	                value:_model.password
+    	                value:_model.password,
     	        },{
     	                type:"password",
     	                name:"re_new_password",
     	                label:i18nCommon.USER.RE_NEW_PASSWORD,
-    	                value:_model.password
+    	                value:_model.password,
     	        }]
     	    });
     	    
@@ -74,8 +74,8 @@ define([
      	},
     	submitSave : function(e){
     	    var dfd= new $.Deferred();
-    	    var _view=this,_form=this.form,_data=_form.getData();
-    	    var _id=_data.id;
+    	    var _form=this.form,_data=_form.getData();
+    	   // var _id=_data.id;
     	    var _password=_data.password;
     	    var _new_password=_data.new_password;
     	    var _re_new_password=_data.re_new_password;

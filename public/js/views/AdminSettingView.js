@@ -11,9 +11,6 @@ define([
 	'models/sm/SessionModel',
 	'i18n!nls/common',
 	'lib/component/form',
-	'text!templates/inputForm/textbox.html',
-	'text!templates/inputForm/textarea.html',
-	'text!templates/inputForm/combobox.html',
 	'text!templates/default/rowbutton.html',
 	'text!templates/report/searchFormTemplate.html'
 ], function($, _, Backbone, Util, Moment,
@@ -21,7 +18,7 @@ define([
 	JqFileDownload,
 	MessageModel, SessionModel,
 	i18nCommon, Form,
-	TextBoxHTML, TextAreaHTML, ComboboxHTML, RowButtonHTML, searchFormTemplate
+	RowButtonHTML, searchFormTemplate
 ) {
 	var AdminSettingView = Backbone.View.extend({
 		initialize : function() {

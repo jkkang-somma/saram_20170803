@@ -13,7 +13,7 @@ var CommuteDao = require('../dao/commuteDao.js');
 var OutOffice = function (data) {
     var _getOutOfficeList = function (data) {
         return OutOfficeDao.selectOutOfficeList(data);
-    }
+    };
     var _remove = function (data) {
         return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
@@ -45,12 +45,12 @@ var OutOffice = function (data) {
 				});	
 			});
 		});
-    }
+    };
     return {
         getOutOfficeList:_getOutOfficeList,
         remove : _remove
-    }
-}
+    };
+};
 
 module.exports = new OutOffice();
 

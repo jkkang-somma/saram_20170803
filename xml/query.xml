@@ -81,9 +81,16 @@
         	from
         		commute_base_tbl
         	where
-        		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1);
+        		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1) AND department = ?
         </query>
-        
+        <query id="selectRawDataListAll">
+        	select
+        		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
+        	from
+        		commute_base_tbl
+        	where
+        		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+        </query>
         <query id="selectRawDataListV2">
         	select
         		str_to_date(char_date, "%Y-%m-%d %h:%i") date, commute_base_tbl.*
@@ -210,6 +217,17 @@
 				AND state != '상신취소'
 			ORDER BY doc_num desc
     	</query>
+    	<query id="selectApprovalListById">
+    		select
+				submit_id, office_code, start_date, end_date, submit_comment, day_count
+			from
+				approval_tbl 
+			where 
+				submit_id = ? 
+				AND YEAR(STR_TO_DATE(start_date, '%Y-%m-%d')) = ?
+			    AND state = "결재완료" 
+			    AND office_code like "v%"
+    	</query>
     	<query id="selectApprovalByManager">
         	select 
 				app.doc_num, app.submit_id
@@ -275,7 +293,6 @@
 			WHERE
 				dept_code = ?
     	</query>
-    	
 	</group>
 	
 	<group id="approval_index">
@@ -338,12 +355,53 @@
 							left join overtime_code_tbl o on c.overtime_code = o.code
 							left join work_type_code_tbl w on w.code = c.work_type							
 						WHERE
+							(date BETWEEN ? AND ?) AND department =?
+						ORDER BY date
+            ) t1,
+            (SELECT @idx:= 0) AS idx
+        </query>
+		<query id="selectCommuteAll">
+            SELECT 
+				(@idx:=@idx+1) AS idx,
+            t1.*
+            from (
+					SELECT
+							c.year,
+							c.date,		
+							c.id,
+							c.department,
+							c.name,
+							c.work_type,
+							w.name AS work_type_name,
+							c.late_time,
+							c.over_time,
+							IFNULL( date_format(c.in_time, '%Y-%m-%d %H:%i'), NULL) AS in_time,
+							c.in_time_type,
+							IFNULL( date_format(c.out_time, '%Y-%m-%d %H:%i'), NULL) AS out_time,
+							c.out_time_type,
+							c.in_time_change,
+							c.out_time_change,
+							c.overtime_code_change,
+							c.comment_count,
+							c.overtime_code,
+							c.vacation_code,
+							c.out_office_code,
+							c.early_time,
+							c.not_pay_over_time,
+							IFNULL( o.name, '') AS overtime_type,
+							IFNULL( o.overtime_pay, 0) AS overtime_pay,
+							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
+							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name                
+						FROM 
+							commute_result_tbl c
+							left join overtime_code_tbl o on c.overtime_code = o.code
+							left join work_type_code_tbl w on w.code = c.work_type							
+						WHERE
 							date BETWEEN ? AND ?
 						ORDER BY date
             ) t1,
             (SELECT @idx:= 0) AS idx
         </query>
-
         <query id="updateCommuteResultInOutTime">
         	UPDATE 
         		commute_result_tbl 

@@ -3,7 +3,6 @@ var excelbuilder = require('msexcel-builder');
 var path = require('path');
 var fs = require('fs');
 var	excelFileDirPath = path.normalize(__dirname + '/../excel/files/');
-var csv = require("fast-csv");
 
 var CommuteYearExcelCreater = function () {
 
@@ -52,7 +51,7 @@ var CommuteYearExcelCreater = function () {
 //		}
 
 		sheet.merge({col:2, row:1},{col:4, row:1});
-		_setBaseCell(sheet, 2, 1, (searchValObj.startTime + " ~ " + searchValObj.endTime) );
+		_setBaseCell(sheet, 2, 1, (" " + searchValObj.startTime + " ~ " + searchValObj.endTime + "	") );
 
 		sheet.merge({col:COL_DEPT, row:2},{col:COL_DEPT, row:4});
 		sheet.width(COL_DEPT, COL_DEPT_WIDTH);
@@ -408,40 +407,8 @@ var CommuteYearExcelCreater = function () {
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
-//			var fileName = "근태자료_"+ searchValObj.startTime + "_" + searchValObj.endTime + "_" +new Date().getTime() + ".xlsx";
-//			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
-//			
-//			// 파일 폴더 체크 
-//			if (!fs.existsSync(excelFileDirPath)) {
-//				try {
-//					fs.mkdirSync(excelFileDirPath);
-//				} catch(e) {
-//					if ( e.code != 'EEXIST' ) {
-//						console.log("Fail create excel file dir");
-//						throw e;
-//					}
-//				}
-//			}
-//			
-//			// sheet 기본 크기 
-//			var sheet1 = workbook.createSheet('sheet1', 200, 150);
-//			
-//			_createExcelTitle(sheet1, searchValObj);		
-//			_createExcelData(sheet1, searchValObj, datas);
-//
-//			// Save it
-//			workbook.save(function(err){
-//				if (err) {
-//				    workbook.cancel();
-//				  	reject(err);
-//				} else {
-//					resolve(excelFileDirPath + fileName);
-//				}
-//			});
-			
-			// CSV 변경 
-			var fileName = "근태자료_"+ searchValObj.startTime + "_" + searchValObj.endTime + "_" +new Date().getTime() + ".csv";
-			console.log("1. 엑셀 파일 이름 : " + fileName);
+			var fileName = "근태자료_"+ searchValObj.startTime + "_" + searchValObj.endTime + "_" +new Date().getTime() + ".xlsx";
+			var workbook = excelbuilder.createWorkbook(excelFileDirPath, fileName);
 			
 			// 파일 폴더 체크 
 			if (!fs.existsSync(excelFileDirPath)) {
@@ -455,115 +422,21 @@ var CommuteYearExcelCreater = function () {
 				}
 			}
 			
-			try {
-				var fileFullName = excelFileDirPath +  fileName;			
-				var csvStream = csv.createWriteStream({headers: false}),
-			    writableStream = fs.createWriteStream(fileFullName, {encoding: "utf8"});
-				writableStream.on("finish", function(){
-				  console.log("DONE!! create csv file : " + fileName);
-				  resolve(excelFileDirPath +  fileName);
-				});
-				
-				csvStream.pipe(writableStream);
-				
-				//title
-				//csvStream.write( headerInfo );
-				
-				var users = datas[0],
-					lateWorkers = datas[1],
-					usedHolidays = datas[2],
-					overTimeWorkes = datas[3],
-					overTimeWorkTypes = datas[4],
-					overTimeWorkPays = datas[5],
-					holidayWorkTypes = datas[6],
-					holidayWorkPays = datas[7];
-				
-				csvStream.write( ["\ufeff  - "] );
-				
-				for (var i = 0, len = users.length; i < len; i++) {
-					var user = users[i],
-						lateWorker = lateWorkers[i],
-						usedHoliday = usedHolidays[i],
-						overTimeWorke = overTimeWorkes[i],
-						overTimeWorkType = overTimeWorkTypes[i],
-						overTimeWorkPay = overTimeWorkPays[i],
-						holidayWorkType = holidayWorkTypes[i],
-						holidayWorkPay = holidayWorkPays[i];
-					
-					if ( !searchValObj.isInLeaveWorker ){
-						if (user.leave_company != null && user.leave_company != "") {
-							continue;
-						}
-					}
-					
-					var arr = [];
-					arr.push(user.dept_name);
-					arr.push(user.position_name);
-					arr.push(user.name);
-					arr.push(( user.leave_company == null)? "": user.leave_company);
-					
-					var k = 0,
-						tLen = 0;
-					
-					//////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( lateWorker[k+1] );
-					}
-					arr.push( lateWorker.total );
-
-					/////////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( usedHoliday[k+1] );
-					}
-					arr.push( usedHoliday.total_day );
-					arr.push( usedHoliday.holiday );
-
-					////////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( overTimeWorke[k+1] );
-					}
-					arr.push( overTimeWorke.total );
-					
-//					////////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( overTimeWorkType[ (k+1)+'a' ] );
-						arr.push( overTimeWorkType[ (k+1)+'b' ] );
-						arr.push( overTimeWorkType[ (k+1)+'c' ] );
-					}
-					arr.push( overTimeWorkType.a_total );
-					arr.push( overTimeWorkType.b_total );
-					arr.push( overTimeWorkType.c_total );
-//
-//					////////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( overTimeWorkPay[k+1] );
-					}
-					arr.push( overTimeWorkPay.total );
-//					
-//					////////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( holidayWorkType[ (k+1)+'a' ] );
-						arr.push( holidayWorkType[ (k+1)+'b' ] );
-						arr.push( holidayWorkType[ (k+1)+'c' ] );
-					}
-					arr.push( holidayWorkType.a_total );
-					arr.push( holidayWorkType.b_total );
-					arr.push( holidayWorkType.c_total );
-//
-//					////////
-					for (k = 0, tLen = 11; k <= tLen; k++) {
-						arr.push( holidayWorkPay[k+1] );
-					}
-					arr.push( holidayWorkPay.total );
-					
-					csvStream.write( arr );
-				}
-
-				csvStream.end();				
-			} catch (err) {
-				reject(err);
-			}
+			// sheet 기본 크기 
+			var sheet1 = workbook.createSheet('sheet1', 200, 150);
 			
+			_createExcelTitle(sheet1, searchValObj);		
+			_createExcelData(sheet1, searchValObj, datas);
+
+			// Save it
+			workbook.save(function(err){
+				if (err) {
+				    workbook.cancel();
+				  	reject(err);
+				} else {
+					resolve(excelFileDirPath + fileName);
+				}
+			});
 		});
 	};
 	

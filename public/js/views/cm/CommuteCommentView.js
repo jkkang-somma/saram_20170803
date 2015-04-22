@@ -18,7 +18,7 @@ define([
         'text!templates/default/content.html',
         'text!templates/layout/default.html',
         'text!templates/default/row.html',
-        'text!templates/default/datepickerRange.html',
+        'text!templates/default/rowdatepickerRange.html',
         'text!templates/default/rowbuttoncontainer.html',
         'text!templates/default/rowbutton.html',
         'models/sm/SessionModel',

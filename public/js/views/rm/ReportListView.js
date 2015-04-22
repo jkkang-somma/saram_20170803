@@ -11,7 +11,7 @@ define([
   'cmoment',
   'code',
   'models/sm/SessionModel',
-  'text!templates/commuteListTemplete.html',
+  'text!templates/report/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
   'collection/vacation/VacationCollection',
   'collection/common/HolidayCollection',
@@ -536,6 +536,11 @@ define([
                                               Dialog.show("Completed Report Cancel.");
                                               _this.grid.updateRow(model);
                                               dialogRef.close();
+                                           }).fail(function(failReason){
+                                             if(failReason.div_fail){
+                                               _this.setReportTable(true, false);
+                                               dialogRef.close();
+                                             }
                                            });
                                           _dfd.resolve();
                                           return _dfd.promise();

@@ -16,15 +16,13 @@ define([
     'lib/component/form',
     'core/BaseView',
     'models/cm/CommentModel',
-	'text!templates/inputForm/textbox.html',
-	'text!templates/inputForm/textarea.html',
 	'text!templates/default/datepickerChange.html',
 ], function(
 	$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment, 
 	i18nCommon, Form,
 	BaseView,
 	CommentModel,
-	TextBoxHTML, TextAreaHTML, DatePickerChangeHTML
+	DatePickerChangeHTML
 ) {
 	
 	var CommentPopupView = Backbone.View.extend({

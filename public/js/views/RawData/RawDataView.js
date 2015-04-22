@@ -15,9 +15,10 @@ define([
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
   'text!templates/default/row.html',
-  'text!templates/default/datepickerRange.html',
+  'text!templates/default/rowdatepickerRange.html',
   'text!templates/default/rowbuttoncontainer.html',
   'text!templates/default/rowbutton.html',
+  'text!templates/default/rowcombo.html',
   'models/sm/SessionModel',
   'models/common/RawDataModel',
   'collection/common/RawDataCollection',
@@ -25,7 +26,7 @@ define([
   'collection/sm/UserCollection',
   'views/component/ProgressbarView',
 ], function($, _, Backbone, BaseView, Grid, Schemas, Util, Dialog, csvParser, Moment, Code, i18nCommon,
-HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
+HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, RowComboHTML,
 SessionModel, RawDataModel, RawDataCollection,UserModel, UserCollection,
 ProgressbarView){
     var RawDataView = BaseView.extend({
@@ -81,27 +82,24 @@ ProgressbarView){
                	});
             }
             
-            // 경영지원 팀 인 경우
-            // if ( dept_code == '1000' || admin == 1 ) {
-            // 	this.gridOption.column.push( { data : "mac",		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.MAC } );
-            // }
     	},
         getRawData : function(){
             var startDate = Moment($(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate());
             var endDate = Moment($(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate());
+            var deptCode = $(this.el).find("#rdCombo").val();
             if(endDate.diff(startDate, 'days') > 92){
                 Dialog.warning("검색 기간이 초과되었습니다. (최대 3개월)");
             }else{
-                this.renderTable(startDate, endDate);
+                this.renderTable(startDate, endDate, deptCode);
             }
         },
-        renderTable : function(startDate, endDate){
+        renderTable : function(startDate, endDate,deptCode){
             var that = this;
             Dialog.loading({
                 action:function(){
                     var dfd = new $.Deferred();
                     that.rawDataCollection.fetch({
-                        data : {start : startDate.format("YYYY-MM-DD"), end : endDate.format("YYYY-MM-DD")},
+                        data : {start : startDate.format("YYYY-MM-DD"), end : endDate.format("YYYY-MM-DD"), dept : deptCode},
                         success: function(){
                             dfd.resolve();
                         }, error: function(){
@@ -158,24 +156,31 @@ ProgressbarView){
     	        })
 	        );
 	        
+	        var _combo = $(_.template(RowComboHTML)({
+    	            obj : {
+    	                id : "rdCombo",
+    	                label : "부서"
+    	            }
+    	        })
+	        );
+    	    
 	        _searchBtn.click(function(e){
 	            _view.getRawData();
 	        });
+	        
 	        _btnContainer.append(_searchBtn);
 	        
     	    _row.append(_datepickerRange);
+    	    _row.append(_combo);
     	    _row.append(_btnContainer);
-            // this.progressbar = new ProgressbarView();
             
     	    _layout.append(_head);
     	    _layout.append(_row);
             _layout.append(_content);
-            // _layout.append(this.progressbar.render());
 
     	    $(this.el).append(_layout);
     	    
     	    var today = new Date();
-    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
     	    $(this.el).find("#rdFromDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
@@ -192,13 +197,22 @@ ProgressbarView){
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
             
+            var dept = Code.getCodes(Code.DEPARTMENT);
+            $(this.el).find("#rdCombo").append("<option>"+"전체"+"</option>");
+     	    for(var i=0; i < dept.length; i++){
+     	        $(this.el).find("#rdCombo").append("<option>"+dept[i].name+"</option>");
+     	    }
+     	    $(this.el).find("#rdCombo").val(SessionModel.getUserInfo().dept_name);
+     	    
     	    var _gridSchema=Schemas.getSchema('grid');
+    	    
         	this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
             this.getRawData();
             
             return this;
      	},
+     	
     });
     return RawDataView;
 });

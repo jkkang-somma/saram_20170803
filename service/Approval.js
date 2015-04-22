@@ -28,8 +28,6 @@ var transport = nodemailer.createTransport(smtpTransport({
     connectionTimeout:10000
 }));
 
-
-
 var Approval = function (data) {
     var _getApprovalList = function (doc_num) {
         return ApprovalDao.selectApprovalList(doc_num);
@@ -39,6 +37,9 @@ var Approval = function (data) {
             return ApprovalDao.selectApprovalByManager(managerId, startDate, endDate);
         }
         return ApprovalDao.selectApprovalListWhere(startDate, endDate);
+    };
+    var _getApprovalListById = function(data){
+        return ApprovalDao.selectApprovalListById(data);
     };
     var _insertApproval = function (data) {
         return ApprovalDao.insertApproval(data);
@@ -113,7 +114,6 @@ var Approval = function (data) {
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    console.log(result[idx]);
                                     cc.push({name : result[idx].name, address: result[idx].email});
                                 }
                             }
@@ -133,7 +133,6 @@ var Approval = function (data) {
                         
                         transport.sendMail(mailOptions, function(error, info){
                             if(error){//메일 보내기 실패시 
-                                console.log(error);
                                 reject();
                             }else{
                                 resolve();
@@ -155,6 +154,7 @@ var Approval = function (data) {
     var _getApprovalIndex = function (yearmonth) {
         return ApprovalDao.selectApprovalIndex(yearmonth);
     };
+    
     var _setApprovalIndex = function () {
         var _schema = new Schemas('approval_index');
         var _param = _schema.get(data);
@@ -173,6 +173,7 @@ var Approval = function (data) {
     return {
         getApprovalList:_getApprovalList,
         getApprovalListWhere:_getApprovalListWhere,
+        getApprovalListById:_getApprovalListById,
         insertApproval:_insertApproval,
         updateApprovalConfirm:_updateApprovalConfirm,
         getApprovalIndex:_getApprovalIndex,

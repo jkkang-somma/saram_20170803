@@ -25,15 +25,15 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
-	'views/report/ReportCommuteView'
+	// 'views/report/ReportCommuteView'
 ], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
 UserListView,
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
-ReportListView, // report manager
-ReportCommuteView
+ReportListView // report manager
+// ReportCommuteView
 ){
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
@@ -48,11 +48,11 @@ ReportCommuteView
 			'holidaymanager' : 'showHolidayManager',
 			'commutemanager' : 'showCommuteManager',
 			'commutemanager/comment' : 'showCommuteComment',
-			'commutemanager/comment/:id/:date' : 'showCommuteCommentListCount',
 			'vacation' : 'showVacation',
+			'vacation/:id/:year' : 'showVacationDetail',
 			'rawdatalist' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
-			'reportCommute' : 'showReportCommute',
+			// 'reportCommute' : 'showReportCommute',
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
 			'*actions' : 'showHome'
@@ -78,7 +78,6 @@ ReportCommuteView
 		
 		before : function(url, next){
 			var _nextURL="#"+url;
-			var router=this;
 			var sessionUser=SessionModel.getUserInfo();
 			
 			var auth=sessionUser.admin;
@@ -95,8 +94,8 @@ ReportCommuteView
 		
 			var index= _.indexOf(_urlArr, _nextURL);
 			if (_authArr[index] <= auth){ // 권한 있을 시
-				return next();
 				LOG.debug("next");
+				return next();
 			} else {//권한 없을 때
 				var isSubTag= false;
 				for (var index in _urlArr){
@@ -110,7 +109,7 @@ ReportCommuteView
 							if (configURLTokenArr.length==nextURLTokenArr.length){
 								isSubTag=true;
 							}
-						};
+						}
 					}
 				}
 			 
@@ -217,10 +216,10 @@ ReportCommuteView
 			var reportListView = new ReportListView();
 			this.changeView(reportListView);
 		},
-		showReportCommute : function() {
-			var reportCommuteView = new ReportCommuteView();
-			this.changeView(reportCommuteView);			
-		}
+		// showReportCommute : function() {
+		// 	var reportCommuteView = new ReportCommuteView();
+		// 	this.changeView(reportCommuteView);			
+		// }
 	});
 	return Router;
 });
