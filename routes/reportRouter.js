@@ -46,7 +46,7 @@ router.route('/commuteResultTblReport')
 			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
 	};
 	
-	debug("Report Router 검색 조건 : " + searchValObj);
+	debug("Report Router 검색 조건 : " , searchValObj);
 			
 	Report.gettCommuteResultTblReport(searchValObj).then(function(filePullPath) {
 

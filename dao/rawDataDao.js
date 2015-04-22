@@ -1,40 +1,39 @@
-var debug = require('debug')('rawDataDao');
 var db = require('../lib/dbmanager.js');
 var _ = require('underscore');
+var group = "rawData";
 
 var RawDataDao = function () {
-}
+};
 
 RawDataDao.prototype.insertRawData =  function (connection, data) {
-    var queryStr = db.getQuery('rawData', 'insertRawData');
     return db.queryTransaction(
         connection,
-        queryStr,
+        group,
+        "insertRawData",
         data,
         [
             "id", "name", "department", "char_date", "year", "type", "char_date", "type"
         ]
     );
-}
+};
 
 // 툴퇴근 정보 등록 
 RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
-    var queryStr = db.getQuery('rawData', 'insertRawDataCompanyAccess');
     console.log(data.char_date);
-    return db.queryV2(queryStr, [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm, data.mac]);
-}
+    return db.query(group, "insertRawDataCompanyAccess", 
+        [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm, data.mac]
+    );
+};
 
 RawDataDao.prototype.selectRawDataList =  function (data) {
     if(_.isUndefined(data.dept) || data.dept == "전체")
-        return db.queryV2(db.getQuery('rawData', 'selectRawDataListAll'), [data.start, data.end]);
+        return db.query(group, 'selectRawDataListAll', [data.start, data.end]);
     else
-        return db.queryV2(db.getQuery('rawData', 'selectRawDataList'), [data.start, data.end, data.dept]);
-    
-}
+        return db.query(group, 'selectRawDataList', [data.start, data.end, data.dept]);
+};
 
 RawDataDao.prototype.selectRawDataListV2 =  function (data) {
-    var queryStr = db.getQuery('rawData', 'selectRawDataListV2');
-    return db.queryV2(queryStr, [data.start]);
-}
+    return db.query(group, "selectRawDataListV2", [data.start]);
+};
 
 module.exports = new RawDataDao();

@@ -9,7 +9,7 @@ define([
     var _getCollection=function(kind){
         var index=_.indexOf(_configArr, kind);
         return index>-1?_codeCollectionArr[index]:null;
-    }
+    };
     var Code = {
         DEPARTMENT : "dept",
         OFFICE : "office",
@@ -65,7 +65,7 @@ define([
         		return false;
         	}
         }
-    }
+    };
 	return Code;
 });
 

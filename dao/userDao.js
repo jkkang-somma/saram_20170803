@@ -1,46 +1,49 @@
 // Author: sanghee park <novles@naver.com>
 // Create Date: 2014.12.18
 // 사용자 Service
-var debug = require('debug')('userDao');
 var db = require('../lib/dbmanager.js');
+var group = 'user';
 
 var UserDao = function () {
+    
 };
 
 UserDao.prototype.selectIdByUser =  function (id) {
-    var queryStr = db.getQuery('user', 'selectIdByUser');
-    return db.queryV2(queryStr, [id]);
+    return db.query(group, "selectIdByUser", [id]);
 };
+
 UserDao.prototype.selectUserList =  function () {
-    var queryStr = db.getQuery('user', 'selectUserList');
-    return db.queryV2(queryStr);
+    return db.query(group, "selectUserList");
 };
+
 UserDao.prototype.selectManagerList =  function (id) {
-    var queryStr = db.getQuery('user', 'selectManager');
-    return db.queryV2(queryStr, [id]);
+    return db.query(group, "selectManager", [id]);
 };
+
 UserDao.prototype.initPassword =  function (id, password) {
-    var queryStr = db.getQuery('user', 'initPassword');
-    return db.queryV2(queryStr, [password, id]);
+    return db.query(group, "initPassword", [password, id]);
 };
+
 UserDao.prototype.deleteUser = function(id){
-    var queryStr = db.getQuery('user', 'deleteUser');
-    return db.queryV2(queryStr,[id]);
+    return db.query(group, "deleteUser",[id]);
 };
+
 UserDao.prototype.insertUser = function(user){
-    var queryStr = db.getQuery('user', 'insertUser');
-      return db.queryV2(queryStr, [user.id, user.name, user.dept_code, user.approval_id, user.name_commute,user.join_company, user.leave_company, user.privilege, user.admin, user.position_code,
-        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo]);
+      return db.query(group, "insertUser",
+        [user.id, user.name, user.dept_code, user.approval_id, user.name_commute,user.join_company, user.leave_company, user.privilege, user.admin, user.position_code,
+        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo]
+    );
 };
+
 UserDao.prototype.updateUser = function(user){
-    var queryStr = db.getQuery('user', 'updateUser');
-    return db.queryV2(queryStr, [user.password, user.name, user.dept_code, user.approval_id, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.position_code,
-        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.id]);
+    return db.query(group, "updateUser", 
+        [user.password, user.name, user.dept_code, user.approval_id, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.position_code,
+        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.id]
+    );
 };
 
 UserDao.prototype.selectUserByIp =  function (data) {
-    var queryStr = db.getQuery('user', 'selectUserByIp');
-    return db.queryV2(queryStr, [data.id, data.ip_office]);
-}
+    return db.query(group, "selectUserByIp", [data.id, data.ip_office]);
+};
 
 module.exports = new UserDao();

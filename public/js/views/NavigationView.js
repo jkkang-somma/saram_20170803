@@ -60,7 +60,8 @@ define([
         }
         
 	    var ip_office = SessionModel.getUserInfo().ip_office;
-        if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) || isOnLoginModule && isMobile.any()) { 
+	    if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office)) { 
+        // if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) || isOnLoginModule && isMobile.any()) { 
         	$(this.el).find('#accessIn').remove();
         	$(this.el).find('#accessOut').remove();
         }

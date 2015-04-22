@@ -2,9 +2,7 @@ var db = require('../lib/dbmanager.js');
 var moment = require('moment');
 var _ = require("underscore");
 var Promise = require("bluebird");
-// var debug = require('debug')('BatchJob');
-// var exec = require('exec');
-
+var debug = require("debug")("DBBatchJob");
 var createDbArr =[
     "dept_code_tbl",
     "position_code_tbl",
@@ -58,7 +56,7 @@ var DBBatchJobExecuter = function(){
 };
 
 DBBatchJobExecuter.prototype.getTables = function(){
-    return db.queryV2('SHOW TABLES');
+    return db.query(null,null,null, 'SHOW TABLES');
 };
 
 DBBatchJobExecuter.prototype.doTableEntries = function(tables){
@@ -70,7 +68,7 @@ DBBatchJobExecuter.prototype.doTableEntries = function(tables){
         tableDefinitionGetters.push(
             new Promise(function(resolve,reject){
                 var tableName = destTableName;
-                db.queryV2('SHOW CREATE TABLE ' + tableName).then(
+                db.query(null,null,null,'SHOW CREATE TABLE ' + tableName).then(
                     function(createTableQryResult){
                         that.result[tableName]["dropQuery"] = "drop table if exists " + tableName +";\n\n";
                         that.result[tableName]["createQuery"] = createTableQryResult[0]["Create Table"] + ";\n\n";
@@ -87,8 +85,8 @@ DBBatchJobExecuter.prototype.doTableEntries = function(tables){
                 var tableName = destTableName;
                 var queryColumn = "";
                 var queryItem = "";
-                var query =""
-                db.queryV2('select * from ' + tableName).then(
+                var query ="";
+                db.query(null,null,null,'select * from ' + tableName).then(
                     function(result){
                         query = "INSERT INTO " + tableName;
                         
@@ -159,16 +157,16 @@ DBBatchJobExecuter.prototype.saveFile = function(){
 
 DBBatchJobExecuter.prototype.backupDb = function(){
     var that = this;
-    console.log("DB Schedule Start :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));
+    debug("DB Schedule Start :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));
     
     db.getConnection().then(function(connection){
         that.getTables().then(function(result){
             Promise.all(that.doTableEntries(result)).then(function(){
                 that.saveFile();
-                console.log("DB Schedule End :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));      
+                debug("DB Schedule End :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));      
             });
         }).catch( function(err) {
-            console.log('Something went away', err);
+            debug('Something went away', err);
         }).finally( function() {
             connection.release();
         });    

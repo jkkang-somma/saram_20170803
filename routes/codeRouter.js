@@ -27,8 +27,7 @@ router.route('/list/:category')
     }
     
     var code = new Code({category:_category});
-    var result = code.getCodeList().then(function(result){
-        debug("Complete Select Code List.");
+    code.getCodeList().then(function(result){
         res.send(result);    
     }).catch(function(e){
         debug("Error Select Code List.");

@@ -2,7 +2,6 @@
 // Create Date: 2014.1.12
 // 코드 Service
 var _ = require("underscore"); 
-var debug = require('debug')('User');
 var Schemas = require("../schemas.js");
 var CodeDao= require('../dao/codeDao.js');
 

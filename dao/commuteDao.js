@@ -1,33 +1,33 @@
-var debug = require('debug')('CommuteDao');
 var db = require('../lib/dbmanager.js');
+var group = "commute";
 
 var CommuteDao = function () {
-}
+};
 
 // 근태자료관리 조회 
 CommuteDao.prototype.selectCommute =  function (data) {
     if(data.dept == "전체"){
-        return db.queryV2(db.getQuery('commute', 'selectCommuteAll'), [data.startDate, data.endDate]);    
+        return db.query(group, 'selectCommuteAll', [data.startDate, data.endDate]);    
     }else{
-        return db.queryV2(db.getQuery('commute', 'selectCommute'), [data.startDate, data.endDate, data.dept]);    
+        return db.query(group, 'selectCommute', [data.startDate, data.endDate, data.dept]);    
     }
-}
+};
+
 CommuteDao.prototype.selectCommuteByID = function(data){
-    var queryStr = db.getQuery('commute', 'selectCommuteByID');
-    return db.queryV2(queryStr, [data.startDate, data.endDate, data.id]);
-}
+    return db.query(group, "selectCommuteByID", [data.startDate, data.endDate, data.id]);
+};
 
 // 툴퇴근 수정 
 CommuteDao.prototype.updateCommuteResultInOutTime =  function (data) {
-	var queryStr = db.getQuery('commute', 'updateCommuteResultInOutTime');
-    return db.queryV2(queryStr, [data.in_time, data.in_time_change, data.out_time, data.out_time_change, data.id, data.date]);
-}
+    return db.query(group, "updateCommuteResultInOutTime",
+        [data.in_time, data.in_time_change, data.out_time, data.out_time_change, data.id, data.date]
+    );
+};
 
 CommuteDao.prototype.insertCommute = function(connection, data){
-    var queryStr = db.getQuery('commute', 'insertCommuteResult');
     return db.queryTransaction(
         connection,
-        queryStr,
+        group, "insertCommuteResult",
         data,
         [
             "date", "department", "id", "in_time", "late_time", "name",
@@ -38,13 +38,12 @@ CommuteDao.prototype.insertCommute = function(connection, data){
             "early_time", "not_pay_over_time"
         ]
     ); 
-}
+};
 
 CommuteDao.prototype.updateCommute_t = function(connection, data){
-    var queryStr = db.getQuery('commute', 'updateCommuteResult');
     return db.queryTransaction(
         connection,
-        queryStr,
+        group, "updateCommuteResult",
         data,
         [
             "in_time", "late_time", "out_office_code", "out_time","over_time", 
@@ -54,21 +53,19 @@ CommuteDao.prototype.updateCommute_t = function(connection, data){
             "early_time", "not_pay_over_time", "id", "date"
         ]
     ); 
-}
+};
 
 CommuteDao.prototype.selectCommuteDate = function(date) {
-	var queryStr = db.getQuery('commute', 'selectCommuteDate');
-    return db.queryV2(queryStr, [date]);
-}
+    return db.query(group, "selectCommuteDate", [date]);
+};
 
 // comment 갯수 수정 
 CommuteDao.prototype.updateCommuteCommentCount =  function (data) {
-	var queryStr = db.getQuery('commute', 'updateCommuteCommentCount');
-    return db.queryV2(queryStr, [data.id, data.year, data.date, data.id, data.year, data.date]);
-}
+    return db.query(group, "updateCommuteCommentCount", [data.id, data.year, data.date, data.id, data.year, data.date]);
+};
 
 CommuteDao.prototype.getLastiestDate = function(){
-    var queryStr = db.getQuery('commute', 'getLastiestDate');
-    return db.queryV2(queryStr);
-}
+    return db.query(group, "getLastiestDate");
+};
+
 module.exports = new CommuteDao();

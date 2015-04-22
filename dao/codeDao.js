@@ -2,35 +2,33 @@
 // Create Date: 2014.1.12
 // code table access 
 
-var debug = require('debug')('codeDao');
 var db = require('../lib/dbmanager.js');
+var group = "code";
 
 var CodeDao = function () {
 };
+
 CodeDao.prototype.selectDeptList =  function () {
-    var queryStr = db.getQuery('code', 'selectDeptList');
-    return db.queryV2(queryStr);
+    return db.query(group, "selectDeptList");
 };
+
 CodeDao.prototype.selectApprovalUserList =  function () {
-    var queryStr = db.getQuery('code', 'selectApprovalUserList');
-    return db.queryV2(queryStr);
+    return db.query(group, "selectApprovalUserList");
 };
+
 CodeDao.prototype.selectPositionList =  function () {
-    var queryStr = db.getQuery('code', 'selectPositionList');
-    return db.queryV2(queryStr);
+    return db.query(group, "selectPositionList");
 };
+
 CodeDao.prototype.getOfficeCode =  function () {
-    var queryStr = db.getQuery('code', 'getOfficeCode');
-    return db.queryV2(queryStr);
+    return db.query(group, "getOfficeCode");
 };
 
 CodeDao.prototype.getOvertimeCode =  function () {
-    var queryStr = db.getQuery('code', 'getOvertimeCode');
-    return db.queryV2(queryStr);
+    return db.query(group, "getOvertimeCode");
 };
 
 CodeDao.prototype.getWorktypeCode =  function () {
-    var queryStr = db.getQuery('code', 'getWorktypeCode');
-    return db.queryV2(queryStr);
+    return db.query(group, "getWorktypeCode");
 };
 module.exports = new CodeDao();
