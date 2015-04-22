@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var debug = require('debug')('CommuteResultExcelCreater');
 var excelbuilder = require('msexcel-builder');
 var path = require('path');
 var fs = require('fs');
@@ -79,7 +80,7 @@ var CommuteYearExcelCreater = function () {
 	// 	var commuteResults = datas[0],
 	// 		currentRow = 3;
 		
-	// 	console.log("3-1. 엑셀 데이터  길이 :  " + commuteResults.length);
+	// 	debug("3-1. 엑셀 데이터  길이 :  " + commuteResults.length);
 	// 	for (var i = 0, len = commuteResults.length; i < len; i++) {
 	// 		var commuteResult = commuteResults[i];
 			
@@ -89,7 +90,7 @@ var CommuteYearExcelCreater = function () {
 	// 			}
 	// 		}
 			
-	// 		console.log("3-2. 엑셀 데이터 생성  중:  " + i);
+	// 		debug("3-2. 엑셀 데이터 생성  중:  " + i);
 			
 	// 		currentRow++;
 			
@@ -123,7 +124,7 @@ var CommuteYearExcelCreater = function () {
 			
 			var fileName = "CommuteResultTbl_"+ searchValObj.startTime + "_" + searchValObj.endTime + "_" +new Date().getTime() + ".csv";
 			
-			console.log("1. 엑셀 파일 이름 : " + fileName);
+			debug("1. 엑셀 파일 이름 : " + fileName);
 			
 			// 파일 폴더 체크 
 			if (!fs.existsSync(excelFileDirPath)) {
@@ -131,7 +132,7 @@ var CommuteYearExcelCreater = function () {
 					fs.mkdirSync(excelFileDirPath);
 				} catch(e) {
 					if ( e.code != 'EEXIST' ) {
-						console.log("Fail create excel file dir");
+						debug("Fail create excel file dir");
 						throw e;
 					}
 				}
@@ -142,7 +143,7 @@ var CommuteYearExcelCreater = function () {
 				var csvStream = csv.createWriteStream({headers: false}),
 			    writableStream = fs.createWriteStream(fileFullName, {encoding: "utf8"});
 				writableStream.on("finish", function(){
-				  console.log("DONE!! create csv file : " + fileName);
+				  debug("DONE!! create csv file : " + fileName);
 				  resolve(excelFileDirPath +  fileName);
 				});
 				
@@ -169,11 +170,11 @@ var CommuteYearExcelCreater = function () {
 
 		
 //			if (err) {
-//			console.log("엑셀 파일 생성 실패  : " + err);
+//			debug("엑셀 파일 생성 실패  : " + err);
 //		    workbook.cancel();
 //		  	reject(err);
 //		} else {
-//			console.log("엑셀 파일 생성 성공 ");
+//			debug("엑셀 파일 생성 성공 ");
 //			resolve(excelFileDirPath + fileName);
 //		}			
 
@@ -184,21 +185,21 @@ var CommuteYearExcelCreater = function () {
 //			// sheet 기본 크기 
 //			var sheet1 = workbook.createSheet('sheet1', excel_col_size, excel_row_size);
 //			
-//			console.log("2. 엑셀 컬럼 생성 ");
+//			debug("2. 엑셀 컬럼 생성 ");
 //			_createExcelTitle(sheet1, searchValObj);
 //			
-//			console.log("3. 엑셀 데이터 생성 ");
+//			debug("3. 엑셀 데이터 생성 ");
 //			_createExcelData(sheet1, searchValObj, datas);
 //
-//			console.log("4. 엑셀 파일 생성 중 ");
+//			debug("4. 엑셀 파일 생성 중 ");
 //			// Save it
 //			workbook.save(function(err){
 //				if (err) {
-//					console.log("엑셀 파일 생성 실패  : " + err);
+//					debug("엑셀 파일 생성 실패  : " + err);
 //				    workbook.cancel();
 //				  	reject(err);
 //				} else {
-//					console.log("엑셀 파일 생성 성공 ");
+//					debug("엑셀 파일 생성 성공 ");
 //					resolve(excelFileDirPath + fileName);
 //				}
 //			});
