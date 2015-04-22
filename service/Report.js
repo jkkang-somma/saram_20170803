@@ -2,7 +2,7 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var _ = require("underscore"); 
-var debug = require('debug')('Vacation');
+var debug = require('debug')('Report');
 var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
 var ReportDao= require('../dao/ReportDao.js');
@@ -42,17 +42,17 @@ var Report = function() {
 	var _gettCommuteResultTblReport = function(selObj) {		
 	    return new Promise(function(resolve, reject){// promise patten
 
-	    	console.log("Report service : _gettCommuteResultTblReport");
+	    	debug("Report service : _gettCommuteResultTblReport");
 	    	
 			var queryResults = [];
 			
-			console.log("Report service : DB 조회 시작 ");
+			debug("Report service : DB 조회 시작 ");
 			// 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함 
 			queryResults.push( ReportDao.selectReportCommuteResultTbl(selObj) );
 	    	
 	    	Promise.all(queryResults).then(function(result){
 	    		
-	    		console.log("Report service : DB 조회 완료 ");
+	    		debug("Report service : DB 조회 완료 ");
 	    		
 	    		commuteResultExcelCreater.createExcel(selObj, result).then(function(excelResult) {
 					resolve( excelResult);

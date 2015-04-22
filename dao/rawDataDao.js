@@ -1,6 +1,6 @@
 var debug = require('debug')('rawDataDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
+var _ = require('underscore');
 
 var RawDataDao = function () {
 }
@@ -25,7 +25,7 @@ RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
 }
 
 RawDataDao.prototype.selectRawDataList =  function (data) {
-    if(data.dept == "전체")
+    if(_.isUndefined(data.dept) || data.dept == "전체")
         return db.queryV2(db.getQuery('rawData', 'selectRawDataListAll'), [data.start, data.end]);
     else
         return db.queryV2(db.getQuery('rawData', 'selectRawDataList'), [data.start, data.end, data.dept]);

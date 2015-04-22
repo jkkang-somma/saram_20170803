@@ -11,8 +11,6 @@ define([
 	'models/sm/SessionModel',
 	'i18n!nls/common',
 	'lib/component/form',
-	'text!templates/inputForm/textbox.html',
-	'text!templates/inputForm/textarea.html',
 	'text!templates/default/rowbutton.html',
 	'text!templates/report/searchFormTemplate.html'
 ], function($, _, Backbone, Util, Moment,
@@ -20,7 +18,7 @@ define([
 	JqFileDownload,
 	MessageModel, SessionModel,
 	i18nCommon, Form,
-	TextBoxHTML, TextAreaHTML, RowButtonHTML, searchFormTemplate
+	RowButtonHTML, searchFormTemplate
 ) {
 	var AdminSettingView = Backbone.View.extend({
 		initialize : function() {
@@ -30,31 +28,45 @@ define([
 		afterRender: function(){
 			var that = this;
 			this.el.find("#btnCreateExcel").click(function(){
+				 Dialog.loading({
+	                action:function(){
+	                    var dfd = new $.Deferred();
+	                    var _formObj = that.getSearchForm(); 				
+						if ( _formObj == null) {
+							return;
+						}
+						
+						var url = "";
+						if (_formObj.reportType == "commuteYear") {
+							url = "/report/commuteYearReport";
+						} else if (_formObj.reportType == "commuteResult"){
+							url = "/report/commuteResultTblReport";
+						} else {
+							new Error("Error: Invalid report type.");
+						}
+						
+						url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker;
+						
+			     		$.fileDownload(url, {
+			     		    successCallback: function (url) {
+			     				dfd.resolve();    	
+			     		    },
+			     		    failCallback: function (html, url) {
+			     		    	dfd.reject();
+			     		    }
+			     		});
+			     		return dfd.promise();
+	        	    },
+	        	    
+	                actionCallBack:function(res){//response schema
+	                
+	                },
+	                errorCallBack:function(response){
+	                    Dialog.error("보고서 생성 실패");
+	                },
+	            });
+            
 				
-				var _formObj = that.getSearchForm(); 				
-				if ( _formObj == null) {
-					return;
-				}
-				
-				var url = "";
-				if (_formObj.reportType == "commuteYear") {
-					url = "/report/commuteYearReport";
-				} else if (_formObj.reportType == "commuteResult"){
-					url = "/report/commuteResultTblReport";
-				} else {
-					new Error("Error: Invalid report type.");
-				}
-				
-				url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker;
-				
-				
-	     		$.fileDownload(url, {
-	     		    successCallback: function (url) {
-	     		    },
-	     		    failCallback: function (html, url) {
-	     		    	Dialog.error("보고서 생성 실패");
-	     		    }
-	     		});
 			});
 			
 			this.el.find("#btnCreateMsg").click(function(){
@@ -107,7 +119,7 @@ define([
 			                name:"reportType",
 			                label:"자료 선택",
 			                collection:[
-			                            {key:"commuteYear",value:"근태 보고서 - CSV"},
+			                            {key:"commuteYear",value:"근태 보고서 - XLS"},
 			                            {key:"commuteResult",value:"근태 DB 자료 - CSV"}
 			                	],
 			                group:"reportGroup"

@@ -13,9 +13,8 @@ define([
   'text!templates/default/head.html',
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
-  'text!templates/component/progressbar.html',
-  'text!templates/inputForm/forminline.html',
-  'text!templates/inputForm/label.html',
+  'text!templates/default/row.html',
+  
   'models/cm/CommuteModel',
   'collection/common/HolidayCollection',
   'collection/common/RawDataCollection',
@@ -23,13 +22,13 @@ define([
   'collection/cm/CommuteCollection',
   'collection/vacation/OutOfficeCollection',
   'collection/vacation/InOfficeCollection',
+  
   'views/cm/popup/CreateDataPopupView',
   'views/cm/popup/CreateDataRemovePopupView',
   'views/component/ProgressbarView'
 ], function($, _, Backbone, BaseView, Grid, Schemas, Dialog, Moment, ResultTimeFactory, Code, i18nCommon,
-    HeadHTML, ContentHTML, LayoutHTML, ProgressbarHTML, ForminlineHTML, LabelHTML,
-    CommuteModel, 
-    HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
+    HeadHTML, ContentHTML, LayoutHTML,RowHTML,
+    CommuteModel, HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
     CreateDataPopupView, CreateDataRemovePopupView, ProgressbarView
 ){
     function dateToText(data){
@@ -208,10 +207,15 @@ define([
     	    
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    
-    	    var _row=$(ForminlineHTML);
-    	    var _label = $(_.template(LabelHTML)({label : ""}));
+    	    var _row=$(RowHTML);
+    	    var _labelContainer = $("<div class='col-sm-3'></div>");
+    	    var _label = $("<label class='control-label'></label>");
+    	    
     	    this.label = _label;
-    	    _row.append(_label);
+    	    
+    	    _labelContainer.append(_label);
+    	    _row.append(_labelContainer);
+    	    
     	    _layout.append(_head);
     	    _layout.append(_row);
             _layout.append(_content);

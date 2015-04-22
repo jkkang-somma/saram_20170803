@@ -1,5 +1,4 @@
 var debug = require('debug')('CommuteDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var CommuteDao = function () {

@@ -1,5 +1,4 @@
 var debug = require('debug')('ChangeHistoryDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var ChangeHistoryDao = function () {

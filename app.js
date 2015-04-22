@@ -40,13 +40,14 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({limit: '80mb', extended: true}));
 app.use(bodyParser.json({limit: '80mb'}));
-app.use(bodyParser({limit : '80mb'}));
+// app.use(bodyParser({limit : '80mb'}));
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express_session({
     secret:"express-saram",
     //store : sessionStore,
+    resave : true,
     saveUninitialized:true
 }));
 
@@ -58,12 +59,6 @@ var authError=function(next){
 
 app.use(logger('dev'));
 
-// Server Memory Check
-app.use(function(req,res,next){
-    debug("CurrentMemory ");
-    debug(process.memoryUsage());   
-    next();
-});
 // //근태서버 다운
 // app.use(function(req,res,next){
     
@@ -90,6 +85,12 @@ app.use(function(req,res,next){
     }
 });
 
+// Server Memory Check
+app.use(function(req,res,next){
+    var currentMemory = process.memoryUsage();
+    debug("CurrentMemory { rss: " + currentMemory.rss + " heapTotal : " + currentMemory.heapTotal + " heapUsed : " + currentMemory.heapUsed + " }");
+    next();
+});
 
 // route link
 app.use('/', index);

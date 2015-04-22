@@ -1,0 +1,46 @@
+﻿<div class="container">
+    <div class="page-header hidden-xs">
+        <h1>근태관리 <small id="smallTitleTxt">근태결재관리</small></h1>
+    </div>
+    <div class="page-header visible-xs">
+        <h2>근태관리 <small id="smallTitleTxt">근태결재관리</small></h2>
+    </div>
+    <div id="dataContent">
+        <div id="filterContainer">
+            <div class="row">
+                <div class='col-sm-3'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="beforeDate">
+                            <span class="input-group-addon">
+                                from
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="beforeDate" readonly/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-3'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="afterDate">
+                            <span class="input-group-addon">
+                                to
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="afterDate" readonly/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div id="bottomBtnCon" class="form-group form-group-sm">
+                        <button class="btn btn-default btn-success btn-sm" id="btnCommuteSearch">조회</button>
+                        <button class="btn btn-default btn-success btn-sm" id="btnManagerSearch">결재 조회</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="content"></div>
+</div>           

@@ -7,7 +7,7 @@ var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
 var VacationDao= require('../dao/vacationDao.js');
 var UserDao= require('../dao/userDao.js');
-
+var db = require('../lib/dbmanager.js');
 /**
  * id 자릿수가 7자리(외주인력)은 휴가 수가 15일로 고정 
  * 
@@ -95,7 +95,7 @@ var Vacation = function() {
     				}
     				
     				if (result[i].dept_code == '0000') { // 임원의 경우 제회 
-    					continue
+    					continue;
     				}    				
     				
     				obj = {
@@ -105,11 +105,36 @@ var Vacation = function() {
     				};
     				datas.push(obj);
     			}
-    			VacationDao.insertVacation(datas).then(function(result) {
-    				resolve(result);
-                }).catch(function(e){
-                    reject(e);
-                });
+    			
+    			db.getConnection().then(function(connection){
+    				var promiseArr = [];
+    				promiseArr.concat(VacationDao.insertVacation(connection, datas));
+    				Promise.all(promiseArr).then(function(resultArr){
+						connection.commit(function(){
+							var successCount = _.filter(resultArr,function(result){
+								return result[0].affectedRows > 0;
+							});
+							
+							var result = {
+								totalCount : resultArr.length,
+								successCount : successCount.length,
+								failCount : resultArr.length - successCount.length,
+							};
+						    resolve(result);
+						});
+					},function(){
+						connection.rollback(function(){
+							connection.release();
+							reject();
+						});
+					}).catch(function(){
+					    connection.rollback(function(){
+					        connection.release();
+					        reject();
+					    });
+					});	
+    			});
+    			
     		}).catch(function(e){//Connection Error
                reject(e);
             });

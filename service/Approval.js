@@ -48,7 +48,7 @@ var Approval = function (data) {
         return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
 			    var promiseArr = [];
-			    promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.data));
+			    promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.data));
 			    
 			    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
 			        var outOfficeData = {};
@@ -59,7 +59,7 @@ var Approval = function (data) {
                         outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
 			        }
 			        
-			        promiseArr.push(OutOfficeDao.insertOutOffice(connection, outOfficeData));
+			        promiseArr.concat(OutOfficeDao.insertOutOffice(connection, outOfficeData));
 			    }
 			    
 			    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
@@ -70,11 +70,11 @@ var Approval = function (data) {
                         inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
                         inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
 			        }
-			        promiseArr.push(InOfficeDao.insertInOffice(connection, inOfficeData));
+			        promiseArr.concat(InOfficeDao.insertInOffice(connection, inOfficeData));
 			    }
 			    
 			    if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-		            promiseArr.push(CommuteDao.updateCommute_t(connection, data.commute));    
+		            promiseArr.concat(CommuteDao.updateCommute_t(connection, data.commute));    
 			    }
                 
 				Promise.all(promiseArr).then(function(resultArr){
@@ -114,7 +114,6 @@ var Approval = function (data) {
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    console.log(result[idx]);
                                     cc.push({name : result[idx].name, address: result[idx].email});
                                 }
                             }
@@ -134,7 +133,6 @@ var Approval = function (data) {
                         
                         transport.sendMail(mailOptions, function(error, info){
                             if(error){//메일 보내기 실패시 
-                                console.log(error);
                                 reject();
                             }else{
                                 resolve();

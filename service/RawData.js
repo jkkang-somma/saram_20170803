@@ -16,8 +16,9 @@ var RawData = function (data) {
     var _insertRawData = function (data) {
         return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
-				var insertResult = RawDataDao.insertRawData(connection, data);
-				Promise.all([insertResult]).then(function(resultArr){
+				var promiseArr = [];
+				promiseArr.concat(RawDataDao.insertRawData(connection, data));
+				Promise.all(promiseArr).then(function(resultArr){
 					connection.commit(function(){
 						connection.release();
 						resolve(resultArr.length);

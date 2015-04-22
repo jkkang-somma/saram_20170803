@@ -15,8 +15,9 @@ var Commute = function() {
 	var _insertCommute = function(data){
 		return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
-				var inserCommuteResult = CommuteDao.insertCommute(connection, data);	
-				Promise.all([inserCommuteResult]).then(function(resultArr){
+				var promiseArr = [];
+				promiseArr.concat(CommuteDao.insertCommute(connection, data));
+				Promise.all(promiseArr).then(function(resultArr){
 					connection.commit(function(){
 						connection.release();
 						resolve();
@@ -34,9 +35,11 @@ var Commute = function() {
 	var _updateCommute = function(data){
 		return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
-				var updateCommuteResult = CommuteDao.updateCommute_t(connection, data.data);
-				var changeHistoryResult = ChangeHistoryDao.inserChangeHistory(connection, data.changeHistory);	
-				Promise.all([updateCommuteResult, changeHistoryResult]).then(function(resultArr){
+				var promiseArr = [];
+				
+				promiseArr.concat(CommuteDao.updateCommute_t(connection, data.data));
+				promiseArr.concat(ChangeHistoryDao.inserChangeHistory(connection, data.changeHistory));
+				Promise.all(promiseArr).then(function(resultArr){
 					connection.commit(function(){
 						connection.release();
 						resolve();

@@ -1,4 +1,4 @@
-define([ 
+﻿define([ 
 	'jquery',
 	'underscore',
 	'backbone',
@@ -15,11 +15,10 @@ define([
 	'collection/vacation/OutOfficeCollection',
 	'collection/vacation/InOfficeCollection',
 	'text!templates/default/datepicker.html',
-	'text!templates/inputForm/label.html',
 ], function(
 	$, _, Backbone, Util, Moment, ResultTimeFactory, Dialog, i18nCommon, Form,
 	HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
-	DatePickerHTML, LabelHTML
+	DatePickerHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder;
 	var ChangeHistoryPopupView = Backbone.View.extend({

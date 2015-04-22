@@ -5,7 +5,7 @@ define([
   'animator',
   'core/BaseView',
   'dialog',
-  'text!templates/addReportTemplate.html',
+  'text!templates/report/addReportTemplate.html',
   'models/rm/ApprovalModel',
   'models/vacation/OutOfficeModel',
   'collection/rm/ApprovalCollection',

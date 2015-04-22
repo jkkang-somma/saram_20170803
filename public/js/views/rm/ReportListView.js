@@ -11,7 +11,7 @@ define([
   'cmoment',
   'code',
   'models/sm/SessionModel',
-  'text!templates/commuteListTemplete.html',
+  'text!templates/report/commuteListTemplete.html',
   'collection/rm/ApprovalCollection',
   'collection/vacation/VacationCollection',
   'collection/common/HolidayCollection',
