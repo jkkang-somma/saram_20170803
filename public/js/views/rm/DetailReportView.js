@@ -229,7 +229,7 @@ define([
      		})
         .done(function(result){
             var resultVal = result[0].state;
-            if(resultVal == '상신'){
+            if(resultVal == '상신' || stateVal != '상신취소'){
                 var approvalCollection = new ApprovalCollection(formData);
                 approvalCollection.idAttribute = "doc_num";
                 approvalCollection.save({}, _this.options["doc_num"]).then(function(){
