@@ -2,8 +2,8 @@
 process.env.DEBUG = "*,-express:*,-send,-express-session";
 var debug = require('debug')('start.js');
 var app = require('./app');
-var schedule = require('node-schedule');
-var batch = require('./batch/batch');
+// var schedule = require('node-schedule');
+// var batch = require('./batch/batch');
 
 //app.set('port', process.env.PORT);
 // app.set('port', 8002);
