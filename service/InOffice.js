@@ -18,11 +18,11 @@ var InOffice = function (data) {
          return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
 			    var promiseArr = [];
-			    promiseArr.push(InOfficeDao.removeInOffice(connection, [{_id : data._id }]));
-                promiseArr.push(ApprovalDao.updateApprovalConfirm(connection, data.approval));
+			    promiseArr.concat(InOfficeDao.removeInOffice(connection, [{_id : data._id }]));
+                promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.approval));
                 
                 if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-		            promiseArr.push(CommuteDao.updateCommute_t(connection, data.commute));    
+		            promiseArr.concat(CommuteDao.updateCommute_t(connection, data.commute));    
 			    }
 			    
 				Promise.all(promiseArr).then(function(resultArr){

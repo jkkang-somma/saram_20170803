@@ -107,8 +107,9 @@ var Vacation = function() {
     			}
     			
     			db.getConnection().then(function(connection){
-    				var insertVacationResult = VacationDao.insertVacation(connection, datas);
-    				Promise.all(insertVacationResult).then(function(resultArr){
+    				var promiseArr = [];
+    				promiseArr.concat(VacationDao.insertVacation(connection, datas));
+    				Promise.all(promiseArr).then(function(resultArr){
 						connection.commit(function(){
 							var successCount = _.filter(resultArr,function(result){
 								return result[0].affectedRows > 0;
