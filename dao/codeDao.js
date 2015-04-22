@@ -3,7 +3,6 @@
 // code table access 
 
 var debug = require('debug')('codeDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var CodeDao = function () {
@@ -21,17 +20,17 @@ CodeDao.prototype.selectPositionList =  function () {
     return db.queryV2(queryStr);
 };
 CodeDao.prototype.getOfficeCode =  function () {
-    var queryStr = util.format(db.getQuery('code', 'getOfficeCode'));
+    var queryStr = db.getQuery('code', 'getOfficeCode');
     return db.queryV2(queryStr);
 };
 
 CodeDao.prototype.getOvertimeCode =  function () {
-    var queryStr = util.format(db.getQuery('code', 'getOvertimeCode'));
+    var queryStr = db.getQuery('code', 'getOvertimeCode');
     return db.queryV2(queryStr);
 };
 
 CodeDao.prototype.getWorktypeCode =  function () {
-    var queryStr = util.format(db.getQuery('code', 'getWorktypeCode'));
+    var queryStr = db.getQuery('code', 'getWorktypeCode');
     return db.queryV2(queryStr);
 };
 module.exports = new CodeDao();

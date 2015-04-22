@@ -2,7 +2,6 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var debug = require('debug')('userDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var UserDao = function () {
@@ -25,7 +24,7 @@ UserDao.prototype.initPassword =  function (id, password) {
     return db.queryV2(queryStr, [password, id]);
 };
 UserDao.prototype.deleteUser = function(id){
-    var queryStr = util.format(db.getQuery('user', 'deleteUser'));
+    var queryStr = db.getQuery('user', 'deleteUser');
     return db.queryV2(queryStr,[id]);
 };
 UserDao.prototype.insertUser = function(user){

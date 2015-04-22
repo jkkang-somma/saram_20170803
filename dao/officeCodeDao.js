@@ -3,7 +3,6 @@
 // code table access 
 
 var debug = require('debug')('codeDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var OfficeCodeDao = function () {

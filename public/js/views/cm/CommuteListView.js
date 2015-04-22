@@ -458,10 +458,6 @@ define([
      		
      		data.startDate = data.startDate.format("YYYY-MM-DD");
      		data.endDate = data.endDate.format("YYYY-MM-DD");
-     		// if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     		// 	Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
-     		// 	return;
-     		// }
      		
             var _this = this;
             Dialog.loading({
