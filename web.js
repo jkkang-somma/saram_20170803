@@ -18,10 +18,10 @@ var server = app.listen(app.get('port'), function() {
     debug('Saram server listening on port ' + server.address().port);
     
     //batchJob
-    debug("StartBatchJob");
-    schedule.scheduleJob('43 4 * * *', function(){
-        batch.backupDb();
-    });
+    // debug("StartBatchJob");
+    // schedule.scheduleJob('43 4 * * *', function(){
+    //     batch.backupDb();
+    // });
 });
 
 

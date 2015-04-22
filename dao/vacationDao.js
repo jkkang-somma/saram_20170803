@@ -1,5 +1,4 @@
 var debug = require('debug')('vacationDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var VacationDao = function () {

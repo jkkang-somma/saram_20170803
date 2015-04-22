@@ -350,9 +350,16 @@ define([
             var dept = Code.getCodes(Code.DEPARTMENT);
             $(this.el).find("#ccmCombo").append("<option>"+"전체"+"</option>");
      	    for(var i=0; i < dept.length; i++){
-     	        $(this.el).find("#ccmCombo").append("<option>"+dept[i].name+"</option>");
+     	    	if(dept[i].name != "임원" || dept[i].name != "무소속")
+     	        	$(this.el).find("#ccmCombo").append("<option>"+dept[i].name+"</option>");
      	    }
-     	    $(this.el).find("#ccmCombo").val(SessionModel.getUserInfo().dept_name);
+     	    
+     	    
+     	    if(SessionModel.getUserInfo().id == "130702")
+     	    	$(this.el).find("#ccmCombo").val("전체");
+     	    else
+     	    	$(this.el).find("#ccmCombo").val(SessionModel.getUserInfo().dept_name);
+     	    	
             
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -458,10 +465,6 @@ define([
      		
      		data.startDate = data.startDate.format("YYYY-MM-DD");
      		data.endDate = data.endDate.format("YYYY-MM-DD");
-     		// if (_.isNull(data.startDate) || _.isNull(data.endDate)) {
-     		// 	Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.DATE_SELECT_ERROR);
-     		// 	return;
-     		// }
      		
             var _this = this;
             Dialog.loading({

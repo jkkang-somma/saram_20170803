@@ -1,5 +1,4 @@
 var debug = require('debug')('CommentDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var CommentDao = function () {

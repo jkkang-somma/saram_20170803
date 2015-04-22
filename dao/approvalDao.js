@@ -2,7 +2,6 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var debug = require('debug')('approvalDao');
-var util = require('util');
 var db = require('../lib/dbmanager.js');
 
 var ApprovalDao = function () {

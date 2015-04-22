@@ -105,7 +105,7 @@ define([
 			                name:"reportType",
 			                label:"자료 선택",
 			                collection:[
-			                            {key:"commuteYear",value:"근태 보고서 - CSV"},
+			                            {key:"commuteYear",value:"근태 보고서 - XLS"},
 			                            {key:"commuteResult",value:"근태 DB 자료 - CSV"}
 			                	],
 			                group:"reportGroup"

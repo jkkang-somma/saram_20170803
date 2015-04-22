@@ -9,7 +9,7 @@ var Session = require('../service/Session');
 var debug = require('debug')('sessionRouter');
 var router = express.Router();
 var User = require('../service/User.js');
-var encryptor = require('../lib/encryptor.js');
+// var encryptor = require('../lib/encryptor.js');
 var suid =  require('rand-token').suid;
 var _baseURL="http://210.220.205.57";
 

@@ -384,7 +384,12 @@ define([
     	        }
     	    ];
     	    var _buttonIcon;
-    	   _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
+    	    if(SessionModel.getUserInfo().id == "130702"){
+    	        _buttonIcon=$(_defaultBtnText).html(filterBtnText[1]);
+    	    }else{
+    	        _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
+    	    }
+    	    
     	    
     	    var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
             this.buttonid[obj.name] = _btnId;
@@ -397,8 +402,13 @@ define([
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
             
             //filter 설정
-            _grid.filterValue.myRecord=0;
-            _grid.filters.myRecord=filter[0];
+            if(SessionModel.getUserInfo().id == "130702"){
+                _grid.filterValue.myRecord=1;
+                _grid.filters.myRecord=filter[1];
+            }else{
+                _grid.filterValue.myRecord=0;
+                _grid.filters.myRecord=filter[0];
+            }
             
             _button.click(function(){
                 var index=_grid.filterValue.myRecord;
@@ -458,7 +468,11 @@ define([
     	    var _grid = this;
     		//필터링 초기화
             $.fn.dataTable.ext.search=[];
-            _grid.currentLength=50;
+            if(SessionModel.getUserInfo().id == "130702"){
+    	        _grid.currentLength=100;   
+    	    }else{
+                _grid.currentLength=50;
+    	    }
             
     	    this._drawButtons();
     	
