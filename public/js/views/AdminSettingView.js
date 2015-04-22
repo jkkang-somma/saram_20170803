@@ -28,31 +28,46 @@ define([
 		afterRender: function(){
 			var that = this;
 			this.el.find("#btnCreateExcel").click(function(){
+				 Dialog.loading({
+	                action:function(){
+	                    var dfd = new $.Deferred();
+	                    var _formObj = that.getSearchForm(); 				
+						if ( _formObj == null) {
+							return;
+						}
+						
+						var url = "";
+						if (_formObj.reportType == "commuteYear") {
+							url = "/report/commuteYearReport";
+						} else if (_formObj.reportType == "commuteResult"){
+							url = "/report/commuteResultTblReport";
+						} else {
+							new Error("Error: Invalid report type.");
+						}
+						
+						url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker;
+						
+			     		$.fileDownload(url, {
+			     		    successCallback: function (url) {
+			     		    	alert("success!!!!!!!!!");
+			     				dfd.resolve();    	
+			     		    },
+			     		    failCallback: function (html, url) {
+			     		    	dfd.reject();
+			     		    }
+			     		});
+			     		return dfd.promise();
+	        	    },
+	        	    
+	                actionCallBack:function(res){//response schema
+	                    alert("success!!!");
+	                },
+	                errorCallBack:function(response){
+	                    Dialog.error("보고서 생성 실패");
+	                },
+	            });
+            
 				
-				var _formObj = that.getSearchForm(); 				
-				if ( _formObj == null) {
-					return;
-				}
-				
-				var url = "";
-				if (_formObj.reportType == "commuteYear") {
-					url = "/report/commuteYearReport";
-				} else if (_formObj.reportType == "commuteResult"){
-					url = "/report/commuteResultTblReport";
-				} else {
-					new Error("Error: Invalid report type.");
-				}
-				
-				url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker;
-				
-				
-	     		$.fileDownload(url, {
-	     		    successCallback: function (url) {
-	     		    },
-	     		    failCallback: function (html, url) {
-	     		    	Dialog.error("보고서 생성 실패");
-	     		    }
-	     		});
 			});
 			
 			this.el.find("#btnCreateMsg").click(function(){

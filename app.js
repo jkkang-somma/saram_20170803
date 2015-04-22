@@ -88,7 +88,7 @@ app.use(function(req,res,next){
 // Server Memory Check
 app.use(function(req,res,next){
     var currentMemory = process.memoryUsage();
-    debug("CurrentMemory{ rss: " + currentMemory.rss + " heapTotal : " + currentMemory.heapTotal + " heapUsed : " + currentMemory.heapUsed);
+    debug("CurrentMemory { rss: " + currentMemory.rss + " heapTotal : " + currentMemory.heapTotal + " heapUsed : " + currentMemory.heapUsed + " }");
     next();
 });
 

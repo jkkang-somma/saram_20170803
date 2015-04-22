@@ -48,7 +48,7 @@ var Approval = function (data) {
         return new Promise(function(resolve, reject){
 			db.getConnection().then(function(connection){
 			    var promiseArr = [];
-			    _.promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.data));
+			    promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.data));
 			    
 			    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
 			        var outOfficeData = {};
