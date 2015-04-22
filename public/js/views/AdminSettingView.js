@@ -49,7 +49,6 @@ define([
 						
 			     		$.fileDownload(url, {
 			     		    successCallback: function (url) {
-			     		    	alert("success!!!!!!!!!");
 			     				dfd.resolve();    	
 			     		    },
 			     		    failCallback: function (html, url) {
@@ -60,7 +59,7 @@ define([
 	        	    },
 	        	    
 	                actionCallBack:function(res){//response schema
-	                    alert("success!!!");
+	                
 	                },
 	                errorCallBack:function(response){
 	                    Dialog.error("보고서 생성 실패");

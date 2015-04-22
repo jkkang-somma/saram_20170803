@@ -16,10 +16,10 @@ router.route('/commuteYearReport')
 	};
 			
 	Report.getCommuteYearReport(searchValObj).then(function(filePullPath) {
-
+		res.cookie("fileDownload", true);
 		res.download(filePullPath, function(err) {
 			if (err) {
-				console.log("excel download fail");
+				debug("excel download fail");
 				next(err);
 			} else {				
 				fs.unlink(filePullPath, function (err) {
@@ -37,7 +37,7 @@ router.route('/commuteYearReport')
 router.route('/commuteResultTblReport')
 .get(function(req, res, next){
 	
-	console.log("URL 시작 : /commuteResultTblReport");
+	debug("URL 시작 : /commuteResultTblReport");
 	
 	var searchValObj = {
 			year : req.query.startTime.substring(0, 4),
@@ -46,25 +46,26 @@ router.route('/commuteResultTblReport')
 			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
 	};
 	
-	console.log("Report Router 검색 조건 : " + searchValObj);
+	debug("Report Router 검색 조건 : " + searchValObj);
 			
 	Report.gettCommuteResultTblReport(searchValObj).then(function(filePullPath) {
 
-		console.log("엑셀 다운로드 시작  1");
-		console.log(filePullPath);
+		debug("엑셀 다운로드 시작  1");
+		debug(filePullPath);
+		res.cookie("fileDownload", true);
 		res.download(filePullPath, function(err) {
-			console.log("엑셀 다운로드 시작 2");
+			debug("엑셀 다운로드 시작 2");
 			
 			if (err) {
-				console.log("excel download fail");
+				debug("excel download fail");
 				next(err);
 			} else {
-				console.log("엑셀 다운로드 시작 3");
+				debug("엑셀 다운로드 시작 3");
 				
 				fs.unlink(filePullPath, function (err) {
-					console.log("엑셀 다운로드 성공 파일 삭제 !!");
+					debug("엑셀 다운로드 성공 파일 삭제 !!");
 				  if (err) {  
-					  console.log("파일 삭제 실패 ");
+					  debug("파일 삭제 실패 ");
 					  throw next(err);
 				  }
 				  
