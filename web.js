@@ -4,8 +4,8 @@ var debug = require('debug')('start.js');
 var app = require('./app');
 var schedule = require('node-schedule');
 var batch = require('./batch/batch');
-var memwatch = require('memwatch');
-var moment = require('moment');
+// var memwatch = require('memwatch');
+// var moment = require('moment');
 
 app.set('port', process.env.PORT);
 // app.set('port', 8002);
@@ -25,16 +25,16 @@ var server = app.listen(app.get('port'), function() {
     });
 });
 
-var memDebug = require("debug")("memDebug");
+// var memDebug = require("debug")("memDebug");
 
-memwatch.on('leak', function(d) {
-    memDebug("######## Memory Leak! ######## " + moment(new Date()).format("YYYYMMDD_HHmmss"));
-    memDebug("Start : " + moment(d.start).format("YYYYMMDD_HHmmss"));
-    memDebug("End : " + moment(d.end).format("YYYYMMDD_HHmmss"));
-    memDebug("Reason : " + d.reason);
-    var currentMemory = process.memoryUsage();
-    memDebug(" CurrentMemory { rss: " + currentMemory.rss + " heapTotal : " + currentMemory.heapTotal + " heapUsed : " + currentMemory.heapUsed + " }");
-});
+// memwatch.on('leak', function(d) {
+//     memDebug("######## Memory Leak! ######## " + moment(new Date()).format("YYYYMMDD_HHmmss"));
+//     memDebug("Start : " + moment(d.start).format("YYYYMMDD_HHmmss"));
+//     memDebug("End : " + moment(d.end).format("YYYYMMDD_HHmmss"));
+//     memDebug("Reason : " + d.reason);
+//     var currentMemory = process.memoryUsage();
+//     memDebug(" CurrentMemory { rss: " + currentMemory.rss + " heapTotal : " + currentMemory.heapTotal + " heapUsed : " + currentMemory.heapUsed + " }");
+// });
 
 
 
