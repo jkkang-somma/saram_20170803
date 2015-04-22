@@ -8,7 +8,7 @@ var db = require('../lib/dbmanager.js');
 var OfficeCodeDao = function () {
 };
 OfficeCodeDao.prototype.selectOfficeCodeList =  function () {
-    var queryStr = util.format(db.getQuery('office_code', 'selectOfficeCodeList'));
+    var queryStr = db.getQuery('office_code', 'selectOfficeCodeList');
     return db.queryV2(queryStr);
 };
 module.exports = new OfficeCodeDao();
