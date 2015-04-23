@@ -51,15 +51,15 @@ ApprovalDao.prototype.getApprovalMailingList =  function (dept_code) {
 };
 
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
-    return db.query(group, "selectMaxIndexApproval", [yearmonth]);
+    return db.query("approval_idex", "selectMaxIndexApproval", [yearmonth]);
 };
 
 ApprovalDao.prototype.insertApprovalIndex =  function (data) {
-    return db.query(group, "insertApprovalIndex", [data.yearmonth]);
+    return db.query("approval_idex", "insertApprovalIndex", [data.yearmonth]);
 };
 
 ApprovalDao.prototype.updateMaxIndex =  function (data) {
-    return db.query(group, "updateMaxIndex", [data.yearmonth]);
+    return db.query("approval_idex", "updateMaxIndex", [data.yearmonth]);
 };
 
 module.exports = new ApprovalDao();
