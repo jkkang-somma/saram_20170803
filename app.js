@@ -32,9 +32,10 @@ var message = require('./routes/messageRouter');
 
 var debug = require('debug')('APP');
 var app = express();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 
 
 app.use(bodyParser.urlencoded({limit: '80mb', extended: true}));
@@ -105,15 +106,16 @@ app.use('/report', report);
 app.use('/message', message);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
-    var err = new Error('Invalid URL.');
+app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
+    if(_.isUndefined(err))
+        err = new Error('Invalid URL.');
     err.status = 404;
     next(err);
 });
 
 app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따로 에러 처리 안되고 쓰로우 되면 여기 탐.
-    debug(err);
-    console.log("Error : " + err.message);
+    debug("###### ERROR!! (" + err.message + ")");
+    // console.log("Error : " + err.message);
     res.status(err.status || 500);
     res.send({
         message: err.message,

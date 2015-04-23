@@ -48,11 +48,10 @@ ReportListView // report manager
 			'holidaymanager' : 'showHolidayManager',
 			'commutemanager' : 'showCommuteManager',
 			'commutemanager/comment' : 'showCommuteComment',
+			'commutemanager/comment/:id/:date' : 'showCommuteCommentListCount',
 			'vacation' : 'showVacation',
-			'vacation/:id/:year' : 'showVacationDetail',
 			'rawdatalist' : 'showRawdata',
 			'reportmanager' : 'showReportManager',
-			// 'reportCommute' : 'showReportCommute',
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
 			'*actions' : 'showHome'
