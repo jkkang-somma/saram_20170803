@@ -15,10 +15,7 @@ router.route('/')
 		}else{
 			Commute.getCommute(req.query).then(function(result) {
 				try{
-					debug("END DB Query");
-					debug(result.length);
 					res.send(result);
-					debug("End Response Send");
 				}catch(err){
 					debug(err);
 				}

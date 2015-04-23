@@ -330,7 +330,9 @@ define([
 	 					_this.searchParam = null; // url 접속 - 최초 검색 후 초기화
 	 					
 	 					// URL 접속시 필터를 전체로 변경하기 위해 강제 크릭 
-		 				$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");	 					
+	 					var filterBtn =$(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
+	 					if(filterBtn.text() =="나")
+		 					$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");	
 	 				}
 	 			},
 	 			error : function(result) {
