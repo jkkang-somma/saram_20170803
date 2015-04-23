@@ -23,7 +23,6 @@ var commute = require('./routes/commuteRouter');
 var changeHistory = require('./routes/changeHistoryRouter');
 var outOffice = require('./routes/outofficeRouter');
 var inOffice = require('./routes/inofficeRouter');
-var officeCode = require('./routes/officeCodeRouter');
 var comment = require('./routes/commentRouter');
 var companyAccess = require('./routes/companyAccessRouter');
 var dashboard = require('./routes/dashboardRouter');
@@ -85,12 +84,6 @@ app.use(function(req,res,next){
     }
 });
 
-// Server Memory Check
-app.use(function(req,res,next){
-    var currentMemory = process.memoryUsage();
-    debug("CurrentMemory { rss: " + currentMemory.rss + " heapTotal : " + currentMemory.heapTotal + " heapUsed : " + currentMemory.heapUsed + " }");
-    next();
-});
 
 // route link
 app.use('/', index);
@@ -105,7 +98,6 @@ app.use('/commute', commute);
 app.use('/changeHistory', changeHistory);
 app.use('/outOffice',outOffice);
 app.use('/inOffice',inOffice);
-app.use('/officeCode',officeCode);
 app.use('/comment', comment);
 app.use('/companyAccess', companyAccess);
 app.use('/dashboard', dashboard);
@@ -128,5 +120,7 @@ app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따
         success: false,
         err:err
     });
+    next();
 });
+
 module.exports = app;

@@ -1,4 +1,4 @@
-﻿define([
+define([
   'jquery',
   'underscore',
   'backbone',
@@ -7,14 +7,14 @@
   'dialog',
   'comboBox',
   'cmoment',
+  'code',
   'models/sm/SessionModel',
   'text!templates/report/addReportTemplate.html',
   'collection/rm/ApprovalCollection',
-  'collection/common/OfficeCodeCollection',
   'collection/sm/UserCollection',
   'models/rm/ApprovalModel',
   'models/rm/ApprovalIndexModel',
-], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, SessionModel, addReportTmp, ApprovalCollection, OfficeCodeCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, Code, SessionModel, addReportTmp, ApprovalCollection, UserCollection, ApprovalModel, ApprovalIndexModel){
   var addReportView = BaseView.extend({
     options: {},
   	events: {
@@ -171,29 +171,26 @@
       // selGubun.css('width', '35%');
       
       
-      var officeCollection = new OfficeCodeCollection();
-      officeCollection.fetch().done(function(result){
-        var arrGubunData = result;
-        
-        // option setting
-        for(var index=0; index < arrGubunData.length; index++){
-          var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
-          selGubun.append(optionHtml);
-        }
-        // 휴일근무
-        $(_this.el).find('#datePickerTitleTxt').text('date');
-        _this.afterDate.hide();
-        _this.holReq = 0;
-        $(_this.el).find('#reqHoliday').val("0 일");
-        $(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
-        ComboBox.createCombo(selGubun);
-        
-        if ( arrGubunData.length >0) {
-        	if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03') {
-        		$(_this.el).find('#usableHolidayCon').hide();
-        	}
-        }
-      });
+      var arrGubunData = Code.getCodes(Code.OFFICE);
+      
+      // option setting
+      for(var index=0; index < arrGubunData.length; index++){
+        var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
+        selGubun.append(optionHtml);
+      }
+      // 휴일근무
+      $(_this.el).find('#datePickerTitleTxt').text('date');
+      _this.afterDate.hide();
+      _this.holReq = 0;
+      $(_this.el).find('#reqHoliday').val("0 일");
+      $(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
+      ComboBox.createCombo(selGubun);
+      
+      if ( arrGubunData.length >0) {
+      	if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03') {
+      		$(_this.el).find('#usableHolidayCon').hide();
+      	}
+      }
       
       selGubun.change(function() {
         var selVal = selGubun.val();

@@ -1,22 +1,20 @@
 // Author: sanghee park <novles@naver.com>
 // Create Date: 2014.1.12
 // code table access 
-
-var debug = require('debug')('OutOfficeDao');
 var db = require('../lib/dbmanager.js');
+var group = "outOffice";
 
 var OutOfficeDao = function () {
 };
+
 OutOfficeDao.prototype.selectOutOfficeList =  function () {
-    var queryStr = db.getQuery('outOffice', 'selectOutOfficeList');
-    return db.queryV2(queryStr);
+    return db.query(group, "selectOutOfficeList");
 };
 
 OutOfficeDao.prototype.insertOutOffice =  function (connection, data) {
-    var queryStr = db.getQuery('outOffice', 'insertOutOffice');
     return db.queryTransaction(
         connection,
-        queryStr,
+        group, "insertOutOffice",
         data,
         [
             "year", "date", "id", "office_code", "office_code",  "memo", "doc_num", "black_mark", "start_time", "end_time"
@@ -24,16 +22,14 @@ OutOfficeDao.prototype.insertOutOffice =  function (connection, data) {
     ); 
 };
 OutOfficeDao.prototype.removeOutOffice =  function (connection, data) {
-    var queryStr = db.getQuery('outOffice', 'deleteOutOfficeList');
     return db.queryTransaction(
         connection,
-        queryStr,
+        group, "deleteOutOfficeList",
         data,
         [
             "_id"
         ]
     ); 
 };
-
 
 module.exports = new OutOfficeDao();

@@ -1,30 +1,27 @@
-var debug = require('debug')('ChangeHistoryDao');
 var db = require('../lib/dbmanager.js');
+var group = "changeHistory";
 
-var ChangeHistoryDao = function () {
-}
+var ChangeHistoryDao = function (){
+};
 
 // 변경 이력 조회 
 ChangeHistoryDao.prototype.selectChangeHistory =  function (data) {
-	var queryStr = db.getQuery('changeHistory', 'selectChangeHistory');
-    return db.queryV2(queryStr, [data.id, data.date, data.change_column]);
-}
+    return db.query(group, "selectChangeHistory", [data.id, data.date, data.change_column]);
+};
 
 //퇴퇴근 변경 이력 조회 
 ChangeHistoryDao.prototype.selectInOutChangeCount =  function (data) {
-	var queryStr = db.getQuery('changeHistory', 'selectInOutChangeCount');
-    return db.queryV2(queryStr, [data.year, data.id, data.date, data.year, data.id, data.date]);
-}
+    return db.query(group, "selectInOutChangeCount", [data.year, data.id, data.date, data.year, data.id, data.date]);
+};
 
 //변경 이력 등록
 ChangeHistoryDao.prototype.inserChangeHistory =  function (connection, data) {
-	var queryStr = db.getQuery('changeHistory', 'inserChangeHistory');
 	return db.queryTransaction(
 	    connection,
-        queryStr,
+        group, "inserChangeHistory",
         data,
         ["year", "id",  "date",  "change_column", "change_before", "change_after", "change_id"]
     ); 
-}
+};
 
 module.exports = new ChangeHistoryDao();

@@ -60,7 +60,8 @@ define([
         }
         
 	    var ip_office = SessionModel.getUserInfo().ip_office;
-        if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) || isOnLoginModule && isMobile.any()) { 
+	    if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office)) { 
+        // if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) || isOnLoginModule && isMobile.any()) { 
         	$(this.el).find('#accessIn').remove();
         	$(this.el).find('#accessOut').remove();
         }
@@ -118,22 +119,22 @@ define([
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
-            if (isOnLoginModule){
-                var status=LoginModule.status;
-                if (status==2){
-                        clearInterval(myVar);
-                        var info=LoginModule.registIpInfos();
-                        obj = JSON.parse(info);
+            // if (isOnLoginModule){
+            //     var status=LoginModule.status;
+            //     if (status==2){
+            //             clearInterval(myVar);
+            //             var info=LoginModule.registIpInfos();
+            //             obj = JSON.parse(info);
                         
-                } else {
-                    clearInterval(myVar);
-                    Dialog.error("로긴 정보가 올바르지 않습니다.");
-                }
-            } else {
+            //     } else {
+            //         clearInterval(myVar);
+            //         Dialog.error("로긴 정보가 올바르지 않습니다.");
+            //     }
+            // } else {
                 clearInterval(myVar);
                 obj.mac='';
                 obj.ip_pc='';
-            }
+            // }
             
             obj.type='출근(수원)';
             var model = new RawDataModel();
@@ -159,22 +160,22 @@ define([
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
-            if (isOnLoginModule){
-                var status=LoginModule.status;
-                if (status==2){
-                        clearInterval(myVar);
-                        var info=LoginModule.registIpInfos();
-                        obj = JSON.parse(info);
+            // if (isOnLoginModule){
+            //     var status=LoginModule.status;
+            //     if (status==2){
+            //             clearInterval(myVar);
+            //             var info=LoginModule.registIpInfos();
+            //             obj = JSON.parse(info);
                         
-                } else {
-                    clearInterval(myVar);
-                    Dialog.error("로긴 정보가 올바르지 않습니다.");
-                }
-            } else {
+            //     } else {
+            //         clearInterval(myVar);
+            //         Dialog.error("로긴 정보가 올바르지 않습니다.");
+            //     }
+            // } else {
                 clearInterval(myVar);
                 obj.mac='';
                 obj.ip_pc='';
-            }
+            // }
             
             obj.type='퇴근(수원)';
             var model = new RawDataModel();
