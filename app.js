@@ -115,7 +115,7 @@ app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 
 
 app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따로 에러 처리 안되고 쓰로우 되면 여기 탐.
     debug("###### ERROR!! (" + err.message + ")");
-    // console.log("Error : " + err.message);
+    debug(err);
     res.status(err.status || 500);
     res.send({
         message: err.message,
