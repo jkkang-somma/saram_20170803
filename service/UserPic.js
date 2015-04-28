@@ -52,17 +52,9 @@ var UserPic = function () {
         );
     };
     var _fileUpload = function(file){
-        // var originalName = picPath + "/" + file.originalname;
         return new Promise(
             function(resolve,reject){
                 resolve();
-                // fs.rename(file.path, originalName, function(err){
-                //     if(err){
-                //         reject(err);
-                //     } else {
-                //         resolve();
-                //     }
-                // });           
             }
         );
     };
