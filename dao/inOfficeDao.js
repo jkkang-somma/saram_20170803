@@ -11,28 +11,25 @@ InOfficeDao.prototype.selectInOfficeList =  function () {
     return db.query(group, "selectInOfficeList");
 };
 
-InOfficeDao.prototype.insertInOffice =  function (connection, data) {
-    return db.queryTransaction(
-        connection,
-        group, 
-        "insertInOffice",
-        data,
-        [
-            "year", "date", "id", "doc_num"
+InOfficeDao.prototype.insertInOffice =  function (data) {
+    return {
+        group : group,
+        item : "insertInOffice",
+        data : [
+                data.year, data.date, data.id, data.doc_num
         ]
-    ); 
+    };
 };
 
-InOfficeDao.prototype.removeInOffice =  function (connection, data) {
-     return db.queryTransaction(
-        connection,
-        group, 
-        "deleteInOfficeList",
-        data,
-        [
-            "_id"
+InOfficeDao.prototype.removeInOffice =  function (data) {
+    console.log(data);
+    return {
+        group : group,
+        item : "deleteInOfficeList",
+        data : [
+                data._id    
         ]
-    ); 
+    };
 };
 
 module.exports = new InOfficeDao();

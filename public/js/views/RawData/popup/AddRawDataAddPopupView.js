@@ -11,7 +11,7 @@ define([
 	FileFormHTML,
 	ProgressbarView
 ) {
-	var ChangeHistoryPopupView = Backbone.View.extend({
+	var AddRawDataAddPopupView = Backbone.View.extend({
 		initialize : function() {
 
 		},
@@ -45,5 +45,5 @@ define([
 		}
 	});
 	
-	return ChangeHistoryPopupView;
+	return AddRawDataAddPopupView;
 });

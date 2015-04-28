@@ -27,15 +27,12 @@ ApprovalDao.prototype.insertApproval =  function (data) {
     );
 };
 
-ApprovalDao.prototype.updateApprovalConfirm =  function (connection, data) {
-    return db.queryTransaction(
-        connection,
-        group, "updateApprovalConfirm",
-        data,
-        [
-            "decide_comment", "state", "black_mark", "doc_num"
-        ]
-    ); 
+ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
+    return {
+        group : group,
+        item : "updateApprovalConfirm",
+        data : [data.decide_comment, data.state, data.black_mark, data.doc_num],
+    };
 };
 
 ApprovalDao.prototype.selectApprovalListById =  function (data) {

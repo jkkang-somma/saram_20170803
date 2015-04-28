@@ -2,8 +2,6 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var _ = require("underscore"); 
-var debug = require('debug')('InOffice');
-var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
 var db = require('../lib/dbmanager.js');
 var ApprovalDao= require('../dao/approvalDao.js');
@@ -13,37 +11,27 @@ var InOfficeDao= require('../dao/inOfficeDao.js');
 var InOffice = function (data) {
     var _getInOfficeList = function (data) {
         return InOfficeDao.selectInOfficeList(data);
-    }
+    };
     var _removeInOffice = function (data) {
          return new Promise(function(resolve, reject){
-			db.getConnection().then(function(connection){
-			    var promiseArr = [];
-			    promiseArr.concat(InOfficeDao.removeInOffice(connection, [{_id : data._id }]));
-                promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.approval));
-                
-                if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-		            promiseArr.concat(CommuteDao.updateCommute_t(connection, data.commute));    
-			    }
-			    
-				Promise.all(promiseArr).then(function(resultArr){
-					connection.commit(function(){
-						connection.release();
-						resolve();
-					});
-				},function(){
-					connection.rollback(function(){
-						connection.release();
-						reject();
-					});
-				}).catch(function(){
-				    connection.rollback(function(){
-				        connection.release();
-				        reject();
-				    });
-				});	
-			});
+		    var queryArr = [];
+		    queryArr.push(InOfficeDao.removeInOffice({ _id : data._id }));
+		    for(var idx in data.approval){
+		        queryArr.push(ApprovalDao.updateApprovalConfirm(data.approval[idx]));    
+		    }
+            
+            
+            if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
+	            queryArr = queryArr.concat(CommuteDao.updateCommute_t(data.commute));    
+		    }
+		    
+		    db.queryTransaction(queryArr).then(function(resultArr){
+		    	resolve(resultArr);
+		    }, function(err){
+		    	reject(err);
+		    });
 		});
-    }
+    };
     return {
         getInOfficeList:_getInOfficeList,
         remove : _removeInOffice

@@ -5,21 +5,18 @@ var group = "rawData";
 var RawDataDao = function () {
 };
 
-RawDataDao.prototype.insertRawData =  function (connection, data) {
-    return db.queryTransaction(
-        connection,
-        group,
-        "insertRawData",
-        data,
-        [
-            "id", "name", "department", "char_date", "year", "type", "char_date", "type"
+RawDataDao.prototype.insertRawData =  function (data) {
+    return {
+        group : group,
+        item : "insertRawData",
+        data : [
+                data.id, data.name, data.department, data.char_date, data.year, data.type, data.char_date, data.type
         ]
-    );
+    };
 };
 
 // 툴퇴근 정보 등록 
 RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
-    console.log(data.char_date);
     return db.query(group, "insertRawDataCompanyAccess", 
         [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm, data.mac]
     );

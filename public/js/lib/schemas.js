@@ -61,7 +61,8 @@ define([
             read: "glyphicon-list-alt",
             pulsSign:"glyphicon-plus-sign",
             minusSign:"glyphicon-minus-sign",
-            setting:"glyphicon-cog"
+            setting:"glyphicon-cog",
+            user:"glyphicon-user"
         },
         
         //API

@@ -2,8 +2,6 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var _ = require("underscore"); 
-var debug = require('debug')('OutOffice');
-var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
 var db = require('../lib/dbmanager.js');
 var OutOfficeDao= require('../dao/outOfficeDao.js');
@@ -11,39 +9,24 @@ var ApprovalDao= require('../dao/approvalDao.js');
 var CommuteDao = require('../dao/commuteDao.js');
 
 var OutOffice = function (data) {
-    var _getOutOfficeList = function (data) {
-        return OutOfficeDao.selectOutOfficeList(data);
+    var _getOutOfficeList = function (a) {
+        return OutOfficeDao.selectOutOfficeList();
     };
     var _remove = function (data) {
         return new Promise(function(resolve, reject){
-			db.getConnection().then(function(connection){
-			    var promiseArr = [];
-			    promiseArr.concat(OutOfficeDao.removeOutOffice(connection, [{_id : data._id}]));
-                promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.approval));
-                
-                if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-		            promiseArr.concat(CommuteDao.updateCommute_t(connection, data.commute));    
-			    }
-			    
-				Promise.all(promiseArr).then(function(resultArr){
-					connection.commit(function(){
-						connection.release();
-						resolve();
-					});
-				},function(err){
-					connection.rollback(function(){
-						connection.release();
-						reject();
-						throw err;
-					});
-				}).catch(function(err){
-				    connection.rollback(function(){
-				        connection.release();
-				        reject();
-				        throw err;
-				    });
-				});	
-			});
+		    var queryArr = [];
+		    queryArr.push(OutOfficeDao.removeOutOffice({_id : data._id}));
+		    for(var idx in data.approval){
+		        queryArr.push(ApprovalDao.updateApprovalConfirm(data.approval[idx]));    
+		    }
+            if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
+	            queryArr.push(CommuteDao.updateCommute_t(data.commute));    
+		    }
+		    db.queryTransaction(queryArr).then(function(resultArr){
+		    	resolve(resultArr);
+		    }, function(err){
+		    	reject(err);
+		    });
 		});
     };
     return {

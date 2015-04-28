@@ -2,7 +2,7 @@
 /*@import url(https://fonts.googleapis.com/css?family=Great+Vibes|Orbitron|Audiowide);*/
 body {
   overflow:auto;
-  font-family: 'Nanum Gothic';
+  font-family: 'Nanum Gothic','Helvetica Neue',Helvetica,Arial,sans-serif;
   transition:background .9s;
 }
 
@@ -152,6 +152,7 @@ tr.shown td.details-control {
 table.dataTable .subTable {
     width: 100%;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     display: inline-block;
     min-width: 1.5em;
@@ -169,12 +170,14 @@ table.dataTable .subTable {
     font-size: 12px;
     line-height: 1.5;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
   color: white !important;
   border: none;
   background: #1F8871;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
   color: white !important;
@@ -197,6 +200,7 @@ table.dataTable .subTable {
   border: none;
   background: beige;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
   color: #2ABB9B !important;
   border: none;
@@ -233,6 +237,7 @@ table.dataTable .subTable {
 .dataTables_wrapper .dataTables_info{
     padding-top:.25em;
 }
+
 .dataTables_wrapper .default_span{
     display: inline-block;
     min-width: 1.5em;
@@ -261,7 +266,7 @@ table.dataTable .subTable {
 table.dataTable thead .sorting_asc{
     border-top: 3px #219076 solid !important;
     background-color: #2ABB9B !important;
-    /*background: url("img/sort_asc.svg") no-repeat center right;*/
+    background: url("img/sort_asc.svg") no-repeat center right;
     
     background-size:12px 12px;
     color: white;
@@ -272,7 +277,12 @@ table.dataTable thead .sorting_desc {
     color: white;
 }
 
-
+.btn-sm, .btn-xs{
+    padding : 8px;
+}
+.glyphicon{
+    top : 0;
+}
 /*Dialog*/
 .dialog-loding {
     background: url('img/Preloader_3.gif') no-repeat center center;

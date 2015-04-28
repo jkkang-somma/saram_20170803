@@ -13,23 +13,29 @@ define([
   'text!templates/default/content.html',
   'text!templates/layout/default.html',
   'collection/sm/UserCollection',
-  'views/sm/AddUserView',
-  'views/sm/EditUserView',
+  'views/sm/popup/AddUserView',
+  'views/sm/popup/EditUserView',
   'models/sm/UserModel',
-], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel){
+  'text!templates/default/button.html',
+], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel, ButtonHTML){
     var userListCount=0;
     var _currentFilter=0;
     var UserListView = BaseView.extend({
         el:".main-container",
     	initialize:function(){
-    	    var view=this;
     	    var userCollection= new UserCollection();
     	    var _id="userList_"+(userListCount++);
     		this.option = {
     		    el:_id+"_content",
     		    column:[
     		        { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
-    		        i18Common.USER.NAME, 
+    		      //  { render: function(data,type,row){
+            //             return "<img src='/userpic?file="+row.id+"'>";
+    		      //  }},
+    		        { "title" : i18Common.USER.NAME, data:"name", render: function(data,type,row){
+    		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px' data-id='"+row.id+"'aria-hidden='true'></span>");
+                        return temp.wrap('<p>').parent().html() + data;
+    		        }},
                     { "title" : i18Common.USER.POSITION, render:function(data, type, row) {
                         return row.position_name;
                     }},
@@ -74,13 +80,34 @@ define([
     		    detail:true,
     		    view:this,
     		    order:[[2, "asc"]],
-    		    //visibleSub:true
-    		    //gridOption
-    		}
+    		};
+    	},
+    	events : {
+    	    "mouseover .userpic" : "over",
+    	    "mouseleave .userpic" : "leave",
+    	},
+    	over:function(event){
+    	    var id = $(event.currentTarget).data("id");
+    	    var picdiv = $("<div id='picdiv' style='position: absolute; z-index: 1000;border:solid 1px #2ABB9B;padding: 2px; background-color:white'></div>");
+    	    var img = $("<img src='/userpic?file="+id+"'>");
+    	    
+    	    var windowHeight = $(window).height();
+    	    var top = event.pageY + 25;
+    	    var left = event.pageX + 5;
+    	    top = windowHeight < top + 180 ? top-190 : top;
+    	    
+    	    picdiv.css("top", top);
+    	    picdiv.css("left", left);
+    	    picdiv.append(img);
+    	    
+    	    $(this.el).append(picdiv);
+    	    console.log("over");
+    	},
+    	leave:function(){
+    	    $(this.el).find("#picdiv").remove();
+    	    console.log("leave");
     	},
     	render:function(){
-    	    //this.beforeRender();
-    	    var _view=this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
@@ -92,7 +119,7 @@ define([
     	    //grid button add;
     	    var _buttons=["search"];
     	    
-    	    var _filterText=[i18Common.CODE.ALL, i18Common.CODE.WORKER, i18Common.CODE.LEAVE_USER]
+    	    var _filterText=[i18Common.CODE.ALL, i18Common.CODE.WORKER, i18Common.CODE.LEAVE_USER];
     	    _buttons.push({//User Remove
     	        type:"custom",
     	        name:"filter",
@@ -123,7 +150,7 @@ define([
                    
                    _button.html(_filterText[_currentFilter]);
                    _grid.setBtnText(_button, _filterText[_currentFilter]);
-                   var filteredData = _grid.filtering(function(data){
+                   _grid.filtering(function(data){
                        var fn=filters[_currentFilter];
                        return fn(data);
                    }, "userType");
@@ -150,10 +177,10 @@ define([
                                     beforEvent=function(){
                                         $(_btn).data('loading-text',"<div class='spinIcon'>"+i18Common.DIALOG.BUTTON.ADD +"</div>");
                                         $(_btn).button('loading');
-                                    }
+                                    };
                                     affterEvent=function(){
                                         $(_btn).button('reset');
-                                    }
+                                    };
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                                     addUserView.submitAdd(beforEvent, affterEvent).done(function(data){
                                         grid.addRow(data);
@@ -220,7 +247,6 @@ define([
         	    });
     	    }    
     	    
-    	    
     	    if (this.actionAuth.remove){
         	    _buttons.push({//User Remove
         	        type:"custom",
@@ -232,7 +258,7 @@ define([
                             Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
                         } else {
                             selectItem._id="-1";
-                            var dd=Dialog.confirm({
+                            Dialog.confirm({
                                 msg:i18Common.CONFIRM.USER.REMOVE, //"Do you want Delete User?",
                                 action:function(){
                                    var userModel=new UserModel(selectItem);
@@ -266,7 +292,7 @@ define([
     	    _layOut.append(_head);
     	    _layOut.append(_content);
     	    $(this.el).html(_layOut);
-          //  this.affterRender();
+    	    
      	}
     });
     

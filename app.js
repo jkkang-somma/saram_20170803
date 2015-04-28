@@ -7,7 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var url = require("url");
-
+var multer = require("multer");
 
 //lib router config
 var sessionManager = require('./lib/sessionManager');
@@ -28,6 +28,7 @@ var companyAccess = require('./routes/companyAccessRouter');
 var dashboard = require('./routes/dashboardRouter');
 var report = require('./routes/reportRouter');
 var message = require('./routes/messageRouter');
+var userPic = require('./routes/userPicRouter');
 
 
 var debug = require('debug')('APP');
@@ -50,6 +51,7 @@ app.use(express_session({
     resave : true,
     saveUninitialized:true
 }));
+app.use(multer({dest:'./pic'}));
 
 var authError=function(next){
     var err = new Error('not Authoryty');
@@ -66,7 +68,7 @@ app.use(logger('dev'));
 
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){
-    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/", "/message"];
+    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/", "/message", "/userpic"];
     var pathname = url.parse(req.url).pathname;
     if(_.indexOf(passURLArr, pathname) > -1){
         next();
@@ -104,12 +106,14 @@ app.use('/companyAccess', companyAccess);
 app.use('/dashboard', dashboard);
 app.use('/report', report);
 app.use('/message', message);
+app.use('/userpic', userPic);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
-    if(_.isUndefined(err))
+    if(_.isUndefined(err)){
         err = new Error('Invalid URL.');
-    err.status = 404;
+        err.status = 404;
+    }
     next(err);
 });
 
@@ -122,7 +126,7 @@ app.use(function(err, req, res, next) {//최종적으로 에러 날리는곳 따
         success: false,
         err:err
     });
-    next();
+    // next();
 });
 
 module.exports = app;

@@ -168,7 +168,7 @@ define([
           }
         }
        
-      }else{
+      } else {
          if(start.getDay() != 0 && start.getDay() != 6){
             // 주말이 아닌 날짜
            for(var k=0; k<holidayInfos.length; k++){

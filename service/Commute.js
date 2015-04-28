@@ -14,42 +14,33 @@ var Commute = function() {
 	};
 	var _insertCommute = function(data){
 		return new Promise(function(resolve, reject){
-			db.getConnection().then(function(connection){
-				var promiseArr = [];
-				promiseArr.concat(CommuteDao.insertCommute(connection, data));
-				Promise.all(promiseArr).then(function(resultArr){
-					connection.commit(function(){
-						connection.release();
-						resolve();
-					});
-				},function(){
-					connection.rollback(function(){
-						connection.release();
-						reject();
-					});
-				});	
+			var queryArr = [];
+			for(var idx in data){
+				queryArr.push(CommuteDao.insertCommute(data[idx]));	
+			}
+			
+			db.queryTransaction(queryArr).then(function(resultArr){
+				resolve(resultArr);
+			}, function(err){
+				reject(err);
 			});
 		});
 	};
 	
 	var _updateCommute = function(data){
 		return new Promise(function(resolve, reject){
-			db.getConnection().then(function(connection){
-				var promiseArr = [];
-				
-				promiseArr.concat(CommuteDao.updateCommute_t(connection, data.data));
-				promiseArr.concat(ChangeHistoryDao.inserChangeHistory(connection, data.changeHistory));
-				Promise.all(promiseArr).then(function(resultArr){
-					connection.commit(function(){
-						connection.release();
-						resolve();
-					});
-				},function(){
-					connection.rollback(function(){
-						connection.release();
-						reject();
-					});
-				});	
+			var queryArr = [];
+			for(var idx in data.data){
+				queryArr.push(CommuteDao.updateCommute_t(data.data[idx]));
+			}
+			for(var idx in data.changeHistory){
+				queryArr.push(ChangeHistoryDao.inserChangeHistory(data.changeHistory[idx]));	
+			}
+			console.log(queryArr);
+			db.queryTransaction(queryArr).then(function(resultArr){
+				resolve(resultArr);	
+			},function(err){
+				reject(err);
 			});
 		});
 	};

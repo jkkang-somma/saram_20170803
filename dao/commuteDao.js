@@ -24,35 +24,32 @@ CommuteDao.prototype.updateCommuteResultInOutTime =  function (data) {
     );
 };
 
-CommuteDao.prototype.insertCommute = function(connection, data){
-    return db.queryTransaction(
-        connection,
-        group, "insertCommuteResult",
-        data,
-        [
-            "date", "department", "id", "in_time", "late_time", "name",
-            "out_office_code", "out_time", "over_time", "overtime_code",
-            "vacation_code", "standard_in_time", "standard_out_time", "work_type",
-            "year",	"in_time_type", "out_time_type", "out_office_start_time",
-            "out_office_end_time", "in_time_change", "out_time_change",
-            "early_time", "not_pay_over_time"
-        ]
-    ); 
+CommuteDao.prototype.insertCommute = function(data){
+    return {
+        group : group,
+        item : "insertCommuteResult",
+        data : [
+                data.date, data.department, data.id, data.in_time, data.late_time, data.name,
+                data.out_office_code, data.out_time, data.over_time, data.overtime_code,
+                data.vacation_code, data.standard_in_time, data.standard_out_time, data.work_type,
+                data.year, data.in_time_type, data.out_time_type, data.out_office_start_time,
+                data.out_office_end_time, data.in_time_change, data.out_time_change,
+                data.early_time, data.not_pay_over_time ]
+    };
 };
 
-CommuteDao.prototype.updateCommute_t = function(connection, data){
-    return db.queryTransaction(
-        connection,
-        group, "updateCommuteResult",
-        data,
-        [
-            "in_time", "late_time", "out_office_code", "out_time","over_time", 
-            "overtime_code", "vacation_code", "standard_in_time","standard_out_time", 
-            "work_type", "in_time_type", "out_time_type", "out_office_start_time",
-            "out_office_end_time", "in_time_change", "out_time_change", "overtime_code_change",
-            "early_time", "not_pay_over_time", "id", "date"
-        ]
-    ); 
+CommuteDao.prototype.updateCommute_t = function(data){
+    return {
+        group : group,
+        item : "updateCommuteResult",
+        data : [
+                data.in_time, data.late_time, data.out_office_code, data.out_time, data.over_time, data.
+                overtime_code, data.vacation_code, data.standard_in_time, data.standard_out_time, data.
+                work_type, data.in_time_type, data.out_time_type, data.out_office_start_time,
+                data.out_office_end_time, data.in_time_change, data.out_time_change, data.overtime_code_change,
+                data.early_time, data.not_pay_over_time, data.id, data.date
+            ]
+    };
 };
 
 CommuteDao.prototype.selectCommuteDate = function(date) {

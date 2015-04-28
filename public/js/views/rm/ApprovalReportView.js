@@ -418,6 +418,8 @@ define([
         }
         _approvalCollection.save(resultData, resultData.outOffice.doc_num).done(function(){
           dfd.resolve(resultData);  
+        }).fail(function(){
+          dfd.reject();
         });     
       });
       
@@ -458,6 +460,8 @@ define([
         }
         _approvalCollection.save(resultData, resultData.inOffice.doc_num).done(function(){
           dfd.resolve(resultData);  
+        }).fail(function(){
+          dfd.reject();
         });     
       });
       
@@ -468,6 +472,8 @@ define([
        var resultData = this.getFormData($(this.el).find('form'));
       _approvalCollection.save(resultData, resultData.doc_num).done(function(){
           dfd.resolve(resultData);  
+        }).fail(function(){
+          dfd.reject();
         }); 
         
         return dfd.promise();

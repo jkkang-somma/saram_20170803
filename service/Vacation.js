@@ -106,34 +106,25 @@ var Vacation = function() {
     				datas.push(obj);
     			}
     			
-    			db.getConnection().then(function(connection){
-    				var promiseArr = [];
-    				promiseArr.concat(VacationDao.insertVacation(connection, datas));
-    				Promise.all(promiseArr).then(function(resultArr){
-						connection.commit(function(){
-							var successCount = _.filter(resultArr,function(result){
-								return result[0].affectedRows > 0;
-							});
-							
-							var result = {
-								totalCount : resultArr.length,
-								successCount : successCount.length,
-								failCount : resultArr.length - successCount.length,
-							};
-						    resolve(result);
-						});
-					},function(){
-						connection.rollback(function(){
-							connection.release();
-							reject();
-						});
-					}).catch(function(){
-					    connection.rollback(function(){
-					        connection.release();
-					        reject();
-					    });
-					});	
-    			});
+				var queryArr = [];
+				for(var idx in datas){
+					queryArr.push(VacationDao.insertVacation(datas[idx]));	
+				}
+				
+				db.queryTransaction(queryArr).then(function(resultArr){
+					var successCount = _.filter(resultArr,function(result){
+						return result[0].affectedRows > 0;
+					});
+					
+					var result = {
+						totalCount : resultArr.length,
+						successCount : successCount.length,
+						failCount : resultArr.length - successCount.length,
+					};
+				    resolve(result);
+				}, function(err){
+					reject(err);
+				});
     			
     		}).catch(function(e){//Connection Error
                reject(e);
@@ -143,7 +134,7 @@ var Vacation = function() {
 	
 	var _updateVacation = function(data) {
 		return VacationDao.updateVacation(data);
-	}
+	};
 	
 	return {
 		getVacation : _getVacation,
