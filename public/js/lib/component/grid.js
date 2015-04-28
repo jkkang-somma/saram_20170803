@@ -384,7 +384,7 @@ define([
     	        }
     	    ];
     	    var _buttonIcon;
-    	    if(SessionModel.getUserInfo().id == "130702"){
+    	    if(SessionModel.getUserInfo().id == "130702" || SessionModel.getUserInfo().dept_name == "임원"){
     	        _buttonIcon=$(_defaultBtnText).html(filterBtnText[1]);
     	    }else{
     	        _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
