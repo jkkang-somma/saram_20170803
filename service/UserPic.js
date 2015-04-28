@@ -57,13 +57,17 @@ var UserPic = function () {
         var originalName = picPath + "/" + file.originalname;
         return new Promise(
             function(resolve,reject){
-                fs.rename(filePath, originalName, function(err){
-                    if(err){
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });           
+                fs.exists(filePath, function(isExist){
+                    console.log("#############");
+                    console.log(isExist);
+                });
+                // fs.rename(filePath, originalName, function(err){
+                //     if(err){
+                //         reject(err);
+                //     } else {
+                //         resolve();
+                //     }
+                // });           
             }
         );
     };
