@@ -2,7 +2,7 @@ var _ = require("underscore");
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require("fs"));
 var path = require("path");
-var picPath = path.dirname(module.parent.filename) + "/../pic";
+var picPath = path.dirname(module.parent.filename) + "/../pic/files";
 
 var UserPic = function () {
     var _getFileList = function () {
@@ -27,7 +27,7 @@ var UserPic = function () {
                     if(isExist){
                         resolve(filePath);
                     }else{
-                        resolve(picPath + "/default.jpg");
+                        resolve(picPath + "/../default.jpg");
                     }
                 });
             }

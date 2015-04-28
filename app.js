@@ -51,7 +51,8 @@ app.use(express_session({
     resave : true,
     saveUninitialized:true
 }));
-app.use(multer({dest:'./pic'}));
+
+app.use(multer({dest:'./pic/files'}));
 
 var authError=function(next){
     var err = new Error('not Authoryty');
