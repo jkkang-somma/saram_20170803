@@ -34,7 +34,7 @@ define([
     		    column:[
                     { "title" : "사진",
                         "render": function(data, type, row){
-                            return "<div class='imgbox'><img src='/userpic?file=" + row.id + "&timestamp="+new Date().getTime() +"'/></div>";
+                            return "<div class='imgbox'><img src='/userpic?file=" + row.id + "&timestamp="+new Date().getTime() +"' height='140' width='100'/></div>";
                         }
                     },
                     { "title" : "부서", "data" : "dept_code",

@@ -89,7 +89,7 @@ define([
     	over:function(event){
     	    var id = $(event.currentTarget).data("id");
     	    var picdiv = $("<div id='picdiv' style='position: absolute; z-index: 1000;border:solid 1px #2ABB9B;padding: 2px; background-color:white'></div>");
-    	    var img = $("<img src='/userpic?file="+id+"'>");
+    	    var img = $("<img src='/userpic?file="+id+"' height='140' width='100'>");
     	    
     	    var windowHeight = $(window).height();
     	    var top = event.pageY + 25;
