@@ -30,7 +30,7 @@ define([
     		    column:[
     		        { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
     		        { "title" : i18Common.USER.NAME, data:"name", render: function(data,type,row){
-    		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px; cursor:pointer;' data-id='"+row.id+"'aria-hidden='true'></span>");
+    		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px;' data-id='"+row.id+"'aria-hidden='true'></span>");
                         return temp.wrap('<p>').parent().html() + data;
     		        }},
                     { "title" : i18Common.USER.POSITION, render:function(data, type, row) {
