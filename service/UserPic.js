@@ -52,6 +52,7 @@ var UserPic = function () {
         );
     };
     var _fileUpload = function(file){
+        console.log(file);
         var filePath = path.dirname(module.parent.filename)  + "/../" + file.path;
         var originalName = picPath + "/" + file.originalname;
         return new Promise(
