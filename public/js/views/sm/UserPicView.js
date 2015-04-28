@@ -72,7 +72,8 @@ define([
     	},
     	removePic : function(event){
     	    var _view = this;
-    	    Dialog.loading({
+    	    Dialog.confirm({
+	        	msg : "해당 사진을 삭제하시겠습니까?",
                 action:function(){
                     var dfd = new $.Deferred();
                     var target = $(event.currentTarget);
@@ -92,16 +93,13 @@ define([
             	    
             	    $.ajax( url, ajaxSetting );
 		     		return dfd.promise();
-        	    },
+                },
                 actionCallBack:function(res){//response schema
                     var row = $(_view.grid.getRowNodeAt(res.msg));
                     var data = _view.grid.getDataAt(res.msg);
                     row.find(".imgbox img").attr("src", "/userpic?file="+data.id+"&timestamp="+new Date().getTime());
                 },
-                errorCallBack:function(response){
-                    Dialog.warning("Error: " + response["error"]);
-                },
-            });
+    	    });
     	},
     	
     	render:function(){
