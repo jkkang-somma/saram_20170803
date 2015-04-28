@@ -402,7 +402,7 @@ define([
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
             
             //filter 설정
-            if(SessionModel.getUserInfo().id == "130702"){
+            if(SessionModel.getUserInfo().id == "130702" || SessionModel.getUserInfo().dept_name == "임원"){
                 _grid.filterValue.myRecord=1;
                 _grid.filters.myRecord=filter[1];
             }else{
