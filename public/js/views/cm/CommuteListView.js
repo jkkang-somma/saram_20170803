@@ -350,12 +350,12 @@ define([
             var dept = Code.getCodes(Code.DEPARTMENT);
             $(this.el).find("#ccmCombo").append("<option>"+"전체"+"</option>");
      	    for(var i=0; i < dept.length; i++){
-     	    	if(dept[i].name != "임원" || dept[i].name != "무소속")
+     	    	if(dept[i].name != "임원" && dept[i].name != "무소속")
      	        	$(this.el).find("#ccmCombo").append("<option>"+dept[i].name+"</option>");
      	    }
      	    
      	    
-     	    if(SessionModel.getUserInfo().id == "130702")
+     	    if(SessionModel.getUserInfo().id == "130702" || SessionModel.getUserInfo().dept_name == "임원")
      	    	$(this.el).find("#ccmCombo").val("전체");
      	    else
      	    	$(this.el).find("#ccmCombo").val(SessionModel.getUserInfo().dept_name);
