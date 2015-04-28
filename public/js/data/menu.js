@@ -18,6 +18,10 @@ define([
                 edit:ADMIN
             }
         },{
+            title:"사진 등록", //휴일 관리
+            hashTag:"#userpic",
+            auth:ADMIN
+        },{
             title:i18Common.MENU.SUB.SM.HOLIDAY, //휴일 관리
             hashTag:"#holidaymanager",
             auth:ADMIN

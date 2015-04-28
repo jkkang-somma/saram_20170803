@@ -25,6 +25,9 @@ require.config({
          deps: ['cryptojs.core']
       },
       jqFileDownload: {deps : ['jquery']},
+      'jquery.ui.widget' : {deps: ['jquery']},
+      jqFileUpload : {deps: ['jquery', 'jquery.ui.widget']},
+      
    },
    paths: {
    //    jquery: 'tool/jquery.min',
@@ -41,7 +44,8 @@ require.config({
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
       
       jqFileDownload: 'tool/jquery.fileDownload',
-      
+      jqFileUpload : 'tool/jquery.fileupload',
+      "jquery.ui.widget" : 'tool/jquery.ui.widget',
       dialog:'lib/dialog',
       animator:'lib/animator',
       router:'router/mainRouter',

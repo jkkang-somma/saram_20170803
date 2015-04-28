@@ -124,18 +124,22 @@ router.route('/bulk')
     approval.updateApprovalConfirm(req.body).then(function(e){
         debug("Complete Update Approval."); 
         res.send({success:true, msg:"Complete Update Approval."});
-        
-        if(req.body.outOffice.state == "결재완료"){
-            console.log();
-            approval.sendOutofficeEmail(req.body.outOffice.doc_num);
+        if(!_.isUndefined(req.body.outOffice)){
+            if(req.body.outOffice.state == "결재완료"){
+            approval.sendOutofficeEmail(req.body.outOffice.doc_num).then(function(){
+                debug("Send Email"); 
+            }).catch(function(e){
+                debug("Fail to Send Email");
+            });
+            }    
         }
-        
     }).catch(function(e){
         debug("Error Update Approval.");
+        debug(e);
         res.status(500);
         res.send({
             success:false,
-            message: e.message,
+            message: "Error Update Approval",
             error:e
         });
     });

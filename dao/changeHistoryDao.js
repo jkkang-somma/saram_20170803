@@ -15,13 +15,12 @@ ChangeHistoryDao.prototype.selectInOutChangeCount =  function (data) {
 };
 
 //변경 이력 등록
-ChangeHistoryDao.prototype.inserChangeHistory =  function (connection, data) {
-	return db.queryTransaction(
-	    connection,
-        group, "inserChangeHistory",
-        data,
-        ["year", "id",  "date",  "change_column", "change_before", "change_after", "change_id"]
-    ); 
+ChangeHistoryDao.prototype.inserChangeHistory =  function (data) {
+    return {
+        group : group,
+        item : "inserChangeHistory",
+        data : [data.year, data.id,  data.date,  data.change_column, data.change_before, data.change_after, data.change_id],
+    };
 };
 
 module.exports = new ChangeHistoryDao();

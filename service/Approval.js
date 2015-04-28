@@ -46,53 +46,46 @@ var Approval = function (data) {
     };
     var _updateApprovalConfirm = function(data) {
         return new Promise(function(resolve, reject){
-			db.getConnection().then(function(connection){
-			    var promiseArr = [];
-			    promiseArr.concat(ApprovalDao.updateApprovalConfirm(connection, data.data));
-			    
-			    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
-			        var outOfficeData = {};
-			        for(var key in data.outOffice.arrInsertDate){
-			            outOfficeData[key] = _.clone( data.outOffice);
-			            outOfficeData[key].date = data.outOffice.arrInsertDate[key];
-                        outOfficeData[key].year = outOfficeData[key].date.substr(0,4);
-                        outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
-			        }
-			        
-			        promiseArr.concat(OutOfficeDao.insertOutOffice(connection, outOfficeData));
+		    var queryArr = [];
+		    for(var idx in data.data){
+		        queryArr.push(ApprovalDao.updateApprovalConfirm(data.data[idx]));    
+		    }
+		    
+		    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
+		        var outOfficeData = {};
+		        for(var key in data.outOffice.arrInsertDate){
+		            outOfficeData[key] = _.clone( data.outOffice);
+		            outOfficeData[key].date = data.outOffice.arrInsertDate[key];
+                    outOfficeData[key].year = outOfficeData[key].date.substr(0,4);
+                    outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
+                    queryArr.push(OutOfficeDao.insertOutOffice(outOfficeData[key]));
+		        }
+		    }
+		    
+		    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
+		        var inOfficeData = {};
+		        for(var inKey in data.inOffice.arrInsertDate){
+		            inOfficeData[inKey] = _.clone( data.inOffice );
+		            inOfficeData[inKey].date = data.inOffice.arrInsertDate[inKey];
+                    inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
+                    inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
+                    queryArr.push(InOfficeDao.insertInOffice(inOfficeData[inKey]));    
+		        }
+		        
+		    }
+		    
+		    if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
+		        for(var idx in data.commute){
+			        queryArr.push(CommuteDao.updateCommute_t(data.commute[idx])); 
 			    }
-			    
-			    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
-			        var inOfficeData = {};
-			        for(var inKey in data.inOffice.arrInsertDate){
-			            inOfficeData[inKey] = _.clone( data.inOffice );
-			            inOfficeData[inKey].date = data.inOffice.arrInsertDate[inKey];
-                        inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
-                        inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
-			        }
-			        promiseArr.concat(InOfficeDao.insertInOffice(connection, inOfficeData));
-			    }
-			    
-			    if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-		            promiseArr.concat(CommuteDao.updateCommute_t(connection, data.commute));    
-			    }
-                
-				Promise.all(promiseArr).then(function(resultArr){
-					connection.commit(function(){
-					    resolve();
-					});
-				},function(){
-					connection.rollback(function(){
-						connection.release();
-						reject();
-					});
-				}).catch(function(){
-				    connection.rollback(function(){
-				        connection.release();
-				        reject();
-				    });
-				});	
-			});
+	            
+		    }
+		    
+            db.queryTransaction(queryArr).then(function(resultArr){
+                resolve(resultArr); 
+            }, function(err){
+                reject(err);
+            });
 		});
     };
     
@@ -140,11 +133,9 @@ var Approval = function (data) {
                         });    
                     });
                 }).catch(SyntaxError, function (e) {
-                    console.log("file contains invalid file");
-                    reject();
+                    reject(e);
                 }).error(function (e) {
-                    console.log(e);
-                    reject();
+                    reject(e);
                 });    
     	    });
     	    
@@ -158,14 +149,11 @@ var Approval = function (data) {
     var _setApprovalIndex = function () {
         var _schema = new Schemas('approval_index');
         var _param = _schema.get(data);
-        var _result = null;
-        if(_param.seq != null){
-            _result = ApprovalDao.updateMaxIndex(_param);            
-        }else{
-            _result = ApprovalDao.insertApprovalIndex(_param);
-        }
         
-        return _result;
+        if(_param.seq != null)
+            return ApprovalDao.updateMaxIndex(_param);            
+        else
+            return ApprovalDao.insertApprovalIndex(_param);
     };
     var _updateApprovalIndex = function (yearmonth) {
         return ApprovalDao.updateMaxIndex(yearmonth);

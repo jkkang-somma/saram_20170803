@@ -1,5 +1,4 @@
 var _ = require("underscore"); 
-var debug = require('debug')('User');
 var Schemas = require("../schemas.js");
 var RawDataDao= require("../dao/rawDataDao.js");
 var Promise = require("bluebird");
@@ -15,23 +14,17 @@ var RawData = function (data) {
     }
     var _insertRawData = function (data) {
         return new Promise(function(resolve, reject){
-			db.getConnection().then(function(connection){
-				var promiseArr = [];
-				promiseArr.concat(RawDataDao.insertRawData(connection, data));
-				Promise.all(promiseArr).then(function(resultArr){
-					connection.commit(function(){
-						connection.release();
-						resolve(resultArr.length);
-					});
-				},function(){
-					connection.rollback(function(){
-						connection.release();
-						reject();
-					})
-				});	
+			var queryArr = [];
+			for(var idx in data){
+                queryArr.push(RawDataDao.insertRawData(data[idx]));
+			}
+			db.queryTransaction(queryArr).then(function(resultArr){
+				resolve();
+			}, function(err){
+				reject(err);
 			});
 		});
-    }
+    };
     
     return {
         insertRawData:_insertRawData,

@@ -496,7 +496,7 @@ define([
       var _approvalModel = new ApprovalModel(formData);
       _approvalModel.save({},{
       	        success:function(model, xhr, options){
-      	            Dialog.show("Complete Add Approval.");
+      	            Dialog.show("결재가 상신되었습니다.");
       	            _this.thisDfd.resolve(model);
       	        },
       	        error:function(model, xhr, options){

@@ -9,7 +9,9 @@ var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
 var ChangeHistory = function() {	
 
 	var _getChangeHistory = function(data, callback) {
+		console.log(data);
 		ChangeHistoryDao.selectChangeHistory(data).then(function(result) {
+			console.log(result);
 			return callback(result);
 		});
 	};

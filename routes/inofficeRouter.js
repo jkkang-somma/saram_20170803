@@ -22,6 +22,7 @@ router.route('/bulk')
         res.send({success:true, message:"Complete Delete User."});
     }).catch(function(e){
         debug("Error Delete User.");
+        debug(e);
         res.status(500);
         res.send({
             success:false,

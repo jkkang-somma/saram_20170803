@@ -17,6 +17,7 @@ define([
 	'views/LoginView',
 	'views/NavigationView',
 	'views/sm/UserListView',
+	'views/sm/UserPicView',
 	'views/RawData/AddRawDataView',
 	'views/RawData/RawDataView',
 	'views/Holiday/HolidayManagerView',
@@ -28,7 +29,7 @@ define([
 	// 'views/report/ReportCommuteView'
 ], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
-UserListView,
+UserListView, UserPicView,
 AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
@@ -43,6 +44,7 @@ ReportListView // report manager
 	var Router = BaseRouter.extend({
 		routes : {
 			'usermanager' : 'showUserList',
+			'userpic' : 'showUserPic',
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
 			'holidaymanager' : 'showHolidayManager',
@@ -215,6 +217,11 @@ ReportListView // report manager
 			var reportListView = new ReportListView();
 			this.changeView(reportListView);
 		},
+		
+		showUserPic : function(){
+			var userPicView = new UserPicView();
+			this.changeView(userPicView);
+		}
 		// showReportCommute : function() {
 		// 	var reportCommuteView = new ReportCommuteView();
 		// 	this.changeView(reportCommuteView);			
