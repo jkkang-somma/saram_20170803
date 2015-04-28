@@ -101,11 +101,9 @@ define([
     	    picdiv.append(img);
     	    
     	    $(this.el).append(picdiv);
-    	    console.log("over");
     	},
     	leave:function(){
     	    $(this.el).find("#picdiv").remove();
-    	    console.log("leave");
     	},
     	render:function(){
     	    var _headSchema=Schemas.getSchema('headTemp');

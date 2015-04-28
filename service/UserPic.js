@@ -12,6 +12,7 @@ var UserPic = function () {
                     files = _.reject(files, function(file){
                         return file == "default.jpg";
                     });
+                    console.log(files);
                     resolve(files);
                 }).catch(function(err){
                     throw(err);
