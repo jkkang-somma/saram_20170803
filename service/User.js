@@ -45,7 +45,6 @@ var User = function (data, isNoSchemas) {
     var _editUser=function(){
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
-                debug(currentData);
                 var _updateData=_.defaults(_data, currentData[0]);
                 UserDao.updateUser(_updateData).then(function(result){
                     resolve(result);
@@ -60,10 +59,8 @@ var User = function (data, isNoSchemas) {
         });
     };
     var _configUser=function(){
-        var _user=this;
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
-                debug(currentData[0]);
                 if (currentData[0].password!=_data.password){
                     debug("_configUser ERROR:Not equls Password");
                     throw new Error("NOT_EQULES_PASSWORD");
@@ -84,7 +81,6 @@ var User = function (data, isNoSchemas) {
         });
     };
     var _findPassword=function(){
-        var _user=this;
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
                 if (_.isUndefined(currentData[0])){
