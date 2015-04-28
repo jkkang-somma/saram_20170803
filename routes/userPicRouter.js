@@ -5,17 +5,6 @@ var UserPic = require('../service/UserPic.js');
 var path = require("path");
 var fs=require("fs");
 
-var	picpath = path.normalize(__dirname + '/../pic/files/');
- if (!fs.existsSync('')) {
-    try {
-    	fs.mkdirSync(picpath);
-    } catch(e) {
-    	if ( e.code != 'EEXIST' ) {
-    		throw e;
-    	}
-    }
-}
-
 router.route('/')
 .get(function(req, res){
     if(_.isUndefined(req.query.file)){

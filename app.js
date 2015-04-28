@@ -30,9 +30,9 @@ var report = require('./routes/reportRouter');
 var message = require('./routes/messageRouter');
 var userPic = require('./routes/userPicRouter');
 
-
 var debug = require('debug')('APP');
 var app = express();
+var filePath = path.normalize(__dirname + '/pic/files');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,8 +51,13 @@ app.use(express_session({
     resave : true,
     saveUninitialized:true
 }));
-
-app.use(multer({dest:'./pic/files'}));
+app.use(multer({
+    dest:filePath,
+    rename:function(fieldname, filename, req,res){
+        console.log(filename);
+        return filename;
+    }
+}));
 
 var authError=function(next){
     var err = new Error('not Authoryty');

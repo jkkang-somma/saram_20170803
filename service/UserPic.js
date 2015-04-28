@@ -52,16 +52,11 @@ var UserPic = function () {
         );
     };
     var _fileUpload = function(file){
-        console.log(file);
-        var filePath = path.dirname(module.parent.filename)  + "/../" + file.path;
-        var originalName = picPath + "/" + file.originalname;
+        // var originalName = picPath + "/" + file.originalname;
         return new Promise(
             function(resolve,reject){
-                fs.exists(filePath, function(isExist){
-                    console.log("#############");
-                    console.log(isExist);
-                });
-                // fs.rename(filePath, originalName, function(err){
+                resolve();
+                // fs.rename(file.path, originalName, function(err){
                 //     if(err){
                 //         reject(err);
                 //     } else {

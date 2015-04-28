@@ -4,6 +4,7 @@ var debug = require('debug')('SARAM');
 var app = require('./app');
 var schedule = require('node-schedule');
 var batch = require('./batch/batch');
+
 // var memwatch = require('memwatch');
 // var moment = require('moment');
 
@@ -23,6 +24,8 @@ var server = app.listen(app.get('port'), function() {
     schedule.scheduleJob('43 3 * * *', function(){
         batch.backupDb();
     });
+    
+   
 });
 
 // var memDebug = require("debug")("memDebug");
