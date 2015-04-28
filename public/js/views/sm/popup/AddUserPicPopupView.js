@@ -27,6 +27,7 @@ define([
     	    
     	    var _view = this;
             $(this.el).append("<input type='file' id='AddUserPicFile' multiple style='display:none' accept='.jpg'></input>");
+            $(this.el).append("<div style='margin:10px 0'>100px X 140px 크기의 사진을 선택해주세요 (파일형식 : 사번.jpg) </div>");
             $(this.el).append("<div id='filebtn' style='float:left' class='btn btn-default btn-primary'>파일 선택</div>");
             $(this.el).append("<div id='filelabel' style='float: left;margin-left: 10px;'></div>");
             $(this.el).find('#AddUserPicFile').fileupload({
