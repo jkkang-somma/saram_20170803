@@ -29,11 +29,8 @@ define([
     		    el:_id+"_content",
     		    column:[
     		        { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
-    		      //  { render: function(data,type,row){
-            //             return "<img src='/userpic?file="+row.id+"'>";
-    		      //  }},
     		        { "title" : i18Common.USER.NAME, data:"name", render: function(data,type,row){
-    		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px' data-id='"+row.id+"'aria-hidden='true'></span>");
+    		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px; cursor:pointer;' data-id='"+row.id+"'aria-hidden='true'></span>");
                         return temp.wrap('<p>').parent().html() + data;
     		        }},
                     { "title" : i18Common.USER.POSITION, render:function(data, type, row) {
@@ -124,7 +121,6 @@ define([
     	        tooltip:i18Common.TOOLTIP.USER.TYPE,//"사용자 유형",
     	        filterBtnText:_filterText,
     	        click:function(_grid, _button){
-    	           
     	           var filters=[
     	                function(){
     	                    return true;
@@ -279,9 +275,13 @@ define([
     	    
     	    //Refresh
     	    _buttons.push("refresh");
-    	    
     	    this.option.buttons=_buttons;
-    	    
+    	    this.option.fetchParam = {
+    	        success : function(){
+    	            grid._draw();
+    	            $("#"+grid.getButton("filter")).trigger("click");
+    	        }
+    	    };
     	    //grid 
     	    var _gridSchema=Schemas.getSchema('grid');
     	    var grid= new Grid(_gridSchema.getDefault(this.option));
@@ -290,7 +290,6 @@ define([
     	    _layOut.append(_head);
     	    _layOut.append(_content);
     	    $(this.el).html(_layOut);
-    	    
      	}
     });
     
