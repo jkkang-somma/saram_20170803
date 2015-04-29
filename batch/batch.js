@@ -6,10 +6,10 @@ var DBBatchJobExecuter = function(){
 };
 
 DBBatchJobExecuter.prototype.DbBackup = function(){
-    debug("DB Schedule Start :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));
+    debug("DB Schedule Start : " + moment().format("YYYYMMDD_HH:mm:ss SSS"));
     var dbinfo = db.getDbInfo();
     var filename = moment().format("YYYYMMDD_HHmmss") + ".sql";
-    var cmd = "mysqldump -u"+dbinfo.user+" -p"+dbinfo.password+ " -h " + dbinfo.host + " -P " + dbinfo.port + " " + dbinfo.database +" > " + filename;
+    var cmd = "mysqldump -u"+dbinfo.user+" -p"+dbinfo.password+ " " + dbinfo.database +" > " + filename;
 
     debug(cmd);
     
@@ -19,7 +19,7 @@ DBBatchJobExecuter.prototype.DbBackup = function(){
         if(error!==null){
             console.log('exec error: ' + error);
         }
-        debug("DB Schedule End :" + moment().format("YYYYMMDD_HH:mm:ss SSS"));
+        debug("DB Schedule End : " + moment().format("YYYYMMDD_HH:mm:ss SSS"));
     });
 };
 
