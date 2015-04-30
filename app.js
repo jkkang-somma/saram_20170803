@@ -74,7 +74,7 @@ app.use(logger('dev'));
 
 // if session hasn`t loginid, redirect login page
 app.use(function(req,res,next){
-    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/", "/message", "/userpic"];
+    var passURLArr=["/session", "/session/findPassword", "/session/resetPassword", "/", "/message"];
     var pathname = url.parse(req.url).pathname;
     if(_.indexOf(passURLArr, pathname) > -1){
         next();
