@@ -279,7 +279,11 @@ define([
     	    this.option.fetchParam = {
     	        success : function(){
     	            grid._draw();
-    	            $("#"+grid.getButton("filter")).trigger("click");
+                    var filterBtn = $("#"+grid.getButton("filter"));
+                    while(filterBtn.text() != "근무자"){
+                        filterBtn.trigger("click");
+                    }
+
     	        }
     	    };
     	    //grid 
