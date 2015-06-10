@@ -200,8 +200,9 @@ define([
      	                   		}
      	                   	},
      	                   	{data: "vacation_code", title: i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.VACATION,
-		                        "render": function (data, type, rowData, meta) {
-		                            return Code.getCodeName(Code.OFFICE, data);
+		                        render: function (data, type, rowData, meta) {
+		                            var codeName = Code.getCodeName(Code.OFFICE, data);
+     	                   			return _.isNull(codeName)? null : codeName.replace(",", "<br>");
 		                       }
 		                    },
      	                   	{ data : "out_office_code", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.OUT_OFFICE,
