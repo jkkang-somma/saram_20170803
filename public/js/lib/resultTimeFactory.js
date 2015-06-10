@@ -362,18 +362,32 @@ define([
         
         setOutOffice : function(todayOutOffice){ // 오늘의 vacationCode, outOfficeCode 설정
             if(todayOutOffice.length > 0){
+                var vacationArr = [];
                 for (var i = 0; i <todayOutOffice.length; i++){
                     var model = todayOutOffice[i];
                     var code = model.get("office_code");
                     var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
                     var OUTOFFICE_CODES = ["W01","W02", "W03"];
+                    var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05"];
                     if(_.indexOf(VACATION_CODES, code) >= 0){
-                        this.vacationCode = code;
+                        vacationArr.push(code);
                     }
                     
                     if(_.indexOf(OUTOFFICE_CODES, code) >= 0){
                         this.outOfficeCode = code;
                     }
+                }
+                
+                if(vacationArr.length == 1){
+                    this.vacationCode = vacationArr[0];
+                }else if(vacationArr.length == 2){
+                    vacationArr = _.sortBy(vacationArr, function(str){ return str});
+                    this.vacationCode = vacationArr[0] + vacationArr[1];
+                    if(_.indexOf(VACATIONS_CODE, this.vacationCode) < 0){
+                        this.vacationCode = null;
+                    }
+                }else if(vacationArr.length > 2){
+                    this.vacationCode = null;
                 }
             }else{
                 this.vacationCode = null;
@@ -387,6 +401,9 @@ define([
                     case "V04": // 경조휴가
                     case "V05": // 공적휴가
                     case "V06": // 특별휴가
+                    case "V02V03": // 특별휴가
+                    case "V02V05": // 특별휴가
+                    case "V03V05": // 특별휴가
                         this.workType = WORKTYPE.VACATION;
                         this.inTimeType = 1;            
                         this.outTimeType = 1;            
