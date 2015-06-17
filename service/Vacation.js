@@ -33,6 +33,9 @@ var db = require('../lib/dbmanager.js');
  *
  */
 var getHoliday = function(userId, joinDate) {
+	if(_.isNull(joinDate) || _.isUndefined(joinDate) || joinDate==""){
+		return 0;
+	}
 	var joinDateArr = joinDate.split("-"),
 		joinYear = parseInt( joinDateArr[0]),
 		joinMonth = parseInt( joinDateArr[1]),
@@ -86,8 +89,7 @@ var Vacation = function() {
 	var _setVacation = function(data) {
         return new Promise(function(resolve, reject){// promise patten
     		UserDao.selectUserList().then(function(result) {
-    			var datas = [],
-    				obj = {};
+    			var datas = [];
     			
     			for (var i = 0, len = result.length; i < len; i++) {    				
     				if (result[i].leave_company != "" && result[i].leave_company != null) {	// 퇴사일이 있는 경우 연차 생성하지 않음 
@@ -98,12 +100,11 @@ var Vacation = function() {
     					continue;
     				}    				
     				
-    				obj = {
+    				datas.push({
     						id : (result[i].id),
     						year : data.year,
     						total_day : getHoliday(result[i].id, result[i].join_company)
-    				};
-    				datas.push(obj);
+    				});
     			}
     			
 				var queryArr = [];
@@ -112,14 +113,10 @@ var Vacation = function() {
 				}
 				
 				db.queryTransaction(queryArr).then(function(resultArr){
-					var successCount = _.filter(resultArr,function(result){
-						return result[0].affectedRows > 0;
-					});
-					
 					var result = {
-						totalCount : resultArr.length,
-						successCount : successCount.length,
-						failCount : resultArr.length - successCount.length,
+						totalCount : queryArr.length,
+						successCount : queryArr.length,
+						failCount : 0
 					};
 				    resolve(result);
 				}, function(err){

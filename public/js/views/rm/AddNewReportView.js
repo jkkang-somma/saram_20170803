@@ -175,8 +175,10 @@ define([
       
       // option setting
       for(var index=0; index < arrGubunData.length; index++){
-        var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
-        selGubun.append(optionHtml);
+        if(arrGubunData[index].code.length == 3){
+          var optionHtml = "<option value='"+arrGubunData[index].code+"'>"+arrGubunData[index].name+"</option>";
+          selGubun.append(optionHtml);
+        }
       }
       // 휴일근무
       $(_this.el).find('#datePickerTitleTxt').text('date');
