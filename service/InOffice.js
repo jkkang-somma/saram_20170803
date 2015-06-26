@@ -22,7 +22,9 @@ var InOffice = function (data) {
             
             
             if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-	            queryArr = queryArr.concat(CommuteDao.updateCommute_t(data.commute));    
+            	for(var idx in data.commute){
+	            	queryArr.push(CommuteDao.updateCommute_t(data.commute[idx]));    
+            	}
 		    }
 		    
 		    db.queryTransaction(queryArr).then(function(resultArr){

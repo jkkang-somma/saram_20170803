@@ -467,7 +467,7 @@
 				work_type,
 				out_office_code,
 				overtime_code,
-				vacation_code
+				vacation_code,
 				in_time_type,
 				out_time_type,
 				out_office_end_time,

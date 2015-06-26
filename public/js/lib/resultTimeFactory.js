@@ -752,8 +752,9 @@ define([
          		}else if(type == "out"){
          		    model.date = date;
          		    var outOfficeCollection = new OutOfficeCollection();
-         		    outOfficeCollection.add(model);
-         		    that.setOutOffice(outOfficeCollection.where({date: that.date}));
+     		        that.setOutOffice([]);
+     		        outOfficeCollection.add(model);
+     		        that.setOutOffice(outOfficeCollection.where({date: that.date}));
          		}else{
          		    dfd.reject({msg : "Wrong type (in /out)"});
          		}    
