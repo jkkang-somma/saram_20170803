@@ -17,14 +17,16 @@ var path = require("path");
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 var transport = nodemailer.createTransport(smtpTransport({
-    host: 'webmail.yescnc.co.kr',
-    port: 25,
-    secure: false,
+    host: 'wsmtp.ecounterp.com',
+    port: 587,
     auth: {
         user: 'webmaster@yescnc.co.kr',
-        pass: 'Yes112233'
+        pass: 'yes112233'
     },
+    rejectUnauthorized: false,
     connectionTimeout:10000
 }));
 
@@ -126,6 +128,58 @@ var Approval = function (data) {
                         
                         transport.sendMail(mailOptions, function(error, info){
                             if(error){//메일 보내기 실패시 
+                                console.log(error);
+                                reject();
+                            }else{
+                                resolve();
+                            }
+                        });    
+                    });
+                }).catch(SyntaxError, function (e) {
+                    reject(e);
+                }).error(function (e) {
+                    reject(e);
+                });    
+    	    });
+    	    
+        });
+    };
+    
+    var _sendApprovalEmail = function(doc_num, managerId){
+        return new Promise(function(resolve, reject){
+            ApprovalDao.getApprovalMailData(doc_num).then(function(data){
+                if(data.length == 1 )
+                    data = data[0];
+                
+                if(data.start_date == data.end_date)
+                    data.end_date = null;
+                
+    	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
+                    var temp=_.template(html);
+                    var sendHTML=temp(data);
+                    
+                    ApprovalDao.getManagerId(managerId).then(function(result){
+                        var to = [];
+                        if(data.dept_code != "5100" && data.dept_code != "5200"){
+                            for(var idx in result){
+                                if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
+                                    var person = result[idx];
+                                    to.push({name : person.name, address: person.email});
+                                }
+                            }
+                        }
+                        
+                        var mailOptions= {
+                            from: 'webmaster@yescnc.co.kr', // sender address 
+                            to: to,
+                            subject:"[근태 상신 알림] " + data.name + "_" + data.code_name,
+                            html:sendHTML,
+                        	text:"",
+                        };
+                        
+                        transport.sendMail(mailOptions, function(error, info){
+                            if(error){//메일 보내기 실패시 
+                                console.log(error);
                                 reject();
                             }else{
                                 resolve();
@@ -167,7 +221,8 @@ var Approval = function (data) {
         getApprovalIndex:_getApprovalIndex,
         setApprovalIndex:_setApprovalIndex,
         updateApprovalIndex:_updateApprovalIndex,
-        sendOutofficeEmail:_sendOutofficeEmail
+        sendOutofficeEmail:_sendOutofficeEmail,
+        sendApprovalEmail : _sendApprovalEmail
     };
 };
 

@@ -293,6 +293,16 @@
 			WHERE
 				dept_code = ?
     	</query>
+    	
+    	<query id="getManagerId">
+    		SELECT
+				name,
+				email
+			FROM
+				members_tbl
+			WHERE
+				id = ?
+    	</query>
 	</group>
 	
 	<group id="approval_index">

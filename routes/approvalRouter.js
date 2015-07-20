@@ -107,6 +107,15 @@ router.route('/')
     approval.insertApproval(req.body).then(function(e){
         debug("Complete Add Approval.");
         res.send({success:true, msg:"Complete Add Approval."});
+        
+        if(!_.isUndefined(req.body.doc_num) && !_.isUndefined(req.body.manager_id)){
+            approval.sendApprovalEmail(req.body.doc_num, req.body.manager_id).then(function(){
+                debug("Send Email"); 
+            }).catch(function(e){
+                debug("Fail to Send Email");
+            });
+        }
+        
     }).catch(function(e){
         debug("Error Add Approval.");
         res.status(500);
@@ -126,11 +135,11 @@ router.route('/bulk')
         res.send({success:true, msg:"Complete Update Approval."});
         if(!_.isUndefined(req.body.outOffice)){
             if(req.body.outOffice.state == "결재완료"){
-            approval.sendOutofficeEmail(req.body.outOffice.doc_num).then(function(){
-                debug("Send Email"); 
-            }).catch(function(e){
-                debug("Fail to Send Email");
-            });
+                approval.sendOutofficeEmail(req.body.outOffice.doc_num).then(function(){
+                    debug("Send Email"); 
+                }).catch(function(e){
+                    debug("Fail to Send Email");
+                });
             }    
         }
     }).catch(function(e){

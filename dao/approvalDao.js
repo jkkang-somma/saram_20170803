@@ -47,6 +47,10 @@ ApprovalDao.prototype.getApprovalMailingList =  function (dept_code) {
     return db.query(group, "getApprovalMailingList", [dept_code]);
 };
 
+ApprovalDao.prototype.getManagerId =  function (manager_id) {
+    return db.query(group, "getManagerId", [manager_id]);
+};
+
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
     return db.query("approval_index", "selectMaxIndexApproval", [yearmonth]);
 };
@@ -58,5 +62,8 @@ ApprovalDao.prototype.insertApprovalIndex =  function (data) {
 ApprovalDao.prototype.updateMaxIndex =  function (data) {
     return db.query("approval_index", "updateMaxIndex", [data.yearmonth]);
 };
+
+
+
 
 module.exports = new ApprovalDao();
