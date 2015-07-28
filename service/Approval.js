@@ -160,11 +160,17 @@ var Approval = function (data) {
                     
                     ApprovalDao.getManagerId(managerId).then(function(result){
                         var to = [];
+                        var cc = [];
+                        var bcc = [];
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
                                     var person = result[idx];
                                     to.push({name : person.name, address: person.email});
+                                    if(person.name == "김특훈"){
+                                        cc.push({ name: "김성식", address: "sskim@yescnc.co.kr"});
+                                        bcc.push({ name: "안정길", address: "carran@yescnc.co.kr"});
+                                    }
                                 }
                             }
                         }
@@ -176,6 +182,14 @@ var Approval = function (data) {
                             html:sendHTML,
                         	text:"",
                         };
+                        
+                        if(cc.length > 0){
+                            mailOptions["cc"] = cc;
+                        }
+                        
+                        if(bcc.length > 0){
+                            mailOptions["bcc"] = bcc;
+                        }
                         
                         transport.sendMail(mailOptions, function(error, info){
                             if(error){//메일 보내기 실패시 
