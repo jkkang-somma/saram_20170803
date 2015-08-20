@@ -75,9 +75,7 @@ define([
         $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);
         animator.animate(this.el, animator.FADE_IN_DOWN);
         
-        if(SessionModel.getUserInfo().name == "안정길"){
-            $("#document").html('<span class="glyphicon glyphicon-file"></span>  양식');
-        }
+        $("#document").html('<span class="glyphicon glyphicon-file"></span>  양식');
     },
     events: {
 		'click #logout': 'logout',
