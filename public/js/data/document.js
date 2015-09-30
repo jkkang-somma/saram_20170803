@@ -21,6 +21,9 @@ define([
         }, {
             value : "출장비 정산서 신청서",
 	        key : "/doc/출장비 정산서 신청서.xlsx"
+        }, {
+            value : "도서 구매 신청서",
+	        key : "/doc/도서구매신청서.xlsx"
         } 
     ];
 	return doc;

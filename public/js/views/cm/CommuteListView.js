@@ -162,7 +162,7 @@ define([
 	        						}
 	        					}
 	        				);
-	        				if(!_.isUndefined(yesterdayRow.data().idx)){
+	        				if(yesterdayRow.length > 0){
 	        					yesterday.set({idx : yesterdayRow.data().idx});
 		        				yesterdayRow.data(yesterday.attributes);
 	        				}
