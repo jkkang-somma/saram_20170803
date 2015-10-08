@@ -439,7 +439,7 @@ define([
           Dialog.error("기간을 잘못 입력하였습니다.");      
           // this.thisDfd.reject();
           return;
-      }else if( !(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03') && (this.holReq > usable) ){
+      }else if( !(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V05') && (this.holReq > usable) ){
         Dialog.error("잔여 연차 일수를 초과 했습니다.");      
         // this.thisDfd.reject();
         return;
