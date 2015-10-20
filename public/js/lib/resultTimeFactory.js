@@ -410,26 +410,6 @@ define([
                         break;
                 }
                 
-                switch(this.outOfficeCode){
-                    case "W01": // 외근
-                        if(!this.isSuwon){
-                            var startTime = Moment(model.get("start_time"), "HH:mm");
-                            var endTime = Moment(model.get("end_time"), "HH:mm");
-                            if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
-                                this.checkLate = false;
-                            if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
-                                this.checkEarly = false;
-                        }
-                        break;
-                    case "W02": // 출장
-                        this.inTimeType = 1;            
-                        this.outTimeType = 1;            
-                    case "W03": // 장기외근
-                        this.checkLate = false;
-                        this.checkEarly = false;
-                        break;
-                }
-                
                 // 휴가 / flaxible 에 의한 Std In/Out 조정
                 if(this.isSuwon){
                     if(this.vacationCode == "V02"){
@@ -460,6 +440,27 @@ define([
                         this.standardOutTime.hour(12).minute(20).second(0);
                     }
                 }
+                 
+                switch(this.outOfficeCode){
+                    case "W01": // 외근
+                        if(!this.isSuwon){
+                            var startTime = Moment(model.get("start_time"), "HH:mm");
+                            var endTime = Moment(model.get("end_time"), "HH:mm");
+                            if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
+                                this.checkLate = false;
+                            if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
+                                this.checkEarly = false;
+                        }
+                        break;
+                    case "W02": // 출장
+                        this.inTimeType = 1;            
+                        this.outTimeType = 1;            
+                    case "W03": // 장기외근
+                        this.checkLate = false;
+                        this.checkEarly = false;
+                        break;
+                }
+                
             }else{
                 if(_.isNull(this.inTime) && _.isNull(this.outTime)){
                     this.outOfficeCode = null;
