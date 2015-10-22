@@ -366,9 +366,9 @@ define([
                 for (var i = 0; i <todayOutOffice.length; i++){
                     var model = todayOutOffice[i];
                     var code = model.get("office_code");
-                    var VACATION_CODES = ["V01","V02","V03","V04","V05","V06"];
+                    var VACATION_CODES = ["V01","V02","V03","V04","V05","V06","V07","V08"];
                     var OUTOFFICE_CODES = ["W01","W02", "W03"];
-                    var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05"];
+                    var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07"];
                     if(_.indexOf(VACATION_CODES, code) >= 0){
                         vacationArr.push(code);
                     }
@@ -401,9 +401,11 @@ define([
                     case "V04": // 경조휴가
                     case "V05": // 공적휴가
                     case "V06": // 특별휴가
-                    case "V02V03": // 특별휴가
-                    case "V02V05": // 특별휴가
-                    case "V03V05": // 특별휴가
+                    case "V02V03": // 오전반차, 오후반차
+                    case "V02V05": // 오전반차, 공적휴가
+                    case "V03V05": // 공적휴가, 오후반차
+                    case "V02V08": // 오전반차, 공적휴가(오후)
+                    case "V03V07": // 오후반차, 공적휴가(오전)
                         this.workType = WORKTYPE.VACATION;
                         this.inTimeType = 1;            
                         this.outTimeType = 1;            
@@ -412,10 +414,10 @@ define([
                 
                 // 휴가 / flaxible 에 의한 Std In/Out 조정
                 if(this.isSuwon){
-                    if(this.vacationCode == "V02"){
+                    if(this.vacationCode == "V02" || this.vacationCode == "V07"){
                         this.standardInTime.hour(14).minute(0).second(0);
                         this.standardOutTime = Moment(this.standardInTime).add(_.isUndefined(this.eveningWorkTime)? 4 : this.eveningWorkTime,"hours");
-                    }else if(this.vacationCode == "V03"){
+                    }else if(this.vacationCode == "V03" || this.vacationCode == "V08"){
                         if(!_.isNull(this.inTime)){
                             if((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime)) && this.isFlexible) // 지각기준보다 일찍왔을경우 기준시간 변경
                                 this.standardInTime = Moment(this.inTime);
@@ -434,9 +436,9 @@ define([
                         this.standardOutTime = Moment(this.standardInTime).add(this.dayWorkTime,"hours");
                     }
                 }else{
-                    if(this.vacationCode == "V02"){
+                    if(this.vacationCode == "V02" || this.vacationCode == "V07"){
                         this.standardInTime.hour(13).minute(20).second(0);
-                    }else if( this.vacationCode == "V03"){
+                    }else if( this.vacationCode == "V03" || this.vacationCode == "V08"){
                         this.standardOutTime.hour(12).minute(20).second(0);
                     }
                 }
