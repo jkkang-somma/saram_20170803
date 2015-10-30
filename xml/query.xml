@@ -287,7 +287,8 @@
     	<query id="getApprovalMailingList">
     		SELECT
 				name,
-				email
+				email,
+				leave_company
 			FROM
 				members_tbl
 			WHERE

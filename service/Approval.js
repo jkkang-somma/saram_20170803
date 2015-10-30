@@ -109,7 +109,8 @@ var Approval = function (data) {
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    cc.push({name : result[idx].name, address: result[idx].email});
+                                    if(result[idx].leave_company == "")
+                                        cc.push({name : result[idx].name, address: result[idx].email});
                                 }
                             }
                         }
