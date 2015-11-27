@@ -102,17 +102,22 @@ define([
                     'code': '취소완료',
                     'name': '취소승인'
                 });
+                arrGubunData.push({
+                    'code': '취소반려',
+                    'name': '반려'
+                });
             }
             else {
                 arrGubunData.push({
                     'code': '결재완료',
                     'name': '결재'
                 });
+                arrGubunData.push({
+                    'code': '반려',
+                    'name': '반려'
+                });
             }
-            arrGubunData.push({
-                'code': '반려',
-                'name': '반려'
-            });
+            
             arrGubunData.push({
                 'code': '보류',
                 'name': '보류'
@@ -272,8 +277,11 @@ define([
                 else { // 휴일 근무
                     promiseArr.push(this.delInOfficeData(_approvalCollection, this.options["doc_num"]));
                 }
-            }
-            else {
+            // }
+            // else if(formData.state == '반려'){
+            //     promiseArr.push(this.updateApprovalData(_approvalCollection));
+                
+            }else {
                 promiseArr.push(this.updateApprovalData(_approvalCollection));
             }
 
@@ -498,6 +506,7 @@ define([
 
             return dfd.promise();
         },
+
         updateApprovalData: function(_approvalCollection) {
             var dfd = new $.Deferred();
             var resultData = this.getFormData($(this.el).find('form'));

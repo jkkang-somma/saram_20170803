@@ -183,6 +183,12 @@
     </group>
     
     <group id="approval">
+    	<query id="rejectApprovalConfirm">
+    		update approval_tbl set 
+    			decide_comment = ?
+    			,state = "결재완료"
+			where doc_num=?
+    	</query>
         <query id="selectApprovalList">
         	select 
         		app.doc_num

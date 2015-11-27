@@ -50,7 +50,12 @@ var Approval = function (data) {
         return new Promise(function(resolve, reject){
 		    var queryArr = [];
 		    for(var idx in data.data){
-		        queryArr.push(ApprovalDao.updateApprovalConfirm(data.data[idx]));    
+		        var approvalItem = data.data[idx];
+		        if(approvalItem.state == "취소반려"){
+		            queryArr.push(ApprovalDao.rejectApprovalConfirm(approvalItem));
+		        }else{
+	                queryArr.push(ApprovalDao.updateApprovalConfirm(approvalItem));    
+		        }
 		    }
 		    
 		    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
@@ -109,7 +114,7 @@ var Approval = function (data) {
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company))
+                                    if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
                                         cc.push({name : result[idx].name, address: result[idx].email});
                                 }
                             }

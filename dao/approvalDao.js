@@ -19,6 +19,14 @@ ApprovalDao.prototype.selectApprovalByManager =  function (manager_id, startDate
     return db.query(group, "selectApprovalByManager", [manager_id,startDate,endDate,startDate,endDate]);
 };
 
+ApprovalDao.prototype.rejectApprovalConfirm =  function (data) {
+    return {
+        group : group,
+        item : "rejectApprovalConfirm",
+        data : [data.decide_comment, data.doc_num],
+    };
+};
+
 ApprovalDao.prototype.insertApproval =  function (data) {
     return db.query(group, "insertApproval",
         [ data.doc_num,data.submit_id,data.manager_id
