@@ -458,8 +458,13 @@ define([
                         this.inTimeType = 1;            
                         this.outTimeType = 1;            
                     case "W03": // 장기외근
-                        this.checkLate = false;
-                        this.checkEarly = false;
+                        if(!this.isSuwon){
+                            this.checkLate = false;
+                            this.checkEarly = false;
+                        }
+                        break;
+                    case "W04": // 외주개발
+                        
                         break;
                 }
                 
