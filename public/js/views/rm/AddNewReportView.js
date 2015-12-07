@@ -10,39 +10,49 @@ define([
     'code',
     'models/sm/SessionModel',
     'text!templates/report/addReportTemplate.html',
+    'collection/vacation/VacationCollection',
+    'collection/common/HolidayCollection',
     'collection/rm/ApprovalCollection',
     'collection/sm/UserCollection',
     'models/rm/ApprovalModel',
     'models/rm/ApprovalIndexModel',
-], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, Code, SessionModel, addReportTmp, ApprovalCollection, UserCollection, ApprovalModel, ApprovalIndexModel) {
+], function($, _, Backbone, animator, BaseView, Dialog, ComboBox, Moment, Code, SessionModel, addReportTmp, VacationCollection, HolidayCollection, ApprovalCollection, UserCollection, ApprovalModel, ApprovalIndexModel) {
     var addReportView = BaseView.extend({
-        options: {},
+        options: {
+            holidayInfos : [],
+            total_day : 0,
+            used_holiday : 0,
+        },
         events: {},
 
         initialize: function() {
             this.collection = new ApprovalCollection();
-
+            
             $(this.el).html('');
             $(this.el).empty();
+
 
             _.bindAll(this, "onClickBtnSend");
         },
 
         render: function(el) {
             var dfd = new $.Deferred();
-
+            var _this = this;
+            
             if (!_.isUndefined(el)) {
                 this.el = el;
             }
-
-            $(this.el).append(addReportTmp);
-
-            // title setting
-            this.setTitleTxt();
-            // default display setting
-            this.setAddReportDisplay();
-
-            dfd.resolve();
+            
+            this.setUserData(new Date()).then(function(){
+                $(_this.el).append(addReportTmp);
+    
+                // title setting
+                _this.setTitleTxt();
+                // default display setting
+                _this.setAddReportDisplay();                
+                
+                dfd.resolve();
+            });
 
             return dfd.promise();
         },
@@ -105,20 +115,28 @@ define([
                 format: "YYYY-MM-DD",
                 autoclose: true,
                 defaultDate: Moment(new Date()).format("YYYY-MM-DD")
+                // maxDate : Moment([new Date().getFullYear(), 11, 31]).format("YYYY-MM-DD")
             });
 
             this.beforeDate.change(function(val) {
                 var startDate = $(_this.el).find('#start_date input').val();
-                if (startDate.length > 8) {
-                    var selGubun = $(_this.el).find('#office_code');
-                    var selVal = selGubun.val();
-                    // _this.holReq = 0;
-                    if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
-                        var arrInsertDate = _this.getDatePariod();
-                        _this.holReq = arrInsertDate.length;
-                        $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+                var date = new Date(startDate);
+                _this.setUserData(date).then(function(){
+                    _this.setTableDisplay();
+                    if (startDate.length > 8) {
+                        var selGubun = $(_this.el).find('#office_code');
+                        var selVal = selGubun.val();
+                        // _this.holReq = 0;
+                        if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
+                            var arrInsertDate = _this.getDatePariod();
+                            _this.holReq = arrInsertDate.length;
+                            $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+                        }
+                        
                     }
-                }
+                    // var year = startDate.slice(0,4);
+                    // $(_this.afterDate).data("DateTimePicker").setMaxDate(Moment([year,12,31]));
+                });
             });
             this.afterDate.change(function(val) {
                 var endDate = $(_this.el).find('#end_date input').val();
@@ -192,7 +210,7 @@ define([
             ComboBox.createCombo(selGubun);
 
             if (arrGubunData.length > 0) {
-                if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03') {
+                if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03' || arrGubunData[0].code == 'W04') {
                     $(_this.el).find('#usableHolidayCon').hide();
                 }
             }
@@ -299,7 +317,7 @@ define([
             var compareVal = parseInt((end - start) / day);
             var arrInsertDate = [];
             var holidayInfos = this.options.holidayInfos;
-            if (compareVal > 0) {
+            if (compareVal >= 0) {
                 // 차이
                 for (var i = 0; i <= compareVal; i++) {
                     var dt = start.valueOf() + (i * day);
@@ -372,7 +390,19 @@ define([
             }
             return sZero + s;
         },
+        checkYear : function(formData){
+            var startDate = formData.start_date;
+            var endDate = formData.end_date;
 
+            var start = new Date(startDate);
+            var end = new Date(endDate);
+
+            if(start.getFullYear() != end.getFullYear()){
+                return false;
+            }
+            
+            return true;
+        },
         isDateCompare: function(formData) {
             var startDate = formData.start_date;
             var endDate = formData.end_date;
@@ -386,6 +416,7 @@ define([
 
             return true;
         },
+        
         isSelectHoliday: function() {
             var isHoli = false; // true: 쉬는 날, false : 평일
 
@@ -449,9 +480,12 @@ define([
 
             var usable = (this.options.total_day > this.options.used_holiday) ? this.options.total_day - this.options.used_holiday : 0;
             if (!this.isDateCompare(formData)) {
-                Dialog.error("기간을 잘못 입력하였습니다.");
+                Dialog.error("기간을 잘못 입력하였습니다. (시작일자 / 종료일자는 같은 연도에서만 가능합니다.)");
                 // this.thisDfd.reject();
                 return;
+            }else if(!this.checkYear(formData)){
+                Dialog.error("시작일자 / 종료일자는 같은 연도에서만 가능합니다.");
+                return; 
             }
             else if (!(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V05') && (this.holReq > usable)) {
                 Dialog.error("잔여 연차 일수를 초과 했습니다.");
@@ -526,7 +560,70 @@ define([
                 wait: false
             });
             return _this.thisDfd.promise();
-        }
+        },
+        
+        setUserData : function(date){
+            var dfd = new $.Deferred();
+            var promiseArr = [];
+            promiseArr.push(this.setVacationById(date));
+            promiseArr.push(this.setHolidayInfos(date));
+            Promise.all(promiseArr).then(function(){
+               dfd.resolve();
+            });
+            return dfd.promise();
+        },
+        
+        setVacationById: function(date) {
+            var dfd = new $.Deferred();
+            var _this = this;
+            var today = date;
+            var sYear = today.getFullYear() + "";
+            var sessionInfo = SessionModel.getUserInfo();
+            var _vacationColl = new VacationCollection();
+            _vacationColl.url = '/vacation/list';
+            _vacationColl.fetch({
+                data: {
+                    id: sessionInfo.id,
+                    year: sYear
+                },
+                error: function(result) {
+                    Dialog.error("데이터 조회가 실패했습니다.");
+                }
+            }).done(function(result) {
+                if (result.length > 0) {
+                    _this.options.total_day = result[0].total_day;
+                    _this.options.used_holiday = result[0].used_holiday;
+                }
+                dfd.resolve();
+            });
+            return dfd.promise();
+        },
+
+        setHolidayInfos: function(date) {
+            var dfd = new $.Deferred();
+            var _this = this;
+            var today = date;
+            var sYear = today.getFullYear() + "";
+
+            var _holiColl = new HolidayCollection();
+            _holiColl.fetch({
+                data: {
+                    year: sYear
+                },
+                error: function(result) {
+                    Dialog.error("데이터 조회가 실패했습니다.");
+                }
+            }).done(function(result) {
+                if (result.length > 0) {
+                    _this.options.holidayInfos = result;
+                }
+                else {
+                    _this.options.holidayInfos = [];
+                }
+                dfd.resolve();
+            });
+            return dfd.promise();
+        },
 
     });
     return addReportView;

@@ -367,7 +367,7 @@ define([
                     var model = todayOutOffice[i];
                     var code = model.get("office_code");
                     var VACATION_CODES = ["V01","V02","V03","V04","V05","V06","V07","V08"];
-                    var OUTOFFICE_CODES = ["W01","W02", "W03"];
+                    var OUTOFFICE_CODES = ["W01","W02", "W03", "W04"];
                     var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07"];
                     if(_.indexOf(VACATION_CODES, code) >= 0){
                         vacationArr.push(code);

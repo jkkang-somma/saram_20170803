@@ -27,7 +27,7 @@ define([
     var _reportListView = 0;
     var reportListView = BaseView.extend({
         el: $(".main-container"),
-        holidayInfos: [],
+        // holidayInfos: [],
 
         events: {
             "click #commuteManageTbl tbody tr": "onSelectRow",
@@ -43,9 +43,9 @@ define([
             this.collection = new ApprovalCollection();
 
             // 휴가
-            this.setVacationById();
+            // this.setVacationById();
             // 휴일
-            this.setHolidayInfos();
+            // this.setHolidayInfos();
 
             this.option = {
                 el: _id + "_content",
@@ -254,11 +254,11 @@ define([
                 click: function(_grid) {
                     // location.href = '#reportmanager/add';
                     var _addNewReportView = new AddNewReportView();
-                    var selectData = {};
-                    selectData.total_day = _this.total_day;
-                    selectData.used_holiday = _this.used_holiday;
-                    selectData.holidayInfos = _this.holidayInfos;
-                    _addNewReportView.options = selectData;
+                    // var selectData = {};
+                    // selectData.total_day = _this.total_day;
+                    // selectData.used_holiday = _this.used_holiday;
+                    // selectData.holidayInfos = _this.holidayInfos;
+                    // _addNewReportView.options = selectData;
                     Dialog.show({
                         title: "결재 상신",
                         content: _addNewReportView,
@@ -302,49 +302,52 @@ define([
             return _buttons;
         },
 
-        setVacationById: function() {
-            var _this = this;
-            var sessionInfo = SessionModel.getUserInfo();
-            var _vacationColl = new VacationCollection();
-            _vacationColl.url = '/vacation/list';
-            _vacationColl.fetch({
-                data: {
-                    id: sessionInfo.id
-                },
-                error: function(result) {
-                    Dialog.error("데이터 조회가 실패했습니다.");
-                }
-            }).done(function(result) {
-                if (result.length > 0) {
-                    _this.total_day = result[0].total_day;
-                    _this.used_holiday = result[0].used_holiday;
-                }
-            });
-        },
+        // setVacationById: function() {
+        //     var _this = this;
+        //     var today = new Date();
+        //     var sYear = today.getFullYear() + "";
+        //     var sessionInfo = SessionModel.getUserInfo();
+        //     var _vacationColl = new VacationCollection();
+        //     _vacationColl.url = '/vacation/list';
+        //     _vacationColl.fetch({
+        //         data: {
+        //             id: sessionInfo.id,
+        //             year: sYear
+        //         },
+        //         error: function(result) {
+        //             Dialog.error("데이터 조회가 실패했습니다.");
+        //         }
+        //     }).done(function(result) {
+        //         if (result.length > 0) {
+        //             _this.total_day = result[0].total_day;
+        //             _this.used_holiday = result[0].used_holiday;
+        //         }
+        //     });
+        // },
 
-        setHolidayInfos: function() {
-            var _this = this;
-            var today = new Date();
-            var sYear = today.getFullYear() + "";
+        // setHolidayInfos: function() {
+        //     var _this = this;
+        //     var today = new Date();
+        //     var sYear = today.getFullYear() + "";
 
-            var _holiColl = new HolidayCollection();
-            _holiColl.fetch({
-                data: {
-                    year: sYear
-                },
-                error: function(result) {
-                    Dialog.error("데이터 조회가 실패했습니다.");
-                }
-            }).done(function(result) {
-                if (result.length > 0) {
-                    _this.holidayInfos = result;
-                }
-                else {
-                    _this.holidayInfos = [];
-                }
-            });
+        //     var _holiColl = new HolidayCollection();
+        //     _holiColl.fetch({
+        //         data: {
+        //             year: sYear
+        //         },
+        //         error: function(result) {
+        //             Dialog.error("데이터 조회가 실패했습니다.");
+        //         }
+        //     }).done(function(result) {
+        //         if (result.length > 0) {
+        //             _this.holidayInfos = result;
+        //         }
+        //         else {
+        //             _this.holidayInfos = [];
+        //         }
+        //     });
 
-        },
+        // },
 
         getDateFormat: function(dateData) {
 
@@ -463,7 +466,7 @@ define([
             var _this = this;
             // var selectData=_this.grid.getSelectItem();
             if (Util.isNotNull(selectData)) {
-                selectData.holidayInfos = _this.holidayInfos;
+                // selectData.holidayInfos = _this.holidayInfos;
                 var sessionInfo = SessionModel.getUserInfo();
 
                 if (selectData.state == "상신" || selectData.state == "취소요청") {
@@ -547,7 +550,7 @@ define([
             var _this = this;
             // var selectData=_this.grid.getSelectItem();
             if (Util.isNotNull(selectData)) {
-                selectData.holidayInfos = _this.holidayInfos;
+                // selectData.holidayInfos = _this.holidayInfos;
                 var _detailReportView = new DetailReportView();
                 // data param 전달
                 _detailReportView.options = selectData;

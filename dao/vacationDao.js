@@ -15,8 +15,8 @@ VacationDao.prototype.selectVacatonCount =  function (year) {
 };
 
 // 연차 조회 - id 별 연차를 조회하기 위해
-VacationDao.prototype.selectVacatonById =  function (id) {
-    return db.query(group, "selectVacationsById", [id]);
+VacationDao.prototype.selectVacatonById =  function (data) {
+    return db.query(group, "selectVacationsById", [data.year, data.id]);
 };
 
 // vacation 1개 등록

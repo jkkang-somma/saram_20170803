@@ -155,7 +155,7 @@
         <query id="selectVacationsById">
 			SELECT total_day
 			, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl o WHERE year = v.year AND id=v.id), 0) used_holiday
-			FROM vacation_tbl v WHERE year = YEAR(NOW()) AND id=?
+			FROM vacation_tbl v WHERE year = ? AND id=?
         </query>
         
         <query id="insertVacation">

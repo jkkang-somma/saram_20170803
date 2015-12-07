@@ -9,9 +9,12 @@ define([
     'models/rm/ApprovalModel',
     'models/vacation/OutOfficeModel',
     'collection/rm/ApprovalCollection',
-], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalModel, OutOfficeModel, ApprovalCollection) {
+    'collection/common/HolidayCollection',
+], function($, _, Backbone, animator, BaseView, Dialog, addReportTmp, ApprovalModel, OutOfficeModel, ApprovalCollection, HolidayCollection) {
     var detailReportView = BaseView.extend({
-        options: {},
+        options: {
+            holidayInfos : [],
+        },
 
         events: {},
 
@@ -22,17 +25,21 @@ define([
 
         render: function(el) {
             var dfd = new $.Deferred();
-
+            var _this = this;
             if (!_.isUndefined(el)) {
                 this.el = el;
             }
-            $(this.el).append(addReportTmp);
-
-            // title setting
-            this.setTitleTxt();
-            // default display setting
-            this.setAddReportDisplay(this.options);
-            dfd.resolve();
+            
+            this.setHolidayInfos().then(function(){
+                $(_this.el).append(addReportTmp);
+    
+                // title setting
+                _this.setTitleTxt();
+                // default display setting
+                _this.setAddReportDisplay(_this.options);
+                dfd.resolve();    
+            });
+            
 
             return dfd.promise();
         },
@@ -259,8 +266,33 @@ define([
             return _this.thisDfd.promise();
 
             // // this.collection
-        }
+        },
 
+        setHolidayInfos: function() {
+            var dfd = new $.Deferred();
+            var _this = this;
+            var today = new Date(_this.options.start_date);
+            var sYear = today.getFullYear() + "";
+
+            var _holiColl = new HolidayCollection();
+            _holiColl.fetch({
+                data: {
+                    year: sYear
+                },
+                error: function(result) {
+                    Dialog.error("데이터 조회가 실패했습니다.");
+                }
+            }).done(function(result) {
+                if (result.length > 0) {
+                    _this.options.holidayInfos = result;
+                }
+                else {
+                    _this.options.holidayInfos = [];
+                }
+                dfd.resolve();
+            });
+            return dfd.promise();
+        },
     });
     return detailReportView;
 });

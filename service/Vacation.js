@@ -83,7 +83,7 @@ var Vacation = function() {
 	};
 	
 	var _getVacationById = function(data) {
-		return VacationDao.selectVacatonById(data.id);
+		return VacationDao.selectVacatonById(data);
 	};
 
 	var _setVacation = function(data) {
