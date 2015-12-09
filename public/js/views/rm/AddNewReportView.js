@@ -487,7 +487,7 @@ define([
                 Dialog.error("시작일자 / 종료일자는 같은 연도에서만 가능합니다.");
                 return; 
             }
-            else if (!(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V05') && (this.holReq > usable)) {
+            else if (!(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V05' || selVal == 'V04' || selVal == 'V06') && (this.holReq > usable)) {
                 Dialog.error("잔여 연차 일수를 초과 했습니다.");
                 // this.thisDfd.reject();
                 return;
