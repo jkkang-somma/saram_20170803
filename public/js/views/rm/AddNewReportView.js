@@ -564,11 +564,11 @@ define([
         
         setUserData : function(date){
             var dfd = new $.Deferred();
-            var promiseArr = [];
-            promiseArr.push(this.setVacationById(date));
-            promiseArr.push(this.setHolidayInfos(date));
-            Promise.all(promiseArr).then(function(){
-               dfd.resolve();
+            var p1 = this.setVacationById(date);
+            var p2 = this.setHolidayInfos(date);
+            
+            $.when(p1,p2).done(function(r1, r2){
+               dfd.resolve(); 
             });
             return dfd.promise();
         },
