@@ -241,7 +241,7 @@ define([
                 $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
 
                 // 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
-                if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
+                if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
                     $(_this.el).find('#usableHolidayCon').hide();
                 }
                 else {
@@ -249,7 +249,7 @@ define([
                 }
 
                 // 신청연차일수 감추기
-                if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
+                if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
                     $(_this.el).find('#usableHolidayCon').hide();
                 }
                 else {
@@ -487,7 +487,7 @@ define([
                 Dialog.error("시작일자 / 종료일자는 같은 연도에서만 가능합니다.");
                 return; 
             }
-            else if (!(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'V05' || selVal == 'V04' || selVal == 'V06') && (this.holReq > usable)) {
+            else if (!(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V05' || selVal == 'V04' || selVal == 'V06') && (this.holReq > usable)) {
                 Dialog.error("잔여 연차 일수를 초과 했습니다.");
                 // this.thisDfd.reject();
                 return;
