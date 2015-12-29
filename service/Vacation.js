@@ -32,7 +32,7 @@ var db = require('../lib/dbmanager.js');
  *  => 15 + ( rounddwon( A-1 ) / 2 ) 
  *
  */
-var getHoliday = function(userId, joinDate) {
+var getHoliday = function(userId, joinDate, year) {
 	if(_.isNull(joinDate) || _.isUndefined(joinDate) || joinDate==""){
 		return 0;
 	}
@@ -40,8 +40,8 @@ var getHoliday = function(userId, joinDate) {
 		joinYear = parseInt( joinDateArr[0]),
 		joinMonth = parseInt( joinDateArr[1]),
 		joinDay = parseInt( joinDateArr[2]),
-		nowYear = new Date().getFullYear(),
-		nowMonth = (new Date().getMonth() +1),
+		nowYear = year,
+		// nowMonth = (new Date().getMonth() +1),
 		diffYear = nowYear -  joinYear,
 		holiday = 0;
 	
@@ -50,7 +50,7 @@ var getHoliday = function(userId, joinDate) {
 	}
 		
 	if ( diffYear == 0) {
-		return nowMonth - joinMonth;
+		return 0;
 		
 	} else if (diffYear == 1) {
 		var a = ( joinMonth + (15 / 12 * (12-joinMonth)) ).toString();
@@ -103,7 +103,7 @@ var Vacation = function() {
     				datas.push({
     						id : (result[i].id),
     						year : data.year,
-    						total_day : getHoliday(result[i].id, result[i].join_company)
+    						total_day : getHoliday(result[i].id, result[i].join_company, data.year)
     				});
     			}
     			
