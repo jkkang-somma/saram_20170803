@@ -153,9 +153,15 @@
 			SELECT count(*) count FROM vacation_tbl WHERE year = ?
         </query>
         <query id="selectVacationsById">
-			SELECT total_day
-			, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl o WHERE year = v.year AND id=v.id), 0) used_holiday
-			FROM vacation_tbl v WHERE year = ? AND id=?
+			SELECT 
+				total_day, 
+				IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl o WHERE year = v.year AND id=v.id), 0) used_holiday,
+				IFNULL((SELECT sum(day_count) approval_count FROM approval_tbl a WHERE year(start_date) = v.year AND submit_id=v.id AND state="상신"), 0) approval_count
+			FROM 
+				vacation_tbl v 
+			WHERE 
+				year = ? 
+				AND id=?
         </query>
         
         <query id="insertVacation">

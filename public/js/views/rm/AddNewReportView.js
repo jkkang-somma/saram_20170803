@@ -22,6 +22,7 @@ define([
             holidayInfos : [],
             total_day : 0,
             used_holiday : 0,
+            approval_count : 0,
         },
         events: {},
 
@@ -86,8 +87,10 @@ define([
             // 잔여 연차 일수 
             var usable = "0";
             if (this.options.total_day != undefined) {
-                usable = (this.options.total_day > this.options.used_holiday) ? this.options.total_day - this.options.used_holiday : 0;
+                //usable = (this.options.total_day > this.options.used_holiday) ? this.options.total_day - this.options.used_holiday : 0;
+                usable = this.options.total_day - this.options.used_holiday - this.options.approval_count;
             }
+            
             $(this.el).find('#usableHoliday').val(usable + " 일");
         },
 
@@ -478,7 +481,8 @@ define([
                 }
             }
 
-            var usable = (this.options.total_day > this.options.used_holiday) ? this.options.total_day - this.options.used_holiday : 0;
+            // var usable = (this.options.total_day > this.options.used_holiday) ? this.options.total_day - this.options.used_holiday : 0;
+            var usable = this.options.total_day - this.options.used_holiday - this.options.approval_count;
             if (!this.isDateCompare(formData)) {
                 Dialog.error("기간을 잘못 입력하였습니다. (시작일자 / 종료일자는 같은 연도에서만 가능합니다.)");
                 // this.thisDfd.reject();
@@ -593,6 +597,7 @@ define([
                 if (result.length > 0) {
                     _this.options.total_day = result[0].total_day;
                     _this.options.used_holiday = result[0].used_holiday;
+                    _this.options.approval_count = result[0].approval_count;
                 }
                 dfd.resolve();
             });
