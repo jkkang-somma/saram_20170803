@@ -156,12 +156,18 @@ define([
                 "title": "근태기간",
                 "render": function(data, type, row) {
                     var dataVal = "";
-                    if (row.day_count != null && row.day_count > 1) {
+                    
+                    if(row.start_date == row.end_date && row.day_count != null){
+                        dataVal = row.start_date;
+                    }else{
                         dataVal = row.start_date + "</br>~ " + row.end_date;
                     }
-                    else {
-                        dataVal = row.start_date;
-                    }
+                    // if (row.day_count != null && row.day_count > 1) {
+                    //     dataVal = row.start_date + "</br>~ " + row.end_date;
+                    // }
+                    // else {
+                    //     dataVal = row.start_date;
+                    // }
 
                     return dataVal;
                 }
