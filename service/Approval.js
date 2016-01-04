@@ -111,7 +111,7 @@ var Approval = function (data) {
                     
                     ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
                         var cc = [];
-                        if(data.dept_code != "5100" && data.dept_code != "5200"){
+                        if(data.dept_code != "5100" && data.dept_code != "5200" && data.dept_code !="5400"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
                                     if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
