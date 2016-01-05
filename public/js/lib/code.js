@@ -55,7 +55,8 @@ define([
             if(_.isNull(destCollection)){
                 return null;
             }
-            return destCollection.toJSON();
+            var result =  _.sortBy(destCollection.toJSON(), "code");
+            return result;
         },
         isSuwonWorker : function(code) {	// 수원 근로자 여부 체크
         	var obj = _getCollection(this.DEPARTMENT).where({code: code});
