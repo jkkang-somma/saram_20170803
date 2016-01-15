@@ -153,9 +153,15 @@
 			SELECT count(*) count FROM vacation_tbl WHERE year = ?
         </query>
         <query id="selectVacationsById">
-			SELECT total_day
-			, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl o WHERE year = v.year AND id=v.id), 0) used_holiday
-			FROM vacation_tbl v WHERE year = YEAR(NOW()) AND id=?
+			SELECT 
+				total_day, 
+				IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl o WHERE year = v.year AND id=v.id), 0) used_holiday,
+				IFNULL((SELECT sum(day_count) approval_count FROM approval_tbl a WHERE year(start_date) = v.year AND submit_id=v.id AND state="상신"), 0) approval_count
+			FROM 
+				vacation_tbl v 
+			WHERE 
+				year = ? 
+				AND id=?
         </query>
         
         <query id="insertVacation">
@@ -183,6 +189,12 @@
     </group>
     
     <group id="approval">
+    	<query id="rejectApprovalConfirm">
+    		update approval_tbl set 
+    			decide_comment = ?
+    			,state = "결재완료"
+			where doc_num=?
+    	</query>
         <query id="selectApprovalList">
         	select 
         		app.doc_num
@@ -287,11 +299,22 @@
     	<query id="getApprovalMailingList">
     		SELECT
 				name,
-				email
+				email,
+				leave_company
 			FROM
 				members_tbl
 			WHERE
 				dept_code = ?
+    	</query>
+    	
+    	<query id="getManagerId">
+    		SELECT
+				name,
+				email
+			FROM
+				members_tbl
+			WHERE
+				id = ?
     	</query>
 	</group>
 	
@@ -467,7 +490,7 @@
 				work_type,
 				out_office_code,
 				overtime_code,
-				vacation_code
+				vacation_code,
 				in_time_type,
 				out_time_type,
 				out_office_end_time,
@@ -919,14 +942,20 @@
     	
     	<query id="selectOverTimeWorkeReport">
 			SELECT 
-				m.dept_code, m.position, m.name, m.id,
-				IFNULL( SUBSTRING( SEC_TO_TIME( t2.1 *60), 1, 5), '') AS '1', IFNULL(SUBSTRING( SEC_TO_TIME( t2.2 *60), 1, 5), '') AS '2', 
-                IFNULL(SUBSTRING( SEC_TO_TIME( t2.3 *60), 1, 5), '') AS '3', IFNULL(SUBSTRING( SEC_TO_TIME( t2.4 *60), 1, 5), '') AS '4', 
-                IFNULL(SUBSTRING( SEC_TO_TIME( t2.5 *60), 1, 5), '') AS '5', IFNULL(SUBSTRING( SEC_TO_TIME( t2.6 *60), 1, 5), '') AS '6',
-                IFNULL(SUBSTRING( SEC_TO_TIME( t2.7 *60), 1, 5), '') AS '7', IFNULL(SUBSTRING( SEC_TO_TIME( t2.8 *60), 1, 5), '') AS '8', 
-                IFNULL(SUBSTRING( SEC_TO_TIME( t2.9 *60), 1, 5), '') AS '9', IFNULL(SUBSTRING( SEC_TO_TIME( t2.10 *60), 1, 5), '') AS '10', 
-                IFNULL(SUBSTRING( SEC_TO_TIME( t2.11 *60), 1, 5), '') AS '11', IFNULL(SUBSTRING( SEC_TO_TIME( t2.12 *60), 1, 5), '') AS '12',
-                IFNULL(SUBSTRING( SEC_TO_TIME( t2.total *60), 1, 5), '') AS total
+					m.dept_code, m.position, m.name, m.id,
+					if(isnull(t2.1) , '', concat(round(t2.1/60),":",round(t2.1%60))) as '1',
+					if(isnull(t2.2) , '', concat(round(t2.2/60),":",round(t2.2%60))) as '2',
+					if(isnull(t2.3) , '', concat(round(t2.3/60),":",round(t2.3%60))) as '3',
+					if(isnull(t2.4) , '', concat(round(t2.4/60),":",round(t2.4%60))) as '4',
+					if(isnull(t2.5) , '', concat(round(t2.5/60),":",round(t2.5%60))) as '5',
+					if(isnull(t2.6) , '', concat(round(t2.6/60),":",round(t2.6%60))) as '6',
+					if(isnull(t2.7) , '', concat(round(t2.7/60),":",round(t2.7%60))) as '7',
+					if(isnull(t2.8) , '', concat(round(t2.8/60),":",round(t2.8%60))) as '8',
+					if(isnull(t2.9) , '', concat(round(t2.9/60),":",round(t2.9%60))) as '9',
+					if(isnull(t2.10) , '', concat(round(t2.10/60),":",round(t2.10%60))) as '10',
+					if(isnull(t2.11) , '', concat(round(t2.11/60),":",round(t2.11%60))) as '11',
+					if(isnull(t2.12) , '', concat(round(t2.12/60),":",round(t2.12%60))) as '12',
+					if(isnull(t2.total) , '', concat(round(t2.total/60),":",round(t2.total%60))) as 'total'
 			FROM
 					members_tbl m
 			        LEFT JOIN (

@@ -13,6 +13,9 @@
     "find.nak": {
         "@searchLimit": 100
     },
+    "general": {
+        "@stripws": false
+    },
     "language": {
         "@eslintrc": "true",
         "@instanceHighlight": "true",
@@ -20,6 +23,10 @@
         "@undeclaredVars": "true",
         "@unusedFunctionArgs": "false",
         "@warnLevel": "info"
+    },
+    "python": {
+        "@path": "/usr/local/lib/python2.7/dist-packages:/usr/local/lib/python3.4/dist-packages",
+        "@version": "python2"
     },
     "run": {
         "@path": "/.c9/runners",

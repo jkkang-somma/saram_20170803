@@ -100,6 +100,9 @@ form .form-group:last-child {
     .form-text-harf label.checkbox-inline {
         width : 0%;
     }
+    .float_right {
+        float : right;
+    }
 }
 @media (max-width: 399px) {
     .form-group-harf {
@@ -111,6 +114,9 @@ form .form-group:last-child {
         width: 100%;
         float: none;
         padding-left: none;
+    }
+    .float_right {
+        float : left;
     }
 }
 

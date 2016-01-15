@@ -20,7 +20,9 @@ var OutOffice = function (data) {
 		        queryArr.push(ApprovalDao.updateApprovalConfirm(data.approval[idx]));    
 		    }
             if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-	            queryArr.push(CommuteDao.updateCommute_t(data.commute));    
+            	for(var idx in data.commute){
+	            	queryArr.push(CommuteDao.updateCommute_t(data.commute[idx]));    
+            	}
 		    }
 		    db.queryTransaction(queryArr).then(function(resultArr){
 		    	resolve(resultArr);

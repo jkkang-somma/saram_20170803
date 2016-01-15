@@ -32,13 +32,16 @@ var db = require('../lib/dbmanager.js');
  *  => 15 + ( rounddwon( A-1 ) / 2 ) 
  *
  */
-var getHoliday = function(userId, joinDate) {
+var getHoliday = function(userId, joinDate, year) {
+	if(_.isNull(joinDate) || _.isUndefined(joinDate) || joinDate==""){
+		return 0;
+	}
 	var joinDateArr = joinDate.split("-"),
 		joinYear = parseInt( joinDateArr[0]),
 		joinMonth = parseInt( joinDateArr[1]),
 		joinDay = parseInt( joinDateArr[2]),
-		nowYear = new Date().getFullYear(),
-		nowMonth = (new Date().getMonth() +1),
+		nowYear = year,
+		// nowMonth = (new Date().getMonth() +1),
 		diffYear = nowYear -  joinYear,
 		holiday = 0;
 	
@@ -47,7 +50,7 @@ var getHoliday = function(userId, joinDate) {
 	}
 		
 	if ( diffYear == 0) {
-		return nowMonth - joinMonth;
+		return 0;
 		
 	} else if (diffYear == 1) {
 		var a = ( joinMonth + (15 / 12 * (12-joinMonth)) ).toString();
@@ -80,14 +83,13 @@ var Vacation = function() {
 	};
 	
 	var _getVacationById = function(data) {
-		return VacationDao.selectVacatonById(data.id);
+		return VacationDao.selectVacatonById(data);
 	};
 
 	var _setVacation = function(data) {
         return new Promise(function(resolve, reject){// promise patten
     		UserDao.selectUserList().then(function(result) {
-    			var datas = [],
-    				obj = {};
+    			var datas = [];
     			
     			for (var i = 0, len = result.length; i < len; i++) {    				
     				if (result[i].leave_company != "" && result[i].leave_company != null) {	// 퇴사일이 있는 경우 연차 생성하지 않음 
@@ -98,12 +100,11 @@ var Vacation = function() {
     					continue;
     				}    				
     				
-    				obj = {
+    				datas.push({
     						id : (result[i].id),
     						year : data.year,
-    						total_day : getHoliday(result[i].id, result[i].join_company)
-    				};
-    				datas.push(obj);
+    						total_day : getHoliday(result[i].id, result[i].join_company, data.year)
+    				});
     			}
     			
 				var queryArr = [];
@@ -112,14 +113,10 @@ var Vacation = function() {
 				}
 				
 				db.queryTransaction(queryArr).then(function(resultArr){
-					var successCount = _.filter(resultArr,function(result){
-						return result[0].affectedRows > 0;
-					});
-					
 					var result = {
-						totalCount : resultArr.length,
-						successCount : successCount.length,
-						failCount : resultArr.length - successCount.length,
+						totalCount : queryArr.length,
+						successCount : queryArr.length,
+						failCount : 0
 					};
 				    resolve(result);
 				}, function(err){

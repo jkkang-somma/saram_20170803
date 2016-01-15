@@ -115,43 +115,75 @@ define([
     	    var _result=$('<div></div>');
     	    var _subTable=$('<table class="subTable" cellpadding="5" cellspacing="0" border="0" ></table>');
     	    
-    	    for (var name in rowData){
-    	        var index=_.indexOf(this.dataschema, name);
-    	        if (-1 < index){
-    	            var _column=this.column[index];
-    	            var _value;
-    	            if (_.isObject(_column)){
-    	                if (!_.isUndefined(_column.render)){
-    	                    _value=_column.render({},{},rowData);
-    	                } else {
-    	                    _value=rowData[name];
-    	                }
-    	                _column=_column.title;
-    	            }   else {
-	                    _value=rowData[name];
-	                }
-	                
-                    if(_.isNull(_value) || _value=="null"){
-                        _value ="";
-                    }
-    	            
-    	            
-    	            if ((_.isObject(this.column[index])&&this.column[index].subVisible==false)||_value==""){//sub detail visible
-    	                
-    	            } else {
-        	            _subTable.append(
-            	            '<tr>'
-            	                +'<td>'+_column+'</td>'
-                                +'<td>'+_value+'</td>'
-                            +'</tr>'
-            	        );
-    	            }
-    	        }
+    	    
+    	    for(var idx in this.column){
+    	        var _column = this.column[idx];
+    	        var _value;
     	        
+    	        if (!(_column.subVisible==false) && !(_column.visible==false)){
+        	        if(!_.isUndefined(_column.render)){
+        	            if(!_.isUndefined(_column.data)){
+        	                _value = _column.render(rowData[_column.data],{},rowData);
+        	            }else{
+        	                _value = _column.render({},{},rowData);
+        	            }
+        	        }else if(!_.isUndefined(_column.data)){
+    	                _value = rowData[_column.data];
+        	        }
+        	        if(_.isNull(_value) || _value=="null")
+                        _value ="";
+                        
+        	        _column = _column.title;
+        	        _subTable.append(
+        	            '<tr>'
+        	                +'<td>'+_column+'</td>'
+                            +'<td>'+_value+'</td>'
+                        +'</tr>'
+        	        );
+    	        }
     	    }
+    	    
     	    _result.append(_subTable);
     	    
             return _result.html();
+    	   // for (var name in rowData){
+    	        
+    	        
+    	      
+    	       // var index=_.indexOf(this.dataschema, name);
+    	       // if (-1 < index){
+    	       //     var _column=this.column[index];
+    	       //     var _value;
+    	       //     if (_.isObject(_column)){
+    	       //         if (!_.isUndefined(_column.render)){
+    	       //             _value=_column.render({},{},rowData);
+    	       //         } else {
+    	       //             _value=rowData[name];
+    	       //         }
+    	       //         _column=_column.title;
+    	       //     }   else {
+	           //         _value=rowData[name];
+	           //     }
+	                
+            //         if(_.isNull(_value) || _value=="null"){
+            //             _value ="";
+            //         }
+    	            
+    	            
+    	       //     if ((_.isObject(this.column[index])&&this.column[index].subVisible==false)||_value==""){//sub detail visible
+    	                
+    	       //     } else {
+        	   //         _subTable.append(
+            // 	            '<tr>'
+            // 	                +'<td>'+_column+'</td>'
+            //                     +'<td>'+_value+'</td>'
+            //                 +'</tr>'
+            // 	        );
+    	       //     }
+    	       // }
+    	        
+    	   // }
+    	    
         },
         getRowByFunction:function(validateFunction){
             return this.DataTableAPI.row(validateFunction);

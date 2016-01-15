@@ -12,11 +12,12 @@ define([
   'models/sm/SessionModel',
   'models/common/RawDataModel',
   'views/sm/ConfigUserView',
-  'views/AdminSettingView'
+  'views/AdminSettingView',
+  'views/DocumentView'
 ], function($, _, Backbone, animator,Dialog, i18Common, 
 		BaseView, navigation, Menu, Code,
 		SessionModel, RawDataModel,
-		ConfigUserView, AdminSettingView
+		ConfigUserView, AdminSettingView, DocumentView
 ){
   
   var NavigationView = BaseView.extend({
@@ -73,13 +74,16 @@ define([
         }
         $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);
         animator.animate(this.el, animator.FADE_IN_DOWN);
+        
+        $("#document").html('<span class="glyphicon glyphicon-file"></span>  양식');
     },
     events: {
 		'click #logout': 'logout',
 		'click #userConifg' :'userConifg',
 		'click #accessIn' : 'accessIn',
 		'click #accessOut' : 'accessOut',
-		'click #setting' : 'setting'
+		'click #setting' : 'setting',
+		'click #document' : 'document'
     },
     show:function(){
       var _view=this;
@@ -203,7 +207,22 @@ define([
             }]
             
         });
+	},
+	
+	document:function(){
+	    var documentView=new DocumentView();
+	    Dialog.show({
+	        title:"주요 양식 다운로드",
+	        content:documentView,
+	        buttons:[{
+	            label: i18Common.DIALOG.BUTTON.CLOSE,
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+	        }]
+	    });
 	}
+	
   });
   return NavigationView;
 });

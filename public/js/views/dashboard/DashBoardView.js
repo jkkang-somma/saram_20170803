@@ -48,6 +48,7 @@ define([
             _defaultData.id=SessionModel.getUserInfo().id;
             _defaultData.name=SessionModel.getUserInfo().name;
             
+            
             var _startDate=Moment().startOf('month').format("YYYY-MM-DD");
             var _endDate=Moment().endOf('month').format("YYYY-MM-DD");
             var _searchParams={
@@ -76,9 +77,11 @@ define([
     	},
     	render:function(){
     	    var _view=this;
+    	    
     	    this.getWorkingSummary(_view.searchParams).done(function(workingSummary){
+    	        var code = SessionModel.getUserInfo().dept_code;
     	        if (workingSummary.length==0){// 조회내역이 없을때
-    	            if (_firstInitialize){
+    	            if (_firstInitialize && code!='0000'){
     	                var _startDate=Moment().add(-1, 'month').startOf('month').format("YYYY-MM-DD");
                         var _endDate=Moment().add(-1, 'month').endOf('month').format("YYYY-MM-DD");
                         var _searchParams={
