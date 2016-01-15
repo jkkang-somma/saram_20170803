@@ -26,7 +26,10 @@ define([
 	        key : "/doc/직원대출계약서.doc"
         }, {
             value : "출장비 정산 신청서",
-	        key : "/doc/출장비 정산 신청서.xlsx"
+	        key : "/doc/출장비정산신청서.xlsx"
+        }, {
+            value : "출퇴근기록 수정 요청서",
+            key : "/doc/출퇴근기록수정요청서.xlsx"
         } 
     ];
 	return doc;
