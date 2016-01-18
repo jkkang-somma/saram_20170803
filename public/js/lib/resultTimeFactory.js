@@ -651,20 +651,25 @@ define([
                     /**
                      * 지각조퇴, 지각, 조퇴 설정
                      **/
-                    if (this.lateTime > 0 && tmpTime > 0){
-                        this.workType = WORKTYPE.EARLY_LATE;
-                        
-                    } else if (this.lateTime > 0) {
+                    if(this.lateTime > 0){
                         this.workType = WORKTYPE.LATE;
-                        
-                    } else if (tmpTime > 0){
+                    }else{
+                        this.lateTime = 0;
+                    }
+                    
+                    if(tmpTime > 0){
                         /**
                          * 조퇴일때
                          *  퇴근시간이 13:20분 이전 > 퇴근시간 없음
                          *  퇴근시간이 13:20분 이후 > 조퇴
                          * 오후반차이면서 조퇴일때 - 조퇴로 표시
                          **/
-                        this.workType = WORKTYPE.EARLY;
+                        if(this.workType == WORKTYPE.LATE){
+                            this.workType = WORKTYPE.EARLY_LATE;
+                        } else {
+                            this.workType = WORKTYPE.EARLY;
+                        }
+                        
                         var standardTime = Moment(this.date).hour(12).minute(20).second(00);
                         if(this.outTime && _.isNull(this.vacationCode)){
                             if(this.outTime.isBefore(standardTime)){
@@ -673,7 +678,10 @@ define([
                             }
                         }
                         
+                    }else{
+                        tmpTime = 0;
                     }
+                    
                     /**
                      * 초과근무 계산
                      *  지각시간 10분단위 반올림하여 추가로 근무해야함
@@ -685,7 +693,7 @@ define([
                     if(!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))){
                         this.lateOverTime = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간
                                                                 
-                        if(tmpTime >= 0) { 
+                        if(tmpTime > 0) { 
                             this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateOverTime;
                             if((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0){  // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
                                 if(this.overTime >= 360){
