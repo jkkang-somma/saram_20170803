@@ -556,15 +556,23 @@ define([
                  * 파견
                  *  변경 없음
                  **/
+                
                 switch(this.outOfficeCode){
                     case "W01": // 외근
                         if(!this.isSuwon){
-                            var startTime = Moment(model.get("start_time"), "HH:mm");
-                            var endTime = Moment(model.get("end_time"), "HH:mm");
-                            if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
-                                this.checkLate = false;
-                            if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
-                                this.checkEarly = false;
+                            for (var i = 0; i <todayOutOffice.length; i++){
+                                model = todayOutOffice[i];
+                                code = model.get("office_code");
+                                if(code == this.outOfficeCode){
+                                    var startTime = Moment(model.get("start_time"), "HH:mm");
+                                    var endTime = Moment(model.get("end_time"), "HH:mm");
+                                    if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
+                                        this.checkLate = false;
+                                    if(endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
+                                        this.checkEarly = false;
+                                    break;
+                                }
+                            }
                         }
                         break;
                     case "W02": // 출장
@@ -572,6 +580,7 @@ define([
                         this.outTimeType = 1;            
                         this.checkLate = false;
                         this.checkEarly = false;
+                        break;
                     case "W03": // 장기외근
                         if(!this.isSuwon){
                             this.checkLate = false;
@@ -642,15 +651,29 @@ define([
                     /**
                      * 지각조퇴, 지각, 조퇴 설정
                      **/
-                    if (this.lateTime > 0 && tmpTime > 0)
+                    if (this.lateTime > 0 && tmpTime > 0){
                         this.workType = WORKTYPE.EARLY_LATE;
                         
-                    else if (this.lateTime > 0)
+                    } else if (this.lateTime > 0) {
                         this.workType = WORKTYPE.LATE;
                         
-                    else if (tmpTime > 0)
+                    } else if (tmpTime > 0){
+                        /**
+                         * 조퇴일때
+                         *  퇴근시간이 13:20분 이전 > 퇴근시간 없음
+                         *  퇴근시간이 13:20분 이후 > 조퇴
+                         * 오후반차이면서 조퇴일때 - 조퇴로 표시
+                         **/
                         this.workType = WORKTYPE.EARLY;
-                    
+                        var standardTime = Moment(this.date).hour(12).minute(20).second(00);
+                        if(this.outTime && _.isNull(this.vacationCode)){
+                            if(this.outTime.isBefore(standardTime)){
+                                this.outTime = null;
+                                this.workType.WORKTYPE.NOTOUTTIME;
+                            }
+                        }
+                        
+                    }
                     /**
                      * 초과근무 계산
                      *  지각시간 10분단위 반올림하여 추가로 근무해야함
