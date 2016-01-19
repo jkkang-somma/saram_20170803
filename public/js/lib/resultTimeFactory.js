@@ -657,12 +657,12 @@ define([
                         this.lateTime = 0;
                     }
                     
-                    if(tmpTime > 0){
+                    if(tmpTime < 0){
                         /**
                          * 조퇴일때
                          *  퇴근시간이 13:20분 이전 > 퇴근시간 없음
                          *  퇴근시간이 13:20분 이후 > 조퇴
-                         * 오후반차이면서 조퇴일때 - 조퇴로 표시
+                         * 오후반차이면서 조퇴일때 - 조���로 표시
                          **/
                         if(this.workType == WORKTYPE.LATE){
                             this.workType = WORKTYPE.EARLY_LATE;
@@ -678,8 +678,6 @@ define([
                             }
                         }
                         
-                    }else{
-                        tmpTime = 0;
                     }
                     
                     /**
