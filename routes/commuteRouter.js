@@ -78,6 +78,23 @@ router.route('/lastiestdate')
 	});
 });
 
+router.route('/today')
+.get(function(req, res){
+	debug("TODAY!!!!!!" + req);
+	if(!_.isUndefined(req.query.startDate) && !_.isUndefined(req.query.endDate)){
+		Commute.getCommuteToday(req.query).then(function(result){
+			res.send(result);
+		});
+	}else{
+		debug('Error CommuteTdoay : date is undefined');
+		res.status(500);
+    	res.send({
+            success:false,
+            message: "Internal Error ( date is undefined )",
+        });
+	}
+});
+
 router.route('/:id')
 .get(function(req, res){
 }).post(function(req, res){

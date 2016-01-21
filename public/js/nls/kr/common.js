@@ -146,7 +146,8 @@ define({
                 CREATE_DATA:"근태 자료 생성",
                 COMMUTE_MANAGER:"근태 자료 조회",
                 COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
-                REPORT_MANAGER:"근태 결재 관리"
+                REPORT_MANAGER:"근태 결재 관리",
+                COMMUTE_TODAY:"오늘의 근태상황"
             }
         }
     },
@@ -479,6 +480,21 @@ define({
             BUTTON : {
                 CANCEL : "취소",
             },
+        }
+    },
+    
+	COMMUTE_TODAY_LIST : {
+        TITLE : "근태 관리",
+        SUB_TITLE : "오늘의 근태 상황",
+        SEARCH_BTN : "조회",
+        GRID_COL_NAME : {
+            DATE : "날짜",
+            NAME: "이름",
+            DEPARTMENT: "부서",
+            OUT_OFFICE: "외근/휴가<br>정보",
+            START_TIME: "시작<br>시간",
+            END_TIME: "종료<br>시간",
+            MEMO: "비고"
         }
     }
 });

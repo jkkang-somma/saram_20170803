@@ -57,13 +57,18 @@ var Commute = function() {
 		return CommuteDao.getLastiestDate();
 	};
 	
+	var _getCommuteToday = function(date){
+		return CommuteDao.selectCommuteToday(date);
+	};
+	
 	return {
 		getCommute : _getCommute,
 		updateCommute : _updateCommute,
 		insertCommute : _insertCommute,
 		getCommuteDate : _getCommuteDate,
 		getCommuteByID: _getCommuteByID,
-		getLastiestDate : _getLastiestDate
+		getLastiestDate : _getLastiestDate,
+		getCommuteToday : _getCommuteToday
 	};
 };
 
