@@ -4,7 +4,7 @@ var debug = require('debug')('SARAM');
 var app = require('./app');
 // var schedule = require('node-schedule');
 // var batch = require('./batch/batch');
-
+//test
 //app.set('port', process.env.PORT);
 // app.set('port', 8002);
  app.set('port', 8001);
