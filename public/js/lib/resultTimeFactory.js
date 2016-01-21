@@ -674,7 +674,7 @@ define([
                         if(this.outTime && _.isNull(this.vacationCode)){
                             if(this.outTime.isBefore(standardTime)){
                                 this.outTime = null;
-                                this.workType.WORKTYPE.NOTOUTTIME;
+                                this.workType = WORKTYPE.NOTOUTTIME;
                             }
                         }
                         
