@@ -559,7 +559,7 @@
         	SELECT 
 				oot.id as id, oot.date as date, mem.name as name, dept.name as dept_name, oct.name as out_office_name, oot.start_time as start_time, oot.end_time as end_time, oot.memo as memo
 			FROM 
-				commute.out_office_tbl oot, members_tbl mem, dept_code_tbl dept, office_code_tbl oct
+				out_office_tbl oot, members_tbl mem, dept_code_tbl dept, office_code_tbl oct
 			WHERE
 				oot.date BETWEEN ? AND ? AND
     			oot.id = mem.id AND
