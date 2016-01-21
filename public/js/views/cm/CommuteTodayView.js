@@ -32,15 +32,15 @@ define([
         		    id:"commuteDataTable",
         		    column:[
      	                   	{ data : "date",            "title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.DATE },
-                            { data : "name", 			"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.NAME },
      	                   	{ data : "dept_name", 		"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.DEPARTMENT },
+                            { data : "name",            "title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.NAME },
      	                   	{ data : "out_office_name", "title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.OUT_OFFICE },
      	                   	{ data : "start_time", 		"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.START_TIME },
      	                   	{ data : "end_time", 		"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.END_TIME },
      	                   	{ data : "memo", 			"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.MEMO, 
                                render: function(data, type, full, meta) {
                                        var memo = full.memo; 
-                                       if (memo.length > 14) {
+                                       if (memo.length > 16) {
                                           memo = memo.substring(0, 16) + "...";
                                        }
                                        return memo;
@@ -57,7 +57,7 @@ define([
         		    dataschema:["id", "date", "name", "dept_name", "out_office_name", "start_time", "end_time", "memo"],
         		    detail: true,
         		    fetch: false,
-        		    order : [[1, "asc"],[2, "asc"]]
+        		    order : [[1, "asc"],[2, "asc"],[3, "asc"]]
         	};    		
     		this.buttonInit();
     	},
