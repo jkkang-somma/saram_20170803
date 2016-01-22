@@ -456,6 +456,80 @@ define([
     	        _grid._filtering();
             })
     	},
+        _createMyDeptRecordButton:function(obj){
+            var _grid=this;
+            var filterBtnText=["부서","전체"];
+            var userDeptName=SessionModel.getUserInfo().dept_name;
+            var filter=[
+                function(data){
+                    var filterColumns=obj.filterColumn;
+                    var configColumns=_grid.options.column;
+                    var configColumnsNameArr=_.pluck(configColumns, "data");
+                    
+                    for (var index in filterColumns){
+                        var columnName=filterColumns[index];
+                        var findIndex=_.indexOf(configColumnsNameArr, columnName)+1;
+                        
+                        var value=data[findIndex];
+                       // if (configColumns[_.indexOf(configColumnsNameArr, columnName)].render){
+                       //     value=data[findIndex];
+                       // } else {
+                       //     configColumns[_.indexOf(configColumnsNameArr, columnName)].render();
+                       // }
+                        
+                        var nameIndex=value.indexOf(userDeptName);
+                        
+                        if (nameIndex>=0){
+                            return true;
+                        }
+                    }
+                    return false;
+                },
+                function(){
+                    return true;
+                }
+            ];
+
+            var _buttonIcon;
+            if(SessionModel.getUserInfo().id == "130702" || SessionModel.getUserInfo().dept_name == "임원"){
+                _buttonIcon=$(_defaultBtnText).html(filterBtnText[1]);
+            }else{
+                _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
+            }
+            
+            var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+            this.buttonid[obj.name] = _btnId;
+            
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:"검색 대상"}));
+            
+            _button.attr("id", _btnId);
+            _button.append(_buttonIcon);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
+            
+            //filter 설정
+            if(SessionModel.getUserInfo().id == "130702" || SessionModel.getUserInfo().dept_name == "임원"){
+                _grid.filterValue.myRecord=1;
+                _grid.filters.myRecord=filter[1];
+            }else{
+                _grid.filterValue.myRecord=0;
+                _grid.filters.myRecord=filter[0];
+            }
+            
+            _button.click(function(){
+                var index=_grid.filterValue.myRecord;
+                if (index==(filterBtnText.length-1)){
+                    index=0;
+                } else {
+                    index++;
+                }
+                _button.html($(_defaultBtnText).html(filterBtnText[index]));
+                _grid.filterValue.myRecord=index;
+               //grid.filtering(filter[index]);
+                _grid.filters.myRecord=filter[index];
+                _grid._filtering();
+            })
+        },
     	_drawButtons:function(){//button draw
     	    var _grid=this;
     	    var _btns=this.options.buttons;
@@ -491,6 +565,9 @@ define([
                     case "myRecord" :
                         this._createMyrecordButton(obj);
                         break;  
+                    case "myDeptRecord" :
+                        this._createMyDeptRecordButton(obj);
+                        break;
     	        }
     	    }
             

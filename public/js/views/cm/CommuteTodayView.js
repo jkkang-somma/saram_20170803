@@ -56,6 +56,12 @@ define([
         		    collection:this.commuteTodayCollection,
         		    dataschema:["id", "date", "name", "dept_name", "out_office_name", "start_time", "end_time", "memo"],
         		    detail: true,
+                    buttons:["search",{
+                        type:"myDeptRecord",
+                        name: "myDeptRecord",
+                        filterColumn:["dept_name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+                        tooltip: "",
+                    }],
         		    fetch: false,
         		    order : [[1, "asc"],[2, "asc"],[3, "asc"]]
         	};    		
