@@ -1428,5 +1428,25 @@
         		visible = ?
 		</query>
 	</group>
+
+	<group id ="statistics">
+		<query id="selectPageUrlCount">
+			select 
+				count 
+			from 
+				statistics_page_view
+			where
+				page_url = ?
+		</query>
+    	<query id="updatePageUrlCount">
+			insert into statistics_page_view
+				(page_url, count)
+			values
+				(?, ?)
+			ON DUPLICATE KEY UPDATE
+        		page_url = ?,
+        		count = ?
+		</query>
+	</group>
     	
 </querys>
