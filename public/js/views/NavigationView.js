@@ -140,7 +140,7 @@ define([
                 obj.ip_pc='';
             // }
             
-            obj.type='출근(수원)';
+            obj.type='출근(Web)';
             var model = new RawDataModel();
             model.companyAccessUrl().save(obj,{
                 success: function(model, response) {
@@ -181,7 +181,7 @@ define([
                 obj.ip_pc='';
             // }
             
-            obj.type='퇴근(수원)';
+            obj.type='퇴근(Web)';
             var model = new RawDataModel();
             model.companyAccessUrl().save(obj, {
                 success: function(model, response) {
