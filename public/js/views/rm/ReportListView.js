@@ -305,6 +305,16 @@ define([
                     _this.onClickDetail(selectData);
                 }
             });
+            if (this.actionAuth.save){
+                _buttons.push({ // detail
+                    type: "custom",
+                    name: "save",
+                    tooltip: "저장하기",
+                    click: function(_grid) {
+                        _this.onClickSave(_this.grid);
+                    }
+                });
+            };
             return _buttons;
         },
 
@@ -634,6 +644,9 @@ define([
                 Dialog.error("항목을 선택해주세요.");
             }
 
+        },
+        onClickSave: function(grid) {
+            grid.saveExcel();
         }
 
     });

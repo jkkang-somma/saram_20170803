@@ -185,6 +185,9 @@ define([
     	   // }
     	    
         },
+        getAllData:function(){
+            return this.DataTableAPI.rows().data();
+        },
         getRowByFunction:function(validateFunction){
             return this.DataTableAPI.row(validateFunction);
         },
@@ -680,6 +683,43 @@ define([
     	   }
     	   return grid;
      	},
+        saveExcel:function(e){
+            var grid = this;
+            var gridAllData = grid.getAllData();
+
+            var gridHtml = '<table>';
+            //TITLE
+            gridHtml = gridHtml.concat('<thead><tr>');
+            for ( var i=1 ; i < grid.columns.length ; i++ ) {
+                gridHtml = gridHtml.concat('<th>');
+                gridHtml = gridHtml.concat(grid.columns[i].title.replace(/ /g, '%20'));
+                gridHtml = gridHtml.concat('</th>');
+            }
+            gridHtml = gridHtml.concat('</tr></thead>');
+
+            // BODY
+            gridHtml.concat('<tbody>');
+            for ( var i=0 ; i < gridAllData.length ; i++ ) {
+                var rowData = grid.getRowNodeAt(i);
+                gridHtml = gridHtml.concat(rowData.outerHTML.replace(/ /g, '%20'));
+            }
+            gridHtml = gridHtml.concat('</tbody>');
+            gridHtml = gridHtml.concat('</table>');
+
+            gridHtml = gridHtml.replace(/<br>/g, '%20');
+            
+            var link = document.createElement('a');
+            var data_type = 'data:application/vnd.ms-excel';
+            link.download = "GridDataExcel.xls";
+            
+            link.href = data_type + ', ' + gridHtml;
+            link.click();
+
+            // $('#grid-0').battatech_excelexport({
+            //     containerid : "grid-0",
+            //     datatype: 'table'
+            // });
+        }
     });
     return Grid;
 });

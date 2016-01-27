@@ -62,7 +62,8 @@ define([
             pulsSign:"glyphicon-plus-sign",
             minusSign:"glyphicon-minus-sign",
             setting:"glyphicon-cog",
-            user:"glyphicon-user"
+            user:"glyphicon-user",
+            save:"glyphicon-floppy-disk"
         },
         
         //API

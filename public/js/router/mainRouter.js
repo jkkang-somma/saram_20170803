@@ -222,7 +222,7 @@ ReportListView // report manager
 		
 		showReportManager : function(){
 			var reportListView = new ReportListView();
-			this.changeView(reportListView);
+			this.changeView(reportListView, "#reportmanager");
 		},
 		
 		showUserPic : function(){
