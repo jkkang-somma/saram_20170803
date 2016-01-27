@@ -691,7 +691,7 @@ define([
                     if(!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))){
                         this.lateOverTime = (Math.ceil(this.lateTime/10)) * 10; // 지각으로 인해 추가 근무 해야하는시간
                                                                 
-                        if(tmpTime > 0) { 
+                        if(tmpTime >= 0) { 
                             this.overTime = this.outTime.diff(this.standardOutTime,"minute") - this.lateOverTime;
                             if((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0){  // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
                                 if(this.overTime >= 360){
