@@ -221,8 +221,6 @@
 				, submit_date , decide_date , submit_comment , decide_comment , start_date , end_date , office_code
 				, (SELECT office.name FROM office_code_tbl office WHERE office.code = app.office_code) office_code_name
 				, state, start_time, end_time, black_mark , day_count 
-				, IFNULL((SELECT total_day FROM vacation_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0)  total_day
-				, IFNULL((SELECT sum(day_count) used_holiday FROM out_office_tbl WHERE year = YEAR(app.start_date) AND id=app.submit_id), 0) used_holiday
 			from  approval_tbl app 
 			where ((DATE(start_date) between DATE(?) AND DATE(?)) 
 				OR (DATE(end_date)  between DATE(?) AND DATE(?)))
