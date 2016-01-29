@@ -4,6 +4,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'util',
   'log',
   'schemas',
   'dialog',
@@ -13,7 +14,8 @@ define([
   'text!templates/default/button.html',
   //'fnFindCellRowIndexes',
   'text!templates/component/grid.html',
-  ], function($, _, Backbone, log, Schemas, Dialog, SessionModel, Datatables, Util, ButtonHTML, GridHTML){
+  'lib/FileSaver',
+  ], function($, _, Backbone, Util, log, Schemas, Dialog, SessionModel, Datatables, Util, ButtonHTML, GridHTML, fileSaver){
     var LOG=log.getLogger('Grid');
     var gridId=0;
     var _glyphiconSchema=Schemas.getSchema('glyphicon');
@@ -683,7 +685,8 @@ define([
     	   }
     	   return grid;
      	},
-        saveExcel:function(e){
+        saveExcel:function(){
+            
             var grid = this;
             var gridAllData = grid.getAllData();
 
@@ -692,7 +695,7 @@ define([
             gridHtml = gridHtml.concat('<thead><tr>');
             for ( var i=1 ; i < grid.columns.length ; i++ ) {
                 gridHtml = gridHtml.concat('<th>');
-                gridHtml = gridHtml.concat(grid.columns[i].title.replace(/ /g, '%20'));
+                gridHtml = gridHtml.concat(grid.columns[i].title);
                 gridHtml = gridHtml.concat('</th>');
             }
             gridHtml = gridHtml.concat('</tr></thead>');
@@ -701,24 +704,36 @@ define([
             gridHtml.concat('<tbody>');
             for ( var i=0 ; i < gridAllData.length ; i++ ) {
                 var rowData = grid.getRowNodeAt(i);
-                gridHtml = gridHtml.concat(rowData.outerHTML.replace(/ /g, '%20'));
+                gridHtml = gridHtml.concat(rowData.outerHTML);
             }
             gridHtml = gridHtml.concat('</tbody>');
             gridHtml = gridHtml.concat('</table>');
 
-            gridHtml = gridHtml.replace(/<br>/g, '%20');
+            gridHtml = gridHtml.replace(/<br>/g, ' ');
             
-            var link = document.createElement('a');
-            var data_type = 'data:application/vnd.ms-excel';
-            link.download = "GridDataExcel.xls";
-            
-            link.href = data_type + ', ' + gridHtml;
-            link.click();
+            var d = new Date();
+            var dateStr = Util.dateToString(d);
+            dateStr = dateStr.concat('_');
+            dateStr = dateStr.concat(Util.timeToString(d));
 
+            // 방식_1
+            // var link = document.createElement('a');
+            // document.body.appendChild(link);
+            // var data_type = 'data:application/vnd.ms-excel';
+            // link.download = "GridDataExcel.xls";
+            
+            // link.href = data_type + ', ' + gridHtml;
+            // link.click();
+
+            // 방식_2
             // $('#grid-0').battatech_excelexport({
             //     containerid : "grid-0",
             //     datatype: 'table'
             // });
+
+            // 방식_3
+            saveAs(new Blob(["\uFEFF" + gridHtml], {type: "text/csv;charset=utf-8"}), 'GridDataExcel_' + dateStr + '.xls');
+            
         }
     });
     return Grid;
