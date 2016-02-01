@@ -98,7 +98,7 @@ define([
         	                collection:approvalUserCodeCollection,
         	                group:"requireInfo",
         	                firstBlank:true,
-        	                linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
+        	                linkField:"approval_name"// text 값을 셋팅 해줌 type은 hidden
         	        },{
         	                type:"hidden",
         	                name:"approval_name",
