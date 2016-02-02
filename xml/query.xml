@@ -147,7 +147,10 @@
 							WHERE v.year = ?
 			    ) t2
 			    ON m.id = t2.id
-			ORDER BY m.name
+			WHERE
+				leave_company is null or leave_company = ''
+			ORDER BY 
+				m.name
         </query>
         <query id="selectVacatonCount">
 			SELECT count(*) count FROM vacation_tbl WHERE year = ?
