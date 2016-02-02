@@ -251,7 +251,8 @@ define([
     	    $(this.el).html(_layOut);
 
             var today = new Date();
-    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+    	    var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            firstDay.setMonth(firstDay.getMonth()-1);
     	    $(this.el).find("#ccmFromDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
