@@ -165,12 +165,10 @@ define([
             this.checkEarly =true;
             this.earlyTime = model.get("early_time");
             this.notPayOverTime =model.get("not_pay_over_time");
-            if(this.department.slice(0,4) === "품질검증"){
-                if(this.department == "품질검증총괄"){
-                    this.isSuwon = false;    
-                }else{
-                    this.isSuwon = true;
-                }
+            if(this.department === "품질검증팀"){
+                this.isSuwon = true;
+            }else if(this.department === "개발품질팀(수원)"){
+                this.isSuwon = true;                
             }else{
                 this.isSuwon = false;    
             }
