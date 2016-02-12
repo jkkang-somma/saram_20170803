@@ -660,7 +660,7 @@ define([
                          * 조퇴일때
                          *  퇴근시간이 13:20분 이전 > 퇴근시간 없음
                          *  퇴근시간이 13:20분 이후 > 조퇴
-                         * 오후반차이면서 조퇴일때 - 조���로 표시
+                         * 오후반차이면서 조퇴일때 - 조퇴 표시
                          **/
                         if(this.workType == WORKTYPE.LATE){
                             this.workType = WORKTYPE.EARLY_LATE;
@@ -670,7 +670,7 @@ define([
                         
                         var standardTime = Moment(this.date).hour(12).minute(20).second(00);
                         if(this.outTime && _.isNull(this.vacationCode)){
-                            if(this.outTime.isBefore(standardTime)){
+                            if(this.outTime.isBefore(standardTime) && this.isSuwon != true){
                                 this.outTime = null;
                                 this.workType = WORKTYPE.NOTOUTTIME;
                             }
