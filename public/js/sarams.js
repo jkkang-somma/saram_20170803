@@ -8,7 +8,7 @@ require.config({
    shim: {
       'util' : {deps : ['jquery', 'underscore']},
       'bootstrap' : { deps : ['jquery'] , exports: '$.fn' },
-      'bootstrap-dialog': { deps: ['jquery'] },
+      'bootstrap-dialog': { deps: ['jquery', 'bootstrap'] },
       momentjs:{deps:['jquery']},
       cmoment:{deps:['momentjs']},
       'bootstrap-datepicker': { deps: ['jquery','bootstrap', 'momentjs']  },
