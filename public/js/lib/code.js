@@ -19,6 +19,7 @@ define([
         APPROVAL_USER:"approvalUser",
         
         init : function(){
+    		_codeCollectionArr = [];
             var dfdArr=[];
             for (var index in _configArr){
                 var codeCollection=new CodeCollection(_configArr[index]);   
@@ -65,7 +66,7 @@ define([
         	} else {
         		return false;
         	}
-        }
+        },
     };
 	return Code;
 });

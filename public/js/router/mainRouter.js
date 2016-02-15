@@ -18,6 +18,7 @@ define([
 	'views/NavigationView',
 	'views/sm/UserListView',
 	'views/sm/UserPicView',
+	'views/sm/DepartmentListView',
 	'views/cm/CommuteTodayView',
 	'views/RawData/AddRawDataView',
 	'views/RawData/RawDataView',
@@ -30,7 +31,7 @@ define([
 	// 'views/report/ReportCommuteView'
 ], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
-UserListView, UserPicView,
+UserListView, UserPicView,DepartmentListView,
 CommuteTodayView, AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
@@ -45,6 +46,7 @@ ReportListView // report manager
 	var Router = BaseRouter.extend({
 		routes : {
 			'usermanager' : 'showUserList',
+			'departmentmanager' : 'showDepartmnet',
 			'userpic' : 'showUserPic',
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
@@ -59,7 +61,7 @@ ReportListView // report manager
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
 			'*actions' : 'showHome'
-
+			
 		},
 		initialize:function(option){
 			var affterCallback,beforeCallback;
@@ -228,7 +230,11 @@ ReportListView // report manager
 		showUserPic : function(){
 			var userPicView = new UserPicView();
 			this.changeView(userPicView);
-		}
+		},
+		showDepartmnet : function(){
+			var departmentView = new DepartmentListView();
+			this.changeView(departmentView, '#departmentmanager');
+	}
 		// showReportCommute : function() {
 		// 	var reportCommuteView = new ReportCommuteView();
 		// 	this.changeView(reportCommuteView);			

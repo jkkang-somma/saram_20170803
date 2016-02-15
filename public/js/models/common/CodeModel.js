@@ -33,7 +33,7 @@ define([
         },
         default:{ 
             code:"",
-            name:""
+            name:"",
         }
     });
     

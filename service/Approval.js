@@ -97,116 +97,118 @@ var Approval = function (data) {
     };
     
     var _sendOutofficeEmail = function(doc_num){
-        return new Promise(function(resolve, reject){
-            ApprovalDao.getApprovalMailData(doc_num).then(function(data){
-                if(data.length == 1 )
-                    data = data[0];
+        return true;
+    //     return new Promise(function(resolve, reject){
+    //         ApprovalDao.getApprovalMailData(doc_num).then(function(data){
+    //             if(data.length == 1 )
+    //                 data = data[0];
                 
-                if(data.start_date == data.end_date)
-                    data.end_date = null;
+    //             if(data.start_date == data.end_date)
+    //                 data.end_date = null;
                 
-    	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
-                    var temp=_.template(html);
-                    var sendHTML=temp(data);
+    // 	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
+    //                 var temp=_.template(html);
+    //                 var sendHTML=temp(data);
                     
-                    ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
-                        var cc = [];
-                        if(data.dept_code != "5100" && data.dept_code != "5200" && data.dept_code !="5400"){
-                            for(var idx in result){
-                                if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
-                                        cc.push({name : result[idx].name, address: result[idx].email});
-                                }
-                            }
-                        }
+    //                 ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
+    //                     var cc = [];
+    //                     if(data.dept_code != "5100" && data.dept_code != "5200" && data.dept_code !="5400"){
+    //                         for(var idx in result){
+    //                             if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
+    //                                 if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
+    //                                     cc.push({name : result[idx].name, address: result[idx].email});
+    //                             }
+    //                         }
+    //                     }
                         
-                        var mailOptions= {
-                            from: 'webmaster@yescnc.co.kr', // sender address 
-                            to: [
-                                { name: "김성식", address: "sskim@yescnc.co.kr"},
-                                { name :"김은영", address: "eykim@yescnc.co.kr"},
-                                ],
-                            subject:"[근태보고] " + data.name + "_" + data.code_name,
-                            html:sendHTML,
-                        	text:"",
-                            cc: cc
-                        };
+    //                     var mailOptions= {
+    //                         from: 'webmaster@yescnc.co.kr', // sender address 
+    //                         to: [
+    //                             { name: "김성식", address: "sskim@yescnc.co.kr"},
+    //                             { name :"김은영", address: "eykim@yescnc.co.kr"},
+    //                             ],
+    //                         subject:"[근태보고] " + data.name + "_" + data.code_name,
+    //                         html:sendHTML,
+    //                     	text:"",
+    //                         cc: cc
+    //                     };
                         
-                        transport.sendMail(mailOptions, function(error, info){
-                            if(error){//메일 보내기 실패시 
-                                console.log(error);
-                                reject();
-                            }else{
-                                resolve();
-                            }
-                        });    
-                    });
-                }).catch(SyntaxError, function (e) {
-                    reject(e);
-                }).error(function (e) {
-                    reject(e);
-                });    
-    	    });
+    //                     transport.sendMail(mailOptions, function(error, info){
+    //                         if(error){//메일 보내기 실패시 
+    //                             console.log(error);
+    //                             reject();
+    //                         }else{
+    //                             resolve();
+    //                         }
+    //                     });    
+    //                 });
+    //             }).catch(SyntaxError, function (e) {
+    //                 reject(e);
+    //             }).error(function (e) {
+    //                 reject(e);
+    //             });    
+    // 	    });
     	    
-        });
+    //     });
     };
     
     var _sendApprovalEmail = function(doc_num, managerId){
-        return new Promise(function(resolve, reject){
-            ApprovalDao.getApprovalMailData(doc_num).then(function(data){
-                if(data.length == 1 )
-                    data = data[0];
+            return true;
+    //     return new Promise(function(resolve, reject){
+    //         ApprovalDao.getApprovalMailData(doc_num).then(function(data){
+    //             if(data.length == 1 )
+    //                 data = data[0];
                 
-                if(data.start_date == data.end_date)
-                    data.end_date = null;
+    //             if(data.start_date == data.end_date)
+    //                 data.end_date = null;
                 
-    	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
-                    var temp=_.template(html);
-                    var sendHTML=temp(data);
+    // 	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
+    //                 var temp=_.template(html);
+    //                 var sendHTML=temp(data);
                     
-                    ApprovalDao.getManagerId(managerId).then(function(result){
-                        var to = [];
-                        var cc = [];
+    //                 ApprovalDao.getManagerId(managerId).then(function(result){
+    //                     var to = [];
+    //                     var cc = [];
                         
-                        for(var idx in result){
-                            if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                var person = result[idx];
-                                to.push({name : person.name, address: person.email});
-                                if(person.name == "김특훈"){
-                                    cc.push({ name: "김성식", address: "sskim@yescnc.co.kr"});
-                                }
-                            }
-                        }
+    //                     for(var idx in result){
+    //                         if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
+    //                             var person = result[idx];
+    //                             to.push({name : person.name, address: person.email});
+    //                             if(person.name == "김특훈"){
+    //                                 cc.push({ name: "김성식", address: "sskim@yescnc.co.kr"});
+    //                             }
+    //                         }
+    //                     }
                         
-                        var mailOptions= {
-                            from: 'webmaster@yescnc.co.kr', // sender address 
-                            to: to,
-                            subject:"[근태 상신 알림] " + data.name + "_" + data.code_name,
-                            html:sendHTML,
-                        	text:"",
-                        };
+    //                     var mailOptions= {
+    //                         from: 'webmaster@yescnc.co.kr', // sender address 
+    //                         to: to,
+    //                         subject:"[근태 상신 알림] " + data.name + "_" + data.code_name,
+    //                         html:sendHTML,
+    //                     	text:"",
+    //                     };
                         
-                        if(cc.length > 0){
-                            mailOptions["cc"] = cc;
-                        }
+    //                     if(cc.length > 0){
+    //                         mailOptions["cc"] = cc;
+    //                     }
                         
-                        transport.sendMail(mailOptions, function(error, info){
-                            if(error){//메일 보내기 실패시 
-                                console.log(error);
-                                reject();
-                            }else{
-                                resolve();
-                            }
-                        });    
-                    });
-                }).catch(SyntaxError, function (e) {
-                    reject(e);
-                }).error(function (e) {
-                    reject(e);
-                });    
-    	    });
+    //                     transport.sendMail(mailOptions, function(error, info){
+    //                         if(error){//메일 보내기 실패시 
+    //                             console.log(error);
+    //                             reject();
+    //                         }else{
+    //                             resolve();
+    //                         }
+    //                     });    
+    //                 });
+    //             }).catch(SyntaxError, function (e) {
+    //                 reject(e);
+    //             }).error(function (e) {
+    //                 reject(e);
+    //             });    
+    // 	    });
     	    
-        });
+    //     });
     };
     
     var _getApprovalIndex = function (yearmonth) {

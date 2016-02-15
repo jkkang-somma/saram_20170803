@@ -31,7 +31,7 @@ var User = function (data, isNoSchemas) {
         return UserDao.selectUserList();
     };
     var _getManagerList = function(id){
-        return UserDao.selectManagerList(id);
+        return UserDao.selectDepartmentList(id);
     };
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);

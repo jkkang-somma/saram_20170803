@@ -16,8 +16,8 @@ UserDao.prototype.selectUserList =  function () {
     return db.query(group, "selectUserList");
 };
 
-UserDao.prototype.selectManagerList =  function (id) {
-    return db.query(group, "selectManager", [id]);
+UserDao.prototype.selectDepartmentList =  function (id) {
+    return db.query(group, "selectDepartment", [id]);
 };
 
 UserDao.prototype.initPassword =  function (id, password) {

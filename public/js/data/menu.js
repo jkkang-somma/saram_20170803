@@ -18,6 +18,15 @@ define([
                 edit:ADMIN
             }
         },{
+        	title:i18Common.MENU.SUB.SM.DEPARTMENT, //부서관리
+        	hashTag:"#departmentmanager",
+            auth:ADMIN,
+            actionAuth:{
+                add:ADMIN,
+                remove:ADMIN,
+                edit:ADMIN
+        	}
+        },{
             title:"사진 등록", //휴일 관리
             hashTag:"#userpic",
             auth:ADMIN

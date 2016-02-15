@@ -7,7 +7,9 @@ define({
            INFO:"알림",
            ERROR:"에러",
            USER_ADD:"사용자 등록",
-           USER_UPDATE:"사용자 정보 수정"
+           USER_UPDATE:"사용자 정보 수정",
+           DEPARTMENT_ADD:"부서 등록",
+           DEPARTMENT_UPDATE:"부서 정보 수정"
        },
        BUTTON:{
            OK:"확인",
@@ -136,6 +138,7 @@ define({
         SUB:{
             SM:{
                 USER:"사원 관리",
+                DEPARTMENT:"부서 관리",
                 HOLIDAY:"휴일 관리",
                 VACATION:"연차 관리",
                 REPORTCOMMUTE: "레포트"
@@ -496,5 +499,50 @@ define({
             END_TIME: "종료<br>시간",
             MEMO: "비고"
         }
+    },
+	DEPARTMENT_LIST : {
+        TITLE : "부서 관리",
+        SEARCH_BTN : "조회",
+        GRID_COL_NAME : {
+            CODE : "부서코드",
+            NAME : "부서",
+            AREA : "지역"
+        },
+        CREATE_DIALOG :{
+            TOOLTIP : "부서 등록",
+            TITLE : "부서 데이터 생성",
+            ASK : "부서 데이터를 생성하시겠습니까?",
+            BUTTON : {
+                CREATE : "데이터 생성",
+                CANCEL : "취소",
+            },
+            MSG : {
+                CREATE_DATA_COMPLETE : "데이터 생성 완료!",
+                CREATE_DATA_FAIL : "데이터 생성 실패!"
+            },
+        },
+        UPDATE_DIALOG :{
+            TOOLTIP: "수정",
+            TITLE : "부서 수정",
+            BUTTON :{
+                MODIFY : "수정",
+                CANCEL : "취소",
+            },
+        },
+        REMOVE_DIALOG : {
+            TOOLTIP : "삭제",
+            MSG : {
+                NOTING_SELECTED : "선택된 데이터가 없습니다!",
+                REMOVE :"부서 데이터를 삭제하시겠습니까?",
+                REMOVE_COMPLETE : "부서 데이터가 삭제되었습니다.",
+                REMOVE_FAIL : "사용중인 부서입니다."
+            },
+        },    
+
+    },
+    	AREA_LIST : {
+    		AREA_1 : "서울",
+    		AREA_2 : "수원"    	
     }
+    
 });

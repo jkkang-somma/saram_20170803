@@ -1429,6 +1429,39 @@
         		visible = ?
 		</query>
 	</group>
+	<group id="department">
+		<query id="selectDepartment">
+			select
+				 *
+			from
+				dept_code_tbl
+			ORDER BY code
+		</query>
+		<query id="insertDepartment">
+			INSERT INTO dept_code_tbl
+				(code, name, area)
+			VALUES
+				(?, ?, ?)
+		</query>
+		<query id="updateDepartment">
+			UPDATE
+				dept_code_tbl
+			SET
+				name=?,
+				area=?
+			WHERE code=?
+		</query>
+		<query id="deleteDepartment">
+			delete from dept_code_tbl where code=?
+		</query>
+		<query id= "selectCodeData">
+			select
+				dept_code
+			FROM 
+				members_tbl 
+			where dept_code = ?	
+		</query>
+	</group>	
 
 	<group id ="statistics">
 		<query id="selectPageUrlCount">

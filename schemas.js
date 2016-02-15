@@ -41,6 +41,11 @@ var Schemas = function (schemaName) {
             wedding_day : null,
             memo: null
         },
+        department:{
+        	code: null,
+        	name: null,
+        	area: null
+        },
         auth:{
         },
         rawData:{
@@ -96,7 +101,7 @@ var Schemas = function (schemaName) {
         //Common
         code:{
             code:null,
-            name:null
+            name:null,
         },
         
         office_code:{
