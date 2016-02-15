@@ -93,7 +93,7 @@ define([
 		return {
 	        type:"custom",
 	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
-	        tooltip: (SessionModel.get("user").admin == 1)?"Comment 달기" : "상세보기",
+	        tooltip: (SessionModel.get("user").admin == 1)?"답변달기" : "상세보기",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
 	        	_clickCommentUpdateBtn(that, selectItem);
