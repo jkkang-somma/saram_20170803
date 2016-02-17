@@ -35,8 +35,8 @@ var debug = require('debug')('APP');
 var app = express();
 var filePath = path.normalize(__dirname + '/pic/files');
 
-var Statistics = require('./service/Statistics');
-var statisticsService = new Statistics();
+//var Statistics = require('./service/Statistics');
+//var statisticsService = new Statistics();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -86,11 +86,11 @@ app.use(function(req,res,next){
         if (req.cookies.saram) {//cookie가 있을 때.
             if (sessionManager.validationCookie(req.cookies.saram, res)){
                 
-                try {
-                    statisticsService.updatePageUrlCount(pathname);
-                }catch(err) {
-                    debug(err);
-                }
+//                try {
+//                    statisticsService.updatePageUrlCount(pathname);
+//                }catch(err) {
+//                    debug(err);
+//                }
 
                 next();
                 
