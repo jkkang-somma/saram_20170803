@@ -484,14 +484,17 @@ define([
             // var usable = (this.options.total_day > this.options.used_holiday) ? this.options.total_day - this.options.used_holiday : 0;
             var usable = this.options.total_day - this.options.used_holiday - this.options.approval_count;
             if (!this.isDateCompare(formData)) {
-                Dialog.error("기간을 잘못 입력하였습니다. (시작일자 / 종료일자는 같은 연도에서만 가능합니다.)");
+                Dialog.error("기간을 잘못 입력하였습니다.");
                 // this.thisDfd.reject();
                 return;
             }else if(!this.checkYear(formData)){
                 Dialog.error("시작일자 / 종료일자는 같은 연도에서만 가능합니다.");
                 return; 
             }
-            else if (!(selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V05' || selVal == 'V04' || selVal == 'V06') && (this.holReq > usable)) {
+            else if( _this.holReq != 0 && _this.holReq > 31 ) {
+                Dialog.error("최대 기간을 초과했습니다.(31일)");
+                return;
+            }else if ( (selVal == 'V01' || selVal == 'V02' || selVal == 'V03') && (this.holReq > usable) ) {
                 Dialog.error("잔여 연차 일수를 초과 했습니다.");
                 // this.thisDfd.reject();
                 return;
