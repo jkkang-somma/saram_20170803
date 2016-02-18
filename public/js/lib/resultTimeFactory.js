@@ -63,6 +63,10 @@ define([
         checkEarly : true,
         earlyTime : 0,
         notPayOverTime :0,
+        
+        /**
+         * Factory 기본값 설정
+         */
         init : function(userId, userName, userDepartment){
             this.id = userId;
             this.name = userName;
@@ -104,6 +108,9 @@ define([
             }
         },
         
+        /**
+         * Factory 초기화
+         */
         initToday : function(todayStr, holidayData){
             this.year = Moment(todayStr, DATETIMEFORMAT);
             this.year = this.year.year();
@@ -136,6 +143,9 @@ define([
             this.notPayOverTime =0;
         },
         
+        /**
+         * Model을 사용하여 Factory 초기화
+         **/
         initByModel : function(model){
             this.id = model.get("id");
             this.name = model.get("name");
@@ -803,18 +813,27 @@ define([
             };
         },
         
-        /***************************************************
-        // destCollection (length = 3[yesterday, today, tomorrow])
-        // inData{ changeInTime, changeOutTime }
-        // return resultCommuteCollection(today,tomorrow);
-        ****************************************************/
+        /**
+         * Collection 기준으로 Commute Result를 수정한다. 
+         * 관리자가 수정하는 화면 (Comment에 의한 수정, 직접 수정) 에서 사용 함
+         * 
+         * parameter : 
+         * 	destCollection : 어제 오늘 내일 3일치 데이터 (없을 경우 적게 들어올 수 있음)
+         * 	inData : Object { changeInTime, changeOutTime }
+         *  changeHistoryCollection : 관리자 수정 내역을 저장할 Collection
+         *  todayIdx : destCollection에서 당일 데이터가 들어있는 Index
+         *  
+         * 	return resultCommuteCollection(today,tomorrow);
+         **/
         modifyByCollection: function(destCommuteCollection, inData, changeHistoryCollection, todayIdx){
             var dfd = new $.Deferred();
             var that = this;
             
             var resultCommuteCollection = new CommuteCollection();
             
-		    
+            /**
+             * 오늘, 내일 데이터를 계산하기전 초기화 한다.
+             */
  			var currentDayCommute = destCommuteCollection.models[todayIdx];
  			var yesterdayCommute = null;
  			var nextDayCommute = null;
@@ -837,6 +856,9 @@ define([
             var inOfficeCollection = new InOfficeCollection();
             var outOfficeCollection = new OutOfficeCollection();
             
+            /**
+             * 오늘과 내일의 in, out office 내용을 조회한다.
+             */
             $.when(
                 outOfficeCollection.fetch({data : selectedDate}),
                 inOfficeCollection.fetch({data : selectedDate})
@@ -850,53 +872,92 @@ define([
      				that.outTime = Moment(inData.changeOutTime);
      				that.outTimeChange += 1;
      			}
-     			
+     			/**
+     			 * 어제의 퇴근시간을 가지고 출근 기준 시간을 구한다.
+     			 */
                 var yesterdayOutTime = null;
                 if(!_.isNull(yesterdayCommute)){
                     yesterdayOutTime = yesterdayCommute.get("out_time");
                 }
      			that.setStandardTime(_.isNull(yesterdayOutTime)? null : Moment(yesterdayOutTime, DATETIMEFORMAT));
-
+     			
+     			/**
+     			 * 조회된 in, out office 내용중 선택된 사용자에 해당하는 데이터가 있는지 확인한다.
+     			 */
                 var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
                 userOutOfficeCollection.add(outOfficeCollection.where({id: that.id}));
                         
                 var userInOfficeCollection = new InOfficeCollection();
                 userInOfficeCollection.add(inOfficeCollection.where({id: that.id}));
                 
-                // 휴일근무 판단
+                /**
+                 * 휴일근무 여부를 판단한다.
+                 */
                 var todayInOffice = userInOfficeCollection.where({date:selectedDate.start});
                 that.setInOffice(todayInOffice);
                 
-                // 휴가/외근/출장 판단
+                /**
+                 * 휴가, 외근, 출장 여부를 판단한다.
+                 */
                 var todayOutOffice = userOutOfficeCollection.where({date: selectedDate.start});
                 that.setOutOffice(todayOutOffice);
                 
+                /**
+                 * 변경된 사항들은 반영하여 결과값을 산출한다.
+                 */
      			var currentResult = that.getResult();
      			
+     			/**
+     			 * 초과근무를 관리자가 수정한 적이 있을경우는
+     			 * 계산으로 인해 추가근무가 변경되더라도 적용하지 않는다. 
+     			 */
      			if(!_.isUndefined(inData.changeOvertimeCode)){
      			    currentResult.overtime_code = inData.changeOvertimeCode == "" ? null : inData.changeOvertimeCode;
      				currentResult.overtime_code_change += 1;
      			}
      			
+     			/**
+     			 * 계산 결과를 resultCommuteCollection에 추가한다.
+     			 */
      			resultCommuteCollection.add(currentResult);
+     			
+     			/**
+     			 * 오늘의 결과값이 내일의 출근 기준시간에 영향을 줄 수 있으므로
+     			 * 내일의 결과값이 있을경우 다시 계산한다.
+     			 */
                 if(!_.isNull(nextDayCommute)){
                     		
          			that.initByModel(nextDayCommute);
          			
+         			/**
+         			 * 새로 계산된 오늘의 퇴근시간으로 출근 기준시간을 계산한다.
+         			 */
          			if(currentResult.out_time){
                     	that.setStandardTime(Moment(currentResult.out_time), DATETIMEFORMAT);
          			}
+         			
+         			/**
+                     * 휴일근무 여부를 판단한다.
+                     */
          			var tomorrowInOffice = userInOfficeCollection.where({date:selectedDate.end});
                     that.setInOffice(tomorrowInOffice);
                     
+                    /**
+                     * 휴가, 외근, 출장 여부를 판단한다.
+                     */
                     var tomorrowOutOffice = userOutOfficeCollection.where({date:selectedDate.end});
                     that.setOutOffice(tomorrowOutOffice);
                     
+         			/**
+         			 * 계산 결과를 resultCommuteCollection에 추가한다.
+         			 */
                     var tomorrowResult = that.getResult();
-                    
         			resultCommuteCollection.add(tomorrowResult);    
                 }
      			
+                /**
+                 * resultCommuteCollection에 추가된 값들을 DB에 반영한다.
+                 */
     			resultCommuteCollection.save({
     			    success : function(){
     			        dfd.resolve(resultCommuteCollection);
