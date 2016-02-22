@@ -18,7 +18,8 @@ define([
             change_after : '',
             change_date : '',
             change_id : '',
-            change_name : ''
+            change_name : '',
+            change_memo : "",
         }
     });    
     

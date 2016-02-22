@@ -16,7 +16,7 @@ define([
         'text!templates/default/content.html',
         'models/cm/ChangeHistoryModel',
         'collection/cm/ChangeHistoryCollection',
-        'views/component/ProgressbarView'
+        'views/component/ProgressbarView',
 ], function(
 		$,
 		_,
@@ -40,18 +40,38 @@ define([
         		    el:"changeHistoryDataTable_content",
         		    id:"changeHistoryDataTable",
         		    column:[
-    	                     { data : "date", "title" : "일자" },
+    	                     //{ data : "date", "title" : "일자" },
      	                     //{ data : "id", "title" : "ID", visible: true },
-     	                     { data : "name", "title" : "이름"},
-     	                     { data : "change_before", "title" : "변경 전"},
+     	                     //{ data : "name", "title" : "이름"},
+     	                     { data : "change_before", "title" : "변경 전",
+     	                    	 render : function(data, type, full, meta){
+     	                    	 	var nullvalue = "기록 없음";
+     	                    	 	var changeBefore = full.change_before;
+     	                    	 	if(changeBefore == null){
+     	                    	 		changeBefore = nullvalue;
+     	                    	 	}
+     	                    	 	return changeBefore;
+     	                    	 }
+     	                     },
      	                     { data : "change_after", "title" : "변경 후"},
      	                     { data : "change_date", "title" : "수정 날짜"},
-     	                     { data : "change_name", "title" : "수정자 이름"}
-             	        ],
+     	                     { data : "change_memo", "title" : "변경 사유",
+     	                    	 render : function(data, type, full, meta){
+     	                    	// var changeBr = full.change_memo +full.comment_reply+ "<br>";
+     	                    	 var changeBr = full.change_memo + "<br>";
+     	                    	 var changehi = " - " + full.change_name;
+     	                    	 return changeBr + changehi;
+     	                    	 //return full.change_memo+full.change_name;
+  	                   			}
+     	                     }
+
+     	                     //{ data : "change_name", "title" : "변경"}
+             	        ],        	  
         		    collection:this.changeHistoryCollection,
         		    detail: true,
         		    buttons:["search"],
-        		    fetch: false
+        		    fetch: false,
+        		    order : [[3, "desc"]]
         		};
         		// this.on('view:rendered', this.renderGrid, this);
 		},

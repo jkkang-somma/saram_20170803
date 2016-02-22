@@ -420,6 +420,7 @@ define([
 					id : selectItem.id,
 					year : selectItem.year, 
 					date : selectItem.date,
+					name : selectItem.name,
 					change_column : data.change_column
 			};
         	
@@ -427,13 +428,14 @@ define([
             var title = "";
             switch(data.change_column){
             	case "in_time" :
-            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_IN;
+            		//title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_IN;       
+            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_IN + " - " + searchData.name + " ( " + searchData.date + " )" ;
             		break;
             	case "out_time" :
-            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OUT;
+            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OUT + " - " + searchData.name + " ( " + searchData.date + " )" ;
             		break;
             	case "overtime_code" :
-            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OVER;
+            		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OVER + " - " + searchData.name + " ( " + searchData.date + " )" ;
             		break;
             }
             Dialog.show({

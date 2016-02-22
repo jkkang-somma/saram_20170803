@@ -575,6 +575,7 @@
 					c.seq,
 					c.year,
 			        c.id,
+			        c.change_memo,
 			        m.name,
 			        c.date,
 			        c.change_column,
@@ -619,11 +620,11 @@
     	<query id="inserChangeHistory">
 			INSERT INTO change_history_tbl
 			(
-				year, id, date,	change_column, change_before, change_after, change_date, change_id
+				year, id, date,	change_column, change_before, change_after, change_date, change_id, change_memo
 			)
 			values
 			(
-				?, ?, ?, ?, ?, ?, now(), ?			
+				?, ?, ?, ?, ?, ?, now(), ?, ?			
 			);
     	</query>
     </group>
@@ -735,6 +736,7 @@
 			WHERE
 				id = ? AND year = ? AND date = ? AND seq = ?
     	</query>
+    	
     </group>
     
     <group id="outOffice">

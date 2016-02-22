@@ -101,6 +101,12 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 	                value:this.selectData.overtime_code,
 	                collection:comboItem,
 	                group:"modifyItem"
+		        }, {
+		        	type:"text",
+		        	name:"changememo",
+		        	label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.CHANGE_MEMO,
+		        	value:this.selectData.change_memo,
+		        	group:"modifyItem"
 		        }]
 		    });
 		    
@@ -120,7 +126,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
      		var that = this;
      		var changeData = { };
      		if (data === null) {
-     			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_CHANGED);
+     			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_CHANGEDS);
      			dfd.reject();
      		}else{
 				var message = "";
@@ -193,20 +199,20 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 		},
 		getInsertData: function() {
 			var data = this.form.getData();
-			
      		var newData = {
      			date : this.selectData.date,
      			id : this.selectData.id,
      			in_time : data.inTime == "" ? null : data.inTime,
      			out_time : data.outTime == "" ? null : data.outTime,
-     			overtime_code : data.overtime == "" ? null : data.overtime
+     			overtime_code : data.overtime == "" ? null : data.overtime,
+     			change_memo : data.changememo
      		};
 			
      		var userId = SessionModel.get("user").id;
 			
-			var inChangeModel = _getChangeHistoryModel("in_time", newData, this.selectData, userId);
-			var outChangeModel = _getChangeHistoryModel("out_time", newData, this.selectData, userId);
-			var overtimeChangeModel = _getChangeHistoryModel("overtime_code", newData, this.selectData, userId);
+			var inChangeModel = _getChangeHistoryModel("in_time", newData, this.selectData, userId, data.changememo);
+			var outChangeModel = _getChangeHistoryModel("out_time", newData, this.selectData, userId, data.changememo);
+			var overtimeChangeModel = _getChangeHistoryModel("overtime_code", newData, this.selectData, userId, data.changememo);
 			
 			newData.changeHistoryCollection = new ChangeHistoryCollection();
 			
@@ -231,12 +237,15 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			if (newData.changeHistoryCollection.length === 0) {
 				return null;
 			}
-			
+     		if (newData.change_memo.length == 0) {
+     			//Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.EMPTY_COMMENT_ERR);
+     			return null;
+     		}
 			return newData;
 		}
 	});
 	
-	function _getChangeHistoryModel(changeColumn, newData, oriData, changeId ) {
+	function _getChangeHistoryModel(changeColumn, newData, oriData, changeId, changememo ) {
 		if (oriData[changeColumn] == newData[changeColumn]){
 			return null;
 			
@@ -248,7 +257,8 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 				change_column : changeColumn,
 				change_before : oriData[changeColumn],
 				change_after : newData[changeColumn],
-				change_id : changeId 
+				change_id : changeId,
+				change_memo : changememo
 			});				
 			return changeHistoryModel;
 		}

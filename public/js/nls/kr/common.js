@@ -432,6 +432,7 @@ define({
                 IN_TIME:"출근시간",
                 OUT_TIME: "퇴근시간",
                 OVER_TIME : "초과근무",
+                CHANGE_MEMO : "변경 사유"
                 
                 
             },
@@ -445,7 +446,8 @@ define({
                 +"수정 사항이 정확합니까?",
                 NOTING_SELECTED : "사원을 선택하여 주시기 바랍니다.",
                 UPDATE_COMPLETE : "근태 정보가 수정되었습니다.",
-                NOTING_CHANGED : "변경된 내용이 없습니다."
+                NOTING_CHANGED : "변경된 내용이 없습니다.",
+                NOTING_CHANGEDS : "수정 내역 또는 변경 사유가 없습니다."
             }
         },
         COMMENT_DIALOG : {

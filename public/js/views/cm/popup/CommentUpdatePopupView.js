@@ -244,7 +244,6 @@ define([
 			
 			var userId = SessionModel.get("user").id;
 			inData._id = userId;
-			
 			if(inData.changeHistoryCollection.length == 0){
 				Dialog.confirm({
 					msg : "출/퇴근 시간이 수정되지 않았습니다. 진행하시겠습니까?",
@@ -312,14 +311,13 @@ define([
      			alert("처리 내용을 입력해주시기 바랍니다. ");
      			return null;
      		}
-     		
 			var userId = SessionModel.get("user").id;
 			
      		var checkResult = this.getDatapickerDisable();
-     		
+     		//comment를 changememo로 보냄
      		if(checkResult.inCheck){
      			newData.changeInTime = $(this.el).find("#commentUpdatePopupInTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm");
-     			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId);
+     			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId, data.comment_reply);
      			if (inChangeModel)
 					newData.changeHistoryCollection.add(inChangeModel);
 			
@@ -327,18 +325,17 @@ define([
      		
      		if(checkResult.outCheck){
      			newData.changeOutTime = $(this.el).find("#commentUpdatePopupOutTime").data("DateTimePicker").getDate().format("YYYY-MM-DD HH:mm");
-     			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId);
+     			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId, data.comment_reply);
      			if (outChangeModel)
 					newData.changeHistoryCollection.add(outChangeModel);
      		}
      		
 			return newData;
 		},
-		_getChangeHistoryModel :function(changeColumn, newData, oriData, changeId ) {
+		_getChangeHistoryModel :function(changeColumn, newData, oriData, changeId, comment_reply) {
 		if(newData == oriData){
 			return null;
 		}
-		
 		var changeHistoryModel = new ChangeHistoryModel({
 			year : this.selectData.year,
 			id : this.selectData.id,
@@ -346,7 +343,8 @@ define([
 			change_column : changeColumn,
 			change_before : oriData,
 			change_after : newData,
-			change_id : changeId 
+			change_id : changeId,
+			change_memo : comment_reply
 		});				
 		return changeHistoryModel;
 	

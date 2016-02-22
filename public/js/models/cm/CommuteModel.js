@@ -38,8 +38,7 @@ define([
             in_time_type : 0,
             out_time_type : 0,
             out_office_start_time : "",
-            out_office_end_time : "",
-            
+            out_office_end_time : ""            
         }
     });
 
