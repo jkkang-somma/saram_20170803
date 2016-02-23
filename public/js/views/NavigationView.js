@@ -47,6 +47,8 @@ define([
             
             var _subMenu=_menu.subMenu;//하위 메뉴 생성
             var subUl=$(_subUlTag);
+            var subCount = 0;
+            
             for (var subName in _subMenu){
                 var subMenu=_subMenu[subName];
                 if (subMenu.auth <= _auth){//로그인 사용자의 admin 값보다 같거나 작을 때만 보여짐
@@ -54,10 +56,14 @@ define([
                     var subA=$('<a href="'+subMenu.hashTag+'">'+subMenu.title+'</a>');
                     subLi.append(subA);
                     subUl.append(subLi);
+                    subCount ++;
                 }
             }
-            li.append(subUl);
-            _leftMenu.append(li);
+            
+            if(subCount > 0){
+            	li.append(subUl);
+            	_leftMenu.append(li);
+            }
         }
         
 	    var ip_office = SessionModel.getUserInfo().ip_office;

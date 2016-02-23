@@ -9,7 +9,9 @@ define({
            USER_ADD:"사용자 등록",
            USER_UPDATE:"사용자 정보 수정",
            DEPARTMENT_ADD:"부서 등록",
-           DEPARTMENT_UPDATE:"부서 정보 수정"
+           DEPARTMENT_UPDATE:"부서 정보 수정",
+           POSITION_ADD:"직급 등록",
+           POSITION_UPDATE:"직급 정보 수정"
        },
        BUTTON:{
            OK:"확인",
@@ -132,14 +134,18 @@ define({
     },
     MENU:{
         TOP:{
-            SM:"일반 관리",
+    		BM:"기초 자료",
+            SM:"사원 관리",           
             AM:"근태 관리"
         },
         SUB:{
+        	BM:{
+            	POSITION:"직급 관리",
+            	DEPARTMENT:"부서 관리",
+            	HOLIDAY:"휴일 관리",
+        	},
             SM:{
                 USER:"사원 관리",
-                DEPARTMENT:"부서 관리",
-                HOLIDAY:"휴일 관리",
                 VACATION:"연차 관리",
                 REPORTCOMMUTE: "레포트"
             },
@@ -545,6 +551,44 @@ define({
     	AREA_LIST : {
     		AREA_1 : "서울",
     		AREA_2 : "수원"    	
+    },
+    	POSITION_LIST : {
+    		TITLE : "직급 관리",
+    		SEARCH_BTN : "조회",
+    		GRID_COL_NAME : {
+            	CODE : "직급코드",
+            	NAME : "직급"
+        },
+        CREATE_DIALOG :{
+            TOOLTIP : "직급 등록",
+            TITLE : "직급 데이터 생성",
+            ASK : "직급 데이터를 생성하시겠습니까?",
+            BUTTON : {
+                CREATE : "데이터 생성",
+                CANCEL : "취소",
+            },
+            MSG : {
+                CREATE_DATA_COMPLETE : "데이터 생성 완료!",
+                CREATE_DATA_FAIL : "데이터 생성 실패!"
+            },
+        },
+        UPDATE_DIALOG :{
+            TOOLTIP: "수정",
+            TITLE : "직급 수정",
+            BUTTON :{
+                MODIFY : "수정",
+                CANCEL : "취소",
+            },
+        },
+        REMOVE_DIALOG : {
+            TOOLTIP : "삭제",
+            MSG : {
+                NOTING_SELECTED : "선택된 데이터가 없습니다!",
+                REMOVE :"직급 데이터를 삭제하시겠습니까?",
+                REMOVE_COMPLETE : "직급 데이터가 삭제되었습니다.",
+                REMOVE_FAIL : "사용중인 직급 데이터입니다."
+            },
+        }, 
     }
     
 });

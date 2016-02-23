@@ -6,45 +6,57 @@ define([
 	'i18n!nls/common',
 ], function($, _, i18Common){
     var ADMIN=1,USER=0;
-	var _menu=[{
-        title:i18Common.MENU.TOP.SM, //일반관리
-        subMenu:[{
-            title:i18Common.MENU.SUB.SM.USER, //사용자 관리
-            hashTag:"#usermanager",
-            auth:USER,
-            actionAuth:{
-                add:ADMIN,
-                remove:ADMIN,
-                edit:ADMIN
-            }
-        },{
-        	title:i18Common.MENU.SUB.SM.DEPARTMENT, //부서관리
-        	hashTag:"#departmentmanager",
-            auth:ADMIN,
-            actionAuth:{
-                add:ADMIN,
-                remove:ADMIN,
-                edit:ADMIN
-        	}
-        },{
-            title:"사진 등록", //휴일 관리
-            hashTag:"#userpic",
-            auth:ADMIN
-        },{
-            title:i18Common.MENU.SUB.SM.HOLIDAY, //휴일 관리
-            hashTag:"#holidaymanager",
-            auth:ADMIN
-        },{
-            title:i18Common.MENU.SUB.SM.VACATION, //연차 관리
-            hashTag:"#vacation",
-            auth:USER
-        }]
-        // ,{
-        //     title:i18Common.MENU.SUB.SM.REPORTCOMMUTE, //근태 레포트 
-        //     hashTag:"#reportCommute",
-        //     auth:ADMIN
-        // }]
-    },{
+		var _menu=[{
+		title:i18Common.MENU.TOP.BM, //기초자료
+		subMenu:[{
+			title:i18Common.MENU.SUB.BM.POSITION, //직급관리
+			hashTag:"#positionmanager",
+			auth:ADMIN,
+			actionAuth:{
+			add:ADMIN,
+			remove:ADMIN,
+			edit:ADMIN
+				}
+		},{
+			title:i18Common.MENU.SUB.BM.DEPARTMENT, //부서관리
+			hashTag:"#departmentmanager",
+			auth:ADMIN,
+			actionAuth:{
+			add:ADMIN,
+			remove:ADMIN,
+			edit:ADMIN
+				}
+		},{
+			title:i18Common.MENU.SUB.BM.HOLIDAY, //휴일 관리
+			hashTag:"#holidaymanager",
+			auth:ADMIN
+				}]
+		},{
+		title:i18Common.MENU.TOP.SM, //사원 관리
+	    subMenu:[{
+	        title:i18Common.MENU.SUB.SM.USER, //사용자 관리
+	        hashTag:"#usermanager",
+	        auth:USER,
+	        actionAuth:{
+	            add:ADMIN,
+	            remove:ADMIN,
+	            edit:ADMIN
+	         }
+	    },{
+	        title:"사진 등록", //사진 등록
+	        hashTag:"#userpic",
+	        auth:ADMIN
+	    },{
+	        title:i18Common.MENU.SUB.SM.VACATION, //연차 관리
+	        hashTag:"#vacation",
+	        auth:USER
+	    }]
+	        // ,{
+	        //     title:i18Common.MENU.SUB.SM.REPORTCOMMUTE, //근태 레포트 
+	        //     hashTag:"#reportCommute",
+	        //     auth:ADMIN
+	        // }]
+		},{
         title:i18Common.MENU.TOP.AM,//일반관리
         subMenu:[{
 			title:i18Common.MENU.SUB.AM.COMMUTE_TODAY, //"오늘의 근태 상황",

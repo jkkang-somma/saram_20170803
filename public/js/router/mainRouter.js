@@ -19,6 +19,7 @@ define([
 	'views/sm/UserListView',
 	'views/sm/UserPicView',
 	'views/sm/DepartmentListView',
+	'views/sm/PositionListView',
 	'views/cm/CommuteTodayView',
 	'views/RawData/AddRawDataView',
 	'views/RawData/RawDataView',
@@ -31,7 +32,7 @@ define([
 	// 'views/report/ReportCommuteView'
 ], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
-UserListView, UserPicView,DepartmentListView,
+UserListView, UserPicView,DepartmentListView, PositionListView,
 CommuteTodayView, AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
@@ -47,6 +48,7 @@ ReportListView // report manager
 		routes : {
 			'usermanager' : 'showUserList',
 			'departmentmanager' : 'showDepartmnet',
+			'positionmanager' : 'showPosition',
 			'userpic' : 'showUserPic',
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
@@ -91,13 +93,15 @@ ReportListView // report manager
 				return next();
 			}
 			
-			var subMenu=_.pluck(Menu, "subMenu");
+			var subMenuArr=_.pluck(Menu, "subMenu");
 			
-			subMenu=subMenu[0].concat(subMenu[1]);
+			var subMenu _.flatten(subMenuArr);
+			
 			var _authArr=_.pluck(subMenu, "auth");
 			var _urlArr=_.pluck(subMenu, "hashTag");
 		
 			var index= _.indexOf(_urlArr, _nextURL);
+			
 			if (_authArr[index] <= auth){ // 권한 있을 시
 				LOG.debug("next");
 				return next();
@@ -142,9 +146,11 @@ ReportListView // report manager
 			
 				var auth=sessionUser.admin;
 				
-				var subMenu=_.pluck(Menu, "subMenu");
+				var subMenuArr=_.pluck(Menu, "subMenu");
+				var subMenu=_.flatten(subMenuArr);
 				
-				subMenu=subMenu[0].concat(subMenu[1]);
+				//subMenu=subMenu[0].concat(subMenu[1]);
+				
 				var _urlArr=_.pluck(subMenu, "hashTag");
 				var index= _.indexOf(_urlArr, url);
 				var attrKeys=_.keys(subMenu[index]); 
@@ -234,7 +240,11 @@ ReportListView // report manager
 		showDepartmnet : function(){
 			var departmentView = new DepartmentListView();
 			this.changeView(departmentView, '#departmentmanager');
-	}
+		},
+		showPosition : function(){
+			var positionView = new PositionListView();
+			this.changeView(positionView, '#positionmanager');
+		}
 		// showReportCommute : function() {
 		// 	var reportCommuteView = new ReportCommuteView();
 		// 	this.changeView(reportCommuteView);			

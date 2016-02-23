@@ -1484,5 +1484,38 @@
         		count = ?
 		</query>
 	</group>
+	<group id="position">
+		<query id="selectPosition">
+			select
+				 *
+			from
+				position_code_tbl
+			ORDER BY code
+		</query>
+		<query id="insertPosition">
+			INSERT INTO position_code_tbl
+				(code, name)
+			VALUES
+				(?, ?)
+		</query>
+		<query id="updatePosition">
+			UPDATE
+				position_code_tbl
+			SET
+				name=?
+			WHERE 
+				code=?
+		</query>
+		<query id="deletePosition">
+			delete from position_code_tbl where code=?
+		</query>
+		<query id= "selectPositionCode">
+			select
+				position_code
+			FROM 
+				members_tbl 
+			where position_code = ?	
+		</query>
+	</group>	
     	
 </querys>

@@ -41,6 +41,10 @@ var Schemas = function (schemaName) {
             wedding_day : null,
             memo: null
         },
+        position:{
+        	code: null,
+        	name: null
+        },
         department:{
         	code: null,
         	name: null,
