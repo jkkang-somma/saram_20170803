@@ -95,7 +95,7 @@ ReportListView // report manager
 			
 			var subMenuArr=_.pluck(Menu, "subMenu");
 			
-			var subMenu _.flatten(subMenuArr);
+			var subMenu = _.flatten(subMenuArr);
 			
 			var _authArr=_.pluck(subMenu, "auth");
 			var _urlArr=_.pluck(subMenu, "hashTag");
