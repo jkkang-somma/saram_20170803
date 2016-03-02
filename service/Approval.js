@@ -115,7 +115,6 @@ var Approval = function (data) {
                         /* 유강재 이사님 결재선일 경우(팀장) 사장님, 부사장님 추가 */
                         if(data.manager_id == "160301"){
                             cc.push({name : "김특훈", address : "thkim@yescnc.co.kr"});
-                            cc.push({name : "이국원", address : "leekw@yescnc.co.kr"});
                         }
                 
                         /* 근태 메일 품질검증팀 제외 */ 
@@ -176,10 +175,12 @@ var Approval = function (data) {
                         var to = [];
                         var cc = [];
                         
+                        
                         for(var idx in result){
                             if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
                                 var person = result[idx];
                                 to.push({name : person.name, address: person.email});
+                                
                                 if(person.name == "김특훈"){
                                     cc.push({ name: "김성식", address: "sskim@yescnc.co.kr"});
                                 }

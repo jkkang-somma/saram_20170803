@@ -129,7 +129,6 @@
                         || userDepartment == "무소속"
                         || userName.slice(0,3) == "테스트"){
                             
-                        console.log(userName);
                     }else{
                         var yesterdayAttribute = {};
                         
