@@ -111,6 +111,14 @@ var Approval = function (data) {
                     
                     ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
                         var cc = [];
+                        
+                        /* 유강재 이사님 결재선일 경우(팀장) 사장님, 부사장님 추가 */
+                        if(data.manager_id == "160301"){
+                            cc.push({name : "김특훈", address : "thkim@yescnc.co.kr"});
+                            cc.push({name : "이국원", address : "leekw@yescnc.co.kr"});
+                        }
+                
+                        /* 근태 메일 품질검증팀 제외 */ 
                         if(data.dept_code != "5100" && data.dept_code != "5200" && data.dept_code !="5400"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){

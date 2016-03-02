@@ -28,7 +28,6 @@
 		    }else{
 		        this.date = Moment(data.date, ResultTimeFactory.DATEFORMAT).add(1,"days").format(ResultTimeFactory.DATEFORMAT);
 		    }
-		    
 		  
 		},
 		render : function(el) {
@@ -115,14 +114,22 @@
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
                     var leaveCompany = userModel.attributes.leave_company;
+                    var userPosition = userModel.attributes.position_name;
                     if(_.isString(leaveCompany)){
 						leaveCompany = leaveCompany.trim();
 					}
-                    if( userDepartment == "무소속"
-                        || userDepartment == "임원"
+					
+					/**
+					 * 사장님, 부사장님, 퇴사자(leaveCompany값 있는경우), 무소속, 테스트계정
+					 * 근태 결과 생성하지 않음
+					 **/
+                    if( userPosition == "대표이사"
+                        || userPosition =="부사장"
                         || (!_.isNull(leaveCompany) && leaveCompany != "")
+                        || userDepartment == "무소속"
                         || userName.slice(0,3) == "테스트"){
-                        
+                            
+                        console.log(userName);
                     }else{
                         var yesterdayAttribute = {};
                         

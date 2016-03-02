@@ -278,6 +278,7 @@
     	<query id="getApprovalMailData">
     		SELECT
 				a.doc_num,
+				a.manager_id,
 				a.submit_id,
 				m.name as name,
 				a.start_date,
