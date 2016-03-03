@@ -358,6 +358,7 @@ define([
                     });
 
                     $.when.apply($, promiseArr).always(function() {
+                        results = _.compact(results);
                         if (results.length > 0) {
                             resultData.commute = results;
                         }
@@ -412,6 +413,7 @@ define([
                     });
 
                     $.when.apply($, promiseArr).always(function() {
+                        results = _.compact(results);
                         if (results.length > 0) {
                             resultData.commute = results;
                         }
@@ -459,6 +461,7 @@ define([
             });
 
             $.when.apply($, promiseArr).always(function() {
+                results = _.compact(results);
                 if (results.length > 0) {
                     resultData.commute = results;
                 }
@@ -502,6 +505,7 @@ define([
             });
 
             $.when.apply($, promiseArr).always(function() {
+                results = _.compact(results);
                 if (results.length > 0) {
                     resultData.commute = results;
                 }
