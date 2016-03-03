@@ -742,7 +742,7 @@
     
     <group id="outOffice">
     	<query id="selectOutOfficeList">
-    		select * from out_office_tbl where date >= ? and date <= ?
+    		select * from out_office_tbl where date &gt;= ? and date &lt;= ?
     	</query>
     	<query id="insertOutOffice">
 			insert into out_office_tbl(year, date, id, office_code, day_count, memo, doc_num, black_mark, start_time, end_time) 
@@ -758,7 +758,7 @@
     </group>
     <group id="inOffice">
     	<query id="selectInOfficeList">
-    		select * from in_office_tbl where date >= ? and date <= ?
+    		select * from in_office_tbl where date &gt;= ? and date &lt;= ?
     	</query>
     	<query id="insertInOffice">
 			insert into in_office_tbl(year, date, id, doc_num) values(? ,? , ?, ?)  		
