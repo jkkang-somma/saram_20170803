@@ -347,7 +347,7 @@ define([
                         var todayOutOfficeModels = filterCollection.where({
                             date: today
                         });
-                        var resultTimeFactory = ResultTimeFacoty.Builder;
+                        var resultTimeFactory = new ResultTimeFacoty.Builder();
                         promiseArr.push(
                             resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "out", todayOutOfficeModels).done(function(result) {
                                 results.push(result);
@@ -402,7 +402,7 @@ define([
                         var todayInOfficeModels = filterCollection.where({
                             date: today
                         });
-                        var resultTimeFactory = ResultTimeFacoty.Builder;
+                        var resultTimeFactory = new ResultTimeFacoty.Builder();
                         promiseArr.push(
                             resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "in", todayInOfficeModels).done(function(result) {
                                 results.push(result);
@@ -450,7 +450,7 @@ define([
             var results = [];
             var promiseArr = [];
             $.each(arrInsertDate, function(key) {
-                var resultTimeFactory = ResultTimeFacoty.Builder;
+                var resultTimeFactory = new ResultTimeFacoty.Builder();
                 var outOffice = _.clone(resultData.outOffice);
                 outOffice["date"] = arrInsertDate[key];
                 promiseArr.push(
@@ -498,7 +498,7 @@ define([
             var promiseArr = [];
 
             $.each(arrInsertDate, function(key) {
-                var resultTimeFactory = ResultTimeFacoty.Builder;
+                var resultTimeFactory = new ResultTimeFacoty.Builder();
                 promiseArr.push(
                     resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.inOffice.id, "in", resultData.inOffice).done(function(result) {
                         results.push(result);
