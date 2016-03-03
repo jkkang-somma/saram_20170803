@@ -30,7 +30,8 @@ define([
     
     var DATETIMEFORMAT = "YYYY-MM-DD HH:mm";
     
-    var Builder = {
+    var Builder = function(){};
+    _.extend(Builder.prototype, {
         id:                 "",
         name:               "",
         department:         "",
@@ -1035,13 +1036,13 @@ define([
             
             return dfd.promise();
         }
-    };
+    });
     
     return {
         TIMEFORMAT : TIMEFORMAT,
         DATEFORMAT : DATEFORMAT,
         DATETIMEFORMAT : DATETIMEFORMAT,
         WORKTYPE : WORKTYPE,
-        Builder : Builder
+        Builder : new Builder()
     };  
 });

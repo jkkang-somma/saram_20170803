@@ -28,7 +28,7 @@ define([
 	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
 	DatePickerChangeHTML
 ) {
-	var resultTimeFactory = ResultTimeFactory.Builder;
+	
 	var CommentPopupView = Backbone.View.extend({
 		initialize : function(data) {
 			this.selectData = data;
@@ -219,6 +219,7 @@ define([
      						break;
      					}
      				}
+     				var resultTimeFactory = ResultTimeFactory.Builder;
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
 						data,
