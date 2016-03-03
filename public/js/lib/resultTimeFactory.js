@@ -1021,8 +1021,8 @@ define([
              		    dfd.reject({msg : "Wrong type (in /out)"});
              		}
              		
-             		that.setInOffice(inOfficeCollection.where({date: date}));
-         		    that.setOutOffice(outOfficeCollection.where({date: date}));
+             		that.setInOffice(inOfficeCollection.where({id : id, date: date}));
+         		    that.setOutOffice(outOfficeCollection.where({id : id, date: date}));
          		    dfd.resolve(that.getResult());
          		    
                 });
