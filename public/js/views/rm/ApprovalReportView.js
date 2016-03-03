@@ -451,8 +451,10 @@ define([
             var promiseArr = [];
             $.each(arrInsertDate, function(key) {
                 var resultTimeFactory = ResultTimeFacoty.Builder;
+                var outOffice = _.clone(resultData.outOffice);
+                outOffice["date"] = arrInsertDate[key];
                 promiseArr.push(
-                    resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.outOffice.id, "out", resultData.outOffice).done(function(result) {
+                    resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.outOffice.id, "out", outOffice).done(function(result) {
                         results.push(result);
                     }).fail(function() {
                         /// 수정할 내용 없음

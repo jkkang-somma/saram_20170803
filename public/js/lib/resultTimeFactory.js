@@ -1019,7 +1019,6 @@ define([
          		        dfd.resolve(that.getResult());
          		    });
          		}else if(type == "out"){
-     		        model.date = date;
      		        outOfficeCollection.add(model);
      		        inOfficeCollection.fetch({data : selectedDate}).done(function(){
      		            that.setInOffice(inOfficeCollection.where({id : id, date: date}));
