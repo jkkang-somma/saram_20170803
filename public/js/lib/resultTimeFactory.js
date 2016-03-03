@@ -1043,6 +1043,8 @@ define([
         DATEFORMAT : DATEFORMAT,
         DATETIMEFORMAT : DATETIMEFORMAT,
         WORKTYPE : WORKTYPE,
-        Builder : new Builder()
+        Builder : function(){
+            return new Builder();
+        }
     };  
 });
