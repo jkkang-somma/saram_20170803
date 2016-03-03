@@ -1000,32 +1000,33 @@ define([
          		}
          		
          		that.initByModel(currentDayCommute);
+         		
          		var inOfficeCollection = new InOfficeCollection();
          		var outOfficeCollection = new OutOfficeCollection();
          		
-         		 var selectedDate = {
+         		var selectedDate = {
                     start : date,
                     end : date
                 };
                 
-                $.when(
-                    outOfficeCollection.fetch({data : selectedDate}),
-                    inOfficeCollection.fetch({data : selectedDate})
-                ).done(function(){
-                    if(type == "in"){
-             		    inOfficeCollection.add(model);
-             		}else if(type == "out"){
-         		        that.setOutOffice([]);
-         		        outOfficeCollection.add(model);
-             		}else{
-             		    dfd.reject({msg : "Wrong type (in /out)"});
-             		}
-             		
-             		that.setInOffice(inOfficeCollection.where({id : id, date: date}));
-         		    that.setOutOffice(outOfficeCollection.where({id : id, date: date}));
-         		    dfd.resolve(that.getResult());
-         		    
-                });
+         		if(type == "in"){
+         		    inOfficeCollection.add(model);
+         		    that.setInOffice(inOfficeCollection);
+         		    outOfficeCollection.fetch({data : selectedDate}).done(function(){
+         		        that.setOutOffice(outOfficeCollection.where({id : id,  date: date}));
+         		        dfd.resolve(that.getResult());
+         		    });
+         		}else if(type == "out"){
+     		        that.setOutOffice([]);
+     		        outOfficeCollection.add(model);
+     		        that.setOutOffice(outOfficeCollection.where({date: that.date}));
+     		        inOfficeCollection.fetch({data : selectedDate}).done(function(){
+     		            that.setInOffice(inOfficeCollection.where({id : id, date: date}));
+     		            dfd.resolve(that.getResult());        
+     		        });
+         		}else{
+         		    dfd.reject({msg : "Wrong type (in /out)"});
+         		}    
          		
             },function(){
                 dfd.reject();
