@@ -39,7 +39,6 @@ CommuteDao.prototype.insertCommute = function(data){
 };
 
 CommuteDao.prototype.updateCommute_t = function(data){
-    console.log(data);
     return {
         group : group,
         item : "updateCommuteResult",
