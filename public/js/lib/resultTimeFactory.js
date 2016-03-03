@@ -1018,6 +1018,7 @@ define([
          		    });
          		}else if(type == "out"){
      		        that.setOutOffice([]);
+     		        model.date = date;
      		        outOfficeCollection.add(model);
      		        that.setOutOffice(outOfficeCollection.where({date: that.date}));
      		        inOfficeCollection.fetch({data : selectedDate}).done(function(){
