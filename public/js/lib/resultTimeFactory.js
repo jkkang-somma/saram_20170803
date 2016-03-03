@@ -1012,18 +1012,17 @@ define([
                 
          		if(type == "in"){
          		    inOfficeCollection.add(model);
-         		    that.setInOffice(inOfficeCollection);
          		    outOfficeCollection.fetch({data : selectedDate}).done(function(){
+         		        that.setInOffice(inOfficeCollection);
          		        that.setOutOffice(outOfficeCollection.where({id : id,  date: date}));
          		        dfd.resolve(that.getResult());
          		    });
          		}else if(type == "out"){
-     		        that.setOutOffice([]);
      		        model.date = date;
      		        outOfficeCollection.add(model);
-     		        that.setOutOffice(outOfficeCollection.where({date: that.date}));
      		        inOfficeCollection.fetch({data : selectedDate}).done(function(){
      		            that.setInOffice(inOfficeCollection.where({id : id, date: date}));
+     		            that.setOutOffice(outOfficeCollection.where({date: that.date}));
      		            dfd.resolve(that.getResult());        
      		        });
          		}else{
