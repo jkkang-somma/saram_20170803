@@ -996,7 +996,8 @@ define([
          		if(currentDayCommute.length > 0){
          		    currentDayCommute = currentDayCommute[0];
          		}else {
-         		    dfd.reject({msg : "Fail to fetch commuteCollection"});
+         		    console.log({msg : "Fail to fetch commuteCollection"});
+         		    dfd.resolve();
          		    return;
          		}
          		
@@ -1026,7 +1027,8 @@ define([
      		            dfd.resolve(that.getResult());        
      		        });
          		}else{
-         		    dfd.reject({msg : "Wrong type (in /out)"});
+         		    console.log({msg : "Wrong type (in /out)"});
+         		    dfd.resolve();
          		}    
          		
             },function(){
