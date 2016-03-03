@@ -9,8 +9,8 @@ var ApprovalDao= require('../dao/approvalDao.js');
 var CommuteDao = require('../dao/commuteDao.js');
 
 var OutOffice = function (data) {
-    var _getOutOfficeList = function (a) {
-        return OutOfficeDao.selectOutOfficeList();
+    var _getOutOfficeList = function (date) {
+        return OutOfficeDao.selectOutOfficeList(date);
     };
     var _remove = function (data) {
         return new Promise(function(resolve, reject){

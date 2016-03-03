@@ -9,7 +9,7 @@ var InOffice = require('../service/InOffice.js');
 router.route('/')
 .get(function(req, res) {
     // var inOffice = new InOffice();
-    InOffice.getInOfficeList().then(function(result){
+    InOffice.getInOfficeList(req.query).then(function(result){
        res.send(result); 
     });
     

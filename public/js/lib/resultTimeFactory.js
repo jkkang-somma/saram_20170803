@@ -970,6 +970,16 @@ define([
  			return dfd.promise();
         },
         
+        /**
+         * In/Out Office 변경 사항을 적용하여 Commute Result를 수정한다. 
+         * 결재로 인해 근태 내역이 변경될때 사용됨 (결재, 결재 취소)
+         * 
+         * parameter : 
+         *  date : 날짜
+         *  id : 사용자 ID
+         *  type : "in", "out"
+         *  model : in/outOfficeModel
+         **/
         modifyByInOutOfficeType : function(date, id, type, model){
             
             var dfd = new $.Deferred();
@@ -977,6 +987,9 @@ define([
             var commuteCollection = new CommuteCollection();
             
             
+            /**
+             * 선택된 일자에 만들어져 있는 commute result를 조회한다.
+             **/
      		commuteCollection.fetchDate(date).then(function(result){
          		var currentDayCommute = commuteCollection.where({id : id});
          		if(currentDayCommute.length > 0){
@@ -987,22 +1000,33 @@ define([
          		}
          		
          		that.initByModel(currentDayCommute);
+         		var inOfficeCollection = new InOfficeCollection();
+         		var outOfficeCollection = new OutOfficeCollection();
          		
-         		if(type == "in"){
-         		    var inOfficeCollection = new InOfficeCollection();
-         		    inOfficeCollection.add(model);
-         		    that.setInOffice(inOfficeCollection);
-         		}else if(type == "out"){
-         		    model.date = date;
-         		    var outOfficeCollection = new OutOfficeCollection();
-     		        that.setOutOffice([]);
-     		        outOfficeCollection.add(model);
-     		        that.setOutOffice(outOfficeCollection.where({date: that.date}));
-         		}else{
-         		    dfd.reject({msg : "Wrong type (in /out)"});
-         		}    
+         		 var selectedDate = {
+                    start : date,
+                    end : date
+                };
+                
+                $.when(
+                    outOfficeCollection.fetch({data : selectedDate}),
+                    inOfficeCollection.fetch({data : selectedDate})
+                ).done(function(){
+                    if(type == "in"){
+             		    inOfficeCollection.add(model);
+             		}else if(type == "out"){
+         		        that.setOutOffice([]);
+         		        outOfficeCollection.add(model);
+             		}else{
+             		    dfd.reject({msg : "Wrong type (in /out)"});
+             		}
+             		
+             		that.setInOffice(inOfficeCollection.where({date: date}));
+         		    that.setOutOffice(outOfficeCollection.where({date: date}));
+         		    dfd.resolve(that.getResult());
+         		    
+                });
          		
-         		dfd.resolve(that.getResult());
             },function(){
                 dfd.reject();
             });

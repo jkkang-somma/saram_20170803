@@ -7,8 +7,8 @@ var group = "outOffice";
 var OutOfficeDao = function () {
 };
 
-OutOfficeDao.prototype.selectOutOfficeList =  function () {
-    return db.query(group, "selectOutOfficeList");
+OutOfficeDao.prototype.selectOutOfficeList =  function (data) {
+    return db.query(group, "selectOutOfficeList", [data.start, data.end]);
 };
 
 OutOfficeDao.prototype.insertOutOffice =  function (data) {
