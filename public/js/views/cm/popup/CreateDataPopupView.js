@@ -1,4 +1,4 @@
-﻿define([ 
+define([ 
 	'jquery',
 	'underscore',
 	'backbone',
@@ -20,7 +20,7 @@
 	HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
 	DatePickerHTML
 ) {
-	var resultTimeFactory = ResultTimeFactory.Builder;
+	var resultTimeFactory = ResultTimeFactory.Builder();
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(data) {
 		    if(_.isNull(data.date)){

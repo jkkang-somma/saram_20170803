@@ -169,7 +169,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			     						break;
 			     					}
 			     				}
-			     				var resultTimeFactory = ResultTimeFactory.Builder;
+			     				var resultTimeFactory = ResultTimeFactory.Builder();
 			     				resultTimeFactory.modifyByCollection( // commute_result 수정
 			     					resultCollection,
 			     					changeData,
