@@ -856,8 +856,9 @@
 				INNER JOIN position_code_tbl p
 			    ON p.code = m.position_code
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectLateWorkerReport">
@@ -902,8 +903,9 @@
 			        ) t2
 			ON m.id = t2.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
 			    	
 		<query id="selectUsedHolidayReport">
@@ -952,8 +954,9 @@
 				) t2
 			ON m.id = t2.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name	
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name	
     	</query>
     	
     	<query id="selectOverTimeWorkeReport">
@@ -1009,8 +1012,9 @@
 			        ) t2
 			ON m.id = t2.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
     	<query id="selectOverTimeWorkTypeReport">
 			SELECT 
@@ -1127,8 +1131,9 @@
 				)tc
 				ON m.id = tc.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectOverTimeWorkPayReport">
@@ -1174,8 +1179,9 @@
 		        ) t2
 				ON m.id = t2.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectHolidayWorkTypeReport">
@@ -1293,8 +1299,9 @@
 				)tc
 				ON m.id = tc.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
 
     	<query id="selectHolidayWorkPayReport">
@@ -1341,8 +1348,9 @@
 		        ) t2
 				ON m.id = t2.id
 			WHERE 
-				m.dept_code != '0000'
-			ORDER BY m.dept_code, m.position_code, m.name
+				LEFT(m.position_code,1) NOT IN ( 'A', 'B' )
+			ORDER BY 
+				m.dept_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectReportCommuteResultTbl">
