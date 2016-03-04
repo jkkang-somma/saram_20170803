@@ -219,7 +219,7 @@ define([
      						break;
      					}
      				}
-     				var resultTimeFactory = ResultTimeFactory.();
+     				var resultTimeFactory = ResultTimeFactory.Builder();
 					resultTimeFactory.modifyByCollection( // commute_result 수정
 						resultCollection,
 						data,

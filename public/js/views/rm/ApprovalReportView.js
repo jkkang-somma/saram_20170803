@@ -446,33 +446,60 @@ define([
             resultData.outOffice["office_code"] = this.options["office_code"];
             resultData.outOffice["start_time"] = this.options["start_time"];
             resultData.outOffice["end_time"] = this.options["end_time"];
+            
+            var outOfficeCollection = new OutOfficeCollection();
+            
+            outOfficeCollection.fetch({
+                data: {
+                    start: arrInsertDate[0],
+                    end: arrInsertDate[arrInsertDate.length - 1]
+                },
+                success: function(result) {
+                	var results = [];
+                    var promiseArr = [];
+                    
+                    var filterCollection = new OutOfficeCollection();
+                    for (var key in result.models) {
+                        filterCollection.add(result.models[key]);
+                    }
+                    
+                    $.each(arrInsertDate, function(key) {
+                        var resultTimeFactory = ResultTimeFactoy.Builder();
+                        var outOffice = _.clone(resultData.outOffice);
+                        var today = arrInsertDate[key];
+                        
+                        outOffice["date"] = today;
+                        filterCollection.add(outOffice);
+                        
+                        var todayOutOfficeModels = filterCollection.where({
+                            date: today,
+                            id:resultData.outOffice.id
+                        });
+                        
+                        promiseArr.push(
+                            resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.outOffice.id, "out", todayOutOfficeModels).done(function(result) {
+                                results.push(result);
+                            }).fail(function() {
+                                /// 수정할 내용 없음
+                            })
+                        );
+                    });
 
-            var results = [];
-            var promiseArr = [];
-            $.each(arrInsertDate, function(key) {
-                var resultTimeFactory = ResultTimeFactoy.Builder()
-                var outOffice = _.clone(resultData.outOffice);
-                outOffice["date"] = arrInsertDate[key];
-                promiseArr.push(
-                    resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], resultData.outOffice.id, "out", outOffice).done(function(result) {
-                        results.push(result);
-                    }).fail(function() {
-                        /// 수정할 내용 없음
-                    })
-                );
+                    $.when.apply($, promiseArr).always(function() {
+                        results = _.compact(results);
+                        if (results.length > 0) {
+                            resultData.commute = results;
+                        }
+                        _approvalCollection.save(resultData, resultData.outOffice.doc_num).done(function() {
+                            dfd.resolve(resultData);
+                        }).fail(function() {
+                            dfd.reject();
+                        });
+                    });
+                },
             });
-
-            $.when.apply($, promiseArr).always(function() {
-                results = _.compact(results);
-                if (results.length > 0) {
-                    resultData.commute = results;
-                }
-                _approvalCollection.save(resultData, resultData.outOffice.doc_num).done(function() {
-                    dfd.resolve(resultData);
-                }).fail(function() {
-                    dfd.reject();
-                });
-            });
+            
+            
 
             return dfd.promise();
         },
