@@ -96,7 +96,7 @@ var Vacation = function() {
     					continue;
     				}
     				
-    				if (result[i].dept_code == '0000') { // 임원의 경우 제회 
+    				if (result[i].position_code[0] == 'A' || result[i].position_code[0] == 'B') { // 임원의 경우 제외 
     					continue;
     				}    				
     				
