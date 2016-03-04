@@ -415,6 +415,10 @@ define([
          * 휴가, 외근 상태를 설정한다.
          **/
         setOutOffice : function(todayOutOffice){
+        	
+        	this.vacationCode = null;
+            this.outOfficeCode = null;
+            
             if(todayOutOffice.length > 0){
                 var vacationArr = [];
                 /**
@@ -453,10 +457,7 @@ define([
                 } else if (vacationArr.length > 2){
                     this.vacationCode = null;
                 }
-            } else {
-                this.vacationCode = null;
-                this.outOfficeCode = null;
-            }
+            } 
             
             /**
              * 휴가에 따른 Standard In/Out Time 조정
