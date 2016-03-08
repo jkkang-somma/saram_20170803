@@ -652,12 +652,17 @@ define([
                     /**
                      * 지각, 조퇴 시간 계산
                      **/
-                    if(this.checkLate)
+                    if(this.checkLate){
                         this.lateTime = this.inTime.diff(this.standardInTime,"minute");
+                	}else{
+                    	this.lateTime = 0;
+                    }
                     
-                    if(this.checkEarly)
+                    if(this.checkEarly){
                         tmpTime = this.outTime.diff(this.standardOutTime,"minute");
-                    
+                    }else{
+                    	tmpTime = 0;
+                    }
                     /**
                      * 지각조퇴, 지각, 조퇴 설정
                      **/
