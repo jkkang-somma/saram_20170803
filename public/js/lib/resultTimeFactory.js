@@ -1028,7 +1028,7 @@ define([
      		        outOfficeCollection.add(model);
      		        inOfficeCollection.fetch({data : selectedDate}).done(function(){
      		            that.setInOffice(inOfficeCollection.where({id : id, date: date}));
-     		            that.setOutOffice(outOfficeCollection.where({date: that.date}));
+     		            that.setOutOffice(outOfficeCollection.where({id : id, date: that.date}));
      		            dfd.resolve(that.getResult());        
      		        });
          		}else{
