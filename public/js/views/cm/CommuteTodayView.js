@@ -11,7 +11,7 @@ define([
 	'dialog',
 	'text!templates/default/head.html',
 	'text!templates/default/row.html',
-	'text!templates/default/rowdatepickerRange.html',
+	'text!templates/default/rowdatepicker.html',
 	'text!templates/default/rowbuttoncontainer.html',
 	'text!templates/default/rowbutton.html',
 	'text!templates/default/content.html',
@@ -47,11 +47,11 @@ define([
                                    }},
              	        ],
              	    rowCallback: function(row, data){
-             	    	// if(data.work_type == 21 || data.work_type == 22){ // 결근 처리
-             	    	// 	$(row).addClass("absentce");
-             	    	// }else{
-             	    	// 	$(row).removeClass("absentce");
-             	    	// }
+             	    	if(data.approval_ok == '0'){ // 미결
+             	            $(row).addClass("absentce");
+             	    	}else{
+             	    	    $(row).removeClass("absentce");
+             	    	}
              	    },
         		    collection:this.commuteTodayCollection,
         		    dataschema:["id", "date", "name", "dept_name", "out_office_name", "start_time", "end_time", "memo"],
@@ -96,8 +96,7 @@ define([
     	    var _datepickerRange=$(_.template(DatePickerHTML)(
     	    	{ obj : 
     	    		{
-    	    			fromId : "ccmFromDatePicker",
-    	    			toId : "ccmToDatePicker"
+    	    			dateId : "ccmFromDatePicker"
     	    		}
     	    	})
     	    );
@@ -141,13 +140,13 @@ define([
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
             
-            $(this.el).find("#ccmToDatePicker").datetimepicker({
-            	pickTime: false,
-		        language: "ko",
-		        todayHighlight: true,
-		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(today).format("YYYY-MM-DD")
-            });
+          //   $(this.el).find("#ccmToDatePicker").datetimepicker({
+          //   	pickTime: false,
+		        // language: "ko",
+		        // todayHighlight: true,
+		        // format: "YYYY-MM-DD",
+		        // defaultDate: Moment(today).format("YYYY-MM-DD")
+          //   });
             
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
@@ -161,17 +160,17 @@ define([
      	},
     	selectCommuteToday: function() {
     		var data = {
-     		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate()),
-     		    endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate()),
+     		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate())
+    		    // endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate()),
      		};
      		
-     		if(data.startDate.isAfter(data.endDate)){
-     			Dialog.warning("시작일자가 종료일자보다 큽니다.");
-     			return;
-     		}
+     		// if(data.startDate.isAfter(data.endDate)){
+     		// 	Dialog.warning("시작일자가 종료일자보다 큽니다.");
+     		// 	return;
+     		// }
      		
      		data.startDate = data.startDate.format("YYYY-MM-DD");
-     		data.endDate = data.endDate.format("YYYY-MM-DD");
+     		// data.endDate = data.endDate.format("YYYY-MM-DD");
      		
             var _this = this;
             Dialog.loading({

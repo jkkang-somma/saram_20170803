@@ -22,7 +22,8 @@ define([
             out_office_name : "",
             start_time : "",
             end_time : "",
-            memo : "",            
+            memo : "", 
+            approval_ok : ""           
         }
     });
     

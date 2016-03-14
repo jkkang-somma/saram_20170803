@@ -66,7 +66,7 @@ CommuteDao.prototype.getLastiestDate = function(){
 };
 
 CommuteDao.prototype.selectCommuteToday = function(date) {
-    return db.query(group, "selectCommuteToday", [date.startDate, date.endDate]);
+    return db.query(group, "selectCommuteToday", [date.startDate,date.startDate,date.startDate,date.startDate]);
 };
 
 module.exports = new CommuteDao();
