@@ -2,7 +2,9 @@
 // Create Date: 2014.12.18
 // 사용자 Service
 var db = require('../lib/dbmanager.js');
+var util = require('../lib/util.js');
 var group = "approval";
+var debug = require('debug')('ApprovalDao');
 
 var ApprovalDao = function () {
 };
@@ -28,10 +30,39 @@ ApprovalDao.prototype.rejectApprovalConfirm =  function (data) {
 };
 
 ApprovalDao.prototype.insertApproval =  function (data) {
+    
+    // 1:정상, 2:당일결재, 3:익일결재, 4:당일상신, 5:익일상신
+    // 4,5 중 선택하여 데이타 셋팅
+
+    var today = new Date();
+    var todayDate = today.getFullYear() + "-" + util.getzFormat((today.getMonth() + 1), 2) + "-" + util.getzFormat(today.getDate(), 2);
+    var todayTime = util.getzFormat(today.getHours(), 2) + ":" + util.getzFormat(today.getMinutes(), 2);
+    
+    debug("data :  START_DATE: " + data.start_date + ", OFFICE_CODE: " + data.office_code);
+    debug("today : " + today  + ", todayDate: " + todayDate + ", todayTime: " + todayTime);
+
+    var black_mark = '-1';
+
+    if (data.start_date > todayDate) {
+        // 정상
+        black_mark = '1';
+    }
+    else if (data.start_date == todayDate) 
+    {
+        if (todayTime > "12:00" ) 
+        {
+            black_mark = '4'    // 당일 상신
+        }else{
+            black_mark = '1'    // 정상
+        }
+    }else{
+        black_mark = '5';       // 익일상신
+    }
+
     return db.query(group, "insertApproval",
         [ data.doc_num,data.submit_id,data.manager_id
         ,data.submit_comment,data.start_date,data.end_date
-        ,data.office_code,data.start_time,data.end_time,data.day_count ]
+        ,data.office_code,black_mark,data.start_time,data.end_time,data.day_count ]
     );
 };
 
@@ -39,7 +70,7 @@ ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
     return {
         group : group,
         item : "updateApprovalConfirm",
-        data : [data.decide_comment, data.state, data.black_mark, data.doc_num],
+        data : [data.decide_comment, data.state, data.doc_num],
     };
 };
 

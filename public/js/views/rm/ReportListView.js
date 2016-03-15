@@ -193,7 +193,7 @@ define([
                 "title": "처리상태",
                 "render": function(data, type, row) {
                     // data : "black_mark",
-                    // ( 1:정상, 2:당일결재, 3:익일결재
+                    // ( 1:정상, 2:당일결재, 3:익일결재, 4:당일상신, 5:익일상신
                     var sessionInfo = SessionModel.getUserInfo();
                     var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
                     dataVal += "<div style='text-align: center;'>";
@@ -222,6 +222,12 @@ define([
                             break;
                         case '3':
                             dataVal = "익일결재";
+                            break;
+                        case '4':
+                            dataVal = '당일상신';
+                            break;
+                        case '5':
+                            dataVal = '익일상신';
                             break;
                         default:
                             dataVal = "-";

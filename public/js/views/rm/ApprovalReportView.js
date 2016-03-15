@@ -222,29 +222,6 @@ define([
 
             indexed_array["doc_num"] = this.options["doc_num"];
 
-            if (indexed_array.state == '결재완료') {
-                // black_mark 값 설정 1: 정상 , 2: 당일 결재 , 3: 익일결재
-                var _today = new Date();
-                var sToday = _today.getFullYear() + "-" + this.getzFormat(_today.getMonth() + 1, 2) + "-" + this.getzFormat(_today.getDate(), 2);
-                _today = new Date(sToday.substr(0, 4), sToday.substr(5, 2) - 1, sToday.substr(8, 2));
-                var sStart = $(this.el).find('#start_date input').val();
-                var start = new Date(sStart.substr(0, 4), sStart.substr(5, 2) - 1, sStart.substr(8, 2));
-
-                if (start > _today) {
-                    // 정상
-                    indexed_array["black_mark"] = '1';
-                }
-                else if (sStart == sToday) {
-                    // 당일결재
-                    indexed_array["black_mark"] = '2';
-                }
-                else if (start < _today) {
-                    // 익일결재
-                    indexed_array["black_mark"] = '3';
-                }
-
-            }
-
             return indexed_array;
         },
 
@@ -252,7 +229,6 @@ define([
             var arrData = this.options;
             arrData["decide_comment"] = sendData["decide_comment"];
             arrData["state"] = sendData["state"];
-            arrData["black_mark"] = sendData["black_mark"];
             arrData["decide_date"] = new Date();
             return arrData;
         },
@@ -296,9 +272,6 @@ define([
                 });
                 resultModel.set({
                     decide_date: new Date()
-                });
-                resultModel.set({
-                    black_mark: formData.black_mark
                 });
 
                 dfd.resolve(resultModel.attributes);

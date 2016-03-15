@@ -260,15 +260,14 @@
     	</query>
     	<query id="insertApproval">
     		insert into approval_tbl
-				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, start_time, end_time, day_count) 
-			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?, ?)
+				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, black_mark, start_time, end_time, day_count) 
+			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?, ?, ?)
     	</query>
     	<query id="updateApprovalConfirm">
     		update approval_tbl set 
     			decide_date = NOW()
     			,decide_comment = ?
     			,state = ? 
-    			,black_mark = ?
 			where doc_num=?
     	</query>
     	<query id="deleteApproval">
