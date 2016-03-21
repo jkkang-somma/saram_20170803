@@ -130,11 +130,32 @@ define([
                         var selGubun = $(_this.el).find('#office_code');
                         var selVal = selGubun.val();
                         // _this.holReq = 0;
-                        if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
+                        if (selVal == 'W01') {
+                            // 외근
+                            _this.holReq = 0;
+                            $(_this.el).find('#datePickerTitleTxt').text('date');
+                            _this.afterDate.hide();
+                            _this.setTimePicker(false);
+                        }
+                        else if (selVal == 'B01' || selVal == 'V02' || selVal == 'V03' || selVal == 'V07' || selVal == 'V08') {
+                            _this.holReq = (selVal == 'B01') ? 0 : 0.5;
+                            $(_this.el).find('#datePickerTitleTxt').text('date');
+                            _this.afterDate.hide();
+                            _this.setTimePicker(true);
+                        }
+                        else {
                             var arrInsertDate = _this.getDatePariod();
                             _this.holReq = arrInsertDate.length;
-                            $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+                            $(_this.el).find('#datePickerTitleTxt').text('from');
+                            _this.afterDate.css('display', 'table');
+                            _this.setTimePicker(true);
                         }
+                        
+                        // if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
+                        //     var arrInsertDate = _this.getDatePariod();
+                        //     _this.holReq = arrInsertDate.length;
+                            $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+                        // }
                         
                     }
                     // var year = startDate.slice(0,4);
@@ -147,11 +168,31 @@ define([
                     var selGubun = $(_this.el).find('#office_code');
                     var selVal = selGubun.val();
                     // _this.holReq = 0;
-                    if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
+                    if (selVal == 'W01') {
+                        // 외근
+                        _this.holReq = 0;
+                        $(_this.el).find('#datePickerTitleTxt').text('date');
+                        _this.afterDate.hide();
+                        _this.setTimePicker(false);
+                    }
+                    else if (selVal == 'B01' || selVal == 'V02' || selVal == 'V03' || selVal == 'V07' || selVal == 'V08') {
+                        _this.holReq = (selVal == 'B01') ? 0 : 0.5;
+                        $(_this.el).find('#datePickerTitleTxt').text('date');
+                        _this.afterDate.hide();
+                        _this.setTimePicker(true);
+                    }
+                    else {
                         var arrInsertDate = _this.getDatePariod();
                         _this.holReq = arrInsertDate.length;
-                        $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+                        $(_this.el).find('#datePickerTitleTxt').text('from');
+                        _this.afterDate.css('display', 'table');
+                        _this.setTimePicker(true);
                     }
+                    // if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
+                    //     var arrInsertDate = _this.getDatePariod();
+                    //     _this.holReq = arrInsertDate.length;
+                        $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
+                    // }
                 }
             });
 

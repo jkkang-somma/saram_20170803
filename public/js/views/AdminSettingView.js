@@ -129,7 +129,8 @@ define([
 			                label:"&nbsp",
 			                checkLabel: '퇴사자 포함',
 			                value: false,
-			                group:"reportGroup"
+			                group:"reportGroup",
+			                full:false
 			        	}, {
 			        		type:"text",
 			                name:"msgTextArea",
@@ -142,7 +143,8 @@ define([
 			                label:"&nbsp",
 			                checkLabel: '공지 표시',
 			                value:  (_view.messageModel.get("visible") == 1)?true:false ,
-			                group:"memoGroup"
+			                group:"memoGroup",
+			                full:true
 				        }]
 				    });
 

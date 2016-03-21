@@ -64,7 +64,8 @@ define([
         checkEarly: true,
         earlyTime: 0,
         notPayOverTime: 0,
-
+        normal : 0,
+        normalChange : 0,
         /**
          * Factory 기본값 설정
          */
@@ -100,6 +101,8 @@ define([
             this.checkEarly = true;
             this.earlyTime = 0;
             this.notPayOverTime = 0;
+            this.normal = 0;
+            this.normalChange = 0;
             if (this.department === "품질검증팀") {
                 this.isSuwon = true;
             }
@@ -178,6 +181,8 @@ define([
             this.checkEarly = true;
             this.earlyTime = model.get("early_time");
             this.notPayOverTime = model.get("not_pay_over_time");
+            this.normal = model.get("normal");
+            this.normalChange = model.get("normal_change");
             if (this.department === "품질검증팀") {
                 this.isSuwon = true;
             }
@@ -383,24 +388,6 @@ define([
                     this.isFlexible = true;
                     this.standardInTime = Moment(this.date, DATEFORMAT).hour(9).minute(30).second(0);
                     this.standardOutTime = Moment(this.date, DATEFORMAT).hour(18).minute(30).second(0);
-                    // if(!_.isNull(yesterdayOutTime)){
-                    //     if(yesterdayOutTime.format(DATEFORMAT) == this.date){
-                    //         var outTimeHour = yesterdayOutTime.hour();
-                    //         var outTimeMin = yesterdayOutTime.minute();
-                    //         if (outTimeHour >= 4){
-                    //             this.checkLate = false;
-                    //             this.checkEarly = false;
-
-                    //         } else if (outTimeHour >= 3){
-                    //             this.standardInTime.hour(13).minute(20).second(0); 
-
-                    //         } else if (outTimeHour >= 0){
-                    //             var roundedMin = Math.floor(outTimeMin/10) * 10 + 10;
-                    //             this.standardInTime.add(outTimeHour, 'hour');
-                    //             this.standardInTime.add(roundedMin, 'minute');
-                    //         }
-                    //     }
-                    // }
 
                 }
             }
@@ -466,7 +453,7 @@ define([
                 }
                 else if (vacationArr.length == 2) {
                     vacationArr = _.sortBy(vacationArr, function(str) {
-                        return str
+                        return str;
                     });
                     this.vacationCode = vacationArr[0] + vacationArr[1];
                     if (_.indexOf(VACATIONS_CODE, this.vacationCode) < 0) {
@@ -573,7 +560,18 @@ define([
                             break;
                         case "V03": // 오후반차
                         case "V08": // 오후반차(공적)
-                            this.standardOutTime.hour(12).minute(20).second(0);
+                            if (this.isFlexible) {
+                                if (!_.isNull(this.inTime)) {
+                                    // 지각 기준보다 일찍왔을경우 flexible 적용
+                                    if ((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime))) {
+                                        this.standardInTime = Moment(this.inTime);
+                                    }
+                                }
+                                this.standardOutTime = Moment(this.standardInTime).add(3, "hours").add(20, "minutes");
+                            }
+                            else {
+                                this.standardOutTime.hour(12).minute(20).second(0);
+                            }
                             break;
                         default:
                             /**
@@ -628,10 +626,38 @@ define([
                                 if (code == this.outOfficeCode) {
                                     var startTime = Moment(model.get("start_time"), "HH:mm");
                                     var endTime = Moment(model.get("end_time"), "HH:mm");
-                                    if (startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm")) || startTime.isSame(Moment(this.standardInTime.format("HH:mm"), "HH:mm")))
+                                    /**
+                                     * 외근 시작시간
+                                     * 9시 이전       : 9:00, checkLate = false, standardintime : 09:00, standardouttime : 18:00,
+                                     * 9시 ~ 9시 30분 : 출근시간, checkLate = false, standardintime = 출근시간, standardouttime : 출근시간 + 9시간
+                                     * 9시 30분       : 9:30, checkLate = true, standardintime : 09:30, standardouttime : 18:30,
+                                     * 
+                                     * 외근 종료시간
+                                     * standardouttime 이전 : checkEarly = true
+                                     * standardouttime 이후 : checkEarly = false
+                                     **/
+                                    if(startTime.hour() < 9){
+                                        this.standardInTime.hour(9).minute(0).second(0);
+                                        this.standardOutTime.hour(18).minute(0).second(0);
                                         this.checkLate = false;
+                                    }else if(startTime.hour() == 9){
+                                        if(startTime.minute() <= 30){
+                                            if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm"))){
+                                                this.standardInTime.hour(startTime.hour()).minute(startTime.minute()).second(0);
+                                                this.standardOutTime = Moment(this.standardInTime);
+                                                this.standardOutTime.add(9,'hours');
+                                            }
+                                            this.checkLate = false;    
+                                        }else{
+                                            this.checkLate = true;
+                                        }
+                                    }else{
+                                        this.checkLate = true;
+                                    }
+                                    
                                     if (endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
                                         this.checkEarly = false;
+                                    
                                     break;
                                 }
                             }
@@ -683,6 +709,11 @@ define([
                  * 출근기록 없음 : 출근기록이 없는 경우 & 지각체크를 하는 경우
                  * 퇴근기록 없음 : 퇴근기록이 없는 경우 & 조퇴체크를 하는 경우
                  **/
+                 
+                if(this.normal != 0){
+                    this.checkEarly = false;
+                    this.checkLate = false;
+                }
                 if (this.standardInTime.isAfter(this.standardOutTime)) {
                     this.workType = WORKTYPE.NORMAL;
 
@@ -871,6 +902,7 @@ define([
                 standard_out_time: _.isNull(this.standardOutTime) ? null : this.standardOutTime.format(DATETIMEFORMAT),
                 in_time: _.isNull(this.inTime) ? null : this.inTime.format(DATETIMEFORMAT),
                 out_time: _.isNull(this.outTime) ? null : this.outTime.format(DATETIMEFORMAT),
+                normal : this.normal,
                 in_time_type: this.inTimeType,
                 out_time_type: this.outTimeType,
                 late_time: this.lateTime,
@@ -882,6 +914,7 @@ define([
                 out_office_end_time: _.isNull(this.outOfficeEndTime) ? null : Moment(this.outOfficeEndTime).format(DATETIMEFORMAT),
                 in_time_change: this.inTimeChange,
                 out_time_change: this.outTimeChange,
+                normal_change: this.normalChange,
                 overtime_code_change: this.overtimeCodeChange,
                 early_time: this.earlyTime,
                 not_pay_over_time: this.notPayOverTime,
@@ -894,7 +927,7 @@ define([
          * 
          * parameter : 
          * 	destCollection : 어제 오늘 내일 3일치 데이터 (없을 경우 적게 들어올 수 있음)
-         * 	inData : Object { changeInTime, changeOutTime }
+         * 	inData : Object { changeInTime, changeOutTime, changeNormal }
          *  changeHistoryCollection : 관리자 수정 내역을 저장할 Collection
          *  todayIdx : destCollection에서 당일 데이터가 들어있는 Index
          *  
@@ -950,6 +983,11 @@ define([
                 if (!_.isUndefined(inData.changeOutTime)) {
                     that.outTime = Moment(inData.changeOutTime);
                     that.outTimeChange += 1;
+                }
+                
+                if (!_.isUndefined(inData.changeNormal)) {
+                    that.normal = 1;
+                    that.normalChange += 1;
                 }
                 /**
                  * 어제의 퇴근시간을 가지고 출근 기준 시간을 구한다.

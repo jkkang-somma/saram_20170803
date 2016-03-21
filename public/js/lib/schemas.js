@@ -157,6 +157,13 @@ define([
             group:undefined,
             firstBlank:false //공백 로우
         },
+        empty:{
+            type:"empty",
+            name:undefined,
+            value:undefined,
+            textKey:"name",
+            group:undefined,
+        },
         checkBox:{
             type:"checkBox",
             name:undefined,
@@ -164,7 +171,8 @@ define([
             checkLabel:undefined,
             value:undefined,
             disabled:false,
-            group:undefined
+            group:undefined,
+            full:false,
         },
         //SERVER response
         response:{

@@ -108,7 +108,7 @@ define([
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
     	    //Head 
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18Common.PAGE.TITLE.USER_MANAGER, subTitle:"사진 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18Common.PAGE.TITLE.USER_MANAGER, subTitle:"사진 등록"})));
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    

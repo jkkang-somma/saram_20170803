@@ -1,14 +1,16 @@
 <%  if (typeof(obj) != "undefined") { %>
-<div class="form-group form-group-harf">
-    <label for="<%= obj.el %>"><%= obj.label %></label>
-<!--     <select class="form-control selectpicker" name="<%= obj.name %>" value="<%= obj.value %>"> -->
-
+	<%  if (obj.full == true) { %>
+	<div class="form-group">
+	
+	<%  } else { %>    
+	<div class="form-group form-group-harf">
+	    <label for="<%= obj.el %>"><%= obj.label %></label>
+	<%  }  %>    
 		<div class="checkbox" style="margin-top: 5px;">
 			<label style="font-weight: bold;">
 			<input name="<%= obj.name %>" type="checkbox" <% if (obj.value) { %> checked="checked" <% } %> > <%= obj.checkLabel %>
 			</label>
 		</div>
-    </select>
-</div>
+	</div>
 <% } %>
 

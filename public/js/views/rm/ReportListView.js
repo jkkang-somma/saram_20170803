@@ -293,24 +293,24 @@ define([
                 }
             });
 
-            _buttons.push({ // 결재
-                type: "custom",
-                name: "ok",
-                tooltip: "결재",
-                click: function(_grid) {
-                    var selectData = _this.grid.getSelectItem();
-                    _this.onClickApproval(selectData);
-                }
-            });
-            _buttons.push({ // detail
-                type: "custom",
-                name: "read",
-                tooltip: "상세 보기",
-                click: function(_grid) {
-                    var selectData = _this.grid.getSelectItem();
-                    _this.onClickDetail(selectData);
-                }
-            });
+            // _buttons.push({ // 결재
+            //     type: "custom",
+            //     name: "ok",
+            //     tooltip: "결재",
+            //     click: function(_grid) {
+            //         var selectData = _this.grid.getSelectItem();
+            //         _this.onClickApproval(selectData);
+            //     }
+            // });
+            // _buttons.push({ // detail
+            //     type: "custom",
+            //     name: "read",
+            //     tooltip: "상세 보기",
+            //     click: function(_grid) {
+            //         var selectData = _this.grid.getSelectItem();
+            //         _this.onClickDetail(selectData);
+            //     }
+            // });
             if (this.actionAuth.save){
                 _buttons.push({ // detail
                     type: "custom",

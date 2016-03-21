@@ -23,7 +23,7 @@ CommentDao.prototype.selectCommentByPk =  function (data) {
 CommentDao.prototype.insertComment =  function (data) {
     return db.query(group, "insertComment", 
         [ data.year, data.id, data.date, data.comment, data.state, data.writer_id, 
-        data.want_in_time, data.want_out_time, data.before_in_time, data.before_out_time ]
+        data.want_in_time, data.want_out_time, data.before_in_time, data.before_out_time, data.want_normal, data.approval_id, data.approval_name ]
     );
 };
 

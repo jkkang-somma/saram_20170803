@@ -75,25 +75,34 @@ body {
 .form-group-harf {
     margin-bottom: 10px;
 }
- .form-text-harf {
+.form-text-harf {
     margin-bottom: 10px;
 }
 
-form .form-group:last-child {
-    margin-bottom: 0px;
+.modal-footer {
+    margin-top : 0px;
 }
+/*form .form-group:last-child {*/
+/*    margin-bottom: 0px;*/
+/*}*/
 
 @media (min-width: 400px) {
+    .form-row {
+        float : left;
+        width : 100%;
+    }
+    
+    .form-row .form-group-harf:nth-child(odd){
+        padding-right: .5em;
+    }
+    .form-row .form-group-harf:nth-child(even){
+        padding-left : .5em;
+    }
     .form-group-harf {
         width: 50%;
         float: left;
-        padding-left: .5em;
-        padding-right: .5em;
     }
-    .form-text-harf {
-        padding-left: .5em;
-        padding-right: .5em;
-    }
+
     .form-text-harf label {
         width : 100%;
     }
@@ -108,7 +117,8 @@ form .form-group:last-child {
     .form-group-harf {
         width: 100%;
         float: none;
-        padding-left: none;
+        padding-left: 0;
+        padding-right : 0;
     }
      .form-text-harf {
         width: 100%;
@@ -796,6 +806,7 @@ border: 2px dotted #2ABB9B !important;
 }
 .yes-panel {
   border:none !important; 
+  margin-bottom : 0;
 }
 .yes-panel .panel-body{
     padding-left: .5em;

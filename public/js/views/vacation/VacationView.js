@@ -179,7 +179,7 @@ define([
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"일반 관리", subTitle:"연차 관리"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"사원 관리", subTitle:"연차 관리"})));
     	    
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");

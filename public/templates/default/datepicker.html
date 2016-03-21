@@ -1,6 +1,8 @@
 <%  if (typeof(obj) != "undefined") { %>
 <div class="form-group form-group-harf">
-    <label for="<%= obj.id %>"><%= obj.label %></label>
+    <label for="<%= obj.id %>">
+        <%= obj.label %>
+    </label>
     <div class="input-group date" id="<%= obj.id %>">
         <input type="text" class="form-control yes-form-control" data-date-format="<%= obj.format %>"  name="<%= obj.name %>" value="<%= obj.value %>" readonly/>
         <span class="input-group-addon">

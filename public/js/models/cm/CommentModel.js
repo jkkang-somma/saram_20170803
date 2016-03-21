@@ -21,6 +21,7 @@ define([
             writer_id : "",
             reply_name : "",
             reply_id : "",
+            want_normal: "",
             want_in_time: "",
             want_out_time: "",
             before_in_time: "",

@@ -176,6 +176,12 @@ define([
                 return _combo;  
             }
         },
+        empty:{
+            getElement:function(){
+                var empty = $('<input type="hidden" class="form-control"/>');
+                return empty;
+            }
+        },
         hidden:{
             getElement:function(data){
                 var _hiddenTemp=_.template(HiddenHTML);
@@ -218,6 +224,9 @@ define([
     };
     var Form = Backbone.View.extend({
         initialize:function(options){
+            this.elementsMap = {};
+            this.groupMap = {};
+            
             var _formSchema=Schemas.getSchema('form');
             this.options=_formSchema.getDefault(options);
             
@@ -288,29 +297,110 @@ define([
                     _config=_.extend(_config, {id:_view.id+"_"+_type+"_"+(_inputId++)}); //setting config
                     
                     _childement=_defaultInputType[_type].getElement(_config);
-                    _view.elements.push(_childement);
                     
+                    _view.elements.push(_childement);
+                    _view.elementsMap[_config.name] = _childement;
                     if (!_.isUndefined(_view.el)){
                         if (!_.isUndefined(_config.group)){//group 설정이 있을 경우 그룹에 append
                             var findIndex=_.indexOf(_.pluck(_view.group, "name"), _config.group);
                             if (findIndex > -1 ){
-                                _view.groupElements[findIndex].find(".panel-body").append(_childement);
+                                if(_.isUndefined(this.groupMap[_config.group])){
+                                    this.groupMap[_config.group] = [];
+                                }
+                                this.groupMap[_config.group].push(_childement);
+                                // _view.groupElements[findIndex].find(".panel-body").append(_childement);
                             } else {
                                 LOG.debug("Not find Group:" + _config.group + " => " + _config.name);
                             }
                         } else {
-                            _form.append(_childement);     
+                            
+                            if(_.isUndefined(this.groupMap["default"])){
+                                this.groupMap["default"] = [];
+                            }
+                            this.groupMap["default"].push(_childement);
+                            // _form.append(_childement);     
                         }
                     }
+                    
                 } else {
                     LOG.error("not support child type.");
                     dfd.reject();
+                }
+            }
+            if (!_.isUndefined(_view.el)){
+                var keys= _.keys(this.groupMap);
+            
+                if(keys.length == 1 && keys[0] == "default"){
+                    var formRow = $("<div class='form-row'></div>");
+                    var formCount = 0;
+                    for(var j=0; j<this.groupMap.default.length; j++){
+                        var element = this.groupMap.default[j];
+                        if(element.hasClass("form-group-harf")){
+                            formCount += 1;
+                            formRow.append(element);
+                            if(formCount == 2){
+                                _form.append(formRow);
+                                formRow = $("<div class='form-row'></div>");
+                                formCount =0;
+                            }
+                        }else{
+                            if(formCount == 1){
+                                dest.append(formRow);
+                                formCount = 0;
+                            }
+                            _form.append(element);        
+                        }
+                        if(formCount == 1){
+                            _form.append(formRow);
+                            formCount = 0;
+                        }
+                    }
+                } else {
+                    for(var key in this.groupMap){
+                        var group = this.groupMap[key];
+                        
+                        var findIndex=_.indexOf(_.pluck(_view.group, "name"), key);
+                        if (findIndex > -1 ){
+                            var formRow = $("<div class='form-row'></div>");
+                            var formCount =0;
+                            var dest = _view.groupElements[findIndex].find(".panel-body");
+                            
+                            for(var k=0; k<group.length; k++){
+                                var element = group[k];
+                                if(element.hasClass("form-group-harf")){
+                                    formCount += 1;
+                                    formRow.append(element);
+                                    if(formCount == 2){
+                                        dest.append(formRow);
+                                        formRow = $("<div class='form-row'></div>");
+                                        formCount =0;
+                                    }
+                                }else{
+                                    if(formCount == 1){
+                                        dest.append(formRow);
+                                        formCount = 0;
+                                    }
+                                    dest.append(element);        
+                                }
+                            }
+                            if(formCount == 1){
+                                dest.append(formRow);
+                                formCount = 0;
+                            }
+                        } else {
+                            LOG.debug("Not find Group:" + _config.group + " => " + _config.name);
+                            continue;
+                        }
+                    }
                 }
             }
             _view.form=_form;
             $(_view.el).html(_form);
             dfd.resolve(_view);
             return dfd.promise();
+        },
+        getElement : function(name){
+            return this.elementsMap[name];
         },
         getData: function() {
             var disabled = this.form.find(':input:disabled').removeAttr('disabled');

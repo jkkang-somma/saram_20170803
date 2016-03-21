@@ -43,6 +43,8 @@ define([
 		var text = null; 
 		if(cellType == "overtime_code")
  			text = Code.getCodeName(Code.OVERTIME, cellData[cellType]);
+ 		else if(cellType == "normal")
+			text = _getBrString(Code.getCodeName(Code.WORKTYPE, cellData.work_type)); 		
  		else
  			text = _getTimeCell( cellData[cellType] );
  			
@@ -62,7 +64,6 @@ define([
  		}
 		 
 	}
-	
 	// 시간 값을 두 줄로 표시 
 	function _getTimeCell(time) {
 		if (Util.isNotNull(time) ) {
@@ -196,7 +197,7 @@ define([
      	                   	{ data : "name", 			"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.NAME },
      	                   	{ data : "work_type", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.WORK_TYPE,
      	                   		render : function(data, type, full, meta){
-     	                   			return _getBrString(Code.getCodeName(Code.WORKTYPE, data));
+     	                   			return _createHistoryCell("normal", full,"normal_change" );
      	                   		}
      	                   	},
      	                   	{data: "vacation_code", title: i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.VACATION,
@@ -244,7 +245,7 @@ define([
              	    	}
              	    },
         		    collection:this.commuteCollection,
-        		    dataschema:["date", "department", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count"],
+        		    dataschema:["date", "department", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count", "normal_change"],
         		    detail: true,
         		    buttons:["search",{
         		    	type:"myRecord",
@@ -266,9 +267,9 @@ define([
     	buttonInit: function(){
     	    var that = this;
     	    // tool btn
-    	    if (SessionModel.get("user").admin == 1 ) {
-    	    	this.gridOption.buttons.push(_getCommuteUpdateBtn(that));
-    	    }
+    	    // if (SessionModel.get("user").admin == 1 ) {
+    	    // 	this.gridOption.buttons.push(_getCommuteUpdateBtn(that));
+    	    // }
     	},
     	render:function(){
     	    //var _view=this;
@@ -436,6 +437,9 @@ define([
             		break;
             	case "overtime_code" :
             		title = i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.TITLE_OVER + " - " + searchData.name + " ( " + searchData.date + " )" ;
+            		break;
+            	case "normal" :
+            		title = "근태 정상 처리 내역" + " - " + searchData.name + " ( " + searchData.date + " )" ;
             		break;
             }
             Dialog.show({

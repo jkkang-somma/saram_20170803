@@ -77,15 +77,7 @@ define([
 	}
 	function _getClickFilterResult(data, value){
 		var _data= (value == "")? "" : data[9];
-		var _filterVal = $("#commuteDataTable_custom_myRecord_Btn").text();
-       	var result = false;
-       	
-       	if (_filterVal != "전체"){
-       		var ss = SessionModel.get("user").name;
-       		result = (_data == value && data[2]==ss)?true:false;
-       	}else{
-       		result = (_data == value)?true:false;
-       	}
+       	var result = (_data == value )?true:false;
        	return result;
 	}
 	function _getCommentUpdateBtn(view){	// comment 수정 
@@ -103,40 +95,58 @@ define([
 	
 	function _clickCommentUpdateBtn(view, selectItem ){
 		if ( Util.isNull(selectItem) ) {
-        			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
-        			return;
-	        	}
-	        	
-	            var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);	            
-	            var buttons = [];
-	            
-	            if(SessionModel.get("user").admin == 1 && selectItem.state != "처리완료") { // 관리자만 수정 가능
-	            	buttons.push({
-                        id: 'updateCommentBtn',
-                        cssClass: Dialog.CssClass.SUCCESS,
-                        label: '수정',
-                        action: function(dialog) {
-                        	commentUpdatePopupView.updateComment().done(function(result){
-                    			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
-                				dialog.close();
-                            }).fail(function(){
-                            	Dialog.show("업데이트가 실패했습니다.");
-                            });
-                        }
-                    });
-	            }
-	            buttons.push({
-                    label : "취소",
-                    action : function(dialog){
-                        dialog.close();
+			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
+			return;
+    	}
+    	
+        var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);	            
+        var buttons = [];
+        
+        if(selectItem.state != "처리"){
+        	if(SessionModel.get("user").id == selectItem.approval_id && selectItem.state == "상신"){ // 결재자인 경우
+            	buttons.push({
+                    id: 'updateCommentBtn',
+                    cssClass: Dialog.CssClass.SUCCESS,
+                    label: '결재',
+                    action: function(dialog) {
+                    	commentUpdatePopupView.approvalComment().done(function(result){
+                    		view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                			Dialog.show("결재가 완료되었습니다..");
+            				dialog.close();
+                        }).fail(function(){
+                        	Dialog.show("결재가 실패했습니다.");
+                        });
                     }
                 });
-	            
-	            Dialog.show({
-	                title:"Comment 처리", 
-                    content: commentUpdatePopupView,
-                    buttons: buttons
-	            });
+            }else if(SessionModel.get("user").admin == 1 && selectItem.state == "결재"){ // 관리자인 경우
+            	buttons.push({
+                    id: 'updateCommentBtn',
+                    cssClass: Dialog.CssClass.SUCCESS,
+                    label: '처리',
+                    action: function(dialog) {
+                    	commentUpdatePopupView.updateComment().done(function(result){
+                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+            				dialog.close();
+                        }).fail(function(){
+                        	Dialog.show("처리에 실패했습니다.");
+                        });
+                    }
+                });
+            }	
+        }
+        
+        buttons.push({
+            label : "취소",
+            action : function(dialog){
+                dialog.close();
+            }
+        });
+        
+        Dialog.show({
+            title:"Comment 처리", 
+            content: commentUpdatePopupView,
+            buttons: buttons
+        });
 	}
 	
 	var CommuteCommentView = BaseView.extend({
@@ -150,7 +160,11 @@ define([
         		    el: "commute_content",
         		    id: "commuteDataTable",
         		    column:[
-        		    	   { data : "comment_date", "title" : "신청일자"},
+        		    	   { data : "comment_date", "title" : "신청일자", 
+        		    	   		render: function(data, type, full, meta) {
+    			        		   return Moment(data).format("YYYY-MM-DD<br>hh-mm");
+    			        	   }
+        		    	   },
     			           { data : "name", "title" : "이름"},
     			           { data : "date", "title" : "일자" },
     			           { data : "comment", "title" : "접수내용",
@@ -172,8 +186,8 @@ define([
     			        		   return comment_reply;
     			        	   }    			        	   
     			           },
-    			           { data : "comment_reply_date", "title" : "업데이트일자"},
-    			           { data : "reply_name", "title" : "답변자" },
+    			           { data : "comment_reply_date", "title" : "처리일자"},
+    			           { data : "approval_name", "title" : "결재자" },
     			           { data : "state", "title" : "처리상태", "render": function(data, type, row){
 					           var dataVal = "<div style='text-align: center;'>" + row.state + "</div>";
 					           dataVal += "<div style='text-align: center;'>";
@@ -183,12 +197,12 @@ define([
 				         	}}
              	        ],
         		    collection: this.commentCollection,
-        		    dataschema:["date", "name", "comment", "writer_name", "comment_date", "comment_reply", "reply_name", "comment_reply_date", "state"],
+        		    dataschema:["date", "name", "comment", "writer_name", "comment_date", "comment_reply", "approval_name", "comment_reply_date", "state"],
         		    detail: true,
         		    buttons: ["search",{
         		    	type:"myRecord",
 				        name: "myRecord",
-				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				        filterColumn:["name", "approval_name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
 				        tooltip: "",
         		    }],
         		    fetch: false

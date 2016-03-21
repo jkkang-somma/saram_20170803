@@ -263,14 +263,23 @@ define([
     	    
     	    var _filters=this.filters;
             $.fn.dataTable.ext.search=[];
-            for (var name in _filters){
+            
                 $.fn.dataTable.ext.search.push(
-                    function( settings, data, dataIndex ) {
-                        var fn=_filters[name];
-                        return fn(data);
+                    function( settings, data, dataIndex, rowData, counter ) {
+                        var fnResultArr = [];
+                        for (var name in _filters){
+                            var fn=_filters[name];
+                            fnResultArr.push(fn(data));
+                        }
+                        
+                        if(_.indexOf(fnResultArr, false) > -1){
+                            return false;
+                        }else{
+                            return true;
+                        }
                     }
                 );
-            }
+            
             
             this.DataTableAPI.draw();
     	},
