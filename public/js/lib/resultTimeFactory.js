@@ -557,20 +557,28 @@ define([
                         case "V02": // 오전반차
                         case "V07": // 오전반차(공적)
                             this.standardInTime.hour(13).minute(20).second(0);
+                            this.standardOutTime.hour(18).minute(0).second(0);
                             break;
                         case "V03": // 오후반차
                         case "V08": // 오후반차(공적)
                             if (this.isFlexible) {
                                 if (!_.isNull(this.inTime)) {
                                     // 지각 기준보다 일찍왔을경우 flexible 적용
-                                    if ((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime))) {
+                                    var hour = this.inTime.hour();
+                                    var minute = this.inTime.minute();
+                                    if(hour === 9 && minute <= 30){
                                         this.standardInTime = Moment(this.inTime);
+                                    }else if(hour < 9){
+                                        this.standardInTime.hour(9).minute(0).second(0);
+                                    } else {
+                                        this.standardInTime.hour(9).minute(30).second(0);
                                     }
                                 }
                                 this.standardOutTime = Moment(this.standardInTime).add(3, "hours").add(20, "minutes");
                             }
                             else {
-                                this.standardOutTime.hour(12).minute(20).second(0);
+                                this.standardInTime.hour(9).minute(30).second(0);
+                                this.standardOutTime.hour(13).minute(50).second(0);
                             }
                             break;
                         default:
