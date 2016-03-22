@@ -30,7 +30,12 @@ router.route('/')
 	data.writer_id = session.user.id;	// 코멘트 작성자 ID
 	
 	Comment.insertComment(data).then(function(result) {
-		return res.send(result);
+		res.send(result);
+		Comment.sendCommentEmail(data).then(function(){
+            debug("Send Email"); 
+        }).catch(function(e){
+            debug("Fail to Send Email");
+        });
 	}).catch(function(err) {
 		next(err);
 	});
@@ -47,7 +52,12 @@ router.route('/:id')
 	data.reply_id = session.user.id;	// 코멘트 작성자 ID	
 	
 	Comment.updateCommentReply(data).then(function(result) {
-		return res.send(result);
+		res.send(result);
+		Comment.sendCommentEmail(data).then(function(){
+            debug("Send Email"); 
+        }).catch(function(e){
+            debug("Fail to Send Email");
+        });
 	}).catch(function(err) {
 		next(err);
 	});

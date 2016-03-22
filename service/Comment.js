@@ -5,8 +5,28 @@ var _ = require("underscore");
 var debug = require('debug')('Comment');
 var Schemas = require("../schemas.js");
 var Promise = require('bluebird');
+var UserDao = require('../dao/userDao');
 var CommentDao = require('../dao/commentDao.js');
 var CommuteDao = require('../dao/commuteDao.js');
+var ApprovalDao= require('../dao/approvalDao.js');
+
+var fs = require('fs');
+var path = require("path");
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var transport = nodemailer.createTransport(smtpTransport({
+    host: 'wsmtp.ecounterp.com',
+    port: 587,
+    auth: {
+        user: 'webmaster@yescnc.co.kr',
+        pass: 'yes112233'
+    },
+    rejectUnauthorized: false,
+    connectionTimeout:10000
+}));
 
 var Comment = function() {	
 
@@ -35,7 +55,7 @@ var Comment = function() {
                 reject(e);
              });
 		});
-	}
+	};
 	
 	var _updateCommentReply = function(inData) {
 		return new Promise(function(resolve, reject){// promise patten
@@ -50,15 +70,90 @@ var Comment = function() {
 	         });		
 		});
 
-	}
+	};
+	
+	var _sendCommentEmail = function(inData){
+		return new Promise(function(resolve, reject){// promise patten
+			var managerId = inData.approval_id;
+			fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/comment.html","utf8").then(function (html) {
+				UserDao.selectIdByUser(inData.id).then(function(result){
+					var user = result[0];
+					
+					var data = {
+						name : user.name,
+						date : inData.date,
+						comment : inData.comment,
+						comment_reply : inData.comment_reply,
+					};
+					
+	                var temp=_.template(html);
+	                var sendHTML=temp(data);
+	                var to = [];
+	                
+	                if(_.isUndefined(data.comment_reply)){
+	                	ApprovalDao.getManagerId(managerId).then(function(result){
+	                		for(var idx in result){
+	                			to = [
+									{ name : result[idx].name, address : result[idx].email}
+								];	
+	                		}
+	                		
+	                		var mailOptions= {
+			                    from: 'webmaster@yescnc.co.kr', // sender address 
+			                    to: to,
+			                    subject:"[Comment 등록] Comment가 등록되었습니다. (" + data.date + " " +  data.name + ")",
+			                    html:sendHTML,
+			                	text:"",
+			                };
+			                
+			                console.log(mailOptions);
+			                transport.sendMail(mailOptions, function(error, info){
+			                    if(error){//메일 보내기 실패시 
+			                        console.log(error);
+			                        reject();
+			                    }else{
+			                        resolve();
+			                    }
+			                });
+						});	
+	                }else{
+	                	to = [
+		                    { name: "김성식", address: "sskim@yescnc.co.kr"},
+		                    { name :"김은영", address: "eykim@yescnc.co.kr"},
+	                    ];
+	                    
+	                    var mailOptions= {
+		                    from: 'webmaster@yescnc.co.kr', // sender address 
+		                    to: to,
+		                    subject:"[Comment 결재 완료] Comment의 결재가 완료되었습니다. (" + data.date + " " +  data.name + ")",
+		                    html:sendHTML,
+		                	text:"",
+		                };
+		                
+		                console.log(mailOptions);
+		                transport.sendMail(mailOptions, function(error, info){
+		                    if(error){//메일 보내기 실패시 
+		                        console.log(error);
+		                        reject();
+		                    }else{
+		                        resolve();
+		                    }
+		                });
+	                }	
+				});
+				
+			});
+		});
+	};
 	
 	return {
 		getComment : _getComment,
 		getCommentById : _getCommentById,
 		getCommentByPk : _getCommentByPk,
 		insertComment : _insertComment,
-		updateCommentReply : _updateCommentReply
-	}
-} 
+		updateCommentReply : _updateCommentReply,
+		sendCommentEmail : _sendCommentEmail
+	};
+};
 
 module.exports = new Comment();
