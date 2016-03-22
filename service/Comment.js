@@ -101,7 +101,7 @@ var Comment = function() {
 	                		var mailOptions= {
 			                    from: 'webmaster@yescnc.co.kr', // sender address 
 			                    to: to,
-			                    subject:"[Comment 등록] Comment가 등록되었습니다. (" + data.date + " " +  data.name + ")",
+			                    subject:"[출퇴근 수정 요청] Comment가 등록되었습니다. (" + data.date + " " +  data.name + ")",
 			                    html:sendHTML,
 			                	text:"",
 			                };
@@ -125,7 +125,7 @@ var Comment = function() {
 	                    var mailOptions= {
 		                    from: 'webmaster@yescnc.co.kr', // sender address 
 		                    to: to,
-		                    subject:"[Comment 결재 완료] Comment의 결재가 완료되었습니다. (" + data.date + " " +  data.name + ")",
+		                    subject:"[출퇴근 수정 요청] Comment의 결재가 완료되었습니다. (" + data.date + " " +  data.name + ")",
 		                    html:sendHTML,
 		                	text:"",
 		                };
