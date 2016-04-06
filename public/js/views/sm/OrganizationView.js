@@ -14,7 +14,6 @@ define([
   'text!templates/layout/organization.html',
   'collection/sm/UserCollection',
   'collection/sm/DepartmentCollection',
-  'models/sm/OrganizationModel',
   'text!templates/default/button.html',
   'code',
 ], function(
@@ -33,7 +32,6 @@ define([
     LayoutHTML,  
     UserCollection,
     DepartmentCollection,
-    OrganizationModel, 
     ButtonHTML,
     Code){
 	
