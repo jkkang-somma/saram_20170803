@@ -278,6 +278,17 @@ form .form-group:last-child {
 }
 
 @media (min-width: 400px) {
+    .form-row {
+        float : left;
+        width : 100%;
+    }
+    
+    .form-row .form-group-harf:nth-child(odd){
+        padding-right: .5em;
+    }
+    .form-row .form-group-harf:nth-child(even){
+        padding-left : .5em;
+    }
     .form-group-harf {
         width: 50%;
         float: left;
