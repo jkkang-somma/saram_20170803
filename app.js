@@ -129,7 +129,6 @@ app.use('/userpic', userPic);
 app.use('/department', department);
 app.use('/position', position);
 
-
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
     if(_.isUndefined(err)){

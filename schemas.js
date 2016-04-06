@@ -48,7 +48,8 @@ var Schemas = function (schemaName) {
         department:{
         	code: null,
         	name: null,
-        	area: null
+        	area: null,
+        	leader: null
         },
         auth:{
         },
