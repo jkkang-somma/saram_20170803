@@ -85,14 +85,8 @@ define([
         	                //
         	                group:"requireInfo",
         	                linkField:"position_name"
+        	        
         	        },{
-        	                type:"hidden",
-        	                name:"position_name",
-        	                value:_model.position_name,
-        	                collection:positionCodeCollection,
-        	                group:"requireInfo"
-        	        },
-        	        {
         	                type:"combo",
         	                name:"dept_code",
         	                label:i18nCommon.USER.DEPT,
@@ -100,12 +94,7 @@ define([
         	                collection:deptCodeCollection,
         	                group:"requireInfo",
         	                linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
-        	        },{
-        	                type:"hidden",
-        	                name:"dept_name",
-        	                value:_model.dept_name,
-        	                collection:deptCodeCollection,
-        	                group:"requireInfo"
+        	        
         	        },{
         	                type:"combo",
         	                name:"approval_id",
@@ -115,14 +104,8 @@ define([
         	                group:"requireInfo",
         	                firstBlank:true,
         	                linkField:"approval_name"// text 값을 셋팅 해줌 type은 hidden
+        	        
         	        },{
-        	                type:"hidden",
-        	                name:"approval_name",
-        	                value:_model.approval_name,
-        	                group:"requireInfo",
-        	                collection:approvalUserCodeCollection,
-        	        },
-        	       {
         	                type:"combo",
         	                name:"privilege",
         	                label:i18nCommon.USER.PRIVILEGE,
@@ -144,6 +127,24 @@ define([
         	                label:i18nCommon.USER.NAME_COMMUTE,
         	                group:"requireInfo",
         	                value:_model.name_commute
+        	        },{
+	    	                type:"hidden",
+	    	                name:"position_name",
+	    	                value:_model.position_name,
+	    	                collection:positionCodeCollection,
+	    	                group:"requireInfo"
+	    	        },{
+	    	                type:"hidden",
+	    	                name:"dept_name",
+	    	                value:_model.dept_name,
+	    	                collection:deptCodeCollection,
+	    	                group:"requireInfo"
+	    	        },{
+			                type:"hidden",
+			                name:"approval_name",
+			                value:_model.approval_name,
+			                group:"requireInfo",
+			                collection:approvalUserCodeCollection,
         	        },
         	        {
         	                type:"date",
