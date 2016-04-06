@@ -24,6 +24,7 @@ define({
     }, 
     USER:{
         NAME:"이름",
+        LEADER_NAME:"팀장",
         ID:"사번",
         DEPT:"부서",
         NAME_COMMUTE:"식별 이름",
@@ -55,10 +56,10 @@ define({
     },
     PAGE:{
         TITLE:{
-            USER_MANAGER:"사원 관리"
+            USER_MANAGER:"사용자 관리"
         },
         SUB_TITLE:{
-            USER_LIST:"사원 목록"
+            USER_LIST:"사용자 목록"
         }
     },
     
@@ -143,6 +144,7 @@ define({
             	POSITION:"직급 관리",
             	DEPARTMENT:"부서 관리",
             	HOLIDAY:"휴일 관리",
+            	ORGANIZATION:"조직도",
         	},
             SM:{
                 USER:"사원 관리",
@@ -154,7 +156,7 @@ define({
                 RAW_DATA_LIST:"출입 기록 조회",
                 CREATE_DATA:"근태 자료 생성",
                 COMMUTE_MANAGER:"근태 자료 조회",
-                COMMUTE_MANAGER_COMMENT:"Comment 관리",
+                COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
                 REPORT_MANAGER:"근태 결재 관리",
                 COMMUTE_TODAY:"오늘의 근태상황"
             }
@@ -197,8 +199,8 @@ define({
     COMMENT: {
     	STATE: {
     		ALL : "전체",
-    		ACCEPTING : "상신",
-    		PROCESSING : "결재",
+    		ACCEPTING : "접수중",
+    		PROCESSING : "처리중",
     		COMPLETE : "처리완료"
     	}
     },
@@ -507,6 +509,9 @@ define({
             END_TIME: "종료<br>시간",
             MEMO: "비고"
         }
+    },
+    ORGANIZATION :{
+    	TITLE : "(주)예스씨앤씨  조직도"
     },
 	DEPARTMENT_LIST : {
         TITLE : "부서 관리",

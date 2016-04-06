@@ -31,6 +31,7 @@ var message = require('./routes/messageRouter');
 var userPic = require('./routes/userPicRouter');
 var department = require('./routes/departmentRouter');
 var position = require('./routes/positionRouter');
+var organization = require('./routes/organizationRouter');
 
 var debug = require('debug')('APP');
 var app = express();
@@ -128,7 +129,7 @@ app.use('/message', message);
 app.use('/userpic', userPic);
 app.use('/department', department);
 app.use('/position', position);
-
+app.use('/organization', organization);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
