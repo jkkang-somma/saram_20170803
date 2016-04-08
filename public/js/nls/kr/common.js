@@ -56,10 +56,10 @@ define({
     },
     PAGE:{
         TITLE:{
-            USER_MANAGER:"사용자 관리"
+            USER_MANAGER:"사원 관리"
         },
         SUB_TITLE:{
-            USER_LIST:"사용자 목록"
+            USER_LIST:"사원 목록"
         }
     },
     
@@ -156,7 +156,7 @@ define({
                 RAW_DATA_LIST:"출입 기록 조회",
                 CREATE_DATA:"근태 자료 생성",
                 COMMUTE_MANAGER:"근태 자료 조회",
-                COMMUTE_MANAGER_COMMENT:"근태 Comment 내역 관리",
+                COMMUTE_MANAGER_COMMENT:"Comment 관리",
                 REPORT_MANAGER:"근태 결재 관리",
                 COMMUTE_TODAY:"오늘의 근태상황"
             }
@@ -200,7 +200,7 @@ define({
     	STATE: {
     		ALL : "전체",
     		ACCEPTING : "상신",
-    		PROCESSING : "처리중",
+    		PROCESSING : "결재",
     		COMPLETE : "처리완료"
     	}
     },
