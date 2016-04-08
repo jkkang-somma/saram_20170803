@@ -90,14 +90,14 @@ form .form-group:last-child {
 }
 
 
-#tbl_0000{width: 280px;}
-#tbl_1000{width: 280px;}
-#tbl_7400{width: 280px;}
+#tbl_0000{width: 340px;}
+#tbl_1000{width: 340px;}
+#tbl_7400{width: 340px;}
 
  .dept00 {
   position: relative;
   height: 30px;
-  width: 280px;
+  width: 340px;
   border: 0px solid #9BA0DC;
   border-top : none;
   background: #9BA0DC;
@@ -119,7 +119,7 @@ form .form-group:last-child {
 .dept02 {
   position: relative;
   height: 30px;
-  width: 280px;
+  width: 340px;
   border: 0px solid #83F5FF;
   border-top : none;
   background: #83F5FF;
@@ -141,7 +141,7 @@ form .form-group:last-child {
 .dept07 {
   position: relative;
   height: 30px;
-  width: 280px;
+  width: 340px;
   border: 0px solid #84FFC8;
   border-top : none;
   background: #84FFC8;
@@ -163,7 +163,7 @@ form .form-group:last-child {
 .dept08 {
   position: relative;
   height: 30px;
-  width: 280px;
+  width: 340px;
   border: 0px solid #76FF7D;
   border-top : none;
   background: #76FF7D;
@@ -185,7 +185,7 @@ form .form-group:last-child {
 .dept09 {
   position: relative;
   height: 30px;
-  width: 280px;
+  width: 340px;
   border: 0px solid #FFCA7A;
   border-top : none;
   background: #FFCA7A;
@@ -207,7 +207,7 @@ form .form-group:last-child {
 .dept11 {
   position: relative;
   height: 30px;
-  width: 280px;
+  width: 340px;
   border: 0px solid #FF7E7E;
   border-top : none;
   background: #FF7E7E;
@@ -232,7 +232,12 @@ form .form-group:last-child {
 	padding-top: 30px;
 	border-radius: 15px 15px 0px 0px;	
 }
-#ybold{	font-weight: bold;}
+
+#ybold{font-weight: bold;}
+#printname{font-size:18px;}
+#printh4{font-size:22px;}
+#tdfont{font-size:18px;}    
+#printleader{font-size:19px;}
 
 @media print {	    
     html, body {
@@ -273,7 +278,10 @@ form .form-group:last-child {
  	.page-header h2{font-weight: bold; font-size:45px;padding-bottom:1em;}
  
     #ystyle{border-bottom:none;}
-    td{font-size:16px;}
+    td{font-size:22px;}
+    #printleader{font-size:24px;}
+    #printname{font-size:24px;}
+    #printh4{font-size:28px;}
     .orgcontainer{padding-top:5em;}    
 }
 
