@@ -153,6 +153,7 @@ define([
 	                collection:[
 	                	{key : STATE.ACCEPTING, value : STATE.ACCEPTING},
 	                	{key : STATE.PROCESSING, value : STATE.PROCESSING},
+	                	{key : STATE.NPROCESSING, value : STATE.NPROCESSING},
 	                	{key : STATE.COMPLETE, value : STATE.COMPLETE}
 	                ],
 	                disabled: true,
@@ -176,7 +177,7 @@ define([
 	            if(_view.selectData.state != "처리"){
 		        	if(SessionModel.get("user").id == _view.selectData.approval_id && _view.selectData.state == "상신"){ // 결재자인 경우
 						$(_view.form.getElement("comment_reply")).find("textarea").removeAttr('readonly');
-		            }else if(SessionModel.get("user").admin == 1 && _view.selectData.state == "결재"){ // 관리자인 경우
+		            }else if(SessionModel.get("user").admin == 1 && _view.selectData.state == "결재" && _view.selectData.state != "반려"){ // 관리자인 경우
 						$(_view.form.getElement("comment_reply")).find("textarea").removeAttr('readonly');
 		            }	
 		        }
@@ -274,6 +275,24 @@ define([
 			newData._id = userId;
 			newData.comment_reply = data.comment_reply;
 			// commentModel.set("_id", )
+			console.log(newData);
+			commentModel.save(newData, {
+				success : function(result){
+					dfd.resolve(result);
+				}
+			});
+			return dfd.promise();
+		},
+		NapprovalComment : function(){
+			var dfd = new $.Deferred();
+			var data = this.form.getData();
+     		
+			var commentModel = new CommentModel(newData);
+			var userId = SessionModel.get("user").id;
+			var newData = _.clone(this.selectData);
+			newData.state = "반려";
+			newData._id = userId;
+			newData.comment_reply = data.comment_reply;
 			console.log(newData);
 			commentModel.save(newData, {
 				success : function(result){

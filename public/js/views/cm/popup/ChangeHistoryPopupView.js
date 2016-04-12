@@ -41,15 +41,21 @@ define([
 				id: "changeHistoryDataTable",
 				column: [{
 					data: "change_date",
-					"title": "수정 날짜"
+					"title": "수정 날짜",
+					render : function(data, type, full, meta) {
+					return Moment(data).format("YYYY-MM-DD<br>hh-mm");
+				}
 				}, {
 					data: "change_memo",
-					"title": "변경 사유",
-					render: function(data, type, full, meta) {
-						var changeBr = full.change_memo + "<br>";
-						var changehi = " - " + full.change_name;
-						return changeBr + changehi;
-					}
+					"title": "변경 사유"
+//					render: function(data, type, full, meta) {
+//						var changeBr = full.change_memo + "<br>";
+//						var changehi = " - " + full.change_name;
+//						return changeBr + changehi;
+//					}
+				},{
+					data: "change_name",
+					"title": "관리부",
 				}],
 				collection: this.changeHistoryCollection,
 				detail: true,

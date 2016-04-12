@@ -56,6 +56,9 @@ define([
 	                    // return (_data == STATE.PROCESSING)?true:false;
 	                },
 	                function(data){
+						return _getClickFilterResult(data, STATE.NPROCESSING);	
+	                },
+	                function(data){
 						return _getClickFilterResult(data, STATE.COMPLETE);	
 	                    // return (_data == STATE.COMPLETE)?true:false;
 	                }
@@ -118,7 +121,21 @@ define([
                         });
                     }
                 });
-            }else if(SessionModel.get("user").admin == 1 && selectItem.state == "결재"){ // 관리자인 경우
+            	buttons.push({
+                    id: 'updateCommentBtn',
+                    cssClass: Dialog.CssClass.SUCCESS,
+                    label: '반려',
+                    action: function(dialog) {
+                    	commentUpdatePopupView.NapprovalComment().done(function(result){
+                    		view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                			Dialog.show("결재가 반려되었습니다..");
+            				dialog.close();
+                        }).fail(function(){
+                        	Dialog.show("결재가 실패했습니다.");
+                        });
+                    }
+                });
+            }else if(SessionModel.get("user").admin == 1 && selectItem.state == "결재" && selectItem.state != "반려"){ // 관리자인 경우
             	buttons.push({
                     id: 'updateCommentBtn',
                     cssClass: Dialog.CssClass.SUCCESS,

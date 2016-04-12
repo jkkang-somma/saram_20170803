@@ -201,6 +201,7 @@ define({
     		ALL : "전체",
     		ACCEPTING : "상신",
     		PROCESSING : "결재",
+    		NPROCESSING : "반려",
     		COMPLETE : "처리완료"
     	}
     },
