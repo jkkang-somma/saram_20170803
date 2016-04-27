@@ -41,8 +41,9 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			
 			var _view=this;
 			var overtimeCodes = Code.getCodes(Code.OVERTIME);
-			var comboItem = [{key:"", value:" "}];
+			var comboItem = [{key:" ", value:"초과근무 없음"}];
 			var selectedCode = null;
+			comboItem.push({key:"",value:""});
     	    for(var key in overtimeCodes){
     	    	comboItem.push({key:overtimeCodes[key].code, value:overtimeCodes[key].name});
     	    }
@@ -142,7 +143,7 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 							break;
 						case "overtime_code":
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OVER_TIME_MSG;
-							changeData.changeOvertimeCode = data.overtime_code;
+							changeData.changeOvertimeCode = data.overtime_code == null ? " " : data.overtime_code;
 							break;
 					}
 					message = message + "[ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
@@ -249,7 +250,8 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 	function _getChangeHistoryModel(changeColumn, newData, oriData, changeId, changememo ) {
 		if (oriData[changeColumn] == newData[changeColumn]){
 			return null;
-			
+		}else if (oriData[changeColumn] == null && newData[changeColumn] == " "){
+			return null;
 		} else {
 			var changeHistoryModel = new ChangeHistoryModel({
 				year : oriData.year,
