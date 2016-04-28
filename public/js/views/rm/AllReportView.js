@@ -27,7 +27,6 @@ define([
     ApprovalCollection, VacationCollection, HolidayCollection,
     AddAllReportView, ApprovalReportView, DetailReportView,UserCollection,i18Common,ButtonHTML
 ) {
-	var _currentFilter=0;
     var allreportView = BaseView.extend({
         el: $(".main-container"),
         events: {  },
