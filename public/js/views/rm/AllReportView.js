@@ -41,9 +41,6 @@ define([
                 view: this
                     //gridOption
             };
-
-//            $(this.el).html('');
-//            $(this.el).empty();
             
         },
         render: function() {
