@@ -127,11 +127,11 @@ define([
 					var category = $(
 							'<div  style="float:left; padding-left:10px; padding-right:10px; width:360px;">'+
 								'<div id="div_'+deptorg[0].code+'" style="margin-bottom:30px;">'
-									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:30px;"><span id=ybold>'+deptorg[0].name + '</span></div><div class=dept00></div>' +
+									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:32px;"><span id=ybold>'+deptorg[0].name + '</span></div><div class=dept00></div>' +
 									'<table id="tbl_'+deptorg[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
 								+'<div id="div_'+deptorg[2].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:30px;"><span id=ybold>'+deptorg[2].name + '</span></div><div class=dept02 style="padding-bottom:20px;"></div>' +
+									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:32px;"><span id=ybold>'+deptorg[2].name + '</span></div><div class=dept02 style="padding-bottom:20px;"></div>' +
 									'<table id="tbl_'+deptorg[2].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
@@ -145,7 +145,7 @@ define([
 					var category = $(
 							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
 								'<div id="div_'+deptorg[7].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#26FF9E, #84FFC8);font-weight: bold;font-size:30px;"><span id=ybold>' +deptorg[7].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept5400+"명)"+'</span>' +'</div><div class=dept07></div>' +
+									+'<div id=ystyle style="background: linear-gradient(#26FF9E, #84FFC8);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[7].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept5400+"명)"+'</span>' +'</div><div class=dept07></div>' +
 									'<table id="tbl_'+deptorg[7].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
@@ -175,7 +175,7 @@ define([
 					var category = $(
 							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
 								'<div id="div_'+deptorg[8].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#2FFF39, #76FF7D);font-weight: bold;font-size:30px;"><span id=ybold>' +deptorg[8].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept7010+"명)"+'</span>' +'</div><div class=dept08></div>' +
+									+'<div id=ystyle style="background: linear-gradient(#2FFF39, #76FF7D);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[8].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept7010+"명)"+'</span>' +'</div><div class=dept08></div>' +
 									'<table id="tbl_'+deptorg[8].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
@@ -204,11 +204,11 @@ define([
 					var category = $(
 							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
 								'<div id="div_'+deptorg[9].code+'" style="margin-bottom:30px;">'
-									+'<div id=ystyle style="background: linear-gradient(#FFB23C, #FFCA7A);font-weight: bold;font-size:30px;"><span id=ybold>' +deptorg[9].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept7400+"명)"+'</span>' +'</div><div class=dept09></div>' +
+									+'<div id=ystyle style="background: linear-gradient(#FFB23C, #FFCA7A);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[9].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept7400+"명)"+'</span>' +'</div><div class=dept09></div>' +
 									'<table id="tbl_'+deptorg[9].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
 								+'<div id="div_'+deptorg[10].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#FFB23C, #FFCA7A);font-weight: bold;font-size:31px;"><span id=ybold>'+ deptorg[9].name+'</span>'+ '<span style=font-size:25px;>' +" ("+"수원)"+'</span>' 
+									+'<div id=ystyle style="background: linear-gradient(#FFB23C, #FFCA7A);font-weight: bold;font-size:32px;"><span id=ybold>'+ deptorg[9].name+'</span>'+ '<span style=font-size:25px;>' +" ("+"수원)"+'</span>' 
 									+'</div><div class=dept09 style="padding-bottom:20px;"></div>' +
 									'<table id="tbl_'+deptorg[10].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
@@ -239,7 +239,7 @@ define([
 					var category = $(
 							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
 								'<div id="div_'+deptorg[11].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#FF3636, #FF7E7E);font-weight: bold;font-size:30px;"><span id=ybold>' +deptorg[11].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept8100+"명)"+'</span>' +'</div><div class=dept11></div>' +
+									+'<div id=ystyle style="background: linear-gradient(#FF3636, #FF7E7E);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[11].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept8100+"명)"+'</span>' +'</div><div class=dept11></div>' +
 									'<table id="tbl_'+deptorg[11].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
 								'</div>'
 							+'</div>'

@@ -1,0 +1,95 @@
+<div class="container">
+    <form role='form'>        
+        <div class="form-group">
+            <label for="office_code">구분</label>
+            <select id="office_code" name="office_code" class="form-control"></select>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class='col-sm-3'><label for="start_date">기간</label></div>
+            </div>
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="start_date">
+                            <span class="input-group-addon" id="datePickerTitleTxt">
+                                from
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="start_date" readonly/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="end_date">
+                            <span class="input-group-addon">
+                                to
+                            </span>
+                            <input type="text" class="form-control" data-format="yyyy-MM-dd" name="end_date" readonly/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="outsideOfficeTimeCon">
+            <div class="row">
+                <div class='col-sm-3'><label for="start_date" id="timePickTitle">외근 시간</label></div>
+            </div>
+            <div class="row" style="height: 45px;">
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="start_time">
+                            <span class="input-group-addon">
+                                from
+                            </span>
+                            <input type="text" class="form-control" data-format="HH:mm" name="start_time" readonly/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-6'>
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm date" id="end_time">
+                            <span class="input-group-addon">
+                                to
+                            </span>
+                            <input type="text" class="form-control" data-format="HH:mm" name="end_time" readonly/>
+                            <span class="input-group-addon datepickerbutton">
+                                  <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+        <div class="row">            
+            <div class='col-sm-6'>
+                <label for="reqHoliday">신청 일수</label>
+                <input type="text" id="reqHoliday" class="form-control" readonly="true" style='text-align: right;'/>
+            </div>
+        </div>
+    </div>
+        <div class="form-group addReportNone">
+	        <label for="submit_id">신청자</label>
+	        <textarea id="submit_id" name="submit_id" rows="4" class="form-control" disabled="true"/>
+        </div>
+        <div class="form-group addReportNone">
+            <label for="decide_comment">결재 메모</label>
+            <textarea id="decide_comment" name="decide_comment" rows="4" class="form-control"/>
+        </div>
+        <div class="form-group approvalReportNone">
+            <label for="manager_id">결재자</label>
+            <select id="manager_id" name="manager_id" class="form-control"></select>
+        </div>
+
+    </form>
+</div>

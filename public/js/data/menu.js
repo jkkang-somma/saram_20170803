@@ -94,6 +94,13 @@ define([
             actionAuth:{
                 save:ADMIN
             }
+        },{
+            title:i18Common.MENU.SUB.AM.ALL_REPORT, //"일괄 상신(list)",
+            hashTag:"#allreport",
+            auth:ADMIN,
+            actionAuth:{
+                save:ADMIN
+            }
         }]
     }];
 	return _menu;

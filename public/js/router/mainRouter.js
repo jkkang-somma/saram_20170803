@@ -30,6 +30,7 @@ define([
 	'views/cm/CommuteCommentView',
 	'views/vacation/VacationView',
 	'views/rm/ReportListView',
+	'views/rm/AllReportView',
 	// 'views/report/ReportCommuteView'
 ], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
@@ -37,7 +38,7 @@ UserListView, UserPicView,DepartmentListView, OrganizationView, PositionListView
 CommuteTodayView, AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
-ReportListView // report manager
+ReportListView, AllReportView // report manager
 // ReportCommuteView
 ){
 	var LOG=log.getLogger('MainRouter');
@@ -64,6 +65,7 @@ ReportListView // report manager
 			'reportmanager' : 'showReportManager',
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
+			'allreport' : 'showAllReport',
 			'*actions' : 'showHome'
 			
 		},
@@ -250,6 +252,10 @@ ReportListView // report manager
 		showOrganization : function(){
 			var organizationView = new OrganizationView();
 			this.changeView(organizationView, '#organization');
+		},
+		showAllReport : function(){
+			var allreportView = new AllReportView();
+			this.changeView(allreportView, '#allreport');
 		}
 		// showReportCommute : function() {
 		// 	var reportCommuteView = new ReportCommuteView();

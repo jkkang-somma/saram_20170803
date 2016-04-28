@@ -158,7 +158,8 @@ define({
                 COMMUTE_MANAGER:"근태 자료 조회",
                 COMMUTE_MANAGER_COMMENT:"Comment 관리",
                 REPORT_MANAGER:"근태 결재 관리",
-                COMMUTE_TODAY:"오늘의 근태상황"
+                COMMUTE_TODAY:"오늘의 근태상황",
+                ALL_REPORT:"근태 일괄 결재"
             }
         }
     },
