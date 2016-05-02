@@ -371,6 +371,7 @@ define([
      			year: this.selectData.year,
      			date: this.selectData.date,
      			seq: this.selectData.seq,
+     			comment: data.comment,
      			comment_reply: data.comment_reply,
      			state: "처리완료",
      			changeInTime: null,
@@ -388,28 +389,28 @@ define([
      		//comment를 changememo로 보냄
      		if(checkResult.normalCheck){
      			newData.changeNormal = 1;
-     			var nomalChangeModel = this._getChangeHistoryModel("normal", 1, 0, userId, data.comment_reply);
+     			var nomalChangeModel = this._getChangeHistoryModel("normal", 1, 0, userId, data.comment);
      			if (nomalChangeModel)
 					newData.changeHistoryCollection.add(nomalChangeModel);
      		}
      		
      		if(checkResult.inCheck){
      			newData.changeInTime = data.inTimeAfter;
-     			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId, data.comment_reply);
+     			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId, data.comment);
      			if (inChangeModel)
 					newData.changeHistoryCollection.add(inChangeModel);
      		}
      		
      		if(checkResult.outCheck){
      			newData.changeOutTime = data.outTimeAfter;
-     			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId, data.comment_reply);
+     			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId, data.comment);
      			if (outChangeModel)
 					newData.changeHistoryCollection.add(outChangeModel);
      		}
      		
 			return newData;
 		},
-		_getChangeHistoryModel :function(changeColumn, newData, oriData, changeId, comment_reply) {
+		_getChangeHistoryModel :function(changeColumn, newData, oriData, changeId, comment) {
 			if(newData == oriData){
 				return null;
 			}
@@ -421,7 +422,7 @@ define([
 				change_before : oriData,
 				change_after : newData,
 				change_id : changeId,
-				change_memo : comment_reply
+				change_memo : comment
 			});				
 			return changeHistoryModel;
 		
