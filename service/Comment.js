@@ -90,7 +90,7 @@ var Comment = function() {
 	                var sendHTML=temp(data);
 	                var to = [];
 	                
-	                if(_.isUndefined(data.comment_reply)){
+	                if(data.state !== "처리완료"){
 	                	ApprovalDao.getManagerId(managerId).then(function(result){
 	                		for(var idx in result){
 	                			to = [
