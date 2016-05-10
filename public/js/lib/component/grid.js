@@ -26,6 +26,7 @@ define([
     var _gridLength=[10,25,50,100];
     
     var Grid = Backbone.View.extend({
+    	_dataTable: null,
     	initialize:function(options){
     	    var grid=this;
     	    
@@ -594,7 +595,10 @@ define([
             if(SessionModel.getUserInfo().id == "130702"){
     	        _grid.currentLength=100;   
     	    }else{
-                _grid.currentLength=50;
+    	    	//initLength가 undefined이면 currentLength의 표시수 50.
+    	    	var initLength = this.options.initLength;
+    	    	_grid.currentLength = (initLength==undefined)?50:initLength;
+//                _grid.currentLength=50;
     	    }
             
     	    this._drawButtons();
@@ -625,7 +629,8 @@ define([
     	    this.columns= _columns;
     	    this.options.collection.toJSON();
     	    //dataTable reander
-    	    var _dataTable=$(GridHTML);
+//    	    var _dataTable=$(GridHTML);
+    	    _dataTable=$(GridHTML);
             $("#"+this.options.el).append(_dataTable);
     	    _dataTable.attr("id", this.options.id);
             _dataTable.dataTable({

@@ -83,9 +83,8 @@ define([
         	var submitMem = $(this.el).find('#submit_id');
         	var submitOptionHtml ="";
         	for(var i=0;i<this.setuser.length;i++){
-        		submitOptionHtml = "<option value='" + this.setuser[i].id + "'>" + this.setuser[i].name + "</option>";
         		submitMem.append(submitOptionHtml);
-        		$(this.el).find("#submit_id").append(this.setuser[i].name + " ");
+        		$(this.el).find("#submit_id").append(this.setuser[i].name + ", ");
         	}        	
         },
 

@@ -29,18 +29,17 @@ define([
 ) {
     var allreportView = BaseView.extend({
         el: $(".main-container"),
-        events: {  },
-        
+        grid1 : null,
+        grid2 : null,
         initialize: function() {
             this.userCollection= new UserCollection();
             this.option = {
             	el:"content",
                 collection:this.userCollection,
                 detail: true,
-                view: this
+                view: this,
                     //gridOption
             };
-            
         },
         render: function() {
             $(this.el).html(reportListTmp);
@@ -53,8 +52,9 @@ define([
         		    el:"left",
         		    id:"left_table",
         		    column:[
-					{render: function(data, type, row) {						
-						return "<input type='checkbox' name='leftbox' id='leftbox' class='leftbox'>";
+					{"title":"<input type='checkbox' name='leftall' class='leftall'>" ,
+						render: function() {						
+							return "<input type='checkbox' name='leftbox' class='leftbox'>";
 						}
 					},         
         		    {"title": "이름",render:function(data, type, row){
@@ -73,23 +73,12 @@ define([
                     { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
              	        ],
         		    collection:this.userCollection,
-//        		    buttons:["search"],
         		    detail: true,
         		    fetch: false,
+        		    initLength : 100,
         		    order : [[2, "asc"]],
         		    rowCallback : function(row, data) {
-            			$(row).unbind("change");
-            			$(row).change(function(){
-            				if ( $('input[name="leftbox"]').is(":checked") ){
-                				grid2.addRow(data);                       				
-                				_view.mydata.push(data);
-//                				console.log(_view.mydata);
-                				grid1.removeRow(data);
-            				}
-//            				else if($('input[name="leftbox"]').is(":not(:checked)") ){
-//            					grid2.removeRow(data);
-//            				}
-            			});
+            			$(row).data("row", data);
             		}
         	};    		
             
@@ -97,44 +86,43 @@ define([
         		    el:"right",
         		    id:"right_table",
         		    column:[
-        			{render: function() {
-        				return "<input type='checkbox' name='rightbox' id='rightbox' class='rightbox'>";
+        			{"title":"<input type='checkbox' name='rightall' class='rightall'>" ,
+        				render: function() {
+        					return "<input type='checkbox' name='rightbox' class='rightbox'>";
         				}
         			},
-        		    {data: "name", "title": "이름"}, 
+        			{"title": "이름",render:function(data, type, row){
+						return row.name;
+						}
+					}, 
         		    {"title": "직급",render: function(data, type, row) {
-                            return row.position_name;
+						return row.position_name;
                         }
                     },
                     { "title": "부서","render": function(data, type, row){
-                        return row.dept_name;
+                    	return row.dept_name;
                         }
                     },
                     { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
                     { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
              	        ],
-        		    collection:new UserCollection(),
+             	    collection:this.userCollection,
         		    detail: true,
         		    fetch: false,
+        		    //initLength grid.js에서 설정 undefined면 표시수 50
+        		    initLength : 100,
         		    order : [[2, "asc"]],
         		    rowCallback : function(row, data) {
-            			$(row).unbind("change");
-            			$(row).change(function(){
-            				if ( $('input[name="rightbox"]').is(":checked") ){
-                				grid1.addRow(data);  
-                				grid2.removeRow(data);
-            				}
-//            				else if($('input[name="leftbox"]').is(":not(:checked)") ){
-//            					grid1.removeRow(data);
-//            				}
-            			});
+            			$(row).data("row", data);
             		}
-        	};    		
-            gridOption2.buttons = this.getTableButtons();            
+        	};    		 
+            gridOption2.buttons = this.getTableButtons();  
             var _gridSchema = Schemas.getSchema('grid');
-            var grid1 = new Grid(_gridSchema.getDefault(gridOption1));
-            var grid2 = new Grid(_gridSchema.getDefault(gridOption2)); 
-            var that = this;
+
+            this.grid1 = new Grid(_gridSchema.getDefault(gridOption1));
+            this.grid2 = new Grid(_gridSchema.getDefault(gridOption2)); 
+            
+            var that = this;            
             that.userCollection.fetch({
                 success : function(){
             		that.userCollection.models = _.filter(that.userCollection.models, function(model){
@@ -145,12 +133,43 @@ define([
             				return false;
             			}
             		})
-                    grid1.render();
+                    that.grid1.render();
+            		//grid1이 다 그려진 시점에서 테이블에 전체 checkbox
+            		$(".leftall").click(function () {
+        				if(this.checked ==true){
+        					$('#left_table').find('input[name="leftbox"]').prop('checked', true);
+        				}else{
+        					$('#left_table').find('input[name="leftbox"]').prop('checked', false);
+        				}
+        			});
                 }
-            });
+            });           
             
-            grid2.render();        
+            that.grid2.render();  
+            //gird2이 다 그려진 시점에서 테이블에 전체 checkbox
+            $(".rightall").click(function () {
+				if(this.checked ==true){
+					$('#right_table').find('input[name="rightbox"]').prop('checked', true);					
+				}else{
+					$('#right_table').find('input[name="rightbox"]').prop('checked', false);
+				}
+			});
             
+//            $(this.el).find('#left').after("<div id='rightMove'></div>");
+//            $(this.el).find('#left').after("<div id='leftMove'></div>");
+                    
+            $("#rightMove").click(function(){            	
+        		if ( $('input[name="leftbox"]').is(":checked") ){
+        			that.moveRight();
+        			$('#left_table').find('input[name="leftall"]').prop('checked', false);
+				}
+        	});
+            $("#leftMove").click(function(){
+        		if ( $('input[name="rightbox"]').is(":checked") ){
+        			that.moveLeft();
+        			$('#right_table').find('input[name="rightall"]').prop('checked', false);
+				}
+        	});
         },
         setTitleTxt: function() {
             // small title 
@@ -159,10 +178,44 @@ define([
             smallTitleTxt.text('일괄 근태 결재');
             return this;
         },
-        getTableButtons: function() {
-        	arrdata =this.mydata;
-//        	console.log(arrdata);
+        //left_table에서 right_table로 이동
+        moveRight: function() {
+        	var _that = this;
+        	var _view = this;
+      	
+        	var list = [];
+        	//left>>right
+        	$("input[name=leftbox]:checked").each(function() {   
+        		var tr = $(this).parents("tr");
+        		$(tr).addClass('checked');
+        		var rowData = $(tr).data("row");
+        		list.push(rowData);
+        		_view.mydata.push(rowData);       		
+			});
+        	_that.grid1.DataTableAPI.row('.checked').remove().draw(false);
+        	$("#right_table").dataTable().fnAddData(list);
+        },
+        //right_table에서 left_table로 이동
+        moveLeft: function() {
+        	var _that = this;
+        	var _view = this;
         	
+        	var list = [];
+        	//right>>left
+        	$("input[name=rightbox]:checked").each(function() {     		
+        		var tr = $(this).parents("tr");
+        		$(tr).addClass('checked');
+        		var rowData = $(tr).data("row");
+        		list.push(rowData);
+        		//right_table에서 제거 한 rowData를 제거       		
+        		var indexRemove = _view.mydata.indexOf(rowData);
+        		_view.mydata.splice(indexRemove,1); //mydata array에서 indexRemove부터 1개만 제거(indexRemove만 제거됨)      		
+			});
+        	_that.grid2.DataTableAPI.row('.checked').remove().draw(false);
+        	$("#left_table").dataTable().fnAddData(list);
+        },
+        getTableButtons: function() {
+        	arrdata =this.mydata;        	
             var _this = this;
             var _buttons =["search"];
             _buttons.push({ // 신규상신
