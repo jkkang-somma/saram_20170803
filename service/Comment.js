@@ -90,13 +90,16 @@ var Comment = function() {
 	                var sendHTML=temp(data);
 	                var to = [];
 	                
-	                if(data.state !== "처리완료"){
+	                if(data.state == "상신"){
 	                	ApprovalDao.getManagerId(managerId).then(function(result){
 	                		for(var idx in result){
 	                			to = [
 									{ name : result[idx].name, address : result[idx].email}
 								];	
 	                		}
+	                		
+	                		to.push({ name: "김성식", address: "sskim@yescnc.co.kr"});
+	                		to.push({ name :"김은영", address: "eykim@yescnc.co.kr"});
 	                		
 	                		var mailOptions= {
 			                    from: 'webmaster@yescnc.co.kr', // sender address 
@@ -116,7 +119,7 @@ var Comment = function() {
 			                    }
 			                });
 						});	
-	                }else{
+	                }else if(data.state == "결재"){
 	                	to = [
 		                    { name: "김성식", address: "sskim@yescnc.co.kr"},
 		                    { name :"김은영", address: "eykim@yescnc.co.kr"},
