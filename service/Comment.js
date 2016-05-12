@@ -90,7 +90,7 @@ var Comment = function() {
 	                var sendHTML=temp(data);
 	                var to = [];
 	                
-	                if(data.state == "상신"){
+	                if(inData.state == "상신"){
 	                	ApprovalDao.getManagerId(managerId).then(function(result){
 	                		for(var idx in result){
 	                			to = [
@@ -119,12 +119,12 @@ var Comment = function() {
 			                    }
 			                });
 						});	
-	                }else if(data.state == "결재"){
+	                }else if(inData.state == "결재"){
 	                	to = [
 		                    { name: "김성식", address: "sskim@yescnc.co.kr"},
 		                    { name :"김은영", address: "eykim@yescnc.co.kr"},
 	                    ];
-	                    
+	                    to.push({ name :user.name, address: user.email})
 	                    var mailOptions= {
 		                    from: 'webmaster@yescnc.co.kr', // sender address 
 		                    to: to,
