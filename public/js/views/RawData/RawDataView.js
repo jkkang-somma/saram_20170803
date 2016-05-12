@@ -31,7 +31,10 @@ SessionModel, RawDataModel, RawDataCollection,UserModel, UserCollection,
 ProgressbarView){
     var RawDataView = BaseView.extend({
         el:$(".main-container"),
-        
+        setSearchParam : function(searchParam) {
+			this.searchParam = searchParam; // url + 검색 조건으로 페이지 이동시 조건감들 {id: id, date: date}
+		},
+		
     	initialize:function(){
     		$(this.el).html('');
     	    $(this.el).empty();
@@ -87,6 +90,7 @@ ProgressbarView){
             var startDate = Moment($(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate());
             var endDate = Moment($(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate());
             var deptCode = $(this.el).find("#rdCombo").val();
+            
             if(endDate.diff(startDate, 'days') > 92){
                 Dialog.warning("검색 기간이 초과되었습니다. (최대 3개월)");
             }else{
@@ -117,7 +121,9 @@ ProgressbarView){
                 },
             });
         },
-        
+        events: {
+        	'click #rdSearchBtn' : 'onClickSearchBtn'
+        },
     	render:function(){
     	    var _view= this;
     	    var _headSchema=Schemas.getSchema('headTemp');
@@ -215,10 +221,57 @@ ProgressbarView){
     	    
         	this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
-            this.getRawData();
+            if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+            	$(this.el).find("#rdFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+     		    $(this.el).find("#rdToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+            }
+            this.selectInOut();
+            this.getRawData();       
+            
+            
             
             return this;
      	},
+     	onClickSearchBtn: function() {
+    		this.selectInOut();
+    	},
+    	getSearchForm: function() {	// 검색 조건
+     		var data = {
+     		    startDate : $(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
+     		    endDate : $(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+     		}
+     		
+     		if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+     			data.id = this.searchParam.id;
+     		}
+     		
+     		if ( Util.isNull(data.startDate) ) {
+     			alert("검색 시작 날짜를 선택해주세요");
+     			return null;
+     		} else if ( Util.isNull(data.endDate) ) {
+     			alert("검색 끝 날짜를 선택해주세요");
+     			return null;
+     		}
+     		
+     		return data;
+     	},
+     	selectInOut: function() {	// 데이터 조회
+     		var data = this.getSearchForm();     		
+     		if (Util.isNull (data) ) {
+     			return;
+     		}
+
+            var _this = this;
+     		this.rawDataCollection.fetch({ 
+     			data: data,
+	 			success: function(result) {
+	 				_this.grid.render();		     		
+	 			},
+	 			error : function(result) {
+	 				alert("데이터 조회가 실패했습니다.");
+	 			}
+     		}); 
+     	}
      	
     });
     return RawDataView;

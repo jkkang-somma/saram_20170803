@@ -150,7 +150,17 @@ define([
             var model = new RawDataModel();
             model.companyAccessUrl().save(obj,{
                 success: function(model, response) {
-                    Dialog.show("출근 등록 되었습니다.\n"+ "출근시간 : " + response.data.char_date );
+                    Dialog.show({
+                    	title: "출근",
+                    	message:"출근 등록 되었습니다.\n"+ "출근시간 : " + response.data.char_date,
+                    	buttons:[{
+            	            label: "확인",
+                            action: function(dialogRef){
+                                dialogRef.close();
+                                window.location.href="#rawdatalist/"+response.data.id+"/"+response.data.char_date  //response.data.id  response.data.char_date
+                            }
+            	        }]
+                    	});
                 }, 
                 error : function(model, res){
                     Dialog.error("출근 등록이 실패했습니다.");
@@ -191,7 +201,17 @@ define([
             var model = new RawDataModel();
             model.companyAccessUrl().save(obj, {
                 success: function(model, response) {
-                    Dialog.show("퇴근 등록 되었습니다.\n퇴근시간 : " + response.data.char_date );
+                    Dialog.show({
+                    	title: "퇴근",
+                    	message: "퇴근 등록 되었습니다.\n퇴근시간 : " + response.data.char_date ,                    	
+                    	buttons:[{
+            	            label: "확인",
+                            action: function(dialogRef){
+                                dialogRef.close();
+                                window.location.href="#rawdatalist/"+response.data.id+"/"+response.data.char_date
+                            }
+            	        }]
+                    	});
                 }, 
                 error : function(model, res){
                     Dialog.error("퇴근 등록이 실패했습니다.");

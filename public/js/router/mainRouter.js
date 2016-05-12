@@ -61,6 +61,7 @@ ReportListView, AllReportView // report manager
 			'commutemanager/comment/:id/:date' : 'showCommuteCommentListCount',
 			'vacation' : 'showVacation',
 			'rawdatalist' : 'showRawdata',
+			'rawdatalist/:id/:date' : 'showRawdataList',
 			'commutetoday' : 'showCommuteToday',
 			'reportmanager' : 'showReportManager',
 			'accessIn' : 'accessIn',
@@ -229,6 +230,11 @@ ReportListView, AllReportView // report manager
 		
 		showRawdata : function(){
 			var rawDataView = new RawDataView();
+			this.changeView(rawDataView);
+		},
+		showRawdataList : function(id, date){ // url + 검색 조건을 토한 페이지 이동 
+			var rawDataView = new RawDataView();
+			rawDataView.setSearchParam({"id": id, "date": date});
 			this.changeView(rawDataView);
 		},
 		
