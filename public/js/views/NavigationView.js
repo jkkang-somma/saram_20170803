@@ -157,7 +157,9 @@ define([
             	            label: "확인",
                             action: function(dialogRef){
                                 dialogRef.close();
-                                window.location.href="#rawdatalist/"+response.data.id+"/"+response.data.char_date  //response.data.id  response.data.char_date
+                                //var dateTime = response.data.char_date.split(' ');
+                                //window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];  //response.data.id  response.data.char_date
+                                window.location.href="#rawdatalist";
                             }
             	        }]
                     	});
@@ -208,7 +210,9 @@ define([
             	            label: "확인",
                             action: function(dialogRef){
                                 dialogRef.close();
-                                window.location.href="#rawdatalist/"+response.data.id+"/"+response.data.char_date
+                                //var dateTime = response.data.char_date.split(' '); 
+                                //window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];
+                                window.location.href="#rawdatalist";
                             }
             	        }]
                     	});
