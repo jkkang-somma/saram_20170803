@@ -48,9 +48,18 @@ define([
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
     	    //Head 
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18Common.ORGANIZATION.TITLE})));
+    	    var date = new Date();
+    	    var yyyy = date.getFullYear().toString();
+    	    var mm = (date.getMonth()+1).toString();
+    	    var dd  = date.getDate().toString();
+    	    var mmChars = mm.split('');
+    	    var ddChars = dd.split('');
+    	    var dateTime = yyyy + '-' + (mmChars[1]?mm:"0"+mmChars[0]) + '-' + (ddChars[1]?dd:"0"+ddChars[0]);
+    	    
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:i18Common.ORGANIZATION.TITLE, subTitle:dateTime})));
     	    _head.addClass("left-padding");
-    	    _head.addClass("relative-layout"); 	        	    
+    	    _head.addClass("relative-layout"); 	     
+    	    $(_head).find("small").addClass("small");
     	    
     	    var promiseArr = [];
     	    var userCollection = new UserCollection();
@@ -65,206 +74,165 @@ define([
     	    	var deptorg = [];
     	    	userorg = user[0];
     	    	deptorg = dept[0];	    	
-    	    	
-//    	    	//position_code 정렬 직급->이름
-//    	    	function PositionSort(a,b){
-//    	    		if(a.dept_code != "0000" && b.dept_code != "0000"){
-//	    	    		if(a.position_code==b.position_code){
-//	    	    			return a.name > b.name ? 1 : -1
-//	    	    					}
-//	    	    		return a.position_code > b.position_code ? 1 : -1
-//	    	    	}	
-//    	    	}
-//    	    	//join_company 정렬 (dept_code가 0000인 경우)
-//    	    	function JoinSort(a,b){
-//					if(a.dept_code === "0000" || b.dept_code === "0000"){
-//	    	    		if(a.position_code==b.position_code){
-//	    	    			return a.join_company > b.join_company ? 1 : -1
-//	    	    					}
-//	    	    		return a.position_code > b.position_code ? 1 : -1
-//					}
-//						else{
-//							return 0
-//					}	
-//				}
-//    	    	userorg.sort(PositionSort);  	 
-//    	    	userorg.sort(JoinSort); 
-    	    	
+
     	    	function PositionSort(a,b){
-	    		if(a.dept_code != "0000" && b.dept_code != "0000"){
-    	    		if(a.position_code==b.position_code){
-    	    			return a.name > b.name ? 1 : -1
-    	    		}
-    	    		return a.position_code > b.position_code ? 1 : -1
-    	    	}	
-	    		else if(a.dept_code === "0000" || b.dept_code === "0000"){
-    	    		if(a.position_code==b.position_code){
-    	    			return a.join_company > b.join_company ? 1 : -1
-	    			}
-	    		return a.position_code > b.position_code ? 1 : -1
-	    		}
-	    	}
-    	    	
+		    		if(a.dept_code != "0000" && b.dept_code != "0000"){
+	    	    		if(a.position_code==b.position_code){
+	    	    			return a.name > b.name ? 1 : -1
+	    	    		}
+	    	    		return a.position_code > b.position_code ? 1 : -1
+	    	    	}	
+		    		else if(a.dept_code === "0000" || b.dept_code === "0000"){
+	    	    		if(a.position_code==b.position_code){
+	    	    			return a.join_company > b.join_company ? 1 : -1
+		    			}
+		    		return a.position_code > b.position_code ? 1 : -1
+		    		}
+    	    	}    	    	
     	    	userorg.sort(PositionSort);
     	    	
-				
-    	    	// 인원
-    	    	var dept5400 =0;
-    	    	var dept7010 =0;
-    	    	var dept7400 =0;
-    	    	var dept8100 =0;
+    	    	//인원체크
+    	    	var deptmem = [];
+    	    	var usermem = [];
+    	    	var tolmem = 0;
+    	    	//퇴사자 필터링
     	    	for(var i=0;i<userorg.length;i++){
     	    		if(userorg[i].leave_company == null || userorg[i].leave_company ==""){
-	    	    		if(userorg[i].dept_code == 5400){dept5400 +=1;}
-	    	    		if(userorg[i].dept_code == 7010){dept7010 +=1;}
-	    	    		if(userorg[i].dept_code == 7300){dept7400 +=1;}
-	    	    		if(userorg[i].dept_code == 7400){dept7400 +=1;}
-	    	    		if(userorg[i].dept_code == 8100){dept8100 +=1;}
+    	    			usermem[i] = userorg[i].dept_code;
     	    		}
     	    	}
-				//임원+경영지원팀 
+    	    	for(var i=0;i<deptorg.length;i++){
+    	    		deptmem[i] =0;
+    	    	}
+    	    	//부서별 총원
+    	    	for(var i=0;i<deptorg.length;i++){
+    	    		for(var j=0;j<usermem.length;j++){
+    	    			if(deptorg[i].code == usermem[j]){
+    	    				deptmem[i] +=1;  
+    	    			}
+    	    		}
+    	    	}
+    	    	//yescnc 총원
+    	    	for(var i=0;i<deptorg.length;i++){
+    	    		tolmem += deptmem[i];
+    	    	}
+    	    	
+    	    	//서울수원
+    	    	var seoul = 0;
+    	    	var suwon = 0;
+    	    	for(var i=0;i<deptorg.length;i++){
+	    	    	if(deptorg[i].code == 5400 || deptorg[i].code == 7400 || deptorg[i].area == "수원"){
+	    	    			suwon +=deptmem[i]; 	 
+	    	    	}   		
+    	    	}
+    	    	seoul = tolmem - suwon;
+//    	    	console.log(seoul);
+//    	    	console.log(suwon);
+    	    	
+    	    	//솔루션개발팀 +1명
+    	    	for(var i=0;i<deptorg.length;i++){
+	    	    	if(deptorg[i].code == 8100){
+	    	    		if(deptorg[i].leader == 160401){
+	    	    			deptmem[i] +=1;
+	    	    		}    	 
+	    	    	}   		
+    	    	}
+    	    	
+    	    	
+    	    	//임원+경영지원팀 고정
 				if(deptorg[0].leader){							
 					var category = $(
-							'<div  style="float:left; padding-left:10px; padding-right:10px; width:360px;">'+
-								'<div id="div_'+deptorg[0].code+'" style="margin-bottom:30px;">'
-									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:32px;"><span id=ybold>'+deptorg[0].name + '</span></div><div class=dept00></div>' +
-									'<table id="tbl_'+deptorg[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
+							'<div style="padding-left:10px; float:left; padding-right:10px; width:300px;display: table-cell;">'+
+								'<div class ="printdiv" id="div_'+deptorg[0].code+'" style="margin-bottom:15px;">'
+									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+deptorg[0].name + "</span></div><div class='deptColor team0000'></div>" +
+									'<table id="tbl_'+deptorg[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
 								'</div>'
-								+'<div id="div_'+deptorg[2].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:32px;"><span id=ybold>'+deptorg[2].name + '</span></div><div class=dept02 style="padding-bottom:20px;"></div>' +
-									'<table id="tbl_'+deptorg[2].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
+								+'<div class ="printdiv" id="div_'+deptorg[2].code+'">'
+									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:28px;"><span id=ybold>'+deptorg[2].name + "</span></div><div class='deptColor team1000' style='padding-bottom:20px;'></div>" +
+									'<table id="tbl_'+deptorg[2].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
 						);	
 				}					
 				$(_content).append(category);
 				
-				
-				//품질검증팀
-				if(deptorg[7].leader){							
-					var category = $(
-							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
-								'<div id="div_'+deptorg[7].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#26FF9E, #84FFC8);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[7].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept5400+"명)"+'</span>' +'</div><div class=dept07></div>' +
-									'<table id="tbl_'+deptorg[7].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
-								'</div>'
-							+'</div>'
-						);	
+				//leader 중복값 제
+				var leaderorg = [];
+				for(var i=3;i<deptorg.length;i++){
+					leaderorg[i] = deptorg[i].leader;			
 				}
-//				leader
-				for(var j=0;j<userorg.length;j++){ 		
-					var phoneoffice ="";
-					if(deptorg[7].leader == userorg[j].id){
-						if(userorg[j].phone_office != "" && userorg[j].phone_office != null){
-							phoneoffice += "("+ userorg[j].phone_office + ")";
-							}
-					}
-					if(deptorg[7].leader == userorg[j].id){
-						var teamleader = $(
-								'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px; border:1px solid #D7D7D7;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
-										userorg[j].position_name.replace("연구원","")+ "(" +userorg[j].email.replace("@yescnc.co.kr","") + ")" + "</b>" + "<br>"+userorg[j].phone + phoneoffice  + '</td></tr>'
-								);
-					}	
+				function onlyUnique(value, index, self) { 
+				    return self.indexOf(value) === index;
 				}
-				$(category).find("table").append(teamleader);
-				$(_content).append(category);
-
+				var leaderArr = leaderorg.filter( onlyUnique ); 
 				
-				//NMS개발팀
-				if(deptorg[8].leader){							
-					var category = $(
-							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
-								'<div id="div_'+deptorg[8].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#2FFF39, #76FF7D);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[8].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept7010+"명)"+'</span>' +'</div><div class=dept08></div>' +
-									'<table id="tbl_'+deptorg[8].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
-								'</div>'
-							+'</div>'
-						);	
-				}
-//				leader
-				for(var j=0;j<userorg.length;j++){ 		
-					var phoneoffice ="";
-					if(deptorg[8].leader == userorg[j].id){
-						if(userorg[j].phone_office != "" && userorg[j].phone_office != null){
-							phoneoffice += "("+ userorg[j].phone_office + ")";
-							}
-					}
-					if(deptorg[8].leader == userorg[j].id){
-						var teamleader = $(
-								'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px; border:1px solid #D7D7D7;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
-										userorg[j].position_name.replace("연구원","")+ "(" +userorg[j].email.replace("@yescnc.co.kr","") + ")" + "</b>" + "<br>"+userorg[j].phone + phoneoffice  + '</td></tr>'
-								);
-					}	
-				}
-				$(category).find("table").append(teamleader);
-				$(_content).append(category);
+				var tDiv = $('<div style="width: 100%; height: 100%; display: table;"></div>');
+				$(_content).append(tDiv);
 				
-				//개발품질팀+수원팀 
-				if(deptorg[9].leader){							
-					var category = $(
-							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
-								'<div id="div_'+deptorg[9].code+'" style="margin-bottom:30px;">'
-									+'<div id=ystyle style="background: linear-gradient(#FFB23C, #FFCA7A);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[9].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept7400+"명)"+'</span>' +'</div><div class=dept09></div>' +
-									'<table id="tbl_'+deptorg[9].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
-								'</div>'
-								+'<div id="div_'+deptorg[10].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#FFB23C, #FFCA7A);font-weight: bold;font-size:32px;"><span id=ybold>'+ deptorg[9].name+'</span>'+ '<span style=font-size:25px;>' +" ("+"수원)"+'</span>' 
-									+'</div><div class=dept09 style="padding-bottom:20px;"></div>' +
-									'<table id="tbl_'+deptorg[10].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
-								'</div>'
-							+'</div>'
-						);	
-				}	
-//				leader
-				for(var j=0;j<userorg.length;j++){ 		
-					var phoneoffice ="";
-					if(deptorg[9].leader == userorg[j].id){
-						if(userorg[j].phone_office != "" && userorg[j].phone_office != null){
-							phoneoffice += "("+ userorg[j].phone_office + ")";
-							}
-					}
-					if(deptorg[9].leader == userorg[j].id){
-						var teamleader = $(
-								'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px; border:1px solid #D7D7D7;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
-										userorg[j].position_name.replace("연구원","")+ "(" +userorg[j].email.replace("@yescnc.co.kr","") + ")" + "</b>" + "<br>"+userorg[j].phone + phoneoffice  + '</td></tr>'
-								);
-					}	
-				}
-				$(category).find("table").append(teamleader);
-				$(_content).append(category);
-				
-				
-				//솔루션개발팀  
-				if(deptorg[11].leader){							
-					var category = $(
-							'<div  style="float:left; padding-left:10px; padding-right:10px; padding-bottom: 20px; width:360px;">'+
-								'<div id="div_'+deptorg[11].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#FF3636, #FF7E7E);font-weight: bold;font-size:32px;"><span id=ybold>' +deptorg[11].name+'</span>'+ '<span style=font-size:25px;>' +" ("+dept8100+"명)"+'</span>' +'</div><div class=dept11></div>' +
-									'<table id="tbl_'+deptorg[11].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:340px;">'+ '</table>'+
-								'</div>'
-							+'</div>'
-						);	
-				}				
-//				leader
-				for(var j=0;j<userorg.length;j++){ 		
-					var phoneoffice ="";
-					if(deptorg[11].leader == userorg[j].id){
-						if(userorg[j].phone_office != "" && userorg[j].phone_office != null){
-							phoneoffice += "("+ userorg[j].phone_office + ")";
-							}
-					}
-					if(deptorg[11].leader == userorg[j].id){
-						var teamleader = $(
-							'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px; border:1px solid #D7D7D7;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
-									userorg[j].position_name.replace("연구원","")+ "(" +userorg[j].email.replace("@yescnc.co.kr","") + ")" + "</b>" + "<br>"+userorg[j].phone + phoneoffice  + '</td></tr>'
+				//AllTeamDiv   1 deptorg[i].leader 중복값 제거
+				for(var i=0;i<leaderArr.length;i++){		
+					if(leaderArr[i]){
+						var category = $(
+								'<div id ='+ leaderArr[i] +' style="padding-left:10px;float:left; padding-right:10px; width:300px;display: table-cell;"></div>'
 							);
-					}	
+					}
+					$(tDiv).append(category);
 				}
-				$(category).find("table").append(teamleader);
-				$(_content).append(category);
-
 				
-				//tr td th만들기
+				var divleader = [];
+				//TeamDiv 2 AllTeam div안에 넣기
+				for(var i=3;i<=deptorg.length;i++){		
+					if(_.has(deptorg[i], "leader")) {
+//					if(deptorg[i].leader){
+						var category = $(
+								'<div class ="printdiv" id="div_'+deptorg[i].code+'" style="margin-bottom:15px;">'
+								+"<div class='TopColor dept"+ i +"'id=ystyle style='font-weight: bold;font-size:28px;'>"
+									+'<span id=ybold>'+deptorg[i].name + '</span>'
+								+ '</div>'
+								+"<div class='deptColor team"+i+"'></div>" +
+								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
+							'</div>'
+							);
+//					}			
+					
+						divleader = "#" + deptorg[i].leader;
+						if($($(_content).find(divleader)).find(".member").length == 1){
+							var count = parseInt($($(_content).find(divleader)).find(".member").text().slice(2,-1)) + deptmem[i];
+							$($(_content).find(divleader)).find(".member").text(" ("+count+"명)")
+						}else {
+							category.find("#ystyle").append($('<span class="member" style=font-size:23px;>' +" ("+deptmem[i]+"명)"+'</span>'));
+						}
+						$(_content).find(divleader).append(category);
+
+					}
+				}
+				
+				var leaderList =[];
+				//leader 3 TeamDiv안에 leader 넣기
+				for(var i=0;i<deptorg.length;i++){
+					for(var j=0;j<userorg.length;j++){ 		
+						var phoneoffice ="";
+						if(deptorg[i].leader == userorg[j].id){
+							if(userorg[j].phone_office != "" && userorg[j].phone_office != null){
+								phoneoffice += "("+ userorg[j].phone_office + ")";
+							}
+							
+							var teamleader = $(
+									'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px; border:1px solid #D7D7D7;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
+											userorg[j].position_name.replace("연구원","")+"<br>" +"(" +userorg[j].email.replace("@yescnc.co.kr","") + ")" + "</b>" + "<br>"+userorg[j].phone + phoneoffice  + '</td></tr>'
+									);
+						
+							leaderList.push(userorg[j].id);
+						}
+					}
+					if(_.has(deptorg[i], "leader")) {
+						var tleader = "#tbl_" + deptorg[i].code;
+						$(_content).find(tleader).append(teamleader);							
+					}			
+				}			
+								
+									
+				//tr td th만들기				
 				$.each(userorg, function (i ,item){
 					var target = $(_content).find("#tbl_"+item.dept_code);
 					var trHTML = "";
@@ -276,16 +244,24 @@ define([
 							+ "<h4 id=printh4><b>" + item.position_name + "</h4></b>" + "<br>" +"<b id=printname>"+ item.name + "</b>"+" (" + item.email.replace("@yescnc.co.kr","") + ")" +  "<br>" + item.phone + phoneoffice + '</td></tr>';			    	    	
 							target.append(trHTML);
 						}
-						else if(item.id!="071102" && item.id!= "110201" && item.id!= "070901" && item.id!=  "060601" ){					
+						else if(!_.contains(leaderList, item.id)) {
 							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = " padding-left: 15px; padding-bottom: 15px; padding-top: 25px; border:1px solid #D7D7D7;">' 
-							+ "<b id=printname>" + item.name + "</b>" +" " + item.position_name.substring(0,3)  +" (" + item.email.replace("@yescnc.co.kr","") + ")" +"<br>" + item.phone + phoneoffice  + '</td></tr>';  
-							target.append(trHTML);
+									+ "<b id=printname>" + item.name + "</b>" +" " + item.position_name.substring(0,3)  +" (" + item.email.replace("@yescnc.co.kr","") + ")" +"<br>" + item.phone + phoneoffice  + '</td></tr>';  
+									target.append(trHTML);
 						}
 					}
 				});
 				
     	    	//개발품질팀(수원) 팀장 중복 제거
 				$("#div_7400").find("tr :eq(0)").remove();
+				//하단 div
+				var footer = $(
+						'<div style="float:right; margin-top:-30px;margin-right:20px; font-size:24px;">'
+						+"사내 전화번호: 070-7163-XXXX" + "<br>" +"총 인원- "+ tolmem +"명" + "( " + "사내- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"
+						+"<br>"+ "수원 사업장 U-city 전화번호: 031-213-8740~2"
+						+'</div>'
+						);
+				$(_content).append(footer);
     	    })
     	      	        	    
     	    var _content=$(ContentHTML).attr("id", this.option.el);	   
