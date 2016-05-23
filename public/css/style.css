@@ -230,19 +230,19 @@ form .form-group:last-child {
 #tdfont{font-size:18px;}    
 #printleader{font-size:19px;}
 
-@media print {	    
+@media print{	   
     html, body {
-    	page-break-after: always;
-        width: 120%;
-        height: 100%;    
-        zoom: 90%;        
-        margin:0;
-        padding:0;   
+    	page-break-after: always;   
+    	width: auto;
+    	height: auto;
+        zoom: 70%;        
+        margin:0 auto;
+        padding:0 auto;   
         }       
     @page {
     	size :auto;
-        margin: 0;
-        padding: 0;
+        margin: 0 auto;
+        padding: 0 auto;
         border: initial;
         border-radius: initial;
         width: initial;
@@ -250,20 +250,17 @@ form .form-group:last-child {
         box-shadow: initial;
         background: initial;
     }
-    
-    .printdiv{border: 1px solid gray; border-radius: 15px 15px 0px 0px; margin-bottom:2em;}
-    
-    
+    .printdiv{border: 1px solid gray; border-radius: 15px 15px 0px 0px; margin-bottom:2em;}  
     .deptColor: {border:1px solid gray;}
  
  	.page-header h2{font-weight: bold; font-size:45px;padding-bottom:1em;}
- 
+ 	.small{font-size:25px;}
     #ystyle{border-bottom:none;}
     td{font-size:22px;}
     #printleader{font-size:24px;}
     #printname{font-size:24px;}
     #printh4{font-size:28px;}
-    .orgcontainer{padding-top:3em;}    
+    .orgcontainer{padding-top:3em;}   
 }
 
 @media (min-width: 400px) {

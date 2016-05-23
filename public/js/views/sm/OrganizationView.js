@@ -138,12 +138,13 @@ define([
 	    	    	}   		
     	    	}
     	    	
-    	    	
+    	    	//Div 총 width
+    	    	var tWidth = 0;
     	    	//임원+경영지원팀 고정
 				if(deptorg[0].leader){							
 					var category = $(
 							'<div style="padding-left:10px; float:left; padding-right:10px; width:300px;display: table-cell;">'+
-								'<div class ="printdiv" id="div_'+deptorg[0].code+'" style="margin-bottom:15px;">'
+								'<div class ="printdiv" id="div_'+deptorg[0].code+'" style="margin-bottom:30px;">'
 									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+deptorg[0].name + "</span></div><div class='deptColor team0000'></div>" +
 									'<table id="tbl_'+deptorg[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
 								'</div>'
@@ -155,7 +156,8 @@ define([
 						);	
 				}					
 				$(_content).append(category);
-				
+				tWidth += $(category).width();
+								
 				//leader 중복값 제
 				var leaderorg = [];
 				for(var i=3;i<deptorg.length;i++){
@@ -166,9 +168,9 @@ define([
 				}
 				var leaderArr = leaderorg.filter( onlyUnique ); 
 				
-				var tDiv = $('<div style="width: 100%; height: 100%; display: table;"></div>');
+				var tDiv = $('<div id=tDiv style="display: table; margin:auto;"></div>');
 				$(_content).append(tDiv);
-				
+								
 				//AllTeamDiv   1 deptorg[i].leader 중복값 제거
 				for(var i=0;i<leaderArr.length;i++){		
 					if(leaderArr[i]){
@@ -177,15 +179,17 @@ define([
 							);
 					}
 					$(tDiv).append(category);
+					tWidth += $(category).width();
 				}
-				
+				$(tDiv).width(tWidth-130);
+								
 				var divleader = [];
 				//TeamDiv 2 AllTeam div안에 넣기
 				for(var i=3;i<=deptorg.length;i++){		
 					if(_.has(deptorg[i], "leader")) {
 //					if(deptorg[i].leader){
 						var category = $(
-								'<div class ="printdiv" id="div_'+deptorg[i].code+'" style="margin-bottom:15px;">'
+								'<div class ="printdiv" id="div_'+deptorg[i].code+'" style="margin-bottom:30px;">'
 								+"<div class='TopColor dept"+ i +"'id=ystyle style='font-weight: bold;font-size:28px;'>"
 									+'<span id=ybold>'+deptorg[i].name + '</span>'
 								+ '</div>'
@@ -209,7 +213,7 @@ define([
 				
 				var leaderList =[];
 				//leader 3 TeamDiv안에 leader 넣기
-				for(var i=0;i<deptorg.length;i++){
+				for(var i=3;i<deptorg.length;i++){
 					for(var j=0;j<userorg.length;j++){ 		
 						var phoneoffice ="";
 						if(deptorg[i].leader == userorg[j].id){
@@ -256,8 +260,9 @@ define([
 				$("#div_7400").find("tr :eq(0)").remove();
 				//하단 div
 				var footer = $(
-						'<div style="float:right; margin-top:-30px;margin-right:20px; font-size:24px;">'
-						+"사내 전화번호: 070-7163-XXXX" + "<br>" +"총 인원- "+ tolmem +"명" + "( " + "사내- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"
+						'<div id= footer style="float:right; margin-top:-50px; margin-right:20px; font-size:24px;">'
+						+"총 인원- "+ tolmem +"명" + "( " + "사내- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"+"<br>"
+						+"사내 전화번호: 070-7163-XXXX" 
 						+"<br>"+ "수원 사업장 U-city 전화번호: 031-213-8740~2"
 						+'</div>'
 						);
