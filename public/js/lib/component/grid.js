@@ -26,7 +26,7 @@ define([
     var _gridLength=[10,25,50,100];
     
     var Grid = Backbone.View.extend({
-    	_dataTable: null,
+//    	_dataTable: null,
     	initialize:function(options){
     	    var grid=this;
     	    
@@ -629,8 +629,7 @@ define([
     	    this.columns= _columns;
     	    this.options.collection.toJSON();
     	    //dataTable reander
-//    	    var _dataTable=$(GridHTML);
-    	    _dataTable=$(GridHTML);
+    	    var _dataTable=$(GridHTML);
             $("#"+this.options.el).append(_dataTable);
     	    _dataTable.attr("id", this.options.id);
             _dataTable.dataTable({
@@ -644,6 +643,7 @@ define([
      	    
      	    //ROW click
      	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
+     	    	console.log(_dataTable.$('tr.selected'));
                 _dataTable.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             } );
