@@ -158,10 +158,10 @@ define([
 				$(_content).append(category);
 				tWidth += $(category).width();
 								
-				//leader 중복값 제
+				//leader 중복값 제거
 				var leaderorg = [];
 				for(var i=3;i<deptorg.length;i++){
-					leaderorg[i] = deptorg[i].leader;			
+					leaderorg[i] = deptorg[i].leader;
 				}
 				function onlyUnique(value, index, self) { 
 				    return self.indexOf(value) === index;
@@ -185,18 +185,20 @@ define([
 								
 				var divleader = [];
 				//TeamDiv 2 AllTeam div안에 넣기
-				for(var i=3;i<=deptorg.length;i++){		
-					if(_.has(deptorg[i], "leader")) {
-//					if(deptorg[i].leader){
+				for(var i=3,num=1;i<deptorg.length;i++){		
+//					if(_.has(deptorg[i], "leader")) {
+					if(deptorg[i].leader !=null){
 						var category = $(
 								'<div class ="printdiv" id="div_'+deptorg[i].code+'" style="margin-bottom:30px;">'
-								+"<div class='TopColor dept"+ i +"'id=ystyle style='font-weight: bold;font-size:28px;'>"
+								+"<div class='TopColor dept"+ num +"'id=ystyle style='font-weight: bold;font-size:28px;'>"
 									+'<span id=ybold>'+deptorg[i].name + '</span>'
 								+ '</div>'
-								+"<div class='deptColor team"+i+"'></div>" +
+								+"<div class='deptColor team"+num+"'></div>" +
 								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
 							'</div>'
 							);
+						
+						num++;
 //					}			
 					
 						divleader = "#" + deptorg[i].leader;

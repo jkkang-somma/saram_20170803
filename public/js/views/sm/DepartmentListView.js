@@ -43,14 +43,29 @@ define([
         el:".main-container",
     	initialize:function(){
     	    var departmentCollection= new DepartmentCollection();
+//    	    var userCollection= new UserCollection();
     		this.option = {
     		    el:"department_content",
     		    column:[
  	                  	{ data : "code",            "title" : i18Common.DEPARTMENT_LIST.GRID_COL_NAME.CODE },
  	                   	{ data : "name",	 		"title" : i18Common.DEPARTMENT_LIST.GRID_COL_NAME.NAME },
                         { data : "area",            "title" : i18Common.DEPARTMENT_LIST.GRID_COL_NAME.AREA },
+                        { "title" : i18Common.DEPARTMENT_LIST.GRID_COL_NAME.LEADER, render: function(data, type, row){
+                        	var leaderName = row.user_name;
+                        	var leaderCode = row.leader;
+                        	if(leaderCode == "0000"){
+                        		return null;
+                        	}
+                        	if(leaderName != null){
+                        		var outName = "(" + leaderName + ")";
+                        		var outLeader = leaderCode + outName;
+                        		return outLeader
+                        	}
+                        	return null;                        	
+                        }}
+//                        { data : "leader",          "title" : i18Common.DEPARTMENT_LIST.GRID_COL_NAME.LEADER},
                 ],
-    		    dataschema:["code", "name", "area"],
+    		    dataschema:["code", "name", "area", "leader"],
     		    collection:departmentCollection,
     		    detail:true,
     		    view:this,

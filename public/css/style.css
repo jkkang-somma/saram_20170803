@@ -94,22 +94,22 @@ form .form-group:last-child {
     margin-bottom: 0px;
 }
 
-.TopColor.dept7{ 
+.TopColor.dept1{ 
 	background: linear-gradient(#26FF9E, #84FFC8);
 }
-.TopColor.dept8{ 
+.TopColor.dept2{ 
 	background: linear-gradient(#2FFF39, #76FF7D);
 }
-.TopColor.dept9{ 
+.TopColor.dept3{ 
 	background: linear-gradient(#FFB23C, #FFCA7A);
 }
-.TopColor.dept10{ 
+.TopColor.dept4{ 
 	background: linear-gradient(#FFB23C, #FFCA7A);
 }
-.TopColor.dept11{ 
+.TopColor.dept5{ 
 	background: linear-gradient(#FF3636, #FF7E7E);
 }
-.TopColor.dept12{ 
+.TopColor.dept6{ 
 	background: linear-gradient(#9B4BE5, #AB6EE3);
 }
 
@@ -156,61 +156,61 @@ form .form-group:last-child {
   	border-bottom: 1px solid #83F5FF;
 }
 
-.deptColor.team7 {
+.deptColor.team1 {
 	border: 0px solid #84FFC8;
 	background: #84FFC8;
 }
-.deptColor.team7:before {
+.deptColor.team1:before {
 	background: #84FFC8;
   	border-right: 1px solid #84FFC8; 
   	border-bottom: 1px solid #84FFC8;
 }
 
-.deptColor.team8 {
+.deptColor.team2 {
 	border: 0px solid #76FF7D;
 	background: #76FF7D;
 }
-.deptColor.team8:before {
+.deptColor.team2:before {
 	background: #76FF7D;
   	border-right: 1px solid #76FF7D; 
   	border-bottom: 1px solid #76FF7D;
 }
 
-.deptColor.team9 {
+.deptColor.team3 {
 	border: 0px solid #FFCA7A;
 	background: #FFCA7A;
 }
-.deptColor.team9:before {
+.deptColor.team3:before {
 	background: #FFCA7A;
   	border-right: 1px solid #FFCA7A; 
   	border-bottom: 1px solid #FFCA7A;
 }
 
-.deptColor.team10 {
+.deptColor.team4 {
 	border: 0px solid #FFCA7A;
 	background: #FFCA7A;
 }
-.deptColor.team10:before {
+.deptColor.team4:before {
 	background: #FFCA7A;
   	border-right: 1px solid #FFCA7A; 
   	border-bottom: 1px solid #FFCA7A;
 }
 
-.deptColor.team11 {
+.deptColor.team5 {
 	border: 0px solid #FF7E7E;
 	background: #FF7E7E;
 }
-.deptColor.team11:before {
+.deptColor.team5:before {
 	background: #FF7E7E;
   	border-right: 1px solid #FF7E7E; 
   	border-bottom: 1px solid #FF7E7E;
 }
 
-.deptColor.team12 {
+.deptColor.team6 {
 	border: 0px solid #AB6EE3;
 	background: #AB6EE3;
 }
-.deptColor.team12:before {
+.deptColor.team6:before {
 	background: #AB6EE3;
   	border-right: 1px solid #AB6EE3; 
   	border-bottom: 1px solid #AB6EE3;

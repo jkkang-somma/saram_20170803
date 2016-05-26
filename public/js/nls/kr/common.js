@@ -521,7 +521,8 @@ define({
         GRID_COL_NAME : {
             CODE : "부서코드",
             NAME : "부서",
-            AREA : "지역"
+            AREA : "지역",
+            LEADER : "팀장"
         },
         CREATE_DIALOG :{
             TOOLTIP : "부서 등록",

@@ -1467,23 +1467,31 @@
 	<group id="department">
 		<query id="selectDepartment">
 			select
-				 *
+				code, name, area, leader, (SELECT name FROM members_tbl where id = leader) user_name
+			from
+				dept_code_tbl
+			ORDER BY code
+		</query>
+		<query id="selectUserDepartmentList">
+			select
+				 code, name, area, leader, (SELECT name FROM members_tbl where id = leader) user_name
 			from
 				dept_code_tbl
 			ORDER BY code
 		</query>
 		<query id="insertDepartment">
 			INSERT INTO dept_code_tbl
-				(code, name, area)
+				(code, name, area, leader)
 			VALUES
-				(?, ?, ?)
+				(?, ?, ?, ?)
 		</query>
 		<query id="updateDepartment">
 			UPDATE
 				dept_code_tbl
 			SET
 				name=?,
-				area=?
+				area=?,
+				leader=?
 			WHERE code=?
 		</query>
 		<query id="deleteDepartment">

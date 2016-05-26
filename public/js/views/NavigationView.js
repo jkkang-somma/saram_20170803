@@ -210,8 +210,8 @@ define([
             	            label: "확인",
                             action: function(dialogRef){
                                 dialogRef.close();
-                                //var dateTime = response.data.char_date.split(' '); 
-                                //window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];
+//                                var dateTime = response.data.char_date.split(' '); 
+//                                window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];
                                 window.location.href="#rawdatalist";
                             }
             	        }]
