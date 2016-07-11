@@ -41,10 +41,7 @@ define([
 				id: "changeHistoryDataTable",
 				column: [{
 					data: "change_date",
-					"title": "수정 날짜",
-					render : function(data, type, full, meta) {
-					return Moment(data).format("YYYY-MM-DD<br>hh-mm");
-				}
+					"title": "수정 날짜"
 				}, {
 					data: "change_memo",
 					"title": "변경 사유"
