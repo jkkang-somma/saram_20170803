@@ -8,6 +8,7 @@ var ApprovalDao= require('../dao/approvalDao.js');
 var CommuteDao = require('../dao/commuteDao.js');
 var OutOfficeDao= require('../dao/outOfficeDao.js');
 var InOfficeDao= require('../dao/inOfficeDao.js');
+var moment = require("moment");
 
 var Promise = require('bluebird');
 var db = require('../lib/dbmanager.js');
@@ -54,7 +55,26 @@ var Approval = function (data) {
 		        if(approvalItem.state == "취소반려"){
 		            queryArr.push(ApprovalDao.rejectApprovalConfirm(approvalItem));
 		        }else{
-	                queryArr.push(ApprovalDao.updateApprovalConfirm(approvalItem));    
+		            console.log(data);
+		            if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
+		                
+		                var today = moment();
+		                var inOfficeDay = moment(data.inOffice.arrInsertDate[0], "YYYY-MM-DD").hours(0).minutes(0).seconds(0);
+		                if(today.isBefore(inOfficeDay)){
+		                    if(inOfficeDay.day() == "7" && today.day() == "6"){
+		                        approvalItem.black_mark = '3';
+		                    }else{
+		                        approvalItem.black_mark = '1';
+		                    }
+		                }else{
+		                    approvalItem.black_mark = '3';
+		                }
+		                
+		                queryArr.push(ApprovalDao.updateApprovalConfirm2(approvalItem));        
+		                
+		            }else{
+	                    queryArr.push(ApprovalDao.updateApprovalConfirm(approvalItem));    
+		            }
 		        }
 		    }
 		    

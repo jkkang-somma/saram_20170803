@@ -74,6 +74,15 @@ ApprovalDao.prototype.updateApprovalConfirm =  function (data) {
     };
 };
 
+ApprovalDao.prototype.updateApprovalConfirm2 =  function (data) {
+    return {
+        group : group,
+        item : "updateApprovalConfirm2",
+        data : [data.decide_comment, data.state, data.black_mark, data.doc_num],
+    };
+};
+
+
 ApprovalDao.prototype.selectApprovalListById =  function (data) {
     return db.query(group, "selectApprovalListById", [data.id, data.year]);
 };
