@@ -30,6 +30,10 @@ define([
 			title:i18Common.MENU.SUB.BM.HOLIDAY, //휴일 관리
 			hashTag:"#holidaymanager",
 			auth:ADMIN
+		},{
+			title:i18Common.MENU.SUB.BM.DOCUMENT, //양식관리
+			hashTag:"#documentlist",
+			auth:ADMIN
 		}]
 		},{
 		title:i18Common.MENU.TOP.SM, //사원 관리

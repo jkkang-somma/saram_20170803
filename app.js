@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var url = require("url");
 var multer = require("multer");
+var util = require("util");
 
 //lib router config
 var sessionManager = require('./lib/sessionManager');
@@ -29,15 +30,73 @@ var dashboard = require('./routes/dashboardRouter');
 var report = require('./routes/reportRouter');
 var message = require('./routes/messageRouter');
 var userPic = require('./routes/userPicRouter');
+var documentlist = require('./routes/documentRouter');
 var department = require('./routes/departmentRouter');
 var position = require('./routes/positionRouter');
 
 var debug = require('debug')('APP');
 var app = express();
-var filePath = path.normalize(__dirname + '/pic/files');
+var filePath1 = path.normalize(__dirname + '/pic/files'); 
+var filePath2 = path.normalize(__dirname + '/public/doc'); 
 
 //var Statistics = require('./service/Statistics');
 //var statisticsService = new Statistics();
+
+var mwMulter1 = multer({ dest: filePath1 , rename:function(fieldname, filename, req,res){
+	  console.log(filename);
+	  return filename;
+	} });
+app.post('/userpic', mwMulter1, function(req, res) {
+    // check req.files for your files
+	console.log('IN POST (/userpic)');
+    console.log(req.body)
+
+    var filesUploaded = 0;
+
+    if ( Object.keys(req.files).length === 0 ) {
+        console.log('no files uploaded');
+    } else {
+        console.log(req.files)
+
+        var files = req.files.file1;
+        if (!util.isArray(req.files.file1)) {
+            files = [ req.files.file1 ];
+        } 
+
+        filesUploaded = files.length;
+    }
+
+    res.json({ message: 'Finished! Uploaded ' + filesUploaded + ' files.  Route is /userpic' });
+});
+
+var mwMulter2 = multer({ dest: filePath2 , rename:function(fieldname, filename, req,res){
+  console.log(filename);
+  return filename;
+} });
+app.post('/documentlist', mwMulter2, function(req, res) {
+    // check req.files for your files
+	console.log('IN POST (/documentlist)');
+    console.log(req.body)
+
+    var filesUploaded = 0;
+
+    if ( Object.keys(req.files).length === 0 ) {
+        console.log('no files uploaded');
+    } else {
+        console.log(req.files)
+
+        var files = req.files.file1;
+        if (!util.isArray(req.files.file1)) {
+            files = [ req.files.file1 ];
+        } 
+
+        filesUploaded = files.length;
+    }
+
+    res.json({ message: 'Finished! Uploaded ' + filesUploaded + ' files.  Route is /document' });
+
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,13 +115,13 @@ app.use(express_session({
     resave : true,
     saveUninitialized:true
 }));
-app.use(multer({
-    dest:filePath,
-    rename:function(fieldname, filename, req,res){
-        console.log(filename);
-        return filename;
-    }
-}));
+//app.use(multer({
+//    dest:filePath,
+//    rename:function(fieldname, filename, req,res){
+//        console.log(filename);
+//        return filename;
+//    }
+//}));  test
 
 var authError=function(next){
     var err = new Error('not Authoryty');
@@ -126,6 +185,7 @@ app.use('/dashboard', dashboard);
 app.use('/report', report);
 app.use('/message', message);
 app.use('/userpic', userPic);
+app.use('/documentlist', documentlist);
 app.use('/department', department);
 app.use('/position', position);
 
