@@ -61,7 +61,7 @@ var Approval = function (data) {
 		                var today = moment();
 		                var inOfficeDay = moment(data.inOffice.arrInsertDate[0], "YYYY-MM-DD").hours(0).minutes(0).seconds(0);
 		                if(today.isBefore(inOfficeDay)){
-		                    if(inOfficeDay.day() == "0" && today.day() == "6"){
+		                    if(inOfficeDay.day() == "0" && today.day() == "6" && today.diff(inOfficeDay,"days") == 0 ){
 		                        approvalItem.black_mark = '3';
 		                    }else{
 		                        approvalItem.black_mark = '1';
