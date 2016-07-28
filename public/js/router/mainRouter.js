@@ -19,6 +19,7 @@ define([
 	'views/sm/UserListView',
 	'views/sm/UserPicView',
 	'views/sm/DocumentListView',
+	'views/sm/BookDocumentView',
 	'views/sm/DepartmentListView',
 	'views/sm/OrganizationView',
 	'views/sm/PositionListView',
@@ -35,7 +36,7 @@ define([
 	// 'views/report/ReportCommuteView'
 ], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
 DashBoardView, LoginView, NavigationView, // Main View
-UserListView, UserPicView,DocumentListView,DepartmentListView, OrganizationView, PositionListView,
+UserListView, UserPicView,DocumentListView, BookDocumentView, DepartmentListView, OrganizationView, PositionListView,
 CommuteTodayView, AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
 CommuteListView, CreateDataView, CommuteCommentView, // CM View
 VacationView, 
@@ -55,6 +56,7 @@ ReportListView, AllReportView // report manager
 			'positionmanager' : 'showPosition',
 			'userpic' : 'showUserPic',
 			'documentlist' : 'showDocument',
+			'bookdocument' : 'showBookDocument',
 			'addrawdata' : 'showAddRawData',
 			'createdata' : 'showCreateData',
 			'holidaymanager' : 'showHolidayManager',
@@ -251,6 +253,10 @@ ReportListView, AllReportView // report manager
 		showDocument : function(){
 			var documentListView = new DocumentListView();
 			this.changeView(documentListView, 'documentlist');
+		},
+		showBookDocument : function(){
+			var bookbocumentView = new BookDocumentView();
+			this.changeView(bookbocumentView, 'bookdocument');
 		},
 		showDepartmnet : function(){
 			var departmentView = new DepartmentListView();

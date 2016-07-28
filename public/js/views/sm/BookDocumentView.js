@@ -15,29 +15,29 @@ define([
   'text!templates/default/button.html',
   'text!templates/sm/userpicbtn.html',
   'models/sm/SessionModel',
-  'views/sm/popup/AddDocumentPopupView',
-  'collection/sm/DocumentCollection',
+  'views/sm/popup/AddBookDocumentPopupView',
+  'collection/sm/BookDocumentCollection',
 ], function(
     $, _, Backbone, BaseView, Grid, Schemas, i18Common, Dialog, Code, jqFileUpload,
     HeadHTML, ContentHTML, LayoutHTML, ButtonHTML, DeleteBtnHTML,
     SessionModel,
-    AddDocumentPopupView, DocumentCollection
+    AddBookDocumentPopupView, BookDocumentCollection
 ){
-    var DocumentListView = BaseView.extend({
+    var BookDocumentView = BaseView.extend({
         el:".main-container",
         elements:{
     		grid: null
     	},
     	initialize:function(){
     	    var _view = this;
-    	    var documentCollection = new DocumentCollection;
+    	    var bookdocumentCollection = new BookDocumentCollection;
     		this.option = {
-    		    el: "documentList_content",
+    		    el: "bookdocument_content",
     		    column:[
                     { "title" : "파일명", "data" : "filename",
                         "render": function(data, type, row, meta){
                             var tpl = _.template(DeleteBtnHTML)({id: row.filename, index : meta.row});
-                            return "<div class='filebox'><src='/documentlist?file=" + row.filename  +"'/>"+ tpl + data +"</div>";
+                            return "<div class='filebox'><src='/bookdocument?file=" + row.filename  +"'/>"+ tpl + data +"</div>";
                         }
                     },
                 ],
@@ -46,7 +46,7 @@ define([
                     _view.option.data[data.id] = index;
                 },
                 dataschema:[],
-    		    collection:documentCollection,
+    		    collection:bookdocumentCollection,
     		    fetch:true,
     		    detail:true,
     		    view:this,
@@ -67,7 +67,7 @@ define([
                     var target = $(event.currentTarget);
             	    var id = target.data("id");
             	    var index = target.data("index");
-            	    var url = "/documentlist";
+            	    var url = "/bookdocument";
             	    var ajaxSetting = {
             	        method : "DELETE",
             	        data : {id:id},
@@ -94,7 +94,7 @@ define([
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
     	    //Head 
-    	    var _head=$(_headTemp(_headSchema.getDefault({title:"양식 관리", subTitle:"양식 등록"})));
+    	    var _head=$(_headTemp(_headSchema.getDefault({title:"도서 관리", subTitle:"도서 등록"})));
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
     	    
@@ -106,16 +106,16 @@ define([
     	        name:"add",
     	        tooltip:"파일 추가",
     	        click:function(){
-    	            var addDocumentPopupView = new AddDocumentPopupView();
+    	            var addBookDocumentPopupView = new AddBookDocumentPopupView();
     	            Dialog.show({
     	                title:"파일 추가", 
-                        content:addDocumentPopupView, 
+                        content:addBookDocumentPopupView, 
                         buttons: [{
                             id: 'rawDataCommitBtn',
                             cssClass: Dialog.CssClass.SUCCESS,
                             label: "추가",
                             action: function(dialog) {
-                        			addDocumentPopupView.submit().done(function(result){
+                        			addBookDocumentPopupView.submit().done(function(result){
 //                        				Dialog.info("파일 전송 완료! ("+result.length+"건)");
                         				if(result.length != 0){
 //                        					_view.elements.grid.render();
@@ -134,8 +134,8 @@ define([
                         }]
     	            });
     	        }
-    	    });  
-    		   
+    	    });  	    
+    	   
     	   // //Refresh
     	    _buttons.push("refresh");
     	    this.option.buttons=_buttons;
@@ -157,5 +157,5 @@ define([
 	     	}, 
 	    });
     
-    return DocumentListView;
+    return BookDocumentView;
 });

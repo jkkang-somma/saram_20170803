@@ -34,6 +34,10 @@ define([
 			title:i18Common.MENU.SUB.BM.DOCUMENT, //양식관리
 			hashTag:"#documentlist",
 			auth:ADMIN
+		},{
+			title:i18Common.MENU.SUB.BM.BOOKDOCUMENT, //도서관리
+			hashTag:"#bookdocument",
+			auth:ADMIN
 		}]
 		},{
 		title:i18Common.MENU.TOP.SM, //사원 관리

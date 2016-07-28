@@ -2,13 +2,13 @@ var _ = require("underscore");
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require("fs"));
 var path = require("path");
-var docPath = path.dirname(module.parent.filename) + "/../public/doc";
+var bookdocPath = path.dirname(module.parent.filename) + "/../public/book";
 
-var DocumentList = function () {
+var BookDocument = function () {
     var _getFileList = function () {
         return new Promise(
             function(resolve,reject){
-                fs.readdirAsync(docPath).then(function(files){
+                fs.readdirAsync(bookdocPath).then(function(files){
 //                    files = _.reject(files, function(file){
 //                        return file == "";
 //                    });
@@ -25,7 +25,7 @@ var DocumentList = function () {
         );
     };
     var _getFilePath = function(id){
-        var filePath = docPath + "/" + id;
+        var filePath = bookdocPath + "/" + id;
         return new Promise(
             function(resolve, reject){
                 fs.exists(filePath, function(isExist){
@@ -38,7 +38,7 @@ var DocumentList = function () {
     };
     
     var _deleteFile = function(id){
-        var filePath = docPath + "/" + id;
+        var filePath = bookdocPath + "/" + id;
         return new Promise(
             function(resolve,reject){
                 fs.exists(filePath, function(isExist){
@@ -69,5 +69,5 @@ var DocumentList = function () {
     };
 };
 
-module.exports = new DocumentList();
+module.exports = new BookDocument();
 

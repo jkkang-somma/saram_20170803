@@ -145,6 +145,7 @@ define({
             	DEPARTMENT:"부서 관리",
             	HOLIDAY:"휴일 관리",
             	DOCUMENT:"양식 관리",
+            	BOOKDOCUMENT:"도서 관리",
             	ORGANIZATION:"조직도",
         	},
             SM:{

@@ -13,11 +13,12 @@ define([
   'models/common/RawDataModel',
   'views/sm/ConfigUserView',
   'views/AdminSettingView',
-  'views/DocumentView'
+  'views/DocumentView',
+  'views/BookView'
 ], function($, _, Backbone, animator,Dialog, i18Common, 
 		BaseView, navigation, Menu, Code,
 		SessionModel, RawDataModel,
-		ConfigUserView, AdminSettingView, DocumentView
+		ConfigUserView, AdminSettingView, DocumentView, BookView
 ){
   
   var NavigationView = BaseView.extend({
@@ -82,6 +83,7 @@ define([
         animator.animate(this.el, animator.FADE_IN_DOWN);
         
         $("#document").html('<span class="glyphicon glyphicon-file"></span>  양식');
+        $("#book").html('<span class="glyphicon glyphicon-file"></span>  도서');
     },
     events: {
 		'click #logout': 'logout',
@@ -89,7 +91,8 @@ define([
 		'click #accessIn' : 'accessIn',
 		'click #accessOut' : 'accessOut',
 		'click #setting' : 'setting',
-		'click #document' : 'document'
+		'click #document' : 'document',
+		'click #book' : 'book'
     },
     show:function(){
       var _view=this;
@@ -244,6 +247,19 @@ define([
 	    Dialog.show({
 	        title:"주요 양식 다운로드",
 	        content:documentView,
+	        buttons:[{
+	            label: i18Common.DIALOG.BUTTON.CLOSE,
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+	        }]
+	    });
+	},
+	book:function(){
+	    var bookView=new BookView();
+	    Dialog.show({
+	        title:"도서 다운로드",
+	        content:bookView,
 	        buttons:[{
 	            label: i18Common.DIALOG.BUTTON.CLOSE,
                 action: function(dialogRef){

@@ -31,6 +31,7 @@ var report = require('./routes/reportRouter');
 var message = require('./routes/messageRouter');
 var userPic = require('./routes/userPicRouter');
 var documentlist = require('./routes/documentRouter');
+var bookdocument = require('./routes/bookdocumentRouter');
 var department = require('./routes/departmentRouter');
 var position = require('./routes/positionRouter');
 
@@ -38,6 +39,7 @@ var debug = require('debug')('APP');
 var app = express();
 var filePath1 = path.normalize(__dirname + '/pic/files'); 
 var filePath2 = path.normalize(__dirname + '/public/doc'); 
+var filePath3 = path.normalize(__dirname + '/public/book'); 
 
 //var Statistics = require('./service/Statistics');
 //var statisticsService = new Statistics();
@@ -95,6 +97,33 @@ app.post('/documentlist', mwMulter2, function(req, res) {
 
     res.json({ message: 'Finished! Uploaded ' + filesUploaded + ' files.  Route is /document' });
 
+});
+
+var mwMulter3 = multer({ dest: filePath3 , rename:function(fieldname, filename, req,res){
+	  console.log(filename);
+	  return filename;
+	} });
+app.post('/bookdocument', mwMulter3, function(req, res) {
+  // check req.files for your files
+	console.log('IN POST (/bookdocument)');
+  console.log(req.body)
+
+  var filesUploaded = 0;
+
+  if ( Object.keys(req.files).length === 0 ) {
+      console.log('no files uploaded');
+  } else {
+      console.log(req.files)
+
+      var files = req.files.file1;
+      if (!util.isArray(req.files.file1)) {
+          files = [ req.files.file1 ];
+      } 
+
+      filesUploaded = files.length;
+  }
+
+  res.json({ message: 'Finished! Uploaded ' + filesUploaded + ' files.  Route is /bookdocument' });
 });
 
 
@@ -185,7 +214,8 @@ app.use('/dashboard', dashboard);
 app.use('/report', report);
 app.use('/message', message);
 app.use('/userpic', userPic);
-app.use('/documentlist', documentlist);
+app.use('/documentlist', documentlist); 
+app.use('/bookdocument', bookdocument);
 app.use('/department', department);
 app.use('/position', position);
 
