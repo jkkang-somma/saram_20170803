@@ -63,7 +63,7 @@ define([
 		        childs:[{
 	        		type:"combo",
 	                name:"filename",
-	                label:"양식 선택",
+	                label:"선택",
 	                firstBlank : true,
 	                value : _model.filename,
 	                codeKey : "filename",
