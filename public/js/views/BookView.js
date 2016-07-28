@@ -78,7 +78,7 @@ define([
     	        _view.form=_form;     
     	        $(_view.el).find(".form-row").css('margin-bottom','10px');
     	        var panels = _view.el.find('.panel-body');
-    	        var tmpl = '<button id="btnDownload" class="btn btn-success btn-block " type="button">양식 다운로드</button>';
+    	        var tmpl = '<button id="btnDownload" class="btn btn-success btn-block " type="button">다운로드</button>';
     	        $(panels[0]).append(tmpl);
     	        
     	        dfd.resolve(_view);
