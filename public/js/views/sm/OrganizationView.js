@@ -137,20 +137,26 @@ define([
 	    	    		}    	 
 	    	    	}   		
     	    	}
+    	    	var dept0 = [];
+    	    	var dept1 = [];
+    	    	for(var i=0;i<deptorg.length;i++){
+    	    		if(deptorg[i].code == 0000){dept0[0] = deptorg[i];}
+    	    		if(deptorg[i].code == 1000){dept1[0] = deptorg[i];}
+    	    	}
     	    	
     	    	//Div 총 width
     	    	var tWidth = 0;
     	    	//임원+경영지원팀 고정
-				if(deptorg[0].leader){							
+				if(dept0[0].leader){							
 					var category = $(
 							'<div style="padding-left:10px; float:left; padding-right:10px; width:300px;display: table-cell;">'+
-								'<div class ="printdiv" id="div_'+deptorg[0].code+'" style="margin-bottom:30px;">'
-									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+deptorg[0].name + "</span></div><div class='deptColor team0000'></div>" +
-									'<table id="tbl_'+deptorg[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
+								'<div class ="printdiv" id="div_'+dept0[0].code+'" style="margin-bottom:30px;">'
+									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+dept0[0].name + "</span></div><div class='deptColor team0000'></div>" +
+									'<table id="tbl_'+dept0[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
 								'</div>'
-								+'<div class ="printdiv" id="div_'+deptorg[2].code+'">'
-									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:28px;"><span id=ybold>'+deptorg[2].name + "</span></div><div class='deptColor team1000' style='padding-bottom:20px;'></div>" +
-									'<table id="tbl_'+deptorg[2].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
+								+'<div class ="printdiv" id="div_'+dept1[0].code+'">'
+									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:28px;"><span id=ybold>'+dept1[0].name + "</span></div><div class='deptColor team1000' style='padding-bottom:20px;'></div>" +
+									'<table id="tbl_'+dept1[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
 						);	
