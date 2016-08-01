@@ -260,7 +260,7 @@ form .form-group:last-child {
     #printleader{font-size:24px;}
     #printname{font-size:24px;}
     #printh4{font-size:28px;}
-    .orgcontainer{padding-top:3em;}   
+    .orgcontainer{padding-top:1.5em;}   
 }
 
 @media (min-width: 400px) {
