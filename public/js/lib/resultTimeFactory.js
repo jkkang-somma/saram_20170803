@@ -414,7 +414,7 @@ define([
 
         /**
          * # builder5
-         * 휴가, 외근 상태를 설정한다.
+         * 휴가, 외근 �����태를 설정한다.
          **/
         setOutOffice: function(todayOutOffice) {
 
@@ -589,7 +589,7 @@ define([
                              * * 2. not Flexible (전일 야근)
                              * 9:30 ~ 18:30
                              **/
-                            if (this.isFlexible) {
+                            // if (this.isFlexible) {
                                 if (!_.isNull(this.inTime)) {
                                     // 지각 기준보다 일찍왔을경우 flexible 적용
                                     var hour = this.inTime.hour();
@@ -603,11 +603,11 @@ define([
                                     }
                                 }
                                 this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
-                            }
-                            else {
-                                this.standardInTime.hour(9).minute(30).second(0);
-                                this.standardOutTime.hour(18).minute(30).second(0);
-                            }
+                            // }
+                            // else {
+                            //     this.standardInTime.hour(9).minute(30).second(0);
+                            //     this.standardOutTime.hour(18).minute(30).second(0);
+                            // }
                             break;
                     }
                 }
@@ -702,7 +702,7 @@ define([
 
         /**
          * # builder6
-         * 이전에 설정된 내용을 가지고 결과값 계산
+         * 이전에 ���정된 내용을 가지고 결과값 계산
          **/
         getResult: function() {
             /**
