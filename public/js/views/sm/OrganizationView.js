@@ -174,7 +174,8 @@ define([
 				}
 				var leaderArr = leaderorg.filter( onlyUnique ); 
 				
-				var tDiv = $('<div id=tDiv style="display: table; margin:auto;"></div>');
+//				var tDiv = $('<div id=tDiv style="display: table; margin:auto;"></div>');
+				var tDiv = $('<div id=tDiv style="margin:auto;"></div>');
 				$(_content).append(tDiv);
 								
 				//AllTeamDiv   1 deptorg[i].leader 중복값 제거
@@ -193,7 +194,7 @@ define([
 				//TeamDiv 2 AllTeam div안에 넣기
 				for(var i=3,num=1;i<deptorg.length;i++){		
 //					if(_.has(deptorg[i], "leader")) {
-					if(deptorg[i].leader !=null){
+					if(deptorg[i].leader !=null && deptorg[i].leader !=""){
 						var category = $(
 								'<div class ="printdiv" id="div_'+deptorg[i].code+'" style="margin-bottom:30px;">'
 								+"<div class='TopColor dept"+ num +"'id=ystyle style='font-weight: bold;font-size:28px;'>"
@@ -207,7 +208,8 @@ define([
 						num++;
 //					}			
 					
-						divleader = "#" + deptorg[i].leader;
+//						divleader = "#" + deptorg[i].leader;
+						if(deptorg[i].leader !="" && deptorg[i].leader !=null ){divleader = "#" + deptorg[i].leader;}
 						if($($(_content).find(divleader)).find(".member").length == 1){
 							var count = parseInt($($(_content).find(divleader)).find(".member").text().slice(2,-1)) + deptmem[i];
 							$($(_content).find(divleader)).find(".member").text(" ("+count+"명)")
@@ -265,10 +267,11 @@ define([
 				});
 				
     	    	//개발품질팀(수원) 팀장 중복 제거
-				$("#div_7400").find("tr :eq(0)").remove();
+//				$("#div_7300").find("tr :eq(0)").remove();
+//				$("#div_7400").find("tr :eq(0)").remove();
 				//하단 div
 				var footer = $(
-						'<div id= footer style="float:right; margin-top:-145px; margin-right:20px; font-size:24px;">'
+						'<div id= footer style="float:right; margin-top:420px; margin-right:20px; font-size:24px;">'
 						+"총 인원- "+ tolmem +"명" + "( " + "본사- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"+"<br>"
 						+"본사 전화번호: 070-7163-XXXX" 
 						+"<br>"+ "수원 사업장 U-city 전화번호: 031-213-8740~2"
