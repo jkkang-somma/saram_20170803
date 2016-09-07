@@ -152,11 +152,11 @@ define([
 							'<div style="padding-left:10px; float:left; padding-right:10px; width:300px;display: table-cell;">'+
 								'<div class ="printdiv" id="div_'+dept0[0].code+'" style="margin-bottom:30px;">'
 									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+dept0[0].name + "</span></div><div class='deptColor team0000'></div>" +
-									'<table id="tbl_'+dept0[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:279px;">'+ '</table>'+
+									'<table id="tbl_'+dept0[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:277px;">'+ '</table>'+
 								'</div>'
 								+'<div class ="printdiv" id="div_'+dept1[0].code+'">'
 									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:28px;"><span id=ybold>'+dept1[0].name + "</span></div><div class='deptColor team1000' style='padding-bottom:20px;'></div>" +
-									'<table id="tbl_'+dept1[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:279px;">'+ '</table>'+
+									'<table id="tbl_'+dept1[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:277px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
 						);	
@@ -201,7 +201,7 @@ define([
 									+'<span id=ybold>'+deptorg[i].name + '</span>'
 								+ '</div>'
 								+"<div class='deptColor team"+num+"'></div>" +
-								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:279px;">'+ '</table>'+
+								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:277px;">'+ '</table>'+
 							'</div>'
 							);
 						
@@ -271,7 +271,7 @@ define([
 //				$("#div_7400").find("tr :eq(0)").remove();
 				//하단 div
 				var footer = $(
-						'<div id= footer style="float:right; margin-top:550px; margin-right:20px; font-size:24px;">'
+						'<div id= footer style="float:right; margin-top:650px; margin-right:20px; margin-bottom:20px; font-size:24px;">'
 						+"총 인원- "+ tolmem +"명" + "( " + "본사- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"+"<br>"
 						+"본사 전화번호: 070-7163-XXXX" 
 						+"<br>"+ "수원 사업장 U-city 전화번호: 031-213-8740~2"

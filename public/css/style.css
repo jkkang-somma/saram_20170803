@@ -237,6 +237,7 @@ form .form-group:last-child {
     	height: auto;
         zoom: 70%;        
         margin:0 auto;
+        margin-left:-20px;
         padding:0 auto;   
         }       
     @page {
@@ -260,7 +261,7 @@ form .form-group:last-child {
     #printleader{font-size:24px;}
     #printname{font-size:24px;}
     #printh4{font-size:28px;}
-    .orgcontainer{padding-top:1.5em;}   
+    .orgcontainer{padding-top:10em;}   
 }
 
 @media (min-width: 400px) {
