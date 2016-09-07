@@ -152,11 +152,11 @@ define([
 							'<div style="padding-left:10px; float:left; padding-right:10px; width:300px;display: table-cell;">'+
 								'<div class ="printdiv" id="div_'+dept0[0].code+'" style="margin-bottom:30px;">'
 									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+dept0[0].name + "</span></div><div class='deptColor team0000'></div>" +
-									'<table id="tbl_'+dept0[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
+									'<table id="tbl_'+dept0[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:279px;">'+ '</table>'+
 								'</div>'
 								+'<div class ="printdiv" id="div_'+dept1[0].code+'">'
 									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:28px;"><span id=ybold>'+dept1[0].name + "</span></div><div class='deptColor team1000' style='padding-bottom:20px;'></div>" +
-									'<table id="tbl_'+dept1[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
+									'<table id="tbl_'+dept1[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:279px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
 						);	
@@ -201,7 +201,7 @@ define([
 									+'<span id=ybold>'+deptorg[i].name + '</span>'
 								+ '</div>'
 								+"<div class='deptColor team"+num+"'></div>" +
-								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:280px;">'+ '</table>'+
+								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:279px;">'+ '</table>'+
 							'</div>'
 							);
 						
