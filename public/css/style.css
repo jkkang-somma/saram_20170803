@@ -104,7 +104,7 @@ form .form-group:last-child {
 	background: linear-gradient(#FFB23C, #FFCA7A);
 }
 .TopColor.dept4{ 
-	background: linear-gradient(#FFB23C, #FFCA7A);
+	background: linear-gradient(#9B4BE5, #AB6EE3);
 }
 .TopColor.dept5{ 
 	background: linear-gradient(#FF3636, #FF7E7E);
@@ -187,13 +187,13 @@ form .form-group:last-child {
 }
 
 .deptColor.team4 {
-	border: 0px solid #FFCA7A;
-	background: #FFCA7A;
+	border: 0px solid #AB6EE3;
+	background: #AB6EE3;
 }
 .deptColor.team4:before {
-	background: #FFCA7A;
-  	border-right: 1px solid #FFCA7A; 
-  	border-bottom: 1px solid #FFCA7A;
+	background: #AB6EE3;
+  	border-right: 1px solid #AB6EE3; 
+  	border-bottom: 1px solid #AB6EE3;
 }
 
 .deptColor.team5 {
@@ -254,7 +254,7 @@ form .form-group:last-child {
     .deptColor: {border:1px solid gray;}
  
  	.page-header h2{font-weight: bold; font-size:45px;padding-bottom:1em;}
- 	.small{font-size:25px;}
+ 	.small{font-size:25px; margin-right:-25;}
     #ystyle{border-bottom:none;}
     td{font-size:22px;}
     #printleader{font-size:24px;}
