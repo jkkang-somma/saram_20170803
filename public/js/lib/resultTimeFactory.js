@@ -103,7 +103,7 @@ define([
             this.notPayOverTime = 0;
             this.normal = 0;
             this.normalChange = 0;
-            if (this.department === "품질검증팀") {
+            if (this.department.indexOf("품질검증") > -1) {
                 this.isSuwon = true;
             }
             else if (this.department === "개발품질팀(수원)") {
