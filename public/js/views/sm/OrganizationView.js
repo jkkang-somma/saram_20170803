@@ -268,10 +268,12 @@ define([
 				
     	    	//개발품질팀(수원) 팀장 중복 제거
 //				$("#div_7300").find("tr :eq(0)").remove();
-//				$("#div_7400").find("tr :eq(0)").remove();
+				$("#div_5400").find("tr :eq(0)").remove();
 				//하단 div
+				var maxBody = $("body").height() + 20;
+				console.log(maxBody);
 				var footer = $(
-						'<div id= footer style="float:right; margin-top:650px; margin-right:20px; margin-bottom:20px; font-size:24px;">'
+						'<div id= footer style="float:right; margin-top:1100px; margin-right:20px; margin-bottom:20px; font-size:24px;">'
 						+"총 인원- "+ tolmem +"명" + "( " + "본사- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"+"<br>"
 						+"본사 전화번호: 070-7163-XXXX" 
 						+"<br>"+ "수원 사업장 U-city 전화번호: 031-213-8740~2"

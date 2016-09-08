@@ -110,7 +110,7 @@ form .form-group:last-child {
 	background: linear-gradient(#FF3636, #FF7E7E);
 }
 .TopColor.dept6{ 
-	background: linear-gradient(#9B4BE5, #AB6EE3);
+	background: linear-gradient(#4873D7, #4873D7);
 }
 
 .deptColor {
@@ -207,13 +207,13 @@ form .form-group:last-child {
 }
 
 .deptColor.team6 {
-	border: 0px solid #AB6EE3;
-	background: #AB6EE3;
+	border: 0px solid #4873D7;
+	background: #4873D7;
 }
 .deptColor.team6:before {
-	background: #AB6EE3;
-  	border-right: 1px solid #AB6EE3; 
-  	border-bottom: 1px solid #AB6EE3;
+	background: #4873D7;
+  	border-right: 1px solid #4873D7; 
+  	border-bottom: 1px solid #4873D7;
 }
 
 
@@ -261,7 +261,7 @@ form .form-group:last-child {
     #printleader{font-size:24px;}
     #printname{font-size:24px;}
     #printh4{font-size:28px;}
-    .orgcontainer{padding-top:10em;}   
+    .orgcontainer{padding-top:2em;}   
 }
 
 @media (min-width: 400px) {
