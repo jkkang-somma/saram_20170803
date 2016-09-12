@@ -18,7 +18,7 @@ body {
 	text-align: center;
 	padding-left:180px;
 	padding-top:1em;
-	padding-bottom:2.5em;
+	padding-bottom:0.5em;
 }
 .no-radius{
     border-radius:0px !important;
@@ -137,7 +137,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team0000 {
-	border: 0px solid #9BA0DC;
+	border-bottom: 1px solid #9BA0DC;
 	background: #9BA0DC;
 }
 .deptColor.team0000:before {
@@ -147,7 +147,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team1000 {
-	border: 0px solid #83F5FF;
+	border-bottom: 1px solid #83F5FF;
 	background: #83F5FF;
 }
 .deptColor.team1000:before {
@@ -157,7 +157,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team1 {
-	border: 0px solid #84FFC8;
+	border-bottom: 1px solid #84FFC8;
 	background: #84FFC8;
 }
 .deptColor.team1:before {
@@ -167,7 +167,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team2 {
-	border: 0px solid #76FF7D;
+	border-bottom: 1px solid #76FF7D;
 	background: #76FF7D;
 }
 .deptColor.team2:before {
@@ -177,7 +177,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team3 {
-	border: 0px solid #FFCA7A;
+	border-bottom: 1px solid #FFCA7A;
 	background: #FFCA7A;
 }
 .deptColor.team3:before {
@@ -187,7 +187,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team4 {
-	border: 0px solid #AB6EE3;
+	border-bottom: 1px solid #AB6EE3;
 	background: #AB6EE3;
 }
 .deptColor.team4:before {
@@ -197,7 +197,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team5 {
-	border: 0px solid #FF7E7E;
+	border-bottom: 1px solid #FF7E7E;
 	background: #FF7E7E;
 }
 .deptColor.team5:before {
@@ -207,7 +207,7 @@ form .form-group:last-child {
 }
 
 .deptColor.team6 {
-	border: 0px solid #4873D7;
+	border-bottom: 1px solid #4873D7;
 	background: #4873D7;
 }
 .deptColor.team6:before {
@@ -229,6 +229,15 @@ form .form-group:last-child {
 #printh4{font-size:22px;}
 #tdfont{font-size:18px;}    
 #printleader{font-size:19px;}
+
+.printdiv table {
+	box-shadow : 2px 2px 2px #dddddd
+}
+
+.printdiv table td {
+	border-bottom : 1px solid #dddddd;
+	border-left : 1px solid #dddddd;
+}
 
 @media print{	   
     html, body {
