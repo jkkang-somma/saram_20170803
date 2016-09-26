@@ -121,7 +121,7 @@ define([
     	    	var seoul = 0;
     	    	var suwon = 0;
     	    	for(var i=0;i<deptorg.length;i++){
-	    	    	if(deptorg[i].code == 5400 || deptorg[i].code == 7400 || deptorg[i].area == "수원"){
+	    	    	if(deptorg[i].area == "수원"){
 	    	    			suwon +=deptmem[i]; 	 
 	    	    	}   		
     	    	}
@@ -152,11 +152,11 @@ define([
 							'<div style="padding-left:10px; float:left; padding-right:10px; width:300px;display: table-cell;">'+
 								'<div class ="printdiv" id="div_'+dept0[0].code+'" style="margin-bottom:30px;">'
 									+'<div id=ystyle style="background: linear-gradient(#777FDC, #9BA0DC);font-weight: bold;font-size:28px;"><span id=ybold>'+dept0[0].name + "</span></div><div class='deptColor team0000'></div>" +
-									'<table id="tbl_'+dept0[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:277px;">'+ '</table>'+
+									'<table id="tbl_'+dept0[0].code+'" style="width:277px;">'+ '</table>'+
 								'</div>'
 								+'<div class ="printdiv" id="div_'+dept1[0].code+'">'
 									+'<div id=ystyle style="background: linear-gradient(#37EFFF, #83F5FF);font-weight: bold;font-size:28px;"><span id=ybold>'+dept1[0].name + "</span></div><div class='deptColor team1000' style='padding-bottom:20px;'></div>" +
-									'<table id="tbl_'+dept1[0].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:277px;">'+ '</table>'+
+									'<table id="tbl_'+dept1[0].code+'" style="width:277px;">'+ '</table>'+
 								'</div>'
 							+'</div>'
 						);	
@@ -201,7 +201,7 @@ define([
 									+'<span id=ybold>'+deptorg[i].name + '</span>'
 								+ '</div>'
 								+"<div class='deptColor team"+num+"'></div>" +
-								'<table id="tbl_'+deptorg[i].code+'" style="box-shadow: 2px 2px 2px 0px lightgray; width:277px;">'+ '</table>'+
+								'<table id="tbl_'+deptorg[i].code+'" style="width:277px;">'+ '</table>'+
 							'</div>'
 							);
 						
@@ -232,7 +232,7 @@ define([
 							}
 							
 							var teamleader = $(
-									'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px; border:1px solid #D7D7D7;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
+									'<tr><td id=tdfont bgcolor=#E9E9E9 style = "text-align:center; padding-top: 30px;padding-bottom: 20px;">'+ "<b id=printleader>" +"팀장 " + userorg[j].name + " " + 
 											userorg[j].position_name.replace("연구원","")+"<br>" +"(" +userorg[j].email.replace("@yescnc.co.kr","") + ")" + "</b>" + "<br>"+userorg[j].phone + phoneoffice  + '</td></tr>'
 									);
 						
@@ -254,12 +254,12 @@ define([
 					if(item.phone_office != "" && item.phone_office != null){phoneoffice += "("+ item.phone_office + ")";}
 					if(item.leave_company == "" || item.leave_company == null){
 						if(item.dept_code == "0000"){
-							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = "padding-left: 15px; padding-bottom: 15px; padding-top: 15px; border:1px solid #D7D7D7;">' 
+							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = "padding-left: 15px; padding-bottom: 15px; padding-top: 15px;">' 
 							+ "<h4 id=printh4><b>" + item.position_name + "</h4></b>" + "<br>" +"<b id=printname>"+ item.name + "</b>"+" (" + item.email.replace("@yescnc.co.kr","") + ")" +  "<br>" + item.phone + phoneoffice + '</td></tr>';			    	    	
 							target.append(trHTML);
 						}
 						else if(!_.contains(leaderList, item.id)) {
-							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = " padding-left: 15px; padding-bottom: 15px; padding-top: 25px; border:1px solid #D7D7D7;">' 
+							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = " padding-left: 15px; padding-bottom: 15px; padding-top: 25px;">' 
 									+ "<b id=printname>" + item.name + "</b>" +" " + item.position_name.substring(0,3)  +" (" + item.email.replace("@yescnc.co.kr","") + ")" +"<br>" + item.phone + phoneoffice  + '</td></tr>';  
 									target.append(trHTML);
 						}
@@ -268,7 +268,7 @@ define([
 				
     	    	//개발품질팀(수원) 팀장 중복 제거
 //				$("#div_7300").find("tr :eq(0)").remove();
-				$("#div_5400").find("tr :eq(0)").remove();
+				$("#div_5400").find("tr :eq(0)").hide();
 				//하단 div
 				var maxBody = $("body").height() + 20;
 				console.log(maxBody);
