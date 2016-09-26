@@ -335,7 +335,7 @@
 			insert into approval_index_tbl (yearmonth, seq) values (?, 1)
 		</query>
 		<query id="updateMaxIndex">
-			update approval_index_tbl set seq = (seq+1) where yearmonth=?
+			update approval_index_tbl set seq = (?) where yearmonth=?
 		</query>
 	</group>
 	
@@ -380,6 +380,7 @@
 							c.not_pay_over_time,
 							c.normal,
 							c.normal_change,
+							c.except,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -424,6 +425,7 @@
 							c.out_office_code,
 							c.early_time,
 							c.not_pay_over_time,
+							c.except,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -458,9 +460,9 @@
         		out_time, over_time, overtime_code, vacation_code, standard_in_time,
         		standard_out_time, work_type, year,
         		in_time_type, out_time_type, out_office_start_time, out_office_end_time,
-        		in_time_change, out_time_change, early_time, not_pay_over_time, normal,normal_change)
+        		in_time_change, out_time_change, early_time, not_pay_over_time, normal,normal_change,except)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         
         <query id="updateCommuteResult">
@@ -487,7 +489,8 @@
 				early_time =?,
 				not_pay_over_time=?,
 				normal=?,
-				normal_change=?
+				normal_change=?,
+				except=?
 			WHERE
 				id = ? AND date = ?
         </query>
@@ -551,8 +554,8 @@
 				early_time,
 				not_pay_over_time,
 				normal,
-				normal_change
-				
+				normal_change,
+				except
         	FROM
         		commute_result_tbl
         	WHERE

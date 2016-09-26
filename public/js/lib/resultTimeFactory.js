@@ -49,6 +49,7 @@ define([
         lateTime: 0,
         lateTimeOver: 0,
         overTime: 0,
+        except :null,
         vacationCode: null,
         outOfficeCode: null,
         overtimeCode: null,
@@ -59,6 +60,7 @@ define([
         outTimeChange: 0,
         overtimeCodeChange: 0,
         checkInOffice: false,
+        checkOverTime : false,
         isSuwon: false,
         checkLate: true,
         checkEarly: true,
@@ -86,6 +88,7 @@ define([
             this.lateTime = 0;
             this.lateTimeOver = 0;
             this.overTime = 0;
+            this.except = null;
             this.workType = WORKTYPE.NORMAL;
             this.vacationCode = null;
             this.outOfficeCode = null;
@@ -99,11 +102,14 @@ define([
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly = true;
+            this.checkOverTime = false,
             this.earlyTime = 0;
             this.notPayOverTime = 0;
             this.normal = 0;
             this.normalChange = 0;
-            if (this.department.indexOf("품질검증") > -1) {
+            if (this.department.indexOf("본사") > -1) {
+                this.isSuwon = false;
+            }else if (this.department.indexOf("품질검증") > -1) {
                 this.isSuwon = true;
             }
             else if (this.department === "개발품질팀(수원)") {
@@ -132,6 +138,7 @@ define([
             this.lateTime = 0;
             this.lateTimeOver = 0;
             this.overTime = 0;
+            this.except = null;
             this.workType = WORKTYPE.NORMAL;
             this.vacationCode = null;
             this.outOfficeCode = null;
@@ -142,6 +149,7 @@ define([
             this.inTimeChange = 0;
             this.outTimeChange = 0;
             this.overtimeCodeChange = 0;
+            this.checkOverTime = false,
             this.checkInOffice = false;
             this.checkLate = true;
             this.checkEarly = true;
@@ -168,6 +176,7 @@ define([
             this.holidayWorkTime = model.get("holidayWorkTime");
             this.lateTimeOver = model.get("lateTimeOver");
             this.overTime = model.get("over_time");
+            this.except = model.get("except");
             this.workType = model.get("work_type");
             this.vacationCode = model.get("vacation_code");
             this.outOfficeCode = model.get("out_office_code");
@@ -179,11 +188,14 @@ define([
             this.overtimeCodeChange = model.get("overtime_code_change");
             this.checkLate = true;
             this.checkEarly = true;
+            this.checkOverTime = false,
             this.earlyTime = model.get("early_time");
             this.notPayOverTime = model.get("not_pay_over_time");
             this.normal = model.get("normal");
             this.normalChange = model.get("normal_change");
-            if (this.department === "품질검증팀") {
+            if (this.department.indexOf("본사") > -1) {
+                this.isSuwon = false;
+            }else if (this.department.indexOf("품질검증") > -1) {
                 this.isSuwon = true;
             }
             else if (this.department === "개발품질팀(수원)") {
@@ -401,13 +413,25 @@ define([
         setInOffice: function(todayInOffice) {
             if (this.isHoliday()) {
                 this.workType = WORKTYPE.HOLIDAY;
-
                 // 휴일근무 결재가 된 상태일때만 휴일근무 계산 로직에 들어감
                 if (todayInOffice.length > 0) {
                     this.checkInOffice = true;
                 }
                 else {
                     this.checkInOffice = false;
+                }
+            }else{
+                if (todayInOffice.length > 0) {
+                    this.checkOverTime = true;
+                    var model = todayInOffice.first();
+                    if(!_.isUndefined(model.get("except"))){
+                        this.except = model.get("except");    
+                    }
+                    
+                }
+                else {
+                    this.checkOverTime = false;
+                    this.except = null;
                 }
             }
         },
@@ -571,7 +595,6 @@ define([
                                 if(hour < 8){ 
                                     this.standardInTime.hour(8).minute(0).second(0);
                                 } else if (hour < 10){
-                                    minute = Math.ceil(minute/10) * 10;
                                     this.standardInTime.hour(hour).minute(minute).second(0);
                                 } else {
                                     this.standardInTime.hour(10).minute(0).second(0);
@@ -781,23 +804,34 @@ define([
 
                         if (tmpTime >= 0) {
                             this.overTime = this.outTime.diff(this.standardOutTime, "minute") - this.lateOverTime;
-                            if ((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0) { // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
-                                if (this.overTime >= 360) {
-                                    this.overtimeCode = "2015_AC";
-                                }
-                                else if (this.overTime >= 240) {
-                                    this.overtimeCode = "2015_AB";
-                                }
-                                else if (this.overTime >= 120) {
-                                    this.overtimeCode = "2015_AA";
-                                }
-                                else {
-                                    this.overtimeCode = null;
-                                }
+                            this.notPayOverTime = this.overTime;
+                                
+                            if(this.checkOverTime == true){
+                                if ((this.vacationCode === null || this.vacationCode === "V02") && this.overtimeCodeChange == 0) { // 초과근무 코드 변경내역이 있으면 초과코드는 변경하지 않는다.
+                                    if (this.overTime - this.except >= 360) {
+                                        this.overtimeCode = "2015_AC";
+                                        this.notPayOverTime -=  360 + this.except;
+                                    }
+                                    else if (this.overTime - this.except >= 240) {
+                                        this.overtimeCode = "2015_AB";
+                                        this.notPayOverTime -=  240 + this.except;
+                                    }
+                                    else if (this.overTime - this.except >= 120) {
+                                        this.overtimeCode = "2015_AA";
+                                        this.notPayOverTime -=  120 + this.except;
+                                    }
+                                    else {
+                                        this.overtimeCode = null;
+                                    }
+                                }    
+                            } else {
+                                this.overtimeCode = null;
                             }
-
-                            if (this.overTime < 0)
+                            
+                            if (this.overTime < 0){
                                 this.overTime = 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
+                                this.notPayOverTime = this.overTime;
+                            }
                         }
                     }
 
@@ -811,15 +845,6 @@ define([
                         if (this.earlyTime <= 0)
                             this.earlyTime = 0;
                     }
-
-                    /**
-                     * 수당 외 근무시간 계산
-                     *  초과근무 시간 - 360분(6시간)
-                     **/
-                    if (this.overTime > 360)
-                        this.notPayOverTime = this.overTime - 360;
-                    else
-                        this.notPayOverTime = 0;
                 }
                 /**
                  * 휴일인 경우
@@ -870,7 +895,8 @@ define([
             else if (this.workType == WORKTYPE.VACATION) { // 종일 휴가인 경우
 
             }
-
+        
+            
             return {
                 id: this.id,
                 name: this.name,
@@ -898,6 +924,7 @@ define([
                 overtime_code_change: this.overtimeCodeChange,
                 early_time: this.earlyTime,
                 not_pay_over_time: this.notPayOverTime,
+                except: this.except,
             };
         },
 
@@ -994,17 +1021,18 @@ define([
                 /**
                  * 휴일근무 여부를 판단한다.
                  */
-                var todayInOffice = userInOfficeCollection.where({
+                var todayInOffice = new InOfficeCollection(userInOfficeCollection.where({
                     date: selectedDate.start
-                });
+                }));
+                
                 that.setInOffice(todayInOffice);
 
                 /**
                  * 휴가, 외근, 출장 여부를 판단한다.
                  */
-                var todayOutOffice = userOutOfficeCollection.where({
+                var todayOutOffice = new OutOfficeCollection(userOutOfficeCollection.where({
                     date: selectedDate.start
-                });
+                }));
                 that.setOutOffice(todayOutOffice);
 
                 /**
@@ -1091,7 +1119,6 @@ define([
          *  model : in/outOfficeModel
          **/
         modifyByInOutOfficeType: function(date, id, type, model) {
-
             var dfd = new $.Deferred();
             var that = this;
             var commuteCollection = new CommuteCollection();
@@ -1114,7 +1141,7 @@ define([
                     dfd.resolve();
                     return;
                 }
-
+                
                 that.initByModel(currentDayCommute);
 
                 var inOfficeCollection = new InOfficeCollection();
@@ -1135,7 +1162,9 @@ define([
                             id: id,
                             date: date
                         }));
-                        dfd.resolve(that.getResult());
+                        
+                        var result = that.getResult();
+                        dfd.resolve(result);
                     });
                 }
                 else if (type == "out") {

@@ -240,8 +240,9 @@ define([
 
             // option setting
             for (var index = 0; index < arrGubunData.length; index++) {
-                if (arrGubunData[index].code.length == 3) {
-                    var optionHtml = "<option value='" + arrGubunData[index].code + "'>" + arrGubunData[index].name + "</option>";
+                var code = arrGubunData[index].code; 
+                if (code.length == 3 && code != "O01") {
+                    var optionHtml = "<option value='" + code + "'>" + arrGubunData[index].name + "</option>";
                     selGubun.append(optionHtml);
                 }
             }

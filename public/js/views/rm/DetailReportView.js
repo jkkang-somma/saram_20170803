@@ -94,6 +94,7 @@ define([
         setDataDefaultValues: function(param) {
             // console.log(param);
             var _this = $(this.el);
+            console.log(param);
             if (param != undefined) {
                 _this.find('#submit_id').val(param.submit_name);
                 _this.find('#start_date input').val(param.start_date);
@@ -101,7 +102,26 @@ define([
                 _this.find('#start_time input').val(param.start_time);
                 _this.find('#end_time input').val(param.end_time);
                 _this.find('#office_code').html("<option>" + param.office_code_name + "</option>");
-                _this.find('#submit_comment').val(param.submit_comment);
+                if(param.office_code == "O01"){
+                    var splitArr = param.submit_comment.split(",");
+                    var except = parseInt(splitArr[0],10);
+                    var overTime = parseInt(splitArr[1],10);
+                    var calc = overTime-except;
+                    var type = Math.floor(calc/120);
+                    if(type == 1){
+                        type = "야근 A형";
+                    }else if(type == 2){
+                        type = "야근 B형";
+                    }else if(type > 2){
+                        type = "야근 C형";
+                    }else {
+                        type = "-";
+                    }
+                    var msg = " 초과근무시간 : "+overTime+"분, 제외시간 : "+except+"분\n 확정시간 : "+calc+"분\n 근무타입 : " + type;
+                    _this.find('#submit_comment').val(msg);
+                }else{
+                    _this.find('#submit_comment').val(param.submit_comment);
+                }
                 _this.find('#decide_comment').val(param.decide_comment);
 
                 _this.find('#manager_id').html("<option>" + param.manager_name + "</option>");
@@ -111,7 +131,7 @@ define([
                 _this.find('#usableHoliday').val(usable + " 일");
 
                 var holReq = "0";
-                if (param.office_code == "B01") {
+                if (param.office_code == "B01" || param.office_code == "O01") {
                     // 휴일근무
                     holReq = "0";
                     $(this.el).find('#end_date').css('display', 'none');

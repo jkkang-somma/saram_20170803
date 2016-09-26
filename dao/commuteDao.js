@@ -34,7 +34,7 @@ CommuteDao.prototype.insertCommute = function(data){
                 data.vacation_code, data.standard_in_time, data.standard_out_time, data.work_type,
                 data.year, data.in_time_type, data.out_time_type, data.out_office_start_time,
                 data.out_office_end_time, data.in_time_change, data.out_time_change,
-                data.early_time, data.not_pay_over_time, data.normal, data.normal_change ]
+                data.early_time, data.not_pay_over_time, data.normal, data.normal_change, data.except ]
     };
 };
 
@@ -47,7 +47,7 @@ CommuteDao.prototype.updateCommute_t = function(data){
                 overtime_code, data.vacation_code, data.standard_in_time, data.standard_out_time, data.
                 work_type, data.in_time_type, data.out_time_type, data.out_office_start_time,
                 data.out_office_end_time, data.in_time_change, data.out_time_change, data.overtime_code_change,
-                data.early_time, data.not_pay_over_time, data.normal, data.normal_change, data.id, data.date
+                data.early_time, data.not_pay_over_time, data.normal, data.normal_change, data.except, data.id, data.date
             ]
     };
 };

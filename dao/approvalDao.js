@@ -108,7 +108,7 @@ ApprovalDao.prototype.insertApprovalIndex =  function (data) {
 };
 
 ApprovalDao.prototype.updateMaxIndex =  function (data) {
-    return db.query("approval_index", "updateMaxIndex", [data.yearmonth]);
+    return db.query("approval_index", "updateMaxIndex", [data.seq, data.yearmonth]);
 };
 
 

@@ -24,18 +24,24 @@ define([
         'text!templates/default/rowcombo.html',
         'models/sm/SessionModel',
         'models/cm/CommuteModel',
+	    'models/rm/ApprovalModel',
+	    'models/rm/ApprovalIndexModel',
+	    'collection/rm/ApprovalCollection',
         'collection/cm/CommuteCollection',
+        'collection/common/HolidayCollection',
         'views/cm/popup/CommuteUpdatePopupView',
         'views/cm/popup/CommentPopupView',
         'views/cm/popup/ChangeHistoryPopupView',
+        'views/cm/popup/OvertimeApprovalPopupView',
         'text!templates/cm/searchFormTemplate.html',
-        'text!templates/cm/btnNoteCellTemplate.html'
+        'text!templates/cm/btnNoteCellTemplate.html',
+        'text!templates/cm/overTimeCellTemplate.html',
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
-		SessionModel, CommuteModel, CommuteCollection,
-		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView,
-		searchFormTemplate, btnNoteCellTemplate){
+		SessionModel, CommuteModel, ApprovalModel, ApprovalIndexModel, ApprovalCollection, CommuteCollection, HolidayCollection, 
+		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, OvertimeApprovalPopupView,
+		searchFormTemplate, btnNoteCellTemplate, overTimeCellTemplate){
 
 	
 	// 출퇴근 시간 셀 생성
@@ -186,7 +192,8 @@ define([
 	
 	var commuteListView = BaseView.extend({
         el:$(".main-container"),
-    	initialize:function(){
+        initialize : function(){
+        	var _view = this;
     		this.commuteCollection = new CommuteCollection();
     		this.gridOption = {
         		    el:"commute_content",
@@ -206,9 +213,9 @@ define([
      	                   			return _.isNull(codeName)? null : codeName.replace(",", "<br>");
 		                       }
 		                    },
-     	                   	{ data : "out_office_code", 	"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.OUT_OFFICE,
+     	                   	{ data : "out_office_code", 	"title" : "외근",
      	                   		render : function(data, type, full, meta){
-     	                   			return Code.getCodeName(Code.OFFICE, data);
+ 	                   				return Code.getCodeName(Code.OFFICE, data);
      	                   		}
      	                   	},
      	                   	{ data : "in_time", "title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.IN_TIME,
@@ -226,6 +233,33 @@ define([
      	                    		return _getTimeStr(data);
      	                    	}
      	                    }, 
+     	                    { data : "over_time", 		"title" : "초과근무<br>시간 (분)",
+     	                    	render : function(data, type, full, meta){
+     	                    		var result = "-";
+     	                    		if (data > 0){
+     	                    			result = _.template(overTimeCellTemplate)({
+ 	                    					isMod : false,
+ 	                    					over_time : data
+ 	                    				});
+
+ 	                    				if(full.id == SessionModel.getUserInfo().id){
+ 	                    					if(_.isNull(full.overtime_code)){
+	     	                    				var date = full.date;
+	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
+		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date)){
+		     	                    				result = _.template(overTimeCellTemplate)({
+		     	                    					isMod : true,
+		     	                    					idx : full.idx,
+		     	                    					over_time : full.over_time
+		     	                    				});
+		    	 	                    		}	
+	     	                    			}
+     	                    			}
+     	                    		}
+									return result;
+     	                    	}
+     	                    },
+     	                    { data : "except", 		"title" : "제외시간 (분)",},
      	                   	{ data : "overtime_code", 		"title" : i18nCommon.COMMUTE_RESULT_LIST.GRID_COL_NAME.OVERTIME_CODE,
      	                   		render : function(data, type, full, meta){
      	                   			return _createHistoryCell("overtime_code", full, "overtime_code_change");
@@ -263,6 +297,7 @@ define([
         	'click #commuteDataTable .td-in-out-time' : 'onClickOpenChangeHistoryPopup',
         	'click #commuteDataTable .btn-comment-add' : 'onClickOpenInsertCommentPopup',
         	'click #commuteDataTable .btn-commute-edit' : 'onClickOpenUpdateCommutePopup', 
+        	'click #commuteDataTable .btn-overtime' : 'onClickOpenOvertimePopup'
     	},
     	buttonInit: function(){
     	    var that = this;
@@ -362,11 +397,36 @@ define([
      	    else
      	    	$(this.el).find("#ccmCombo").val(SessionModel.getUserInfo().dept_name);
      	    	
-            
-    	    var _gridSchema=Schemas.getSchema('grid');
-    	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
-            this.grid.render();
-            this.selectCommute();
+            var _view = this;
+        	this.holidayCollection = new HolidayCollection();
+        	this.holidayCollection.fetch({
+        		data :  {
+        			year : Moment().year()
+        		}
+        	}).done(function(){
+        		console.log(_view.holidayCollection);
+        		var day = Moment().hour(0).minute(0).second(0);
+        		var holidays = _view.holidayCollection.pluck("date");
+        		
+        		for(var count = 0 ; ; day.add(-1,"days")){
+        			if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
+        				
+        			} else {
+        				console.log(day.format("YYYY-MM-DD"));
+        				count ++;
+        				if(count == 5){
+        					break;
+        				}
+        				
+        			}
+        			
+        		}
+        		_view.overTimeDay = day;
+        		var _gridSchema=Schemas.getSchema('grid');
+	    	    _view.grid= new Grid(_gridSchema.getDefault(_view.gridOption));
+	            _view.grid.render();
+	            _view.selectCommute();
+        	});
 			
             return this;
      	},
@@ -453,6 +513,108 @@ define([
                 }]
             });
      	},
+     	
+     	onClickOpenOvertimePopup : function(evt){
+     		var index = $(evt.currentTarget).attr('data');
+        	var selectItem = this.grid.getDataAt(index-1); // 0부터 시작
+        	var overtimeApprovalPopupView = new OvertimeApprovalPopupView(selectItem);
+        	
+        	console.log("grid data", selectItem);
+        	var _this = this;
+            Dialog.show({
+                title: "초과근무 결재", 
+                content: overtimeApprovalPopupView,
+                buttons: [{
+                	label : "상신",
+                	cssClass: Dialog.CssClass.SUCCESS,
+                	action : function(dialog){
+                		var inputData = overtimeApprovalPopupView.getData();
+                		console.log(inputData);
+                		var data = {
+                			day_count:0,
+                			decide_comment:"",
+                			end_date:selectItem.date,
+                			end_time:"",
+                			manager_id:SessionModel.getUserInfo().approval_id,
+                			office_code:"O01",
+                			start_date:selectItem.date,
+                			start_time:"",
+                			submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time,
+							submit_id:SessionModel.getUserInfo().id
+                		};
+                		
+                		var yearMonth = "";
+
+		                // getzFormat
+		                var nowDate = new Date();
+		                yearMonth = nowDate.getFullYear() + _this.getzFormat(nowDate.getMonth() + 1, 2);
+		
+		                var docData = {
+		                    yearmonth: yearMonth
+		                };
+		
+						var _appCollection = new ApprovalCollection();
+		                _appCollection.url = "/approval/appIndex";
+		
+		                _appCollection.fetch({
+	                        reset: true,
+	                        data: docData,
+	                        error: function(result) {
+	                            Dialog.error("데이터 조회가 실패했습니다.");
+	                            dialog.close();
+	                        }
+	                    }).done(function(result) {
+	                        docData["seq"] = result[0].maxSeq;
+    	                    var _approvalIndexModel = new ApprovalIndexModel(docData);
+				            _approvalIndexModel.save({}, {
+				                success: function(model, xhr, options) {
+				                    var _seq = model.attributes.seq;
+				                    _seq = (_seq == null) ? 1 : _seq + 1;
+				                    var doc_num = docData.yearmonth + "-" + _this.getzFormat(_seq, 3);
+				                    data["doc_num"] = doc_num;
+				                    var _approvalModel = new ApprovalModel(data);
+						            _approvalModel.save({}, {
+						                success: function(model, xhr, options) {
+						                    Dialog.show("결재가 상신되었습니다.");
+						                    dialog.close();
+						                },
+						                error: function(model, xhr, options) {
+						                    var respons = xhr.responseJSON;
+						                    Dialog.error(respons.message);
+						                    dialog.close();
+						                },
+						                wait: false
+						            });
+				                    
+				                },
+				                error: function(model, xhr, options) {
+				                    var respons = xhr.responseJSON;
+				                    Dialog.error(respons.message);
+				                    dialog.close();
+				                },
+				                wait: false
+				            });
+                    	});
+                	}
+            	},{
+                    label : i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
+                    action : function(dialog){
+                        dialog.close();
+                    }
+                }]
+            });
+     	},
+     	getzFormat: function(s, len) {
+            var sZero = "";
+            s = s + "";
+            if (s.length < len) {
+                for (var i = 0; i < (len - s.length); i++) {
+                    sZero += "0";
+                }
+            }
+            return sZero + s;
+        },
+        
     	selectCommute: function() {
     		var data = {
      		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate()),

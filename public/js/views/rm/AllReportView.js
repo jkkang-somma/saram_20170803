@@ -215,8 +215,7 @@ define([
         	$("#left_table").dataTable().fnAddData(list);
         },
         getTableButtons: function() {
-        	arrdata =this.mydata;        	
-            var _this = this;
+        	var arrdata =this.mydata;        	
             var _buttons =["search"];
             _buttons.push({ // 신규상신
                 type: "custom",
@@ -224,7 +223,6 @@ define([
                 tooltip: "일괄 결재",
                 click: function(_grid) {
                     var _addAllReportView = new AddAllReportView({data : arrdata});
-                    var _approvalReportView = new ApprovalReportView();
                     // Dialog
                     Dialog.show({
                         title: "일괄 결재",
@@ -233,11 +231,9 @@ define([
                             label: "결재",
                             cssClass: Dialog.CssClass.SUCCESS,
                             action: function(dialogRef) { // 버튼 클릭 이벤트
-                                var _appCollection = new ApprovalCollection();
                                 if (arrdata.length != 0) {
-                                	_approvalReportView.submitAdd().done(function(data) {
+                                	_addAllReportView.submitAdd().done(function(data) {
                                 		Dialog.show("완료되었습니다.");
-                                		_this.grid.addRow(data);
                                         dialogRef.close();
                                         }).fail(function() {
                                             Dialog.error("해당 날짜에 이미 결재된 내역이 있습니다.");

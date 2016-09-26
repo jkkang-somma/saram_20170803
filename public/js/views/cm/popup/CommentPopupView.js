@@ -124,6 +124,17 @@ define([
 							value: result[0].approval_name,
 							disabled: true,
 							group: "modifyItem",
+						// }, {
+						// 	type: "combo",
+						// 	name: "comment_type",
+						// 	label: "유형",
+						// 	data : 0,
+						// 	collection : [
+						// 		{key : 0, value : "-"},
+						// 		{key : 1, value : "결재"},
+						// 		{key : 2, value : "일반"}
+						// 	],
+						// 	group: "modifyItem",
 						}]
 					};
 
@@ -138,11 +149,11 @@ define([
 					_form.render().done(function() {
 						_view.form = _form;
 						var normal = _view.form.getElement("normal");
+						var inTimeAfter = $(_view.form.getElement("inTimeAfter")).find("input");
+						var outTimeAfter = $(_view.form.getElement("outTimeAfter")).find("input");
 						$(_view.form.getElement("approval")).data("id", result[0].approval_id);
+						
 						$(normal).click(function(evt) {
-							var inTimeAfter = $(_view.form.getElement("inTimeAfter")).find("input");
-							var outTimeAfter = $(_view.form.getElement("outTimeAfter")).find("input");
-
 							if ($(evt.currentTarget).find("input").is(":checked")) {
 								$(inTimeAfter).attr("disabled", "true");
 								$(outTimeAfter).attr("disabled", "true");
@@ -152,6 +163,30 @@ define([
 								$(outTimeAfter).removeAttr("disabled");
 							}
 						});
+						
+						// var type = $(_view.form.getElement("comment_type"));
+						// type.find("select").change(function(evt){
+						// 	var value = $(this).val();
+							
+						// 	switch(value){
+						// 		case "0" :
+						// 		case "1" :
+						// 			$(normal).find("input").removeAttr("disabled", "true");
+						// 			if($(normal).find("input").is(":checked")){
+						// 				$(inTimeAfter).attr("disabled", "true");
+						// 				$(outTimeAfter).attr("disabled", "true");	
+						// 			}else{
+						// 				$(inTimeAfter).removeAttr("disabled");
+						// 				$(outTimeAfter).removeAttr("disabled");
+						// 			}
+						// 			break;
+						// 		case "2" :
+						// 			$(normal).find("input").attr("disabled", "true");
+						// 			$(inTimeAfter).attr("disabled", "true");
+						// 			$(outTimeAfter).attr("disabled", "true");
+						// 			break;
+						// 	}
+						// });
 						dfd.resolve();
 					}).fail(function() {
 						dfd.reject();
@@ -173,6 +208,7 @@ define([
 			var commentModel = new CommentModel();
 			commentModel.save(inData, opt);
 		},
+		
 		getInsertData: function() {
 			var data = this.form.getData();
 			var newData = {
@@ -187,35 +223,48 @@ define([
 				want_normal : 0,
 			};
 
-			if (data.inTimeAfter != "") {
-				newData.want_in_time = data.inTimeAfter;
-			}
-
-			if (data.outTimeAfter != "") {
-				newData.want_out_time = data.outTimeAfter;
-			}
-
-			var normal = this.form.getElement("normal");
-			
-			if(!_.isUndefined(normal)){
-				if (normal.find("input").is(":checked")) {
-					newData.want_normal = 1;
-					newData.want_in_time = null;
-					newData.want_out_time = null;
+			// switch(data.comment_type){
+			// 	case "0" :
+			// 		Dialog.warning("Comment 유형을 선택해 주십시오 <br> (정상처리, 출퇴근시간 변경시 결재, 이외의 경우는 일반)");
+			// 		break;
+			// 	case "1" : // approval
+				if (data.inTimeAfter != "") {
+					newData.want_in_time = data.inTimeAfter;
 				}
-				else {
-					newData.want_normal = 0;
+	
+				if (data.outTimeAfter != "") {
+					newData.want_out_time = data.outTimeAfter;
 				}
-			}
-		
-			newData.before_in_time = this.selectData.in_time;
-			newData.before_out_time = this.selectData.out_time;
-
-			if (newData.comment.length == 0) {
-				Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.EMPTY_COMMENT_ERR);
-				return null;
-			}
-			return newData;
+	
+				var normal = this.form.getElement("normal");
+				
+				if(!_.isUndefined(normal)){
+					if (normal.find("input").is(":checked")) {
+						newData.want_normal = 1;
+						newData.want_in_time = null;
+						newData.want_ouet_time = null;
+					}
+					else {
+						newData.want_normal = 0;
+					}
+				}
+				newData.before_in_time = this.selectData.in_time;
+				newData.before_out_time = this.selectData.out_time;
+				
+				if( newData["want_normal"] == 0
+					&&  _.isNull(newData["want_in_time"]) 
+					&& _.isNull(newData["want_out_time"])){
+					Dialog.warning("근태 정상처리요청, 출퇴근 수정요청중 한가지는 입력되어야 합니다.");
+					return null;
+				}
+				
+				// case "2" : // normal
+					if (newData.comment.length == 0) {
+						Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.EMPTY_COMMENT_ERR);
+						return null;
+					}
+					return newData;
+			// }
 		}
 	});
 

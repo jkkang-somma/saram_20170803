@@ -129,37 +129,39 @@ define([
             var formData = this.getSearchData(val, managerMode);
             var view = this;
             this.option.column = [{
-                "title": "신청일자",
-                "render": function(data, type, row) {
+                title: "신청일자",
+                render: function(data, type, row) {
                     var dataVal = view.getDateFormat(row.submit_date);
                     return dataVal;
                 }
             }, {
+                title: "부서",
                 data: "submit_dept_code",
-                "title": "부서",
                 render: function(data, type, row) {
                     return Code.getCodeName(Code.DEPARTMENT, data);
                 }
             }, {
-                data: "submit_name",
-                "title": "이름"
+                title: "이름",
+                "data": "submit_name",
             }, {
-                data: "office_code_name",
-                "title": "구분"
+                
+                title: "구분",
+                "data": "office_code_name",
             }, {
-                "title": "근태일수",
-                "render": function(data, type, row) {
+                title: "근태일수",
+                render: function(data, type, row) {
                     var dataVal = (row.day_count != null && row.day_count != 0) ? "<span class='float_right'>" + row.day_count + "일</span>" : "<span style='float: right;'>-</span>";
                     return dataVal;
                 }
             }, {
-                "title": "근태기간",
-                "render": function(data, type, row) {
+                title: "근태기간",
+                render: function(data, type, row) {
                     var dataVal = "";
-                    
-                    if(row.start_date == row.end_date && row.day_count != null){
+
+                    if (row.start_date == row.end_date && row.day_count != null) {
                         dataVal = row.start_date;
-                    }else{
+                    }
+                    else {
                         dataVal = row.start_date + "</br>~ " + row.end_date;
                     }
                     // if (row.day_count != null && row.day_count > 1) {
@@ -172,8 +174,8 @@ define([
                     return dataVal;
                 }
             }, {
-                "title": "외근시간",
-                "render": function(data, type, row) {
+                title: "외근시간",
+                render: function(data, type, row) {
                     var dataVal = row.start_time + "</br>~ " + row.end_time;
                     if (row.start_time == null || row.office_code != 'W01') {
                         dataVal = "-";
@@ -182,16 +184,16 @@ define([
                 }
             }, {
                 data: "manager_name",
-                "title": "결재자"
+                title: "결재자"
             }, {
-                "title": "처리일자",
-                "render": function(data, type, row) {
+                title: "처리일자",
+                render: function(data, type, row) {
                     var dataVal = view.getDateFormat(row.decide_date);
                     return dataVal;
                 }
             }, {
-                "title": "처리상태",
-                "render": function(data, type, row) {
+                title: "처리상태",
+                render: function(data, type, row) {
                     // data : "black_mark",
                     // ( 1:정상, 2:당일결재, 3:익일결재, 4:당일상신, 5:익일상신
                     var sessionInfo = SessionModel.getUserInfo();
@@ -208,31 +210,34 @@ define([
                     return dataVal;
                 }
             }, {
-                "title": "비고",
-                "render": function(data, type, row) {
+                title: "비고",
+                render: function(data, type, row) {
                     // data : "black_mark",
                     // ( 1:정상, 2:당일결재, 3:익일결재
-                    var dataVal = "";
-                    switch (row.black_mark) {
-                        case '1':
-                            dataVal = "정상";
-                            break;
-                        case '2':
-                            dataVal = "당일결재";
-                            break;
-                        case '3':
-                            dataVal = "익일결재";
-                            break;
-                        case '4':
-                            dataVal = '당일상신';
-                            break;
-                        case '5':
-                            dataVal = '익일상신';
-                            break;
-                        default:
-                            dataVal = "-";
+                    var dataVal = "-";
+                    if(row.office_code != "O01"){
+                        switch (row.black_mark) {
+                            case '1':
+                                dataVal = "정상";
+                                break;
+                            case '2':
+                                dataVal = "당일결재";
+                                break;
+                            case '3':
+                                dataVal = "익일결재";
+                                break;
+                            case '4':
+                                dataVal = '당일상신';
+                                break;
+                            case '5':
+                                dataVal = '익일상신';
+                                break;
+                            default:
+                                dataVal = "-";
+                        }
                     }
                     return dataVal;
+                    
                 }
             }];
 
@@ -311,7 +316,7 @@ define([
             //         _this.onClickDetail(selectData);
             //     }
             // });
-            if (this.actionAuth.save){
+            if (this.actionAuth.save) {
                 _buttons.push({ // detail
                     type: "custom",
                     name: "save",

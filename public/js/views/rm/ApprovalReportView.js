@@ -145,7 +145,26 @@ define([
                 _this.find('#start_time input').val(param.start_time);
                 _this.find('#end_time input').val(param.end_time);
                 _this.find('#office_code').html("<option>" + param.office_code_name + "</option>");
-                _this.find('#submit_comment').val(param.submit_comment);
+                if(param.office_code == "O01"){
+                    var splitArr = param.submit_comment.split(",");
+                    var except = parseInt(splitArr[0],10);
+                    var overTime = parseInt(splitArr[1],10);
+                    var calc = overTime-except;
+                    var type = Math.floor(calc/120);
+                    if(type == 1){
+                        type = "야근 A형";
+                    }else if(type == 2){
+                        type = "야근 B형";
+                    }else if(type > 2){
+                        type = "야근 C형";
+                    }else {
+                        type = "-";
+                    }
+                    var msg = " 초과근무시간 : "+overTime+"분, 제외시간 : "+except+"분\n 확정시간 : "+calc+"분\n 근무타입 : " + type;
+                    _this.find('#submit_comment').val(msg);
+                }else{
+                    _this.find('#submit_comment').val(param.submit_comment);
+                }
                 if (param.decide_comment != null && param.decide_comment != "") {
                     _this.find('#decide_comment').val(param.decide_comment);
                 }
@@ -156,40 +175,45 @@ define([
                 _this.find('#usableHoliday').val(usable + " 일");
 
                 var holReq = "0";
-                if (param.office_code == "B01") {
-                    // 휴일근무
-                    holReq = "0";
-                    $(this.el).find('#end_date').css('display', 'none');
-                    $(this.el).find('#outsideOfficeTimeCon').css('display', 'none');
+                switch(param.office_code){
+                    case "O01": // 휴일근무
+                        holReq = "0";
+                        $(this.el).find('#end_date').hide();
+                        $(this.el).find('#outsideOfficeTimeCon').hide();
+                        break;
+                    case "B01": 
+                        holReq = "0";
+                        $(this.el).find('#end_date').hide();
+                        $(this.el).find('#outsideOfficeTimeCon').hide();
+                        break;
+                    case "V02" : case "V03" : case "V07" : case "V08" : // 반차
+                        holReq = "0.5";
+                        $(this.el).find('#end_date').hide();
+                        $(this.el).find('#outsideOfficeTimeCon').hide();
+                        break;
+                    case "W01" : // 외근
+                        holReq = "0";
+                        $(this.el).find('#end_date').hide();
+                        $(this.el).find('#outsideOfficeTimeCon').show();
+                        break;
+                    default :
+                        var arrInsertDate;
+                        if (param.office_code == "W03") {
+                            arrInsertDate = this.getDatePariod(true);
+                        }else {
+                            arrInsertDate = this.getDatePariod(false);
+                        }
+                        holReq = arrInsertDate.length + "";
+                        $(this.el).find('#end_date').css('display', 'table');
+                        $(this.el).find('#outsideOfficeTimeCon').css('display', 'none');
+                        break;
                 }
-                else if (param.office_code == "V02" || param.office_code == "V03" || param.office_code == "V07" || param.office_code == "V08") {
-                    // 반차
-                    holReq = "0.5";
-                    $(this.el).find('#end_date').css('display', 'none');
-                    $(this.el).find('#outsideOfficeTimeCon').css('display', 'none');
-                }
-                else if (param.office_code == "W01") {
-                    // 외근
-                    holReq = "0";
-                    $(this.el).find('#end_date').css('display', 'none');
-                    $(this.el).find('#outsideOfficeTimeCon').css('display', 'block');
-                }
-                else {
-                    var arrInsertDate;
-                    if (param.office_code == "W03") {
-                        arrInsertDate = this.getDatePariod(true);
-                    }
-                    else {
-                        arrInsertDate = this.getDatePariod(false);
-                    }
-                    holReq = arrInsertDate.length + "";
-                    $(this.el).find('#end_date').css('display', 'table');
-                    $(this.el).find('#outsideOfficeTimeCon').css('display', 'none');
-                }
+                
                 _this.find('#reqHoliday').val(holReq + " 일");
 
                 // 휴일 근무, 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
-                if (param.office_code == 'B01' || param.office_code == 'W01' || param.office_code == 'W02' || param.office_code == 'W03' || param.office_code == 'W04' ) {
+                var hideHoliday = ['B01', 'W01', 'W02', 'W03', 'W04', 'O01'];
+                if (_.indexOf(hideHoliday, param.office_code) > -1) {
                     $(this.el).find('#usableHolidayCon').hide();
                 }
                 else {
@@ -241,26 +265,22 @@ define([
             var _approvalCollection = new ApprovalCollection(formData);
 
             var promiseArr = [];
+            var outOfficeArr = ["B01", "O01"];
             if (formData.state == '결재완료') {
-                if (this.options.office_code != 'B01') { // 외근 / 휴가 등등
-                    promiseArr.push(_this.addOutOfficeData(_approvalCollection));
-                }
-                else { // 휴일 근무
+                if (_.indexOf(outOfficeArr, this.options.office_code) > -1) { // 휴일 근무
                     promiseArr.push(this.addInOfficeData(_approvalCollection));
+                }
+                else { // 외근 / 휴가 등등
+                    promiseArr.push(this.addOutOfficeData(_approvalCollection));
                 }
             }
             else if (formData.state == '취소완료') {
-
-                if (this.options.office_code != 'B01') { // 외근 / 휴가 등등
-                    promiseArr.push(this.delOutOfficeData(_approvalCollection, this.options["doc_num"]));
-                }
-                else { // 휴일 근무
+                if (_.indexOf(outOfficeArr, this.options.office_code) > -1) { // 휴일 근무
                     promiseArr.push(this.delInOfficeData(_approvalCollection, this.options["doc_num"]));
                 }
-            // }
-            // else if(formData.state == '반려'){
-            //     promiseArr.push(this.updateApprovalData(_approvalCollection));
-                
+                else { // 외근 / 휴가 등등
+                    promiseArr.push(this.delOutOfficeData(_approvalCollection, this.options["doc_num"]));
+                }
             }else {
                 promiseArr.push(this.updateApprovalData(_approvalCollection));
             }
@@ -320,7 +340,7 @@ define([
                         var todayOutOfficeModels = filterCollection.where({
                             date: today
                         });
-                        var resultTimeFactory = ResultTimeFactoy.Builder()
+                        var resultTimeFactory = ResultTimeFactoy.Builder();
                         promiseArr.push(
                             resultTimeFactory.modifyByInOutOfficeType(arrInsertDate[key], userId, "out", todayOutOfficeModels).done(function(result) {
                                 results.push(result);
@@ -493,7 +513,12 @@ define([
             resultData.inOffice["arrInsertDate"] = arrInsertDate; // insert 에 필요한 데이터 저장
             resultData.inOffice["id"] = this.options["submit_id"];
             resultData.inOffice["doc_num"] = this.options["doc_num"];
-
+            if(this.options.office_code == "O01"){
+                var splitArr = this.options.submit_comment.split(",");
+                var except = parseInt(splitArr[0],10);
+                resultData.inOffice["except"] = except;
+            }
+            
             var results = [];
             var promiseArr = [];
 
