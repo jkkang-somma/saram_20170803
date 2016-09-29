@@ -1030,9 +1030,9 @@ define([
                 /**
                  * 휴가, 외근, 출장 여부를 판단한다.
                  */
-                var todayOutOffice = new OutOfficeCollection(userOutOfficeCollection.where({
+                var todayOutOffice = userOutOfficeCollection.where({
                     date: selectedDate.start
-                }));
+                });
                 that.setOutOffice(todayOutOffice);
 
                 /**
