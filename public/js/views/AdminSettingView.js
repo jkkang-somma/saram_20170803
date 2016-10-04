@@ -39,6 +39,8 @@ define([
 						var url = "";
 						if (_formObj.reportType == "commuteYear") {
 							url = "/report/commuteYearReport";
+						}else if (_formObj.reportType == "commuteYear25") {
+							url = "/report/commuteYearReport25";
 						} else if (_formObj.reportType == "commuteResult"){
 							url = "/report/commuteResultTblReport";
 						} else {
@@ -120,6 +122,7 @@ define([
 			                label:"자료 선택",
 			                collection:[
 			                            {key:"commuteYear",value:"근태 보고서 - XLS"},
+			                            {key:"commuteYear25",value:"초과근무수당_25 - XLS"},
 			                            {key:"commuteResult",value:"근태 DB 자료 - CSV"}
 			                	],
 			                group:"reportGroup"

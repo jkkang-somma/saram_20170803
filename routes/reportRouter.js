@@ -34,6 +34,35 @@ router.route('/commuteYearReport')
 	});	
 });
 
+router.route('/commuteYearReport25')
+.get(function(req, res, next){
+	
+	var searchValObj = {
+			year : req.query.startTime.substring(0, 4),
+			startTime : req.query.startTime,
+			endTime : req.query.endTime,
+			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
+	};
+			
+	Report.getCommuteYearReport25(searchValObj).then(function(filePullPath) {
+		res.cookie("fileDownload", true);
+		res.download(filePullPath, function(err) {
+			if (err) {
+				debug("excel download fail");
+				next(err);
+			} else {				
+				fs.unlink(filePullPath, function (err) {
+				  if (err)  throw next(err);
+				  
+				});
+				
+			}
+		});
+	}).catch(function(err) {
+		next(err);
+	});	
+});
+
 router.route('/commuteResultTblReport')
 .get(function(req, res, next){
 	

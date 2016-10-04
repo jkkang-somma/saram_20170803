@@ -247,11 +247,13 @@ define([
 	     	                    				var date = full.date;
 	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
 		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date)){
-		     	                    				result = _.template(overTimeCellTemplate)({
-		     	                    					isMod : true,
-		     	                    					idx : full.idx,
-		     	                    					over_time : full.over_time
-		     	                    				});
+		     	                    				if ( full.over_time >= 120) {	// 최소 120분 이상이 되어야 버튼이 보이도록 한다.
+			     	                    				result = _.template(overTimeCellTemplate)({
+			     	                    					isMod : true,
+			     	                    					idx : full.idx,
+			     	                    					over_time : full.over_time
+			     	                    				});
+			     	                    			}
 		    	 	                    		}	
 	     	                    			}
      	                    			}
@@ -414,7 +416,7 @@ define([
         			} else {
         				console.log(day.format("YYYY-MM-DD"));
         				count ++;
-        				if(count == 5){
+        				if(count == 3){
         					break;
         				}
         				
