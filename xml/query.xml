@@ -335,7 +335,7 @@
 			insert into approval_index_tbl (yearmonth, seq) values (?, 1)
 		</query>
 		<query id="updateMaxIndex">
-			update approval_index_tbl set seq = (?) where yearmonth=?
+			update approval_index_tbl set seq = ?+1 where yearmonth=?
 		</query>
 	</group>
 	
