@@ -117,6 +117,24 @@ var Approval = function (data) {
     };
     
     var _sendOutofficeEmail = function(doc_num){
+        function timeformat(num){
+            var result = "";
+            var hour = Math.ceil(num / 60);
+            var min = Math.ceil(num % 60);
+            
+            if(hour < 10){
+                result += "0";
+            }
+            result += hour + "시간 ";
+            
+            if(min < 10){
+                result += "0";
+            }
+            
+            result += min+"분";
+            
+            return result;
+        }
         return new Promise(function(resolve, reject){
             ApprovalDao.getApprovalMailData(doc_num).then(function(data){
                 if(data.length == 1 )
@@ -126,6 +144,26 @@ var Approval = function (data) {
                     data.end_date = null;
                 
     	        fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/outofficeApproval.html","utf8").then(function (html) {
+    	            
+    	            if(data.code_name == "초과근무"){
+    	                var splitArr = data.submit_comment.split(",");
+                        var except = parseInt(splitArr[0],10);
+                        var overTime = parseInt(splitArr[1],10);
+                        var startTime = splitArr[2];
+                        var endTime = splitArr[3];
+                        var calc = overTime-except;
+                        var type = Math.floor(calc/120);
+                        if(type == 1){
+                            type = "야근 A형";
+                        }else if(type == 2){
+                            type = "야근 B형";
+                        }else if(type > 2){
+                            type = "야근 C형";
+                        }else {
+                            type = "-";
+                        }
+                        data.submit_comment = "출근시간 : "+ startTime + ", 퇴근시간: "+endTime+"<br>초과시간 : "+timeformat(overTime)+"분, 제외시간 : "+timeformat(except)+"분<br>확정시간 : "+timeformat(calc)+"분 근무타입 : " + type;
+    	            }
                     var temp=_.template(html);
                     var sendHTML=temp(data);
                     

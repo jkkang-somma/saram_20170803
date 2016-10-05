@@ -138,12 +138,6 @@ define([
 						}]
 					};
 
-					if (Code.isSuwonWorker(SessionModel.get('user').dept_code)) {
-						formop.childs = _.reject(formop.childs, function(i) {
-							return i.name == "normal";
-						});
-					}
-
 					var _form = new Form(formop);
 
 					_form.render().done(function() {

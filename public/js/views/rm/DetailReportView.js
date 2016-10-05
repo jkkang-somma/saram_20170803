@@ -95,6 +95,25 @@ define([
             // console.log(param);
             var _this = $(this.el);
             console.log(param);
+            
+            function timeformat(num){
+                var result = "";
+                var hour = Math.ceil(num / 60);
+                var min = Math.ceil(num % 60);
+                
+                if(hour < 10){
+                    result += "0";
+                }
+                result += hour + "시간 ";
+                
+                if(min < 10){
+                    result += "0";
+                }
+                
+                result += min+"분";
+                
+                return result;
+            }
             if (param != undefined) {
                 _this.find('#submit_id').val(param.submit_name);
                 _this.find('#start_date input').val(param.start_date);
@@ -106,6 +125,8 @@ define([
                     var splitArr = param.submit_comment.split(",");
                     var except = parseInt(splitArr[0],10);
                     var overTime = parseInt(splitArr[1],10);
+                    var startTime = splitArr[2];
+                    var endTime = splitArr[3];
                     var calc = overTime-except;
                     var type = Math.floor(calc/120);
                     if(type == 1){
@@ -117,7 +138,7 @@ define([
                     }else {
                         type = "-";
                     }
-                    var msg = " 초과근무시간 : "+overTime+"분, 제외시간 : "+except+"분\n 확정시간 : "+calc+"분\n 근무타입 : " + type;
+                    var msg = "출근시간 : "+ startTime + ", 퇴근시간: "+endTime+"\n초과시간 : "+timeformat(overTime)+"분, 제외시간 : "+timeformat(except)+"분\n확정시간 : "+timeformat(calc)+"분 근무타입 : " + type;
                     _this.find('#submit_comment').val(msg);
                 }else{
                     _this.find('#submit_comment').val(param.submit_comment);
@@ -134,6 +155,7 @@ define([
                 if (param.office_code == "B01" || param.office_code == "O01") {
                     // 휴일근무
                     holReq = "0";
+                    $(this.el).find("#reqHolidayCon").css("display", 'none');
                     $(this.el).find('#end_date').css('display', 'none');
                     $(this.el).find('#outsideOfficeTimeCon').css('display', 'none');
                 }

@@ -161,14 +161,6 @@ define([
 		        }]
 		    };
 		    
-		    
-		    
-		    if (Code.isSuwonWorker(SessionModel.get('user').dept_code)) {
-				formOption.childs = _.reject(formOption.childs, function(i) {
-					return i.name == "normal";
-				});
-			}
-			
 			var _form = new Form(formOption);
 			
 		    _form.render().done(function(){

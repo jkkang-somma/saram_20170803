@@ -356,52 +356,11 @@ define([
         setStandardTime: function(yesterdayOutTime) {
             if (!this.isHoliday()) {
                 /**
-                 * 수원 Standard Time
-                 * 기본값 : 10:00 ~ 19:00
-                 * 01:00 ~ 02:59 : 10:00 + 10분단위 추가 (최대 12:00)
-                 * 03:00 ~ 03:59 : 14:00 출근
-                 * 04:00 ~       : 조퇴, 지각 체크하지 않음
+                 * 기본 : 10:00 ~ 19:00 ( Flexible 본사 / 수원 동일 )
                  **/
-                if (this.isSuwon) {
-                    this.isFlexible = true;
-                    this.standardInTime = Moment(this.date, DATEFORMAT).hour(10).minute(0).second(0);
-                    this.standardOutTime = Moment(this.date, DATEFORMAT).hour(19).minute(0).second(0);
-
-                    if (!_.isNull(yesterdayOutTime) && !_.isUndefined(yesterdayOutTime)) {
-                        if (yesterdayOutTime.format(DATEFORMAT) == this.date) {
-                            var suOutTimeHour = yesterdayOutTime.hour();
-                            var suoutTimeMin = yesterdayOutTime.minute();
-                            if (suOutTimeHour >= 4) {
-                                this.checkLate = false;
-                                this.checkEarly = false;
-                            }
-                            else if (suOutTimeHour >= 3) { // 3시 ~ 3시 59분
-                                this.standardInTime.hour(14).minute(0).second(0);
-                                this.standardOutTime.hour(18).minute(0).second(0);
-                                this.isFlexible = false;
-                            }
-                            else if (suOutTimeHour >= 1) { // 1시 ~ 2시 59분
-                                var suRoundedMin = Math.floor(suoutTimeMin / 10) * 10 + 10;
-                                this.standardInTime.add(suOutTimeHour, 'hour');
-                                this.standardInTime.add(suRoundedMin, 'minute');
-                                this.isFlexible = false;
-                            }
-                        }
-                    }
-                    /**
-                     * 본사 Standard Time
-                     * 기본값 : 09:00 ~ 18:00
-                     * 12:00 ~ 02:59 : 09:00 + 10분단위 추가 (최대 12:00)
-                     * 03:00 ~ 03:59 : 13:20 출근
-                     * 04:00 ~       : 조퇴, 지각 체크하지 않음
-                     **/
-                }
-                else {
-                    this.isFlexible = true;
-                    this.standardInTime = Moment(this.date, DATEFORMAT).hour(9).minute(30).second(0);
-                    this.standardOutTime = Moment(this.date, DATEFORMAT).hour(18).minute(30).second(0);
-
-                }
+                this.isFlexible = true;
+                this.standardInTime = Moment(this.date, DATEFORMAT).hour(10).minute(0).second(0);
+                this.standardOutTime = Moment(this.date, DATEFORMAT).hour(19).minute(0).second(0);
             }
         },
 
@@ -427,7 +386,6 @@ define([
                     if(!_.isUndefined(model.get("except"))){
                         this.except = model.get("except");    
                     }
-                    
                 }
                 else {
                     this.checkOverTime = false;
@@ -441,7 +399,6 @@ define([
          * 휴가, 외근 �����태를 설정한다.
          **/
         setOutOffice: function(todayOutOffice) {
-
             this.vacationCode = null;
             this.outOfficeCode = null;
 
@@ -510,88 +467,37 @@ define([
                         break;
                 }
 
-                /**
-                 * 수원 사업장
-                 **/
-                if (this.isSuwon) {
-                    switch (this.vacationCode) {
-                        case "V02": // 오전반차
-                        case "V07": // 오전반차(공적)
-                            // 오전반차인 경우 2시~ 6시 근무
-                            this.standardInTime.hour(14).minute(0).second(0);
-                            this.standardOutTime.hour(18).minute(0).second(0);
-                            break;
-                        case "V03":
-                        case "V08":
-                            /**
-                             * 오후반차인 경우
-                             * 1. Flexible (기본값)
-                             *  flexible 하게 변경된 출근시간 ~ 출근시간 + 4시간 근무
-                             * 2. not Flexible (전일 야근)
-                             *  야근으로 인해 변경된 출근시간(10시 + a) ~ 14시 까지 근무
-                             **/
-                            if (this.isFlexible) {
-                                if (!_.isNull(this.inTime)) {
-                                    // 지각 기준보다 일찍왔을경우 flexible 적용
-                                    if ((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime))) {
-                                        this.standardInTime = Moment(this.inTime);
-                                    }
+                switch (this.vacationCode) {
+                    case "V02": // 오전반차
+                    case "V07": // 오전반차(공적)
+                        this.standardInTime.hour(14).minute(0).second(0);
+                        this.standardOutTime.hour(18).minute(0).second(0);
+                        break;
+                    case "V03": // 오후반차
+                    case "V08": // 오후반차(공적)
+                    default:
+                        // 본사
+                        //       ~ 8:00 : 08:00
+                        //  8:01 ~ 9:59 : 출근시간;
+                        // 10:00 ~      : 10:00
+                        
+                        // 수원
+                        //       ~ 7:00 : 07:00
+                        //  7:01 ~ 9:59 : 출근시간;
+                        // 10:00 ~      : 10:00
+                        if (!_.isNull(this.inTime)) {
+                            var hour = this.inTime.hour();
+                            var minute = this.inTime.minute();
+                            
+                            if(this.isSuwon == true){
+                                if(hour < 7){ 
+                                    this.standardInTime.hour(7).minute(0).second(0);
+                                } else if (hour < 10){
+                                    this.standardInTime.hour(hour).minute(minute).second(0);
+                                } else {
+                                    this.standardInTime.hour(10).minute(0).second(0);
                                 }
-                                this.standardOutTime = Moment(this.standardInTime).add(4, "hours");
-                            }
-                            else {
-                                this.standardOutTime.hour(14).minute(0).second(0);
-                            }
-                            break;
-                        default:
-                            /**
-                             * 기본값
-                             * 1. Flexible
-                             * Flexible 하게 변경된 출근시간(07:00 ~ 10:00) ~ 출근시간 + 9시간 근무
-                             * 2. not Flexible (전일 야근)
-                             * 야근으로 인해 변경된 출근시간 ~ 18시 까지 근무
-                             **/
-                            if (this.isFlexible) {
-                                if (!_.isNull(this.inTime)) {
-                                    // 지각 기준보다 일찍왔을경우 flexible 적용
-                                    if ((this.inTime.isBefore(this.standardInTime) || this.inTime.isSame(this.standardInTime))) {
-                                        // 7시 이전에 출근했을경우는 stdin 7시로 고정
-                                        if (this.inTime.hour() < 7) {
-                                            this.standardInTime.hour(7).minute(0).second(0);
-                                        }
-                                        else {
-                                            this.standardInTime = Moment(this.inTime);
-                                        }
-                                    }
-                                }
-                                this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
-                            }
-                            else {
-                                this.standardOutTime.hour(18).minute(0).second(0);
-                            }
-                            break;
-                    }
-                    
-                }
-                /**
-                 * 본사
-                 **/
-                else {
-                    switch (this.vacationCode) {
-                        case "V02": // 오전반차
-                        case "V07": // 오전반차(공적)
-                            this.standardInTime.hour(14).minute(0).second(0);
-                            this.standardOutTime.hour(18).minute(0).second(0);
-                            break;
-                        case "V03": // 오후반차
-                        case "V08": // 오후반차(공적)
-                        default:
-                            //       ~ 8:00 : 08:00
-                            //  8:01 ~ 9:59 : 10분 단위로  설정 (1~9분 -> 10분);
-                            // 10:00 ~      : 10:00
-                            if (!_.isNull(this.inTime)) {
-                                var hour = this.inTime.hour();
-                                var minute = this.inTime.minute();
+                            }else{
                                 if(hour < 8){ 
                                     this.standardInTime.hour(8).minute(0).second(0);
                                 } else if (hour < 10){
@@ -600,14 +506,14 @@ define([
                                     this.standardInTime.hour(10).minute(0).second(0);
                                 }
                             }
-                            
-                            if(this.vacationCode == "V03" || this.vacationCode == "V08"){
-                                this.standardOutTime = Moment(this.standardInTime).add(4, "hours");
-                            }else{
-                                this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
-                            }
-                            break;
-                    }
+                        }
+                        
+                        if(this.vacationCode == "V03" || this.vacationCode == "V08"){
+                            this.standardOutTime = Moment(this.standardInTime).add(4, "hours");
+                        }else{
+                            this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
+                        }
+                        break;
                 }
 
                 /**
@@ -775,20 +681,6 @@ define([
                             this.workType = WORKTYPE.EARLY;
                         }
                         
-                        /**
-                         * 조퇴일때
-                         *  퇴근시간이 13:20분 이전 > 퇴근시간 없음
-                         *  퇴근시간이 13:20분 이후 > 조퇴
-                         * 오후반차이면서 조퇴일때 - 조퇴 표시
-                         **/
-                        // var standardTime = Moment(this.date).hour(12).minute(20).second(00);
-                        // if (this.outTime && _.isNull(this.vacationCode)) {
-                        //     if (this.outTime.isBefore(standardTime) && this.isSuwon != true) {
-                        //         this.outTime = null;
-                        //         this.workType = WORKTYPE.NOTOUTTIME;
-                        //     }
-                        // }
-
                     }
 
                     /**

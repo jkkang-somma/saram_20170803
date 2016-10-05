@@ -541,7 +541,7 @@ define([
                 			office_code:"O01",
                 			start_date:selectItem.date,
                 			start_time:"",
-                			submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time,
+                			submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time+","+inputData.in_time+","+inputData.out_time,
 							submit_id:SessionModel.getUserInfo().id
                 		};
                 		
