@@ -136,6 +136,25 @@ define([
 	    };
 	}
 	
+	function timeformat(num){
+        var result = "";
+        var hour = Math.ceil(num / 60);
+        var min = Math.ceil(num % 60);
+        
+        if(hour < 10){
+            result += "0";
+        }
+        result += hour + "시간 ";
+        
+        if(min < 10){
+            result += "0";
+        }
+        
+        result += min+"분";
+        
+        return result;
+    }
+    
 	// 근태 수정 팝업 열기
 	function _openCommuteUpdatePopup(selectItem, that) {
     	if ( Util.isNull(selectItem) ) {
@@ -194,6 +213,7 @@ define([
         el:$(".main-container"),
         initialize : function(){
         	var _view = this;
+        	
     		this.commuteCollection = new CommuteCollection();
     		this.gridOption = {
         		    el:"commute_content",
@@ -237,9 +257,10 @@ define([
      	                    	render : function(data, type, full, meta){
      	                    		var result = "-";
      	                    		if (data > 0){
+     	                    			var overtime = timeformat(full.over_time);
      	                    			result = _.template(overTimeCellTemplate)({
  	                    					isMod : false,
- 	                    					over_time : data
+ 	                    					over_time : overtime
  	                    				});
 
  	                    				if(full.id == SessionModel.getUserInfo().id){
@@ -247,11 +268,12 @@ define([
 	     	                    				var date = full.date;
 	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
 		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date)){
+		     	                    				
 		     	                    				if ( full.over_time >= 120) {	// 최소 120분 이상이 되어야 버튼이 보이도록 한다.
 			     	                    				result = _.template(overTimeCellTemplate)({
 			     	                    					isMod : true,
 			     	                    					idx : full.idx,
-			     	                    					over_time : full.over_time
+			     	                    					over_time : overtime
 			     	                    				});
 			     	                    			}
 		    	 	                    		}	
