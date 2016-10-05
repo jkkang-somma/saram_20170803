@@ -149,8 +149,8 @@ var Approval = function (data) {
     	                var splitArr = data.submit_comment.split(",");
                         var except = parseInt(splitArr[0],10);
                         var overTime = parseInt(splitArr[1],10);
-                        var startTime = splitArr[2];
-                        var endTime = splitArr[3];
+                        var startTime = _.isUndefined(splitArr[2]) ? "" : splitArr[2];
+                        var endTime = _.isUndefined(splitArr[3]) ? "" : splitArr[3];
                         var calc = overTime-except;
                         var type = Math.floor(calc/120);
                         if(type == 1){
@@ -162,7 +162,7 @@ var Approval = function (data) {
                         }else {
                             type = "-";
                         }
-                        data.submit_comment = "출근시간 : "+ startTime + ", 퇴근시간: "+endTime+"<br>초과시간 : "+timeformat(overTime)+"분, 제외시간 : "+timeformat(except)+"분<br>확정시간 : "+timeformat(calc)+"분 근무타입 : " + type;
+                        data.submit_comment = "출근시간 : "+ startTime + ", 퇴근시간: "+endTime+"<br>초과시간 : "+timeformat(overTime)+", 제외시간 : "+timeformat(except)+"<br>확정시간 : "+timeformat(calc)+", 근무타입 : " + type;
     	            }
                     var temp=_.template(html);
                     var sendHTML=temp(data);
