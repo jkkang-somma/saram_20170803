@@ -119,8 +119,8 @@ var Approval = function (data) {
     var _sendOutofficeEmail = function(doc_num){
         function timeformat(num){
             var result = "";
-            var hour = Math.ceil(num / 60);
-            var min = Math.ceil(num % 60);
+            var hour = Math.floor(num / 60);
+            var min = Math.floor(num % 60);
             
             if(hour < 10){
                 result += "0";
