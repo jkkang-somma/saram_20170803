@@ -382,7 +382,14 @@ define([
             }else{
                 if (todayInOffice.length > 0) {
                     this.checkOverTime = true;
-                    var model = todayInOffice.first();
+                    var model;
+
+                    if(_.isFunction(todayInOffice.first)){
+                        model = todayInOffice.first();
+                    }else{
+                        model = _.first(todayInOffice);
+                    }
+                        
                     if(!_.isUndefined(model.get("except"))){
                         this.except = model.get("except");    
                     }
