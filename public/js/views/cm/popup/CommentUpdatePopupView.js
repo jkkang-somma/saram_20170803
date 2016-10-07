@@ -299,7 +299,8 @@ define([
 			var inData = this.getInsertData();
 			
 			if (inData == null) {
-				return;
+				dfd.reject();
+				return dfd.promise();
 			}
 			
 			var userId = SessionModel.get("user").id;
