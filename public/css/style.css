@@ -239,11 +239,9 @@ form .form-group:last-child {
 	border-left : 1px solid #dddddd;
 }
 #org_footer{
-    	margin-top:790px;
-    	float:right;  
-    	margin-right:15px; 
-    	margin-bottom:20px; 
-    	font-size:24px;
+    	position: absolute;
+    	top:2600px;
+    	right:0px;
 }
 
 @media print{	   
