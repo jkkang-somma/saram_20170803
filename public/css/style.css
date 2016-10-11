@@ -238,6 +238,13 @@ form .form-group:last-child {
 	border-bottom : 1px solid #dddddd;
 	border-left : 1px solid #dddddd;
 }
+#org_footer{
+    	margin-top:790px;
+    	float:right;  
+    	margin-right:15px; 
+    	margin-bottom:20px; 
+    	font-size:24px;
+}
 
 @media print{	   
     html, body {
@@ -262,7 +269,7 @@ form .form-group:last-child {
     }
     .printdiv{border: 1px solid gray; border-radius: 15px 15px 0px 0px; margin-bottom:2em;}  
     .deptColor: {border:1px solid gray;}
- 
+ 	
  	.page-header h2{font-weight: bold; font-size:45px;padding-bottom:1em;}
  	.small{font-size:25px; margin-right:-25;}
     #ystyle{border-bottom:none;}

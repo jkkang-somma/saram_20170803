@@ -273,7 +273,7 @@ define([
 				var maxBody = $("body").height() + 20;
 				console.log(maxBody);
 				var footer = $(
-						'<div id= footer style="float:right; margin-top:1100px; margin-right:20px; margin-bottom:20px; font-size:24px;">'
+						'<div id= org_footer>'
 						+"총 인원- "+ tolmem +"명" + "( " + "본사- "+ seoul+ "명" + ", " + "수원- "+ suwon + "명 )"+"<br>"
 						+"본사 전화번호: 070-7163-XXXX" 
 						+"<br>"+ "수원 사업장 U-city 전화번호: 031-213-8740~2"
