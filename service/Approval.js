@@ -178,7 +178,7 @@ var Approval = function (data) {
                         }
                 
                         /* 근태 메일 품질검증팀 제외 */ 
-                        if(data.dept_code != "5100" && data.dept_code != "5200" && data.dept_code !="5400"){
+                        if(data.dept_code != "5100" && data.dept_code != "5200"){
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
                                     if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
@@ -190,8 +190,12 @@ var Approval = function (data) {
                         var mailOptions= {
                             from: 'webmaster@yescnc.co.kr', // sender address 
                             to: [
-                                { name: "김성식", address: "sskim@yescnc.co.kr"},
-                                { name :"김은영", address: "eykim@yescnc.co.kr"},
+	                                { name :"전영호", address: "yh.jeon@yescnc.co.kr"},
+	                                { name :"유강재", address: "youkj@yescnc.co.kr"},
+	                                { name :"최홍락", address: "redrock.choi@yescnc.co.kr"},
+	                                
+	                                { name: "김성식", address: "sskim@yescnc.co.kr"},
+	                                { name :"김은영", address: "eykim@yescnc.co.kr"}
                                 ],
                             subject:"[근태보고] " + data.name + "_" + data.code_name,
                             html:sendHTML,
