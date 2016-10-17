@@ -554,6 +554,13 @@ define([
                 	action : function(dialog){
                 		var inputData = overtimeApprovalPopupView.getData();
                 		console.log(inputData);
+                		
+                		var checkTime = selectItem.over_time - inputData.except;
+						if ( checkTime < 120 ) {
+							Dialog.error("초과근무 시간이 유효하지 않습니다.");
+							return;
+						}
+						
                 		var data = {
                 			day_count:0,
                 			decide_comment:"",
@@ -588,7 +595,7 @@ define([
 	                            dialog.close();
 	                        }
 	                    }).done(function(result) {
-	                        docData["seq"] = result[0].maxSeq;
+	                        dㅋocData["seq"] = result[0].maxSeq;
     	                    var _approvalIndexModel = new ApprovalIndexModel(docData);
 				            _approvalIndexModel.save({}, {
 				                success: function(model, xhr, options) {
