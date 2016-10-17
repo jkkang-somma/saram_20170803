@@ -595,7 +595,7 @@ define([
 	                            dialog.close();
 	                        }
 	                    }).done(function(result) {
-	                        dㅋocData["seq"] = result[0].maxSeq;
+	                        docData["seq"] = result[0].maxSeq;
     	                    var _approvalIndexModel = new ApprovalIndexModel(docData);
 				            _approvalIndexModel.save({}, {
 				                success: function(model, xhr, options) {
