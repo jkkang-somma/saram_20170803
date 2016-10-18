@@ -177,8 +177,17 @@ var Approval = function (data) {
                             cc.push({name : "김특훈", address : "thkim@yescnc.co.kr"});
                         }
                 
-                        /* 근태 메일 품질검증팀 제외 */ 
+                        // 모든 근태 결재 메일을 임원에게 발송
+                        cc.push({ name :"전영호", address: "yh.jeon@yescnc.co.kr"});
+                        cc.push({ name :"유강재", address: "youkj@yescnc.co.kr"});
+                        cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr"});
+                        
+                        /* 근태 메일 품질검증팀 제외 */
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
+                        	// 서울에서 발생한 근태 결재내역은 모든 팀장에게 발송 - 2016.10.18
+                        	cc.push({ name :"박수종", address: "soojong@yescnc.co.kr"});
+		                    cc.push({ name :"윤정관", address: "jkyoon96@yescnc.co.kr"});
+		                    cc.push({ name :"김태중", address: "hhs2tjk@yescnc.co.kr"});
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
                                     if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
@@ -186,14 +195,13 @@ var Approval = function (data) {
                                 }
                             }
                         }
+                        _.uniq(cc, function(d) {return d.address});	// 중복 제거
+                        
+                        cc.push({ name :"강정규", address: "jkkang@yescnc.co.kr"});	// 테스트용
                         
                         var mailOptions= {
                             from: 'webmaster@yescnc.co.kr', // sender address 
                             to: [
-	                                { name :"전영호", address: "yh.jeon@yescnc.co.kr"},
-	                                { name :"유강재", address: "youkj@yescnc.co.kr"},
-	                                { name :"최홍락", address: "redrock.choi@yescnc.co.kr"},
-	                                
 	                                { name: "김성식", address: "sskim@yescnc.co.kr"},
 	                                { name :"김은영", address: "eykim@yescnc.co.kr"}
                                 ],
