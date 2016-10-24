@@ -188,6 +188,7 @@ var Approval = function (data) {
                         	cc.push({ name :"박수종", address: "soojong@yescnc.co.kr"});
 		                    cc.push({ name :"윤정관", address: "jkyoon96@yescnc.co.kr"});
 		                    cc.push({ name :"김태중", address: "hhs2tjk@yescnc.co.kr"});
+		                    cc.push({ name :"최치운", address: "cwchoi@yescnc.co.kr"});
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
                                     if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
@@ -197,7 +198,7 @@ var Approval = function (data) {
                         }
                         _.uniq(cc, function(d) {return d.address});	// 중복 제거
                         
-                        cc.push({ name :"강정규", address: "jkkang@yescnc.co.kr"});	// 테스트용
+                        //cc.push({ name :"강정규", address: "jkkang@yescnc.co.kr"});	// 테스트용
                         
                         var mailOptions= {
                             from: 'webmaster@yescnc.co.kr', // sender address 
