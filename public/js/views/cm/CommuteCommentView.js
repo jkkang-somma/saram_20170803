@@ -179,7 +179,7 @@ define([
         		    column:[
         		    	   { data : "comment_date", "title" : "신청일자", 
         		    	   		render: function(data, type, full, meta) {
-    			        		   return Moment(data).format("YYYY-MM-DD<br>hh-mm");
+    			        		   return Moment(data).format("YYYY-MM-DD<br>HH:mm");
     			        	   }
         		    	   },
     			           { data : "name", "title" : "이름"},
