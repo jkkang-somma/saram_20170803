@@ -679,7 +679,9 @@ define([
                     else {
                         this.lateTime = 0;
                     }
-
+                    
+                    tmpTime -= this.lateTime;
+                    
                     if (tmpTime < 0) {
                         if (this.workType == WORKTYPE.LATE) {
                             this.workType = WORKTYPE.EARLY_LATE;
