@@ -259,7 +259,7 @@ define([
 							target.append(trHTML);
 						}
 						else if(!_.contains(leaderList, item.id)) {
-							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = " padding-left: 15px; padding-bottom: 15px; padding-top: 25px;">' 
+							trHTML += '<tr style = "background-color: white;"><td id=tdfont style = " padding-left: 15px; padding-bottom: 12px; padding-top: 21px;">' 
 									+ "<b id=printname>" + item.name + "</b>" +" " + item.position_name.substring(0,3)  +" (" + item.email.replace("@yescnc.co.kr","") + ")" +"<br>" + item.phone + phoneoffice  + '</td></tr>';  
 									target.append(trHTML);
 						}
