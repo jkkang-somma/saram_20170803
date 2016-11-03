@@ -665,7 +665,6 @@ define([
 
                     if (this.checkEarly) {
                         tmpTime = this.outTime.diff(this.standardOutTime, "minute");
-                        tmpTime -= this.lateTime;
                     }
                     else {
                         tmpTime = 0;
