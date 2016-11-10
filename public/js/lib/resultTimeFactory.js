@@ -658,6 +658,12 @@ define([
                      **/
                     if (this.checkLate) {
                         this.lateTime = this.inTime.diff(this.standardInTime, "minute");
+                        if (this.lateTime > 0) {
+                            this.workType = WORKTYPE.LATE;
+                        }
+                        else {
+                            this.lateTime = 0;
+                        }
                     }
                     else {
                         this.lateTime = 0;
@@ -665,30 +671,19 @@ define([
 
                     if (this.checkEarly) {
                         tmpTime = this.outTime.diff(this.standardOutTime, "minute");
+                        tmpTime -= this.lateTime;
+                        
+                        if (tmpTime < 0) {
+                            if (this.workType == WORKTYPE.LATE) {
+                                this.workType = WORKTYPE.EARLY_LATE;
+                            }
+                            else {
+                                this.workType = WORKTYPE.EARLY;
+                            }
+                        }
                     }
                     else {
                         tmpTime = 0;
-                    }
-                    /**
-                     * 지각조퇴, 지각, 조퇴 설정
-                     **/
-                    if (this.lateTime > 0) {
-                        this.workType = WORKTYPE.LATE;
-                    }
-                    else {
-                        this.lateTime = 0;
-                    }
-                    
-                    tmpTime -= this.lateTime;
-                    
-                    if (tmpTime < 0) {
-                        if (this.workType == WORKTYPE.LATE) {
-                            this.workType = WORKTYPE.EARLY_LATE;
-                        }
-                        else {
-                            this.workType = WORKTYPE.EARLY;
-                        }
-                        
                     }
 
                     /**
