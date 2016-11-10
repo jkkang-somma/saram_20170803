@@ -10,6 +10,8 @@ define({
            USER_UPDATE:"사용자 정보 수정",
            DEPARTMENT_ADD:"부서 등록",
            DEPARTMENT_UPDATE:"부서 정보 수정",
+           PART_ADD:"파트 등록",
+           PART_UPDATE:"파트 정보 수정",
            POSITION_ADD:"직급 등록",
            POSITION_UPDATE:"직급 정보 수정"
        },
@@ -27,6 +29,7 @@ define({
         LEADER_NAME:"팀장",
         ID:"사번",
         DEPT:"부서",
+        PART:"파트",
         NAME_COMMUTE:"식별 이름",
         JOIN_COMPANY:"입사일",
         LEAVE_COMPANY:"퇴사일",
@@ -143,6 +146,7 @@ define({
         	BM:{
             	POSITION:"직급 관리",
             	DEPARTMENT:"부서 관리",
+                PART:"파트 관리",
             	HOLIDAY:"휴일 관리",
             	DOCUMENT:"양식 관리",
             	BOOKDOCUMENT:"도서 관리",
@@ -516,6 +520,46 @@ define({
     },
     ORGANIZATION :{
     	TITLE : "(주)예스씨앤씨  조직도"
+    },
+    PART_LIST : {
+        TITLE : "파트 관리",
+        SEARCH_BTN : "조회",
+        GRID_COL_NAME : {
+            CODE : "파트코드",
+            NAME : "파트",            
+            LEADER : "파트장"
+        },
+        CREATE_DIALOG :{
+            TOOLTIP : "파트 등록",
+            TITLE : "파트 데이터 생성",
+            ASK : "파트 데이터를 생성하시겠습니까?",
+            BUTTON : {
+                CREATE : "데이터 생성",
+                CANCEL : "취소",
+            },
+            MSG : {
+                CREATE_DATA_COMPLETE : "데이터 생성 완료!",
+                CREATE_DATA_FAIL : "데이터 생성 실패!"
+            },
+        },
+        UPDATE_DIALOG :{
+            TOOLTIP: "수정",
+            TITLE : "파트 수정",
+            BUTTON :{
+                MODIFY : "수정",
+                CANCEL : "취소",
+            },
+        },
+        REMOVE_DIALOG : {
+            TOOLTIP : "삭제",
+            MSG : {
+                NOTING_SELECTED : "선택된 데이터가 없습니다!",
+                REMOVE :"파트 데이터를 삭제하시겠습니까?",
+                REMOVE_COMPLETE : "파트 데이터가 삭제되었습니다.",
+                REMOVE_FAIL : "사용중인 파트입니다."
+            },
+        },    
+
     },
 	DEPARTMENT_LIST : {
         TITLE : "부서 관리",

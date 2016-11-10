@@ -15,6 +15,8 @@ var Code = function (data) {
         switch (category) {
             case 'dept' :
                 return CodeDao.selectDeptList();
+            case 'part' :
+                return CodeDao.selectPartList();    
             case 'approvalUser' :
                 return CodeDao.selectApprovalUserList();
             case 'position' :

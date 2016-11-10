@@ -12,6 +12,10 @@ CodeDao.prototype.selectDeptList =  function () {
     return db.query(group, "selectDeptList");
 };
 
+CodeDao.prototype.selectPartList =  function () {
+    return db.query(group, "selectPartList");
+};
+
 CodeDao.prototype.selectApprovalUserList =  function () {
     return db.query(group, "selectApprovalUserList");
 };

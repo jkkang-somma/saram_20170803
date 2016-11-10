@@ -5,13 +5,14 @@ define([
 ], function($, _, CodeCollection){
     
     var _codeCollectionArr=[];
-    var _configArr=["position", "approvalUser", "dept", "overTime", "workType", "office"];
+    var _configArr=["position", "approvalUser", "dept", "part", "overTime", "workType", "office"];
     var _getCollection=function(kind){
         var index=_.indexOf(_configArr, kind);
         return index>-1?_codeCollectionArr[index]:null;
     };
     var Code = {
         DEPARTMENT : "dept",
+        PART : "part",
         OFFICE : "office",
         OVERTIME : "overTime",
         WORKTYPE : "workType",

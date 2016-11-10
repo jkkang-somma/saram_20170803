@@ -27,6 +27,15 @@ define([
 			edit:ADMIN
 				}
 		},{
+			title:i18Common.MENU.SUB.BM.PART, //파트관리
+			hashTag:"#partmanager",
+			auth:ADMIN,
+			actionAuth:{
+			add:ADMIN,
+			remove:ADMIN,
+			edit:ADMIN
+				}
+		},{
 			title:i18Common.MENU.SUB.BM.HOLIDAY, //휴일 관리
 			hashTag:"#holidaymanager",
 			auth:ADMIN

@@ -40,7 +40,9 @@ define([
             approval_name:null,
             emergency_phone:null,
             wedding_day:null,
-            memo:null
+            memo:null,
+            part_code: null,
+            part_name: null
         },
         auth:{
         },

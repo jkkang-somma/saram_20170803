@@ -33,6 +33,7 @@ var userPic = require('./routes/userPicRouter');
 var documentlist = require('./routes/documentRouter');
 var bookdocument = require('./routes/bookdocumentRouter');
 var department = require('./routes/departmentRouter');
+var part = require('./routes/partRouter');
 var position = require('./routes/positionRouter');
 
 var debug = require('debug')('APP');
@@ -217,6 +218,7 @@ app.use('/userpic', userPic);
 app.use('/documentlist', documentlist); 
 app.use('/bookdocument', bookdocument);
 app.use('/department', department);
+app.use('/part', part);
 app.use('/position', position);
 
 // catch 404 and forward to error handler

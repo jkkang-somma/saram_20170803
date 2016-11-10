@@ -35,14 +35,14 @@ UserDao.prototype.deleteUser = function(id){
 UserDao.prototype.insertUser = function(user){
       return db.query(group, "insertUser",
         [user.id, user.name, user.dept_code, user.approval_id, user.name_commute,user.join_company, user.leave_company, user.privilege, user.admin, user.position_code,
-        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo]
+        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.part_code]
     );
 };
 
 UserDao.prototype.updateUser = function(user){
     return db.query(group, "updateUser", 
         [user.password, user.name, user.dept_code, user.approval_id, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.position_code,
-        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.id]
+        user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.part_code, user.id]
     );
 };
 

@@ -28,6 +28,7 @@ define([
     	    }
     	    
     	    var deptCodeCollection=Code.getCollection(Code.DEPARTMENT);
+	    var partCodeCollection=Code.getCollection(Code.PART);
     	    var approvalUserCodeCollection= new CodeCollection("approvalUser");
     	    var positionCodeCollection= Code.getCollection(Code.POSITION);
     	    $.when(approvalUserCodeCollection.fetch()).done(function(){
@@ -88,6 +89,21 @@ define([
         	                name:"dept_name",
         	                value:_model.dept_name,
         	                collection:deptCodeCollection,
+        	                group:"requireInfo"
+        	        },
+			{
+        	                type:"combo",
+        	                name:"part_code",
+        	                label:i18nCommon.USER.PART,
+        	                value:_model.part_code,
+        	                collection:partCodeCollection,
+        	                group:"requireInfo",
+        	                linkField:"part_name"// text 값을 셋팅 해줌 type은 hidden
+        	        },{
+        	                type:"hidden",
+        	                name:"part_name",
+        	                value:_model.part_name,
+        	                collection:partCodeCollection,
         	                group:"requireInfo"
         	        },
         	        {
@@ -235,7 +251,7 @@ define([
     	submitAdd : function(beforEvent, affterEvent){
     	    var view = this;
     	    var dfd= new $.Deferred();
-    	    var _view=this,_form=this.form,_data=_form.getData();
+    	    var _view=this,_form=this.form,_data=_form.getData();	    
     	    var _userModel=new UserModel(_data);
             var _validate=_userModel.validation(_data, {// 유효성 검사 필드 
                 id:"",

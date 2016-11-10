@@ -4,7 +4,7 @@
         	SELECT 
 				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
 				ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
-				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
+				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name
 			FROM members_tbl A
 			ORDER BY name
         </query>
@@ -12,13 +12,13 @@
         	SELECT 
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
         		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
-        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo, part_code) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
         <query id="initPassword">update members_tbl set password=? where id=?</query>
         <query id="updateUser">
@@ -44,7 +44,8 @@
         		emergency_phone=?,
         		birthday=?,
         		wedding_day=?,
-        		memo=?
+        		memo=?,
+				part_code=?
         	WHERE id=?
         </query>
         <query id="deleteUser">delete from members_tbl where id=?</query>
@@ -346,6 +347,11 @@
 	
 	<group id="dept_code">
 		<query id="selectDepartmentCodeList">select * from dept_code_tbl</query>
+        <query id="empty"></query>
+	</group>
+
+	<group id="part_code">
+		<query id="selectPartCodeList">select * from part_code_tbl</query>
         <query id="empty"></query>
 	</group>
 	
@@ -839,6 +845,7 @@
     	</query>
     	
         <query id="selectDeptList">SELECT code, name, area FROM dept_code_tbl</query>
+		<query id="selectPartList">SELECT code, name FROM part_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
     </group>
@@ -1784,6 +1791,47 @@
 		</query>
 	</group>	
 
+	<group id="part">
+		<query id="selectPart">
+			select
+				code, name, leader, (SELECT name FROM members_tbl where id = leader) user_name
+			from
+				part_code_tbl
+			ORDER BY code
+		</query>
+		<query id="selectUserPartList">
+			select
+				 code, name, leader, (SELECT name FROM members_tbl where id = leader) user_name
+			from
+				part_code_tbl
+			ORDER BY code
+		</query>
+		<query id="insertPart">
+			INSERT INTO part_code_tbl
+				(code, name, leader)
+			VALUES
+				(?, ?, ?)
+		</query>
+		<query id="updatePart">
+			UPDATE
+				part_code_tbl
+			SET
+				name=?,				
+				leader=?
+			WHERE code=?
+		</query>
+		<query id="deletePart">
+			delete from part_code_tbl where code=?
+		</query>
+		<query id= "selectCodeData">
+			select
+				part_code
+			FROM 
+				members_tbl 
+			where part_code = ?	
+		</query>
+	</group>	
+	
 	<group id ="statistics">
 		<query id="selectPageUrlCount">
 			select 

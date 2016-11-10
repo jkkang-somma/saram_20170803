@@ -39,7 +39,9 @@ var Schemas = function (schemaName) {
             emergency_phone : null,
             birthday : null,
             wedding_day : null,
-            memo: null
+            memo: null,
+            part_code: null,
+            part_name: null
         },
         position:{
         	code: null,
@@ -49,6 +51,11 @@ var Schemas = function (schemaName) {
         	code: null,
         	name: null,
         	area: null,
+        	leader: null
+        },
+        part:{
+        	code: null,
+        	name: null,        	
         	leader: null
         },
         auth:{
