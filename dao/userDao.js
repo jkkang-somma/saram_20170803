@@ -47,7 +47,7 @@ UserDao.prototype.updateUser = function(user){
 };
 
 UserDao.prototype.selectUserByIp =  function (data) {
-    return db.query(group, "selectUserByIp", [data.id, data.ip_office]);
+    return db.query(group, "selectUserByIp", [data.id, data.ip_office, data.ip_pc]);
 };
 
 module.exports = new UserDao();

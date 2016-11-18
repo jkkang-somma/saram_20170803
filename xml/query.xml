@@ -55,7 +55,7 @@
 	        FROM 
 	        	members_tbl
 			WHERE id = ?
-			AND ip_office = ?
+			AND (ip_office = ? OR ip_pc = ? )
         </query>        
     </group>
     <group id="rawData">
@@ -527,7 +527,8 @@
 				early_time,
 				not_pay_over_time,
 				normal,
-				normal_change
+				normal_change,
+				except
         	FROM
         		commute_result_tbl
         	WHERE
