@@ -4,7 +4,7 @@
         	SELECT 
 				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
 				ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
-				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name
+				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code
 			FROM members_tbl A
 			ORDER BY name
         </query>
@@ -12,7 +12,7 @@
         	SELECT 
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin,
         		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
