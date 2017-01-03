@@ -1119,7 +1119,8 @@
 										end as month
 									from commute_result_tbl
 									where date between ? AND ?
-									AND overtime_code in ('2015_AA', '2015_AB', '2015_AC')
+									AND (overtime_code in ('2015_AA', '2015_AB', '2015_AC', '') OR overtime_code is null )
+									AND work_type not in ('30', '40', '41')
 								) t0
 								group by t0.id, t0.month
 							) t1    
