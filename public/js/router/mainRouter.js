@@ -1,3 +1,4 @@
+/*global requirejs*/
 // Author: sanghee park <novles@naver.com>
 // Create Date: 2014.12.18
 
@@ -13,40 +14,26 @@ define([
   	'i18n!nls/common',
 	'models/sm/SessionModel',
 	'core/BaseRouter',
-	'views/dashboard/DashBoardView',
 	'views/LoginView',
 	'views/NavigationView',
-	'views/sm/UserListView',
-	'views/sm/UserPicView',
-	'views/sm/DocumentListView',
-	'views/sm/BookDocumentView',
-	'views/sm/DepartmentListView',
-	'views/sm/PartListView',
-	'views/sm/OrganizationView',
-	'views/sm/PositionListView',
-	'views/cm/CommuteTodayView',
-	'views/RawData/AddRawDataView',
-	'views/RawData/RawDataView',
-	'views/Holiday/HolidayManagerView',
-	'views/cm/CommuteListView',
-	'views/cm/CreateDataView',
-	'views/cm/CommuteCommentView',
-	'views/vacation/VacationView',
-	'views/rm/ReportListView',
-	'views/rm/AllReportView',
-	// 'views/report/ReportCommuteView'
-], function($, _,  Backbone, animator, Util, log, Dialog, Menu, i18Common, SessionModel, BaseRouter,
-DashBoardView, LoginView, NavigationView, // Main View
-UserListView, UserPicView,DocumentListView, BookDocumentView, DepartmentListView, PartListView, OrganizationView, PositionListView,
-CommuteTodayView, AddRawDataView,RawDataView, HolidayManagerView, // 근태관리
-CommuteListView, CreateDataView, CommuteCommentView, // CM View
-VacationView, 
-ReportListView, AllReportView // report manager
-// ReportCommuteView
+], function(
+	$,
+	_,
+	Backbone,
+	animator,
+	Util,
+	log,
+	Dialog,
+	Menu,
+	i18Common,
+	SessionModel,
+	BaseRouter,
+	LoginView,
+	NavigationView
 ){
 	var LOG=log.getLogger('MainRouter');
 	var mainContainer='.main-container';
-	var loginContainer='.login-container';
+	// var loginContainer='.login-container';
 	var LOGIN='login';
 	
 	var Router = BaseRouter.extend({
@@ -73,6 +60,7 @@ ReportListView, AllReportView // report manager
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
 			'allreport' : 'showAllReport',
+			'roomreserve' : 'showRoomReserve',
 			'*actions' : 'showHome'
 			
 		},
@@ -145,145 +133,159 @@ ReportListView, AllReportView // report manager
 		after : function(){
 		},
 		
-		changeView : function(view, url){
+		changeView : function(viewUrl, authUrl, callback, initParam){
 			LOG.debug("Initalize changeView");
 		    if(this.currentView)
 				this.currentView.close();
-
-	        this.currentView = view;
-	        //view.initialize();
-	        if (!_.isUndefined(url)){
-	        	var sessionUser=SessionModel.getUserInfo();
-			
-				var auth=sessionUser.admin;
 				
-				var subMenuArr=_.pluck(Menu, "subMenu");
-				var subMenu=_.flatten(subMenuArr);
-				
-				//subMenu=subMenu[0].concat(subMenu[1]);
-				
-				var _urlArr=_.pluck(subMenu, "hashTag");
-				var index= _.indexOf(_urlArr, url);
-				var attrKeys=_.keys(subMenu[index]); 
-				var hasActionAuth=_.indexOf(attrKeys, "actionAuth");
-				if (hasActionAuth!=-1){
-					var actionAuth=subMenu[index].actionAuth;
-					var _configActionAuth={};
-					
-					for (var name in actionAuth){//버튼 권한별 셋팅.
-						_configActionAuth[name]=actionAuth[name]<=auth?true:false;
-					}
-					
-					view.setActionAuth(_configActionAuth);
+			var _this = this;
+			requirejs([viewUrl], function(View){
+				var view;
+				if(!_.isUndefined(initParam)){
+					view = new View(initParam);
+				}else{
+					view = new View();
 				}
-	        }
-	       
-	        
-    		view.render();
-    		animator.animate($(view.el), animator.FADE_IN);	
+				
+				if(_.isFunction(callback)){
+					callback(view);
+				}
+				_this.currentView = view;
+		        //view.initialize();
+		        if (!_.isUndefined(authUrl)){
+		        	var sessionUser=SessionModel.getUserInfo();
+				
+					var auth=sessionUser.admin;
+					
+					var subMenuArr=_.pluck(Menu, "subMenu");
+					var subMenu=_.flatten(subMenuArr);
+					
+					var _urlArr=_.pluck(subMenu, "hashTag");
+					var index= _.indexOf(_urlArr, authUrl);
+					var attrKeys=_.keys(subMenu[index]); 
+					var hasActionAuth=_.indexOf(attrKeys, "actionAuth");
+					if (hasActionAuth!=-1){
+						var actionAuth=subMenu[index].actionAuth;
+						var _configActionAuth={};
+						
+						for (var name in actionAuth){//버튼 권한별 셋팅.
+							_configActionAuth[name]=actionAuth[name]<=auth?true:false;
+						}
+						
+						view.setActionAuth(_configActionAuth);
+					}
+		        }
+		       
+		        
+	    		view.render.apply(view, []);
+	    		animator.animate($(view.el), animator.FADE_IN);	
+			});
 		},
 		
 		showUserList : function(r){
-			LOG.debug("Initalize showUserList");
-			var userListView = new UserListView();
-			this.changeView(userListView, "#usermanager");
+			var url = 'views/sm/UserListView';
+			this.changeView(url, "#usermanager");
 		},
 		
 		showAddRawData : function(){
-			var addRawDataView = new AddRawDataView();
-			this.changeView(addRawDataView);
+			var url = 'views/RawData/AddRawDataView';
+			this.changeView(url);
 		},
 		
 		showCommuteToday : function(){
-			var commuteTodayView = new CommuteTodayView();
-			this.changeView(commuteTodayView);
+			var url = 'views/cm/CommuteTodayView';
+			this.changeView(url);
 		},
 		
 		showCreateData : function(){
-			var createDataView = new CreateDataView();
-			this.changeView(createDataView);
+			var url = 'views/cm/CreateDataView';
+			this.changeView(url);
 		},
 		
 		showHome : function(){
-		    var dashBoardView = new DashBoardView({el:mainContainer});
-		    this.changeView(dashBoardView);
+			var url = 'views/dashboard/DashBoardView';
+		    this.changeView(url,undefined,undefined,{el:mainContainer});
 		},
 		showHolidayManager : function(){
-			var holidayManagerView = new HolidayManagerView();
-			this.changeView(holidayManagerView);
+			var url = 'views/Holiday/HolidayManagerView';
+			this.changeView(url);
 		},
 		
 		showCommuteManager : function(){
-			var commuteListView = new CommuteListView();
-			this.changeView(commuteListView);
+			var url = 'views/cm/CommuteListView';
+			this.changeView(url);
 		},
 		
 		showVacation : function() {
-			var vacationView = new VacationView();
-			this.changeView(vacationView);
+			var url = 'views/vacation/VacationView';
+			this.changeView(url);
 		},
 		
 		showCommuteComment : function(){
-			var commuteCommentView = new CommuteCommentView();
-			this.changeView(commuteCommentView);
+			var url = 'views/cm/CommuteCommentView';
+			this.changeView(url);
 		},
 		
 		showCommuteCommentListCount : function(id, date) { // url + 검색 조건을 토한 페이지 이동 
-			var commuteCommentView = new CommuteCommentView();
-			commuteCommentView.setSearchParam({"id": id, "date": date});
-			this.changeView(commuteCommentView);			
+			var url = 'views/cm/CommuteCommentView';
+			var callback = function(view){
+				view.setSearchParam({"id": id, "date": date});
+			};
+			this.changeView(url, undefined, callback);
 		},
 		
 		showRawdata : function(){
-			var rawDataView = new RawDataView();
-			this.changeView(rawDataView);
+			var url = 'views/RawData/RawDataView';
+			this.changeView(url);
 		},
 		showRawdataList : function(id, date){ // url + 검색 조건을 토한 페이지 이동 
-			var rawDataView = new RawDataView();
-			rawDataView.setSearchParam({"id": id, "date": date});
-			this.changeView(rawDataView);
+			var url = 'views/RawData/RawDataView';
+			var callback = function(view){
+				view.setSearchParam({"id": id, "date": date});
+			};
+			this.changeView(url, undefined, callback);
 		},
 		
 		showReportManager : function(){
-			var reportListView = new ReportListView();
-			this.changeView(reportListView, "#reportmanager");
+			var url = 'views/rm/ReportListView';
+			this.changeView(url, "#reportmanager");
 		},
 		showUserPic : function(){
-			var userPicView = new UserPicView();
-			this.changeView(userPicView);
+			var url = 'views/sm/UserPicView';
+			this.changeView(url);
 		},
 		showDocument : function(){
-			var documentListView = new DocumentListView();
-			this.changeView(documentListView, 'documentlist');
+			var url = 'views/sm/DocumentListView';
+			this.changeView(url, 'documentlist');
 		},
 		showBookDocument : function(){
-			var bookbocumentView = new BookDocumentView();
-			this.changeView(bookbocumentView, 'bookdocument');
+			var url = 'views/sm/BookDocumentView';
+			this.changeView(url, 'bookdocument');
 		},
 		showDepartmnet : function(){
-			var departmentView = new DepartmentListView();
-			this.changeView(departmentView, '#departmentmanager');
+			var url = 'views/sm/DepartmentListView';
+			this.changeView(url, '#departmentmanager');
 		},
 		showPart : function(){
-			var partView = new PartListView();
-			this.changeView(partView, '#partmanager');
+			var url = 'views/sm/PartListView';
+			this.changeView(url, '#partmanager');
 		},
 		showPosition : function(){
-			var positionView = new PositionListView();
-			this.changeView(positionView, '#positionmanager');
+			var url = 'views/sm/PositionListView';
+			this.changeView(url, '#positionmanager');
 		},
 		showOrganization : function(){
-			var organizationView = new OrganizationView();
-			this.changeView(organizationView, '#organization');
+			var url = 'views/sm/OrganizationView';
+			this.changeView(url, '#organization');
 		},
 		showAllReport : function(){
-			var allreportView = new AllReportView();
-			this.changeView(allreportView, '#allreport');
+			var url = 'views/rm/AllReportView';
+			this.changeView(url, '#allreport');
+		},
+		showRoomReserve : function(){
+			var url = 'views/room/RoomReserve';
+			this.changeView(url, "roomreserve");
 		}
-		// showReportCommute : function() {
-		// 	var reportCommuteView = new ReportCommuteView();
-		// 	this.changeView(reportCommuteView);			
-		// }
 	});
 	return Router;
 });
