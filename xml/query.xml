@@ -1488,7 +1488,7 @@
 									commute_result_tbl c
 									LEFT JOIN overtime_code_tbl o
 									ON c.overtime_code = o.code
-								where date between "2015-12-26" AND "2016-12-25" AND c.overtime_code IN ('2015_AA', '2015_AB','2015_AC')
+								where date between ? AND ? AND c.overtime_code IN ('2015_AA', '2015_AB','2015_AC')
 								group by id, month
 						) t1    
 						GROUP BY id                
