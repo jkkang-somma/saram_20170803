@@ -165,23 +165,23 @@ var CommuteYearExcelCreater25 = function () {
 //			}
 			
 			// 부서
-			sheet.set(COL_DEPT, currentRow, user.dept_name);
+			sheet.set(COL_DEPT, currentRow, _conVal(user.dept_name) );
 			_setDataCellStyle(sheet, COL_DEPT, currentRow);
 			sheet.border(COL_DEPT, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});		
 			
 			
 			// 이름
-			sheet.set(COL_POSITION, currentRow, user.position_name);
+			sheet.set(COL_POSITION, currentRow, _conVal(user.position_name) );
 			_setDataCellStyle(sheet, COL_POSITION, currentRow);
 			sheet.border(COL_POSITION, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});
 			
 			// 이름
-			sheet.set(COL_NAME, currentRow, user.name);
+			sheet.set(COL_NAME, currentRow, _conVal(user.name) );
 			_setDataCellStyle(sheet, COL_NAME, currentRow);
 			sheet.border(COL_NAME, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});
 			
 			// 퇴사일 
-			sheet.set(COL_LEAVE_COMPANY, currentRow, user.leave_company);
+			sheet.set(COL_LEAVE_COMPANY, currentRow, _conVal(user.leave_company) );
 			_setDataCellStyle(sheet, COL_LEAVE_COMPANY, currentRow);
 			sheet.border(COL_LEAVE_COMPANY, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});
 			
@@ -216,7 +216,7 @@ var CommuteYearExcelCreater25 = function () {
 
 	function _setOverTimeWorkeRow(sheet, startCol, startRow, datas) {
 		for (var i = 0, len = 11; i <= len; i++) {
-			sheet.set( startCol, startRow, datas[i+1]);
+			sheet.set( startCol, startRow,_conVal(datas[i+1]) );
 			_setDataCellStyle(sheet, startCol, startRow);
 			
 			if (i == 0) {
@@ -224,43 +224,43 @@ var CommuteYearExcelCreater25 = function () {
 			}
 			startCol++;
 		}
-		sheet.set( startCol, startRow, datas.total);
+		sheet.set( startCol, startRow, _conVal(datas.total) );
 		_setDataCellStyle(sheet, startCol, startRow);
 	}
 
 	function _setOverTimeWorkTypeRow(sheet, startCol, startRow, datas) {
 		for (var i = 0, len = 11; i <= len; i++) {
-			sheet.set( startCol, startRow, datas[ (i+1)+'a' ]);
+			sheet.set( startCol, startRow, _conVal(datas[ (i+1)+'a' ]) );
 			_setDataCellStyle(sheet, startCol, startRow);
 			
 			if (i == 0) {
 				sheet.border(startCol, startRow, {left:'medium',top:'thin',right:'thin',bottom:'thin'});
 			}		
 			
-			sheet.set( startCol+1, startRow, datas[ (i+1)+'b' ]);
+			sheet.set( startCol+1, startRow, _conVal(datas[ (i+1)+'b' ]) );
 			_setDataCellStyle(sheet, startCol+1, startRow);
 			
-			sheet.set( startCol+2, startRow, datas[ (i+1)+'c' ]);
+			sheet.set( startCol+2, startRow, _conVal(datas[ (i+1)+'c' ]) );
 			_setDataCellStyle(sheet, startCol+2, startRow);
 			startCol = startCol + 3;
 		}	
 
-		sheet.set( startCol, startRow, datas.a_total);
+		sheet.set( startCol, startRow, _conVal(datas.a_total) );
 		_setDataCellStyle(sheet, startCol, startRow);
 		startCol++;
 		
-		sheet.set( startCol, startRow, datas.b_total);
+		sheet.set( startCol, startRow, _conVal(datas.b_total) );
 		_setDataCellStyle(sheet, startCol, startRow);
 		startCol++;
 		
-		sheet.set( startCol, startRow, datas.c_total);
+		sheet.set( startCol, startRow, _conVal(datas.c_total) );
 		_setDataCellStyle(sheet, startCol, startRow);
 	}
 
 
 	function _setOverTimeWorkPayRow(sheet, startCol, startRow, datas) {
 		for (var i = 0, len = 11; i <= len; i++) {
-			sheet.set( startCol, startRow, datas[i+1]);
+			sheet.set( startCol, startRow, _conVal(datas[i+1]) );
 			_setDataCellStyle(sheet, startCol, startRow);
 			
 			if (i == 0) {
@@ -269,25 +269,25 @@ var CommuteYearExcelCreater25 = function () {
 			startCol++;
 		}
 		
-		sheet.set( startCol, startRow, datas.total);
+		sheet.set( startCol, startRow, _conVal(datas.total) );
 		_setDataCellStyle(sheet, startCol, startRow);
 	}
 
 	function _setBaseCell(sheet, col, row, value) {
-		sheet.set(col, row, value);
+		sheet.set(col, row, _conVal(value) );
 		sheet.valign(col, row, 'center');
 		sheet.align(col, row, 'center');	
 	}
 		
 	
 	function _setTitleCell(sheet, col, row, value) {
-		sheet.set(col, row, value);
+		sheet.set(col, row, _conVal(value) );
 		sheet.valign(col, row, 'center');
 		sheet.align(col, row, 'center');	
 	}
 
 	function _setTitleMergeCell(sheet, col, row, value) {
-		sheet.set(col, row, value);
+		sheet.set(col, row, _conVal(value) );
 		sheet.merge({col:col,row:row},{col:col,row:row+1});
 		sheet.valign(col, row, 'center');
 		sheet.align(col, row, 'center');
@@ -301,7 +301,7 @@ var CommuteYearExcelCreater25 = function () {
 
 
 	function _setTitleABCCellType(sheet, col, row, value) {
-		sheet.set(col, row, value);
+		sheet.set(col, row, _conVal(value) );
 		sheet.merge({col:col,row:row},{col:col+2,row:row});
 		sheet.valign(col, row, 'center');
 		sheet.align(col, row, 'center');
@@ -318,6 +318,13 @@ var CommuteYearExcelCreater25 = function () {
 //			sheet.border(i, 4, {left:'medium',top:'medium',right:'medium',bottom:'medium'});
 //		}	
 //	}	
+
+	function _conVal(val) {
+		if (val) {
+			return val + ' ';
+		}
+		return val
+	}
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
