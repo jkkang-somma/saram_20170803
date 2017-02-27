@@ -140,7 +140,8 @@ define({
         TOP:{
     		BM:"기초 자료",
             SM:"사원 관리",           
-            AM:"근태 관리"
+            AM:"근태 관리",
+            RM:"회의실"
         },
         SUB:{
         	BM:{
@@ -166,6 +167,9 @@ define({
                 REPORT_MANAGER:"근태 결재 관리",
                 COMMUTE_TODAY:"오늘의 근태상황",
                 ALL_REPORT:"근태 일괄 결재"
+            },
+            RM:{
+                ROOM_RESERVE:"회의실 예약"
             }
         }
     },

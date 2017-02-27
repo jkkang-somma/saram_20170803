@@ -1075,3 +1075,7 @@ border: 2px dotted #2ABB9B !important;
 #commuteDataTable tr.absentce.selected{
   background-color: rgba(236, 131, 131 ,1);  
 }
+
+.roomRegRect {
+  cursor: hand;
+}

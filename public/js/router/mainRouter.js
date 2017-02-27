@@ -283,7 +283,7 @@ define([
 			this.changeView(url, '#allreport');
 		},
 		showRoomReserve : function(){
-			var url = 'views/room/RoomReserve';
+			var url = 'views/room/RoomReserveView';
 			this.changeView(url, "roomreserve");
 		}
 	});

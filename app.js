@@ -35,6 +35,8 @@ var bookdocument = require('./routes/bookdocumentRouter');
 var department = require('./routes/departmentRouter');
 var part = require('./routes/partRouter');
 var position = require('./routes/positionRouter');
+var room = require("./routes/roomRouter");
+var roomReg = require("./routes/roomRegRouter");
 
 var debug = require('debug')('APP');
 var app = express();
@@ -220,6 +222,8 @@ app.use('/bookdocument', bookdocument);
 app.use('/department', department);
 app.use('/part', part);
 app.use('/position', position);
+app.use('/room', room);
+app.use('/roomreg', roomReg);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .

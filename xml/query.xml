@@ -1887,5 +1887,47 @@
 			where position_code = ?	
 		</query>
 	</group>	
+
+	<group id="room">
+		<query id="selectRoomList">
+			select 
+				*
+			from
+				room_tbl;
+		</query>
+		<query id="temp">
+		</query>
+	</group>
+	<group id="roomReg">
+		<query id="selectRoomRegList">
+			select 
+				*, (SELECT name FROM members_tbl where id = member_id) user_name
+			from
+				room_reserve_tbl
+			where
+				date between DATE(?) AND DATE(?)
+		</query>
+		<query id="selectRoomRegBefore">
+			select 
+				*
+			from
+				room_reserve_tbl
+			where
+				room_index = ? AND
+				date = ? AND
+				TIME(?) &lt; end_time AND TIME(?) &gt; start_time;
+		</query>
+		<query id="insertRoomReg">
+			insert into room_reserve_tbl(room_index, member_id, title, date, start_time, end_time, description) 
+			values(?,?,?,?,?,?,?);
+		</query>
+		<query id="updateRoomReg">
+			update room_reserve_tbl set room_index = ?, title =?, date = ?, start_time = ?, end_time = ?, description = ? 
+			where `index`=?;
+		</query>
+		<query id="deleteRoomReg">
+			delete from room_reserve_tbl where `index`=?;
+		</query>
+	</group>
     	
 </querys>
