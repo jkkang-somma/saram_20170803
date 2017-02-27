@@ -215,6 +215,7 @@ define([
         	var _view = this;
         	
     		this.commuteCollection = new CommuteCollection();
+            
     		this.gridOption = {
         		    el:"commute_content",
         		    id:"commuteDataTable",
@@ -269,13 +270,18 @@ define([
 	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
 		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date)){
 		     	                    				
-		     	                    				if ( full.over_time >= 120) {	// 최소 120분 이상이 되어야 버튼이 보이도록 한다.
-			     	                    				result = _.template(overTimeCellTemplate)({
-			     	                    					isMod : true,
-			     	                    					idx : full.idx,
-			     	                    					over_time : overtime
-			     	                    				});
-			     	                    			}
+                                                    // 휴일,토,일의 경우 버튼이 생성되지 않음.
+                                                    if ( _.indexOf(_view.holidayCollection.pluck("date"), full.date ) == -1 ) {
+    		     	                    				if ( (Moment(full.date,"YYYY-MM-DD")).weekday() != 0 && (Moment(full.date,"YYYY-MM-DD")).weekday() != 6) {
+                                                            if ( full.over_time >= 120) {	// 최소 120분 이상이 되어야 버튼이 보이도록 한다.
+        			     	                    				result = _.template(overTimeCellTemplate)({
+        			     	                    					isMod : true,
+        			     	                    					idx : full.idx,
+        			     	                    					over_time : overtime
+        			     	                    				});
+        			     	                    			}
+                                                        }
+                                                    }
 		    	 	                    		}	
 	     	                    			}
      	                    			}
