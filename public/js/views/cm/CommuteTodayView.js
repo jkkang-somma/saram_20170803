@@ -47,7 +47,7 @@ define([
                                    }},
              	        ],
              	    rowCallback: function(row, data){
-             	    	if(data.approval_ok == '0'){ // 미결
+             	    	if(data.approval_ok == '상신' || data.approval_ok == '취소요청'){ // 미결
              	            $(row).addClass("absentce");
              	    	}else{
              	    	    $(row).removeClass("absentce");

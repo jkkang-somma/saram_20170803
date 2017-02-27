@@ -588,27 +588,22 @@
         </query>
 
         <query id="selectCommuteToday">
-        	SELECT 
-				oot.id as id, oot.date as date, mem.name as name, dept.name as dept_name, oct.name as out_office_name, oot.start_time as start_time, oot.end_time as end_time, oot.memo as memo, '1' as approval_ok
-			FROM 
-				out_office_tbl oot, members_tbl mem, dept_code_tbl dept, office_code_tbl oct
-			WHERE
-				oot.date = ? AND
-				oot.id = mem.id AND
-				mem.dept_code = dept.code AND
-				oot.office_code = oct.code
-			UNION ALL
 			SELECT
-				apt.submit_id, ? as date, mem.name as name, dept.name as dept_name, oct.name as out_office_name, start_time, end_time, submit_comment as memo, '0' as approval_ok
+				apt.submit_id, ? as date, mem.name as name, dept.name as dept_name, oct.name as out_office_name, start_time, end_time, submit_comment as memo, apt.state as approval_ok
 			FROM
 				approval_tbl apt, members_tbl mem, dept_code_tbl dept, office_code_tbl oct
 			WHERE
+				apt.office_code != "O01" AND
 				apt.start_date &lt;= ? AND
         		apt.end_date &gt;= ? AND 
 				apt.submit_id = mem.id AND
 				mem.dept_code = dept.code AND
 				apt.office_code = oct.code AND
-				apt.state = '상신';
+				( 
+					apt.state = "결재완료" OR
+					apt.state = "취소요청" OR
+					apt.state = "상신"
+				)
         </query>
     </group>
     
