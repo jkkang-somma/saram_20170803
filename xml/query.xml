@@ -390,11 +390,13 @@
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
-							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name                
+							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
+							a.state AS work_night_falg
 						FROM 
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
-							left join work_type_code_tbl w on w.code = c.work_type							
+							left join work_type_code_tbl w on w.code = c.work_type
+							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01'
 						WHERE
 							(date BETWEEN ? AND ?) AND department =?
 						ORDER BY date
@@ -435,11 +437,13 @@
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
-							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name                
+							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
+							a.state AS work_night_falg
 						FROM 
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
-							left join work_type_code_tbl w on w.code = c.work_type							
+							left join work_type_code_tbl w on w.code = c.work_type
+							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01'
 						WHERE
 							date BETWEEN ? AND ?
 						ORDER BY date

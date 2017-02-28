@@ -268,8 +268,13 @@ define([
  	                    					if(_.isNull(full.overtime_code)){
 	     	                    				var date = full.date;
 	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
-		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date)){
-		     	                    				
+		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date))
+                                                {	
+                                                    var isApproval = false;
+                                                    if ( full.work_night_falg == "상신") {
+                                                        overtime = overtime + "<BR>(상신중)";
+                                                        isApproval = true;
+                                                    }
                                                     // 휴일,토,일의 경우 버튼이 생성되지 않음.
                                                     if ( _.indexOf(_view.holidayCollection.pluck("date"), full.date ) == -1 ) {
     		     	                    				if ( (Moment(full.date,"YYYY-MM-DD")).weekday() != 0 && (Moment(full.date,"YYYY-MM-DD")).weekday() != 6) {
@@ -279,6 +284,11 @@ define([
         			     	                    					idx : full.idx,
         			     	                    					over_time : overtime
         			     	                    				});
+                                                                if ( isApproval ) {
+                                                                    var div= $("<div/>").append(result);
+                                                                    div.find(".btn-overtime").css("visibility", "hidden");
+                                                                    result = div.html();
+                                                                }
         			     	                    			}
                                                         }
                                                     }
@@ -613,6 +623,8 @@ define([
 						            _approvalModel.save({}, {
 						                success: function(model, xhr, options) {
 						                    Dialog.show("결재가 상신되었습니다.");
+                                            selectItem.work_night_falg = "상신";
+                                            _this.grid.updateRow(selectItem);
 						                    dialog.close();
 						                },
 						                error: function(model, xhr, options) {
