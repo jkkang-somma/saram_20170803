@@ -259,6 +259,11 @@ define([
      	                    		var result = "-";
      	                    		if (data > 0){
      	                    			var overtime = timeformat(full.over_time);
+                                        var isApproval = false;
+                                        if ( full.work_night_falg == "상신") {
+                                            overtime = overtime + "<BR>(상신중)";
+                                            isApproval = true;
+                                        }
      	                    			result = _.template(overTimeCellTemplate)({
  	                    					isMod : false,
  	                    					over_time : overtime
@@ -270,11 +275,6 @@ define([
 	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
 		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date))
                                                 {	
-                                                    var isApproval = false;
-                                                    if ( full.work_night_falg == "상신") {
-                                                        overtime = overtime + "<BR>(상신중)";
-                                                        isApproval = true;
-                                                    }
                                                     // 휴일,토,일의 경우 버튼이 생성되지 않음.
                                                     if ( _.indexOf(_view.holidayCollection.pluck("date"), full.date ) == -1 ) {
     		     	                    				if ( (Moment(full.date,"YYYY-MM-DD")).weekday() != 0 && (Moment(full.date,"YYYY-MM-DD")).weekday() != 6) {
