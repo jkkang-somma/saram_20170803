@@ -189,12 +189,10 @@ define([
 		     			success: function(){
 
                             if ( startDateM.weekday() == 0 || startDateM.weekday() == 6) {
-                                var length = _this.commuteTodayCollection.length;
-                                for ( var i = 0 ; i < length ; i++ ) {
+                                for ( var i = 0 ; i < _this.commuteTodayCollection.length ; i++ ) {
                                     var ct = _this.commuteTodayCollection.models[i];
                                     if ( ct.attributes.out_office_name.indexOf("휴가") >= 0 || ct.attributes.out_office_name.indexOf("반차") >= 0) {
-                                        _this.commuteTodayCollection.models.splice(i,1);
-                                        length--;
+                                        _this.commuteTodayCollection.remove(ct);
                                     }
                                 }
                             }
