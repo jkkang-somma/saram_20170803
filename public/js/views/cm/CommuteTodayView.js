@@ -17,11 +17,12 @@ define([
 	'text!templates/default/content.html',
 	'text!templates/layout/default.html',
 	'models/cm/CommuteTodayModel',
+    'collection/common/HolidayCollection',
 	'collection/cm/CommuteTodayCollection',
 	'text!templates/default/button.html',
 	], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, HeadHTML, RowHTML, 
 		DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, ContentHTML, LayoutHTML, 
-		CommuteTodayModel, CommuteTodayCollection, ButtonHTML){
+		CommuteTodayModel, HolidayCollection, CommuteTodayCollection, ButtonHTML){
 		
 		var commuteTodayView = BaseView.extend({
         el:$(".main-container"),
@@ -156,7 +157,13 @@ define([
             return this;
      	},
      	onClickSearchBtn: function(evt) {
-     		this.selectCommuteToday();
+     		// this.holidayCollection = new HolidayCollection();
+       //      this.holidayCollection.fetch({
+       //          data :  {
+       //              year : Moment().year()
+       //          }
+       //      }).done(this.selectCommuteToday);
+            this.selectCommuteToday();
      	},
     	selectCommuteToday: function() {
     		var data = {
@@ -169,6 +176,7 @@ define([
      		// 	return;
      		// }
      		
+            var startDateM = data.startDate;
      		data.startDate = data.startDate.format("YYYY-MM-DD");
      		// data.endDate = data.endDate.format("YYYY-MM-DD");
      		
@@ -179,6 +187,18 @@ define([
                     _this.commuteTodayCollection.fetch({ 
 		     			data: data,
 		     			success: function(){
+
+                            if ( startDateM.weekday() == 0 || startDateM.weekday() == 6) {
+                                var length = _this.commuteTodayCollection.length;
+                                for ( var i = 0 ; i < length ; i++ ) {
+                                    var ct = _this.commuteTodayCollection.models[i];
+                                    if ( ct.attributes.out_office_name.indexOf("휴가") >= 0 || ct.attributes.out_office_name.indexOf("반차") >= 0) {
+                                        _this.commuteTodayCollection.models.splice(i,1);
+                                        length--;
+                                    }
+                                }
+                            }
+
                             dfd.resolve();
                         }, error: function(){
                             dfd.reject();
