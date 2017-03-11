@@ -157,62 +157,64 @@ define([
             return this;
      	},
      	onClickSearchBtn: function(evt) {
-     		// this.holidayCollection = new HolidayCollection();
-       //      this.holidayCollection.fetch({
-       //          data :  {
-       //              year : Moment().year()
-       //          }
-       //      }).done(this.selectCommuteToday);
             this.selectCommuteToday();
      	},
     	selectCommuteToday: function() {
-    		var data = {
-     		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate())
-    		    // endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate()),
-     		};
-     		
-     		// if(data.startDate.isAfter(data.endDate)){
-     		// 	Dialog.warning("시작일자가 종료일자보다 큽니다.");
-     		// 	return;
-     		// }
-     		
-            var startDateM = data.startDate;
-     		data.startDate = data.startDate.format("YYYY-MM-DD");
-     		// data.endDate = data.endDate.format("YYYY-MM-DD");
-     		
             var _this = this;
-            Dialog.loading({
-                action:function(){
-                    var dfd = new $.Deferred();
-                    _this.commuteTodayCollection.fetch({ 
-		     			data: data,
-		     			success: function(){
+            this.holidayCollection = new HolidayCollection();
+            this.holidayCollection.fetch({
+                data :  {
+                    year : Moment().year()
+                }
+            }).done(function() {
+                var data = {
+                    startDate : Moment($(_this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate())
+                    // endDate : Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate()),
+                };
+                    
+                // if(data.startDate.isAfter(data.endDate)){
+                //  Dialog.warning("시작일자가 종료일자보다 큽니다.");
+                //  return;
+                // }
+                
+                var startDateM = data.startDate;
+                data.startDate = data.startDate.format("YYYY-MM-DD");
+                // data.endDate = data.endDate.format("YYYY-MM-DD");
+                
+                Dialog.loading({
+                    action:function(){
+                        var dfd = new $.Deferred();
+                        _this.commuteTodayCollection.fetch({ 
+                            data: data,
+                            success: function(){
 
-                            if ( startDateM.weekday() == 0 || startDateM.weekday() == 6) {
-                                for ( var i = 0 ; i < _this.commuteTodayCollection.length ; i++ ) {
-                                    var ct = _this.commuteTodayCollection.models[i];
-                                    if ( ct.attributes.out_office_name.indexOf("휴가") >= 0 || ct.attributes.out_office_name.indexOf("반차") >= 0) {
-                                        _this.commuteTodayCollection.remove(ct);
+								if ( _.indexOf(_this.holidayCollection.pluck("date"), data.startDate ) != -1 ||
+                                	 startDateM.weekday() == 0 || startDateM.weekday() == 6) {
+                                    for ( var i = 0 ; i < _this.commuteTodayCollection.length ; i++ ) {
+                                        var ct = _this.commuteTodayCollection.models[i];
+                                        if ( ct.attributes.out_office_name.indexOf("휴가") >= 0 || ct.attributes.out_office_name.indexOf("반차") >= 0) {
+                                            _this.commuteTodayCollection.remove(ct);
+                                        }
                                     }
                                 }
-                            }
 
-                            dfd.resolve();
-                        }, error: function(){
-                            dfd.reject();
-                        }
-		     		});
-		     		return dfd.promise();
-        	    },
-        	    
-                actionCallBack:function(res){//response schema
-                    _this.grid.render();
-                },
-                errorCallBack:function(response){
-                    Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.GET_DATA_FAIL);
-                },
+                                dfd.resolve();
+                            }, error: function(){
+                                dfd.reject();
+                            }
+                        });
+                        return dfd.promise();
+                    },
+                    
+                    actionCallBack:function(res){//response schema
+                        _this.grid.render();
+                    },
+                    errorCallBack:function(response){
+                        Dialog.error(i18nCommon.COMMUTE_RESULT_LIST.MSG.GET_DATA_FAIL);
+                    },
+                });
             });
-    	}
+        }
 	});
 	return commuteTodayView;
 });
