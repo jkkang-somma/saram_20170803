@@ -146,6 +146,14 @@ define([
         	                group:"requireInfo",
         	                value:_model.name_commute
         	        },
+        	        {//본사/외주
+        	        		type:"combo",
+	    	                name:"affiliated",
+	    	                label:i18nCommon.USER.AFFILIATED,
+	    	                group:"requireInfo",
+	    	                value:_model.affiliated,
+	    	                collection:[{key:0,value:i18nCommon.CODE.AFFILIATED_0},{key:1,value:i18nCommon.CODE.AFFILIATED_1}]
+        	        },
         	        {
         	                type:"date",
         	                name:"join_company",
@@ -261,6 +269,7 @@ define([
                 dept_code: "",
                 privilege:"",
                 admin : 0,
+                affiliated : 0,
             });
             
             if(!_.isUndefined(_validate)){

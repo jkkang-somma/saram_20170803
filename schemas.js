@@ -28,6 +28,7 @@ var Schemas = function (schemaName) {
             position_name:null,
             privilege: null,
             admin : null,
+            affiliated : null,
             new_password:null,
             ip_pc : null,
             mac:null,

@@ -41,7 +41,8 @@ define({
         WEDDING_DAY:"Wedding Day",
         EMERGENCY_PHONE:"Emergency Phone",
         MEMO:"Memo",
-        MAC:"Mac"
+        MAC:"Mac",
+        AFFILIATED:"Affiliated"
     },
     GRID:{
         MSG:{
@@ -80,7 +81,9 @@ define({
             MIDDLE_SEAT:"책임 연구원",
             SEAT:"선임 연구원",
             RESEARCHER:"연구원"
-        }
+        },
+        AFFILIATED_0:"본사",
+        AFFILIATED_1:"외주"
     },
     
     

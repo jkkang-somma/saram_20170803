@@ -49,7 +49,8 @@ define({
         WEDDING_DAY:"결혼기념일",
         EMERGENCY_PHONE:"비상연락망",
         MEMO:"메모",
-        MAC:"Mac"
+        MAC:"Mac",
+        AFFILIATED:"소속"
     },
     
     GRID:{
@@ -88,7 +89,9 @@ define({
             DEARI:"대리",
             WORKER:"사원",
             RESEARCHER:"연구원"
-        }
+        },
+        AFFILIATED_0:"본사",
+        AFFILIATED_1:"외주"
     },
     //MSG
     SUCCESS:{
@@ -213,7 +216,8 @@ define({
     		ACCEPTING : "상신",
     		PROCESSING : "결재",
     		NPROCESSING : "반려",
-    		COMPLETE : "처리완료"
+    		COMPLETE : "처리완료",
+    		NACCEPTING : "상신취소",
     	}
     },
     

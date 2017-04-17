@@ -53,6 +53,7 @@ define([
             join_company: "",
             leave_company:"",
             admin : 0,
+            affiliated : 0,
         },
         
     });

@@ -50,6 +50,13 @@ define([
                         }
                         return result;
                     }, visible:false, subVisible:false},
+                    { "title" : i18Common.USER.AFFILIATED, "render": function(data, type, row){
+                        var result=i18Common.CODE.AFFILIATED_0;
+                        if (row.affiliated > 0){
+                            result=i18Common.CODE.AFFILIATED_1;
+                        }
+                        return result;
+                    }, visible:false, subVisible:false},
                     { "title" : i18Common.USER.PHONE, data:"phone"},
                     { "title" : i18Common.USER.EMAIL, data:"email"},
                     { "title" : i18Common.USER.APPROVAL_NAME, data:"approval_name"},
@@ -71,7 +78,7 @@ define([
                     }, visible:false, subVisible:false},
                 ],
     		    dataschema:["id", "name", "position_code", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
-    		    "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege"
+    		    "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege" ,"affiliated"
     		    ],
     		    collection:userCollection,
     		    detail:true,

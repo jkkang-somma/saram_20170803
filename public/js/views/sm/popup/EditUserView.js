@@ -137,7 +137,16 @@ define([
         	                label:i18nCommon.USER.NAME_COMMUTE,
         	                group:"requireInfo",
         	                value:_model.name_commute
-        	        },{
+        	        },
+        	        {//본사/외주
+	    	        		type:"combo",
+	    	                name:"affiliated",
+	    	                label:i18nCommon.USER.AFFILIATED,
+	    	                group:"requireInfo",
+	    	                value:_model.affiliated,
+	    	                collection:[{key:0,value:i18nCommon.CODE.AFFILIATED_0},{key:1,value:i18nCommon.CODE.AFFILIATED_1}]
+        	        },
+        	        {
 	    	                type:"hidden",
 	    	                name:"position_name",
 	    	                value:_model.position_name,

@@ -27,6 +27,7 @@ define([
             join_company: "",
             leave_company: "",
             admin : null,
+            affiliated : null,
             ip_pc : null,
             mac:null,
             ip_office : null,
