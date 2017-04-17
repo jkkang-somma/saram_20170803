@@ -154,7 +154,8 @@ define([
 	                	{key : STATE.ACCEPTING, value : STATE.ACCEPTING},
 	                	{key : STATE.PROCESSING, value : STATE.PROCESSING},
 	                	{key : STATE.NPROCESSING, value : STATE.NPROCESSING},
-	                	{key : STATE.COMPLETE, value : STATE.COMPLETE}
+	                	{key : STATE.COMPLETE, value : STATE.COMPLETE},
+	                	{key : STATE.NACCEPTING, value : STATE.NACCEPTING}
 	                ],
 	                disabled: true,
 	                group:"managerGroup",
@@ -283,6 +284,24 @@ define([
 			var userId = SessionModel.get("user").id;
 			var newData = _.clone(this.selectData);
 			newData.state = "반려";
+			newData._id = userId;
+			newData.comment_reply = data.comment_reply;
+			console.log(newData);
+			commentModel.save(newData, {
+				success : function(result){
+					dfd.resolve(result);
+				}
+			});
+			return dfd.promise();
+		},
+		NACCEPTING : function(){
+			var dfd = new $.Deferred();
+			var data = this.form.getData();
+     		
+			var commentModel = new CommentModel(newData);
+			var userId = SessionModel.get("user").id;
+			var newData = _.clone(this.selectData);
+			newData.state = "상신취소";
 			newData._id = userId;
 			newData.comment_reply = data.comment_reply;
 			console.log(newData);

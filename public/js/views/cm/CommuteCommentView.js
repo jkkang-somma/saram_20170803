@@ -149,6 +149,21 @@ define([
                         });
                     }
                 });
+            }else if(SessionModel.get("user").id == selectItem.writer_id && selectItem.state == "상신"){
+            	buttons.push({
+                    id: 'updateCommentBtn',
+                    cssClass: Dialog.CssClass.SUCCESS,
+                    label: '상신취소',
+                    action: function(dialog) {
+                    	commentUpdatePopupView.NACCEPTING().done(function(result){
+                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                			Dialog.show("상신이 취소되었습니다..");
+            				dialog.close();
+                        }).fail(function(){
+                        	Dialog.show("처리에 실패했습니다.");
+                        });
+                    }
+                });
             }	
         }
         
