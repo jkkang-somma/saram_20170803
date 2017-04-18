@@ -254,30 +254,28 @@ define([
                 }
             }
             
-            // 휴일근무         	
-            if(code == "B01"){
-                 $(_this.el).find('#datePickerTitleTxt').text('date');
-                _this.afterDate.hide();
-                _this.holReq = 0;
-                $(_this.el).find('#reqHoliday').val("0 일");
-                $(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
-                ComboBox.createCombo(selGubun);
-
-                if (arrGubunData.length > 0) {
-                    if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03' || arrGubunData[0].code == 'W04') {
-                        $(_this.el).find('#usableHolidayCon').hide();
-                    }
-            	}      
-            }
-            if(code == "W04"){  
+            // 휴일근무          
+            if(userAffiliated != 1){            	
+            	$(_this.el).find('#datePickerTitleTxt').text('date');
+            	_this.afterDate.hide();
+            	_this.holReq = 0;
+            	$(_this.el).find('#reqHoliday').val("0 일");
+            	$(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
+            	ComboBox.createCombo(selGubun);
+            	
+            	if (arrGubunData.length > 0) {
+            		if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03' || arrGubunData[0].code == 'W04') {
+            			$(_this.el).find('#usableHolidayCon').hide();
+            		}
+            	}
+            } else{
             	_this.holReq = 0;
             	$(_this.el).find('#reqHoliday').val("1 일");
                 if (arrGubunData.length > 0) {                	
                 	$(_this.el).find('#usableHolidayCon').hide();
                 }
             }
-            
-
+ 
             selGubun.change(function() {
                 var selVal = selGubun.val();
                 // _this.holReq = 0;
