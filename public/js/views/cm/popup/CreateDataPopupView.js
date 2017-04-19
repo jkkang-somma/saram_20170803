@@ -113,6 +113,15 @@ define([
                     var userId = userModel.attributes.id;
                     var userName = userModel.attributes.name;
                     var userDepartment = userModel.attributes.dept_name;
+                    
+                    var joinCompany = userModel.attributes.join_company;
+                    var endDay = endDate.format(ResultTimeFactory.DATEFORMAT);
+                    var joinArr = joinCompany.split('-');
+                    var endArr = endDay.split('-');
+                    var cJoinDate = new Date(joinArr[0], joinArr[1], joinArr[2]);
+                    var cEndDate = new Date(endArr[0], endArr[1], endArr[2]);
+
+                    
                     var leaveCompany = userModel.attributes.leave_company;
                     var userPosition = userModel.attributes.position_name;
                     if(_.isString(leaveCompany)){
@@ -127,6 +136,7 @@ define([
                         || userPosition =="부사장"
                         || (!_.isNull(leaveCompany) && leaveCompany != "")
                         || userDepartment == "무소속"
+                        || cJoinDate.getTime() > cEndDate.getTime()
                         || userName.slice(0,3) == "테스트"){
                             
                     }else{
@@ -182,7 +192,12 @@ define([
                             
                             // 결과 저장
                             var result = resultTimeFactory.getResult();
-                            resultCollection.add(result);
+                            var resultArr =result.date.split('-');
+                            var cResult =new Date(resultArr[0], resultArr[1], resultArr[2]);
+                            
+                            if(cResult.getTime() >= cJoinDate.getTime() ){
+                            	resultCollection.add(result);
+                            }
                             
                             // 다음날 계산을 위해 결과를 yesterdayAttribute에 저장
                             yesterdayAttribute = result;
