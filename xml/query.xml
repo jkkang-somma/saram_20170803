@@ -397,7 +397,7 @@
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
 							left join work_type_code_tbl w on w.code = c.work_type
-							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01' AND a.state = '결재완료'
+							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01' AND a.state = '상신'
 						WHERE
 							(date BETWEEN ? AND ?) AND department =?
 						ORDER BY date
@@ -444,7 +444,7 @@
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
 							left join work_type_code_tbl w on w.code = c.work_type
-							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01' AND a.state = '결재완료'
+							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01' AND a.state = '상신'
 						WHERE
 							date BETWEEN ? AND ?
 						ORDER BY date
