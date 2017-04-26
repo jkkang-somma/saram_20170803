@@ -65,76 +65,83 @@ var Approval = function (data) {
     };
     var _insertApproval = function (data) {
         return ApprovalDao.insertApproval(data);
-    };
+    };    
     var _updateApprovalConfirm = function(data) {
+    	var _data = data;
         return new Promise(function(resolve, reject){
-		    var queryArr = [];
-		    for(var idx in data.data){
-		        var approvalItem = data.data[idx];
-		        if(approvalItem.state == "취소반려"){
-		            queryArr.push(ApprovalDao.rejectApprovalConfirm(approvalItem));
-		        }else{
-		            console.log(data);
-		            if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
-		                
-		                var today = moment();
-		                var inOfficeDay = moment(data.inOffice.arrInsertDate[0], "YYYY-MM-DD").hours(0).minutes(0).seconds(0);
-		                if(today.isBefore(inOfficeDay)){
-		                    if(inOfficeDay.day() == "0" && today.day() == "6" && today.diff(inOfficeDay,"days") == 0 ){
-		                        approvalItem.black_mark = '3';
-		                    }else{
-		                        approvalItem.black_mark = '1';
-		                    }
-		                }else{
-		                    approvalItem.black_mark = '3';
-		                }
-		                
-		                queryArr.push(ApprovalDao.updateApprovalConfirm2(approvalItem));        
-		                
-		            }else{
-	                    queryArr.push(ApprovalDao.updateApprovalConfirm(approvalItem));    
-		            }
-		        }
-		    }
-		    
-		    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
-		        var outOfficeData = {};
-		        for(var key in data.outOffice.arrInsertDate){
-		            outOfficeData[key] = _.clone( data.outOffice);
-		            outOfficeData[key].date = data.outOffice.arrInsertDate[key];
-                    outOfficeData[key].year = outOfficeData[key].date.substr(0,4);
-                    outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
-                    queryArr.push(OutOfficeDao.insertOutOffice(outOfficeData[key]));
-		        }
-		    }
-		    
-		    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
-		        var inOfficeData = {};
-		        for(var inKey in data.inOffice.arrInsertDate){
-		            inOfficeData[inKey] = _.clone( data.inOffice );
-		            inOfficeData[inKey].date = data.inOffice.arrInsertDate[inKey];
-                    inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
-                    inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
-                    queryArr.push(InOfficeDao.insertInOffice(inOfficeData[inKey]));    
-		        }
-		        
-		    }
-		    
-		    if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
-		        for(var idx in data.commute){
-			        queryArr.push(CommuteDao.updateCommute_t(data.commute[idx])); 
-			    }
-	            
-		    }
-		    
-            db.queryTransaction(queryArr).then(function(resultArr){
-                resolve(resultArr); 
-            }, function(err){
-                reject(err);
-            });
-		});
+        	var queryArr = [];
+  		    for(var idx in data.data){
+  		        var approvalItem = data.data[idx];
+  		        if(approvalItem.state == "취소반려"){
+  		            queryArr.push(ApprovalDao.rejectApprovalConfirm(approvalItem));
+  		        }else{
+  		            console.log(data);
+  		            if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
+  		                
+  		                var today = moment();
+  		                var inOfficeDay = moment(data.inOffice.arrInsertDate[0], "YYYY-MM-DD").hours(0).minutes(0).seconds(0);
+  		                if(today.isBefore(inOfficeDay)){
+  		                    if(inOfficeDay.day() == "0" && today.day() == "6" && today.diff(inOfficeDay,"days") == 0 ){
+  		                        approvalItem.black_mark = '3';
+  		                    }else{
+  		                        approvalItem.black_mark = '1';
+  		                    }
+  		                }else{
+  		                    approvalItem.black_mark = '3';
+  		                }
+  		                
+  		                queryArr.push(ApprovalDao.updateApprovalConfirm2(approvalItem));        
+  		                
+  		            }else{
+  	                    queryArr.push(ApprovalDao.updateApprovalConfirm(approvalItem));    
+  		            }
+  		        }
+  		    }
+  		    
+  		    if(!(_.isUndefined(data.outOffice) || _.isNull(data.outOffice))){
+  		        var outOfficeData = {};
+  		        for(var key in data.outOffice.arrInsertDate){
+  		            outOfficeData[key] = _.clone( data.outOffice);
+  		            outOfficeData[key].date = data.outOffice.arrInsertDate[key];
+                      outOfficeData[key].year = outOfficeData[key].date.substr(0,4);
+                      outOfficeData[key].black_mark = (data.outOffice.black_mark == undefined)? "" : data.outOffice.black_mark;
+                      queryArr.push(OutOfficeDao.insertOutOffice(outOfficeData[key]));
+  		        }
+  		    }
+  		    
+  		    if(!(_.isUndefined(data.inOffice) || _.isNull(data.inOffice))){
+  		        var inOfficeData = {};
+  		        for(var inKey in data.inOffice.arrInsertDate){
+  		            inOfficeData[inKey] = _.clone( data.inOffice );
+  		            inOfficeData[inKey].date = data.inOffice.arrInsertDate[inKey];
+                      inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
+                      inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
+                      queryArr.push(InOfficeDao.insertInOffice(inOfficeData[inKey]));    
+  		        }
+  		        
+  		    }
+  		    
+  		    if(!(_.isUndefined(data.commute) || _.isNull(data.commute))){
+  		        for(var idx in data.commute){
+  			        queryArr.push(CommuteDao.updateCommute_t(data.commute[idx])); 
+  			    }
+  	            
+  		    }
+  		    
+              db.queryTransaction(queryArr).then(function(resultArr){
+                  resolve(resultArr); 
+              }, function(err){
+                  reject(err);
+              });
+ 		}).catch(function(err){
+        	  if(!(_.isUndefined(_data.outOffice) || _.isNull(_data.outOffice))){        		  
+        		  db.query("outOffice", "deleteOutOfficeList", [_data.outOffice.doc_num]).then(function(resultArr){
+        			  console.log(_data.outOffice.doc_num);
+        		  });
+        		  throw(err);
+        	  }
+        });
     };
-    
     var _sendOutofficeEmail = function(doc_num){
         
         return new Promise(function(resolve, reject){
