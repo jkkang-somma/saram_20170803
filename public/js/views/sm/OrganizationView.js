@@ -233,7 +233,13 @@ define([
 									+ "</b>" + "<br>"+data.phone + inner_phone + '</td></tr>');									
 								} else {								
 									if(idx == 1) {
-										target.append('<tr class="partTop"><td>' 
+ 										var thtml;	
+										if(len != 1){						
+										    thtml = '<tr class="partTop"><td>'
+										}else{
+										    thtml = '<tr class="partTop partBottom"><td>'
+										}
+ 										target.append(thtml					 
 										+ "<b id=printname>" + data.name + "</b>" +" " + data.position_name.substring(0,3)  +" (" + data.email.replace("@yescnc.co.kr","") + ")" +"<br>" 
 										+ data.phone + inner_phone + '</td></tr>');	
 									} else if(idx == len) {
