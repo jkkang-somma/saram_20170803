@@ -133,7 +133,6 @@ define([
 					 * 근태 결과 생성하지 않음
 					 **/
                     if( userPosition == "대표이사"
-                        || userPosition =="부사장"
                         || (!_.isNull(leaveCompany) && leaveCompany != "")
                         || userDepartment == "무소속"
                         || cJoinDate.getTime() > cEndDate.getTime()
