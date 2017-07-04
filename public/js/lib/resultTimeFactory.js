@@ -419,7 +419,7 @@ define([
                     var code = model.get("office_code");
                     var VACATION_CODES = ["V01", "V02", "V03", "V04", "V05", "V06", "V07", "V08"];
                     var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04"];
-                    var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07"];
+                    var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07", "V06V07", "V06V08"];
 
                     if (_.indexOf(VACATION_CODES, code) >= 0) {
                         vacationArr.push(code);
@@ -468,6 +468,8 @@ define([
                     case "V03V05": // 공적휴가, 오후반차
                     case "V02V08": // 오전반차, 공적휴가(오후)
                     case "V03V07": // 오후반차, 공적휴가(오전)
+                    case "V06V07": // 특별휴가,공적휴가(오전)
+                    case "V06V08": // 특별휴가,공적휴가(오후)
                         this.workType = WORKTYPE.VACATION;
                         this.inTimeType = 1;
                         this.outTimeType = 1;
