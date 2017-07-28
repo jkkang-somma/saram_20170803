@@ -31,7 +31,7 @@ define([
             
             $(this.el).html('');
             $(this.el).empty();
-
+			this.clickFlag = false;
 
             _.bindAll(this, "onClickBtnSend");
         },
@@ -501,6 +501,11 @@ define([
             return isHoli;
         },
         onClickBtnSend: function(evt) {
+        	if ( this.clickFlag ) {
+                console.log("IN skip");
+                return;
+            }
+            
             this.dialogRef = evt;
             var _this = this;
             this.thisDfd = new $.Deferred();
@@ -571,11 +576,13 @@ define([
                     yearmonth: yearMonth
                 };
 
+				this.clickFlag =true;
                 _appCollection.fetch({
                         reset: true,
                         data: _thisData,
                         error: function(result) {
                             Dialog.error("데이터 조회가 실패했습니다.");
+                            this.clickFlag =false;
                         }
                     })
                     .done(function(result) {
