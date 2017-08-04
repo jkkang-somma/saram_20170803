@@ -42,6 +42,7 @@ define([
 			'departmentmanager' : 'showDepartmnet',
 			'partmanager' : 'showPart',
 			'organization' : 'showOrganization',
+			'gis' : 'showGis',
 			'positionmanager' : 'showPosition',
 			'userpic' : 'showUserPic',
 			'documentlist' : 'showDocument',
@@ -60,6 +61,7 @@ define([
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
 			'allreport' : 'showAllReport',
+			'roomreserve' : 'showRoomReserve',
 			'roomreserve' : 'showRoomReserve',
 			'*actions' : 'showHome'
 			
@@ -277,6 +279,10 @@ define([
 		showOrganization : function(){
 			var url = 'views/sm/OrganizationView';
 			this.changeView(url, '#organization');
+		},
+		showGis : function(){
+			var url = 'views/gis/gisView';
+			this.changeView(url, '#gis');
 		},
 		showAllReport : function(){
 			var url = 'views/rm/AllReportView';

@@ -172,7 +172,8 @@ define({
                 ALL_REPORT:"근태 일괄 결재"
             },
             RM:{
-                ROOM_RESERVE:"회의실 예약"
+                ROOM_RESERVE:"회의실 예약",
+                GIS:"자리배치도",
             }
         }
     },
@@ -528,6 +529,9 @@ define({
     },
     ORGANIZATION :{
     	TITLE : "(주)예스씨앤씨  조직도"
+    },
+    GIS :{
+      TITLE : "테스트 페이지"  
     },
     PART_LIST : {
         TITLE : "파트 관리",

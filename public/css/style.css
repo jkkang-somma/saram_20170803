@@ -1079,3 +1079,27 @@ border: 2px dotted #2ABB9B !important;
 .roomRegRect {
   cursor: hand;
 }
+
+.gis_position {
+  height:60px; width:40px; border:1px solid; position:absolute;
+}
+
+.gis_position .num{
+  height:0px; width:0px; font-size:8px;
+}
+
+.gis_person {
+  width:40px; height:70px; float:left; text-align: center; padding: 2px;
+}
+
+.gis_person span{
+  font-size:8px;
+}
+
+.gis_person img {
+  border-radius: 50%;
+}
+
+#gis_main .gis_position.added {
+	border: 0px;
+}

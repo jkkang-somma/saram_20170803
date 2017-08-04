@@ -60,6 +60,10 @@ define([
 	            edit:ADMIN
 	         }
 	    },{
+			title:"자리배치도",
+			hashTag:"#gis",
+			auth:ADMIN
+		},{
 			title:i18Common.MENU.SUB.BM.ORGANIZATION, //조직도
 			hashTag:"#organization",
 			auth:ADMIN

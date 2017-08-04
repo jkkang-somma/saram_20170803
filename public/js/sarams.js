@@ -25,12 +25,14 @@ require.config({
          deps: ['cryptojs.core']
       },
       jqFileDownload: {deps : ['jquery']},
+      'jquery.ui' : {deps: ['jquery']},
       'jquery.ui.widget' : {deps: ['jquery']},
-      jqFileUpload : {deps: ['jquery', 'jquery.ui.widget']},
+      jqFileUpload : {deps: ['jquery', 'jquery.ui']},
       
    },
    paths: {
    //    jquery: 'tool/jquery.min',
+      'jquery.ui': 'tool/jqueryui/jquery-ui',
       backbone: 'tool/backbone/backbone',
       underscore: 'tool/underscore/underscore-min',
       'underscore.string': 'tool/underscore/underscore.string.min',

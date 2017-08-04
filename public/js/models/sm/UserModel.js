@@ -5,7 +5,7 @@ define([
 ], function($, _,Backbone){
     var UserModel=Backbone.Model.extend({
         urlRoot: '/user',
-        idAttribute:"_id",
+        idAttribute:"id",
         initialize: function () {
             _.bindAll(this, "remove");
             _.bindAll(this, "validation");
