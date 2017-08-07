@@ -4,7 +4,7 @@
         	SELECT 
 				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
 				ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
-				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code
+				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
 			FROM members_tbl A
 			ORDER BY name
         </query>
@@ -12,7 +12,7 @@
         	SELECT 
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
@@ -47,6 +47,13 @@
         		wedding_day=?,
         		memo=?,
 				part_code=?
+        	WHERE id=?
+        </query>
+        <query id="updateUserGisPos">
+    		UPDATE
+        		members_tbl 
+        	SET 
+        		gis_pos=?
         	WHERE id=?
         </query>
         <query id="deleteUser">delete from members_tbl where id=?</query>

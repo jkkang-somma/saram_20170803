@@ -42,7 +42,8 @@ var Schemas = function (schemaName) {
             wedding_day : null,
             memo: null,
             part_code: null,
-            part_name: null
+            part_name: null,
+            gis_pos: null,
         },
         position:{
         	code: null,

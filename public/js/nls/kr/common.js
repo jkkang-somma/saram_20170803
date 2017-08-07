@@ -531,7 +531,7 @@ define({
     	TITLE : "(주)예스씨앤씨  조직도"
     },
     GIS :{
-      TITLE : "테스트 페이지"  
+      TITLE : "자리배치도"  
     },
     PART_LIST : {
         TITLE : "파트 관리",

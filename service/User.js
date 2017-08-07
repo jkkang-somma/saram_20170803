@@ -58,6 +58,9 @@ var User = function (data, isNoSchemas) {
             });
         });
     };
+    var _updateUserGisPos = function(){
+        return UserDao.updateUserGisPos(_data);
+    };
     var _configUser=function(){
         return new Promise(function(resolve, reject){// promise patten
             _getUser().then(function(currentData){
@@ -110,8 +113,9 @@ var User = function (data, isNoSchemas) {
         addUser:_addUser,
         editUser:_editUser,
         configUser:_configUser,
-        findPassword:_findPassword
-    }
+        findPassword:_findPassword,
+        updateUserGisPos:_updateUserGisPos
+    };
 }
 module.exports = User;
 

@@ -46,6 +46,12 @@ UserDao.prototype.updateUser = function(user){
     );
 };
 
+UserDao.prototype.updateUserGisPos = function(user){
+    return db.query(group, "updateUserGisPos", 
+        [user.gis_pos, user.id]
+    );
+};
+
 UserDao.prototype.selectUserByIp =  function (data) {
     return db.query(group, "selectUserByIp", [data.id, data.ip_office, data.ip_pc]);
 };

@@ -1085,7 +1085,7 @@ border: 2px dotted #2ABB9B !important;
 }
 
 .gis_position .num{
-  height:0px; width:0px; font-size:8px;
+  height:0px; width:0px; font-size:8px; opacity: 0.45;
 }
 
 .gis_person {
@@ -1102,4 +1102,8 @@ border: 2px dotted #2ABB9B !important;
 
 #gis_main .gis_position.added {
 	border: 0px;
+}
+
+.gis_position.added .num {
+  display:none;
 }

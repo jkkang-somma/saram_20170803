@@ -128,4 +128,21 @@ router.route('/config/:id')
         });
     });
 });
+
+// 자리정보 수정
+router.route('/setGisPos/:id')
+.put(function(req, res){
+    var user = new User(req.body, true);
+    user.updateUserGisPos().then(function(result){
+        res.send(result);
+    }).catch(function(e){
+        debug("Error update GIS POS.");
+        res.status(500);
+        res.send({
+            success:false,
+            message: e.message,
+            error:e
+        });
+    });
+})
 module.exports = router;
