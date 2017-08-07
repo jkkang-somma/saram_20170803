@@ -15,11 +15,11 @@ define([
         'text!templates/gis/person.html',
 
         'collection/sm/UserCollection',
-        'collection/sm/DepartmentCollection',
+        'collection/sm/DepartmentCollection'
         ], function(
         		$, jui, _, Backbone, BaseView, Schemas, i18Common, SessionModel, Dialog,
         		HeadHTML, ContentHTML, LayoutHTML, PersonTemplate,
-        		UserCollection, DepartmentCollection,
+        		UserCollection, DepartmentCollection
         )
         {
 	var GisView = BaseView.extend({
@@ -75,7 +75,7 @@ define([
 
 						// 2. 지정 자리가 없는 인원
 						var $gis_member_list = $(_this.el).find("#gis_member_list .gis_person");
-						for ( let i = 0 ; i < $gis_member_list.length ; i++ ) {
+						for ( var i = 0 ; i < $gis_member_list.length ; i++ ) {
 							var person = $gis_member_list[i];
 							var userModel = _this.option.userCollection.findWhere({id:person.id});
 								if ( !_.isUndefined(userModel) && userModel.get("gis_pos") != null ) {
