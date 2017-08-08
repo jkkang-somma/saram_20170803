@@ -1081,7 +1081,7 @@ border: 2px dotted #2ABB9B !important;
 }
 
 .gis_position {
-  height:60px; width:40px; border:1px solid; position:absolute;
+  height:60px; width:40px; position:absolute;
 }
 
 .gis_position .num{
@@ -1092,12 +1092,14 @@ border: 2px dotted #2ABB9B !important;
   width:40px; height:70px; float:left; text-align: center; padding: 2px;
 }
 
-.gis_person span{
-  font-size:8px;
+.gis_person span {
+  font-size: 11px;
+  font-weight: bold;
+  font-family: monospace;
 }
 
 .gis_person img {
-  border-radius: 50%;
+  border-radius: 50%; height:50%; width:70%; margin-top: 7px;
 }
 
 #gis_main .gis_position.added {

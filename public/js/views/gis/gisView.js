@@ -27,11 +27,11 @@ define([
 		initialize:function(){
 			this.option = {
 					el:"gis_content", 
-					pos_y1:42,
+					pos_y1:44,
 					pos_y2:102,
-					pos_y3:203,
+					pos_y3:205,
 					pos_y4:263,
-					pos_y5:323,
+					pos_y5:325,
 
 					draggingIndex : null,
 					moveIndex:-1,
@@ -147,8 +147,26 @@ define([
 
 						$(this).append($(_this.el).find("#"+_this.option.moveIndex));
 						$(this).addClass("added");
-					}	
-					// ui.draggable.draggable("option", "revert", false);
+					}
+
+					// 1 : 사장님
+					// 2 : 부사장님
+					// 3 ~ 6 : 관리부
+					// 10 ~ 19 : y1 ( 최상단 라인 )
+					// 30 ~ 40 : y2
+					// 50 ~ 63 : y3
+					// 70 ~ 83 : y4
+					// 90 ~ 97 : y5
+
+					if ( this.id == "gis_pos_01" || this.id == "gis_pos_02" ||
+						 this.id.startsWith("gis_pos_3") || this.id.startsWith("gis_pos_7") || this.id.startsWith("gis_pos_8") ) 
+					{
+						$(this).find("span").insertAfter( $(this).find("img") );
+						$(this).find("img").css("margin-top", "");
+					}else{
+						$(this).find("img").insertAfter( $(this).find("span") );
+						$(this).find("img").css("margin-top", "0px");
+					}
 				}
 			});
 
@@ -158,11 +176,11 @@ define([
 						var $person = $(_this.el).find("#"+_this.option.moveIndex);
 						$person.parent().removeClass("added");
 						$(this).append($person);
+						$person.find("span").insertAfter( $person.find("img") );
+						$person.find("img").css("margin-top", "");
 					}
 				}
 			});
-
-
 		},
 
 		onSave:function() {
@@ -252,9 +270,9 @@ define([
 			// // 3 ~ 6 : 관리부
 			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_03").replace("<TOP>", "208").replace("<LEFT>", "374").replace("<NUM>", 3);
 			gisMainDiv.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_04").replace("<TOP>", "272").replace("<LEFT>", "300").replace("<NUM>", 4);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_04").replace("<TOP>", "273").replace("<LEFT>", "300").replace("<NUM>", 4);
 			gisMainDiv.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_05").replace("<TOP>", "272").replace("<LEFT>", "374").replace("<NUM>", 5);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_05").replace("<TOP>", "273").replace("<LEFT>", "374").replace("<NUM>", 5);
 			gisMainDiv.append(htmlStr2);
 			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_06").replace("<TOP>", "332").replace("<LEFT>", "374").replace("<NUM>", 6);
 			gisMainDiv.append(htmlStr2);
@@ -360,7 +378,7 @@ define([
 					}
 
 					// 퇴사자 제외
-					if ( user.leave_company != "" ) {
+					if ( user.leave_company != null && user.leave_company != "" ) {
 						continue;
 					}
 
@@ -370,8 +388,20 @@ define([
 					if ( !_.isNull(user.gis_pos) && user.gis_pos.length != 0 ) {
 						var $userPos = $(_this.el).find("#" + user.gis_pos);
 						if (  $userPos.length == 1 ) {
+
 							$userPos.append(htmlTag);
 							$userPos.addClass("added");
+
+							if ( $userPos[0].id == "gis_pos_01" || $userPos[0].id == "gis_pos_02" ||
+						 		 $userPos[0].id.startsWith("gis_pos_3") || $userPos[0].id.startsWith("gis_pos_7") || $userPos[0].id.startsWith("gis_pos_8") ) 
+							{
+								$userPos.find("span").insertAfter( $userPos.find("img") );
+								$userPos.find("img").css("margin-top", "");
+							}else{
+								$userPos.find("img").insertAfter( $userPos.find("span") );
+								$userPos.find("img").css("margin-top", "0px");
+							}
+
 						}else{
 							// exception case
 							if ( SessionModel.getUserInfo().admin == 1 ) {
@@ -384,13 +414,13 @@ define([
 						}
 					}
 				}
+
 				if ( SessionModel.getUserInfo().admin != 1 ) {
 					gis_member_list.remove();
+				}else{
+					// 이벤트 추가
+					_this.addDragEvent();
 				}
-
-				// 이벤트 추가
-				_this.addDragEvent();
-
 			});
 
 			// 저장 버튼 ( 관리자 )

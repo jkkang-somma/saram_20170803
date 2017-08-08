@@ -62,7 +62,7 @@ define([
 	    },{
 			title:"자리배치도",
 			hashTag:"#gis",
-			auth:ADMIN
+			auth:USER
 		},{
 			title:i18Common.MENU.SUB.BM.ORGANIZATION, //조직도
 			hashTag:"#organization",
@@ -116,13 +116,13 @@ define([
                 save:ADMIN
             }
         }]
-		},{
-		title:i18Common.MENU.TOP.RM,//회의실
-        subMenu:[{
-			title:i18Common.MENU.SUB.RM.ROOM_RESERVE, //"회의실 예약",
-            hashTag:"#roomreserve",
-            auth:USER
-        }]
+//		},{
+//		title:i18Common.MENU.TOP.RM,//회의실
+//        subMenu:[{
+//			title:i18Common.MENU.SUB.RM.ROOM_RESERVE, //"회의실 예약",
+//            hashTag:"#roomreserve",
+//            auth:USER
+//        }]
     }];
 	return _menu;
 
