@@ -181,31 +181,36 @@ var Approval = function (data) {
                         
                         /* 유강재 이사님 결재선일 경우(팀장) 사장님, 부사장님 추가 */
                         if(data.manager_id == "160301"){
-                            cc.push({name : "김특훈", address : "thkim@yescnc.co.kr"});
+                            cc.push({name : "김특훈", address : "thkim@yescnc.co.kr", id:"050601"});
                         }
                 
                         // 모든 근태 결재 메일을 임원에게 발송
-                        cc.push({ name :"전영호", address: "yh.jeon@yescnc.co.kr"});
-                        cc.push({ name :"유강재", address: "youkj@yescnc.co.kr"});
-                        cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr"});
+                        cc.push({ name :"이남노", address: "nnlee@yescnc.co.kr", id:"170701"});
+                        cc.push({ name :"전영호", address: "yh.jeon@yescnc.co.kr", id:"150201"});
+                        cc.push({ name :"유강재", address: "youkj@yescnc.co.kr", id:"160301"});
+                        cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});
                         
                         /* 근태 메일 품질검증팀 제외 */
                         if(data.dept_code != "5100" && data.dept_code != "5200"){
                         	// 서울에서 발생한 근태 결재내역은 모든 팀장에게 발송 - 2016.10.18
-                        	cc.push({ name :"박수종", address: "soojong@yescnc.co.kr"});
-		                    cc.push({ name :"윤정관", address: "jkyoon96@yescnc.co.kr"});
-		                    cc.push({ name :"김태중", address: "hhs2tjk@yescnc.co.kr"});
-		                    cc.push({ name :"최치운", address: "cwchoi@yescnc.co.kr"});
+                        	cc.push({ name :"박수종", address: "soojong@yescnc.co.kr", id:"071102"});
+		                    cc.push({ name :"윤정관", address: "jkyoon96@yescnc.co.kr", id:"060601"});
+		                    cc.push({ name :"김태중", address: "hhs2tjk@yescnc.co.kr", id:"070901"});
+		                    cc.push({ name :"최치운", address: "cwchoi@yescnc.co.kr", id:"080802"});
                             for(var idx in result){
                                 if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
-                                    if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company))
-                                        cc.push({name : result[idx].name, address: result[idx].email});
+                                    if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company)) {
+                                       	cc.push({name : result[idx].name, address: result[idx].email, id:result[idx].id});
+									}
                                 }
                             }
                         }
                         _.uniq(cc, function(d) {return d.address});	// 중복 제거
                         
-                        //cc.push({ name :"강정규", address: "jkkang@yescnc.co.kr"});	// 테스트용
+                        // 2017.07.27 김성식 부장님 요청사항 - 결재권자는 제외
+                        cc = _.filter(cc, function(cc_one){return cc_one.id != data.manager_id});
+                        
+                        // cc.push({ name :"강정규", address: "jkkang@yescnc.co.kr", id:"100501"});	// 테스트용
                         
                         var mailOptions= {
                             from: 'webmaster@yescnc.co.kr', // sender address 

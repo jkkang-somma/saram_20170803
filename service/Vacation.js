@@ -96,7 +96,7 @@ var Vacation = function() {
     					continue;
     				}
     				
-    				if (result[i].position_code[0] == 'A' || result[i].position_code[0] == 'B') { // 임원의 경우 제외 
+    				if (result[i].position_code[0] == 'A') { // 임원의 경우 제외  // 2017.08.01 대표이사만 연차 생성하지 않도록 변경 
     					continue;
     				}    				
     				
