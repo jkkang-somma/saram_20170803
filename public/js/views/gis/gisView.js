@@ -159,8 +159,8 @@ define([
 					// 90 ~ 97 : y5
 
 					if ( this.id == "gis_pos_01" || this.id == "gis_pos_02" ||
-						 this.id.indexOf("gis_pos_3") >= 0 || this.id.indexOf("gis_pos_7") >= 0 || 
-						 this.id.indexOf("gis_pos_8") >= 0 ) 
+						 this.id.indexOf("gis_pos_3") >= 0 || this.id.indexOf("gis_pos_4") >= 0 ||
+						 this.id.indexOf("gis_pos_7") >= 0 || this.id.indexOf("gis_pos_8") >= 0 ) 
 					{
 						$(this).find("span").insertAfter( $(this).find("img") );
 						$(this).find("img").css("margin-top", "");
@@ -394,8 +394,8 @@ define([
 							$userPos.addClass("added");
 
 							if ( $userPos[0].id == "gis_pos_01" || $userPos[0].id == "gis_pos_02" ||
-						 		 $userPos[0].id.indexOf("gis_pos_3") >= 0 || $userPos[0].id.indexOf("gis_pos_7") >= 0|| 
-						 		 $userPos[0].id.indexOf("gis_pos_8") >= 0 ) 
+						 		 $userPos[0].id.indexOf("gis_pos_3") >= 0 || $userPos[0].id.indexOf("gis_pos_4") >= 0 || 
+						 		 $userPos[0].id.indexOf("gis_pos_7") >= 0 || $userPos[0].id.indexOf("gis_pos_8") >= 0 ) 
 							{
 								$userPos.find("span").insertAfter( $userPos.find("img") );
 								$userPos.find("img").css("margin-top", "");
