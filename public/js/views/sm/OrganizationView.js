@@ -211,9 +211,23 @@ define([
 					_.each(partCode, function(code) {
 						var datas = userData[code];					
 						if(deptCode == "0000"){
-							_.each(datas, function(data) {							
+							_.each(datas, function(data) {
+							
+								// 직급 우측에 메모 추가 2017.08.09
+								var roleStr = "";
+								if ( data.name == "이남노" ) 
+									roleStr = " (영업/검증 총괄)";
+								else if ( data.name == "전영호")
+									roleStr = " (영업)";
+								else if ( data.name == "유강재")
+									roleStr = " (개발 총괄)";
+								else if ( data.name == "최홍락")
+									roleStr = " (기술연구소장)";
+																
 								target.append('<tr style = "background-color: white;"><td id=tdfont style = "padding-left: 15px; padding-bottom: 15px; padding-top: 15px;">' 
-									+ "<h4 id=printh4><b>" + data.position_name + "</h4></b>" + "<br>" +"<b id=printname>"+ data.name + "</b>"+" (" + data.email.replace("@yescnc.co.kr","") + ")" 
+									+ "<h4 id=printh4><b>" + data.position_name
+									+ '<role style="font-size: 15px;font-weight: normal;">'+roleStr+"</role>" + "</h4></b>"
+									+ "<br>" +"<b id=printname>"+ data.name + "</b>"+" (" + data.email.replace("@yescnc.co.kr","") + ")" 
 									+ "<br>" + data.phone + "(" + data.phone_office + ")" + '</td></tr>');
 							});				
 						} else {
