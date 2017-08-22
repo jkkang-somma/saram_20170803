@@ -27,21 +27,60 @@ define([
 		initialize:function(){
 			this.option = {
 					el:"gis_content", 
-					pos_y1:44,
-					pos_y2:102,
-					pos_y3:205,
-					pos_y4:263,
-					pos_y5:325,
+					pos_y1:47,
+					pos_y2:107,
+					pos_y3:217,
+					pos_y4:277,
+					pos_y5:342,
 
 					draggingIndex : null,
 					moveIndex:-1,
 
 					userCollection:null,
+
+					teamColorList: ["blue", "pink", "yellow", ]
 			};
 		},
 
 		events: {
 			'click #gisSaveBtn' : 'onClickSaveBtn',
+			'click #gis_left' 	: 'onClickGisLeft',
+			'click #gis_right' 	: 'onClickGisRight',
+			"mouseover .userpic" : "over",
+    	    "mouseleave .userpic" : "leave",
+		},
+
+		over:function(event){
+			if ( $(this.el).find("#picdiv").length != 0 )
+				return;
+			
+    	    var id = $(event.currentTarget).data("id");
+    	    var picdiv = $("<div id='picdiv' style='position: absolute; z-index: 1000;border:solid 1px #2ABB9B;padding: 2px; background-color:white'></div>");
+    	    var img = $("<img src='/userpic?file="+id+"' height='140' width='100'>");
+    	    
+    	    var windowHeight = $(window).height();
+    	    var top = event.pageY + 25;
+    	    var left = event.pageX + 5;
+    	    top = windowHeight < top + 180 ? top-190 : top;
+    	    
+    	    picdiv.css("top", top);
+    	    picdiv.css("left", left);
+    	    picdiv.append(img);
+    	    
+    	    $(this.el).append(picdiv);
+    	},
+    	leave:function(){
+    	    $(this.el).find("#picdiv").remove();
+    	},
+
+		onClickGisLeft:function() {
+			$(this.el).find("#gis_main2").hide();
+			$(this.el).find("#gis_main1").show();
+		},
+
+		onClickGisRight:function() {
+			$(this.el).find("#gis_main1").hide();
+			$(this.el).find("#gis_main2").show();
 		},
 
 		onClickSaveBtn:function(){
@@ -162,11 +201,15 @@ define([
 						 this.id.indexOf("gis_pos_3") >= 0 || this.id.indexOf("gis_pos_4") >= 0 ||
 						 this.id.indexOf("gis_pos_7") >= 0 || this.id.indexOf("gis_pos_8") >= 0 ) 
 					{
-						$(this).find("span").insertAfter( $(this).find("img") );
-						$(this).find("img").css("margin-top", "");
+						if ( $(this.children[1]).children().get(0).localName != "img") {
+							$(this).find("span").insertAfter( $(this).find("img") );
+							$(this).find("img").css("margin-top", "");
+						}
 					}else{
-						$(this).find("img").insertAfter( $(this).find("span") );
-						$(this).find("img").css("margin-top", "0px");
+						if ( $(this.children[1]).children().get(0).localName != "span") {
+							$(this).find("img").insertAfter( $(this).find("span") );
+							$(this).find("img").css("margin-top", "0px");
+						}
 					}
 				}
 			});
@@ -257,116 +300,155 @@ define([
 			// 70 ~ 83 : y4
 			// 90 ~ 97 : y5
 
-			var gisMainDiv = $(this.el).find("#gis_main");
+			var gisMainDiv1 = $(this.el).find("#gis_main1");
 			var htmlStr = "<div id='<ID>' class='gis_position' style='top:<TOP>px; left:<LEFT>px;'><div class='num'><NUM></div></div>";
 
 			// 1 : 사장님
-			var htmlStr2 = htmlStr.replace("<ID>", "gis_pos_01").replace("<TOP>", "252").replace("<LEFT>", "65").replace("<NUM>", 1);
-			gisMainDiv.append(htmlStr2);
+			var htmlStr2 = htmlStr.replace("<ID>", "gis_pos_01").replace("<TOP>", "285").replace("<LEFT>", "62").replace("<NUM>", 1);
+			gisMainDiv1.append(htmlStr2);
 
 			// // 2 : 부사장님
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_02").replace("<TOP>", "72").replace("<LEFT>", "65").replace("<NUM>", 2);
-			gisMainDiv.append(htmlStr2);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_02").replace("<TOP>", "93").replace("<LEFT>", "62").replace("<NUM>", 2);
+			gisMainDiv1.append(htmlStr2);
 
 			// // 3 ~ 6 : 관리부
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_03").replace("<TOP>", "208").replace("<LEFT>", "374").replace("<NUM>", 3);
-			gisMainDiv.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_04").replace("<TOP>", "273").replace("<LEFT>", "300").replace("<NUM>", 4);
-			gisMainDiv.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_05").replace("<TOP>", "273").replace("<LEFT>", "374").replace("<NUM>", 5);
-			gisMainDiv.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_06").replace("<TOP>", "332").replace("<LEFT>", "374").replace("<NUM>", 6);
-			gisMainDiv.append(htmlStr2);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_03").replace("<TOP>", "221").replace("<LEFT>", "395").replace("<NUM>", 3);
+			gisMainDiv1.append(htmlStr2);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_04").replace("<TOP>", "291").replace("<LEFT>", "314").replace("<NUM>", 4);
+			gisMainDiv1.append(htmlStr2);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_05").replace("<TOP>", "291").replace("<LEFT>", "387").replace("<NUM>", 5);
+			gisMainDiv1.append(htmlStr2);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_06").replace("<TOP>", "354").replace("<LEFT>", "387").replace("<NUM>", 6);
+			gisMainDiv1.append(htmlStr2);
 
+			var gisMainDiv2 = $(this.el).find("#gis_main2");
 			// 10 ~ 19 : y1 ( 최상단 라인 )
-			var posLeft = 760;
+			var posLeft = 225;
 			for ( var i = 10 ; i <= 13 ; i++ ) {
 				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y1).replace("<LEFT>", posLeft).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);
+				gisMainDiv2.append(htmlStr2);
 				if ( i % 2 == 0 )
-					posLeft += 68;
+					posLeft += 78;
 				else
-					posLeft += 40;
+					posLeft += 47;
 			}
-			posLeft += 26;
+			posLeft += 30;
 			for ( var i = 14 ; i <= 20 ; i++ ) {
 
 				if ( i == 18 ) {
-					posLeft += 38;
+					posLeft += 49;
 					continue;
 				}
 
 				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y1).replace("<LEFT>", posLeft).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);
+				gisMainDiv2.append(htmlStr2);
 				if ( i % 2 == 1 )
-					posLeft += 68;
+					posLeft += 78;
 				else
-					posLeft += 40;
+					posLeft += 47;
 			}
 
 			// 30 ~ 40 : y2
-			posLeft = 760;
+			posLeft = 225;
 			for ( var i = 30 ; i <= 33 ; i++ ) {
-				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y2).replace("<LEFT>", posLeft).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);
+				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y2).replace("<LEFT>", posLeft).replace("<NUM>", i)
+								.replace("gis_position", "gis_position bottom");
+				gisMainDiv2.append(htmlStr2);
 				if ( i % 2 == 0 )
-					posLeft += 68;
+					posLeft += 78;
 				else
-					posLeft += 40;
+					posLeft += 47;
 
 			}
-			posLeft += 26;
+			posLeft += 30;
 			for ( var i = 34 ; i <= 40 ; i++ ) {
-				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y2).replace("<LEFT>", posLeft).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);
+				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y2).replace("<LEFT>", posLeft).replace("<NUM>", i)
+								.replace("gis_position", "gis_position bottom");
+				gisMainDiv2.append(htmlStr2);
 				if ( i % 2 == 1 )
-					posLeft += 68;
+					posLeft += 78;
 				else
-					posLeft += 40;
+					posLeft += 47;
 			}
 
 
 			// 50 ~ 63 : y3
-			posLeft = 610;
+			posLeft = 49;
 			for ( var i = 50 ; i <= 63 ; i++ ) {
+				if ( i == 57 ) {
+					posLeft += 2;
+				}
+
 				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y3).replace("<LEFT>", posLeft).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);
+				gisMainDiv2.append(htmlStr2);
 				if ( i % 2 == 0 )
-					posLeft += 68;
+					posLeft += 80;
 				else
-					posLeft += 40;
+					posLeft += 45;
 			}
 
 
 			// 70 ~ 83 : y4
-			posLeft = 610;
+			posLeft = 49;
 			for ( var i = 70 ; i <= 83 ; i++ ) {
-				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y4).replace("<LEFT>", posLeft).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);
+				if ( i == 77 ) {
+					posLeft += 2;
+				}
+
+				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y4).replace("<LEFT>", posLeft).replace("<NUM>", i)
+								.replace("gis_position", "gis_position bottom");
+				gisMainDiv2.append(htmlStr2);
 				if ( i % 2 == 0 )
-					posLeft += 68;
+					posLeft += 80;
 				else
-					posLeft += 40;
+					posLeft += 45;
 			}
 
 
 			// 90 ~ 97 : y5
 			// 90 91 92 93 94 95 96 97
-			var leftPosList = [610, 718, 822, 934, 1002, 1150, 1258, 1326];
+			var leftPosList = [47, 174, 298, 414, 513, 681, 801, 880];
 			for ( var i = 90 ; i <= 97 ; i++ ) {
 				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y5).replace("<LEFT>", leftPosList[i-90]).replace("<NUM>", i);
-				gisMainDiv.append(htmlStr2);	
-			}			
+
+				if ( i >= 96) {
+					htmlStr2 = htmlStr2.replace("gis_position", "gis_position horizontal");
+				}
+				gisMainDiv2.append(htmlStr2);	
+			}
 
 			// 사원 정보를 지정된 자리에 배치
 			$.when.apply($, promiseArr).then(function(userParam, deptParam){
 				var userList = userParam[0];
 				var deptList = deptParam[0];
+				var existDeptList = [];
 
 				var deptMap = {};
 				for ( var deptIdx = 0 ; deptIdx < deptList.length ; deptIdx++ ) {
 					var dept = deptList[deptIdx];
 					deptMap[dept.code] = dept;
+				}
+
+				for ( var userIdx = 0 ; userIdx < userList.length ; userIdx++ ) {
+					var user = userList[userIdx];
+					if ( deptMap[user.dept_code].area != "서울" ) {
+						continue;
+					}
+
+					// 퇴사자 제외
+					if ( user.leave_company != null && user.leave_company != "" ) {
+						continue;
+					}
+					if ( !_.contains(existDeptList, user.dept_code) ) {
+						existDeptList.push(user.dept_code);
+					}
+				}
+
+				// 부서 소트
+				existDeptList = _.sortBy(existDeptList);
+				var deptDataSet = {};
+				for ( let i = 0 ; i < existDeptList.length ; i++ ) {
+					deptDataSet[existDeptList[i]] = "dept" + i;
 				}
 
 				var gis_member_list = $(_this.el).find("#gis_member_list");
@@ -383,7 +465,12 @@ define([
 						continue;
 					}
 
-					var htmlTag = PersonTemplate.replace("<USER_ID>", user.id).replace("<USER_NAME>", user.name).replace("<PIC_SRC>", "/userpic?file="+user.id);
+					var htmlTag = PersonTemplate.replace("<USER_ID>", user.id)
+									.replace("<USER_NAME>", user.name)
+									.replace("<PIC_SRC>", user.id)
+									.replace("<USER_PHONE>", user.phone_office)
+									.replace("<DEPT_CODE>", deptDataSet[user.dept_code]);
+
 
 					// 자리 배치가 이미 되어 있는 경우 지정된 자리로 설정
 					if ( !_.isNull(user.gis_pos) && user.gis_pos.length != 0 ) {
@@ -416,6 +503,16 @@ define([
 						}
 					}
 				}
+
+				// 부서정보 표기
+				var $deptInfo = $(_this.el).find("#gis_dept_info");
+				var deptHtml = "<div class='<DEPT_CLASS>'><DEPT_NAME></div>";
+				for ( let i = 0 ; i < existDeptList.length ; i++ ) {
+					$deptInfo.append(
+						deptHtml.replace("<DEPT_CLASS>", deptDataSet[existDeptList[i]])
+							.replace("<DEPT_NAME>", deptMap[existDeptList[i]].name )
+					);
+				}	
 
 				if ( SessionModel.getUserInfo().admin != 1 ) {
 					gis_member_list.remove();

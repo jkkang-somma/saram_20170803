@@ -1080,32 +1080,64 @@ border: 2px dotted #2ABB9B !important;
   cursor: hand;
 }
 
-.gis_position {
-  height:60px; width:40px; position:absolute;
+#giscontainer .gis_person {
+  width:45px; height:60px; float:left; text-align: center; padding: 2px; margin-right:10px; padding-top: 5px;
 }
 
-.gis_position .num{
+#giscontainer .gis_person.horizontal{
+  width:55px; height:45px;
+}
+
+#giscontainer .gis_position .num{
   height:0px; width:0px; font-size:8px; opacity: 0.45;
 }
-
-.gis_person {
-  width:40px; height:70px; float:left; text-align: center; padding: 2px;
-}
-
-.gis_person span {
-  font-size: 11px;
+#giscontainer .gis_person span {
+  font-size: 13px;
   font-weight: bold;
   font-family: monospace;
 }
 
-.gis_person img {
+#giscontainer .gis_person img {
   border-radius: 50%; height:50%; width:70%; margin-top: 7px;
 }
 
-#gis_main .gis_position.added {
+#giscontainer .gis_position.added {
 	border: 0px;
 }
 
-.gis_position.added .num {
+#giscontainer .gis_position .num {
   display:none;
+}
+
+#giscontainer .gis_position.bottom .gis_person {
+  padding-top:30px;
+}
+
+#giscontainer #gis_dept_info div {
+  margin: 10px; border-radius: 10px; display: inline; padding: 5px; font-weight: bold;
+}
+
+#giscontainer .dept0 {
+  background-color: rgba(226, 121, 35, 0.5);
+}
+#giscontainer .dept1 {
+  background-color:rgba(146, 205, 220, 0.5);
+}
+#giscontainer .dept2 {
+  background-color:rgba( 72, 115, 215, 0.5);
+}
+#giscontainer .dept3 {
+  background-color:rgba(230, 184, 183, 0.5);
+}
+#giscontainer .dept4 {
+  background-color:rgba(196, 215, 155, 0.5);
+}
+#giscontainer .dept5 {
+  background-color:rgba(177, 160, 199, 0.5);
+}
+#giscontainer .dept6 {
+  background-color:rgba(250, 191, 143, 0.5);
+}
+#giscontainer .dept7 {
+  background-color:rgba( 72, 115, 215, 0.5);
 }
