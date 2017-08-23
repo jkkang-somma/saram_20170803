@@ -19,20 +19,24 @@ define([
     		_.bindAll(this, 'onClick');
     		this.monthpicker_id="monthpicker_"+(monthArr++);
     		this.callBack=option.callBack;
-    		this.el=option.el;
+			this.el=option.el;
     		this.render();
     	},
     	
     	render:function(){
     	    var view=this;
     	    var defaultData=["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
-    	    
-    	    var btn= $("<button class='btn btn-default btn-success'>변경</button>");
-    	    btn.click(function(){
+			var beforeBtn = $("<button id='beforeBtn' class='btn btn-default btn-success'>◀</button>");
+			var afterBtn = $("<button id='afterBtn' class='btn btn-default btn-success'>▶</button>");
+			var btn= $("<button class='btn btn-default btn-success'>변경</button>");
+		   
+			btn.click(function(){
                 view.onClick();  
     	    });
-    	    
-          $(this.el).html(btn);
+			
+			$(this.el).append(beforeBtn);
+			$(this.el).append(afterBtn);
+          	$(this.el).append(btn);
     	    $(".main-container").append("<input type='hidden' id='"+this.monthpicker_id+"'/>");
     	    $("#"+this.monthpicker_id).val(new Date().getFullYear()+"-"+(new Date().getMonth(+1)));
     	    $("#"+this.monthpicker_id).bootstrapMonthpicker({
@@ -47,7 +51,7 @@ define([
      	},
      	onClick:function(){
      	    $("#"+this.monthpicker_id).click();
-     	}
+		}
     });
     return MonthPicker;
 });

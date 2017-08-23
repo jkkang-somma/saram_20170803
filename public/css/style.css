@@ -1088,9 +1088,20 @@ border: 2px dotted #2ABB9B !important;
   width:55px; height:45px;
 }
 
+#giscontainer .gis_position.horizontal .gis_person {
+  width: 64px;
+  height: 46px;
+}
+
 #giscontainer .gis_position .num{
   height:0px; width:0px; font-size:8px; opacity: 0.45;
 }
+
+#giscontainer .gis_position.boss .gis_person {
+  height:80px;
+  padding-top:25px;
+}
+
 #giscontainer .gis_person span {
   font-size: 13px;
   font-weight: bold;
@@ -1099,6 +1110,12 @@ border: 2px dotted #2ABB9B !important;
 
 #giscontainer .gis_person img {
   border-radius: 50%; height:50%; width:70%; margin-top: 7px;
+}
+
+#giscontainer .gis_position {
+	position:absolute;
+  height: 60px;
+  width: 45px;
 }
 
 #giscontainer .gis_position.added {
@@ -1141,3 +1158,146 @@ border: 2px dotted #2ABB9B !important;
 #giscontainer .dept7 {
   background-color:rgba( 72, 115, 215, 0.5);
 }
+
+
+#calendar .calendar-week table{
+    width:100%;
+}
+
+#calendar .calendar-week td{
+    text-align: center;
+    border:1px gray solid;
+    background-color: #34495e;
+    color:white;
+    font-weight: bold;
+}
+
+
+#calendar .calendar-body table{
+    width:100%;
+}
+
+#calendar .calendar-body .cc-header{
+    background-color: rgba(211, 211, 211, 0.46);
+    text-align: center;
+    font-weight: bold;
+}
+
+#calendar .calendar-body td{
+    width:14%;
+    border: 1px gray solid;
+    vertical-align: top; 
+}
+
+#calendar .calendar-body .text{
+    min-height: 30px; 
+    width: calc(50% - 1px);
+    color:white; 
+    /* display: table-cell;
+    vertical-align: middle; */
+    text-align: center;
+    font-size: 15px;
+}
+
+#calendar .calendar-body .text:first-child {
+    float: left;
+}
+
+#calendar .calendar-body .text:last-child {
+    float: left;
+}
+
+#calendar .calendar-body tr td:first-child .cc-header {
+    background-color: rgba(247, 205, 212, 0.46);
+    color: #cc6969;
+}
+
+#calendar .calendar-body tr td:last-child .cc-header {
+    background-color: rgba(135, 206, 235, 0.46);
+    color: #4747f7;
+}
+
+#calendar .calendar-body .text span {
+    display: inline-block;
+    margin-top: 2px;
+}
+
+#calendar .calendar-body .text span{
+	border-radius: 15px;
+	padding:2px 3px; 
+}
+
+#calendar .calendar-body .text .work-normal {
+    background-color:#2ABB9B;
+}
+
+#calendar .calendar-body .text .work-late-leave {
+    /*background-color:#ffafd8;*/
+    background-color:red;
+}
+
+#calendar .calendar-body .text .work-cri {
+    background-color:red;
+}
+
+#calendar .calendar-body .text .overA {
+    background-color:#fcffb0;
+    color: #333;
+}
+
+#calendar .calendar-body .text .overB {
+    background-color:#f2cfa5;
+    color: #333;
+}
+
+#calendar .calendar-body .text .overC {
+    background-color:#ffafd8;
+    color: #333;
+}
+
+#calendar .calendar-body .text .outOffice {    
+    background-color:#caa6fe;
+}
+
+#calendar .calendar-body .text .vacation {
+    background-color: #7fcef5;
+}
+
+
+#calendar .calendar-body .text .attenTime {
+    color : darkviolet;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+
+@media ( min-width: 768px ) and ( max-width: 980px ) {
+	#calendar .calendar-body .text{
+    	font-size: 11px;
+	}
+}
+
+@media ( max-width: 767px ) {
+   #calendar .calendar-body .text {
+       font-size:9px;
+       min-height: 20px;
+       padding: 2px 0px !important;
+   }
+
+   #calendar .calendar-body .text:first-child {
+      float: none;
+      width: calc(100% - 1px);
+      height: 20px;
+      /* border:1px solid black; */
+  }
+
+  #calendar .calendar-body .text:last-child {
+      float: none;
+      
+      width: calc(100% - 1px);
+      height: 20px;
+      /* border:1px solid red; */
+  }
+  
+}
+

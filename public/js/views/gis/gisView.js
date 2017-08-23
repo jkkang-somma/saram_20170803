@@ -31,7 +31,7 @@ define([
 					pos_y2:107,
 					pos_y3:217,
 					pos_y4:277,
-					pos_y5:342,
+					pos_y5:340,
 
 					draggingIndex : null,
 					moveIndex:-1,
@@ -304,21 +304,23 @@ define([
 			var htmlStr = "<div id='<ID>' class='gis_position' style='top:<TOP>px; left:<LEFT>px;'><div class='num'><NUM></div></div>";
 
 			// 1 : 사장님
-			var htmlStr2 = htmlStr.replace("<ID>", "gis_pos_01").replace("<TOP>", "285").replace("<LEFT>", "62").replace("<NUM>", 1);
+			var htmlStr2 = htmlStr.replace("<ID>", "gis_pos_01").replace("<TOP>", "259").replace("<LEFT>", "62").replace("<NUM>", 1);
+			htmlStr2 = htmlStr2.replace("gis_position", "gis_position boss");
 			gisMainDiv1.append(htmlStr2);
 
 			// // 2 : 부사장님
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_02").replace("<TOP>", "93").replace("<LEFT>", "62").replace("<NUM>", 2);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_02").replace("<TOP>", "67").replace("<LEFT>", "62").replace("<NUM>", 2);
+			htmlStr2 = htmlStr2.replace("gis_position", "gis_position boss");
 			gisMainDiv1.append(htmlStr2);
 
 			// // 3 ~ 6 : 관리부
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_03").replace("<TOP>", "221").replace("<LEFT>", "395").replace("<NUM>", 3);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_03").replace("<TOP>", "221").replace("<LEFT>", "376").replace("<NUM>", 3).replace("gis_position", "gis_position horizontal");
 			gisMainDiv1.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_04").replace("<TOP>", "291").replace("<LEFT>", "314").replace("<NUM>", 4);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_04").replace("<TOP>", "291").replace("<LEFT>", "312").replace("<NUM>", 4).replace("gis_position", "gis_position horizontal");
 			gisMainDiv1.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_05").replace("<TOP>", "291").replace("<LEFT>", "387").replace("<NUM>", 5);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_05").replace("<TOP>", "291").replace("<LEFT>", "376").replace("<NUM>", 5).replace("gis_position", "gis_position horizontal");
 			gisMainDiv1.append(htmlStr2);
-			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_06").replace("<TOP>", "354").replace("<LEFT>", "387").replace("<NUM>", 6);
+			htmlStr2 = htmlStr.replace("<ID>", "gis_pos_06").replace("<TOP>", "354").replace("<LEFT>", "376").replace("<NUM>", 6).replace("gis_position", "gis_position horizontal");
 			gisMainDiv1.append(htmlStr2);
 
 			var gisMainDiv2 = $(this.el).find("#gis_main2");
@@ -407,11 +409,11 @@ define([
 
 			// 90 ~ 97 : y5
 			// 90 91 92 93 94 95 96 97
-			var leftPosList = [47, 174, 298, 414, 513, 681, 801, 880];
+			var leftPosList = [31, 170, 294, 407, 507, 676, 801, 880];
 			for ( var i = 90 ; i <= 97 ; i++ ) {
 				htmlStr2 = htmlStr.replace("<ID>", "gis_pos_"+i).replace("<TOP>", this.option.pos_y5).replace("<LEFT>", leftPosList[i-90]).replace("<NUM>", i);
 
-				if ( i >= 96) {
+				if ( i < 96) {
 					htmlStr2 = htmlStr2.replace("gis_position", "gis_position horizontal");
 				}
 				gisMainDiv2.append(htmlStr2);	

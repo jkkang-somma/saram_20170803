@@ -9,9 +9,21 @@ var Dashboard = function () {
     var _getWorkingSummary=function(params){
         return DashboardDao.selectWorkingSummaryById(params);
     };
+
+    var _getCommuteSummary=function(params){
+        console.log(DashboardDao.selectCommuteSummaryById(params));
+        return DashboardDao.selectCommuteSummaryById(params);
+    };
+
+    var _getAttendacne=function(params){
+        console.log(DashboardDao.selectAttendanceById(params));
+        return DashboardDao.selectAttendanceById(params);
+    };
     
     return {
-        getWorkingSummary:_getWorkingSummary
+        getWorkingSummary:_getWorkingSummary,
+        getCommuteSummary:_getCommuteSummary,
+        getAttendacne:_getAttendacne
     }
 }
 module.exports = Dashboard;

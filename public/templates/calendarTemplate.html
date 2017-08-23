@@ -1,0 +1,80 @@
+<div class="calendar-week">
+    <table>
+        <tr>
+            <td>일</td>
+            <td>월</td>
+            <td>화</td>
+            <td>수</td>
+            <td>목</td>
+            <td>금</td>
+            <td>토</td>
+        </tr>
+    </table>
+</div>
+<div class="calendar-body">
+    <table>
+        <% 
+        var day = 0;
+        for (var i=1; i<=row; i++) {    %>
+            <tr>
+        <%  for (var k=1; k<=7; k++) {
+                if(i===1 && k<=theDay || day >= lastDay) {   %>
+                    <td> 
+                        <div class="calendar-content">
+                            <div class="cc-header">
+                                &nbsp;
+                            </div>
+                            <div class="c-content">
+                                <div class="text">
+                                    &nbsp;
+                                </div>
+                                <div class="text">
+                                    &nbsp;
+                                </div>
+                            </div>
+                            <div class="c-content">
+                                <div class="text">
+                                    &nbsp;
+                                </div>
+                                <div class="text">
+                                    &nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+            <%  } else {    %>
+                    <td>
+                        
+                        <div class="calendar-content">
+                            <div class="cc-header">
+                                <%= data[day].days %>
+                            </div>
+                            <div class="c-content">
+                                <div class="text">
+                                    <%= data[day].workType %>
+                                </div>
+                                <div class="text">
+                                    <%= data[day].overTime %>
+                                </div>
+                            </div>
+                            <div class="c-content">
+                                <div class="text">
+                                    <%= data[day].outOffice %>
+                                </div>
+                                <div class="text">
+                                    <%= data[day].vacation %>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+            <%  day++;
+                }
+                
+            }   %>
+            </tr>   
+        <%
+        }
+        %>
+    </table>
+</div>
+

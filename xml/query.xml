@@ -896,6 +896,23 @@
 			WHERE A.id = ?
 			GROUP BY ID
     	</query>
+		<query id="selectCommuteSummaryById">
+			SELECT
+				id, name, date, work_type, vacation_code, out_office_code, overtime_code
+			FROM
+				commute_result_tbl
+			WHERE
+				id = ? AND ( date &gt;= ? AND date &lt;= ? )
+			ORDER BY date
+		</query>
+		<query id="selectAttendanceById">
+			SELECT
+				id, name, char_date, type
+			FROM
+				commute_base_tbl
+			WHERE
+			id = ? AND ( char_date &gt;= ? AND char_date &lt;= ? ) AND type not like "%퇴근%"
+		</query>
     </group>
     
     <group id ="report">

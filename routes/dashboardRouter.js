@@ -25,6 +25,44 @@ router.route('/workingSummary')
         res.send(e);
     });
 });
+
+router.route('/commuteSummary')
+.get(function(req, res){
+    var _dashboard= new Dashboard();
+    var _userId=sessionManager.get(req.cookies.saram).user.id;
+    var params={
+        start:req.query.start,
+        end:req.query.end,
+        userId:_userId
+    };
+
+    _dashboard.getCommuteSummary(params).then(function(result){
+        debug("Complete Select CommuteSummary.");
+        res.send(result);
+    }).catch(function(e){
+        debug("Error Select CommuteSummary.");
+        res.send(e);
+    });
+});
+
+router.route('/attendance')
+.get(function(req, res){
+    var _dashboard= new Dashboard();
+    var _userId=sessionManager.get(req.cookies.saram).user.id;
+    var params={
+        start:req.query.start,
+        end:req.query.end,
+        userId:_userId
+    };
+
+    _dashboard.getAttendacne(params).then(function(result){
+        debug("Complete Select Attendance.");
+        res.send(result);
+    }).catch(function(e){
+        debug("Error Select Attendance.");
+        res.send(e);
+    });
+});
 module.exports = router;
 
 
