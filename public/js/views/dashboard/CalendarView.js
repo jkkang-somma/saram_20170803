@@ -1,6 +1,6 @@
 /**
  * 2017.08.03. ~ 2017.08.25.
- * By Choi Seong Jin
+ * By Choi Seong Jin.
  */
 define([
     'jquery',
