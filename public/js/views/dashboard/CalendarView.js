@@ -1,6 +1,6 @@
 /**
  * 2017.08.03. ~ 2017.08.25.
- * choi..
+ * By Choi Seong Jin
  */
 define([
     'jquery',
@@ -210,7 +210,7 @@ define([
                     }
                 });
                 return result[0];
-            }
+            } 
         },
 
         getCommuteByDay: function (year, month, day) {
