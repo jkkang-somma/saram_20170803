@@ -15,53 +15,83 @@
     <table>
         <% 
         var day = 0;
+        var text = "text";
         for (var i=1; i<=row; i++) {    %>
             <tr>
         <%  for (var k=1; k<=7; k++) {
-                if(i===1 && k<=theDay || day >= lastDay) {   %>
+                if(i===1 && k<=theDay ) {   
+                    text = data[0].exist ? "text" : "text disabled";
+                    %>
                     <td> 
                         <div class="calendar-content">
                             <div class="cc-header">
                                 &nbsp;
                             </div>
                             <div class="c-content">
-                                <div class="text">
+                                <div class="<%=text%>">
                                     &nbsp;
                                 </div>
-                                <div class="text">
+                                <div class="<%=text%>">
                                     &nbsp;
                                 </div>
                             </div>
                             <div class="c-content">
-                                <div class="text">
+                                <div class="<%=text%>">
                                     &nbsp;
                                 </div>
-                                <div class="text">
+                                <div class="<%=text%>">
                                     &nbsp;
                                 </div>
                             </div>
                         </div>
                     </td>
-            <%  } else {    %>
+            <%  } else if(day >= lastDay){ 
+                    text = data[lastDay-1].exist ? "text" : "text disabled";
+                %>
+                    <td> 
+                        <div class="calendar-content">
+                            <div class="cc-header">
+                                &nbsp;
+                            </div>
+                            <div class="c-content">
+                                <div class="<%=text%>">
+                                    &nbsp;
+                                </div>
+                                <div class="<%=text%>">
+                                    &nbsp;
+                                </div>
+                            </div>
+                            <div class="c-content">
+                                <div class="<%=text%>">
+                                    &nbsp;
+                                </div>
+                                <div class="<%=text%>">
+                                    &nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+            <%  }else {  
+                    text = (data[day].exist ? "text" : "text disabled");
+                %>
                     <td>
-                        
                         <div class="calendar-content">
                             <div class="cc-header">
                                 <%= data[day].days %>
                             </div>
                             <div class="c-content">
-                                <div class="text">
+                                <div class="<%=text%>">
                                     <%= data[day].workType %>
                                 </div>
-                                <div class="text">
+                                <div class="<%=text%>">
                                     <%= data[day].overTime %>
                                 </div>
                             </div>
                             <div class="c-content">
-                                <div class="text">
+                                <div class="<%=text%>">
                                     <%= data[day].outOffice %>
                                 </div>
-                                <div class="text">
+                                <div class="<%=text%>">
                                     <%= data[day].vacation %>
                                 </div>
                             </div>

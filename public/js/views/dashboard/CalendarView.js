@@ -84,6 +84,7 @@ define([
             var tmpTime;
             var openTag;
             var closeTag = "</div>";
+            var exist = true;
 
             for (var i = 0; i < lastDay; i++) {
                 tmpDay = i + 1;
@@ -92,13 +93,14 @@ define([
                 outOffice = "";
                 vacation = "";
                 openTag = "";
+                exist = true;
 
                 commuteData = _view.getCommuteByDay(year, month, i);
 
                 if (commuteData.length == 0) {
                     attenData = _view.checkAtten(year, month, i);
                     if (_.isUndefined(attenData)) {
-                        
+                        exist = false;
                     }else{
                         tmpTime = attenData.char_date.split(" ")[1].split(":");
                         workType = "<div class='attenTime'>" + tmpTime[0] + ":" + tmpTime[1] + closeTag;
@@ -170,7 +172,8 @@ define([
                     "workType": workType,
                     "overTime": overTime,
                     "outOffice": outOffice,
-                    "vacation": vacation
+                    "vacation": vacation,
+                    "exist" : exist
                 };
                 data.push(pushData);
             }

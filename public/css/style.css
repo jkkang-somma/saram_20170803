@@ -1311,6 +1311,10 @@ border: 2px dotted #2ABB9B !important;
   padding:3px 0px;
 }
 
-#calendar td .c-content .text{
+/* #calendar td .c-content .text{
   background:gray;
+} */
+
+#calendar td .c-content .disabled{
+    background:gray;
 }
