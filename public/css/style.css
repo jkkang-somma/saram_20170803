@@ -1134,6 +1134,10 @@ border: 2px dotted #2ABB9B !important;
   margin: 10px; border-radius: 10px; display: inline; padding: 5px; font-weight: bold;
 }
 
+#giscontainer #gis_button button {
+  margin:1px; float:right; height: 35px;
+}
+
 #giscontainer .dept0 {
   background-color: rgba(226, 121, 35, 0.5);
 }
@@ -1301,3 +1305,12 @@ border: 2px dotted #2ABB9B !important;
   
 }
 
+#calendar .c-content div div {
+  border-radius:3px;
+  margin:3px;
+  padding:3px 0px;
+}
+
+#calendar td .c-content .text{
+  background:gray;
+}

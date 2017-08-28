@@ -83,7 +83,7 @@ define([
             var tmpDay;
             var tmpTime;
             var openTag;
-            var closeTag = "</span>";
+            var closeTag = "</div>";
 
             for (var i = 0; i < lastDay; i++) {
                 tmpDay = i + 1;
@@ -97,55 +97,64 @@ define([
 
                 if (commuteData.length == 0) {
                     attenData = _view.checkAtten(year, month, i);
-                    if (!_.isUndefined(attenData)) {
+                    if (_.isUndefined(attenData)) {
+                        
+                    }else{
                         tmpTime = attenData.char_date.split(" ")[1].split(":");
-                        workType = "<span class='attenTime'>" + tmpTime[0] + ":" + tmpTime[1] + closeTag;
+                        workType = "<div class='attenTime'>" + tmpTime[0] + ":" + tmpTime[1] + closeTag;
                     }
 
                 } else if (commuteData.length !== 0) {
                     workType = Code.getCodeName(Code.WORKTYPE, commuteData[0].work_type);
                     if (workType !== "휴일") {
                         if (workType === "조퇴" || workType === "지각"  || workType === "지각,조퇴") {
-                            openTag = "<span class='work-late-leave'>";
+                            openTag = "<div class='work-late-leave'>";
                         } else if (workType === "결근" || workType === "결근_미결") {
-                            openTag = "<span class='work-cri'>";
+                            openTag = "<div class='work-cri'>";
                             workType = "결근";
                         } else if (workType === "휴일근무_미결" ) {
                             // no display
                         } else if (workType === "휴일근무" ) {
-                            openTag = "<span class='work-normal holiday'>";
+                            openTag = "<div class='work-normal holiday'>";
                         } else if (workType === "출근기록_없음" ) {
-                            openTag = "<span class='work-cri'>";
+                            openTag = "<div class='work-cri'>";
                             workType = "출근없음";
                         } else if (workType === "퇴근기록_없음" ) {
-                            openTag = "<span class='work-cri'>";
+                            openTag = "<div class='work-cri'>";
                             workType = "퇴근없음";
                         }else{
-                            openTag = "<span class='work-normal'>";
+                            openTag = "<div class='work-normal'>";
                         }
-                        workType = openTag + workType + closeTag;                        
+
+                        if (workType === "정상" ) {
+                            // 정상인 경우 출력하지 않음.
+                            workType="";
+                        }else{
+                            workType = openTag + workType + closeTag;   
+                        }
+                        
                     } else {
-                        workType = "<span class='holiday'></span>";
+                        workType = "<div class='holiday'></div>";
                     }
                     if (commuteData[0].overtime_code != null) {
                         overTime = Code.getCodeName(Code.OVERTIME, commuteData[0].overtime_code);
                         if (overTime.includes("A형")) {
-                            openTag = "<span class='overA'>";
+                            openTag = "<div class='overA'>";
                         } else if (overTime.includes("B형")) {
-                            openTag = "<span class='overB'>";
+                            openTag = "<div class='overB'>";
                         } else {
-                            openTag = "<span class='overC'>";
+                            openTag = "<div class='overC'>";
                         }
                         overTime = openTag + overTime.split("_")[1] + closeTag;
                     }
                     if (commuteData[0].out_office_code != null) {
                         outOffice = Code.getCodeName(Code.OFFICE, commuteData[0].out_office_code);
-                        openTag = "<span class='outOffice'>";
+                        openTag = "<div class='outOffice'>";
                         outOffice = openTag + outOffice + closeTag;
                     }
                     if (commuteData[0].vacation_code != null) {
                         vacation = Code.getCodeName(Code.OFFICE, commuteData[0].vacation_code);
-                        openTag = "<span class='vacation'>";
+                        openTag = "<div class='vacation'>";
                         if (vacation.includes(",") && vacation.includes("(")) {
                             vacation = vacation.replace(/반차/g, "").replace(/휴가/g, "").replace(/ /g, "").replace("(오전)", "").replace("(오후)", "");
                         } else if (vacation.includes(",")) {
