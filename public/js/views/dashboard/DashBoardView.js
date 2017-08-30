@@ -187,7 +187,7 @@ define([
 						}
 					);
 
-					dashboard.append(row);
+					dashboard.find("#list-group").append(row);
 				}, _delay);
 			};
 

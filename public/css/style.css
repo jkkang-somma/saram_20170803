@@ -10,15 +10,15 @@ body {
     margin: 10px;
 }
 .small{
-	font-size: 25px;
-	float:right;
-	margin-right:25px;
+  font-size: 25px;
+  float:right;
+  margin-right:25px;
 }
 .left-padding{
-	text-align: center;
-	padding-left:180px;
-	padding-top:1em;
-	padding-bottom:0.5em;
+  text-align: center;
+  padding-left:180px;
+  padding-top:1em;
+  padding-bottom:0.5em;
 }
 .no-radius{
     border-radius:0px !important;
@@ -95,37 +95,37 @@ form .form-group:last-child {
 }
 
 .TopColor{
-	text-align:center;
-	margin-bottom: 0px; 
-	padding-top: 30px;
-	border-radius: 15px 15px 0px 0px;
+  text-align:center;
+  margin-bottom: 0px; 
+  padding-top: 30px;
+  border-radius: 15px 15px 0px 0px;
     font-weight: bold;
     font-size:28px;
 } 
 
 .TopColor.dept1{ 
-	background: linear-gradient(#777FDC, #9BA0DC);
+  background: linear-gradient(#777FDC, #9BA0DC);
 }
 .TopColor.dept2{ 
-	background: linear-gradient(#37EFFF, #83F5FF)
+  background: linear-gradient(#37EFFF, #83F5FF)
 }
 .TopColor.dept3{ 
-	background: linear-gradient(#26FF9E, #84FFC8);
+  background: linear-gradient(#26FF9E, #84FFC8);
 }
 .TopColor.dept4{ 
-	background: linear-gradient(#2FFF39, #76FF7D);
+  background: linear-gradient(#2FFF39, #76FF7D);
 }
 .TopColor.dept5{ 
-	background: linear-gradient(#FFB23C, #FFCA7A);
+  background: linear-gradient(#FFB23C, #FFCA7A);
 }
 .TopColor.dept6{ 
-	background: linear-gradient(#9B4BE5, #AB6EE3);
+  background: linear-gradient(#9B4BE5, #AB6EE3);
 }
 .TopColor.dept7{ 
-	background: linear-gradient(#FF3636, #FF7E7E);
+  background: linear-gradient(#FF3636, #FF7E7E);
 }
 .TopColor.dept8{ 
-	background: linear-gradient(#4873D7, #4873D7);
+  background: linear-gradient(#4873D7, #4873D7);
 }
 
 .deptColor {
@@ -152,83 +152,83 @@ form .form-group:last-child {
 }
 
 .deptColor.team1 {
-	border-bottom: 1px solid #9BA0DC;
-	background: #9BA0DC;
+  border-bottom: 1px solid #9BA0DC;
+  background: #9BA0DC;
 }
 .deptColor.team1:before {
-	background: #9BA0DC;
-  	border-right: 1px solid #9BA0DC; 
-  	border-bottom: 1px solid #9BA0DC;
+  background: #9BA0DC;
+    border-right: 1px solid #9BA0DC; 
+    border-bottom: 1px solid #9BA0DC;
 }
 
 .deptColor.team2 {
-	border-bottom: 1px solid #83F5FF;
-	background: #83F5FF;
+  border-bottom: 1px solid #83F5FF;
+  background: #83F5FF;
 }
 .deptColor.team2:before {
-	background: #83F5FF;
-  	border-right: 1px solid #83F5FF; 
-  	border-bottom: 1px solid #83F5FF;
+  background: #83F5FF;
+    border-right: 1px solid #83F5FF; 
+    border-bottom: 1px solid #83F5FF;
 }
 
 .deptColor.team3 {
-	border-bottom: 1px solid #84FFC8;
-	background: #84FFC8;
+  border-bottom: 1px solid #84FFC8;
+  background: #84FFC8;
 }
 .deptColor.team3:before {
-	background: #84FFC8;
-  	border-right: 1px solid #84FFC8; 
-  	border-bottom: 1px solid #84FFC8;
+  background: #84FFC8;
+    border-right: 1px solid #84FFC8; 
+    border-bottom: 1px solid #84FFC8;
 }
 
 .deptColor.team4 {
-	border-bottom: 1px solid #76FF7D;
-	background: #76FF7D;
+  border-bottom: 1px solid #76FF7D;
+  background: #76FF7D;
 }
 .deptColor.team4:before {
-	background: #76FF7D;
-  	border-right: 1px solid #76FF7D; 
-  	border-bottom: 1px solid #76FF7D;
+  background: #76FF7D;
+    border-right: 1px solid #76FF7D; 
+    border-bottom: 1px solid #76FF7D;
 }
 
 .deptColor.team5 {
-	border-bottom: 1px solid #FFCA7A;
-	background: #FFCA7A;
+  border-bottom: 1px solid #FFCA7A;
+  background: #FFCA7A;
 }
 .deptColor.team5:before {
-	background: #FFCA7A;
-  	border-right: 1px solid #FFCA7A; 
-  	border-bottom: 1px solid #FFCA7A;
+  background: #FFCA7A;
+    border-right: 1px solid #FFCA7A; 
+    border-bottom: 1px solid #FFCA7A;
 }
 
 .deptColor.team6 {
-	border-bottom: 1px solid #AB6EE3;
-	background: #AB6EE3;
+  border-bottom: 1px solid #AB6EE3;
+  background: #AB6EE3;
 }
 .deptColor.team6:before {
-	background: #AB6EE3;
-  	border-right: 1px solid #AB6EE3; 
-  	border-bottom: 1px solid #AB6EE3;
+  background: #AB6EE3;
+    border-right: 1px solid #AB6EE3; 
+    border-bottom: 1px solid #AB6EE3;
 }
 
 .deptColor.team7 {
-	border-bottom: 1px solid #FF7E7E;
-	background: #FF7E7E;
+  border-bottom: 1px solid #FF7E7E;
+  background: #FF7E7E;
 }
 .deptColor.team7:before {
-	background: #FF7E7E;
-  	border-right: 1px solid #FF7E7E; 
-  	border-bottom: 1px solid #FF7E7E;
+  background: #FF7E7E;
+    border-right: 1px solid #FF7E7E; 
+    border-bottom: 1px solid #FF7E7E;
 }
 
 .deptColor.team8 {
-	border-bottom: 1px solid #4873D7;
-	background: #4873D7;
+  border-bottom: 1px solid #4873D7;
+  background: #4873D7;
 }
 .deptColor.team8:before {
-	background: #4873D7;
-  	border-right: 1px solid #4873D7; 
-  	border-bottom: 1px solid #4873D7;
+  background: #4873D7;
+    border-right: 1px solid #4873D7; 
+    border-bottom: 1px solid #4873D7;
 }
 
 .team-style {
@@ -245,23 +245,23 @@ form .form-group:last-child {
 #printleader{font-size:19px;}
 
 .printdiv {
-	margin-bottom:30px;
+  margin-bottom:30px;
 }
 
 .printdiv table {
-	width:100%;
+  width:100%;
     /*width:277;*/
     box-shadow : 2px 2px 2px #dddddd;    
 }
 
 .printdiv table td {
-	border-bottom : 1px solid #dddddd;
-	border-left : 1px solid #dddddd;
+  border-bottom : 1px solid #dddddd;
+  border-left : 1px solid #dddddd;
 }
 #org_footer{
-    	position: absolute;
-    	top:2600px;
-    	right:0px;
+      position: absolute;
+      top:2600px;
+      right:0px;
 }
 .partTop{
     background-color: white;
@@ -298,18 +298,18 @@ form .form-group:last-child {
     padding-top: 15px;
     font-size:18px;
 }
-@media print{	   
+@media print{    
     html, body {
-    	page-break-after: always;   
-    	width: auto;
-    	height: auto;
+      page-break-after: always;   
+      width: auto;
+      height: auto;
         zoom: 70%;        
         margin:0 auto;
         margin-left:-20px;
         padding:0 auto;   
         }       
     @page {
-    	size :auto;
+      size :auto;
         margin: 0 auto;
         padding: 0 auto;
         border: initial;
@@ -323,9 +323,9 @@ form .form-group:last-child {
     .partCenter{border-left:5px solid grey;border-right:5px solid grey;}
     .partBottom{border-bottom:5px solid grey;border-left:5px solid grey;border-right:5px solid grey;}
     .printdiv{border: 1px solid gray; border-radius: 15px 15px 0px 0px; margin-bottom:2em;}  
-    .deptColor{border:0px solid gray;} 	    
- 	.page-header h2{font-weight: bold; font-size:45px;padding-bottom:1em;}
- 	.small{font-size:25px; margin-right:-25;}
+    .deptColor{border:0px solid gray;}      
+  .page-header h2{font-weight: bold; font-size:45px;padding-bottom:1em;}
+  .small{font-size:25px; margin-right:-25;}
     #ystyle{border-bottom:none;}
     td{font-size:22px;}
     #printleader{font-size:24px;}
@@ -658,101 +658,101 @@ background-color: #e0e0e0;
 }
 /*bootstrap*/
 .navbar.navbar-inverse{
-	border: none;
-	border-radius: 0px;
+  border: none;
+  border-radius: 0px;
 }
 .navbar-inverse .dropdown-menu {
-	border: none;
-	box-shadow: none;
+  border: none;
+  box-shadow: none;
 }
 .navbar-inverse .dropdown-submenu{
-	position: relative;
+  position: relative;
 }
 
 .navbar-inverse .dropdown-submenu .dropdown-menu {
-	display: none;
-	position: absolute;
-	margin-left: 1px;
-	top: -7px;
-	left: 100%;
+  display: none;
+  position: absolute;
+  margin-left: 1px;
+  top: -7px;
+  left: 100%;
 }
 
 .navbar-inverse .dropdown-submenu .caret {
-	border-top-color: #FFFFFF;
-	border-bottom-color: #FFFFFF;
-	-webkit-transform: rotate(270deg);
-	-moz-transform:		 rotate(270deg);
-	-ms-transform:		 rotate(270deg);
-	transform: 				 rotate(270deg);
+  border-top-color: #FFFFFF;
+  border-bottom-color: #FFFFFF;
+  -webkit-transform: rotate(270deg);
+  -moz-transform:    rotate(270deg);
+  -ms-transform:     rotate(270deg);
+  transform:         rotate(270deg);
 }
 
 .navbar-inverse .dropdown-submenu:hover .dropdown-menu {
-	display: block;
+  display: block;
 }
 
 .navbar-inverse .navbar-form,
 .navbar-inverse .input-group-addon,
 .navbar-inverse .form-control {
-	box-shadow: none;
+  box-shadow: none;
 }
 
 .navbar-inverse .input-group {
-	margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .navbar-inverse .btn {
-	transition: border-color .5s, background .5s;
+  transition: border-color .5s, background .5s;
 }
 
 .navbar-inverse .btn,
 .navbar-inverse .btn:hover {
-	border-color: transparent;
+  border-color: transparent;
 }
 
 .navbar-inverse .center {
-	text-align: center;
+  text-align: center;
 }
 /* Inverse navigation bar */
 .navbar-inverse,
 .navbar-inverse .dropdown-menu {
-	background: #34495E;
+  background: #34495E;
 }
 
 .navbar-inverse .navbar-right .dropdown-menu{
-	background: #E4E4E8;
+  background: #E4E4E8;
 }
 
 .navbar-inverse .navbar-brand {
     color:#29BB9B;
-	transition: color .5s;
-	width: 120px;
-	height: 49px;
-	margin-left: 10px;
-	margin-top: 3px;
-	background: url('img/yes_logo_white.png') no-repeat center center;
+  transition: color .5s;
+  width: 120px;
+  height: 49px;
+  margin-left: 10px;
+  margin-top: 3px;
+  background: url('img/yes_logo_white.png') no-repeat center center;
 }
 
 .navbar-inverse .navbar-brand:hover {
-	color: #00CFAF;
+  color: #00CFAF;
 }
 
 .navbar-inverse .navbar-nav>li>a,
 .navbar-inverse .navbar-nav .dropdown-menu>li>a,
 .navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
-	color: #FFFFFF;
-	transition: background .25s, color .5s;
+  color: #FFFFFF;
+  transition: background .25s, color .5s;
 }
 
 .navbar-inverse .navbar-nav>li>a:hover,
 .navbar-inverse .navbar-nav>li>a:focus {
-	color: #00CFAF;
+  color: #00CFAF;
 }
 
 .navbar-inverse .navbar-nav>.active>a, 
 .navbar-inverse .navbar-nav>.open>a {
-	color: #FFFFFF;
-	background: #00CFAF;
-	transition: background .5s;
+  color: #FFFFFF;
+  background: #00CFAF;
+  transition: background .5s;
 }
 
 .navbar-inverse .navbar-nav>.active>a:hover, 
@@ -763,8 +763,8 @@ background-color: #e0e0e0;
 .navbar-inverse .navbar-nav>.open>a:focus,
 .navbar-inverse .navbar-nav .dropdown-menu>li>a:focus,
 .navbar-inverse .navbar-nav .open .dropdown-menu>li>a:focus {
-	color: #FFFFFF;
-	background: #00CFAF;
+  color: #FFFFFF;
+  background: #00CFAF;
 }
 
 .navbar-inverse .dropdown-header,
@@ -772,81 +772,81 @@ background-color: #e0e0e0;
 .navbar-inverse .navbar-nav .open .dropdown-menu>.disabled>a,
 .navbar-inverse .navbar-nav .dropdown-menu>.disabled>a:hover,
 .navbar-inverse .navbar-nav .open .dropdown-menu>.disabled>a:hover {
-	color: #6F7982;
+  color: #6F7982;
 }
 
 .navbar-inverse .divider {
-	background-color: #6F7982;
+  background-color: #6F7982;
 }
 
 .navbar-inverse .btn {
-	border-color: #00CFAF;
-	background: #00CFAF;
-	color: #FFFFFF;
+  border-color: #00CFAF;
+  background: #00CFAF;
+  color: #FFFFFF;
 }
 
 .navbar-inverse .btn:hover {
-	border-color: #00D9C0;
-	background: #00D9C0;
-	color: #FFFFFF;
+  border-color: #00D9C0;
+  background: #00D9C0;
+  color: #FFFFFF;
 }
 
 .navbar-inverse .btn:focus {
-	box-shadow: none;
-	outline: none;
-	border-color: #00B599;
-	background: #00B599;
-	color: #FFFFFF;
+  box-shadow: none;
+  outline: none;
+  border-color: #00B599;
+  background: #00B599;
+  color: #FFFFFF;
 }
 
 .navbar-inverse .navbar-nav>.dropdown a .caret,
 .navbar-inverse .navbar-nav>.open>a .caret {
-	border-top-color: #FFFFFF;
-	border-bottom-color: #FFFFFF;
-	transition: border-color .5s;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #FFFFFF;
+  transition: border-color .5s;
 }
 
 .navbar-inverse .navbar-nav>.dropdown>a:hover .caret,
 .navbar-inverse .navbar-nav>.dropdown>a:focus .caret {
-	border-top-color: #00CFAF;
-	border-bottom-color: #00CFAF;
+  border-top-color: #00CFAF;
+  border-bottom-color: #00CFAF;
 }
 
 .navbar-inverse .navbar-nav>.open>a:hover .caret,
 .navbar-inverse .navbar-nav>.open>a:focus .caret {
-	border-top-color: #FFFFFF;
-	border-bottom-color: #FFFFFF;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #FFFFFF;
 }
 
 .navbar-inverse .badge{
-	border-radius: 4px;
-	background: #00CFAF;
+  border-radius: 4px;
+  background: #00CFAF;
 }
 
 .navbar-inverse .input-group-addon {
-	background: #FFFFFF;
-	color: #00CFAF;
+  background: #FFFFFF;
+  color: #00CFAF;
 }
 
 .navbar-inverse .form-control:focus {
-	border: 1px solid #00CFAF;
-	box-shadow: none;
+  border: 1px solid #00CFAF;
+  box-shadow: none;
 }
 
 .navbar-inverse .navbar-toggle,
 .navbar-inverse .navbar-toggle:hover, 
 .navbar-inverse .navbar-toggle:focus {
-	outline: none;
-	background-color: #00CFAF;
-	border-color: #00CFAF;
+  outline: none;
+  background-color: #00CFAF;
+  border-color: #00CFAF;
 }
 
 .navbar-inverse .navbar-toggle .icon-bar {
-	background-color: #FFFFFF;
+  background-color: #FFFFFF;
 }
 
 .navbar-inverse .navbar-collapse {
-	border-color: #00CFAF;
+  border-color: #00CFAF;
 }
 .navbar-brand{
     font-family:"Audiowide";
@@ -1002,8 +1002,8 @@ border: 2px dotted #2ABB9B !important;
 }
 
 .mp-content li:hover, .mp-content li.active {
-	background: rgb(240, 255, 248) !important;
-	border: 2px dotted #2ABB9B !important;
+  background: rgb(240, 255, 248) !important;
+  border: 2px dotted #2ABB9B !important;
 }
 
 .spinIcon{
@@ -1081,7 +1081,14 @@ border: 2px dotted #2ABB9B !important;
 }
 
 #giscontainer .gis_person {
-  width:45px; height:60px; float:left; text-align: center; padding: 2px; margin-right:10px; padding-top: 5px;
+  width:45px; 
+  height:60px; 
+  float:left; 
+  text-align: center; 
+  padding: 2px; 
+  margin-right:10px; 
+  padding-top: 5px; 
+  border-radius: 2px;
 }
 
 #giscontainer .gis_person.horizontal{
@@ -1105,7 +1112,7 @@ border: 2px dotted #2ABB9B !important;
 #giscontainer .gis_person span {
   font-size: 13px;
   font-weight: bold;
-  font-family: monospace;
+  font-family: '맑은 고딕', 'monospace';
 }
 
 #giscontainer .gis_person img {
@@ -1113,13 +1120,13 @@ border: 2px dotted #2ABB9B !important;
 }
 
 #giscontainer .gis_position {
-	position:absolute;
+  position:absolute;
   height: 60px;
   width: 45px;
 }
 
 #giscontainer .gis_position.added {
-	border: 0px;
+  border: 0px;
 }
 
 #giscontainer .gis_position .num {
@@ -1131,7 +1138,13 @@ border: 2px dotted #2ABB9B !important;
 }
 
 #giscontainer #gis_dept_info div {
-  margin: 10px; border-radius: 10px; display: inline; padding: 5px; font-weight: bold;
+  margin: 10px; 
+  border-radius: 10px; 
+  display: inline-block; 
+  padding: 5px; 
+  font-weight: bold;
+  width: 130px;
+  text-align: center;
 }
 
 #giscontainer #gis_button button {
@@ -1164,11 +1177,11 @@ border: 2px dotted #2ABB9B !important;
 }
 
 
-#calendar .calendar-week table{
+#dashboard_main .calendar-week table{
     width:100%;
 }
 
-#calendar .calendar-week td{
+#dashboard_main .calendar-week td{
     text-align: center;
     border:1px gray solid;
     background-color: #34495e;
@@ -1177,23 +1190,25 @@ border: 2px dotted #2ABB9B !important;
 }
 
 
-#calendar .calendar-body table{
+#dashboard_main .calendar-body table{
     width:100%;
 }
 
-#calendar .calendar-body .cc-header{
+#dashboard_main .calendar-body .cc-header{
     background-color: rgba(211, 211, 211, 0.46);
     text-align: center;
     font-weight: bold;
+    text-align: left;
+    text-indent: 5px;
 }
 
-#calendar .calendar-body td{
+#dashboard_main .calendar-body td{
     width:14%;
     border: 1px gray solid;
     vertical-align: top; 
 }
 
-#calendar .calendar-body .text{
+#dashboard_main .calendar-body .text{
     min-height: 30px; 
     width: calc(50% - 1px);
     color:white; 
@@ -1203,99 +1218,112 @@ border: 2px dotted #2ABB9B !important;
     font-size: 15px;
 }
 
-#calendar .calendar-body .text:first-child {
+#dashboard_main .calendar-body .text:first-child {
     float: left;
 }
 
-#calendar .calendar-body .text:last-child {
+#dashboard_main .calendar-body .text:last-child {
     float: left;
 }
 
-#calendar .calendar-body tr td:first-child .cc-header {
+#dashboard_main .calendar-body tr td:first-child .cc-header {
     background-color: rgba(247, 205, 212, 0.46);
     color: #cc6969;
 }
 
-#calendar .calendar-body tr td:last-child .cc-header {
+#dashboard_main .calendar-body tr td:last-child .cc-header {
     background-color: rgba(135, 206, 235, 0.46);
     color: #4747f7;
 }
 
-#calendar .calendar-body .text span {
+#dashboard_main .calendar-body .text span {
     display: inline-block;
     margin-top: 2px;
 }
 
-#calendar .calendar-body .text span{
-	border-radius: 15px;
-	padding:2px 3px; 
+#dashboard_main .calendar-body .text span{
+  border-radius: 15px;
+  padding:2px 3px; 
 }
 
-#calendar .calendar-body .text .work-normal {
+#dashboard_main .calendar-body .text .work-normal {
     background-color:#2ABB9B;
 }
 
-#calendar .calendar-body .text .work-late-leave {
+#dashboard_main .calendar-body .text .work-late-leave {
     /*background-color:#ffafd8;*/
     background-color:red;
 }
 
-#calendar .calendar-body .text .work-cri {
+#dashboard_main .calendar-body .text .work-cri {
     background-color:red;
 }
 
-#calendar .calendar-body .text .overA {
-    background-color:#fcffb0;
+#dashboard_main .calendar-body .text .overA {
+    background-color:yellow;
     color: #333;
 }
 
-#calendar .calendar-body .text .overB {
+#dashboard_main .calendar-body .text .overB {
     background-color:#f2cfa5;
     color: #333;
 }
 
-#calendar .calendar-body .text .overC {
+#dashboard_main .calendar-body .text .overC {
     background-color:#ffafd8;
     color: #333;
 }
 
-#calendar .calendar-body .text .outOffice {    
+#dashboard_main .calendar-body .text .outOffice {    
     background-color:#caa6fe;
 }
 
-#calendar .calendar-body .text .vacation {
+#dashboard_main .calendar-body .text .vacation {
     background-color: #7fcef5;
 }
 
 
-#calendar .calendar-body .text .attenTime {
+#dashboard_main .calendar-body .text .attenTime {
     color : darkviolet;
     font-style: oblique;
     font-weight: bold;
 }
 
-
-@media ( min-width: 768px ) and ( max-width: 980px ) {
-	#calendar .calendar-body .text{
-    	font-size: 11px;
-	}
+#dashboard_main td .c-content .disabled{
+    background:lightgray;
 }
 
-@media ( max-width: 767px ) {
-   #calendar .calendar-body .text {
+#dashboard_main .c-content div div {
+    border-radius:3px;
+    margin:3px;
+    padding:3px 0px;
+}
+
+#dashboard_main .calendar_left {
+    width : calc(100% - 200px);
+    margin-top: 10px;
+    float: left;
+  }
+
+  #dashboard_main .calendar_right {
+    width : 190px;
+    float:right;
+  }
+
+@media ( max-width: 1250px ) {
+   #dashboard_main .calendar-body .text {
        font-size:9px;
        min-height: 20px;
        padding: 2px 0px !important;
    }
-
-   #calendar .calendar-body .text:first-child {
+   #dashboard_main .calendar-body .text:first-child {
       float: none;
       width: calc(100% - 1px);
       height: 20px;
       /* border:1px solid black; */
   }
 
-  #calendar .calendar-body .text:last-child {
+  #dashboard_main .calendar-body .text:last-child {
       float: none;
       
       width: calc(100% - 1px);
@@ -1303,18 +1331,19 @@ border: 2px dotted #2ABB9B !important;
       /* border:1px solid red; */
   }
   
-}
+  #dashboard_main .c-content div div {
+    border-radius:3px;
+    margin:3px 0px;
+    padding:3px 0px;
+  }
 
-#calendar .c-content div div {
-  border-radius:3px;
-  margin:3px;
-  padding:3px 0px;
-}
+  #dashboard_main .calendar_left {
+    width : 100%;
+    margin-top: 10px;
+  }
 
-/* #calendar td .c-content .text{
-  background:gray;
-} */
-
-#calendar td .c-content .disabled{
-    background:gray;
+  #dashboard_main .calendar_right {
+    width : 100%;
+    margin-top:10px;
+  }
 }

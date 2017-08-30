@@ -8,6 +8,7 @@ define([
         'i18n!nls/common',
         'models/sm/SessionModel',
         'dialog',
+        'html2canvas',
 
         'text!templates/default/head.html',
         'text!templates/gis/gisView.html',
@@ -17,7 +18,7 @@ define([
         'collection/sm/UserCollection',
         'collection/sm/DepartmentCollection'
         ], function(
-        		$, jui, _, Backbone, BaseView, Schemas, i18Common, SessionModel, Dialog,
+        		$, jui, _, Backbone, BaseView, Schemas, i18Common, SessionModel, Dialog, html2canvas,
         		HeadHTML, ContentHTML, LayoutHTML, PersonTemplate,
         		UserCollection, DepartmentCollection
         )
@@ -48,8 +49,26 @@ define([
 			'click #gis_right' 	: 'onClickGisRight',
 			"mouseover .userpic" : "over",
     	    "mouseleave .userpic" : "leave",
+    	    'click #gisPrintBtn' : 'onPrint',
 		},
 
+		onPrint:function() {
+
+			var win = window.open("", "", "width=1200, height=700, toolbar=no, scrollbars=yes");
+			win.document.write("<body> <div id='canvas_div' style='margin-top: 70px;'></body>");
+
+			var _this = this;
+			$(_this.el).find("#giscontainer .gis_position.bottom .gis_person").css("padding-top", "20px");
+
+			html2canvas($(this.el).find("#gis_print_div"), {
+				onrendered: function(canvas) {
+					$(_this.el).find("#giscontainer .gis_position.bottom .gis_person").css("padding-top", "30px");
+					//document.body.appendChild(canvas);
+					win.document.getElementById("canvas_div").append(canvas);
+					win.print();
+				}
+			});
+		},
 		over:function(event){
 			if ( $(this.el).find("#picdiv").length != 0 )
 				return;
@@ -278,8 +297,8 @@ define([
 			_head.addClass("relative-layout"); 		 
 			$(_head).find("small").addClass("small");			  					
 			var _content=$(ContentHTML).attr("id", this.option.el);		
-			_layOut.append(_head);
 			_layOut.append(_content);
+			$(_content).find("#gis_title").append(_head);
 			$(this.el).html(_layOut);
 
 			var promiseArr = [];
@@ -338,7 +357,7 @@ define([
 			for ( var i = 14 ; i <= 20 ; i++ ) {
 
 				if ( i == 18 ) {
-					posLeft += 49;
+					posLeft += 47;
 					continue;
 				}
 
@@ -449,7 +468,7 @@ define([
 				// 부서 소트
 				existDeptList = _.sortBy(existDeptList);
 				var deptDataSet = {};
-				for ( let i = 0 ; i < existDeptList.length ; i++ ) {
+				for ( var i = 0 ; i < existDeptList.length ; i++ ) {
 					deptDataSet[existDeptList[i]] = "dept" + i;
 				}
 
@@ -509,7 +528,7 @@ define([
 				// 부서정보 표기
 				var $deptInfo = $(_this.el).find("#gis_dept_info");
 				var deptHtml = "<div class='<DEPT_CLASS>'><DEPT_NAME></div>";
-				for ( let i = 0 ; i < existDeptList.length ; i++ ) {
+				for ( var i = 0 ; i < existDeptList.length ; i++ ) {
 					$deptInfo.append(
 						deptHtml.replace("<DEPT_CLASS>", deptDataSet[existDeptList[i]])
 							.replace("<DEPT_NAME>", deptMap[existDeptList[i]].name )
@@ -527,6 +546,7 @@ define([
 			// 저장 버튼 ( 관리자 )
 			if ( SessionModel.getUserInfo().admin != 1 ) {
 				$(_this.el).find("#gisSaveBtn").remove();
+				//$(_this.el).find("#gisPrintBtn").remove();
 			}
 		}
 	});

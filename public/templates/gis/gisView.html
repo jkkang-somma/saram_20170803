@@ -1,14 +1,15 @@
 <div class="content" id="gis_content" style='width:1100px; margin: auto;'>
-	<div id='gis_member_list' style='border:1px solid; height:150px; overflow-y:auto;'></div>
-	<div id='gis_nav' style='height: 30px; width:100%;'>
-		<button type="button" id="gis_right" class="btn btn-default btn-success" style="float:right;"><span class="glyphicon glyphicon-chevron-right"></span></button>
-		<button type="button" id="gis_left"  class="btn btn-default btn-success" style="float:right; margin-right:1px;"><span class="glyphicon glyphicon-chevron-left"></span></button>
+	<div id="gis_print_div">
+		<div id='gis_title' ></div>
+		<div id='gis_main1' style='height:430px; width: 1100px; background:url(templates/gis/office_1.png) no-repeat; background-size: 55%;  position: relative; display:none;'></div>
+		<div id='gis_main2' style='height:430px; width: 1100px; background:url(templates/gis/office_2.png) no-repeat; background-size: 100%; position: relative; display:block;'></div>
+		<div id='gis_dept_info' style='height:40px; width: 100%; margin-top:10px'></div>
 	</div>
-	<div id='gis_main1' style='height:430px; width: 1100px; background:url(templates/gis/office_1.png) no-repeat; background-size: 55%;  position: relative; display:none;'></div>
-	<div id='gis_main2' style='height:430px; width: 1100px; background:url(templates/gis/office_2.png) no-repeat; background-size: 100%; position: relative; display:block;'></div>
-	<div id='gis_dept_info' style='height:40px; width: 100%; margin-top:10px'></div>
-
+	<div id='gis_member_list' style='border:1px solid; height:150px; overflow-y:auto;'></div>
 	<div id='gis_button' style>
-		<button class="btn btn-default btn-success" id="gisSaveBtn" style="float: right;">저장</button>
+		<button class="btn btn-default btn-success" id="gisSaveBtn">저장</button>
+		<button class="btn btn-default btn-success" id="gisPrintBtn">출력</button>
+		<button type="button" id="gis_right" class="btn btn-default btn-success" ><span class="glyphicon glyphicon-chevron-right"></span></button>
+		<button type="button" id="gis_left"  class="btn btn-default btn-success" ><span class="glyphicon glyphicon-chevron-left"></span></button>
 	</div>
 </div>

@@ -44,6 +44,7 @@ require.config({
       'bootstrap-datetimepicker' : 'tool/bootstrap-datetimepicker/bootstrap-datetimepicker.min',
       'datatables':'tool/datatables/media/js/jquery.dataTables',
       //'fnFindCellRowIndexes':'tool/datatables/media/js/fnFindCellRowIndexes', DataTable 플러그인 작동안됨 --;
+      'html2canvas' : 'tool/html2canvas/html2canvas',
       
       jqFileDownload: 'tool/jquery.fileDownload',
       jqFileUpload : 'tool/jquery.fileupload',

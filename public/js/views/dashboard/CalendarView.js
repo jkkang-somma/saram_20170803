@@ -140,9 +140,9 @@ define([
                     }
                     if (commuteData[0].overtime_code != null) {
                         overTime = Code.getCodeName(Code.OVERTIME, commuteData[0].overtime_code);
-                        if (overTime.includes("A형")) {
+                        if (overTime.indexOf("A형")>=0) {
                             openTag = "<div class='overA'>";
-                        } else if (overTime.includes("B형")) {
+                        } else if (overTime.indexOf("B형")>=0) {
                             openTag = "<div class='overB'>";
                         } else {
                             openTag = "<div class='overC'>";
@@ -157,11 +157,11 @@ define([
                     if (commuteData[0].vacation_code != null) {
                         vacation = Code.getCodeName(Code.OFFICE, commuteData[0].vacation_code);
                         openTag = "<div class='vacation'>";
-                        if (vacation.includes(",") && vacation.includes("(")) {
+                        if (vacation.indexOf(",")>=0 && vacation.indexOf("(")>=0) {
                             vacation = vacation.replace(/반차/g, "").replace(/휴가/g, "").replace(/ /g, "").replace("(오전)", "").replace("(오후)", "");
-                        } else if (vacation.includes(",")) {
+                        } else if (vacation.indexOf(",")>=0) {
                             vacation = vacation.replace(/ /g, "").replace(/반차/g, "").replace(/휴가/g, "");
-                        } else if (vacation.includes("(")) {
+                        } else if (vacation.indexOf("(")>=0) {
                             vacation = vacation.replace("휴가", "").replace("(", "").replace(")", "");
                         }
                         vacation = openTag + vacation + closeTag;
