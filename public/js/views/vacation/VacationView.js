@@ -100,30 +100,41 @@ define([
         		    column:[
              	            { data : "year", 			"title" : "년" },
              	            { data : "dept_name", 		"title" : "부서" },
-                            { data : "name", 			"title" : "이름"},
-                            { data : "total_day", 		"title" : "연차 휴가" },
-                            { data : "used_holiday", 	"title" : "사용 일수",
-                            	render: function(data, type, full, meta){
-									var obj = {
-										id : full.id,
-										year : full.year,
-										name: full.name,
-										used_holiday : full.used_holiday
-									};
-									var tpl = _.template(vacationListTemplate)(obj);
-									return tpl;
-                            	}
-                            },
-                            { data : "holiday", 		"title" : "휴가 잔여 일수"},
-                            { data : "memo", 			"title" : "Memo",
-      			        	   render: function(data, type, full, meta) {
-     			        		   var memo = full.memo; 
-     			        		   if (memo.length > 10) {
-     			        			  memo = memo.substring(0, 10) + "...";
-     			        		   }
-     			        		   return memo;
-     			        	   }
+                          { data : "name", 			"title" : "이름"},
+                          { data : "total_day", 		"title" : "연차 휴가" },
+                          { data : "used_holiday", 	"title" : "사용 일수",
+                            render: function(data, type, full, meta){
+                              var obj = {
+										            id : full.id,
+										            year : full.year,
+										            name: full.name,
+										            used_holiday : full.used_holiday
+                              };
+                              var tpl = _.template(vacationListTemplate)(obj);
+                              return tpl;
                             }
+                          },
+                          { data : "holiday", 		"title" : "휴가 잔여 일수"},
+                          { data : "memo", 			"title" : "Memo",
+                            render: function(data, type, full, meta) {
+                              var LEN_PER_LINE = 25;
+                              var memo = full.memo; 
+                              var len = memo.length;
+                              var line = len / LEN_PER_LINE;
+                              if ( line == 1 ) {
+                                  return memo;
+                              }else{
+                                  var output_str = "";
+                                  for ( var i = 0 ; i <= line+1 ; i++ ){
+                                      if ( i != 0 ) {
+                                          output_str = output_str + "<BR>";
+                                      }
+                                      output_str = output_str + memo.substr(i*LEN_PER_LINE, LEN_PER_LINE);
+                                  }
+                              }
+                              return output_str;
+                            }
+                          }
              	        ],
              	    dataschema:["year", "dept_name", "name", "total_day", "used_holiday", "holiday", "memo"],
         		    collection:this.vacationCollection,

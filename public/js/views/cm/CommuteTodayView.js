@@ -40,12 +40,23 @@ define([
      	                   	{ data : "end_time", 		"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.END_TIME },
      	                   	{ data : "memo", 			"title" : i18nCommon.COMMUTE_TODAY_LIST.GRID_COL_NAME.MEMO, 
                                render: function(data, type, full, meta) {
-                                       var memo = full.memo; 
-                                       if (memo.length > 16) {
-                                          memo = memo.substring(0, 16) + "...";
-                                       }
-                                       return memo;
-                                   }},
+                                        var LEN_PER_LINE = 25;
+                                        var memo = full.memo; 
+                                        var len = memo.length;
+                                        var line = len / LEN_PER_LINE;
+                                        if ( line == 1 ) {
+                                            return memo;
+                                        }else{
+                                            var output_str = "";
+                                            for ( var i = 0 ; i <= line+1 ; i++ ){
+                                                if ( i != 0 ) {
+                                                    output_str = output_str + "<BR>";
+                                                }
+                                                output_str = output_str + memo.substr(i*LEN_PER_LINE, LEN_PER_LINE);
+                                            }
+                                        }
+                                        return output_str;
+                                    }},
              	        ],
              	    rowCallback: function(row, data){
              	    	if(data.approval_ok == '상신' || data.approval_ok == '취소요청'){ // 미결
@@ -53,6 +64,8 @@ define([
              	    	}else{
              	    	    $(row).removeClass("absentce");
              	    	}
+                        // 툴팁 추가
+                        // $($(row).find("td")[7]).attr("title", data.memo);
              	    },
         		    collection:this.commuteTodayCollection,
         		    dataschema:["id", "date", "name", "dept_name", "out_office_name", "start_time", "end_time", "memo"],
