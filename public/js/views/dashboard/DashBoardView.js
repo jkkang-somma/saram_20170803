@@ -50,7 +50,7 @@ define([
 
 
 			var _startDate = Moment().startOf('month').format("YYYY-MM-DD");
-			var _endDate = Moment().endOf('month').format("YYYY-MM-DD");
+			var _endDate = Moment().endOf('month').format("YYYY-MM-DD HH:mm:ss");
 			var _searchParams = {
 				start: _startDate,
 				end: _endDate
@@ -84,7 +84,7 @@ define([
 				if (workingSummary.length == 0) {// 조회내역이 없을때
 					if (_firstInitialize && code != '0000') {
 						var _startDate = Moment().add(-1, 'month').startOf('month').format("YYYY-MM-DD");
-						var _endDate = Moment().add(-1, 'month').endOf('month').format("YYYY-MM-DD");
+						var _endDate = Moment().add(-1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 						var _searchParams = {
 							start: _startDate,
 							end: _endDate
@@ -213,7 +213,7 @@ define([
 				el: ".btn-group",
 				callBack: function (value) {
 					var _startDate = Moment(value, "YYYY-MM").startOf('month').format("YYYY-MM-DD");
-					var _endDate = Moment(value, "YYYY-MM").endOf('month').format("YYYY-MM-DD");
+					var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").endOf('month').format("YYYY-MM-DD HH:mm:ss");
 					var _searchParams = {
 						start: _startDate,
 						end: _endDate
@@ -232,7 +232,7 @@ define([
 			this.preBtn.on('click', function () {
 				var value = _view.searchParams.start;
 				var _startDate = Moment(value, "YYYY-MM-DD").add(-1, 'month').startOf('month').format("YYYY-MM-DD");
-				var _endDate = Moment(value, "YYYY-MM-DD").add(-1, 'month').endOf('month').format("YYYY-MM-DD");
+				var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(-1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 				var _searchParams = {
 					start: _startDate,
 					end: _endDate
@@ -244,7 +244,7 @@ define([
 			this.afterBtn.on('click', function () {
 				var value = _view.searchParams.start;
 				var _startDate = Moment(value, "YYYY-MM-DD").add(1, 'month').startOf('month').format("YYYY-MM-DD");
-				var _endDate = Moment(value, "YYYY-MM-DD").add(1, 'month').endOf('month').format("YYYY-MM-DD");
+				var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 				var _searchParams = {
 					start: _startDate,
 					end: _endDate
