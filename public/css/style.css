@@ -1195,7 +1195,7 @@ border: 2px dotted #2ABB9B !important;
 }
 
 #dashboard_main .calendar-body .cc-header{
-    background-color: rgba(211, 211, 211, 0.46);
+/*    background-color: rgba(211, 211, 211, 0.46);*/
     text-align: center;
     font-weight: bold;
     text-align: left;
@@ -1204,7 +1204,7 @@ border: 2px dotted #2ABB9B !important;
 
 #dashboard_main .calendar-body td{
     width:14%;
-    border: 1px gray solid;
+    border: 1px rgb(226,232,234) solid;
     vertical-align: top; 
 }
 
@@ -1227,13 +1227,13 @@ border: 2px dotted #2ABB9B !important;
 }
 
 #dashboard_main .calendar-body tr td:first-child .cc-header {
-    background-color: rgba(247, 205, 212, 0.46);
-    color: #cc6969;
+    /*background-color: rgba(247, 205, 212, 0.46);*/
+    /*color: #cc6969;*/
 }
 
 #dashboard_main .calendar-body tr td:last-child .cc-header {
-    background-color: rgba(135, 206, 235, 0.46);
-    color: #4747f7;
+/*    background-color: rgba(135, 206, 235, 0.46);*/
+/*    color: #4747f7;*/
 }
 
 #dashboard_main .calendar-body .text span {
@@ -1346,4 +1346,22 @@ border: 2px dotted #2ABB9B !important;
     width : 100%;
     margin-top:10px;
   }
+}
+
+#dashboard_main table tbody tr td {
+  background:white;
+}
+
+#dashboard_main table tbody tr td.disabled {
+  background:lightgray;
+}
+
+#dashboard_main table tbody tr td.holiday {
+  color: rgb(206, 89, 88);
+  background: rgb(255,240,243);
+}
+
+#dashboard_main table tbody tr td.saturday {
+  color:rgb(97,113,245);
+  background: rgb(229,248,255);
 }

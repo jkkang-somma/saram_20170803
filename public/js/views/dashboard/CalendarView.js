@@ -8,7 +8,7 @@ define([
     'code',
     'collection/dashboard/AttendanceCollection',
     'collection/dashboard/CommuteSummaryCollection',
-    'text!templates/calendarTemplate.html'
+    'text!templates/calendarTemplateBase.html'
 ], function ($, _, Backbone, Code, AttendanceCollection, CommuteSummaryCollection, calendarHTML) {
 
     var CalendarView = Backbone.View.extend({
@@ -70,9 +70,9 @@ define([
             var now = new Date();
             // 현재 달의 1일의 요일
             var theDate = new Date(year, month);
-            var theDay = theDate.getDay();
+            var startDayOfWeek = theDate.getDay();
             var lastDay = new Date(year, month + 1, 0).getDate();
-            var row = Math.ceil((theDay + lastDay) / 7);
+            var row = Math.ceil((startDayOfWeek + lastDay) / 7);
             var data = [];
             var commuteData;
             var attenData;
@@ -178,9 +178,13 @@ define([
                 data.push(pushData);
             }
 
-            var calendarData = { "row": row, "theDay": theDay, "lastDay": lastDay, "year": year, "month": month, "data": data };
+            //var calendarData = { "row": row, "startDayOfWeek": startDayOfWeek, "lastDay": lastDay, "year": year, "month": month, "data": data };
+            //this.$el.html(_.template(calendarHTML)(calendarData));
 
-            this.$el.html(_.template(calendarHTML)(calendarData));
+            this.$el.html(calendarHTML);
+            var calBody = $(this.el).find("#calendar_body");
+            var resultHtml = this.makeOneWeekHtml(row, startDayOfWeek, lastDay, year, month, data);
+            calBody.append(resultHtml);
 
             var today = $('.attenTime');
             if (today.length > 0) {
@@ -198,6 +202,67 @@ define([
                     target.css("color", textColor);
                 }
             }
+        },
+
+        makeOneWeekHtml: function(row, startDayOfWeek, lastDay, year, month, data) {
+            var resultHtml = '';
+            
+            var tdTemplate = '<td class="">';
+            var calendar_content = '<div class="calendar-content">';
+            var cc_header = '<div class="cc-header"><DAY></div>';
+            var cc_content = '<div class="c-content"> <div class="text"><A></div><div class="text"><B></div> </div>';
+
+            var day = 0;
+            var text = "text";
+            for (var i=1; i<=row ; i++) {
+                resultHtml += "<tr>";
+
+                for ( var j=1 ; j<=7 ; j++ ) {
+                    if ( i == 1 && j <= startDayOfWeek ) {
+                        // 1일 시작 전
+                        if ( data[0].exist ) {
+                            resultHtml += tdTemplate;
+                        }else{
+                            resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
+                        }
+                        continue;
+                    }else if ( _.isUndefined(data[day]) ) {
+                        // 말일 종료 후
+                        if ( data[lastDay-1].exist ) {
+                            resultHtml += tdTemplate;
+                        }else{
+                            resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
+                        }
+                    }else{
+                        // 1일 ~ 말일까지
+                        if ( data[day].exist ) {
+                            if ( j == 7 ) {
+                                // 토요일
+                                resultHtml += tdTemplate.replace('class=""', 'class="saturday"');
+                            }else if ( j == 1 || data[day].workType.indexOf("holiday")>=0 ) {
+                                // 쉬는 날
+                                resultHtml += tdTemplate.replace('class=""', 'class="holiday"');
+                            }else{
+                                resultHtml += tdTemplate;
+                            }
+                            
+                        }else{
+                            resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
+                        }
+
+                        resultHtml += calendar_content;
+                        resultHtml += cc_header.replace("<DAY>", data[day].days);
+
+                        resultHtml += cc_content.replace("<A>", data[day].workType).replace("<B>", data[day].overTime);
+                        resultHtml += cc_content.replace("<A>", data[day].outOffice).replace("<B>", data[day].vacation);    
+                    }
+                    day++;
+                    resultHtml += "</div></td>"; // calendar-content
+                }
+                
+                resultHtml += "</tr>";
+            }
+            return resultHtml;
         },
 
         checkAtten: function (year, month, day) {
