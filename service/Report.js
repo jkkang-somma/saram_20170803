@@ -25,6 +25,7 @@ var Report = function() {
 			queryResults.push( ReportDao.selectOverTimeWorkeReport(selObj) );
 			queryResults.push( ReportDao.selectOverTimeWorkTypeReport(selObj) );
 			queryResults.push( ReportDao.selectOverTimeWorkPayReport(selObj) );
+			queryResults.push( ReportDao.selectHolidayWorkTimeReport(selObj) );	// added
 			queryResults.push( ReportDao.selectHolidayWorkTypeReport(selObj) );
 			queryResults.push( ReportDao.selectHolidayWorkPayReport(selObj) );
 	    	

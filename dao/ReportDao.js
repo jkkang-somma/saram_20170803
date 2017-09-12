@@ -36,6 +36,11 @@ ReportDao.prototype.selectOverTimeWorkPayReport =  function (selObj) {
     return db.query(group, "selectOverTimeWorkPayReport", [selObj.year, selObj.startTime, selObj.endTime]);
 };
 
+// 휴일 근무 시간
+ReportDao.prototype.selectHolidayWorkTimeReport =  function (selObj) {
+    return db.query(group, "selectHolidayWorkTimeReport", [selObj.year, selObj.startTime, selObj.endTime]);
+};
+
 // 휴일 근무 타입 현황
 ReportDao.prototype.selectHolidayWorkTypeReport =  function (selObj) {
     return db.query(group, "selectHolidayWorkTypeReport", 

@@ -35,13 +35,17 @@ var CommuteYearExcelCreater = function () {
 	var COL_OVER_TIME_WORK_PAY	= 84;
 	var COL_OVER_TIME_WORK_PAY_END	= 96;
 
+	//휴일 근무 시간
+	var COL_HOLIDAY_WORK_TIME =  97;
+	var COL_HOLIDAY_WORK_TIME_END =  109;
+
 	//휴일 근무 타입 현황
-	var COL_HOLIDAY_WORK_TYPE =  97;
-	var COL_HOLIDAY_WORK_TYPE_END =  135;
+	var COL_HOLIDAY_WORK_TYPE =  110;
+	var COL_HOLIDAY_WORK_TYPE_END =  148;
 
 	//휴일근무 수당 금액 현황
-	var COL_HOLIDAY_WORK_PAY =  136;
-	var COL_HOLIDAY_WORK_PAY_END =  148;
+	var COL_HOLIDAY_WORK_PAY =  149;
+	var COL_HOLIDAY_WORK_PAY_END =  161;
 
 	function _createExcelTitle(sheet, searchValObj) {
 
@@ -109,6 +113,14 @@ var CommuteYearExcelCreater = function () {
 		}
 		_setTitleMergeCell(sheet, COL_OVER_TIME_WORK_PAY_END, 3, ' 전체 ');
 
+		//휴일 근무 시간
+		sheet.merge({col:COL_HOLIDAY_WORK_TIME, row:2},{col:COL_HOLIDAY_WORK_TIME_END, row:2});
+		_setTitleCell(sheet, COL_HOLIDAY_WORK_TIME, 2, " 휴일근무 시간 (분) ");
+		for (var i = 0, len = 11; i <= len; i++) {
+			_setTitleMergeCell(sheet, COL_HOLIDAY_WORK_TIME + i, 3, i+1);
+		}
+		_setTitleMergeCell(sheet, COL_HOLIDAY_WORK_TIME_END, 3, ' 합계 ');
+
 		//휴일 근무 타입 현황
 		sheet.merge({col:COL_HOLIDAY_WORK_TYPE, row:2},{col:COL_HOLIDAY_WORK_TYPE_END,row:2});
 		_setTitleCell(sheet, COL_HOLIDAY_WORK_TYPE, 2, " 휴일 근무 타입 현황 ");
@@ -142,8 +154,9 @@ var CommuteYearExcelCreater = function () {
 			overTimeWorkes = datas[3],
 			overTimeWorkTypes = datas[4],
 			overTimeWorkPays = datas[5],
-			holidayWorkTypes = datas[6],
-			holidayWorkPays = datas[7];
+			holidayWorkTimes = datas[6],
+			holidayWorkTypes = datas[7],
+			holidayWorkPays = datas[8];
 
 		var currentRow = 4;
 		for (var i = 0, len = users.length; i < len; i++) {
@@ -153,6 +166,7 @@ var CommuteYearExcelCreater = function () {
 				overTimeWorke = overTimeWorkes[i],
 				overTimeWorkType = overTimeWorkTypes[i],
 				overTimeWorkPay = overTimeWorkPays[i],
+				holidayWorkTime = holidayWorkTimes[i],
 				holidayWorkType = holidayWorkTypes[i],
 				holidayWorkPay = holidayWorkPays[i];
 			
@@ -210,6 +224,10 @@ var CommuteYearExcelCreater = function () {
 				_setOverTimeWorkPayRow(sheet, COL_OVER_TIME_WORK_PAY, currentRow, overTimeWorkPay);
 			}
 	
+			if (user.id == holidayWorkTime.id) {
+				_setHolidayWorkTimeRow(sheet, COL_HOLIDAY_WORK_TIME, currentRow, holidayWorkTime);
+			}		
+
 			if (user.id == holidayWorkType.id) {
 				_setHolidayWorkTypeRow(sheet, COL_HOLIDAY_WORK_TYPE, currentRow, holidayWorkType);
 			}		
@@ -308,6 +326,21 @@ var CommuteYearExcelCreater = function () {
 			startCol++;
 		}
 		
+		sheet.set( startCol, startRow, _conVal(datas.total) );
+		_setDataCellStyle(sheet, startCol, startRow);
+	}
+
+
+	function _setHolidayWorkTimeRow(sheet, startCol, startRow, datas) {
+		for (var i = 0, len = 11; i <= len; i++) {
+			sheet.set( startCol, startRow, _conVal(datas[i+1]) );
+			_setDataCellStyle(sheet, startCol, startRow);
+			
+			if (i == 0) {
+				sheet.border(startCol, startRow, {left:'medium',top:'thin',right:'thin',bottom:'thin'});
+			}
+			startCol++;
+		}
 		sheet.set( startCol, startRow, _conVal(datas.total) );
 		_setDataCellStyle(sheet, startCol, startRow);
 	}
