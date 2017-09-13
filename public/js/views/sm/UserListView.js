@@ -216,6 +216,25 @@ define([
                                 title:i18Common.DIALOG.TITLE.USER_UPDATE, 
                                 content:editUserView, 
                                 buttons:[{
+                                   label: '재입사',
+                                    cssClass: Dialog.CssClass.SUCCESS,
+                                    action: function(dialogRef){// 버튼 클릭 이벤트
+                                        // 재확인
+                                        Dialog.confirm({
+                                            msg:"데이터 변경 및 재입사 처리 하시겠습니까?",
+                                            action:function(){
+                                                return editUserView.reJoinCompany();
+                                            },
+                                            actionCallBack:function(res){
+                                                grid.updateRow(res);
+                                                dialogRef.close();
+                                                Dialog.show(i18Common.SUCCESS.USER.SAVE);
+                                            },
+                                            errorCallBack:function(){
+                                            }
+                                        });
+                                    } 
+                                },{
                                     label: i18Common.DIALOG.BUTTON.INIT_PASSWORD,
                                     cssClass: Dialog.CssClass.SUCCESS,
                                     action: function(dialogRef){// 버튼 클릭 이벤트

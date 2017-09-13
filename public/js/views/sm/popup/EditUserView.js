@@ -313,7 +313,28 @@ define([
     	    });
     	    
     	    return dfd.promise();  
-    	}
+    	},
+        reJoinCompany:function(){
+            var dfd= new $.Deferred();
+            var _view=this,_form=this.form,_data=_form.getData();
+            _data.leave_company = "";
+            var _userModel= new UserModel(_data);
+            _userModel.attributes._id="-2";
+            var _validate=_userModel.validation(_data);
+            _userModel.save({},{
+                success:function(model, xhr, options){
+                    dfd.resolve(_data);
+                },
+                error:function(model, xhr, options){
+                    var respons=xhr.responseJSON;
+                    Dialog.error(respons.message);
+                    dfd.reject();
+                },
+                wait:false
+            });
+            
+            return dfd.promise();
+        }
     });
     return EditUserView;
 });
