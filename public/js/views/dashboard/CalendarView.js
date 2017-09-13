@@ -6,10 +6,11 @@ define([
     'underscore',
     'backbone',
     'code',
+    'cmoment',
     'collection/dashboard/AttendanceCollection',
     'collection/dashboard/CommuteSummaryCollection',
     'text!templates/calendarTemplateBase.html'
-], function ($, _, Backbone, Code, AttendanceCollection, CommuteSummaryCollection, calendarHTML) {
+], function ($, _, Backbone, Code, Moment, AttendanceCollection, CommuteSummaryCollection, calendarHTML) {
 
     var CalendarView = Backbone.View.extend({
 
@@ -17,6 +18,7 @@ define([
             this.$el = $(opt.el);
             this.commuteSummaryCollection = new CommuteSummaryCollection();
             this.attendanceCollection = new AttendanceCollection();
+            this._today = new Moment().format("YYYY-M-D");
         },
         _draw: function (params) {
             var _view = this;
@@ -67,7 +69,7 @@ define([
             var year = params.start.split("-")[0];
             var month = params.start.split("-")[1] - 1;
 
-            var now = new Date();
+            //var now = new Date();
             // 현재 달의 1일의 요일
             var theDate = new Date(year, month);
             var startDayOfWeek = theDate.getDay();
@@ -186,9 +188,9 @@ define([
             var resultHtml = this.makeOneWeekHtml(row, startDayOfWeek, lastDay, year, month, data);
             calBody.append(resultHtml);
 
-            var today = $('.attenTime');
-            if (today.length > 0) {
-                $('.attenTime').parent().parent().parent().parent().css('border', '2px solid #34495e');
+            var todayBox = $(this.el).find("#"+this._today);
+            if (todayBox.length > 0) {
+                todayBox.css('border', '2px solid #34495e');
             }
             var holiday = $('.holiday');
             var bgColor1 = $('.cc-header').eq(0).css("background-color");
@@ -207,7 +209,7 @@ define([
         makeOneWeekHtml: function(row, startDayOfWeek, lastDay, year, month, data) {
             var resultHtml = '';
             
-            var tdTemplate = '<td class="">';
+            var tdTemplate = '<td id="" class="">';
             var calendar_content = '<div class="calendar-content">';
             var cc_header = '<div class="cc-header"><DAY></div>';
             var cc_content = '<div class="c-content"> <div class="text"><A></div><div class="text"><B></div> </div>';
@@ -225,6 +227,7 @@ define([
                         }else{
                             resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
                         }
+                        resultHtml = resultHtml.replace('id=""', '');
                         continue;
                     }else if ( _.isUndefined(data[day]) ) {
                         // 말일 종료 후
@@ -233,6 +236,7 @@ define([
                         }else{
                             resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
                         }
+                        resultHtml = resultHtml.replace('id=""', '');
                     }else{
                         // 1일 ~ 말일까지
                         if ( data[day].exist ) {
@@ -245,10 +249,10 @@ define([
                             }else{
                                 resultHtml += tdTemplate;
                             }
-                            
                         }else{
                             resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
                         }
+                        resultHtml = resultHtml.replace('id=""', 'id="'+year+'-'+(month+1)+'-'+data[day].days+'"');
 
                         resultHtml += calendar_content;
                         resultHtml += cc_header.replace("<DAY>", data[day].days);
