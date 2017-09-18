@@ -8,44 +8,47 @@ var CommuteYearExcelCreater = function () {
 
 	var COL_DEPT = 1;	// 부서
 	var COL_DEPT_WIDTH = 13;
+
+	var COL_PART = 2;	// 파트
+	var COL_PART_WIDTH = 13;
 	
-	var COL_POSITION = 2 // 직급
+	var COL_POSITION = 3 // 직급
 	var COL_POSITION_WIDTH = 13;
 	
-	var COL_NAME = 3;	// 이름
-	var COL_LEAVE_COMPANY = 4;	// 퇴사
+	var COL_NAME = 4;	// 이름
+	var COL_LEAVE_COMPANY = 5;	// 퇴사
 
 	// 지각 현황
-	var COL_LATE_WORKER = 5;
-	var COL_LATE_WORKER_END = 17;
+	var COL_LATE_WORKER = 6;
+	var COL_LATE_WORKER_END = 18;
 
 	//연차 사용 현황
-	var COL_USED_HOLIDAY = 18;
-	var COL_USED_HOLIDAY_END = 31;
+	var COL_USED_HOLIDAY = 19;
+	var COL_USED_HOLIDAY_END = 32;
 
 	//잔업시간(분) 현황 ( 평일 잔업시간 )
-	var COL_OVER_TIME_WORKE = 32;
-	var COL_OVER_TIME_WORKE_END = 44;
+	var COL_OVER_TIME_WORKE = 33;
+	var COL_OVER_TIME_WORKE_END = 45;
 
 	// 잔업 수당 타입 현황
-	var COL_OVER_TIME_WORK_TYPE = 45;
-	var COL_OVER_TIME_WORK_TYPE_END = 83;
+	var COL_OVER_TIME_WORK_TYPE = 46;
+	var COL_OVER_TIME_WORK_TYPE_END = 84;
 
 	//잔업 수당 금액 현황
-	var COL_OVER_TIME_WORK_PAY	= 84;
-	var COL_OVER_TIME_WORK_PAY_END	= 96;
+	var COL_OVER_TIME_WORK_PAY	= 85;
+	var COL_OVER_TIME_WORK_PAY_END	= 97;
 
 	//휴일 근무 시간
-	var COL_HOLIDAY_WORK_TIME =  97;
-	var COL_HOLIDAY_WORK_TIME_END =  109;
+	var COL_HOLIDAY_WORK_TIME =  98;
+	var COL_HOLIDAY_WORK_TIME_END =  110;
 
 	//휴일 근무 타입 현황
-	var COL_HOLIDAY_WORK_TYPE =  110;
-	var COL_HOLIDAY_WORK_TYPE_END =  148;
+	var COL_HOLIDAY_WORK_TYPE =  111;
+	var COL_HOLIDAY_WORK_TYPE_END =  149;
 
 	//휴일근무 수당 금액 현황
-	var COL_HOLIDAY_WORK_PAY =  149;
-	var COL_HOLIDAY_WORK_PAY_END =  161;
+	var COL_HOLIDAY_WORK_PAY =  150;
+	var COL_HOLIDAY_WORK_PAY_END =  162;
 
 	function _createExcelTitle(sheet, searchValObj) {
 
@@ -61,6 +64,10 @@ var CommuteYearExcelCreater = function () {
 		sheet.width(COL_DEPT, COL_DEPT_WIDTH);
 		_setTitleCell(sheet, COL_DEPT, 2, " 부서 ");		
 		
+		sheet.merge({col:COL_PART, row:2},{col:COL_PART, row:4});
+		sheet.width(COL_PART, COL_PART_WIDTH);
+		_setTitleCell(sheet, COL_PART, 2, " 파트 ");
+
 		sheet.merge({col:COL_POSITION, row:2},{col:COL_POSITION, row:4});
 		sheet.width(COL_POSITION, COL_POSITION_WIDTH);
 		_setTitleCell(sheet, COL_POSITION, 2, " 직급 ");
@@ -188,6 +195,11 @@ var CommuteYearExcelCreater = function () {
 			_setDataCellStyle(sheet, COL_DEPT, currentRow);
 			sheet.border(COL_DEPT, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});		
 			
+			// 파트
+			sheet.set(COL_PART, currentRow, _conVal(user.part_name) ) ;
+			_setDataCellStyle(sheet, COL_PART, currentRow);
+			sheet.border(COL_PART, currentRow, {left:'medium',top:'thin',right:'medium',bottom:'thin'});		
+
 			
 			// 이름
 			sheet.set(COL_POSITION, currentRow, _conVal(user.position_name) );

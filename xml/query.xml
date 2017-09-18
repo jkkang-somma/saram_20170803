@@ -924,13 +924,19 @@
     			m.leave_company,
                 p.name AS position_name,
 			    m.dept_code,
-			    d.name AS dept_name
+			    d.name AS dept_name,
+			    partTbl.name AS part_name
 			FROM 
 				members_tbl m
+
 				INNER JOIN dept_code_tbl d
 			    ON d.code = m.dept_code
+
 				INNER JOIN position_code_tbl p
 			    ON p.code = m.position_code
+
+			    LEFT JOIN part_code_tbl partTbl
+			    ON partTbl.code = m.part_code
 			
 			ORDER BY 
 				m.dept_code, m.part_code, m.position_code, m.name
@@ -1752,13 +1758,20 @@
                 p.name AS position_name,
 			    m.dept_code,
 			    d.name AS dept_name,
+			    partTbl.name AS part_name,
 			    c.*
 			FROM
 				members_tbl m
+
 				INNER JOIN dept_code_tbl d
 			    ON d.code = m.dept_code
+
 				INNER JOIN position_code_tbl p
 			    ON p.code = m.position_code
+
+			    INNER JOIN part_code_tbl partTbl
+			    ON partTbl.code = m.part_code
+
 			    LEFT JOIN (
 					SELECT
 						c.year,

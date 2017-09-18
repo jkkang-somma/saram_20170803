@@ -35,7 +35,8 @@ var CommuteYearExcelCreater = function () {
 
 	// \ufeff -> BOM 설정 
 	var headerInfo = { dept_name : "\ufeff  부서  ",
-	    	 		 name: " 이름 ",
+					part_name : " 파트 ",
+	    	 		name: " 이름 ",
 	    	 		position_name :   " 직급 ",
 	    	 		leave_company :   " 퇴사일  ",
 	    	 		date : " 일자 ",
