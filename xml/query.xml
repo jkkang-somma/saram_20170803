@@ -1769,7 +1769,7 @@
 				INNER JOIN position_code_tbl p
 			    ON p.code = m.position_code
 
-			    INNER JOIN part_code_tbl partTbl
+			    LEFT JOIN part_code_tbl partTbl
 			    ON partTbl.code = m.part_code
 
 			    LEFT JOIN (

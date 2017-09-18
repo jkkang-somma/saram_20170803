@@ -161,7 +161,12 @@ var CommuteYearExcelCreater = function () {
 						if (commuteResults[i].leave_company != null && commuteResults[i].leave_company != "") {
 							continue;
 						}
-					}					
+					}
+
+					if ( commuteResults[i].name == null ) {
+						console.log("REPORT SKIP ROW : " + commuteResults[i].id + ", " + commuteResults[i].dept_name);
+						continue;
+					}
 					
 					csvStream.write( commuteResults[i] );
 				}
