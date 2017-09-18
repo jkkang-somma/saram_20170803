@@ -933,7 +933,7 @@
 			    ON p.code = m.position_code
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectLateWorkerReport">
@@ -979,7 +979,7 @@
 			ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
 			    	
 		<query id="selectUsedHolidayReport">
@@ -1029,7 +1029,7 @@
 			ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name	
+				m.dept_code, m.part_code, m.position_code, m.name	
     	</query>
 
     	<query id="selectHolidayWorkTimeReport">
@@ -1083,7 +1083,7 @@
 			ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectOverTimeWorkeReport">
@@ -1140,7 +1140,7 @@
 			ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
     	<query id="selectOverTimeWorkeReport25">
 			SELECT 
@@ -1207,7 +1207,7 @@
 			ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name;
+				m.dept_code, m.part_code, m.position_code, m.name;
     	</query>
     	<query id="selectOverTimeWorkTypeReport">
 			SELECT 
@@ -1325,7 +1325,7 @@
 				ON m.id = tc.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectOverTimeWorkTypeReport25">
@@ -1471,7 +1471,7 @@
 				ON m.id = tc.id
 		
 		ORDER BY
-				m.dept_code, m.position_code, m.name;
+				m.dept_code, m.part_code, m.position_code, m.name;
     	</query>
     	
     	<query id="selectOverTimeWorkPayReport">
@@ -1518,7 +1518,7 @@
 				ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectOverTimeWorkPayReport25">
@@ -1574,7 +1574,7 @@
 				ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name;
+				m.dept_code, m.part_code, m.position_code, m.name;
     	</query>
     	
     	<query id="selectHolidayWorkTypeReport">
@@ -1693,7 +1693,7 @@
 				ON m.id = tc.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
 
     	<query id="selectHolidayWorkPayReport">
@@ -1741,7 +1741,7 @@
 				ON m.id = t2.id
 			
 			ORDER BY 
-				m.dept_code, m.position_code, m.name
+				m.dept_code, m.part_code, m.position_code, m.name
     	</query>
     	
     	<query id="selectReportCommuteResultTbl">
@@ -1813,7 +1813,7 @@
 				) c
 			    ON m.id = c.id
 		    
-		    ORDER BY m.dept_code, m.position_code, m.name, c.date
+		    ORDER BY m.dept_code, m.part_code, m.position_code, m.name, c.date
     	</query>
     </group>
     <group id ="message">
