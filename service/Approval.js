@@ -138,8 +138,8 @@ var Approval = function (data) {
         		  db.query("outOffice", "deleteOutOfficeList", [_data.outOffice.doc_num]).then(function(resultArr){
         			  console.log(_data.outOffice.doc_num);
         		  });
-        		  throw(err);
         	  }
+       		  throw(err);
         });
     };
     var _sendOutofficeEmail = function(doc_num){

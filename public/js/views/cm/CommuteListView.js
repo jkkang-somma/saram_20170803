@@ -213,7 +213,7 @@ define([
         el:$(".main-container"),
         initialize : function(){
         	var _view = this;
-        	
+
     		this.commuteCollection = new CommuteCollection();
             
     		this.gridOption = {
@@ -564,6 +564,7 @@ define([
         	
         	console.log("grid data", selectItem);
         	var _this = this;
+            var clickFlag = false;
             Dialog.show({
                 title: "초과근무 결재", 
                 content: overtimeApprovalPopupView,
@@ -571,12 +572,19 @@ define([
                 	label : "상신",
                 	cssClass: Dialog.CssClass.SUCCESS,
                 	action : function(dialog){
+                        if ( clickFlag ) {
+                            console.log("IN skip");
+                            return;
+                        }
+                        clickFlag =true;
+
                 		var inputData = overtimeApprovalPopupView.getData();
                 		console.log(inputData);
                 		
                 		var checkTime = selectItem.over_time - inputData.except;
 						if ( checkTime < 120 ) {
 							Dialog.error("초과근무 시간이 유효하지 않습니다.");
+                            clickFlag =false;
 							return;
 						}
 						
@@ -605,13 +613,14 @@ define([
 		
 						var _appCollection = new ApprovalCollection();
 		                _appCollection.url = "/approval/appIndex";
-		
+		                
 		                _appCollection.fetch({
 	                        reset: true,
 	                        data: docData,
 	                        error: function(result) {
 	                            Dialog.error("데이터 조회가 실패했습니다.");
 	                            dialog.close();
+                                _this.clickFlag =false;
 	                        }
 	                    }).done(function(result) {
 	                        docData["seq"] = result[0].maxSeq;
@@ -637,12 +646,12 @@ define([
 						                },
 						                wait: false
 						            });
-				                    
 				                },
 				                error: function(model, xhr, options) {
 				                    var respons = xhr.responseJSON;
 				                    Dialog.error(respons.message);
 				                    dialog.close();
+                                    _this.clickFlag =false;
 				                },
 				                wait: false
 				            });
