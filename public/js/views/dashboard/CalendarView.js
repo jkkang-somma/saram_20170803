@@ -274,7 +274,7 @@ define([
             var dateStr = "";
             var result = _.select(_view.attendance, function (atten) {
                 dateStr = year + "-";
-                dateStr += (month < 9) ? "0" + (month + 1) + "-" : dateStr += (month + 1) + "-";
+                dateStr += (month < 9) ? "0" + (month + 1) + "-" : (month + 1) + "-";
                 dateStr += (day < 9) ? "0" + (day + 1) : (day + 1);
 
                 if (atten.char_date.split(" ")[0] == dateStr && atten.type == "출근(지문)" && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
