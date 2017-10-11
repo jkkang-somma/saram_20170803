@@ -89,7 +89,8 @@ var Comment = function() {
 	                var temp=_.template(html);
 	                var sendHTML=temp(data);
 	                var to = [];
-	                
+	                var cc = [];
+
 	                if(inData.state == "상신"){
 	                	ApprovalDao.getManagerId(managerId).then(function(result){
 	                		for(var idx in result){
@@ -142,7 +143,31 @@ var Comment = function() {
 		                        resolve();
 		                    }
 		                });
-	                }	
+	                }else if(inData.state == "처리완료"){
+	                	cc = [
+		                    { name: "김성식", address: "sskim@yescnc.co.kr"},
+		                    { name :"김은영", address: "eykim@yescnc.co.kr"},
+	                    ];
+	                    to.push({ name :user.name, address: user.email})
+	                    var mailOptions= {
+		                    from: 'webmaster@yescnc.co.kr', // sender address 
+		                    to: to,
+		                    cc: cc,
+		                    subject:"[처리완료] Comment의 처리가 완료되었습니다. (" + data.date + " " +  data.name + ")",
+		                    html:sendHTML,
+		                	text:"",
+		                };
+		                
+		                console.log(mailOptions);
+		                transport.sendMail(mailOptions, function(error, info){
+		                    if(error){//메일 보내기 실패시 
+		                        console.log(error);
+		                        reject();
+		                    }else{
+		                        resolve();
+		                    }
+		                });
+		            }
 				});
 				
 			});
