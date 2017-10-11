@@ -11,6 +11,8 @@ router.route("/")
 	var session = sessionManager.get(req.cookies.saram);
 	var user = session.user;
 
+	console.log("IN_OUT" , req);
+	
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
 	var inData = {
