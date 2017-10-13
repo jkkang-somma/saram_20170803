@@ -17,7 +17,7 @@ router.route("/")
 
 	var inData = {
 		type : req.body.type,
-		ip_pc : _.isEmpty(req.body.ip)?null:req.body.ip,
+		ip_pc : _.isEmpty(req.body.ip_pc)?null:req.body.ip_pc,
 		mac : _.isEmpty(req.body.mac)?null:req.body.mac,
 		ip_office : ip
 	};
