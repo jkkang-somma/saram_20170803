@@ -146,7 +146,7 @@ var Comment = function() {
 	                }else if(inData.state == "처리완료"){
 	                	cc = [
 		                    { name: "김성식", address: "sskim@yescnc.co.kr"},
-		                    { name :"김은영", address: "eykim@yescnc.co.kr"},
+		                    //{ name :"김은영", address: "eykim@yescnc.co.kr"},  // 2017.10.13 김은영 대리 요구로 발신하지 않음.
 	                    ];
 	                    to.push({ name :user.name, address: user.email})
 	                    var mailOptions= {
