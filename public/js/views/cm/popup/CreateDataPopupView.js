@@ -135,6 +135,7 @@ define([
                     if( userPosition == "대표이사"
                         || (!_.isNull(leaveCompany) && leaveCompany != "")
                         || userDepartment == "무소속"
+                        || userDepartment == "임원"
                         || cJoinDate.getTime() > cEndDate.getTime()
                         || userName.slice(0,3) == "테스트"){
                             
