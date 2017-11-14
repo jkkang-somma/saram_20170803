@@ -411,6 +411,7 @@ define([
 
             if (todayOutOffice.length > 0) {
                 var vacationArr = [];
+                var outOfficeArr = [];
                 /**
                  * outOffice 데이터를 가지고 vacationCode, outOfficeCode를 설정한다.
                  **/
@@ -418,7 +419,7 @@ define([
                     var model = todayOutOffice[i];
                     var code = model.get("office_code");
                     var VACATION_CODES = ["V01", "V02", "V03", "V04", "V05", "V06", "V07", "V08"];
-                    var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04"];
+                    var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04", "W01W04"];
                     var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07", "V06V07", "V06V08"];
 
                     if (_.indexOf(VACATION_CODES, code) >= 0) {
@@ -426,7 +427,8 @@ define([
                     }
 
                     if (_.indexOf(OUTOFFICE_CODES, code) >= 0) {
-                        this.outOfficeCode = code;
+                        outOfficeArr.push(code);
+                        // this.outOfficeCode = code;
                     }
                 }
 
@@ -450,6 +452,23 @@ define([
                 }
                 else if (vacationArr.length > 2) {
                     this.vacationCode = null;
+                }
+
+                // 외근 정보가 2개 이상인 경우
+                if (outOfficeArr.length == 1) {
+                    this.outOfficeCode = outOfficeArr[0];
+                }
+                else if (outOfficeArr.length == 2) {
+                    outOfficeArr = _.sortBy(outOfficeArr, function(str) {
+                        return str;
+                    });
+                    this.outOfficeCode = outOfficeArr[0] + outOfficeArr[1];
+                    if (_.indexOf(OUTOFFICE_CODES, this.outOfficeCode) < 0) {
+                        this.outOfficeArr = null;
+                    }
+                }
+                else if (outOfficeArr.length > 2) {
+                    this.outOfficeCode = null;
                 }
             }
 
@@ -540,11 +559,12 @@ define([
 
                 switch (this.outOfficeCode) {
                     case "W01": // 외근
+                    case "W01W04" : // 파견,외근
                         if (!this.isSuwon) {
                             for (var i = 0; i < todayOutOffice.length; i++) {
                                 model = todayOutOffice[i];
                                 code = model.get("office_code");
-                                if (code == this.outOfficeCode) {
+                                if (code == "W01") {
                                     var startTime = Moment(model.get("start_time"), "HH:mm");
                                     var endTime = Moment(model.get("end_time"), "HH:mm");
                                     /**
