@@ -133,9 +133,10 @@ var Approval = function (data) {
 			});
 		}).catch(function(err){
 			if(!(_.isUndefined(_data.outOffice) || _.isNull(_data.outOffice))){        		  
-				db.query("outOffice", "deleteOutOfficeList", [_data.outOffice.doc_num]).then(function(resultArr){
-					console.log(_data.outOffice.doc_num);
-				});
+				console.log("ERROR : " + _data.outOffice.doc_num);
+				//db.query("outOffice", "deleteOutOfficeList", [_data.outOffice.doc_num]).then(function(resultArr){
+				//	console.log(_data.outOffice.doc_num);
+				//});
 			}
 			throw(err);
 		});
