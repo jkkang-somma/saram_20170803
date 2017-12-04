@@ -135,14 +135,14 @@ define([
 					} else {
 						// 파트 정보를 이용하여
 						_.each(parts, function(partInfo) {
-							if(findPartInfo[0].leader == partInfo.id) {
+							if(!_.isUndefined(findPartInfo[0]) && findPartInfo[0].leader == partInfo.id) {
 								newParts.splice(0, 0, partInfo);
 							} else {
 								newParts.push(partInfo);
 							}
 						})
 					}
-					return newParts;					
+					return newParts;
 				}
 
 				var organList = [];
@@ -166,19 +166,26 @@ define([
 				var exception = 0;
 				_.each(organList, function(deptData) {										
 					//부서별 데이터
+
 					_.each(deptData, function(data, deptCode) {						
 						//파트별 데이터
 						var count = getUserCount(data);
 						getAreaCount(deptCode, count);
 						var html = getUserList(deptCode, data);							
 						$(_content).find("#dept_" + deptCode + " table").append(html);
+
+						// Title 출력
+						var keyVal = _.keys(data)[0];
+						var deptTitle = data[keyVal][0].dept_name + "(" + count + "명)";
+						$(_content).find("#dept_" + deptCode + " span").append(deptTitle);
+
 						// 품질검증2팀 본사/수원 
-						if(deptCode == 5200 || deptCode == 5400) {
-							exception += count;
-							$(_content).find("#dept_5200" + " span").html(exception);
-						} else {
-							$(_content).find("#dept_" + deptCode + " span").append(count);
-						}
+						//if(deptCode == 5200 || deptCode == 5400) {
+						//	exception += count;
+						//	$(_content).find("#dept_5200" + " span").html(exception);
+						//} else {
+						//	$(_content).find("#dept_" + deptCode + " span").append(count);
+						//}
 					});					
 				});
 
@@ -216,11 +223,11 @@ define([
 								// 직급 우측에 메모 추가 2017.08.09
 								var roleStr = "";
 								if ( data.name == "이남노" ) 
-									roleStr = " (영업/검증 총괄)";
+									roleStr = " (사업부장)";
 								else if ( data.name == "전영호")
 									roleStr = " (영업)";
 								else if ( data.name == "유강재")
-									roleStr = " (개발 총괄)";
+									roleStr = " (전략사업본부)";
 								else if ( data.name == "최홍락")
 									roleStr = " (기술연구소장)";
 																
