@@ -190,12 +190,13 @@ var Approval = function (data) {
 						cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});
 						
 						/* 근태 메일 품질검증팀 제외 */
-						if(data.dept_code != "5100" && data.dept_code != "5200"){
+						if(data.dept_area != "수원"){
 							// 서울에서 발생한 근태 결재내역은 모든 팀장에게 발송 - 2016.10.18
-							cc.push({ name :"박수종", address: "soojong@yescnc.co.kr", id:"071102"});
-							cc.push({ name :"윤정관", address: "jkyoon96@yescnc.co.kr", id:"060601"});
-							cc.push({ name :"김태중", address: "hhs2tjk@yescnc.co.kr", id:"070901"});
-							cc.push({ name :"최치운", address: "cwchoi@yescnc.co.kr", id:"080802"});
+							// 팀장에게 무조건 보내지 않도록 수정 - 2017.12.05
+							// cc.push({ name :"박수종", address: "soojong@yescnc.co.kr", id:"071102"});
+							// cc.push({ name :"윤정관", address: "jkyoon96@yescnc.co.kr", id:"060601"});
+							// cc.push({ name :"김태중", address: "hhs2tjk@yescnc.co.kr", id:"070901"});
+							// cc.push({ name :"최치운", address: "cwchoi@yescnc.co.kr", id:"080802"});
 							for(var idx in result){
 								if(result[idx].email != "" || !_.isNull(result[idx].email) || !_.isUndefined(result[idx].email)){
 									if(result[idx].leave_company == "" || _.isNull(result[idx].leave_company) || _.isUndefined(result[idx].leave_company)) {
