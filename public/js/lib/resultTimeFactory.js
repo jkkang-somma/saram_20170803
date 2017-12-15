@@ -560,45 +560,52 @@ define([
                 switch (this.outOfficeCode) {
                     case "W01": // 외근
                     case "W01W04" : // 파견,외근
-                        if (!this.isSuwon) {
-                            for (var i = 0; i < todayOutOffice.length; i++) {
-                                model = todayOutOffice[i];
-                                code = model.get("office_code");
-                                if (code == "W01") {
-                                    var startTime = Moment(model.get("start_time"), "HH:mm");
-                                    var endTime = Moment(model.get("end_time"), "HH:mm");
-                                    /**
-                                     * 외근 시작시간
-                                     * 8시 이전       : 8:00, checkLate = false, standardintime : 08:00, standardouttime : 17:00,
-                                     * 8시 ~ 10시 00분 : 출근시간, checkLate = false, standardintime = 출근시간, standardouttime : 출근시간 + 9시간
-                                     * 10시 이후      : 10:00, checkLate = true, standardintime : 10:00, standardouttime : 19:00,
-                                     * 
-                                     * 외근 종료시간
-                                     * standardouttime 이전 : checkEarly = true
-                                     * standardouttime 이후 : checkEarly = false
-                                     **/
-                                    if(startTime.hour() < 8){
-                                        this.standardInTime.hour(8).minute(0).second(0);
-                                        this.standardOutTime.hour(17).minute(0).second(0);
-                                        this.checkLate = false;
-                                    }else if(startTime.hour() < 10 || (startTime.hour() == 10 && startTime.minute() == 0)){
-                                        if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm"))){
-                                            this.standardInTime.hour(startTime.hour()).minute(startTime.minute()).second(0);
-                                            this.standardOutTime = Moment(this.standardInTime);
-                                            this.standardOutTime.add(9,'hours');
-                                        }
-                                        this.checkLate = false;    
-                                    }else{
-                                        this.checkLate = true;
+                        var stdInTime = 8;
+                        if (this.isSuwon) {
+                            stdInTime = 7;
+                        }
+
+                        for (var i = 0; i < todayOutOffice.length; i++) {
+                            model = todayOutOffice[i];
+                            code = model.get("office_code");
+                            if (code == "W01") {
+                                var startTime = Moment(model.get("start_time"), "HH:mm");
+                                var endTime = Moment(model.get("end_time"), "HH:mm");
+                                /**
+                                 * 외근 시작시간
+                                 * 8시 이전       : 8:00, checkLate = false, standardintime : 08:00, standardouttime : 17:00,
+                                 * 8시 ~ 10시 00분 : 출근시간, checkLate = false, standardintime = 출근시간, standardouttime : 출근시간 + 9시간
+                                 * 10시 이후      : 10:00, checkLate = true, standardintime : 10:00, standardouttime : 19:00,
+                                 * 
+                                 * 2017.12.15. 김성식 부장 : 수원 외근 발생시 서울과 동일하게 처리 함.
+                                 *  - 수원의 경우 7시 기준으로 계산함. 
+                                 * 
+                                 * 외근 종료시간
+                                 * standardouttime 이전 : checkEarly = true
+                                 * standardouttime 이후 : checkEarly = false
+                                 **/
+                                if(startTime.hour() < stdInTime){
+                                    this.standardInTime.hour(stdInTime).minute(0).second(0);
+                                    this.standardOutTime.hour(stdInTime+9).minute(0).second(0);
+                                    this.checkLate = false;
+                                }else if(startTime.hour() < 10 || (startTime.hour() == 10 && startTime.minute() == 0)){
+                                    if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm"))){
+                                        this.standardInTime.hour(startTime.hour()).minute(startTime.minute()).second(0);
+                                        this.standardOutTime = Moment(this.standardInTime);
+                                        this.standardOutTime.add(9,'hours');
                                     }
-                                    
-                                    if (endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
-                                        this.checkEarly = false;
-                                    
-                                    break;
+                                    this.checkLate = false;    
+                                }else{
+                                    this.checkLate = true;
                                 }
+                                
+                                if (endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
+                                    this.checkEarly = false;
+                                
+                                break;
                             }
                         }
+                        
                         break;
                     case "W02": // 출장
                         this.inTimeType = 1;
