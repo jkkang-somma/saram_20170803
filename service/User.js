@@ -30,6 +30,9 @@ var User = function (data, isNoSchemas) {
     var _getUserList = function(){
         return UserDao.selectUserList();
     };
+    var _getUserListNow = function(){
+        return UserDao.selectUserListNow();
+    };
     var _getManagerList = function(id){
         return UserDao.selectManagerList(id);
     };
@@ -106,6 +109,7 @@ var User = function (data, isNoSchemas) {
         get:_get,
         getUser:_getUser,
         getUserList:_getUserList,
+        getUserListNow:_getUserListNow,
         getManagerList:_getManagerList,
         initPassword:_initPassword,
         data:_data,

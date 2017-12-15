@@ -16,6 +16,10 @@ UserDao.prototype.selectUserList =  function () {
     return db.query(group, "selectUserList");
 };
 
+UserDao.prototype.selectUserListNow =  function () {
+    return db.query(group, "selectUserListNow");
+};
+
 UserDao.prototype.selectDepartmentList =  function (id) {
     return db.query(group, "selectDepartment", [id]);
 };

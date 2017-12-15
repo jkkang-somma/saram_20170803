@@ -37,6 +37,7 @@ var part = require('./routes/partRouter');
 var position = require('./routes/positionRouter');
 var room = require("./routes/roomRouter");
 var roomReg = require("./routes/roomRegRouter");
+var restful = require("./routes/restfulRouter");
 
 var debug = require('debug')('APP');
 var app = express();
@@ -44,6 +45,7 @@ var filePath1 = path.normalize(__dirname + '/pic/files');
 var filePath2 = path.normalize(__dirname + '/public/doc'); 
 var filePath3 = path.normalize(__dirname + '/public/book'); 
 
+var tokenList = ["5ac5b06f-5629-fbb7-52f6-3a405a989d2f"];
 //var Statistics = require('./service/Statistics');
 //var statisticsService = new Statistics();
 
@@ -174,7 +176,15 @@ app.use(function(req,res,next){
     var pathname = url.parse(req.url).pathname;
     if(_.indexOf(passURLArr, pathname) > -1){
         next();
-    }else{     
+    }else if ( pathname.indexOf("/rest/") > -1 ) {
+        console.log("REQ  ================> " + JSON.stringify(req.headers));
+        if ( !_.isUndefined(req.headers.token) && _.indexOf(tokenList, req.headers.token) > -1 ) {
+            next();
+        }else{
+            authError(next);
+        }
+        
+    }else{
         if (req.cookies.saram) {//cookie가 있을 때.
             if (sessionManager.validationCookie(req.cookies.saram, res)){
                 
@@ -224,6 +234,7 @@ app.use('/part', part);
 app.use('/position', position);
 app.use('/room', room);
 app.use('/roomreg', roomReg);
+app.use('/rest', restful);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .
