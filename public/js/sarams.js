@@ -92,4 +92,7 @@ require([
 ], function(App, LoadingView){
    var app = new App();
    app.start();
+},function(err){
+   console.log(err);
+   location.reload();
 });
