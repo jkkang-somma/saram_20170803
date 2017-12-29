@@ -43,6 +43,7 @@ define([
 			'partmanager' : 'showPart',
 			'organization' : 'showOrganization',
 			'gis' : 'showGis',
+			'gisHistory' : 'showGisHistory',
 			'positionmanager' : 'showPosition',
 			'userpic' : 'showUserPic',
 			'documentlist' : 'showDocument',
@@ -283,6 +284,10 @@ define([
 		showGis : function(){
 			var url = 'views/gis/gisView';
 			this.changeView(url, '#gis');
+		},
+		showGisHistory : function(){
+			var url = 'views/gis/gisHistoryView';
+			this.changeView(url, '#gisHistory');
 		},
 		showAllReport : function(){
 			var url = 'views/rm/AllReportView';

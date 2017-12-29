@@ -64,6 +64,10 @@ define([
 			hashTag:"#gis",
 			auth:USER
 		},{
+			title:"자리배치도-이력",
+			hashTag:"#gisHistory",
+			auth:ADMIN
+		},{
 			title:i18Common.MENU.SUB.BM.ORGANIZATION, //조직도
 			hashTag:"#organization",
 			auth:ADMIN

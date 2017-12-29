@@ -37,6 +37,7 @@ var part = require('./routes/partRouter');
 var position = require('./routes/positionRouter');
 var room = require("./routes/roomRouter");
 var roomReg = require("./routes/roomRegRouter");
+var gisRouter = require("./routes/gisRouter");
 var restful = require("./routes/restfulRouter");
 
 var debug = require('debug')('APP');
@@ -234,6 +235,7 @@ app.use('/part', part);
 app.use('/position', position);
 app.use('/room', room);
 app.use('/roomreg', roomReg);
+app.use('/gis', gisRouter);
 app.use('/rest', restful);
 
 // catch 404 and forward to error handler

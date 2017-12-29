@@ -144,5 +144,5 @@ router.route('/setGisPos/:id')
             error:e
         });
     });
-})
+});
 module.exports = router;

@@ -27,19 +27,17 @@ define([
 		el:".side-container",
 		initialize:function(){
 			this.option = {
-					el:"gis_content", 
-					pos_y1:47,
-					pos_y2:107,
-					pos_y3:217,
-					pos_y4:277,
-					pos_y5:340,
+				el:"gis_content", 
+				pos_y1:47,
+				pos_y2:107,
+				pos_y3:217,
+				pos_y4:277,
+				pos_y5:340,
 
-					draggingIndex : null,
-					moveIndex:-1,
+				draggingIndex : null,
+				moveIndex:-1,
 
-					userCollection:null,
-
-					teamColorList: ["blue", "pink", "yellow", ]
+				userCollection:null,
 			};
 		},
 
@@ -50,6 +48,7 @@ define([
 			"mouseover .userpic" : "over",
     	    "mouseleave .userpic" : "leave",
     	    'click #gisPrintBtn' : 'onPrint',
+    	    'click #gisHistorySaveBtn' : 'onSaveHistory',
 		},
 
 		onPrint:function() {
@@ -68,6 +67,44 @@ define([
 					win.print();
 				}
 			});
+		},
+		onSaveHistory:function() {
+			var _this = this;
+			Dialog.confirm({
+	        	msg : "저장하시겠습니까?",
+                action:function(){
+                	var dfd = new $.Deferred();
+
+                	$(_this.el).find("#giscontainer .gis_position.bottom .gis_person").css("padding-top", "20px");
+
+					html2canvas($(_this.el).find("#gis_print_div"), {
+						onrendered: function(canvas) {
+							$(_this.el).find("#giscontainer .gis_position.bottom .gis_person").css("padding-top", "30px");
+							var imageData = canvas.toDataURL("image/png");
+
+							$.ajax({
+								url : "/gis/GisHistory",
+								type : "POST",
+								dataType : "json",
+								data : {data:imageData},
+								//processData : false,
+								//contentType : false,
+								success : function(data) {
+									alert("Save Success");
+								},
+								error : function(request, status, error) {
+									alert("Save Error : " + error.message);
+								}
+							});
+							dfd.resolve();
+						}
+					});
+                	return dfd.promise();
+                },
+                actionCallBack:function(res){//response schema
+                	_this.render();
+                },
+            });
 		},
 		over:function(event){
 			if ( $(this.el).find("#picdiv").length != 0 )
@@ -95,11 +132,21 @@ define([
 		onClickGisLeft:function() {
 			$(this.el).find("#gis_main2").hide();
 			$(this.el).find("#gis_main1").show();
+			$(this.el).find(".dept1").show();
+			$(this.el).find(".dept2").hide();
+			$(this.el).find(".dept3").hide();
+			$(this.el).find(".dept4").hide();
+			$(this.el).find(".dept5").hide();
 		},
 
 		onClickGisRight:function() {
 			$(this.el).find("#gis_main1").hide();
 			$(this.el).find("#gis_main2").show();
+			$(this.el).find(".dept1").hide();
+			$(this.el).find(".dept2").show();
+			$(this.el).find(".dept3").show();
+			$(this.el).find(".dept4").show();
+			$(this.el).find(".dept5").show();
 		},
 
 		onClickSaveBtn:function(){
@@ -136,10 +183,10 @@ define([
 						for ( var i = 0 ; i < $gis_member_list.length ; i++ ) {
 							var person = $gis_member_list[i];
 							var userModel = _this.option.userCollection.findWhere({id:person.id});
-								if ( !_.isUndefined(userModel) && userModel.get("gis_pos") != null ) {
-									userModel.set("gis_pos", null);
-									_this.ajaxCall(userModel);
-								}
+							if ( !_.isUndefined(userModel) && userModel.get("gis_pos") != null ) {
+								userModel.set("gis_pos", null);
+								_this.ajaxCall(userModel);
+							}
 						}
 
 						dfd.resolve();
@@ -450,14 +497,18 @@ define([
 					deptMap[dept.code] = dept;
 				}
 
+				// 퇴사자 제외
+				userList = _.filter(userList, function(user) {
+					if(user.leave_company == null || user.leave_company =="") {
+						return true;
+					} else {
+						return false;
+					}
+				});
+
 				for ( var userIdx = 0 ; userIdx < userList.length ; userIdx++ ) {
 					var user = userList[userIdx];
 					if ( deptMap[user.dept_code].area != "서울" ) {
-						continue;
-					}
-
-					// 퇴사자 제외
-					if ( user.leave_company != null && user.leave_company != "" ) {
 						continue;
 					}
 					if ( !_.contains(existDeptList, user.dept_code) ) {
@@ -475,17 +526,21 @@ define([
 				var gis_member_list = $(_this.el).find("#gis_member_list");
 				for ( var userIdx = 0 ; userIdx < userList.length ; userIdx++ ) 
 				{
+					var printFlag = true;
 					// 수원 제외 ( 부서 기준 )
 					var user = userList[userIdx];
 					if ( deptMap[user.dept_code].area != "서울" ) {
-						continue;
+						printFlag = false;
+
+						// 김태중 팀장, 백성준 팀장은 자리배치도에 출력되도록 수정. 2017.12.28
+						if ( user.id == "070901" || user.id == "121102") {
+							printFlag = true;
+						}
 					}
 
-					// 퇴사자 제외
-					if ( user.leave_company != null && user.leave_company != "" ) {
+					if ( printFlag == false ) {
 						continue;
 					}
-
 					var htmlTag = PersonTemplate.replace("<USER_ID>", user.id)
 									.replace("<USER_NAME>", user.name)
 									.replace("<PIC_SRC>", user.id)
@@ -541,11 +596,13 @@ define([
 					// 이벤트 추가
 					_this.addDragEvent();
 				}
+				_this.onClickGisRight();
 			});
 
 			// 저장 버튼 ( 관리자 )
 			if ( SessionModel.getUserInfo().admin != 1 ) {
 				$(_this.el).find("#gisSaveBtn").remove();
+				$(_this.el).find("#gisHistorySaveBtn").remove();
 				//$(_this.el).find("#gisPrintBtn").remove();
 			}
 		}
