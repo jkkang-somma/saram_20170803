@@ -56,7 +56,13 @@ define([
     	        			name:"leader",
     	        			label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.LEADER,
     	        			value:_model.leader,
-        	        }]
+        	        },{
+							type:"combo",
+							name:"use",
+							label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.USE,
+							value:_model.area,
+							collection:[{key:1,value:i18nCommon.DEPARTMENT_LIST.UPDATE_DIALOG.USE_VALUE.USE},{key:0,value:i18nCommon.DEPARTMENT_LIST.UPDATE_DIALOG.USE_VALUE.NOT_USE}]
+					}]
         	    });
         	    
         	    _form.render().done(function(){

@@ -368,24 +368,37 @@ define([
      		}
 
             var _this = this;
-     		this.commentCollection.fetch({ 
-     			data: data,
-	 			success: function(result) {
-	 				_this.grid.render();
-	 				
-		     		if (Util.isNotNull(_this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
-	 					_this.searchParam = null; // url 접속 - 최초 검색 후 초기화
-	 					
-	 					// URL 접속시 필터를 전체로 변경하기 위해 강제 크릭 
-	 					var filterBtn =$(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
-	 					if(filterBtn.text() =="나")
-		 					$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");	
-	 				}
-	 			},
-	 			error : function(result) {
-	 				alert("데이터 조회가 실패했습니다.");
-	 			}
-     		}); 
+			Dialog.loading({
+                action:function(){
+					var dfd = new $.Deferred();
+					_this.commentCollection.fetch({ 
+						data: data,
+						success: function(result) {
+							dfd.resolve();
+						},
+						error : function(result) {
+							dfd.reject();
+						}
+					}); 
+            	    return dfd.promise();
+        	    },
+        	    
+                actionCallBack:function(res){//response schema
+					_this.grid.render();
+					
+					if (Util.isNotNull(_this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+						_this.searchParam = null; // url 접속 - 최초 검색 후 초기화
+						
+						// URL 접속시 필터를 전체로 변경하기 위해 강제 크릭 
+						var filterBtn =$(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
+						if(filterBtn.text() =="나")
+							$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");	
+					}
+                },
+                errorCallBack:function(response){
+                    Dialog.error( i18nCommon.RAW_DATA_LIST.MSG.LOADING_FAIL );
+                },
+            });
      	}
     });
 	

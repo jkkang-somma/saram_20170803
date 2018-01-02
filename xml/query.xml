@@ -1855,19 +1855,17 @@
 	<group id="department">
 		<query id="selectDepartment">
 			select
-				code, name, area, leader, (SELECT name FROM members_tbl where id = leader) user_name
+				*, (SELECT name FROM members_tbl where id = leader) user_name
 			from
 				dept_code_tbl
-			where
-				`use`="1"
-			ORDER BY code
+			ORDER BY `use` desc, code
 		</query>
 		<query id="selectUserDepartmentList">
 			select
-				 code, name, area, leader, (SELECT name FROM members_tbl where id = leader) user_name
+				 *, (SELECT name FROM members_tbl where id = leader) user_name
 			from
 				dept_code_tbl
-			ORDER BY code
+			ORDER BY `use` desc, code
 		</query>
 		<query id="insertDepartment">
 			INSERT INTO dept_code_tbl
@@ -1881,7 +1879,8 @@
 			SET
 				name=?,
 				area=?,
-				leader=?
+				leader=?,
+				`use`=?
 			WHERE code=?
 		</query>
 		<query id="deleteDepartment">

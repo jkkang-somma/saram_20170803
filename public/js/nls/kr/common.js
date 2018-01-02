@@ -397,8 +397,7 @@ define({
                 START_DATE : "시작일",
                 END_DATE : "종료일",
                 TIP : "참고사항",
-                TIP_TEXT : "※ 종료일 다음날 6시 까지 출입 기록 필요\n ex) 종료일이 2015-01-15 일 경우  \n 2015-01-16 06:00 까지 출입기록 필요",
-                DATE_ERR_MSG : "시작일이 종료일보다 큽니다."
+                TIP_TEXT : "※ 종료일 다음날 6시 까지 출입 기록 필요\n ex) 종료일이 2015-01-15 일 경우  \n 2015-01-16 06:00 까지 출입기록 필요"
             },
             BUTTON : {
                 CREATE : "데이터 생성",
@@ -406,7 +405,9 @@ define({
             },
             MSG : {
                 CREATE_DATA_COMPLETE : "데이터 생성 완료!",
-                CREATE_DATA_FAIL : "데이터 생성 실패!"
+                CREATE_DATA_FAIL : "데이터 생성 실패!",
+                DATE_ERR_MSG : "시작일이 종료일보다 큽니다.",
+                DATE_ERR_OTHER_YEAR_MSG : "시작일과 종료일의 연도가 같아야 합니다."
             }
         },
         COMMIT_DIALOG : {
@@ -580,7 +581,8 @@ define({
             CODE : "부서코드",
             NAME : "부서",
             AREA : "지역",
-            LEADER : "팀장"
+            LEADER : "팀장",
+            USE : "사용여부"
         },
         CREATE_DIALOG :{
             TOOLTIP : "부서 등록",
@@ -602,6 +604,10 @@ define({
                 MODIFY : "수정",
                 CANCEL : "취소",
             },
+            USE_VALUE : {
+                USE : '사용',
+                NOT_USE : '미사용'
+            }
         },
         REMOVE_DIALOG : {
             TOOLTIP : "삭제",
