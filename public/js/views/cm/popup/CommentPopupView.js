@@ -150,7 +150,9 @@ define([
 						$(normal).click(function(evt) {
 							if ($(evt.currentTarget).find("input").is(":checked")) {
 								$(inTimeAfter).attr("disabled", "true");
+								$(inTimeAfter).val('');
 								$(outTimeAfter).attr("disabled", "true");
+								$(outTimeAfter).val('');
 							}
 							else {
 								$(inTimeAfter).removeAttr("disabled");
