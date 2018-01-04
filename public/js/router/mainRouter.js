@@ -15,7 +15,7 @@ define([
 	'models/sm/SessionModel',
 	'core/BaseRouter',
 	'views/LoginView',
-	'views/NavigationView',
+	'views/NavigationView'
 ], function(
 	$,
 	_,
