@@ -3,7 +3,7 @@
 define([
     'jquery',
 	'underscore',
-	'i18n!nls/common',
+	'i18n!nls/common'
 ], function($, _, i18Common){
     var ADMIN=1,USER=0;
 		var _menu=[{
@@ -86,40 +86,65 @@ define([
 	        //     auth:ADMIN
 	        // }]
 		},{
-        title:i18Common.MENU.TOP.AM,//일반관리
-        subMenu:[{
-			title:i18Common.MENU.SUB.AM.COMMUTE_TODAY, //"오늘의 근태 상황",
-            hashTag:"#commutetoday",
-            auth:USER
+		title: i18Common.MENU.TOP.AM,//일반관리
+		subMenu: [{
+			title: i18Common.MENU.SUB.AM.COMMUTE_TODAY, //"오늘의 근태 상황",
+			hashTag: "#commutetoday",
+			auth: USER
+		}, {
+			title: i18Common.MENU.SUB.AM.ADD_RAW_DATA, //"출입 기록 등록",
+			hashTag: "#addrawdata",
+			auth: ADMIN
+		}, {
+			title: i18Common.MENU.SUB.AM.RAW_DATA_LIST,//"출입 기록 조회",
+			hashTag: "#rawdatalist",
+			auth: USER
+		}, {
+			title: i18Common.MENU.SUB.AM.CREATE_DATA, //"근태 자료 생성",
+			hashTag: "#createdata",
+			auth: ADMIN
+		}, {
+			title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER, //"근태 자료 관리",
+			hashTag: "#commutemanager",
+			auth: USER
+		}, {
+			title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
+			hashTag: "#commutemanager/comment",
+			subTag: ["/?/?"],
+			auth: USER
+		}, {
+			title: i18Common.MENU.SUB.AM.REPORT_MANAGER, //"근태 상신(list)",
+			hashTag: "#reportmanager",
+			auth: USER,
+			actionAuth: {
+				save: ADMIN
+			}
+		}]
         },{
-            title:i18Common.MENU.SUB.AM.ADD_RAW_DATA, //"출입 기록 등록",
-            hashTag:"#addrawdata",
-            auth:ADMIN
-        },{
-            title:i18Common.MENU.SUB.AM.RAW_DATA_LIST,//"출입 기록 조회",
-            hashTag:"#rawdatalist",
-            auth:USER
-        },{
-            title:i18Common.MENU.SUB.AM.CREATE_DATA, //"근태 자료 생성",
-            hashTag:"#createdata",
-            auth:ADMIN
-        },{
-            title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER, //"근태 자료 관리",
-            hashTag:"#commutemanager",
-            auth:USER
-        },{
-            title:i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
-            hashTag:"#commutemanager/comment",
-            subTag:["/?/?"],
-            auth:USER
-        },{
-            title:i18Common.MENU.SUB.AM.REPORT_MANAGER, //"근태 상신(list)",
-            hashTag:"#reportmanager",
-            auth:USER,
-            actionAuth:{
-                save:ADMIN
-            }
-        }]
+		title: "비품 관리",
+		subMenu: [{
+			title: "비품 코드 등록",
+			hashTag: "#officeitemcode",
+			auth: ADMIN
+		}, {
+			title: "비품 관리",
+			hashTag: "#officeitemmanager",
+			auth: ADMIN
+		}, {
+			title: "IP 관리",
+			hashTag: "#ipassignedmanager",
+			auth: ADMIN
+		}, {
+			title: "비품 할당 현황",
+			hashTag: "#officeitemusage",
+			auth: USER
+		}, {
+			title: "비품 이력 관리",
+			hashTag: "#officeitemhistory",
+			auth: ADMIN
+
+		}]
+
 //		},{
 //		title:i18Common.MENU.TOP.RM,//회의실
 //        subMenu:[{

@@ -64,7 +64,12 @@ define([
 			'allreport' : 'showAllReport',
 			'roomreserve' : 'showRoomReserve',
 			'roomreserve' : 'showRoomReserve',
-			'*actions' : 'showHome'
+			'*actions' : 'showHome',
+			'officeitemcode' : 'showOfficeItemCode',
+			'officeitemmanager' : 'showOfficeItemManager',
+			'ipassignedmanager' : 'showIpAssignedManager',
+			'officeitemusage' : 'showOfficeItemUsage',
+			'officeitemhistory' : 'showOfficeItemHistory'
 			
 		},
 		initialize:function(option){
@@ -296,7 +301,27 @@ define([
 		showRoomReserve : function(){
 			var url = 'views/room/RoomReserveView';
 			this.changeView(url, "roomreserve");
-		}
+		},
+        showOfficeItemCode : function(){
+            var url = 'views/officeitem/OfficeItemCodeView';
+            this.changeView(url);
+        },
+        showOfficeItemManager : function(){
+            var url = 'views/officeitem/OfficeItemManagerView';
+            this.changeView(url);
+        },
+        showIpAssignedManager : function(){
+            var url = 'views/officeitem/IpAssignedManagerView';
+            this.changeView(url);
+        },
+        showOfficeItemUsage : function(){
+            var url = 'views/officeitem/OfficeItemUsageView';
+            this.changeView(url);
+        },
+        showOfficeItemHistory : function(){
+            var url = 'views/officeitem/OfficeItemHistoryView';
+            this.changeView(url);
+        }
 	});
 	return Router;
 });
