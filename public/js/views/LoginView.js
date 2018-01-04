@@ -212,7 +212,11 @@ define([
                         });;
                     } else {
                         $("#loginbtn").button('reset');
-                        Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg]);
+                        _view.formSection.find("#loginPasswordTextbox").val('');
+                        
+                        Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg], function(){
+                            _view.formSection.find("#loginPasswordTextbox").focus();
+                        });
                     }
                 });
             }

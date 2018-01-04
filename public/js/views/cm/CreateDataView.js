@@ -137,14 +137,16 @@ define([
                         	            return createDataPopupView.createData();
                                     },
                                     actionCallBack:function(result){
-                                        that.commuteCollection.reset();
-                                        that.commuteCollection.add(result);
-                                        that.grid.render();
-                                        dialog.close();
-                                        Dialog.show(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.MSG.CREATE_DATA_COMPLETE);    
+                                        if(result.length != undefined){
+                                            that.commuteCollection.reset();
+                                            that.commuteCollection.add(result);
+                                            that.grid.render();
+                                            dialog.close();
+                                            Dialog.show(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.MSG.CREATE_DATA_COMPLETE);    
+                                        }
                                     },
                                     errorCallBack:function(response){
-                                        Dialog.error(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.MSG.CREATE_DATA_CANCEL);
+                                        // Dialog.error(i18nCommon.CREATE_COMMUTE_RESULT.CREATE_DIALOG.MSG.CREATE_DATA_CANCEL);
                                     },
                                 });  
                             }

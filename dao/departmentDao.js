@@ -27,7 +27,7 @@ departmentDao.prototype.insertDepartment = function(department){
 
 departmentDao.prototype.updateDepartment = function(department){
     return db.query(group, "updateDepartment", 
-        [department.name, department.area, department.leader, department.code]
+        [department.name, department.area, department.leader,  department.use, department.code]
     );
 };
 

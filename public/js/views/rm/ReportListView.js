@@ -74,7 +74,8 @@ define([
             // button Setting
             this.setBottomButtonCon();
             // table setting
-            this.setReportTable(true, false);
+            this.initReportTable();
+            this.setReportTable();
         },
 
         setTitleTxt: function() {
@@ -127,6 +128,34 @@ define([
 
         setReportTable: function(val, managerMode) {
             var formData = this.getSearchData(val, managerMode);
+
+            var _this = this;
+            
+			Dialog.loading({
+                action:function(){
+					var dfd = new $.Deferred();
+					_this.collection .fetch({ 
+						data: formData,
+						success: function(result) {
+							dfd.resolve();
+						},
+						error : function(result) {
+							dfd.reject();
+						}
+					}); 
+            	    return dfd.promise();
+        	    },
+        	    
+                actionCallBack:function(res){//response schema
+					_this.grid.render();
+				},
+                errorCallBack:function(response){
+                    Dialog.error("데이터 조회가 실패했습니다.");
+                },
+            });
+        },
+
+        initReportTable: function() {
             var view = this;
             this.option.column = [{
                 title: "신청일자",
@@ -164,13 +193,7 @@ define([
                     else {
                         dataVal = row.start_date + "</br>~ " + row.end_date;
                     }
-                    // if (row.day_count != null && row.day_count > 1) {
-                    //     dataVal = row.start_date + "</br>~ " + row.end_date;
-                    // }
-                    // else {
-                    //     dataVal = row.start_date;
-                    // }
-
+                    
                     return dataVal;
                 }
             }, {
@@ -241,16 +264,11 @@ define([
                 }
             }];
 
-            this.option.fetchParam = {
-                reset: true,
-                data: formData,
-                error: function(result) {
-                    Dialog.error("데이터 조회가 실패했습니다.");
-                }
-            };
+            this.option.fetch = false;
             this.option.buttons = this.setTableButtons();
             var _gridSchema = Schemas.getSchema('grid');
             this.grid = new Grid(_gridSchema.getDefault(this.option));
+            this.grid.render();
 
             return this;
         },

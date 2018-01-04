@@ -39,6 +39,7 @@ define([
             name: '',
             area: '',       
             leader: '',
+            use: 1
         },
         
     });
