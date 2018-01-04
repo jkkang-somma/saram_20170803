@@ -142,7 +142,6 @@ define([
 			title: "비품 이력 관리",
 			hashTag: "#officeitemhistory",
 			auth: ADMIN
-
 		}]
 
 //		},{
