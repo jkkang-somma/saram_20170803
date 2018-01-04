@@ -359,7 +359,7 @@ var CommuteYearExcelCreater25 = function () {
 			}
 			
 			// sheet 기본 크기 
-			var sheet1 = workbook.createSheet('sheet1', 200, 150);
+			var sheet1 = workbook.createSheet('sheet1', 200, 250);
 			
 			_createExcelTitle(sheet1, searchValObj);		
 			_createExcelData(sheet1, searchValObj, datas);
