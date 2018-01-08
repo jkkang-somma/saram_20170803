@@ -27,14 +27,14 @@ define([
         'text!templates/cm/searchFormTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,
-		Form, i18Common, 
+		Form, i18Common,
 		BaseView,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
 		SessionModel, CommentCollection,
 		CommentUpdatePopupView,	searchFormTemplate){
 
 	var _currentFilter=0;
-	function _getGridFilterBtn() {	// 검색 필터 
+	function _getGridFilterBtn() {	// 검색 필터
 		var STATE = i18Common.COMMENT.STATE;
 	    var _filterText=[STATE.ALL, STATE.ACCEPTING, STATE.PROCESSING, STATE.COMPLETE];
 	    return {//User Remove
@@ -43,7 +43,7 @@ define([
 	        tooltip:"처리상태",
 	        filterBtnText:_filterText,
 	        click:function(_grid, _button){
-        	  
+
 	           var filters=[
 	                function(data){
 	                    return _getClickFilterResult(data, "");
@@ -52,24 +52,24 @@ define([
 	                    return _getClickFilterResult(data, STATE.ACCEPTING);
 	                },
 	                function(data){
-						return _getClickFilterResult(data, STATE.PROCESSING);	
+						return _getClickFilterResult(data, STATE.PROCESSING);
 	                    // return (_data == STATE.PROCESSING)?true:false;
 	                },
 	                function(data){
-						return _getClickFilterResult(data, STATE.NPROCESSING);	
+						return _getClickFilterResult(data, STATE.NPROCESSING);
 	                },
 	                function(data){
-						return _getClickFilterResult(data, STATE.COMPLETE);	
+						return _getClickFilterResult(data, STATE.COMPLETE);
 	                    // return (_data == STATE.COMPLETE)?true:false;
 	                }
 	           ];
-	           
+
                if (_currentFilter==3){
                     _currentFilter=0;
                } else {
 	                _currentFilter++;
                }
-               
+
                _button.html(_filterText[_currentFilter]);
                var filteredData = _grid.filtering(function(data){
                    var fn=filters[_currentFilter];
@@ -83,7 +83,7 @@ define([
        	var result = (_data == value )?true:false;
        	return result;
 	}
-	function _getCommentUpdateBtn(view){	// comment 수정 
+	function _getCommentUpdateBtn(view){	// comment 수정
 		var that = view;
 		return {
 	        type:"custom",
@@ -95,16 +95,16 @@ define([
 	        }
 	    };
 	}
-	
+
 	function _clickCommentUpdateBtn(view, selectItem ){
 		if ( Util.isNull(selectItem) ) {
 			Dialog.warning("사원을 선택 하여 주시기 바랍니다.");
 			return;
     	}
-    	
-        var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);	            
+
+        var commentUpdatePopupView = new CommentUpdatePopupView(selectItem);
         var buttons = [];
-        
+
         if(selectItem.state != "처리"){
         	if(SessionModel.get("user").id == selectItem.approval_id && selectItem.state == "상신"){ // 결재자인 경우
             	buttons.push({
@@ -113,7 +113,7 @@ define([
                     label: '결재',
                     action: function(dialog) {
                     	commentUpdatePopupView.approvalComment().done(function(result){
-                    		view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                    		view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
                 			Dialog.show("결재가 완료되었습니다..");
             				dialog.close();
                         }).fail(function(){
@@ -127,7 +127,7 @@ define([
                     label: '반려',
                     action: function(dialog) {
                     	commentUpdatePopupView.NapprovalComment().done(function(result){
-                    		view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                    		view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
                 			Dialog.show("결재가 반려되었습니다..");
             				dialog.close();
                         }).fail(function(){
@@ -142,7 +142,7 @@ define([
                     label: '처리',
                     action: function(dialog) {
                     	commentUpdatePopupView.updateComment().done(function(result){
-                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
             				dialog.close();
                         }).fail(function(){
                         	Dialog.show("처리에 실패했습니다.");
@@ -156,7 +156,7 @@ define([
                     label: '상신취소',
                     action: function(dialog) {
                     	commentUpdatePopupView.NACCEPTING().done(function(result){
-                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터 
+                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
                 			Dialog.show("상신이 취소되었습니다..");
             				dialog.close();
                         }).fail(function(){
@@ -164,23 +164,23 @@ define([
                         });
                     }
                 });
-            }	
+            }
         }
-        
+
         buttons.push({
             label : "취소",
             action : function(dialog){
                 dialog.close();
             }
         });
-        
+
         Dialog.show({
-            title:"Comment 처리", 
+            title:"Comment 처리",
             content: commentUpdatePopupView,
             buttons: buttons
         });
 	}
-	
+
 	var CommuteCommentView = BaseView.extend({
 		el:$(".main-container"),
 		setSearchParam : function(searchParam) {
@@ -192,7 +192,7 @@ define([
         		    el: "commute_content",
         		    id: "commuteDataTable",
         		    column:[
-        		    	   { data : "comment_date", "title" : "신청일자", 
+        		    	   { data : "comment_date", "title" : "신청일자",
         		    	   		render: function(data, type, full, meta) {
     			        		   return Moment(data).format("YYYY-MM-DD<br>HH:mm");
     			        	   }
@@ -201,7 +201,7 @@ define([
     			           { data : "date", "title" : "일자" },
     			           { data : "comment", "title" : "접수내용",
      			        	   render: function(data, type, full, meta) {
-    			        		   var comment = full.comment; 
+    			        		   var comment = full.comment;
     			        		   if (comment.length > 7) {
     			        			   comment = comment.substring(0, 10) + "...";
     			        		   }
@@ -211,12 +211,12 @@ define([
     			           { data : "writer_name", "title" : "작성자" },
     			           { data : "comment_reply", "title" : "처리내용",
      			        	   render: function(data, type, full, meta) {
-    			        		   var comment_reply = full.comment_reply; 
+    			        		   var comment_reply = full.comment_reply;
     			        		   if (comment_reply.length > 7) {
     			        			   comment_reply = comment_reply.substring(0, 10) + "...";
     			        		   }
     			        		   return comment_reply;
-    			        	   }    			        	   
+    			        	   }
     			           },
     			           { data : "comment_reply_date", "title" : "처리일자"},
     			           { data : "approval_name", "title" : "결재자" },
@@ -238,7 +238,7 @@ define([
 				        tooltip: "",
         		    }],
         		    fetch: false
-        	};    		
+        	};
     		this.buttonInit();
 		},
 		events: {
@@ -256,18 +256,18 @@ define([
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
     	    var _head=$(_headTemp(_headSchema.getDefault({title:"근태 관리", subTitle:"Comment 관리"})));
-    	    
+
     	    _head.addClass("no-margin");
     	    _head.addClass("relative-layout");
 
             var _row=$(RowHTML);
     	    var _datepickerRange=$(_.template(DatePickerHTML)(
-    	    	{ obj : 
+    	    	{ obj :
     	    		{
     	    			fromId : "ccmFromDatePicker",
     	    			toId : "ccmToDatePicker"
     	    		}
-    	    		
+
     	    	})
     	    );
     	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
@@ -276,7 +276,7 @@ define([
     	            }
     	        })
     	    );
-    	    
+
     	    var _searchBtn = $(_.template(RowButtonHTML)({
     	            obj: {
     	                id: "ccmSearchBtn",
@@ -285,15 +285,15 @@ define([
     	        })
 	        );
 	        _btnContainer.append(_searchBtn);
-	        
+
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
-    	    
+
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
     	    _layOut.append(_head);
     	    _layOut.append(_row);
     	    _layOut.append(_content);
-    	      	    
+
     	    $(this.el).html(_layOut);
 
             var today = new Date();
@@ -306,7 +306,7 @@ define([
 		        format: "YYYY-MM-DD",
 		        defaultDate: Moment(firstDay).format("YYYY-MM-DD")
             });
-            
+
             $(this.el).find("#ccmToDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
@@ -314,24 +314,24 @@ define([
 		        format: "YYYY-MM-DD",
 		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
-                        
+
     	    var _gridSchema=Schemas.getSchema('grid');
     	    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             this.grid.render();
 
-            if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+            if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
             	$(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
      		    $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
             }
-            
+
             this.selectComments();
             return this;
     	},
-    	
+
     	onClickSearchBtn: function() {
     		this.selectComments();
     	},
-    	
+
     	onClickListDetailCommBtn : function(evt){
     		evt.stopPropagation();
     		var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
@@ -340,17 +340,17 @@ define([
 	        var selectData=this.grid.getSelectItem();
 	        _clickCommentUpdateBtn(this, selectData);
     	},
-    	
+
      	getSearchForm: function() {	// 검색 조건
      		var data = {
      		    startDate : $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
      		    endDate : $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
      		}
-     		
-     		if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+
+     		if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
      			data.id = this.searchParam.id;
      		}
-     		
+
      		if ( Util.isNull(data.startDate) ) {
      			alert("검색 시작 날짜를 선택해주세요");
      			return null;
@@ -358,11 +358,11 @@ define([
      			alert("검색 끝 날짜를 선택해주세요");
      			return null;
      		}
-     		
+
      		return data;
      	},
      	selectComments: function() {	// 데이터 조회
-     		var data = this.getSearchForm();     		
+     		var data = this.getSearchForm();
      		if (Util.isNull (data) ) {
      			return;
      		}
@@ -371,7 +371,7 @@ define([
 			Dialog.loading({
                 action:function(){
 					var dfd = new $.Deferred();
-					_this.commentCollection.fetch({ 
+					_this.commentCollection.fetch({
 						data: data,
 						success: function(result) {
 							dfd.resolve();
@@ -379,20 +379,26 @@ define([
 						error : function(result) {
 							dfd.reject();
 						}
-					}); 
+					});
             	    return dfd.promise();
         	    },
-        	    
+
                 actionCallBack:function(res){//response schema
-					_this.grid.render();
-					
-					if (Util.isNotNull(_this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우 
+					_this.grid.render().then(function(result){//Search 필터 값 저장 기능: 전체데이터 조회 후 처리상태 필터링
+                        var STATE = i18Common.COMMENT.STATE;
+                        var _filterText=[STATE.ALL, STATE.ACCEPTING, STATE.PROCESSING, STATE.COMPLETE];
+                        if (_currentFilter != 0) {
+                            $("#commuteDataTable_custom_filter_Btn").html(_filterText[_currentFilter]);
+                        }
+                    });
+
+					if (Util.isNotNull(_this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
 						_this.searchParam = null; // url 접속 - 최초 검색 후 초기화
-						
-						// URL 접속시 필터를 전체로 변경하기 위해 강제 크릭 
+
+						// URL 접속시 필터를 전체로 변경하기 위해 강제 크릭
 						var filterBtn =$(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
 						if(filterBtn.text() =="나")
-							$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");	
+							$(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");
 					}
                 },
                 errorCallBack:function(response){
@@ -401,6 +407,6 @@ define([
             });
      	}
     });
-	
+
 	return CommuteCommentView;
 });

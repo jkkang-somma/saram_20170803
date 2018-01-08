@@ -35,7 +35,7 @@ define([
         'views/cm/popup/OvertimeApprovalPopupView',
         'text!templates/cm/searchFormTemplate.html',
         'text!templates/cm/btnNoteCellTemplate.html',
-        'text!templates/cm/overTimeCellTemplate.html',
+        'text!templates/cm/overTimeCellTemplate.html'
 ], function(
 		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
@@ -331,7 +331,7 @@ define([
 				        tooltip: "",
         		    }],
         		    fetch: false,
-        		    order : [[1, "asc"]]
+        		    order : [[1, "asc"],[2, "asc"],[3, "asc"]]
         	};    		
     		this.buttonInit();
     	},
