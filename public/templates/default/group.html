@@ -2,9 +2,9 @@
     <div class="panel-heading form-group-heading">
         <h4 class="panel-title">
             <% if (obj.initOpen) { %>
-                <a data-toggle="collapse" data-target="#<%= obj.id %>_collapse" class="collapsed"></a>
-            <% } else {%>
                 <a data-toggle="collapse" data-target="#<%= obj.id %>_collapse"></a>
+            <% } else {%>
+                <a data-toggle="collapse" data-target="#<%= obj.id %>_collapse" class="collapsed"></a>
             <% } %>
             
             <p><%= obj.label %></p>
