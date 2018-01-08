@@ -46,7 +46,8 @@ define([
     	        if($(window).width()!=lastWidth){
     	            LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
-    	            grid.updateCSS(grid);
+                    // grid.updateCSS(grid);
+                    grid.updateCSS(true);
                 }
     	    });
 
@@ -82,7 +83,41 @@ define([
     	setBtnText:function(btn, text){
     	    btn.html($(_defaultBtnText).html(text));
     	},
-    	updateCSS:function(){
+        setTheadCss: function(isFilter){
+            var width=$(window).width();
+            var gridCon = $('#' + this.options.id);
+            if (width > 768) {
+                gridCon.find("thead").css('position', 'fixed');
+                gridCon.find("thead").css('margin-top', -(gridCon.find("thead").height()) + "px");
+                gridCon.parent().css('margin-top', (gridCon.find("thead").height() + 10) + "px");
+                
+            } else if ( width  < 767) {
+                gridCon.find("thead").css('position', 'relative');
+                gridCon.find("thead").css('margin-top', "0px");
+                gridCon.parent().css('margin-top', "10px");
+            }
+
+            if(gridCon.find("tbody td").length > 1){
+                
+                if( (gridCon.find("thead").outerWidth() > gridCon.find("thead tr").outerWidth() && gridCon.find("thead").outerWidth() - 17 > gridCon.find("thead tr").outerWidth())
+                    || (isFilter && gridCon.find("thead").outerWidth() - 17 <= gridCon.find("tbody tr").outerWidth()) ){
+                    var theadThs = gridCon.find("thead th");
+                    _.each(theadThs, function(thCon, i){
+                        var tdWidth = $(gridCon.find('tbody tr:first > td')[i]).outerWidth() - 36;
+    
+                        $(thCon).css('width', tdWidth);
+                    });
+                }else{
+                    var theadTds = gridCon.find("colgroup col");
+                    _.each(theadTds, function(tdCon, i){
+                        var tdWidth = $(gridCon.find('thead th')[i]).outerWidth();
+    
+                        $(tdCon).css('width', tdWidth);
+                    });
+                }
+            }
+        },
+    	updateCSS:function(resize){
     	    var width=$(window).width();
     	    var _padding=38;
     	    var API=this.DataTableAPI;
@@ -123,6 +158,7 @@ define([
                     }
                 }
             }
+            this.setTheadCss(resize);
     	},
     	format : function (rowData) {
     	    var _result=$('<div></div>');
@@ -495,7 +531,8 @@ define([
                //grid.filtering(filter[index]);
                 _grid.condition.MyRecord_Text=index;//Search 필터 값 저장 기능:  변경된 필터 값 메모리에 저장
                 _grid.filters.myRecord=filter[index];
-    	        _grid._filtering();
+                _grid._filtering();
+                _grid.setTheadCss(true);
             })
     	},
         _createMyDeptRecordButton:function(obj){
@@ -679,6 +716,24 @@ define([
      	        "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order
      	    });
 
+            if($("#"+this.options.el).find("table colgroup").length == 0){
+                var colgroupCon = $('<colgroup>');
+                $("#"+this.options.el).find("table thead th").each(function(){
+                   var thWidth = $(this).width();
+                   colgroupCon.append($('<col>').css('width', thWidth));
+               });
+               $("#"+this.options.el).find("table").prepend(colgroupCon);
+            }
+
+            var rowsHeight = 0;
+            $('.main-container > div > .row').each(function(){
+                rowsHeight += $(this).height();
+            });
+
+            //  var height = _dataTable.find("thead").height() + rowsHeight +  15;
+            var height = rowsHeight +  65 + _dataTable.find("thead").height();
+             $("#"+this.options.el).find(".dataTables_wrapper").css('height', 'calc(100% - '+ height +'px)')
+            
      	    //ROW click
      	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
      	    	console.log(_dataTable.$('tr.selected'));
