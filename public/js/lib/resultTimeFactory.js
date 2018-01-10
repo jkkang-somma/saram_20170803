@@ -495,55 +495,6 @@ define([
                         break;
                 }
 
-                switch (this.vacationCode) {
-                    case "V02": // 오전반차
-                    case "V07": // 오전반차(공적)
-                        this.standardInTime.hour(14).minute(0).second(0);
-                        this.standardOutTime.hour(18).minute(0).second(0);
-                        break;
-                    case "V03": // 오후반차
-                    case "V08": // 오후반차(공적)
-                    default:
-                        // 본사
-                        //       ~ 8:00 : 08:00
-                        //  8:01 ~ 9:59 : 출근시간;
-                        // 10:00 ~      : 10:00
-                        
-                        // 수원
-                        //       ~ 7:00 : 07:00
-                        //  7:01 ~ 9:59 : 출근시간;
-                        // 10:00 ~      : 10:00
-                        if (!_.isNull(this.inTime)) {
-                            var hour = this.inTime.hour();
-                            var minute = this.inTime.minute();
-                            
-                            if(this.isSuwon == true){
-                                if(hour < 7){ 
-                                    this.standardInTime.hour(7).minute(0).second(0);
-                                } else if (hour < 10){
-                                    this.standardInTime.hour(hour).minute(minute).second(0);
-                                } else {
-                                    this.standardInTime.hour(10).minute(0).second(0);
-                                }
-                            }else{
-                                if(hour < 8){ 
-                                    this.standardInTime.hour(8).minute(0).second(0);
-                                } else if (hour < 10){
-                                    this.standardInTime.hour(hour).minute(minute).second(0);
-                                } else {
-                                    this.standardInTime.hour(10).minute(0).second(0);
-                                }
-                            }
-                        }
-                        
-                        if(this.vacationCode == "V03" || this.vacationCode == "V08"){
-                            this.standardOutTime = Moment(this.standardInTime).add(4, "hours");
-                        }else{
-                            this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
-                        }
-                        break;
-                }
-
                 /**
                  * 외근, 출장, 장기외근, 파견 특이사항 수정
                  * 외근 
@@ -623,6 +574,60 @@ define([
 
                         break;
                 }
+
+                // 휴가에 따른 Standard In/Out Time 조정
+                switch (this.vacationCode) {
+                    case "V02": // 오전반차
+                    case "V07": // 오전반차(공적)
+                        this.standardInTime.hour(14).minute(0).second(0);
+                        this.standardOutTime.hour(18).minute(0).second(0);
+                        break;
+                    case "V03": // 오후반차
+                    case "V08": // 오후반차(공적)
+                    default:
+                        // 본사
+                        //       ~ 8:00 : 08:00
+                        //  8:01 ~ 9:59 : 출근시간;
+                        // 10:00 ~      : 10:00
+                        
+                        // 수원
+                        //       ~ 7:00 : 07:00
+                        //  7:01 ~ 9:59 : 출근시간;
+                        // 10:00 ~      : 10:00
+                        if (!_.isNull(this.inTime)) {
+                            var hour = this.inTime.hour();
+                            var minute = this.inTime.minute();
+                            
+                            if(this.isSuwon == true){
+                                if(hour < 7){ 
+                                    this.standardInTime.hour(7).minute(0).second(0);
+                                } else if (hour < 10){
+                                    this.standardInTime.hour(hour).minute(minute).second(0);
+                                } else {
+                                    this.standardInTime.hour(10).minute(0).second(0);
+                                }
+                            }else{
+                                if(hour < 8){ 
+                                    this.standardInTime.hour(8).minute(0).second(0);
+                                } else if (hour < 10){
+                                    this.standardInTime.hour(hour).minute(minute).second(0);
+                                } else {
+                                    this.standardInTime.hour(10).minute(0).second(0);
+                                }
+                            }
+                        }
+                        
+                        if(this.vacationCode == "V03" || this.vacationCode == "V08"){
+                            this.standardOutTime = Moment(this.standardInTime).add(4, "hours");
+                        }else{
+                            this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
+                        }
+
+                        break;
+                }
+
+                
+
                 /**
                  * 휴일에 출퇴근 기록 없는 경우
                  * 휴가, 외근을 설정하지 않음
@@ -718,12 +723,14 @@ define([
                     /**
                      * 초과근무 계산
                      *  지각시간 10분단위 반올림하여 추가로 근무해야함
+                     *  출근 시간이 기록되지 않는 경우 초과 근무 계산 진행하지 않음
                      *  (5분지각 = 10분 추가)
                      *  2시간 : A형
                      *  4시간 : B형
                      *  6시간 : C형
                      **/
-                    if (!(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))) {
+                    if (!_.isNull(this.inTime) && !(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))) {
+                        
                         this.lateOverTime = (Math.ceil(this.lateTime / 10)) * 10; // 지각으로 인해 추가 근무 해야하는시간
 
                         if (tmpTime >= 0) {
@@ -963,7 +970,7 @@ define([
                  * 변경된 사항들은 반영하여 결과값을 산출한다.
                  */
                 var currentResult = that.getResult();
-
+                
                 /**
                  * 초과근무를 관리자가 수정한 적이 있을경우는
                  * 계산으로 인해 추가근무가 변경되더라도 적용하지 않는다. 
