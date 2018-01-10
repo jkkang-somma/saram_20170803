@@ -5130,6 +5130,9 @@
 			.bind( 'click.DT', oData, function (e) {
 					n.blur(); // Remove focus outline for mouse users
 					fn(e);
+					$('.dataTables_wrapper').animate({
+				        scrollTop: 0
+				    }, 200);
 				} )
 			.bind( 'keypress.DT', oData, function (e){
 					if ( e.which === 13 ) {
