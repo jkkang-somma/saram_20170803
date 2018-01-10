@@ -100,7 +100,7 @@ define([
 				// var index = target.data("index");
 				var id = target.data("id");
 
-				var url = window.location.host + "/gis/GisHistoryImg?file=" + id + "&timestamp=" + new Date().getTime();
+				var url = "http://" + window.location.host + "/gis/GisHistoryImg?file=" + id + "&timestamp=" + new Date().getTime();
 				window.open(url, id.replace(".png",""));
 				//newWin.location.reload();
 				// var newWin = window.open("about:blank");
@@ -121,7 +121,7 @@ define([
 				var _buttons = ["search"];
 
 				//Refresh
-				_buttons.push("refresh");
+				//_buttons.push("refresh");
 
 				this.option.buttons = _buttons;
 
