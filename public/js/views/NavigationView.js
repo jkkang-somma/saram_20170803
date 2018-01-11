@@ -68,11 +68,22 @@ define([
             }
         }
         
-	    var ip_office = SessionModel.getUserInfo().ip_office;
+        var ip_office = SessionModel.getUserInfo().ip_office;
 	    if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office)) { 
-        // if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) || isOnLoginModule && isMobile.any()) { 
-        	$(this.el).find('#accessIn').remove();
-        	$(this.el).find('#accessOut').remove();
+            // if ( ip_office == "" || _.isNull(ip_office) || _.isUndefined(ip_office) || isOnLoginModule && isMobile.any()) { 
+                $(this.el).find('#accessIn').remove();
+                $(this.el).find('#accessOut').remove();
+        }else{
+            var agent = navigator.userAgent.toLowerCase();
+            var filter = "win16|win32|win64|mac";
+            var platform = navigator.platform.toLowerCase();
+            if(agent.indexOf("chrome") < 0 && agent.indexOf("firefox") < 0 && filter.indexOf(platform) > -1){ // 크롬, 모바일이 아닐 경우 
+                $(this.el).find('#accessIn').remove();
+                $(this.el).find('#accessOut').remove();
+                if(agent.indexOf("chrome") < 0){
+                    Dialog.info("출근/퇴근 등록은 크롬이나 파이어폭스에서 해주시기 바랍니다.");
+                }
+            }
         }
         
         if(_auth == 1){

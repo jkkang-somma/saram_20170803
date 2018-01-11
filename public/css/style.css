@@ -1392,6 +1392,8 @@ border: 2px dotted #2ABB9B !important;
   background: rgb(229,248,255);
 }
 
+.dataTables_paginate {margin-left: 5px;}
+
 @media ( min-width: 786px ) {
     body{
         overflow: hidden;
