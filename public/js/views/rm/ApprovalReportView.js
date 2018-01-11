@@ -8,7 +8,8 @@ define([
     'comboBox',
     'cmoment',
     'resulttimefactory',
-    'text!templates/report/addReportTemplate.html',
+    // 'text!templates/report/addReportTemplate.html',
+    'text!templates/report/detailReportTemplete.html',
     'collection/rm/ApprovalCollection',
     'collection/vacation/OutOfficeCollection',
     'collection/vacation/InOfficeCollection',
@@ -158,12 +159,17 @@ define([
             }
             
             if (param != undefined) {
-                _this.find('#submit_id').val(param.submit_name);
-                _this.find('#start_date input').val(param.start_date);
-                _this.find('#end_date input').val(param.end_date);
-                _this.find('#start_time input').val(param.start_time);
-                _this.find('#end_time input').val(param.end_time);
-                _this.find('#office_code').html("<option>" + param.office_code_name + "</option>");
+                _this.find('#submit_id').html(param.submit_name);
+                _this.find('#office_code').html(param.office_code_name);
+
+                _this.find('#start_date').html(param.start_date);
+                var endDateVal = (param.end_date)? "&nbsp; ~ &nbsp;" + param.end_date : "";
+                _this.find('#end_date').html(endDateVal);
+
+                _this.find('#start_time').html(param.start_time);
+                var endTimeVal = (param.end_time)? "&nbsp; ~ &nbsp;" + param.end_time : "";
+                _this.find('#end_time').html(endTimeVal);
+
                 if(param.office_code == "O01"){
                     var splitArr = param.submit_comment.split(",");
                     var except = parseInt(splitArr[0],10);
@@ -193,7 +199,7 @@ define([
                 _this.find('#state').val(param.state);
 
                 var usable = (param.total_day > param.used_holiday) ? param.total_day - param.used_holiday : 0;
-                _this.find('#usableHoliday').val(usable + " 일");
+                _this.find('#usableHoliday').html(usable + " 일");
 
                 var holReq = "0";
                 switch(param.office_code){
@@ -202,17 +208,25 @@ define([
                         $(this.el).find("#reqHolidayCon").hide(); 
                         $(this.el).find('#end_date').hide();
                         $(this.el).find('#outsideOfficeTimeCon').hide();
+
+                        $(this.el).find('#outsideOfficeTimeCon').prev().removeClass('col-sm-6');
+                        $(this.el).find('#outsideOfficeTimeCon').prev().addClass('col-sm-10');
                         break;
                     case "B01": 
                         holReq = "0";
                         $(this.el).find("#reqHolidayCon").hide(); 
                         $(this.el).find('#end_date').hide();
                         $(this.el).find('#outsideOfficeTimeCon').hide();
+
+                        $(this.el).find('#outsideOfficeTimeCon').prev().removeClass('col-sm-6');
+                        $(this.el).find('#outsideOfficeTimeCon').prev().addClass('col-sm-10');
                         break;
                     case "V02" : case "V03" : case "V07" : case "V08" : // 반차
                         holReq = "0.5";
                         $(this.el).find('#end_date').hide();
                         $(this.el).find('#outsideOfficeTimeCon').hide();
+                        $(this.el).find('#outsideOfficeTimeCon').prev().removeClass('col-sm-6');
+                        $(this.el).find('#outsideOfficeTimeCon').prev().addClass('col-sm-10');
                         break;
                     case "W01" : // 외근
                         holReq = "0";
@@ -229,14 +243,16 @@ define([
                         holReq = arrInsertDate.length + "";
                         $(this.el).find('#end_date').css('display', 'table');
                         $(this.el).find('#outsideOfficeTimeCon').css('display', 'none');
+                        $(this.el).find('#outsideOfficeTimeCon').prev().removeClass('col-sm-6');
+                        $(this.el).find('#outsideOfficeTimeCon').prev().addClass('col-sm-10');
                         break;
                 }
                 
-                _this.find('#reqHoliday').val(holReq + " 일");
+                _this.find('#reqHoliday').html(holReq + " 일");
 
                 // 휴일 근무, 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
                 var hideHoliday = ['B01', 'W01', 'W02', 'W03', 'W04', 'O01'];
-                if (_.indexOf(hideHoliday, param.office_code) > -1) {
+                if (_.indexOf(hideHoliday, param.office_code) > -1 || _.isUndefined(param.total_day)) {
                     $(this.el).find('#usableHolidayCon').hide();
                 }
                 else {
@@ -268,8 +284,8 @@ define([
             });
 
             indexed_array["doc_num"] = this.options["doc_num"];
-
-            return indexed_array;
+            
+            return _.extend(this.options,indexed_array);
         },
 
         getChangeFormData: function(sendData) {
@@ -582,8 +598,8 @@ define([
         },
         getDatePariod: function(getHoliday) {
             // 날짜 개수 이용하여 날짜 구하기
-            var sStart = $(this.el).find('#start_date input').val();
-            var sEnd = $(this.el).find('#end_date input').val();
+            var sStart = $(this.el).find('#start_date').html();
+            var sEnd = $(this.el).find('#end_date').html();
 
             var start = new Date(sStart.substr(0, 4), sStart.substr(5, 2) - 1, sStart.substr(8, 2));
             var end = new Date(sEnd.substr(0, 4), sEnd.substr(5, 2) - 1, sEnd.substr(8, 2));

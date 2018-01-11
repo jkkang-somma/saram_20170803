@@ -91,7 +91,7 @@ define([
 
 			if (!_.isUndefined(el)) this.el = el;
 
-			var _content = $(ContentHTML).attr("id", this.gridOption.el);
+			var _content = $(ContentHTML).attr("id", this.gridOption.el).attr('style', 'height : 400px;');
 			// console.log(_content);
 			$(this.el).html(_content);
 

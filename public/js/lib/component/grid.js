@@ -41,14 +41,14 @@ define([
             this.condition.MyDept_Text = "";
             this.condition.Page_num = "";
 
-    	    var lastWidth = $(window).width();
+    	    // var lastWidth = $(window).width();
     	    $(window).on("resize", function(e){
-    	        if($(window).width()!=lastWidth){
-    	            LOG.debug(lastWidth);
+    	        // if($(window).width()!=lastWidth){
+    	            // LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
                     // grid.updateCSS(grid);
                     grid.updateCSS(true);
-                }
+                // }
     	    });
 
             this.options=options;
@@ -88,8 +88,8 @@ define([
             var gridCon = $('#' + this.options.id);
             if (width > 768) {
                 gridCon.find("thead").css('position', 'fixed');
-                gridCon.find("thead").css('margin-top', -(gridCon.find("thead").height()) + "px");
-                gridCon.parent().css('margin-top', (gridCon.find("thead").height() + 10) + "px");
+                gridCon.find("thead").css('margin-top', -(gridCon.find("thead").outerHeight()) + "px");
+                gridCon.parent().css('margin-top', (gridCon.find("thead").outerHeight() + 10) + "px");
                 
             } else if ( width  < 767) {
                 gridCon.find("thead").css('position', 'relative');
@@ -98,15 +98,10 @@ define([
             }
 
             if(gridCon.find("tbody td").length > 1){
-                
-                if( (gridCon.find("thead").outerWidth() > gridCon.find("thead tr").outerWidth() && gridCon.find("thead").outerWidth() - 17 > gridCon.find("thead tr").outerWidth())
+                if( (gridCon.find("thead").outerWidth() > gridCon.find("thead tr").outerWidth() 
+                        && gridCon.find("thead").outerWidth() - 17 > gridCon.find("thead tr").outerWidth()
+                        && gridCon.find("thead tr").outerWidth() >= gridCon.find("tbody tr").outerWidth())
                     || (isFilter && gridCon.find("thead").outerWidth() - 17 <= gridCon.find("tbody tr").outerWidth()) ){
-                    var theadThs = gridCon.find("thead th");
-                    _.each(theadThs, function(thCon, i){
-                        var tdWidth = $(gridCon.find('tbody tr:first > td')[i]).outerWidth() - 36;
-    
-                        $(thCon).css('width', tdWidth);
-                    });
                 }else{
                     var theadTds = gridCon.find("colgroup col");
                     _.each(theadTds, function(tdCon, i){
@@ -115,6 +110,12 @@ define([
                         $(tdCon).css('width', tdWidth);
                     });
                 }
+                var theadThs = gridCon.find("thead th");
+                _.each(theadThs, function(thCon, i){
+                    var tdWidth = $(gridCon.find('tbody tr:first > td')[i]).outerWidth() - 36;
+
+                    $(thCon).css('width', tdWidth);
+                });
             }
         },
     	updateCSS:function(resize){

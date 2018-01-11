@@ -1,0 +1,53 @@
+
+<form>
+    <div class="container detail-content">
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="detail-title">신청자 </div>
+                <div class="detail-value"><span id="submit_id"></span></div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="detail-title">구분 </div>
+                <div class="detail-value"><span id="office_code"></span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="detail-title">기간 </div>
+                <div class="detail-value"><span id="start_date"></span><span id="end_date"></span></div>
+            </div>
+            <div id="outsideOfficeTimeCon" class='col-sm-6'>
+                <div class="detail-title">외근 시간 </div>
+                <div class="detail-value"><span id="start_time"></span><span id="end_time"></span></div>
+            </div>
+        </div>
+        <div>
+            <div class="row">  
+                <div id="usableHolidayCon" class='col-sm-6'>
+                    <div class="detail-title">잔여연차일수</div>
+                    <div class="detail-value" style='text-align: right;'><span id="usableHoliday"></span></div>
+                </div>
+                <div id="reqHolidayCon" class='col-sm-6'>
+                    <div class="detail-title">신청 일수</div>
+                    <div class="detail-value" style='text-align: right;'><span id="reqHoliday"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="submit_comment">메모</label>
+            <textarea id="submit_comment" name="submit_comment" rows="4" class="form-control"/>
+        </div>
+        <div class="form-group addReportNone">
+            <label for="decide_comment">결재자 메모</label>
+            <textarea id="decide_comment" name="decide_comment" rows="4" class="form-control"/>
+        </div>
+        <div class="form-group approvalReportNone">
+            <label for="manager_id">결재자</label>
+            <select id="manager_id" name="manager_id" class="form-control"></select>
+        </div>
+        <div class="form-group addReportNone">
+            <label for="state">결재구분</label>
+            <select id="state" name="state" class="form-control"></select>
+        </div>
+    </div>
+</form>

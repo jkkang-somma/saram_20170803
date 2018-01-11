@@ -47,19 +47,24 @@ define([
 			var _view=this;
 			var formOption = {
 		        el:_view.el,
-		        form:undefined,
+				form:undefined,
+				type:'detail',
 		        group:[{
 	                name:"destGroup",
 	                label:"Comment 정보",
-	                initOpen:true
+					initOpen:true,
+					type: 'detail',
+					titleVisible : false
 	            },{
 	                name:"modifyGroup",
 	                label:"수정 요청사항",
-	                initOpen:true
+	                initOpen:true,
+					titleVisible : false
 	            },{
 	                name:"managerGroup",
 	                label:"처리내용",
-	                initOpen:true
+	                initOpen:true,
+					titleVisible : false
 	            }],
 		        
 		        childs:[{
@@ -82,7 +87,8 @@ define([
 	                label:"Comment 작성자",
 	                value:this.selectData.writer_name,
 	                group:"destGroup",
-	                disabled:true
+	                disabled:true,
+	                full:true
 	        	}, {
 	        		type:"checkBox",
 	                name:"normal",
@@ -189,6 +195,8 @@ define([
 					 	return false;	
 					 });
 				}
+
+				$(_view.el).find('.panel').css('margin-bottom', 0);
 				
 		        dfd.resolve();
 		    }).fail(function(){

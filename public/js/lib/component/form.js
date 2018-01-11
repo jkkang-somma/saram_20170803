@@ -31,14 +31,17 @@ define([
                 var _InputTemp=_.template(InputHTML);
                 var _input=_.noop();
                 _input=_InputTemp(data);
-                
+                var result=$(_input);
+                if(!_.isUndefined(data.full)&&data.full){
+                    result.removeClass('form-group-harf');
+                }
+
                 if(!_.isUndefined(data.disabled)&&data.disabled){
-                    var result=$(_input);
                     result.find("input").attr("readOnly", "readOnly");
 
                     return result;
                 }
-                return $(_input);
+                return result;
             }
         },
         text:{
@@ -264,15 +267,25 @@ define([
             var _form=$(_view.formTemp(this.options.form));
             var _childs=_view.childs;
             var _group=_view.group;
+            var _formType = (_.isUndefined(_view.options.type))? 'default' : _view.options.type;
             
             if (!_.isUndefined(_group)){//설정 그룹이 있을 경우.
               //  var _schema=Schemas.getSchema(_type);//default config
                 for (var index in _group){
                     var group=_group[index];
                     group.id=_view.id+"_"+group.name+"_"+(_groupId++);
-                    
+                    group.titleVisible = (_.isUndefined(group.titleVisible))? true: group.titleVisible;
                     var groupTemp=_.template(GroupHTML);
                     var groupTag=$(groupTemp(group));
+
+                    if(!group.titleVisible){
+                        groupTag.find('.panel-heading').hide();
+                    }
+
+                    if(group.type == 'detail'){
+                        console.log(_formType)
+                        groupTag.addClass('detail-content');
+                    }
                     
                     _view.groupElements.push(groupTag);
                     _form.append(groupTag);

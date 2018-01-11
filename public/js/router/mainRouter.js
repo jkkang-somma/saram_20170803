@@ -183,10 +183,18 @@ define([
 						view.setActionAuth(_configActionAuth);
 					}
 		        }
-		       
-		        
+		       		        
 	    		view.render.apply(view, []);
-	    		animator.animate($(view.el), animator.FADE_IN);	
+				animator.animate($(view.el), animator.FADE_IN);	
+				
+				// side-container
+				if($('.side-container').children().length <= 0 && $(window).width() > 768){
+					$('body').css('overflow', 'hidden');
+					$('.main-container').css('height', '');
+				}else{
+					$('body').css('overflow', 'auto');
+					$('.main-container').css('height', 'auto');
+				}
 			});
 		},
 		

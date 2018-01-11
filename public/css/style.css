@@ -70,6 +70,26 @@ body {
     background-color: #DEEEE6;
 }
 
+form .detail-content input{
+    display: inline-block;
+    width: auto;
+
+    background-color: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+    line-height: 27px;
+    height: 27px;
+    vertical-align: top;
+}
+form .detail-content .form-group-harf{ margin-bottom: 0; padding-left: 0;}
+form .detail-content .panel-body{padding-top: 0; margin-top: 0;}
+
+.detail-content > div{line-height: 28px;}
+.detail-content .detail-title,
+form .detail-content label{display: inline-block; min-width: 50px; font-weight: bold; padding-right: 10px;}
+.detail-content .detail-value{display: inline-flex;}
+.detail-content .detail-value:before {content:" : "; margin-right: 15px;}
+
 .date .form-control[readonly]{
     cursor: default;
     background-color: #ffffff
@@ -566,6 +586,9 @@ table.dataTable thead .sorting_desc {
 }
 .bootstrap-dialog.type-default .bootstrap-dialog-title {
     color:white;
+}
+.bootstrap-dialog .modal-body{
+    padding-bottom: 0;
 }
 .btn-default {
 color: #333;
@@ -1403,6 +1426,10 @@ border: 2px dotted #2ABB9B !important;
         right: 20px;
         left: 20px;
     }
+
+    .bootstrap-dialog-body table.dataTable thead {
+        left: 46px;
+    }
     
     table.dataTable.no-footer{
         border-bottom: 1px solid #ddd;
@@ -1411,6 +1438,10 @@ border: 2px dotted #2ABB9B !important;
         position: fixed;
         bottom: 20px;
         right: 20px;
+    }
+    .bootstrap-dialog-body .dataTables_wrapper .bottom {
+        bottom: 110px;
+        right: 45px;
     }
 }
 @media (max-height: 408px) {
