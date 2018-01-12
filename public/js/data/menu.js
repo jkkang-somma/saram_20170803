@@ -5,7 +5,8 @@ define([
 	'underscore',
 	'i18n!nls/common'
 ], function($, _, i18Common){
-    var ADMIN=1,USER=0;
+	//  관리자,  임원,         부서장,      사용자
+	var ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0;
 		var _menu=[{
 		title:i18Common.MENU.TOP.BM, //기초자료
 		subMenu:[{
@@ -119,6 +120,10 @@ define([
 			actionAuth: {
 				save: ADMIN
 			}
+		}, {
+			title: "부서별 근태현황",
+			hashTag: "#deptsummary",
+			auth: DEPT_BOSS
 		}]
         },{
 		title: "비품 관리",
