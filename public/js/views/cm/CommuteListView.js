@@ -101,7 +101,7 @@ define([
 			idx: cellData.idx,
 			id: cellData.id,
 			date: cellData.date,
-			isShowEditBtn: (SessionModel.get("user").admin == 1)?true: false
+			isShowEditBtn: (SessionModel.get("user").admin == Schemas.ADMIN)?true: false
 		};
 		var tpl = _.template(btnNoteCellTemplate)(data);
 		return tpl;
@@ -345,7 +345,7 @@ define([
     	buttonInit: function(){
     	    var that = this;
     	    // tool btn
-    	    // if (SessionModel.get("user").admin == 1 ) {
+    	    // if (SessionModel.get("user").admin == Schemas.ADMIN ) {
     	    // 	this.gridOption.buttons.push(_getCommuteUpdateBtn(that));
     	    // }
     	},

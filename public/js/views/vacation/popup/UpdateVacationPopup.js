@@ -49,7 +49,7 @@ define([
 	        		type:"input",
 	                name:"total_day",
 	                label:"전체 휴가 일수",
-	                disabled : SessionModel.get("user").admin == 0,
+	                disabled : SessionModel.get("user").admin == Schemas.USER,
 	                value:this.selectData.total_day,
 	                group:"vacationGroup",
 	        	}, {
@@ -71,7 +71,7 @@ define([
 	                name:"memo",
 	                label:"Memo",
 	                value:this.selectData.memo,
-	                disabled: SessionModel.get("user").admin == 0,
+	                disabled: SessionModel.get("user").admin == Schemas.USER,
 	                group:"vacationGroup"
 		        }]
 		    });

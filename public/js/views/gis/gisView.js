@@ -155,7 +155,7 @@ define([
 	        	msg : "수정하시겠습니까?",
                 action:function(){
                 	var dfd = new $.Deferred();
-                	if ( SessionModel.getUserInfo().admin == 1 ) {
+                	if ( SessionModel.getUserInfo().admin == Schemas.ADMIN ) {
 
                 		// 1. 지정 자리가 있을 경우
 						var $personList = $(_this.el).find(".gis_position");
@@ -569,12 +569,12 @@ define([
 
 						}else{
 							// exception case
-							if ( SessionModel.getUserInfo().admin == 1 ) {
+							if ( SessionModel.getUserInfo().admin == Schemas.ADMIN ) {
 								gis_member_list.append(htmlTag);
 							}
 						}
 					}else{
-						if ( SessionModel.getUserInfo().admin == 1 ) {
+						if ( SessionModel.getUserInfo().admin == Schemas.ADMIN ) {
 							gis_member_list.append(htmlTag);
 						}
 					}

@@ -43,8 +43,8 @@ define([
 	function _getVacationUpdateBtn(that) {
 		return {
 	        type:"custom",
-	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
-	        tooltip: (SessionModel.get("user").admin == 1)?"수정" : "상세보기",
+	        name: (SessionModel.get("user").admin == Schemas.ADMIN)?"edit" : "read",
+	        tooltip: (SessionModel.get("user").admin == Schemas.ADMIN)?"수정" : "상세보기",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
 	        	if ( Util.isNull(selectItem) ) {
@@ -54,7 +54,7 @@ define([
 	        	
 	            var updateVacationPopup = new UpdateVacationPopup(selectItem);
 	            var buttons = [];
-	            if(SessionModel.get("user").admin == 1) { // 관리자만 수정 가능
+	            if(SessionModel.get("user").admin == Schemas.ADMIN) { // 관리자만 수정 가능
 	            	buttons.push({
                         id: 'updateVacationBtn',
                         cssClass: Dialog.CssClass.SUCCESS,
@@ -82,7 +82,7 @@ define([
                 });
 	            
 	            Dialog.show({
-	                title: (SessionModel.get("user").admin == 1)?"연차 수정" : "연차 정보", 
+	                title: (SessionModel.get("user").admin == Schemas.ADMIN)?"연차 수정" : "연차 정보", 
                     content: updateVacationPopup,
                     buttons: buttons
 	            });
@@ -196,7 +196,7 @@ define([
     	    _head.addClass("relative-layout");
  
     	    var isShowCreateBtn = false;
-    	    if (SessionModel.get("user").admin == 1 ) {
+    	    if (SessionModel.get("user").admin == Schemas.ADMIN ) {
     	    	isShowCreateBtn = true;
     	    }
     	    

@@ -3,150 +3,149 @@
 define([
     'jquery',
 	'underscore',
+	'schemas',
 	'i18n!nls/common'
-], function($, _, i18Common){
-	//  관리자,  임원,         부서장,      사용자
-	var ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0;
+], function($, _, SCHEMAS, i18Common){
 		var _menu=[{
 		title:i18Common.MENU.TOP.BM, //기초자료
 		subMenu:[{
 			title:i18Common.MENU.SUB.BM.POSITION, //직급관리
 			hashTag:"#positionmanager",
-			auth:ADMIN,
+			auth:SCHEMAS.ADMIN,
 			actionAuth:{
-			add:ADMIN,
-			remove:ADMIN,
-			edit:ADMIN
+			add:SCHEMAS.ADMIN,
+			remove:SCHEMAS.ADMIN,
+			edit:SCHEMAS.ADMIN
 				}
 		},{
 			title:i18Common.MENU.SUB.BM.DEPARTMENT, //부서관리
 			hashTag:"#departmentmanager",
-			auth:ADMIN,
+			auth:SCHEMAS.ADMIN,
 			actionAuth:{
-			add:ADMIN,
-			remove:ADMIN,
-			edit:ADMIN
+			add:SCHEMAS.ADMIN,
+			remove:SCHEMAS.ADMIN,
+			edit:SCHEMAS.ADMIN
 				}
 		},{
 			title:i18Common.MENU.SUB.BM.PART, //파트관리
 			hashTag:"#partmanager",
-			auth:ADMIN,
+			auth:SCHEMAS.ADMIN,
 			actionAuth:{
-			add:ADMIN,
-			remove:ADMIN,
-			edit:ADMIN
+			add:SCHEMAS.ADMIN,
+			remove:SCHEMAS.ADMIN,
+			edit:SCHEMAS.ADMIN
 				}
 		},{
 			title:i18Common.MENU.SUB.BM.HOLIDAY, //휴일 관리
 			hashTag:"#holidaymanager",
-			auth:ADMIN
+			auth:SCHEMAS.ADMIN
 		},{
 			title:i18Common.MENU.SUB.BM.DOCUMENT, //양식관리
 			hashTag:"#documentlist",
-			auth:ADMIN
+			auth:SCHEMAS.ADMIN
 		},{
 			title:i18Common.MENU.SUB.BM.BOOKDOCUMENT, //도서관리
 			hashTag:"#bookdocument",
-			auth:ADMIN
+			auth:SCHEMAS.ADMIN
 		}]
 		},{
 		title:i18Common.MENU.TOP.SM, //사원 관리
 	    subMenu:[{
 	        title:i18Common.MENU.SUB.SM.USER, //사용자 관리
 	        hashTag:"#usermanager",
-	        auth:USER,
+	        auth:SCHEMAS.USER,
 	        actionAuth:{
-	            add:ADMIN,
-	            remove:ADMIN,
-	            edit:ADMIN
+	            add:SCHEMAS.ADMIN,
+	            remove:SCHEMAS.ADMIN,
+	            edit:SCHEMAS.ADMIN
 	         }
 	    },{
 			title:"자리배치도",
 			hashTag:"#gis",
-			auth:USER
+			auth:SCHEMAS.USER
 		},{
 			title:"자리배치도-이력",
 			hashTag:"#gisHistory",
-			auth:ADMIN
+			auth:SCHEMAS.ADMIN
 		},{
 			title:i18Common.MENU.SUB.BM.ORGANIZATION, //조직도
 			hashTag:"#organization",
-			auth:ADMIN
+			auth:SCHEMAS.ADMIN
 		},{
 	        title:"사진 등록", //사진 등록
 	        hashTag:"#userpic",
-	        auth:ADMIN
+	        auth:SCHEMAS.ADMIN
 	    },{
 	        title:i18Common.MENU.SUB.SM.VACATION, //연차 관리
 	        hashTag:"#vacation",
-	        auth:USER
+	        auth:SCHEMAS.USER
 	    }]
 	        // ,{
 	        //     title:i18Common.MENU.SUB.SM.REPORTCOMMUTE, //근태 레포트 
 	        //     hashTag:"#reportCommute",
-	        //     auth:ADMIN
+	        //     auth:SCHEMAS.ADMIN
 	        // }]
 		},{
 		title: i18Common.MENU.TOP.AM,//일반관리
 		subMenu: [{
 			title: i18Common.MENU.SUB.AM.COMMUTE_TODAY, //"오늘의 근태 상황",
 			hashTag: "#commutetoday",
-			auth: USER
+			auth: SCHEMAS.USER
 		}, {
 			title: i18Common.MENU.SUB.AM.ADD_RAW_DATA, //"출입 기록 등록",
 			hashTag: "#addrawdata",
-			auth: ADMIN
+			auth: SCHEMAS.ADMIN
 		}, {
 			title: i18Common.MENU.SUB.AM.RAW_DATA_LIST,//"출입 기록 조회",
 			hashTag: "#rawdatalist",
-			auth: USER
+			auth: SCHEMAS.USER
 		}, {
 			title: i18Common.MENU.SUB.AM.CREATE_DATA, //"근태 자료 생성",
 			hashTag: "#createdata",
-			auth: ADMIN
+			auth: SCHEMAS.ADMIN
 		}, {
 			title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER, //"근태 자료 관리",
 			hashTag: "#commutemanager",
-			auth: USER
+			auth: SCHEMAS.USER
 		}, {
 			title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
 			hashTag: "#commutemanager/comment",
 			subTag: ["/?/?"],
-			auth: USER
+			auth: SCHEMAS.USER
 		}, {
 			title: i18Common.MENU.SUB.AM.REPORT_MANAGER, //"근태 상신(list)",
 			hashTag: "#reportmanager",
-			auth: USER,
+			auth: SCHEMAS.USER,
 			actionAuth: {
-				save: ADMIN
+				save: SCHEMAS.ADMIN
 			}
 		}, {
 			title: "부서별 근태현황",
 			hashTag: "#deptsummary",
-			auth: DEPT_BOSS
+			auth: SCHEMAS.DEPT_BOSS
 		}]
         },{
 		title: "비품 관리",
 		subMenu: [{
 			title: "비품 코드 등록",
 			hashTag: "#officeitemcode",
-			auth: ADMIN
+			auth: SCHEMAS.ADMIN
 		}, {
 			title: "비품 관리",
 			hashTag: "#officeitemmanager",
-			auth: ADMIN
+			auth: SCHEMAS.ADMIN
 		}, {
 			title: "IP 관리",
 			hashTag: "#ipassignedmanager",
-			auth: ADMIN
+			auth: SCHEMAS.ADMIN
 		}, {
 			title: "비품 할당 현황",
 			hashTag: "#officeitemusage",
-			auth: USER
+			auth: SCHEMAS.USER
 		}, {
 			title: "비품 이력 관리",
 			hashTag: "#officeitemhistory",
-			auth: ADMIN
+			auth: SCHEMAS.ADMIN
 		}]
 
 //		},{

@@ -176,7 +176,7 @@ define([
 	            if(_view.selectData.state != "처리"){
 		        	if(SessionModel.get("user").id == _view.selectData.approval_id && _view.selectData.state == "상신"){ // 결재자인 경우
 						$(_view.form.getElement("comment_reply")).find("textarea").removeAttr('readonly');
-		            }else if(SessionModel.get("user").admin == 1 && _view.selectData.state == "결재" && _view.selectData.state != "반려"){ // 관리자인 경우
+		            }else if(SessionModel.get("user").admin == Schemas.ADMIN && _view.selectData.state == "결재" && _view.selectData.state != "반려"){ // 관리자인 경우
 						$(_view.form.getElement("comment_reply")).find("textarea").removeAttr('readonly');
 		            }	
 		        }
@@ -190,7 +190,7 @@ define([
 	            
 	            
 		        // 일반 사용자는 단순 읽기만 
-				if (SessionModel.get("user").admin == 0) {
+				if (SessionModel.get("user").admin == Schemas.USER) {
 					$(_view.el).find("[type='checkbox']").click(function(){
 					 	return false;	
 					 });

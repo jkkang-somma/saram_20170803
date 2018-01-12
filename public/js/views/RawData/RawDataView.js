@@ -71,13 +71,13 @@ ProgressbarView){
             var admin = SessionModel.getUserInfo().admin;
             
             // 경영지원 팀 인 경우
-            if ( dept_code == '1000' || admin == 9 ) {
+            if ( dept_code == '1000' || admin == Schemas.ADMIN ) {
             	this.gridOption.column.push( { data : "ip_office", 		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP } );
             	this.gridOption.column.push( { data : "ip_pc",		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP_PC } );
             }
 
             // 경영 지원팀 또는 수원 사업자의 경우 컬럼을 추가
-            if ( dept_code == '1000' || Code.isSuwonWorker(dept_code) || admin == 9) {
+            if ( dept_code == '1000' || Code.isSuwonWorker(dept_code) || admin == Schemas.ADMIN) {
             	this.gridOption.column.push( { data : "need_confirm", 	"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NEED_CONFIRM,
             		render: function(data, type, full, meta) {
                			return (full.need_confirm == 1)? i18nCommon.RAW_DATA_LIST.MSG.OK : i18nCommon.RAW_DATA_LIST.MSG.NOK ;

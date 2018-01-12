@@ -14,7 +14,7 @@ router.route('/')
 	
 }).post(function(req, res, next){
 	var session = sessionManager.get(req.cookies.saram);
-	if (session.user.admin == 1) {	// admin 일 경우만 생성 
+	if (session.user.admin == Schemas.ADMIN) {	// admin 일 경우만 생성 
 		Vacation.setVacation(req.body).then(function(result) {
 			return res.send(result);
 		}).catch(function(err) {
@@ -47,7 +47,7 @@ router.route('/:id')
 }).post(function(req, res, next){
 }).put(function(req, res, next){
 	var session = sessionManager.get(req.cookies.saram);
-	if (session.user.admin == 1) {
+	if (session.user.admin == Schemas.ADMIN) {
 		Vacation.updateVacation(req.body).then(function(result) {
 			return res.send(result);
 		}).catch(function(err) {

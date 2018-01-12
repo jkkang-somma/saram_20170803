@@ -87,8 +87,8 @@ define([
 		var that = view;
 		return {
 	        type:"custom",
-	        name: (SessionModel.get("user").admin == 1)?"edit" : "read",
-	        tooltip: (SessionModel.get("user").admin == 1)?"답변달기" : "상세보기",
+	        name: (SessionModel.get("user").admin == Schemas.ADMIN)?"edit" : "read",
+	        tooltip: (SessionModel.get("user").admin == Schemas.ADMIN)?"답변달기" : "상세보기",
 	        click:function(_grid){
 	        	var selectItem =_grid.getSelectItem();
 	        	_clickCommentUpdateBtn(that, selectItem);
@@ -135,7 +135,7 @@ define([
                         });
                     }
                 });
-            }else if(SessionModel.get("user").admin == 1 && selectItem.state == "결재" && selectItem.state != "반려"){ // 관리자인 경우
+            }else if(SessionModel.get("user").admin == Schemas.ADMIN && selectItem.state == "결재" && selectItem.state != "반려"){ // 관리자인 경우
             	buttons.push({
                     id: 'updateCommentBtn',
                     cssClass: Dialog.CssClass.SUCCESS,

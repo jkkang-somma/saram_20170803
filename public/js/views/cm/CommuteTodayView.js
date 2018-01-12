@@ -87,7 +87,7 @@ define([
     	buttonInit: function(){
     	    // var that = this;
     	    // // tool btn
-    	    // if (SessionModel.get("user").admin == 1 ) {
+    	    // if (SessionModel.get("user").admin == Schemas.ADMIN ) {
     	    // 	this.gridOption.buttons.push(_getCommuteUpdateBtn(that));
     	    // }
     	},
