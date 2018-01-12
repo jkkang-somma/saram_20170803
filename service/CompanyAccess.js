@@ -15,7 +15,7 @@ var CompanyAccess = function() {
 		return new Promise(function(resolve, reject){
 			var selDataObj = {
 					id: user.id,
-					ip_pc: data.ip_office,		// ip_office 값으로 체크 -> 추후 ip_pc로 변경 될수 있음    
+					ip_pc: data.ip_pc,		// ip_office 값으로 체크 -> 추후 ip_pc로 변경 될수 있음    
 					ip_office: data.ip_office	// ip_office 값으로 체크
 			};
 

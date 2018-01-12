@@ -218,9 +218,9 @@ define([
         	        },
         	         {
         	                type:"input",
-        	                name:"ip_pc",
+        	                name:"ip_office",
         	                label:i18nCommon.USER.IP,
-        	                value:_model.ip_pc,
+        	                value:_model.ip_office,
         	                group:"detailInfo"
         	        },
         	        {
@@ -232,9 +232,9 @@ define([
         	        },
         	         {
         	                type:"input",
-        	                name:"ip_office",
+        	                name:"ip_pc",
         	                label:i18nCommon.USER.OFFICE_IP,
-        	                value:_model.ip_office,
+        	                value:_model.ip_pc,
         	                group:"detailInfo"
         	        },
         	         {
