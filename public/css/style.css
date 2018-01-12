@@ -1414,6 +1414,10 @@ border: 2px dotted #2ABB9B !important;
         height: calc(100% - 60px);
     }
     
+    .modal-dialog div.content {
+        height: 450px;
+    }
+
     .dataTables_wrapper {
         height: calc(100% - 60px);
         min-height: 70px;

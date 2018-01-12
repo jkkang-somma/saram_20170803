@@ -86,17 +86,7 @@ define([
         setTheadCss: function(isFilter){
             var width=$(window).width();
             var gridCon = $('#' + this.options.id);
-            if (width > 768) {
-                gridCon.find("thead").css('position', 'fixed');
-                gridCon.find("thead").css('margin-top', -(gridCon.find("thead").outerHeight()) + "px");
-                gridCon.parent().css('margin-top', (gridCon.find("thead").outerHeight() + 10) + "px");
-                
-            } else if ( width  < 767) {
-                gridCon.find("thead").css('position', 'relative');
-                gridCon.find("thead").css('margin-top', "0px");
-                gridCon.parent().css('margin-top', "10px");
-            }
-
+            
             if(gridCon.find("tbody td").length > 1){
                 if( (gridCon.find("thead").outerWidth() > gridCon.find("thead tr").outerWidth() 
                         && gridCon.find("thead").outerWidth() - 17 > gridCon.find("thead tr").outerWidth()
@@ -116,6 +106,16 @@ define([
 
                     $(thCon).css('width', tdWidth);
                 });
+            }
+            if (width > 768) {
+                gridCon.find("thead").css('position', 'fixed');
+                gridCon.find("thead").css('margin-top', -(gridCon.find("thead").outerHeight()) + "px");
+                gridCon.parent().css('margin-top', (gridCon.find("thead").outerHeight() + 10) + "px");
+                
+            } else if ( width  < 767) {
+                gridCon.find("thead").css('position', 'relative');
+                gridCon.find("thead").css('margin-top', "0px");
+                gridCon.parent().css('margin-top', "10px");
             }
         },
     	updateCSS:function(resize){
@@ -732,7 +732,8 @@ define([
             });
 
             //  var height = _dataTable.find("thead").height() + rowsHeight +  15;
-            var height = rowsHeight +  65 + _dataTable.find("thead").height();
+            var gap = (_dataTable.parents('.modal-dialog').length > 0)? 30 : 65;
+            var height = rowsHeight +  gap + _dataTable.find("thead").height();
              $("#"+this.options.el).find(".dataTables_wrapper").css('height', 'calc(100% - '+ height +'px)')
             
      	    //ROW click

@@ -360,6 +360,7 @@ define({
             TIME : "출입시간",
             TYPE : "출입기록",
             IP : "IP",
+            IP_PC : "사무실 IP",
             NEED_CONFIRM : "확인필요",
             MAC:"Mac"
         },
