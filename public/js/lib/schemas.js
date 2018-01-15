@@ -231,6 +231,10 @@ define([
         }
     }
     return {
-        getSchema:_getSchema
+        getSchema:_getSchema,
+        ADMIN: ADMIN,
+        EXECUTIVE : EXECUTIVE,
+        DEPT_BOSS : DEPT_BOSS,
+        USER : USER
     }
 });
