@@ -590,7 +590,7 @@ define([
 					);
 				}	
 
-				if ( SessionModel.getUserInfo().admin != 1 ) {
+				if ( SessionModel.getUserInfo().admin != Schemas.ADMIN ) {
 					gis_member_list.remove();
 				}else{
 					// 이벤트 추가
@@ -600,7 +600,7 @@ define([
 			});
 
 			// 저장 버튼 ( 관리자 )
-			if ( SessionModel.getUserInfo().admin != 1 ) {
+			if ( SessionModel.getUserInfo().admin != Schemas.ADMIN ) {
 				$(_this.el).find("#gisSaveBtn").remove();
 				$(_this.el).find("#gisHistorySaveBtn").remove();
 				//$(_this.el).find("#gisPrintBtn").remove();
