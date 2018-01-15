@@ -64,13 +64,13 @@ define([
 			'allreport' : 'showAllReport',
 			'roomreserve' : 'showRoomReserve',
 			'roomreserve' : 'showRoomReserve',
-			'*actions' : 'showHome',
 			'officeitemcode' : 'showOfficeItemCode',
 			'officeitemmanager' : 'showOfficeItemManager',
 			'ipassignedmanager' : 'showIpAssignedManager',
 			'officeitemusage' : 'showOfficeItemUsage',
-			'officeitemhistory' : 'showOfficeItemHistory'
-			
+			'officeitemhistory' : 'showOfficeItemHistory',
+			'deptsummary' : 'showDeptSummary',
+			'*actions' : 'showHome',
 		},
 		initialize:function(option){
 			var affterCallback,beforeCallback;
@@ -328,6 +328,10 @@ define([
         },
         showOfficeItemHistory : function(){
             var url = 'views/officeitem/OfficeItemHistoryView';
+            this.changeView(url);
+		},
+		showDeptSummary : function(){
+            var url = 'views/statistics/DeptSummaryView';
             this.changeView(url);
         }
 	});
