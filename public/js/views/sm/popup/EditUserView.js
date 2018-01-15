@@ -129,7 +129,9 @@ define([
         	                label:i18nCommon.USER.ADMIN,
         	                value:_model.admin,
         	                group:"requireInfo",
-        	                collection:[{key:0,value:i18nCommon.CODE.ADMIN_0},{key:1,value:i18nCommon.CODE.ADMIN_1}]
+							collection:[{key:0,value:i18nCommon.CODE.ADMIN_0},{key:1,value:i18nCommon.CODE.ADMIN_1},
+								{key:2,value:i18nCommon.CODE.ADMIN_2},{key:9,value:i18nCommon.CODE.ADMIN_9}]
+							
         	        },
         	        {
         	                type:"input",

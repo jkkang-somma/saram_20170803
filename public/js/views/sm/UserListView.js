@@ -46,7 +46,7 @@ define([
                     { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
                         var result=i18Common.CODE.ADMIN_0;
                         if (row.admin > 0){
-                            result=i18Common.CODE.ADMIN_1;
+                            result=i18Common.CODE.ADMIN_9;
                         }
                         return result;
                     }, visible:false, subVisible:false},
