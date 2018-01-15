@@ -1936,25 +1936,6 @@
 		</query>
 	</group>	
 	
-	<group id ="statistics">
-		<query id="selectPageUrlCount">
-			select 
-				count 
-			from 
-				statistics_page_view
-			where
-				page_url = ?
-		</query>
-    	<query id="updatePageUrlCount">
-			insert into statistics_page_view
-				(page_url, count)
-			values
-				(?, ?)
-			ON DUPLICATE KEY UPDATE
-        		page_url = ?,
-        		count = ?
-		</query>
-	</group>
 	<group id="position">
 		<query id="selectPosition">
 			select
@@ -2030,5 +2011,61 @@
 			delete from room_reserve_tbl where `index`=?;
 		</query>
 	</group>
-    	
+	<group id ="statistics">
+		<query id="selectPageUrlCount">
+			select 
+				count 
+			from 
+				statistics_page_view
+			where
+				page_url = ?
+		</query>
+    	<query id="updatePageUrlCount">
+			insert into statistics_page_view
+				(page_url, count)
+			values
+				(?, ?)
+			ON DUPLICATE KEY UPDATE
+        		page_url = ?,
+        		count = ?
+		</query>
+
+        <query id="selectAbnormalDeptSummary">
+			SELECT 
+				department,
+				count(if(work_type='10',1, null)) AS 'late', 
+				count(if(work_type='01',1, null)) AS 'leave_early', 
+				count(if(work_type='11',1, null)) AS 'late_leave_early',
+				count(if(work_type='21',1, null)) AS 'absent',
+				count(if(work_type='50',1, null)) AS 'data_none_1',
+				count(if(work_type='51',1, null)) AS 'data_none_2'
+			FROM 
+				commute_result_tbl 
+			WHERE 
+				date like ?
+			group by
+				department
+		</query>
+
+		<query id="selectDeptPersonCount">
+			SELECT department, count(*) as count
+			FROM (
+				SELECT distinct department, id
+				FROM commute_result_tbl 
+				WHERE date like ?
+			) R
+			GROUP BY department
+		</query>
+
+		<query id="selectDeptDetail">
+			SELECT 
+				c.name as name, c.date as date, w.name as work_type
+			FROM
+				commute_result_tbl c, work_type_code_tbl w
+			WHERE 
+				w.code = c.work_type AND 
+				date like ? AND department = ? AND work_type = ?
+		</query>
+
+	</group>
 </querys>

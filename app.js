@@ -39,6 +39,7 @@ var room = require("./routes/roomRouter");
 var roomReg = require("./routes/roomRegRouter");
 var gisRouter = require("./routes/gisRouter");
 var restful = require("./routes/restfulRouter");
+var statisticsRouter = require("./routes/statisticsRouter");
 
 var debug = require('debug')('APP');
 var app = express();
@@ -237,6 +238,7 @@ app.use('/room', room);
 app.use('/roomreg', roomReg);
 app.use('/gis', gisRouter);
 app.use('/rest', restful);
+app.use('/statistics', statisticsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .

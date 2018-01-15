@@ -5,6 +5,8 @@ var StatisticsDao= require('../dao/statisticsDao.js');
 
 var db = require('../lib/dbmanager.js');
 
+// 현재 사용하지 않음!!
+
 var Statistics = function () {
     
     var _updatePageUrlCount = function (pageUrl) {
