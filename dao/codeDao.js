@@ -35,4 +35,9 @@ CodeDao.prototype.getOvertimeCode =  function () {
 CodeDao.prototype.getWorktypeCode =  function () {
     return db.query(group, "getWorktypeCode");
 };
+
+CodeDao.prototype.selectOfficeItemCodeList =  function () {
+    return db.query(group, "selectOfficeItemCodeList");
+};
+
 module.exports = new CodeDao();

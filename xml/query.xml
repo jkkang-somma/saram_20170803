@@ -865,6 +865,7 @@
 		<query id="selectPartList">SELECT code, name FROM part_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
+		<query id="selectOfficeItemCodeList">SELECT * FROM office_item_category_tbl</query>
     </group>
     <group id ="dashboard">
     	<query id="getWorktypeCode">
@@ -2010,6 +2011,44 @@
 		<query id="deleteRoomReg">
 			delete from room_reserve_tbl where `index`=?;
 		</query>
+	</group>
+	<group id="officeItem">
+        <query id="selectOfficeItemCodeList">
+        	SELECT 
+				*
+			FROM 
+				office_item_category_tbl
+			ORDER BY category_code, category_type, category_name
+        </query>
+		<query id="insertOfficeItemCode">
+        	INSERT INTO office_item_category_tbl
+				(category_code, category_type, category_name) 
+			VALUES
+				(?,?,?)
+        </query>
+		<query id="deleteOfficeItemCode">
+			DELETE 
+			FROM 
+				office_item_category_tbl 
+			WHERE 
+				category_code=?
+		</query>
+        <query id="updateOfficeItemCode">
+    		UPDATE
+        		office_item_category_tbl 
+        	SET 
+        		category_type = ?,
+				category_name =?
+        	WHERE category_code=?
+        </query>
+        <query id="getOfficeItemCodeUseCount">
+        	SELECT 
+				count(*) cnt
+			FROM 
+				office_item_tbl
+			WHERE
+				serial_yes like ?"%"
+        </query>
 	</group>
 	<group id ="statistics">
 		<query id="selectPageUrlCount">

@@ -23,6 +23,50 @@ define({
            CLOSE:"닫기",
            INIT_PASSWORD:"비밀번호 초기화"
        }
+    },
+    OFFICEITEM : {
+        TITLE : "비품 관리",
+        SUB_TITLE : "비품코드 관리",
+        SEARCH_BTN : "검색",
+        GRID_COL_NAME : {
+            CODE : "관리코드",
+            TYPE : "분류",
+            NAME : "이름"
+        },
+        TYPE : {
+            OS : "사무",
+            CS : "전산"
+        },
+        MSG :{
+            NOK : "확인필요",
+            OK : "정상",
+            NOTING_SELECTED : "선택된 데이터가 없습니다!",
+            LOADING_FAIL : "데이터 조회 실패!"
+        },
+        ADD_DIALOG :{
+            TOOLTIP : "등록",
+            TITLE : "비품코드 등록",
+            ASK : "비품코드를 등록하시겠습니까?",
+            MSG : {
+                ADD_CODE_COMPLETE : "비품코드 등록 완료!",
+                ADD_CODE_FAIL : "비품코드 등록 실패!"
+            }
+        },
+        EDIT_DIALOG : {
+            TOOLTIP : "수정",
+            UPDATE:"비품코드 정보 수정",
+            MSG : {
+                EDIT_CODE_COMPLETE : "비품코드가 수정되었습니다.",
+                EDIT_CODE_FAIL : "비품코드 수정 실패!"
+            }
+        },
+        REMOVE_DIALOG : {
+            TOOLTIP : "삭제",
+            MSG : {
+                REMOVE_CODE_COMPLETE : "비품코드가 삭제되었습니다.",
+                REMOVE_CODE_FAIL : "비품코드 삭제 실패!"
+            }
+        }
     }, 
     USER:{
         NAME:"이름",
@@ -105,6 +149,12 @@ define({
         LOGIN:{
             SUCCESS_INIT_PASSWORD:"비밀번호 설정하였습니다.",
             SUCCESS_REQUEST_FIND_PASSWORD:"비밀번호 초기화 요청 메일이 발송되었습니다."
+        },
+        OFFICEITEM:{
+            SAVE:"비품코드를 수정하였습니다.",
+            REMOVE:"비품코드를 삭제하였습니다.",
+            REMOVE_FAIL:"사용중인 코드입니다.",
+            ADD:"비품코드를 등록하였습니다."
         }
     },
     WARNING:{
@@ -139,6 +189,9 @@ define({
     CONFIRM:{
         USER:{
             REMOVE:"사용자를 삭제 하시겠습니까?"
+        },
+        OFFICEITEM:{
+            REMOVE:"비품코드를 삭제 하시겠습니까?"
         }
     },
     MENU:{

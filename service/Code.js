@@ -27,6 +27,8 @@ var Code = function (data) {
                 return CodeDao.getWorktypeCode();
             case 'overTime' :
                 return CodeDao.getOvertimeCode();
+            case 'officeitem' :
+                return CodeDao.selectOfficeItemCodeList();
         }
     }
     

@@ -127,6 +127,12 @@ var Schemas = function (schemaName) {
         approval_index:{
             yearmonth : null,
             seq : null
+        },
+
+        office_item_code:{
+            category_code : null,
+            category_type : null,
+            category_name : null
         }
     }
     
