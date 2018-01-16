@@ -1,5 +1,6 @@
 define([
 	'jquery',
+	'jquery.ui',
 	'underscore',
 	'backbone',
 	'core/BaseView',
@@ -10,28 +11,30 @@ define([
 	'text!templates/default/row.html',
 	'models/officeitem/OfficeItemCodeModel'
 ], function(
-	$, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, 
+	$, jui, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, 
 	RowHTML, 
 	OfficeItemCodeModel
 ){
     var LOG= log.getLogger("AddOfficeItemCodeView");
     var AddOfficeItemCodeView = BaseView.extend({
-    	initialize:function(){
-		$(this.el).html('');
-		$(this.el).empty();
 
-		this.model = new OfficeItemCodeModel();
-		_.bindAll(this, "submitAdd");
-    	},
+    	initialize:function(){
+			$(this.el).html('');
+			$(this.el).empty();
+
+			this.model = new OfficeItemCodeModel();
+			_.bindAll(this, "submitAdd");
+		},
+		
     	render:function(el){
-		var dfd = new $.Deferred();
-		var _view = this;
-		if (!_.isUndefined(el)){
-			this.el = el;
-		}
-    	
-                var _model = _view.model.attributes;
-		var _form = new Form({
+			var dfd = new $.Deferred();
+			var _view = this;
+			if (!_.isUndefined(el)){
+				this.el = el;
+			}
+
+			var _model = _view.model.attributes;
+			var _form = new Form({
         	        el:_view.el,
         	        form:undefined,
         	        childs:[{
@@ -51,17 +54,20 @@ define([
         	                label:i18nCommon.OFFICEITEM.GRID_COL_NAME.NAME,
 							value:_model.category_name,
 					}]
-		});
-        	    
-		_form.render().done(function(){
-			_view.form=_form;
-			dfd.resolve();
-		}).fail(function(){
-			dfd.reject();
-		});
+			});
 		
-		return dfd.promise();
-     	},
+			_form.render().done(function(){
+				_view.form=_form;
+				dfd.resolve(_view);
+			}).fail(function(){
+				dfd.reject(_view);
+			});
+		
+			return dfd.promise();
+		},
+		 
+		afterRender:function(){
+		},
     	
     	submitAdd : function(beforEvent, affterEvent){
     	    var view = this;
@@ -81,17 +87,17 @@ define([
     	        beforEvent();
                 _officeItemCodeModel.save({},{
         	        success:function(model, xhr, options){
-				affterEvent();
-				dfd.resolve(_.defaults(_data, _officeItemCodeModel.default));
+						affterEvent();
+						dfd.resolve(_.defaults(_data, _officeItemCodeModel.default));
         	        },
         	        error:function(model, xhr, options){
-				var respons=xhr.responseJSON;
-				affterEvent();
-				if(!_.isUndefined(respons))
-					Dialog.error(respons.message);
-				else
-					Dialog.error(options.xhr.responsText);
-				dfd.reject();
+						var respons=xhr.responseJSON;
+						affterEvent();
+						if(!_.isUndefined(respons))
+							Dialog.error(respons.message);
+						else
+							Dialog.error(options.xhr.responsText);
+						dfd.reject();
         	        },
         	        wait:false
         	    });    
