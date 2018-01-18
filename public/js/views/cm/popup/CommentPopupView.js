@@ -221,17 +221,23 @@ define([
 						}).done(function(){
 							console.log(_view.holidayCollection);
 							var day = Moment().hour(0).minute(0).second(0);
+							var dd = Moment(_view.selectData.date).hour(0).minute(0).second(0);
 							var holidays = _view.holidayCollection.pluck("date");
 							
+							var iCnt = 0;
 							for(var count = 0 ; ; day.add(-1,"days")){
 								if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
-									
+									// 휴일일경우
+									iCnt ++;
 								} else {
 									console.log(day.format("YYYY-MM-DD"));
 									count ++;
 									if(count == 4){
-										// if(count == 100){
-										$(overtime).remove();
+										var today = Moment().hour(0).minute(0).second(0);
+										var mm = (today._d.getTime() - dd._d.getTime()) / 1000 / 60 / 60 / 24;
+										if( mm + iCnt > 4 ){
+											$(overtime).remove();
+										}
 										break;
 									}
 									
