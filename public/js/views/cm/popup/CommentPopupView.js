@@ -223,20 +223,21 @@ define([
 							var day = Moment().hour(0).minute(0).second(0);
 							var holidays = _view.holidayCollection.pluck("date");
 							
+							var overTimeApprovalDate = "";
 							for(var count = 0 ; ; day.add(-1,"days")){
 								if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
 									
 								} else {
 									console.log(day.format("YYYY-MM-DD"));
 									count ++;
-									if(count == 4){
-										// if(count == 100){
-										$(overtime).remove();
+									if ( count == 4 ) {
+										overTimeApprovalDate = day.format("YYYY-MM-DD");
 										break;
 									}
-									
 								}
-								
+							}
+							if ( overTimeApprovalDate > _view.selectData.date ) {
+								$(overtime).remove();
 							}
 						});
 
