@@ -59,11 +59,23 @@ ApprovalDao.prototype.insertApproval =  function (data) {
         black_mark = '5';       // 익일상신
     }
 
+    var state = data.state;
+    if(state == null || state == undefined){
+        state = '상신';
+    }
+    
+
     return db.query(group, "insertApproval",
         [ data.doc_num,data.submit_id,data.manager_id
         ,data.submit_comment,data.start_date,data.end_date
-        ,data.office_code,black_mark,data.start_time,data.end_time,data.day_count ]
+        ,data.office_code,state,black_mark,data.start_time,data.end_time,data.day_count ]
     );
+};
+
+// updateApprovalState
+ApprovalDao.prototype.updateApprovalState =  function (data) {
+    return db.query(group, "updateApprovalState"
+        ,[data.state, data.submit_id, data.start_date, data.end_date]);
 };
 
 ApprovalDao.prototype.updateApprovalConfirm =  function (data) {

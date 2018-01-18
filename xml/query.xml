@@ -278,7 +278,15 @@
     	<query id="insertApproval">
     		insert into approval_tbl
 				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, black_mark, start_time, end_time, day_count) 
-			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?, ?, ?)
+			values(?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    	</query>
+		<query id="updateApprovalState">
+    		update approval_tbl set 
+    			state = ? 
+			where submit_id=? 
+				and start_date=? and end_date=? 
+				and state='상신대기'
+				and office_code='O01'
     	</query>
     	<query id="updateApprovalConfirm">
     		update approval_tbl set 
@@ -404,6 +412,8 @@
 							c.normal,
 							c.normal_change,
 							c.except,
+							c.standard_in_time,
+        					c.standard_out_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -451,6 +461,8 @@
 							c.early_time,
 							c.not_pay_over_time,
 							c.except,
+							c.standard_in_time,
+        					c.standard_out_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,

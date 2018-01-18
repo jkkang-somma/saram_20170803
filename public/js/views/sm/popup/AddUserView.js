@@ -199,18 +199,26 @@ define([
         	                value:_model.wedding_day,
         	                format:"YYYY-MM-DD",
         	                group:"detailInfo"
+			},
+			{
+        	                type:"input",
+        	                name:"ip_office",
+        	                label:i18nCommon.USER.OFFICE_IP,
+        	                value:_model.ip_office,
+        	                group:"detailInfo"
         	        },
         	         {
-        	                type:"input",
-        	                name:"ip_pc",
-        	                label:i18nCommon.USER.IP,
-        	                value:_model.ip_pc,
-        	                group:"detailInfo"
-        	        },{
         	                type:"input",
         	                name:"mac",
         	                label:i18nCommon.USER.MAC,
         	                value:_model.mac,
+        	                group:"detailInfo"
+			},
+			{
+        	                type:"input",
+        	                name:"ip_pc",
+        	                label:i18nCommon.USER.IP,
+        	                value:_model.ip_pc,
         	                group:"detailInfo"
         	        },
         	         {

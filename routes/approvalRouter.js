@@ -130,28 +130,46 @@ router.route('/')
 router.route('/bulk')
 .put(function(req, res) {
     var approval = new Approval();
-    approval.updateApprovalConfirm(req.body).then(function(e){
-        debug("Complete Update Approval."); 
-        res.send({success:true, msg:"Complete Update Approval."});
-        if(!_.isUndefined(req.body.outOffice)){
-            if(req.body.outOffice.state == "결재완료"){
-                approval.sendOutofficeEmail(req.body.outOffice.doc_num).then(function(){
-                    debug("Send Email"); 
-                }).catch(function(e){
-                    debug("Fail to Send Email");
-                });
-            }    
-        }
-    }).catch(function(e){
-        debug("Error Update Approval.");
-        debug(e);
-        res.status(500);
-        res.send({
-            success:false,
-            message: "Error Update Approval",
-            error:e
+    var id = req.body._id;
+    console.log(id);
+    if(id == "updateState"){
+        approval.updateApprovalState(req.body.data).then(function(e){
+            debug("Complete Update Approval."); 
+            res.send({success:true, msg:"Complete Update Approval."});
+        }).catch(function(e){
+            debug("Error Update Approval.");
+            debug(e);
+            res.status(500);
+            res.send({
+                success:false,
+                message: "Error Update Approval",
+                error:e
+            });
         });
-    });
+    }else{
+        approval.updateApprovalConfirm(req.body).then(function(e){
+            debug("Complete Update Approval."); 
+            res.send({success:true, msg:"Complete Update Approval."});
+            if(!_.isUndefined(req.body.outOffice)){
+                if(req.body.outOffice.state == "결재완료"){
+                    approval.sendOutofficeEmail(req.body.outOffice.doc_num).then(function(){
+                        debug("Send Email"); 
+                    }).catch(function(e){
+                        debug("Fail to Send Email");
+                    });
+                }    
+            }
+        }).catch(function(e){
+            debug("Error Update Approval.");
+            debug(e);
+            res.status(500);
+            res.send({
+                success:false,
+                message: "Error Update Approval",
+                error:e
+            });
+        });
+    }
 });
 
 module.exports = router;

@@ -3,6 +3,10 @@
 // 서비스의 Data를 명시 해놓은 오브젝트
 var _ = require("underscore");  
 var Schemas = function (schemaName) {
+	
+	//  관리자,  임원,         부서장,      사용자
+    const ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0;
+	
     // 기본 스키마 셋팅 이후 변환 매소드 반환
     var _data = {
         //MODEL
@@ -156,7 +160,11 @@ var Schemas = function (schemaName) {
     }
     return {
         get:_generator,
-        getDefault:__defaultGenerator
+        getDefault:__defaultGenerator,
+        ADMIN: ADMIN,
+        EXECUTIVE : EXECUTIVE,
+        DEPT_BOSS : DEPT_BOSS,
+        USER : USER
     };
 }
 module.exports = Schemas;

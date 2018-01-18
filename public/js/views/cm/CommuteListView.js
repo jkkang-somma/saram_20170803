@@ -5,7 +5,8 @@ define([
         'jquery',
         'underscore',
         'backbone',
-        'util',
+		'util',
+		'resulttimefactory',
         'schemas',
         'grid',
         'dialog',
@@ -37,7 +38,7 @@ define([
         'text!templates/cm/btnNoteCellTemplate.html',
         'text!templates/cm/overTimeCellTemplate.html'
 ], function(
-		$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
+		$, _, Backbone, Util, ResultTimeFactory, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
 		SessionModel, CommuteModel, ApprovalModel, ApprovalIndexModel, ApprovalCollection, CommuteCollection, HolidayCollection, 
 		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, OvertimeApprovalPopupView,
@@ -263,7 +264,10 @@ define([
                                         if ( full.work_night_falg == "상신") {
                                             overtime = overtime + "<BR>(상신중)";
                                             isApproval = true;
-                                        }
+                                        }else if ( full.work_night_falg == "상신대기") {
+											overtime = overtime + "<BR>(상신대기)";
+                                            isApproval = true;
+										}
      	                    			result = _.template(overTimeCellTemplate)({
  	                    					isMod : false,
  	                    					over_time : overtime
@@ -458,6 +462,7 @@ define([
         				console.log(day.format("YYYY-MM-DD"));
         				count ++;
         				if(count == 4){
+							// if(count == 100){
         					break;
         				}
         				
@@ -493,11 +498,36 @@ define([
                     action: function(dialog) {
                     	commentPopupView.insertComment({
                     		success: function(model, response) {
-                    			Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function() {
-                    				dialog.close();
-                    				selectItem.comment_count++;	 // comment 수 증가 
-                    				that.grid.updateRow(selectItem, selectItem.idx -1 );	// index 0부터 시작 
-                    			});
+								// 결재상신
+								selectItem.comment_count++;	 // comment 수 증가 
+								that.grid.updateRow(selectItem, selectItem.idx -1 );	// index 0부터 시작 
+									
+								selectItem = that.grid.getDataAt(data.idx-1);
+								var inputData = commentPopupView.getData();
+								inputData.intime = (inputData.want_in_time != null)? inputData.want_in_time : inputData.before_in_time;
+								inputData.outtime = (inputData.want_out_time != null)? inputData.want_out_time : inputData.before_out_time;
+
+								if(inputData.approvalOvertime){
+									// resultTimeFacctory. initByModel 활용하여 데이터 가져오기 
+									var resultTimeFacctory = ResultTimeFactory.Builder();
+									// 1. model 생성
+									var commM = new CommuteModel(selectItem);
+									commM.set('except', inputData.except);
+									commM.set('in_time', inputData.intime);
+									commM.set('out_time', inputData.outtime);
+									// 2. 해당 model로 
+									resultTimeFacctory.initByModel(commM);
+									var overTimeResult = resultTimeFacctory.getResult();
+									console.log(overTimeResult);
+									
+									that.sendApprovalOvertime(dialog, selectItem, inputData, "상신대기");
+								}else{
+									Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function() {
+										dialog.close();
+										// that.grid.updateRow(selectItem, selectItem.idx -1 );	// index 0부터 시작 
+									});
+								}
+
                          	}, error : function(model, res){
                          		Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_FAIL);
                          	}
@@ -588,74 +618,8 @@ define([
 							return;
 						}
 						
-                		var data = {
-                			day_count:0,
-                			decide_comment:"",
-                			end_date:selectItem.date,
-                			end_time:"",
-                			manager_id:SessionModel.getUserInfo().approval_id,
-                			office_code:"O01",
-                			start_date:selectItem.date,
-                			start_time:"",
-                			submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time+","+inputData.intime+","+inputData.outtime,
-							submit_id:SessionModel.getUserInfo().id
-                		};
+						_this.sendApprovalOvertime(dialog, selectItem, inputData);
                 		
-                		var yearMonth = "";
-
-		                // getzFormat
-		                var nowDate = new Date();
-		                yearMonth = nowDate.getFullYear() + _this.getzFormat(nowDate.getMonth() + 1, 2);
-		
-		                var docData = {
-		                    yearmonth: yearMonth
-		                };
-		
-						var _appCollection = new ApprovalCollection();
-		                _appCollection.url = "/approval/appIndex";
-		                
-		                _appCollection.fetch({
-	                        reset: true,
-	                        data: docData,
-	                        error: function(result) {
-	                            Dialog.error("데이터 조회가 실패했습니다.");
-	                            dialog.close();
-                                _this.clickFlag =false;
-	                        }
-	                    }).done(function(result) {
-	                        docData["seq"] = result[0].maxSeq;
-    	                    var _approvalIndexModel = new ApprovalIndexModel(docData);
-				            _approvalIndexModel.save({}, {
-				                success: function(model, xhr, options) {
-				                    var _seq = model.attributes.seq;
-				                    _seq = (_seq == null) ? 1 : _seq + 1;
-				                    var doc_num = docData.yearmonth + "-" + _this.getzFormat(_seq, 3);
-				                    data["doc_num"] = doc_num;
-				                    var _approvalModel = new ApprovalModel(data);
-						            _approvalModel.save({}, {
-						                success: function(model, xhr, options) {
-						                    Dialog.show("결재가 상신되었습니다.");
-                                            selectItem.work_night_falg = "상신";
-                                            _this.grid.updateRow(selectItem);
-						                    dialog.close();
-						                },
-						                error: function(model, xhr, options) {
-						                    var respons = xhr.responseJSON;
-						                    Dialog.error(respons.message);
-						                    dialog.close();
-						                },
-						                wait: false
-						            });
-				                },
-				                error: function(model, xhr, options) {
-				                    var respons = xhr.responseJSON;
-				                    Dialog.error(respons.message);
-				                    dialog.close();
-                                    _this.clickFlag =false;
-				                },
-				                wait: false
-				            });
-                    	});
                 	}
             	},{
                     label : i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
@@ -675,7 +639,84 @@ define([
             }
             return sZero + s;
         },
-        
+		
+		sendApprovalOvertime : function(dialog, selectItem, inputData, state){
+			var _this = this;
+			var data = {
+				day_count:0,
+				decide_comment:"",
+				end_date:selectItem.date,
+				end_time:"",
+				manager_id:SessionModel.getUserInfo().approval_id,
+				office_code:"O01",
+				start_date:selectItem.date,
+				start_time:"",
+				submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time+","+inputData.intime+","+inputData.outtime,
+				submit_id:SessionModel.getUserInfo().id
+			};
+
+			if(state != undefined){
+				data["state"] = state;
+			}
+			
+			var yearMonth = "";
+
+			// getzFormat
+			var nowDate = new Date();
+			yearMonth = nowDate.getFullYear() + _this.getzFormat(nowDate.getMonth() + 1, 2);
+
+			var docData = {
+				yearmonth: yearMonth
+			};
+
+			var _appCollection = new ApprovalCollection();
+			_appCollection.url = "/approval/appIndex";
+			
+			_appCollection.fetch({
+				reset: true,
+				data: docData,
+				error: function(result) {
+					Dialog.error("데이터 조회가 실패했습니다.");
+					dialog.close();
+					_this.clickFlag =false;
+				}
+			}).done(function(result) {
+				docData["seq"] = result[0].maxSeq;
+				var _approvalIndexModel = new ApprovalIndexModel(docData);
+				_approvalIndexModel.save({}, {
+					success: function(model, xhr, options) {
+						var _seq = model.attributes.seq;
+						_seq = (_seq == null) ? 1 : _seq + 1;
+						var doc_num = docData.yearmonth + "-" + _this.getzFormat(_seq, 3);
+						data["doc_num"] = doc_num;
+						
+						var _approvalModel = new ApprovalModel(data);
+						_approvalModel.save({}, {
+							success: function(model, xhr, options) {
+								Dialog.show("결재가 상신되었습니다.");
+								selectItem.work_night_falg = state;
+								_this.grid.updateRow(selectItem);
+								dialog.close();
+							},
+							error: function(model, xhr, options) {
+								var respons = xhr.responseJSON;
+								Dialog.error(respons.message);
+								dialog.close();
+							},
+							wait: false
+						});
+					},
+					error: function(model, xhr, options) {
+						var respons = xhr.responseJSON;
+						Dialog.error(respons.message);
+						dialog.close();
+						_this.clickFlag =false;
+					},
+					wait: false
+				});
+			});
+		},	
+
     	selectCommute: function() {
     		var data = {
      		    startDate : Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate()),

@@ -66,6 +66,9 @@ var Approval = function (data) {
 	var _insertApproval = function (data) {
 		return ApprovalDao.insertApproval(data);
 	};    
+	var _updateApprovalState = function(data){
+		return ApprovalDao.updateApprovalState(data);
+	};
 	var _updateApprovalConfirm = function(data) {
 		var _data = data;
 		return new Promise(function(resolve, reject){
@@ -113,7 +116,7 @@ var Approval = function (data) {
 				var inOfficeData = {};
 				for(var inKey in data.inOffice.arrInsertDate){
 					inOfficeData[inKey] = _.clone( data.inOffice );
-					inOfficeData[inKey].date = data.inOffice.arrInsertDate[inKey];
+					inOfficeData[inKey].date = (data.inOffice.office_code == 'O01' && data.inOffice.arrInsertDate[inKey] == null)? data.inOffice.start_date : data.inOffice.arrInsertDate[inKey];
 					inOfficeData[inKey].year = inOfficeData[inKey].date.substr(0,4);
 					inOfficeData[inKey].black_mark = (data.inOffice.black_mark == undefined)? "" : data.inOffice.black_mark;
 					queryArr.push(InOfficeDao.insertInOffice(inOfficeData[inKey]));    
@@ -343,6 +346,7 @@ var Approval = function (data) {
 		getApprovalListWhere:_getApprovalListWhere,
 		getApprovalListById:_getApprovalListById,
 		insertApproval:_insertApproval,
+		updateApprovalState : _updateApprovalState,
 		updateApprovalConfirm:_updateApprovalConfirm,
 		getApprovalIndex:_getApprovalIndex,
 		setApprovalIndex:_setApprovalIndex,

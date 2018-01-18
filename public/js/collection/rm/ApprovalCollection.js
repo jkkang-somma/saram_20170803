@@ -27,6 +27,14 @@ define([
             }
             return this.wrapper.save();
         },
+        updateState: function(data){
+            var wrapperData = { data : data };
+
+            this.wrapper = new ApprovalCollectionWrapper(wrapperData);
+            this.wrapper.set({_id : 'updateState'});
+            
+            return this.wrapper.save();
+        }
     });
     var ApprovalCollectionWrapper = Backbone.Model.extend({
         url:'/approval/bulk',

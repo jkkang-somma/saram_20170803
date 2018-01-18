@@ -83,6 +83,7 @@ form .detail-content input{
 }
 form .detail-content .form-group-harf{ margin-bottom: 0; padding-left: 0;}
 form .detail-content .panel-body{padding-top: 0; margin-top: 0;}
+.bootstrap-dialog .modal-body .panel{margin-bottom: 5px;}
 
 .detail-content > div{line-height: 28px;}
 .detail-content .detail-title,
@@ -1138,7 +1139,7 @@ border: 2px dotted #2ABB9B !important;
 #giscontainer .gis_person span {
   font-size: 13px;
   font-weight: bold;
-  font-family: 'ë§‘ì€ ê³ ë”•', 'monospace';
+  font-family: '¸¼Àº °íµñ', 'monospace';
 }
 
 #giscontainer .gis_person img {

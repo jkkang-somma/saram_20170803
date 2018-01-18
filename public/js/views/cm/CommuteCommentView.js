@@ -21,7 +21,8 @@ define([
         'text!templates/default/rowdatepickerRange.html',
         'text!templates/default/rowbuttoncontainer.html',
         'text!templates/default/rowbutton.html',
-        'models/sm/SessionModel',
+		'models/sm/SessionModel',
+		'collection/rm/ApprovalCollection',
         'collection/cm/CommentCollection',
         'views/cm/popup/CommentUpdatePopupView',
         'text!templates/cm/searchFormTemplate.html'
@@ -30,7 +31,7 @@ define([
 		Form, i18Common,
 		BaseView,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
-		SessionModel, CommentCollection,
+		SessionModel, ApprovalCollection, CommentCollection,
 		CommentUpdatePopupView,	searchFormTemplate){
 
 	var _currentFilter=0;
@@ -142,7 +143,18 @@ define([
                     label: '처리',
                     action: function(dialog) {
                     	commentUpdatePopupView.updateComment().done(function(result){
-                			view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
+							var updateData = result.attributes[0];
+							view.grid.updateRow(updateData);	// 업데이트 후 재조회한 데이터
+							// 상신 대기인 결재를 상신으로 변경 // 날짜가 같으면서 초과근무인것 
+							var data = {
+								state : '상신',
+								submit_id : updateData.id,
+								start_date : updateData.date,
+								end_date : updateData.date
+							};
+							// ApprovalCollection
+							var _appCollection = new ApprovalCollection();
+							_appCollection.updateState(data);
             				dialog.close();
                         }).fail(function(){
                         	Dialog.show("처리에 실패했습니다.");

@@ -48,7 +48,6 @@ define([
 			var formOption = {
 		        el:_view.el,
 				form:undefined,
-				type:'detail',
 		        group:[{
 	                name:"destGroup",
 	                label:"Comment 정보",

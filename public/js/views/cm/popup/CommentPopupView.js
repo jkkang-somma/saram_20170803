@@ -7,6 +7,7 @@ define([
 	'underscore',
 	'backbone',
 	'util',
+	'resulttimefactory',
 	'schemas',
 	'grid',
 	'dialog',
@@ -19,12 +20,13 @@ define([
 	'models/cm/CommentModel',
 	'code',
 	'models/sm/SessionModel',
+	'collection/common/HolidayCollection',
 	'text!templates/default/datepickerChange.html',
 ], function(
-	$, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,
+	$, _, Backbone, Util, ResultTimeFactory, Schemas, Grid, Dialog, Datatables, Moment,
 	i18nCommon, Form,
 	BaseView,
-	UserModel, CommentModel, Code, SessionModel,
+	UserModel, CommentModel, Code, SessionModel, HolidayCollection,
 	DatePickerChangeHTML
 ) {
 
@@ -43,6 +45,14 @@ define([
 				id: this.selectData.id
 			});
 
+			var overtimeCollection = [];
+			for(var i=0; i<= 40; i++){
+				overtimeCollection.push({
+					key : i*10,
+					value : i*10
+				});
+			}
+
 			userModel.fetch().done(function(result) {
 				if (result.length > 0) {
 					var formop = {
@@ -51,11 +61,19 @@ define([
 						group: [{
 							name: "destInfo",
 							label: i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.GROUP_DEST,
-							initOpen: true
+							initOpen: true,
+							type: 'detail',
+							titleVisible : false
 						}, {
 							name: "modifyItem",
 							label: i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.GROUP_NEW,
-							initOpen: true
+							initOpen: true,
+							titleVisible : false
+						}, {
+							name: "overtimeItem",
+							label: i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.FORM.GROUP_OVERTIME,
+							initOpen: true,
+							titleVisible : false
 						}],
 
 						childs: [{
@@ -123,7 +141,29 @@ define([
 							label: "결재자",
 							value: result[0].approval_name,
 							disabled: true,
-							group: "modifyItem",
+							group: "modifyItem"
+						}, {
+							type: "checkBox",
+							name: "approvalOvertime",
+							checkLabel: '야근 상신 여부',
+							value: false,
+							group: "overtimeItem",
+							full: true
+						}, {
+							type:"combo",
+							name:"except",
+							label:"제외시간(분)",
+							collection : overtimeCollection,
+							value: 0,
+							group:"overtimeItem"
+						// }, {
+						// 	type:"input",
+						// 	name:"changeOverTime",
+						// 	label:"초과근무(분)",
+						// 	value:_view.selectData.over_time,
+						// 	disabled: true,
+						// 	group:"overtimeItem"
+						
 						// }, {
 						// 	type: "combo",
 						// 	name: "comment_type",
@@ -159,7 +199,48 @@ define([
 								$(outTimeAfter).removeAttr("disabled");
 							}
 						});
+
+						// 야근 상신 여부
+						var overtime = _view.form.getElement("approvalOvertime");
+						$(overtime).next().hide();
+						$(overtime).click(function(evt) {
+							if ($(evt.currentTarget).find("input").is(":checked")) {
+								$(this).next().show();
+							}
+							else {
+								$(this).next().hide();
+							}
+						});
+
 						
+						_view.holidayCollection = new HolidayCollection();
+						_view.holidayCollection.fetch({
+							data :  {
+								year : Moment().year()
+							}
+						}).done(function(){
+							console.log(_view.holidayCollection);
+							var day = Moment().hour(0).minute(0).second(0);
+							var holidays = _view.holidayCollection.pluck("date");
+							
+							for(var count = 0 ; ; day.add(-1,"days")){
+								if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
+									
+								} else {
+									console.log(day.format("YYYY-MM-DD"));
+									count ++;
+									if(count == 4){
+										// if(count == 100){
+										$(overtime).remove();
+										break;
+									}
+									
+								}
+								
+							}
+						});
+
+
 						// var type = $(_view.form.getElement("comment_type"));
 						// type.find("select").change(function(evt){
 						// 	var value = $(this).val();
@@ -216,7 +297,7 @@ define([
 				approval_id: $(this.form.getElement("approval")).data("id"),
 				want_in_time : null,
 				want_out_time : null,
-				want_normal : 0,
+				want_normal : 0
 			};
 
 			// switch(data.comment_type){
@@ -238,7 +319,7 @@ define([
 					if (normal.find("input").is(":checked")) {
 						newData.want_normal = 1;
 						newData.want_in_time = null;
-						newData.want_ouet_time = null;
+						newData.want_out_time = null;
 					}
 					else {
 						newData.want_normal = 0;
@@ -261,6 +342,10 @@ define([
 					}
 					return newData;
 			// }
+		},
+		
+		getData: function(){
+			return _.extend(this.form.getData(),this.getInsertData());
 		}
 	});
 
