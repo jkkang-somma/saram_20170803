@@ -763,9 +763,6 @@ define([
                                 this.overTime = 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
                                 this.notPayOverTime = this.overTime;
                             }
-                        }else{
-                            this.overTime = 0;
-                            this.notPayOverTime = this.overTime;
                         }
                     }
 
