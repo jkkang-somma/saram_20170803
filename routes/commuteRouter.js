@@ -4,6 +4,7 @@ var debug = require('debug')('commuteRouter');
 var router = express.Router();
 var Commute = require('../service/Commute.js');
 var sessionManager = require('../lib/sessionManager');
+var Schemas = require('../schemas');
 
 router.route('/')
 .get(function(req, res){
@@ -33,7 +34,7 @@ router.route('/bulk')
 .post(function(req, res){
 	var data = req.body.data;
 	var session = sessionManager.get(req.cookies.saram);
-	if (session.user.admin == Schemas.ADMIN) {	// admin 일 경우만 생성
+	if (session.user.admin == Schemas().ADMIN) {	// admin 일 경우만 생성
 	    Commute.insertCommute(data).then(function(result){
 	    	res.send({
 	            success:true,
@@ -57,7 +58,7 @@ router.route('/bulk')
 }).put(function(req, res){
 	var data = req.body;
 	var session = sessionManager.get(req.cookies.saram);
-	if (session.user.admin == Schemas.ADMIN) {	// admin 일 경우만 생성
+	if (session.user.admin == Schemas().ADMIN) {	// admin 일 경우만 생성
 		Commute.updateCommute(data).then(function(){
 			res.send({success : true});
 		});
