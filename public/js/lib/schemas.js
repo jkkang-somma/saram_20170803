@@ -101,6 +101,16 @@ define([
             disabled:false,
             group:undefined
         },
+
+        price:{
+            type:"input",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            disabled:false,
+            group:undefined
+        },
+
         auto_input:{
             type:"input",
             name:undefined,
