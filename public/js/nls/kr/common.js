@@ -692,7 +692,8 @@ define({
         SUB_TITLE:{
             OFFICEITEM_LIST:"비품 목록",
             DETAIL_INFO:"비품 상세 정보",
-            OFFICEITEM_CODE : "비품코드 관리"
+            OFFICEITEM_CODE : "비품코드 관리",
+            OFFICEITEM_HISTORY : "비품이력 관리"
         },
         CODE:{
             SERIAL_YES:"관리번호",
@@ -751,6 +752,7 @@ define({
             CODE:{
                 SEQ : "SEQ",
                 SERIAL_YES	:"관리번호",
+                CATEGORY_TYPE:"기기 분류",
                 HISTORY_DATE:"일자",
                 TYPE	    :"발생구분",
                 TITLE	    :"내용",
@@ -760,8 +762,8 @@ define({
                 NAME	    :"사용",
                 CHANGE_USER_ID	:"작업자 이름",
                 MEMO	    :"비고",
-                CATEGORY_NAME : "기기종류",
-                OWNER : "소유"
+                CATEGORY_NAME : "기기 종류",
+                OWNER : "소유자"
             }
         }, 
         CATEGORY : {
