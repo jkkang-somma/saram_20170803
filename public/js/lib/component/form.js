@@ -50,11 +50,7 @@ define([
             }
         },
 
-<<<<<<< HEAD
         price:{
-=======
-        input:{
->>>>>>> f571577169bed275ecf38052b709865725c1f6b4
             getElement:function(data){
                 var _InputTemp=_.template(PriceHTML);
                 var _input=_.noop();
