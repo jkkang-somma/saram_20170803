@@ -8,7 +8,7 @@ define([
 ){
     var officeItemCodeCollection = Backbone.Collection.extend({
         model : OfficeItemCodeModel,
-        url:'/officeitem/list'
+        url:'/officeitemcode/list'
     });
 
     return officeItemCodeCollection;

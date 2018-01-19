@@ -133,11 +133,22 @@ define([
 		}, {
 			title: "비품 관리",
 			hashTag: "#officeitemmanager",
-			auth: SCHEMAS.ADMIN
+			auth: SCHEMAS.ADMIN,
+			actionAuth:{
+				add:SCHEMAS.ADMIN,
+				remove:SCHEMAS.ADMIN,
+				edit:SCHEMAS.ADMIN
+			}
 		}, {
 			title: "IP 관리",
 			hashTag: "#ipassignedmanager",
-			auth: SCHEMAS.ADMIN
+			auth: SCHEMAS.ADMIN,
+			actionAuth:{
+				add:SCHEMAS.ADMIN,
+				remove:SCHEMAS.ADMIN,
+				edit:SCHEMAS.ADMIN,
+				save:SCHEMAS.ADMIN
+			}
 		}, {
 			title: "비품 할당 현황",
 			hashTag: "#officeitemusage",

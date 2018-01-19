@@ -3,14 +3,14 @@ define([
   'underscore',
   'backbone'
 ], function($, _,Backbone){
-    var OfficeItemCodeModel = Backbone.Model.extend({
-        urlRoot: '/officeitemcode',
-        idAttribute:"_category_code",
-        initialize: function (data) {
+    var IpAssignedManagerModel=Backbone.Model.extend({
+        urlRoot: '/IpAssignedManager/IPsearch',
+        idAttribute:"_id",
+        initialize: function () {
             _.bindAll(this, "remove");
             _.bindAll(this, "validation");
         },
-    	validation:function(attrs, validArr){
+        validation:function(attrs, validArr){
     	    for(var name in attrs){
     	        var value=attrs[name];
     	        if (_.isUndefined(validArr)?_.has(this.default, name):_.has(validArr, name)){//default에 있는 필드만 유효성 검사
@@ -23,33 +23,33 @@ define([
         remove:function(){
             return this.destroy(); 
         },
-        getCustomUrl: function (method) {//idAttribute값을 사용하지 않고 id로 할때
-            switch (method) {
-                case 'read':
-                    return this.urlRoot + "/" + this.attributes.category_code;
-                    break;
-                case 'create':
-                    return this.urlRoot;
-                    break;
-                case 'update':
-                    return this.urlRoot + "/" + this.attributes.category_code;
-                    break;
-                case 'delete':
-                    return this.urlRoot + "/" + this.attributes.category_code;
-                    break;
-            }
-        },
         sync: function (method, model, options) {
             options || (options = {});
             options.url = this.getCustomUrl(method.toLowerCase());
             return Backbone.sync.apply(this, arguments);
         },
+        getCustomUrl: function (method) {//idAttribute값을 사용하지 않고 id로 할때
+            switch (method) {
+                case 'read':
+                    return this.urlRoot + "/" + this.attributes.ip;
+                    break;
+                case 'create':
+                    return this.urlRoot;
+                    break;
+                case 'update':
+                    return this.urlRoot + "/" + this.attributes.ip;
+                    break;
+                case 'delete':
+                    return this.urlRoot + "/" + this.attributes.ip;
+                    break;
+            }
+        },
         default:{
-            category_code : "",
-            category_type : "",
-            category_name : ""
+            ip : "",
+            use_dept : "",
+            use_user : "",
+            memo : ""
         }
     });
-    
-    return OfficeItemCodeModel;
+    return IpAssignedManagerModel;
 });

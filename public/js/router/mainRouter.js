@@ -312,23 +312,23 @@ define([
 		},
         showOfficeItemCode : function(){
             var url = 'views/officeitem/OfficeItemCodeView';
-            this.changeView(url);
+            this.changeView(url, '#officeitemcode');
         },
         showOfficeItemManager : function(){
             var url = 'views/officeitem/OfficeItemManagerView';
-            this.changeView(url);
+            this.changeView(url, '#officeitemmanager');
         },
         showIpAssignedManager : function(){
             var url = 'views/officeitem/IpAssignedManagerView';
-            this.changeView(url);
+            this.changeView(url, '#ipassignedmanager');
         },
         showOfficeItemUsage : function(){
             var url = 'views/officeitem/OfficeItemUsageView';
-            this.changeView(url);
+            this.changeView(url, '#officeitemusage');
         },
         showOfficeItemHistory : function(){
             var url = 'views/officeitem/OfficeItemHistoryView';
-            this.changeView(url);
+            this.changeView(url, '#officeitemhistory');
 		},
 		showDeptSummary : function(){
             var url = 'views/statistics/DeptSummaryView';

@@ -2,6 +2,7 @@
 // Create Date: 2014.12.18
 define([
   'jquery',
+  'jquery.ui',
   'underscore',
   'backbone',
   'log',
@@ -10,6 +11,7 @@ define([
   'i18n!nls/common',
   'text!templates/default/form.html',
   'text!templates/default/input.html',
+  'text!templates/default/auto_input.html',
   'text!templates/default/text.html',
   'text!templates/default/password.html',
   'text!templates/default/datepicker.html',
@@ -17,14 +19,16 @@ define([
   'text!templates/default/hidden.html',
   'text!templates/default/group.html',
   'text!templates/default/checkBox.html'
-  ], function($, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
+  ], function($, jui, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
 		  CheckBoxHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
     var _groupId=0;
+    var  auto_id  = "";
     var _formName="form_";
-    
+    var availableTags = [];
+ 
     var _defaultInputType={
         input:{
             getElement:function(data){
@@ -161,6 +165,11 @@ define([
                         if (!_.isUndefined(data.linkField)){
                             $('[data-hidden="'+data.linkField+'"]').val(_text);
                         }
+
+                        if (!_.isUndefined(data.linkFieldValue)){
+                            var _value=$(this).find("option:selected").val();
+                            $('[data-hidden="'+data.linkFieldValue+'"]').val(_value);
+                        }
                     });
                 }
                 
@@ -190,18 +199,28 @@ define([
                 var _hiddenTemp=_.template(HiddenHTML);
                 var _hidden=_.noop();
                 if (_.isUndefined(data.value) || _.isEmpty(data.value)){
-                    var _options=data.collection.models;
-                    for (var index in _options){
-                        var _option= _options[index].attributes;
-                        var _text=_option[[data.textKey]];
-                        if (data.firstBlank){
-                            data.value="";
-                        } else {
-                            if (index==0){ //초기값 설정
-                                data.value=_text;
+                    if(!_.isUndefined(data.isValueInput)){
+                        data.value=data.value;
+                    }else{
+                        var _options=data.collection.models;
+                        for (var index in _options){
+                            var _option= _options[index].attributes;
+                            var _text=_option[[data.textKey]];
+                            var _code=_option["code"];
+                            if (data.firstBlank){
+                                data.value="";
+                            } else {
+                                if (index==0){ //초기값 설정
+
+                                    if (!_.isUndefined(data.linkFieldValue)){
+                                        data.value=_code;
+                                    }else{
+                                        data.value=_text;
+                                    }
+                                }
                             }
+                            
                         }
-                        
                     }
                 }
                 
@@ -223,7 +242,25 @@ define([
                 }
                 return $(_checkBox);
             }
-        }
+        },
+        auto_input:{
+             getElement:function(data){
+                // for( var index = 0; index < data.input_data.models.length; index++) {
+                //      availableTags[index] = data.input_data.models[index].attributes.name + "(" + data.input_data.models[index].attributes.code + ")";
+                //      console.log(availableTags[index]);
+                // }
+                
+                // for( var index = 0; index < data.user_data.models.length; index++) {
+                //     availableTags[index] = data.user_data.models[index].attributes.name + "(" + data.user_data.models[index].attributes.code + ")";
+                //     console.log(availableTags[index]);
+                // }
+                //availableTags = data.input_data;
+                var _InputTemp=_.template(Auto_InputHTML);
+                var _input=_.noop();
+                _input=_InputTemp(data);
+                return $(_input);
+            }
+        },
     };
     var Form = Backbone.View.extend({
         initialize:function(options){
@@ -307,7 +344,13 @@ define([
                     _type=_child.type;
                     var _schema=Schemas.getSchema(_type);//default config
                     _config=_schema.getDefault(_child);
-                    _config=_.extend(_config, {id:_view.id+"_"+_type+"_"+(_inputId++)}); //setting config
+                    if (_.isUndefined(_child.id)){
+                        _config=_.extend(_config, {id:_view.id+"_"+_type+"_"+(_inputId++)}); //setting config
+                    }
+                    else {
+                        auto_id = _child.id;
+                        _config=_.extend(_config, {id:_child.id}); //setting config
+                    }
                     
                     _childement=_defaultInputType[_type].getElement(_config);
                     

@@ -194,7 +194,7 @@ define([
     	       var _hashPassword=hash.toString();
     	        
     	        data.password =_hashPassword;
-    	        $("#loginbtn").button("loading");
+    	        //$("#loginbtn").button("loading");
     	        
     	        var _spin=new Spin(opts).spin($("#loginbtn").find(".spinIcon")[0]);
                 SessionModel.login(data).then(function(){

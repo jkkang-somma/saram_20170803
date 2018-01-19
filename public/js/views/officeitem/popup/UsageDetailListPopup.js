@@ -1,0 +1,142 @@
+/**
+ * 비품 상세조회 팝업창
+ */
+
+define([ 
+        'jquery',
+        'underscore',
+        'backbone',
+        'util',
+        'schemas',
+        'grid',
+        'dialog',
+        'datatables',
+        'code',
+        'cmoment',
+        'collection/officeitem/OfficeItemDetailCollection',
+        'core/BaseView',
+        'views/component/ProgressbarView',
+    	'views/officeitem/popup/UsageOfficeItemHistoryPopupView',
+    	'text!templates/officeitem/usageHistoryTemplate2.html',
+        'text!templates/default/content.html',
+], function(
+	$, _, Backbone, Util, Schemas,
+	Grid, Dialog, Datatables, Code, Moment,
+    OfficeItemDetailCollection,
+	BaseView, ProgressbarView, UsageHistoryListPopup, usageHistoryTemplate2,
+	ContentHTML
+) {
+    // 비품 컬럼 줄바꿈 처리 및 비품 이력 팝업 처리
+    function _getTemplate(items) {
+        if(items != undefined) {
+            let wordArr = items.split(",");
+            let itemList;
+            let wordObj = {id:"", name:""};
+            if (wordArr.length > 1) {
+                for (let i=0; i < wordArr.length; i++) {
+                    wordObj.id = wordArr[i];
+                    wordObj.item = wordArr[i];
+                    if(i==0) {
+                        itemList = _.template(usageHistoryTemplate2)(wordObj);
+                    } else {
+                        itemList = itemList + "</br>" + _.template(usageHistoryTemplate2)(wordObj);
+                    }
+                }
+                wordObj = {id:"", name:""};
+                return itemList;
+            }else{
+                wordObj.id = items;
+                wordObj.item = items;
+                itemList = _.template(usageHistoryTemplate2)(wordObj);
+                wordObj = {id:"", name:""};
+                return itemList;
+            }
+        }
+        return "-";
+    }
+
+	var UsageDetailListPopup = Backbone.View.extend({
+ 		initialize : function(data) {
+			this.searchData = data.id;
+			this.officeItemDetailCollection = new OfficeItemDetailCollection();
+			this.gridOption = {
+    		    el:"UsedDetailList_content",
+    		    id:"UsedDetailListGrid",
+    		    column:[
+    		    	{data : "category_name", "title" : "장비구분"},
+    		        {data : "serial_yes", "title" : "관리번호",
+                    	render: function(data) {
+                            return _getTemplate(data);
+                        }
+            		},
+                    {data : "model_no", "title" : "모델명"},
+                    {data : "buy_date", "title" : "구입일"},
+     	        ],
+     	        detail: true,
+    		    collection:this.officeItemDetailCollection,
+    		    buttons:["search"],
+    		    fetch: false,
+
+    		};
+		},
+		events: {
+ 		    'view:rendered' : 'renderGrid'
+
+		},
+		render: function(el) {
+			var dfd= new $.Deferred();
+			
+			if (!_.isUndefined(el)) this.el=el;
+			
+			var _content=$(ContentHTML).attr("id", this.gridOption.el);
+			$(this.el).html(_content);
+
+			var _gridSchema=Schemas.getSchema('grid');
+		    this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
+			dfd.resolve(this);
+			
+    	    this.progressbar = new ProgressbarView();
+			$(this.el).append(this.progressbar.render());
+			this.progressbar.disabledProgressbar(false);
+		    return dfd.promise();				
+		},
+		
+		afterRender : function(){
+
+			var _this = this;
+            $(_this.el[0].parentElement.parentElement.parentElement.parentElement.parentElement).css('width', 1000);
+			this.officeItemDetailCollection.fetch({
+                data: {user : _this.searchData},
+				success: function(result) {
+				 	_this.grid.render();
+				 	_this.progressbar.disabledProgressbar(true);
+				 	$("#UsedDetailListGrid .history-detail-popup").click(function(evt) {
+                         _this.onClickHistoryOnPopupWindow(evt);
+                    });
+				},
+				error : function(result) {
+					alert("데이터 조회가 실패했습니다.");
+				}
+			});
+		},
+
+        onClickHistoryOnPopupWindow: function(evt) {
+            evt.stopPropagation();
+            let data = JSON.parse( $(evt.currentTarget).attr('data') );
+            let usageHistoryPopupView = new UsageHistoryListPopup(data.id);
+
+            Dialog.show({
+                title: "("+data.id+") 이력",
+                content: usageHistoryPopupView,
+                buttons: [{
+                    label : "닫기",
+                    action : function(dialog){
+                        dialog.close();
+                    }
+                }]
+            });
+        }
+	});
+	
+	return UsageDetailListPopup;
+});

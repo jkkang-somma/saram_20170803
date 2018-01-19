@@ -24,50 +24,6 @@ define({
            INIT_PASSWORD:"비밀번호 초기화"
        }
     },
-    OFFICEITEM : {
-        TITLE : "비품 관리",
-        SUB_TITLE : "비품코드 관리",
-        SEARCH_BTN : "검색",
-        GRID_COL_NAME : {
-            CODE : "관리코드",
-            TYPE : "분류",
-            NAME : "이름"
-        },
-        TYPE : {
-            OS : "사무",
-            CS : "전산"
-        },
-        MSG :{
-            NOK : "확인필요",
-            OK : "정상",
-            NOTING_SELECTED : "선택된 데이터가 없습니다!",
-            LOADING_FAIL : "데이터 조회 실패!"
-        },
-        ADD_DIALOG :{
-            TOOLTIP : "등록",
-            TITLE : "비품코드 등록",
-            ASK : "비품코드를 등록하시겠습니까?",
-            MSG : {
-                ADD_CODE_COMPLETE : "비품코드 등록 완료!",
-                ADD_CODE_FAIL : "비품코드 등록 실패!"
-            }
-        },
-        EDIT_DIALOG : {
-            TOOLTIP : "수정",
-            UPDATE:"비품코드 정보 수정",
-            MSG : {
-                EDIT_CODE_COMPLETE : "비품코드가 수정되었습니다.",
-                EDIT_CODE_FAIL : "비품코드 수정 실패!"
-            }
-        },
-        REMOVE_DIALOG : {
-            TOOLTIP : "삭제",
-            MSG : {
-                REMOVE_CODE_COMPLETE : "비품코드가 삭제되었습니다.",
-                REMOVE_CODE_FAIL : "비품코드 삭제 실패!"
-            }
-        }
-    }, 
     USER:{
         NAME:"이름",
         LEADER_NAME:"팀장",
@@ -86,7 +42,7 @@ define({
         EMAIL:"이메일",
         PHONE:"휴대전화번호",
         APPROVAL_NAME:"결재자",
-        IP:"PC IP",
+        IP:"IP",
         OFFICE_IP:"사무실 IP",
         PHONE_OFFICE:"사무실 전화번호",
         BIRTHDAY:"생일",
@@ -199,7 +155,8 @@ define({
     		BM:"기초 자료",
             SM:"사원 관리",           
             AM:"근태 관리",
-            RM:"회의실"
+            RM:"회의실",
+            IM:"비품 관리"
         },
         SUB:{
         	BM:{
@@ -229,6 +186,9 @@ define({
             RM:{
                 ROOM_RESERVE:"회의실 예약",
                 GIS:"자리배치도",
+            },
+            IM:{
+        	    USAGE:"비품 할당 현황"
             }
         }
     },
@@ -414,8 +374,8 @@ define({
             NAME : "이름",
             TIME : "출입시간",
             TYPE : "출입기록",
-            IP : "사무실 IP",
-            IP_PC : "PC IP",
+            IP : "IP",
+            IP_PC : "사무실 IP",
             NEED_CONFIRM : "확인필요",
             MAC:"Mac"
         },
@@ -584,6 +544,7 @@ define({
             MEMO: "비고"
         }
     },
+
     ORGANIZATION :{
     	TITLE : "(주)예스씨앤씨  조직도"
     },
@@ -716,7 +677,180 @@ define({
                 REMOVE_COMPLETE : "직급 데이터가 삭제되었습니다.",
                 REMOVE_FAIL : "사용중인 직급 데이터입니다."
             },
+        },
+    },
+
+    OFFICEITEM : {
+        TITLE:{
+            OFFICEITEM_MANAGER:"비품 관리",   
+            TYPE:"비품 유형",
+            ADD:"비품 등록",
+            EDIT:"비품 수정",
+            REMOVE:"비품 삭제",
+            SAVE:"비품 정보 저장"         
+        },
+        SUB_TITLE:{
+            OFFICEITEM_LIST:"비품 목록",
+            DETAIL_INFO:"비품 상세 정보",
+            OFFICEITEM_CODE : "비품코드 관리"
+        },
+        CODE:{
+            SERIAL_YES:"관리번호",
+            SERIAL_FACTORY:"일련번호",
+            VENDOR:"제조사",
+            MODEL_NO:"모델명",
+            CATEGORY_CODE:"기기종류",
+            CATEGORY_TYPE:"기기 TYPE",
+            CATEGORY_INDEX:"기기 INDEX",
+            PRICE:"금액",
+            SURTAX:"부가세",
+            PRICE_BUY:"구입가격",
+            BUY_DATE:"구입일",
+            DISPOSAL_DATE:"폐기일",
+            DISPOSAL_ACCOUNT:"회계상 폐기일",
+            EXPIRATION_DATE:"사용 만료일",
+            USE_DEPT:"사용 부서",
+            USE_USER:"사용 직원",
+            USE_DEPT_NAME:"사용 부서명",
+            USE_USER_NAME:"사용 직원명",
+            LOCATION:"장소 위치",
+            STATE:"상태",
+            MEMO:"메모"
+        },
+        CONFIRM: {
+            REMOVE:"비품 정보를 삭제 하시겠습니까?"
+        },
+        SUCCESS:{
+            SAVE:"비품 정보를 수정하였습니다.",
+            REMOVE:"비품 정보를 삭제하였습니다.",
+            ADD:"비품 정보를 등록하였습니다."
+        },
+        STATE: {
+            NORMAL:"정상",
+            BREAK:"고장",
+            DISUSE:"폐기",
+            STANDBY:"대여"
+        },
+        USE_STATE: {
+            USE:"사용중",
+            NOT_USER:"유휴",
+        },
+        LIST:{
+            SEARCH_BTN : "검색",     
+            GET_DATA_FAIL : "데이터 조회 실패!",          
+        },
+        HISTORY : {
+            HISTORY_INFO:"이력 정보",  
+           
+            TITLE: {
+                ADD:"이력 등록",
+            },
+            SUCCESS : {
+                ADD:"이력 정보를 등록하였습니다."
+            },
+            CODE:{
+                SEQ : "SEQ",
+                SERIAL_YES	:"관리번호",
+                HISTORY_DATE:"일자",
+                TYPE	    :"발생구분",
+                TITLE	    :"내용",
+                REPAIR_PRICE:"발생비용",
+                USER_ID	    :"사용자 ID",
+                USE_DEPT	:"사용 부서",
+                NAME	    :"사용",
+                CHANGE_USER_ID	:"작업자 이름",
+                MEMO	    :"비고",
+                CATEGORY_NAME : "기기종류",
+                OWNER : "소유"
+            }
         }, 
+        CATEGORY : {
+            COLUME : {
+                CODE : "관리코드",
+                TYPE : "분류",
+                NAME : "이름"
+            },
+            TYPE : {
+                OS : "사무",
+                CS : "전산"
+            },
+        },
+        MSG :{
+            NOK : "확인필요",
+            OK : "정상",
+            NOTING_SELECTED : "선택된 데이터가 없습니다!",
+            LOADING_FAIL : "데이터 조회 실패!"
+        },
+        ADD_DIALOG :{
+            TOOLTIP : "등록",
+            TITLE : "비품코드 등록",
+            ASK : "비품코드를 등록하시겠습니까?",
+            MSG : {
+                ADD_CODE_COMPLETE : "비품코드 등록 완료!",
+                ADD_CODE_FAIL : "비품코드 등록 실패!"
+            }
+        },
+        EDIT_DIALOG : {
+            TOOLTIP : "수정",
+            UPDATE:"비품코드 정보 수정",
+            MSG : {
+                EDIT_CODE_COMPLETE : "비품코드가 수정되었습니다.",
+                EDIT_CODE_FAIL : "비품코드 수정 실패!"
+            }
+        },
+        REMOVE_DIALOG : {
+            TOOLTIP : "삭제",
+            MSG : {
+                REMOVE_CODE_COMPLETE : "비품코드가 삭제되었습니다.",
+                REMOVE_CODE_FAIL : "비품코드 삭제 실패!"
+            }
+        }
+    },
+    IPASSIGNED_MANAGER_LIST : {
+        TITLE : "비품 관리",
+        SUB_TITLE : "IP 관리",
+        SEARCH_BTN : "조회",
+        GRID_COL_NAME : {
+            IP : "IP",
+            USE_DEPT: "사용부서",
+            USE_USER: "사용자",
+            MEMO: "비고"
+        },
+    },
+    IPCONFIRM:{
+        IP:{
+            REMOVE:"IP를 삭제 하시겠습니까?",
+            REMOVE_COMPLETE:"IP를 삭제 하였습니다.",
+            SUCCESS_COMPLETE:"IP를 등록 하였습니다.",
+            UPDATE_COMPLETE:"정보를 수정 하였습니다."
+        }
+    },
+    IPTOOLTIP: {
+        IP:{
+            TYPE:"IP 유형",
+            ADD:"IP 등록",
+            EDIT:"IP 수정",
+            REMOVE:"IP 삭제"
+        }
+    },
+    USAGE_LIST : {//비품 현황
+        TITLE : "비품 관리",
+        SUB_TITLE : "비품 할당 현황",
+        SEARCH_BTN : "조회",
+        GRID_COL_NAME : {
+            DEPARTMENT: "부서",
+            NAME: "이름",
+            DESCTOP: "데스크톱",
+            MONITOR: "모니터",
+            IP: "IP",
+            NOTEBOOK: "노트북",
+            DETAIL: "상세"
+        },
+        MSG :{
+            NOK : "확인필요",
+            OK : "정상",
+            LOADING_FAIL : "데이터 조회 실패!",
+            GET_DATA_FAIL : "데이터 조회 실패!"
+        },
     }
-    
 });

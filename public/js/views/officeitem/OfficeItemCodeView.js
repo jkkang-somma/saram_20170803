@@ -32,9 +32,9 @@ define([
     		this.option = {
             el:"officeitemcode_content",
             column:[
-                { data : "category_code",            "title" : i18nCommon.OFFICEITEM.GRID_COL_NAME.CODE },
-                { data : "category_type",            "title" : i18nCommon.OFFICEITEM.GRID_COL_NAME.TYPE },
-                { data : "category_name",            "title" : i18nCommon.OFFICEITEM.GRID_COL_NAME.NAME }
+                { data : "category_code",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.CODE },
+                { data : "category_type",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.TYPE },
+                { data : "category_name",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.NAME }
               ],
             dataschema:["category_code", "category_type", "category_name"],
     		    collection:officeItemCodeCollection,
@@ -74,8 +74,8 @@ define([
     	    //Head 
     	    var _head=$(_headTemp(_headSchema.getDefault(
             {
-              title:i18nCommon.OFFICEITEM.TITLE, 
-              subTitle:i18nCommon.OFFICEITEM.SUB_TITLE
+              title:i18nCommon.OFFICEITEM.TITLE.OFFICEITEM_MANAGER, 
+              subTitle:i18nCommon.OFFICEITEM.SUB_TITLE.OFFICEITEM_CODE
             }
           )));
     	    _head.addClass("no-margin");
@@ -103,10 +103,10 @@ define([
                                     
                                     beforEvent=function(){
                                         $(_btn).data('loading-text',"<div class='spinIcon'>"+i18nCommon.DIALOG.BUTTON.ADD +"</div>");
-                                        $(_btn).button('loading');
+                                        //$(_btn).button('loading');
                                     };
                                     affterEvent=function(){
-                                        $(_btn).button('reset');
+                                        //$(_btn).button('reset');
                                     };
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                                     addOfficeItemCodeView.submitAdd(beforEvent, affterEvent).done(function(data){

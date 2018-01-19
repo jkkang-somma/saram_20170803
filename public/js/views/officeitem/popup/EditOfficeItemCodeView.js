@@ -49,20 +49,20 @@ define([
         	        childs:[{
 								type:"combo",
 								name:"category_type",
-								label:i18nCommon.OFFICEITEM.GRID_COL_NAME.TYPE,
+								label:i18nCommon.OFFICEITEM.CATEGORY.COLUME.TYPE,
 								value:_model.category_type,
-								collection:[{key:i18nCommon.OFFICEITEM.TYPE.OS,value:i18nCommon.OFFICEITEM.TYPE.OS},{key:i18nCommon.OFFICEITEM.TYPE.CS,value:i18nCommon.OFFICEITEM.TYPE.CS}],
+								collection:[{key:i18nCommon.OFFICEITEM.CATEGORY.TYPE.OS,value:i18nCommon.OFFICEITEM.CATEGORY.TYPE.OS},{key:i18nCommon.OFFICEITEM.CATEGORY.TYPE.CS,value:i18nCommon.OFFICEITEM.CATEGORY.TYPE.CS}],
 								disabled:"readonly"
 							},{
 								type:"input",
 								name:"category_code",
-								label:i18nCommon.OFFICEITEM.GRID_COL_NAME.CODE,
+								label:i18nCommon.OFFICEITEM.CATEGORY.COLUME.CODE,
 								value:_model.category_code,
 								disabled:"readonly"
 							},{
 								type:"input",
 								name:"category_name",
-								label:i18nCommon.OFFICEITEM.GRID_COL_NAME.NAME,
+								label:i18nCommon.OFFICEITEM.CATEGORY.COLUME.NAME,
 								value:_model.category_name,
 							/*},
 							{

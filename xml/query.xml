@@ -278,15 +278,7 @@
     	<query id="insertApproval">
     		insert into approval_tbl
 				(doc_num, submit_id, manager_id, submit_date, submit_comment, start_date, end_date, office_code, state, black_mark, start_time, end_time, day_count) 
-			values(?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    	</query>
-		<query id="updateApprovalState">
-    		update approval_tbl set 
-    			state = ? 
-			where submit_id=? 
-				and start_date=? and end_date=? 
-				and state='상신대기'
-				and office_code='O01'
+			values(?, ?, ?, NOW(), ?, ?, ?, ?, '상신', ?, ?, ?, ?)
     	</query>
     	<query id="updateApprovalConfirm">
     		update approval_tbl set 
@@ -369,7 +361,7 @@
 		<query id="selectOfficeCodeList">select * from office_code_tbl</query>
         <query id="empty"></query>
 	</group>
-	
+
 	<group id="dept_code">
 		<query id="selectDepartmentCodeList">select * from dept_code_tbl where `use`="1"</query>
         <query id="empty"></query>
@@ -412,8 +404,6 @@
 							c.normal,
 							c.normal_change,
 							c.except,
-							c.standard_in_time,
-        					c.standard_out_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -461,8 +451,6 @@
 							c.early_time,
 							c.not_pay_over_time,
 							c.except,
-							c.standard_in_time,
-        					c.standard_out_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
@@ -639,7 +627,6 @@
 				)
         </query>
     </group>
-    
     <group id="changeHistory">
     	<query id="selectChangeHistory">
 			SELECT
@@ -874,10 +861,11 @@
     	</query>
     	
         <query id="selectDeptList">SELECT code, name, area FROM dept_code_tbl where `use`="1"</query>
-		<query id="selectPartList">SELECT code, name FROM part_code_tbl</query>
+        <query id="selectPartList">SELECT code, name FROM part_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
-		<query id="selectOfficeItemCodeList">SELECT * FROM office_item_category_tbl</query>
+        <query id="selectUserList">SELECT id as code, name  FROM members_tbl</query>
+        <query id="getOfficeItemCode">SELECT category_code as code, category_name as name, category_type as type	FROM office_item_category_tbl order by category_code asc</query>
     </group>
     <group id ="dashboard">
     	<query id="getWorktypeCode">
@@ -2024,20 +2012,21 @@
 			delete from room_reserve_tbl where `index`=?;
 		</query>
 	</group>
+
 	<group id="officeItem">
-        <query id="selectOfficeItemCodeList">
-        	SELECT 
+		<query id="selectOfficeItemCodeList">
+			SELECT 
 				*
 			FROM 
 				office_item_category_tbl
 			ORDER BY category_code, category_type, category_name
-        </query>
+		</query>
 		<query id="insertOfficeItemCode">
         	INSERT INTO office_item_category_tbl
 				(category_code, category_type, category_name) 
 			VALUES
 				(?,?,?)
-        </query>
+		</query>
 		<query id="deleteOfficeItemCode">
 			DELETE 
 			FROM 
@@ -2045,23 +2034,234 @@
 			WHERE 
 				category_code=?
 		</query>
-        <query id="updateOfficeItemCode">
-    		UPDATE
-        		office_item_category_tbl 
-        	SET 
-        		category_type = ?,
+		 <query id="updateOfficeItemCode">
+			UPDATE
+				office_item_category_tbl 
+			SET 
+				category_type = ?,
 				category_name =?
-        	WHERE category_code=?
-        </query>
-        <query id="getOfficeItemCodeUseCount">
-        	SELECT 
+			WHERE category_code=?
+		</query>
+		<query id="getOfficeItemCodeUseCount">
+			SELECT 
 				count(*) cnt
 			FROM 
 				office_item_tbl
 			WHERE
 				serial_yes like ?"%"
+		</query>
+	</group>
+	
+    <group id="officeitem">
+	    <query id="selectIdByOfficeItem">
+        	SELECT serial_yes,serial_factory,vendor,model_no,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_code,
+			category_type,category_index,price,surtax,price_buy,
+            date_format(buy_date, '%Y-%m-%d') AS buy_date,
+			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
+			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
+			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
+			use_dept,use_user,
+			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			location,state,memo
+			FROM commute.office_item_tbl A
+        	WHERE A.serial_yes=?
+        </query>
+        <query id="selectOfficeItemALLList">
+ 			SELECT serial_yes,serial_factory,vendor,model_no,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_code,
+			category_type,category_index,price,surtax,price_buy,
+            date_format(buy_date, '%Y-%m-%d') AS buy_date,
+			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
+			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
+			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
+			use_dept,use_user,
+			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			location,state,memo
+			FROM commute.office_item_tbl A
+        </query>
+		<query id="selectOfficeItemCategoryCodeList">
+ 			SELECT serial_yes,serial_factory,vendor,model_no,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_code,
+			category_type,category_index,price,surtax,price_buy,
+            date_format(buy_date, '%Y-%m-%d') AS buy_date,
+			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
+			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
+			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
+			use_dept,use_user,
+			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			location,state,memo
+			FROM commute.office_item_tbl A
+			where A.category_code=?
+        </query>
+		<query id="empty"></query>
+		<query id="insertOfficeItem">
+        	insert into commute.office_item_tbl(serial_yes,serial_factory,vendor,model_no,
+          	category_code,category_index,category_type,price,surtax,price_buy,buy_date,disposal_date,disposal_account,expiration_date,use_dept,use_user,location,state,memo) 
+        	values(?,?,?,?,?,?,(SELECT category_type FROM commute.office_item_category_tbl where category_code = ?),?,?,?,?,?,?,?,?,?,?,?,?)        
+        </query>
+		<query id="deleteOfficeItem">delete from commute.office_item_tbl where serial_yes=?</query>
+		<query id="updateOfficeItem">
+    		UPDATE
+        		commute.office_item_tbl 
+        	SET 
+				serial_factory=?,
+				vendor=?,
+				model_no=?,
+				category_code=?,
+				price=?,
+				surtax=?,
+				price_buy=?,
+				buy_date=?,
+				disposal_date=?,
+				disposal_account=?,
+				expiration_date=?,
+				use_dept=?,
+				use_user=?,
+				location=?,
+				state=?,
+				memo=?
+        	WHERE serial_yes=?
+        </query>
+		<query id="getOfficeItemMaxCategoryIndex">
+ 			select (ifnull(MAX(category_index),0)+1) as category_index from commute.office_item_tbl where category_code=?
         </query>
 	</group>
+
+	<group id="officeItemHistory">
+		<query id="selectOfficeItemHistoryList">
+			SELECT 
+				*
+			FROM 
+				office_item_history_tbl
+			WHERE 
+				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+			AND 
+				category_type=?
+			AND
+				serial_yes like ?"%"
+		</query>
+		<query id="selectOfficeItemHistoryListV2">
+			SELECT 
+				*
+			FROM 
+				office_item_history_tbl
+			WHERE 
+				serial_yes = ?
+		</query>
+		<query id="selectOfficeItemHistoryListAll">
+			SELECT 
+				*
+			FROM 
+				office_item_history_tbl
+			WHERE 
+				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+		</query>
+		<query id="selectOfficeItemHistoryListAllV2">
+			SELECT 
+				*
+			FROM 
+				office_item_history_tbl
+			WHERE 
+				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+			AND
+				category_type=?
+		</query>
+		<query id="insertOfficeItemHistory">
+			INSERT INTO 
+				office_item_history_tbl(serial_yes,category_type,history_date,type,title,repair_price,use_user,use_dept,name,change_user_id,memo) 
+			VALUES(?,?,now(),?,?,?,?,?,?,?,?)
+		</query>
+		<query id="deleteOfficeItemHistory">
+			DELETE FROM 
+				office_item_history_tbl 
+			WHERE
+				serial_yes =?
+		</query>
+	</group>
+	
+	<group id="IpAssignedManage">
+		<query id="selectIpAll">
+			SELECT ip, use_dept, use_user, memo from ip_tbl;
+		</query>
+		<query id="selectUserInfo">
+			select concat(name, '(', id, ')') from members_tbl;
+		</query>
+		<query id="deleteIP">
+			delete from ip_tbl where `ip`=?;
+		</query>
+		<query id="updateIP">
+			update ip_tbl set `use_dept` = ?, `use_user` =?, `memo` = ?
+			where `ip`=?;
+		</query>
+		<query id="insertIP">
+			insert into ip_tbl(ip, use_dept, use_user, memo) 
+			values(?,?,?,?);
+		</query>
+	</group>
+	<group id="usage">
+		<query id="selectUsageListALL">
+			SELECT
+				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", B.m1 AS "leave_company"
+			FROM
+				ip_tbl A RIGHT JOIN (
+					SELECT
+						off.use_user r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
+						group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
+						group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
+						group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+					FROM
+						members_tbl mem INNER JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
+					ORDER BY
+						mem.name
+				) B ON A.use_user = B.r1
+			GROUP BY B.r2
+		</query>
+
+		<query id="selectUsageList">
+			SELECT B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
+			B.m1 AS "leave_company", B.m2 AS "dept_code"
+			FROM ip_tbl A RIGHT JOIN (
+			SELECT
+			off.use_user r1, mem.name r2, mem.dept_code r3, mem.leave_company m1, mem.dept_code m2,
+			group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
+			group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
+			group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+
+			FROM
+			members_tbl mem INNER JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
+
+			ORDER BY
+			mem.name
+			) B ON A.use_user = B.r1 WHERE B.m2 = ? GROUP BY B.r2
+		</query>
+
+		<query id="selectUsageDetailList">
+			SELECT
+			mem.name, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
+			FROM
+			members_tbl mem RIGHT JOIN office_item_tbl off ON mem.id = off.use_user
+			RIGHT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
+			WHERE
+			off.use_user = ?
+			ORDER BY off.serial_yes
+		</query>
+
+		<query id="selectUsageDetailListAll">
+			SELECT
+			mem.name, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
+			FROM
+			members_tbl mem RIGHT JOIN office_item_tbl off ON mem.id = off.use_user
+			RIGHT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
+			ORDER BY mem.name
+		</query>
+
+
+	</group>
+	
 	<group id ="statistics">
 		<query id="selectPageUrlCount">
 			select 
@@ -2071,7 +2271,7 @@
 			where
 				page_url = ?
 		</query>
-    	<query id="updatePageUrlCount">
+		<query id="updatePageUrlCount">
 			insert into statistics_page_view
 				(page_url, count)
 			values
@@ -2080,8 +2280,7 @@
         		page_url = ?,
         		count = ?
 		</query>
-
-        <query id="selectAbnormalDeptSummary">
+		<query id="selectAbnormalDeptSummary">
 			SELECT 
 				department,
 				count(if(work_type='10',1, null)) AS 'late', 

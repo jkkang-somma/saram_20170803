@@ -28,7 +28,9 @@ var Code = function (data) {
             case 'overTime' :
                 return CodeDao.getOvertimeCode();
             case 'officeitem' :
-                return CodeDao.selectOfficeItemCodeList();
+                return CodeDao.getOfficeItemCode();
+            case 'user' :
+                return CodeDao.selectUserList();
         }
     }
     

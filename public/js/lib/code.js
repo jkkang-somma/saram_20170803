@@ -5,7 +5,7 @@ define([
 ], function($, _, CodeCollection){
     
     var _codeCollectionArr=[];
-    var _configArr=["position", "approvalUser", "dept", "part", "overTime", "workType", "office", "officeitem"];
+    var _configArr=["position", "approvalUser", "dept", "part", "overTime", "workType", "office","officeitem","user"];
     var _getCollection=function(kind){
         var index=_.indexOf(_configArr, kind);
         return index>-1?_codeCollectionArr[index]:null;
@@ -19,6 +19,7 @@ define([
         POSITION : "position",
         APPROVAL_USER : "approvalUser",
         OFFICEITEM : "officeitem",
+        USER:"user",
         
         init : function(){
     		_codeCollectionArr = [];

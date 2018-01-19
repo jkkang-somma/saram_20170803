@@ -31,6 +31,7 @@ define([
             "Search_Text": "",
             "MyRecord_Text": "",
             "MyDept_Text": "",
+            "MyEmploy_Text": "",
             "Page_num" : ""
         },
 
@@ -39,6 +40,7 @@ define([
             this.condition.Search_Text = "";//Search 필터 값 저장 기능 : 새 기능 실행시 필터 조건 초기화
             this.condition.MyRecord_Text = "";
             this.condition.MyDept_Text = "";
+            this.condition.MyEmploy_Text = "";
             this.condition.Page_num = "";
 
     	    // var lastWidth = $(window).width();
@@ -617,6 +619,110 @@ define([
                 _grid._filtering();
             })
         },
+        _createEmployStatusButton:function(obj){//비품현황 버튼 추가
+            let _grid=this;
+            const filterBtnText=["근무자","퇴사자","전체"];
+            let MyText = _grid.condition.MyEmploy_Text;
+
+            let filter=[
+                function(data){
+                    let _levDate = data[7];
+                    if(_levDate === "") return true
+                    return false;
+                },
+                function(data){
+                    let _levDate = data[7];
+                    if(_levDate !== "") return true
+                    return false;
+                },
+                function(){
+                    return true;
+                }
+             ];
+
+            let _buttonIcon;
+
+            if (MyText !="" && MyText != undefined) { //Search 필터 값 저장 기능: 근무자,퇴사자,전체 중 선택되어 있는 상태로 글자 변경
+                _buttonIcon = $(_defaultBtnText).html(filterBtnText[MyText]);
+            }else{
+                _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
+            }
+
+            let _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+            this.buttonid[obj.name] = _btnId;
+
+            let _btnTmp=_.template(_defaultBtnTag);
+            let _button=$(_btnTmp({tooltip:"검색 대상"}));
+
+            _button.attr("id", _btnId);
+            _button.append(_buttonIcon);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
+
+            //filter 설정
+            if (MyText !="" && MyText != undefined) {//Search 필터 값 저장 기능: 근무자,퇴사자,전체 중 선택되어 있는 상태로 필터
+                _grid.filterValue.myRecord=MyText;
+                _grid.filters.myRecord=filter[MyText];
+            }else{
+                _grid.filterValue.myRecord=0;
+                _grid.filters.myRecord=filter[0];
+            }
+
+            _button.click(function(){
+                let index=_grid.filterValue.myRecord;
+                if (index==(filterBtnText.length-1)){
+                    index=0;
+                } else {
+                    index++;
+                }
+                _button.html($(_defaultBtnText).html(filterBtnText[index]));
+                _grid.filterValue.myRecord=index;
+                _grid.condition.MyEmploy_Text=index.toString();//Search 필터 값 저장 기능: 필터 한 값 메모리에 저장
+                //grid.filtering(filter[index]);
+                _grid.filters.myRecord=filter[index];
+                _grid._filtering();
+            })
+        },
+        _createOnlyMyButton:function(obj){//비품현황 버튼 추가
+            let _grid=this;
+            let filterBtnText=["나"];
+            let userName=SessionModel.getUserInfo().name;
+            let userId=SessionModel.getUserInfo().id;
+            let filter=[
+                    function(data){
+                        let filterColumns=obj.filterColumn;
+                        let configColumns=_grid.options.column;
+                        let configColumnsNameArr=_.pluck(configColumns, "data");
+
+                        for (let index in filterColumns){
+                            let columnName=filterColumns[index];
+                            let findIndex=_.indexOf(configColumnsNameArr, columnName)+1;
+
+                            let value=data[findIndex];
+
+                            let nameIndex=value.indexOf(userName);
+                            let idIndex=value.indexOf(userId);
+
+                            if (nameIndex>=0 || idIndex>=0){
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                ];
+            let _buttonIcon = $(_defaultBtnText).html(filterBtnText[0]);
+            let _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+            this.buttonid[obj.name] = _btnId;
+
+            let _btnTmp=_.template(_defaultBtnTag);
+            let _button=$(_btnTmp({tooltip:"검색 대상"}));
+
+            _button.attr("id", _btnId);
+            _button.append(_buttonIcon);
+            this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
+            _grid.filterValue.myRecord=0;
+            _grid.filters.myRecord=filter[0];
+        },
+
     	_drawButtons:function(){//button draw
     	    var _grid=this;
     	    var _btns=this.options.buttons;
@@ -654,6 +760,12 @@ define([
                         break;
                     case "myDeptRecord" :
                         this._createMyDeptRecordButton(obj);
+                        break;
+                    case "EmployStatus" :
+                        this._createEmployStatusButton(obj);
+                        break;
+                    case "OnlyMy" :
+                        this._createOnlyMyButton(obj);
                         break;
     	        }
     	    }
