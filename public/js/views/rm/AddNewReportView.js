@@ -130,7 +130,7 @@ define([
                         var selGubun = $(_this.el).find('#office_code');
                         var selVal = selGubun.val();
                         // _this.holReq = 0;
-                        if (selVal == 'W01') {
+                        if (selVal == 'W01' || selVal == 'E01') {
                             // 외근
                             _this.holReq = 0;
                             $(_this.el).find('#datePickerTitleTxt').text('date');
@@ -168,7 +168,7 @@ define([
                     var selGubun = $(_this.el).find('#office_code');
                     var selVal = selGubun.val();
                     // _this.holReq = 0;
-                    if (selVal == 'W01') {
+                    if (selVal == 'W01' || selVal == 'E01') {
                         // 외근
                         _this.holReq = 0;
                         $(_this.el).find('#datePickerTitleTxt').text('date');
@@ -279,7 +279,7 @@ define([
             selGubun.change(function() {
                 var selVal = selGubun.val();
                 // _this.holReq = 0;
-                if (selVal == 'W01') {
+                if (selVal == 'W01' || selVal == 'E01') {
                     // 외근
                     _this.holReq = 0;
                     $(_this.el).find('#datePickerTitleTxt').text('date');
@@ -302,7 +302,7 @@ define([
                 $(_this.el).find('#reqHoliday').val(_this.holReq + " 일");
 
                 // 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
-                if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
+                if (selVal == 'B01' || selVal == 'E01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
                     $(_this.el).find('#usableHolidayCon').hide();
                 }
                 else {
@@ -310,7 +310,7 @@ define([
                 }
 
                 // 신청연차일수 감추기
-                if (selVal == 'B01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
+                if (selVal == 'B01' || selVal == 'E01' || selVal == 'W01' || selVal == 'W02' || selVal == 'W03' || selVal == 'W04' || selVal == 'V04' || selVal == 'V05' || selVal == 'V06' || selVal == 'V07' || selVal == 'V08') {
                     $(_this.el).find('#usableHolidayCon').hide();
                 }
                 else {
@@ -519,7 +519,7 @@ define([
                 if (i == 1) { // end date 일경우
                     var selGubun = $(this.el).find('#office_code');
                     var selVal = selGubun.val();
-                    if (selVal == 'B01' || selVal == 'V02' || selVal == 'V03' || selVal == 'W01' || selVal =='V07' || selVal == 'V08') {
+                    if (selVal == 'B01' || selVal == 'V02' || selVal == 'V03' || selVal == 'E01' || selVal == 'W01' || selVal =='V07' || selVal == 'V08') {
                         $(this.el).find('#' + essenId[i]).val(formData["start_date"]);
                         formData[essenId[i]] = formData["start_date"];
                     }

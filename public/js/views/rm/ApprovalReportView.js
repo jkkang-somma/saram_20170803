@@ -229,6 +229,7 @@ define([
                         $(this.el).find('#outsideOfficeTimeCon').prev().addClass('col-sm-10');
                         break;
                     case "W01" : // 외근
+                    case "E01" : // 교육
                         holReq = "0";
                         $(this.el).find('#end_date').hide();
                         $(this.el).find('#outsideOfficeTimeCon').show();
@@ -250,8 +251,8 @@ define([
                 
                 _this.find('#reqHoliday').html(holReq + " 일");
 
-                // 휴일 근무, 외근, 출장, 장기외근 - 잔여 연차 일수 감추기 
-                var hideHoliday = ['B01', 'W01', 'W02', 'W03', 'W04', 'O01'];
+                // 휴일 근무, 외근, 출장, 장기외근, 교육 - 잔여 연차 일수 감추기 
+                var hideHoliday = ['B01', 'W01', 'W02', 'W03', 'W04', 'O01', 'E01'];
                 if (_.indexOf(hideHoliday, param.office_code) > -1 || _.isUndefined(param.total_day)) {
                     $(this.el).find('#usableHolidayCon').hide();
                 }

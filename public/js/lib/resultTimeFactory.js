@@ -419,7 +419,7 @@ define([
                     var model = todayOutOffice[i];
                     var code = model.get("office_code");
                     var VACATION_CODES = ["V01", "V02", "V03", "V04", "V05", "V06", "V07", "V08"];
-                    var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04", "W01W04"];
+                    var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04", "W01W04", "E01"];
                     var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07", "V06V07", "V06V08"];
 
                     if (_.indexOf(VACATION_CODES, code) >= 0) {
@@ -510,6 +510,7 @@ define([
 
                 switch (this.outOfficeCode) {
                     case "W01": // 외근
+                    case "E01": // 교육
                     case "W01W04" : // 파견,외근
                         var stdInTime = 8;
                         if (this.isSuwon) {
@@ -519,7 +520,7 @@ define([
                         for (var i = 0; i < todayOutOffice.length; i++) {
                             model = todayOutOffice[i];
                             code = model.get("office_code");
-                            if (code == "W01") {
+                            if (code == "W01" || code == "E01") {
                                 var startTime = Moment(model.get("start_time"), "HH:mm");
                                 var endTime = Moment(model.get("end_time"), "HH:mm");
                                 /**
@@ -763,6 +764,9 @@ define([
                                 this.overTime = 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
                                 this.notPayOverTime = this.overTime;
                             }
+                        }else{
+                            this.overTime = 0;
+                            this.notPayOverTime = this.overTime;
                         }
                     }
 

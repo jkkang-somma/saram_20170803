@@ -175,8 +175,8 @@ define([
                     $(this.el).find('#outsideOfficeTimeCon').prev().removeClass('col-sm-6');
                     $(this.el).find('#outsideOfficeTimeCon').prev().addClass('col-sm-10')
                 }
-                else if (param.office_code == "W01") {
-                    // 외근
+                else if (param.office_code == "W01" || param.office_code == "E01") {
+                    // 외근, 교육
                     holReq = "0";
                     $(this.el).find('#end_date').css('display', 'none');
                     $(this.el).find('#outsideOfficeTimeCon').css('display', 'block');

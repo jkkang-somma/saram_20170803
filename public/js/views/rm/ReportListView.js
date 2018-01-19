@@ -197,10 +197,10 @@ define([
                     return dataVal;
                 }
             }, {
-                title: "외근시간",
+                title: "시간",
                 render: function(data, type, row) {
                     var dataVal = row.start_time + "</br>~ " + row.end_time;
-                    if (row.start_time == null || row.office_code != 'W01') {
+                    if (row.start_time == null || (row.office_code != 'W01' && row.office_code != 'E01')) {
                         dataVal = "-";
                     }
                     return dataVal;
