@@ -12,6 +12,10 @@ UserDao.prototype.selectIdByUser =  function (id) {
     return db.query(group, "selectIdByUser", [id]);
 };
 
+UserDao.prototype.selectIdByLoginUser =  function (id) {
+    return db.query(group, "selectIdByLoginUser", [id]);
+};
+
 UserDao.prototype.selectUserList =  function () {
     return db.query(group, "selectUserList");
 };

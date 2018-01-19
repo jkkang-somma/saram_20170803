@@ -111,6 +111,7 @@ var User = function (data, isNoSchemas) {
     return {
         get:_get,
         getUser:_getUser,
+        getLoginUser:_getLoginUser,
         getUserList:_getUserList,
         getUserListNow:_getUserListNow,
         getManagerList:_getManagerList,
