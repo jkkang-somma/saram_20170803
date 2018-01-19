@@ -37,9 +37,7 @@ var OfficeItem = function (data) {
             data.category_index = maxCategory_index;
             data.serial_yes = data.category_code+'_'+maxCategory_index;   
             
-            if(data.disposal_date ==""){
-                data.disposal_date = null;
-            }
+            if(data.disposal_date ==""){ data.disposal_date = null; }
 
             OfficeItemDao.insertOfficeItem(data).then(function(result) {
 
@@ -60,7 +58,7 @@ var OfficeItem = function (data) {
                         use_dept	: data.use_dept, 
                         name	    : (data.use_user != "")?data.use_user_name:data.use_dept_name, 
                         change_user_id : user.name, 
-                        memo	    : "[비품 등록] serial_yes:"+data.serial_yes+ " 등록 하였습니다."
+                        memo	    : data.serial_yes+ " 등록 하였습니다."
                     };
                 
                     OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {
@@ -90,6 +88,9 @@ var OfficeItem = function (data) {
         return new Promise(function(resolve, reject){// promise patten
             _getOfficeItem().then(function(currentData){
                 var _updateData=_.defaults(data, currentData[0]);
+
+                if(data.disposal_date ==""){ data.disposal_date = null; }
+
                 OfficeItemDao.updateOfficeItem(_updateData).then(function(result){
                     //resolve(result);
                     data = currentData[0];
@@ -105,7 +106,7 @@ var OfficeItem = function (data) {
                         use_dept	: data.use_dept, 
                         name	    : (data.use_user != "")?data.use_user_name:data.use_dept_name, 
                         change_user_id : user.name, 
-                        memo	    : "[비품 수정] serial_yes:"+data.serial_yes+ " 수정 하였습니다."
+                        memo	    : data.serial_yes+ " 수정 하였습니다."
                     };
                 
                     OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {

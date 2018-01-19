@@ -25,13 +25,14 @@ define([
     'views/officeitem/popup/AddOfficeItemHistoryView',
     'models/officeitem/OfficeItemModel',
     'collection/common/CodeCollection',
-    'text!templates/officeitem/searchFormTemplate.html'
+    'text!templates/officeitem/searchFormTemplate.html',
+    'views/officeitem/popup/UsageOfficeItemHistoryPopupView',
   ], function($, _, Backbone,Util, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, Code, SessionModel,
               HeadHTML, ContentHTML, LayoutHTML, 
               RowHTML, RowButtonContainerHTML,RowButtonHTML, RowComboHTML, 
               OfficeItemCollection, AddOfficeItemView, EditOfficeItemView, DetailOfficeItemView,
               AddOfficeItemHistoryView,
-              OfficeItemModel,CodeCollection,searchFormTemplate){
+              OfficeItemModel,CodeCollection,searchFormTemplate,UsageHistoryListPopup){
 
         var officeitemListCount=0;
         var _currentUseFilter=0;
@@ -177,11 +178,19 @@ define([
             },
             onClickOfficeItemHistoryBtn : function(evt){            
                 evt.stopPropagation();
-                var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
-                $('.selected').removeClass('selected');
-                $currentTarget.addClass('selected');
-                
-                var selectData=this.grid.getSelectItem();
+
+                var selectData=this.grid.getSelectItem();    
+                let usageHistoryPopupView = new UsageHistoryListPopup(selectData.serial_yes);
+                Dialog.show({
+                    title: "("+selectData.serial_yes+") 이력",
+                    content: usageHistoryPopupView,
+                    buttons: [{
+                        label : "닫기",
+                        action : function(dialog){
+                            dialog.close();
+                        }
+                    }]
+                });
     
             },
             onClickOfficeItemHistoryAddBtn : function(evt){            
@@ -318,10 +327,10 @@ define([
                                     
                                     beforEvent=function(){
                                         $(_btn).data('loading-text',"<div class='spinIcon'>"+i18Common.OFFICEITEM.TITLE.ADD +"</div>");
-                                        $(_btn).button('loading');
+                                        //$(_btn).button('loading');
                                     };
                                     affterEvent=function(){
-                                        $(_btn).button('reset');
+                                       // $(_btn).button('reset');
                                     };
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                                     addOfficeItemView.submitAdd(beforEvent, affterEvent).done(function(data){
@@ -417,7 +426,17 @@ define([
                         name: "save",
                         tooltip: "저장하기",
                         click: function(_grid) {
-                             _grid.saveExcel();
+                            var columns =[{ "title" : ""}]
+                            var column =  _grid.options.column;
+
+                            for ( var i=0 ; i < column.length-1 ; i++ ) {
+
+                                if(_.isUndefined(column[i].visible) || column[i].visible =='true')
+                                columns.push({"title" :column[i].title});                    
+                            }
+
+                            _grid.columns = columns;                          
+                            _grid.saveExcel();
                         }
                     });
                 }
