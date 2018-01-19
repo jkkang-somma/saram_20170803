@@ -130,7 +130,7 @@ define([
         	                value:_model.model_no,
 
         	        },{
-							type:"input",
+							type:"price",
 							name:"price_buy",
 							label:i18nCommon.OFFICEITEM.CODE.PRICE_BUY,
 							value:_model.price_buy,
@@ -239,7 +239,10 @@ define([
     	    var dfd= new $.Deferred();
     	    var _view=this,_form=this.form,_data=_form.getData();
     	    var _officeitemModel= new OfficeItemModel(_data);
-    	    _officeitemModel.attributes._id="-2";
+			_officeitemModel.attributes._id="-2";
+			var _validate=_officeitemModel.validation(_data, {
+				serial_yes:""},{disposal_date:""});
+
     	    var _validate=_officeitemModel.validation(_data);
     	    _officeitemModel.save({},{
     	        success:function(model, xhr, options){

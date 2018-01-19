@@ -114,21 +114,21 @@ define([
         	                label:i18nCommon.OFFICEITEM.CODE.MODEL_NO,
         	                value:_model.model_no,
 					},{
-        	                type:"input",
+        	                type:"price",
         	                name:"price_buy",
         	                label:i18nCommon.OFFICEITEM.CODE.PRICE_BUY,
-							value:_model.price_buy,
+							value:"0",
 					},{
 							type:"input",
 							name:"price",
 							label:i18nCommon.OFFICEITEM.CODE.PRICE,
-							value:_model.price,
+							value:"0",
 							disabled:"readonly",
 					},{
 							type:"input",
 							name:"surtax",
 							label:i18nCommon.OFFICEITEM.CODE.SURTAX,
-							value:_model.surtax,  
+							value:"0",  
 							disabled:"readonly",
 					},{
         	                type:"input",

@@ -1,0 +1,11 @@
+<%  if (typeof(obj) != "undefined") { %>
+<div class="form-group form-group-harf">
+    <label for="<%= obj.el %>">
+        <%  if (obj.check == true) { %>
+            <input name="<%= obj.checkId %>" type="checkbox">
+        <% } %>
+        <%= obj.label %>
+    </label>
+    <input type="number" min="0" class="form-control" id="<%= obj.id %>" name="<%= obj.name %>" pattern="[0-9]" value="<%= obj.value %>" step="1000"/>
+</div>
+<% } %>
