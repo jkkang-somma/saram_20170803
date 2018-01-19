@@ -75,6 +75,7 @@ define([
     	submitSave : function(e){
     	    var dfd= new $.Deferred();
     	    var _form=this.form,_data=_form.getData();
+    	    var minLen = 4;
     	   // var _id=_data.id;
     	    var _password=_data.password;
     	    var _new_password=_data.new_password;
@@ -84,6 +85,9 @@ define([
   	      if (_.isEmpty(_password)||_.isEmpty(_new_password)||_.isEmpty(_re_new_password)){// 입력하지 않으 정보가 있을때
   	        Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);
   	        dfd.reject();
+  	      } else if (_new_password.length < minLen){
+			Dialog.warning(i18nCommon.WARNING.LOGIN.MIN_LENGTH_PASSWORD);
+			dfd.reject();
   	      } else {//정상 작동 .
   	        if (_data.new_password!=_data.re_new_password) {// 같지 않을때
               Dialog.warning(i18nCommon.WARNING.USER.NOT_EQULES_CONFIG_PASSWORD);

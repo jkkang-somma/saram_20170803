@@ -27,6 +27,9 @@ var User = function (data, isNoSchemas) {
     var _getUser = function () {//select user;
         return UserDao.selectIdByUser(_data.id);
     };
+    var _getLoginUser = function (){
+        return UserDao.selectIdByLoginUser(_data.id);
+    }
     var _getUserList = function(){
         return UserDao.selectUserList();
     };

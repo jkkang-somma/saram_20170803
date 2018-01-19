@@ -69,7 +69,7 @@ router.route('/')
             debug("Exception:" + e);
         });
     } else {
-        user.getUser().then(function(result){
+        user.getLoginUser().then(function(result){
             if (result.length == 0){
                 debug("find user zero.");
                 msg="DO_NOT_FOUND_USER";
