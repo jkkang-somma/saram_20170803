@@ -1,0 +1,47 @@
+<div class="row">
+	<div class='col-sm-3'>
+		<div class="form-group form-group-sm">
+			<div class="input-group input-group-sm date" id="<%= obj.fromId %>">
+				<span class="input-group-addon">
+					from
+				</span>
+				<input type="text" class="form-control" data-format="yyyy-MM-dd" name="<%= obj.fromId %>" readonly/>
+				<span class="input-group-addon datepickerbutton">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-3'>
+		<div class="form-group form-group-sm">
+			<div class="input-group input-group-sm date" id="<%= obj.toId %>">
+				<span class="input-group-addon">
+					to
+				</span>
+				<input type="text" class="form-control" data-format="yyyy-MM-dd" name="<%= obj.toId %>" readonly/>
+				<span class="input-group-addon datepickerbutton">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-2">
+		<div class="form-group form-group-sm">
+			<div class="input-group input-group-sm">
+				<span class="input-group-addon"><%= obj.typeLabel %></span>
+				<select class="form-control" id="<%= obj.typeId %>"></select>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-2">
+		<div class="form-group form-group-sm">
+			<div class="input-group input-group-sm">
+				<span class="input-group-addon"><%= obj.nameLabel %></span>
+				<select class="form-control" id="<%= obj.nameId %>"></select>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-2">
+		<button class="btn btn-default btn-success btn-sm" id="<%= obj.btnId %>" style="margin-right:5px"><%= obj.btnLabel %></button>
+	</div>
+</div>
