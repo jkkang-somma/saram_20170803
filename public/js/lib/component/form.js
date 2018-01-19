@@ -11,6 +11,7 @@ define([
   'i18n!nls/common',
   'text!templates/default/form.html',
   'text!templates/default/input.html',
+  'text!templates/default/price.html',
   'text!templates/default/auto_input.html',
   'text!templates/default/text.html',
   'text!templates/default/password.html',
@@ -19,7 +20,7 @@ define([
   'text!templates/default/hidden.html',
   'text!templates/default/group.html',
   'text!templates/default/checkBox.html'
-  ], function($, jui, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
+  ], function($, jui, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, PriceHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
 		  CheckBoxHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
@@ -48,6 +49,26 @@ define([
                 return result;
             }
         },
+
+        input:{
+            getElement:function(data){
+                var _InputTemp=_.template(PriceHTML);
+                var _input=_.noop();
+                _input=_InputTemp(data);
+                var result=$(_input);
+                if(!_.isUndefined(data.full)&&data.full){
+                    result.removeClass('form-group-harf');
+                }
+
+                if(!_.isUndefined(data.disabled)&&data.disabled){
+                    result.find("input").attr("readOnly", "readOnly");
+
+                    return result;
+                }
+                return result;
+            }
+        },
+
         text:{
             getElement:function(data){
                 var _TextTemp=_.template(TextHTML);
