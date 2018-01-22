@@ -26,7 +26,7 @@ define([
     'text!templates/default/button.html',
     'text!templates/officeitem/usageHistoryTemplate.html',
     'views/officeitem/popup/UsageOfficeItemHistoryPopupView',
-    'views/officeitem/popup/UsageDetailListPopup',
+    'views/officeitem/popup/UsageDetailListPopup'
 ], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, Code, i18nCommon, Dialog, HeadHTML, RowHTML,
             DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, RowComboHTML, ContentHTML, LayoutHTML,
             SessionModel, OfficeItemUsageModel, HolidayCollection, OfficeItemUsageCollection, OfficeItemDetailCollection, ButtonHTML, usageHistoryTemplate,
@@ -39,7 +39,7 @@ define([
         if(_.isNull(text)){
             text = "-";
         }
-            return text;
+        return text;
     }
 
     // 비품 컬럼 줄바꿈 처리
@@ -142,7 +142,7 @@ define([
                             dataVal +=  "<button class='btn list-detailUsage-btn btn-default btn-sm' id='btnDetail01'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>";
                             dataVal +=  "</div>";
                             return dataVal;
-                    }}
+                        }}
 
 
                 ],
@@ -281,12 +281,9 @@ define([
                     if(dept[i].name != "임원" && dept[i].name != "무소속")
                         $(this.el).find("#rdCombo").append("<option>"+dept[i].name+"</option>");
                 }
+                // 관리자로 로그인 하면 전체 부서를 볼수 있도록 보완.
+                $(this.el).find("#rdCombo").val("전체");
 
-                if(SessionModel.getUserInfo().id == "130702" || SessionModel.getUserInfo().dept_name == "임원") {
-                    $(this.el).find("#rdCombo").val("전체");
-                } else {
-                    $(this.el).find("#rdCombo").val(SessionModel.getUserInfo().dept_name);
-                };
             } else {
                 $(this.el).find("#rdCombo").append("<option>"+SessionModel.getUserInfo().dept_name+"</option>");
                 $(this.el).find("#rdCombo").val(SessionModel.getUserInfo().dept_name);
@@ -352,9 +349,12 @@ define([
 
             Dialog.loading({
                 action:function(){
-                    var dfd = new $.Deferred();
+                    let dfd = new $.Deferred();
+                    let privilege = SessionModel.get("user").admin;
+                    let user = SessionModel.get("user").id;
+
                     _this.officeItemUsageCollection.fetch({
-                        data: {dept : deptCode},
+                        data: {dept : deptCode, admin : privilege, user : user},
                         success: function(){
                             dfd.resolve();
                         }, error: function(){
