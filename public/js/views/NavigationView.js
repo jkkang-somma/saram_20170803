@@ -5,6 +5,7 @@ define([
   'animator',
   'dialog',
   'util',
+  'schemas',
   'i18n!nls/common',
   'core/BaseView',
   'text!templates/navigation.html',
@@ -16,7 +17,7 @@ define([
   'views/AdminSettingView',
   'views/DocumentView',
   'views/BookView'
-], function($, _, Backbone, animator,Dialog, Util, i18Common, 
+], function($, _, Backbone, animator,Dialog, Util, Schemas, i18Common, 
 		BaseView, navigation, Menu, Code,
 		SessionModel, RawDataModel,
 		ConfigUserView, AdminSettingView, DocumentView, BookView
@@ -86,7 +87,7 @@ define([
             }
         }
         
-        if(_auth == 1){
+        if(_auth == Schemas.ADMIN){
             $("#setting").html('<span class="glyphicon glyphicon-cog"></span> 설정');    
         }else{
             $(this.el).find('#setting').remove();
