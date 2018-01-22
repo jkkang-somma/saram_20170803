@@ -28,6 +28,7 @@ var Report = function() {
 			queryResults.push( ReportDao.selectHolidayWorkTimeReport(selObj) );	// added
 			queryResults.push( ReportDao.selectHolidayWorkTypeReport(selObj) );
 			queryResults.push( ReportDao.selectHolidayWorkPayReport(selObj) );
+			queryResults.push( ReportDao.selectPayedOverTimeWorkReport(selObj) );	// added 2018.01.22 report payed work time
 	    	
 	    	Promise.all(queryResults).then(function(result){
 				commuteYearExcelCreater.createExcel(selObj, result).then(function(excelResult) {

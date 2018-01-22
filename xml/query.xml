@@ -1225,6 +1225,64 @@
 			ORDER BY
 				m.dept_code, m.part_code, m.position_code, m.name;
     	</query>
+
+		<query id="selectPayedOverTimeWorkReport">
+			SELECT
+					m.dept_code, m.name, m.id,
+					if(isnull(t2.1) , '', concat(floor(t2.1/60),":",round(t2.1%60))) as '1',
+					if(isnull(t2.2) , '', concat(floor(t2.2/60),":",round(t2.2%60))) as '2',
+					if(isnull(t2.3) , '', concat(floor(t2.3/60),":",round(t2.3%60))) as '3',
+					if(isnull(t2.4) , '', concat(floor(t2.4/60),":",round(t2.4%60))) as '4',
+					if(isnull(t2.5) , '', concat(floor(t2.5/60),":",round(t2.5%60))) as '5',
+					if(isnull(t2.6) , '', concat(floor(t2.6/60),":",round(t2.6%60))) as '6',
+					if(isnull(t2.7) , '', concat(floor(t2.7/60),":",round(t2.7%60))) as '7',
+					if(isnull(t2.8) , '', concat(floor(t2.8/60),":",round(t2.8%60))) as '8',
+					if(isnull(t2.9) , '', concat(floor(t2.9/60),":",round(t2.9%60))) as '9',
+					if(isnull(t2.10) , '', concat(floor(t2.10/60),":",round(t2.10%60))) as '10',
+					if(isnull(t2.11) , '', concat(floor(t2.11/60),":",round(t2.11%60))) as '11',
+					if(isnull(t2.12) , '', concat(floor(t2.12/60),":",round(t2.12%60))) as '12',
+					if(isnull(t2.total) , '', concat(floor(t2.total/60),":",round(t2.total%60))) as 'total'
+			FROM
+					members_tbl m
+			        LEFT JOIN (
+							SELECT
+								id,
+								SUM(CASE WHEN month = 1 THEN over_time END) AS '1',
+								SUM(CASE WHEN month = 2 THEN over_time END) AS '2',
+								SUM(CASE WHEN month = 3 THEN over_time END) AS '3',
+								SUM(CASE WHEN month = 4 THEN over_time END) AS '4',
+								SUM(CASE WHEN month = 5 THEN over_time END) AS '5',
+								SUM(CASE WHEN month = 6 THEN over_time END) AS '6',
+								SUM(CASE WHEN month = 7 THEN over_time END) AS '7',
+								SUM(CASE WHEN month = 8 THEN over_time END) AS '8',
+								SUM(CASE WHEN month = 9 THEN over_time END) AS '9',
+								SUM(CASE WHEN month = 10 THEN over_time END) AS '10',
+								SUM(CASE WHEN month = 11 THEN over_time END) AS '11',
+								SUM(CASE WHEN month = 12 THEN over_time END) AS '12',
+                                SUM(over_time) AS total
+							FROM (
+									SELECT
+										id,
+										SUBSTRING(date,6,2) AS month,
+										SUM(over_time) - SUM(except) AS over_time
+									FROM commute_result_tbl
+									WHERE
+										year = ?
+										AND date BETWEEN ? AND ?
+										AND WORK_TYPE != '30'
+										AND WORK_TYPE != '40'
+										AND WORK_TYPE != '41'
+										AND OVER_TIME != '0'
+									GROUP BY id, month
+							) t1
+							GROUP BY id
+			        ) t2
+			ON m.id = t2.id
+
+			ORDER BY
+				m.dept_code, m.part_code, m.position_code, m.name
+    	</query>
+
     	<query id="selectOverTimeWorkTypeReport">
 			SELECT
 				m.dept_code, m.name, m.id,
