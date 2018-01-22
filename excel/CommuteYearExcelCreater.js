@@ -197,12 +197,12 @@ var CommuteYearExcelCreater = function () {
 				}
 			}
 			
-//			if (user.dept_code == "0000") {	// 임원 제외 
-//				continue;
-//			}			
-//			else {
+			if (user.dept_code == "0000") {	// 임원 제외 
+				continue;
+			}			
+			else {
 				currentRow++;
-//			}
+			}
 			
 			// 부서
 			sheet.set(COL_DEPT, currentRow, _conVal(user.dept_name) ) ;
