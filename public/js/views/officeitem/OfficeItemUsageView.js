@@ -202,7 +202,7 @@ define([
             if (SessionModel.get("user").admin == 9) { //부서 선택 필터에 전체 부서가 들어감.
                 _buttonSetting = adminUserfilterButton;
             } else {
-                _buttonSetting = normalUserfilterButton;
+                //_buttonSetting = normalUserfilterButton;
             }
             //excel 출력 버튼 추가 - 관리자에게만 제공
             if (SessionModel.get("user").admin == 9) {
