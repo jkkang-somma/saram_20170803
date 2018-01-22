@@ -15,12 +15,8 @@ define([
 	'cmoment',
 	'core/BaseView',
 	'text!templates/default/content.html',
-	//'text!templates/layout/default.html',
-	//'text!templates/cm/popup/changeHistoryPopupTemplate.html',
 	'models/officeitem/OfficeItemHistoryModel',
 	'collection/officeitem/OfficeItemHistoryCollection',
-	//'models/cm/ChangeHistoryModel',
-	//'collection/cm/ChangeHistoryCollection',
 	'views/component/ProgressbarView',
 	'code'
 ], function(
@@ -35,12 +31,9 @@ define([
 	Datatables,
 	Moment,
 	BaseView,
-	//HistoryTableHTML,
 	ContentHTML,
-	//LayoutHTML,
 	OfficeItemHistoryModel, 
 	OfficeItemHistoryCollection, 
-	//ChangeHistoryModel, ChangeHistoryCollection,
 	ProgressbarView,
 	Code
 ) {
@@ -86,14 +79,7 @@ define([
                     { data : "repair_price",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
                     //{ data : "use_user",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID, visible:false, subVisible:false },
                     //{ data : "use_dept",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USE_DEPT, visible:false, subVisible:false },
-                    { title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER,
-                        "render": function(data, type, row){
-                            console.log(row);
-                            var user = row.use_user;
-                            return ((user!==null&&user!=="")?row.use_user:row.use_dept);
-                        }
-                    }, //use_user or use_dept
-                    //{ data : "name",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.NAME, visible:false, subVisible:false },
+                    { data : "name",           title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },
                     //{ data : "change_user_id", "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CHANGE_USER_ID, visible:false, subVisible:false },
                     { data : "memo",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO }
 				],
@@ -117,7 +103,6 @@ define([
 
 			var _content = $(ContentHTML).attr("id", this.gridOption.el);
 
-			//var _layOut=$(LayoutHTML);
 			$(this.el).html(_content);
 
 			var _gridSchema = Schemas.getSchema('grid');

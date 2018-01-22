@@ -67,13 +67,7 @@ define([
                     },
                     { data : "title",          title : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
                     { data : "repair_price",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
-                    { title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER,
-                        "render": function(data, type, row){
-                            console.log(row);
-                            var user = row.use_user;
-                            return ((user!==null&&user!=="")?row.use_user:row.use_dept);
-                        }
-                    }, //use_user or use_dept
+                    { data : "name",           title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },
                     { data : "memo",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO }
                 ],
                 dataschema:["seq", "serial_yes", "category_type", "history_date", "type", "title", "repair_price", "use_user", "use_dept", "name", "change_user_id", "memo"],
