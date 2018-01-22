@@ -177,10 +177,10 @@ define([
                                     
                                     beforEvent=function(){
                                         $(_btn).data('loading-text',"<div class='spinIcon'>"+i18Common.DIALOG.BUTTON.ADD +"</div>");
-                                        $(_btn).button('loading');
+                                        // $(_btn).button('loading');
                                     };
                                     affterEvent=function(){
-                                        $(_btn).button('reset');
+                                        // $(_btn).button('reset');
                                     };
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                                     addUserView.submitAdd(beforEvent, affterEvent).done(function(data){

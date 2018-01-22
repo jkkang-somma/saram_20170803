@@ -204,14 +204,14 @@ define([
                         
                         _view.loginPasswordSection.addClass("fadeOutRightBig");
                         _view.formSection.addClass("bounceOut").one(transitionEnd, function(){
-                            $("#loginbtn").button('reset');
+                            // $("#loginbtn").button('reset');
                             _view.passwordSection.find("#initIdInput").val(data.id);
                             _view.formSection.css("display", "none");
                             _view.passwordSection.addClass("fadeInLeftBig");
                             _view.passwordSection.css("display", "block");
                         });;
                     } else {
-                        $("#loginbtn").button('reset');
+                        // $("#loginbtn").button('reset');
                         _view.formSection.find("#loginPasswordTextbox").val('');
                         
                         Dialog.warning(i18nCommon.WARNING.LOGIN[e.msg], function(){
@@ -238,9 +238,9 @@ define([
         	    var _hashPassword=hash.toString();
         	    data.password =_hashPassword;
         	    
-                $("#initPaswordBtn").button("loading");
+                // $("#initPaswordBtn").button("loading");
     	        var _spin=new Spin(opts).spin($("#initPaswordBtn").find(".spinIcon")[0]);
-    	        $("#initCanceleBtn").button("loading");
+    	        // $("#initCanceleBtn").button("loading");
     	        
                 SessionModel.initPassword({id: data.id, password:data.password}).done(function(result){
                     _view.passwordSection.addClass("fadeOutLeftBig").one(transitionEnd, function(){
@@ -274,9 +274,9 @@ define([
                 ]);
                 
                 if (validateObject.isValid){//Email 유효성 검사
-                    _view.findPasswordSection.find("#findPasswordBtn").button("loading");
+                    // _view.findPasswordSection.find("#findPasswordBtn").button("loading");
         	        var _spin=new Spin(opts).spin(_view.findPasswordSection.find("#findPasswordBtn").find(".spinIcon")[0]);
-        	        _view.findPasswordSection.find("#findCloseBtn").button("loading");
+        	        // _view.findPasswordSection.find("#findCloseBtn").button("loading");
         	        
                     SessionModel.findPassword({id: data.id, email:data.email}).done(function(result){
                         
@@ -289,8 +289,8 @@ define([
     					});
                     }).fail(function(e){
                         Dialog.warning(i18nCommon.WARNING.LOGIN[e.message]);
-                        _view.findPasswordSection.find("#findPasswordBtn").button("reset");
-                        _view.findPasswordSection.find("#findCloseBtn").button("reset");
+                        // _view.findPasswordSection.find("#findPasswordBtn").button("reset");
+                        // _view.findPasswordSection.find("#findCloseBtn").button("reset");
                     });
                 } else {
                     Dialog.warning(validateObject.message);   
