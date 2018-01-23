@@ -57,7 +57,9 @@ define([
 
 	var UsageDetailListPopup = Backbone.View.extend({
  		initialize : function(data) {
-			this.searchData = data.id;
+            //부서에게 제품이 할당된 경우
+			this.paramId = (data.id == "") ? "" : data.id;
+			this.paramDept = (data.id == "") ? data.dept : "";
 			this.officeItemDetailCollection = new OfficeItemDetailCollection();
 			this.gridOption = {
     		    el:"UsedDetailList_content",
@@ -106,7 +108,7 @@ define([
 			var _this = this;
             //$(_this.el[0].parentElement.parentElement.parentElement.parentElement.parentElement).css('width', 1000);
 			this.officeItemDetailCollection.fetch({
-                data: {user : _this.searchData},
+                data: {user : _this.paramId, dept : _this.paramDept},
 				success: function(result) {
 				 	_this.grid.render();
 				 	_this.progressbar.disabledProgressbar(true);
