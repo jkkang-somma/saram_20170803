@@ -26,6 +26,10 @@ OfficeItemDao.prototype.selectOfficeItemCategoryCodeList =  function (category_c
     return db.query(group, "selectOfficeItemCategoryCodeList",[category_code]);
 };
 
+OfficeItemDao.prototype.selectOfficeItemCategoryCodeTypeList =  function (category_type) {
+    return db.query(group, "selectOfficeItemCategoryCodeTypeList",[category_type]);
+};
+
 OfficeItemDao.prototype.insertOfficeItem = function(officeitem){
     return db.query(group, "insertOfficeItem",
         [officeitem.serial_yes,officeitem.serial_factory,officeitem.vendor,officeitem.model_no,officeitem.category_code,officeitem.category_index,officeitem.category_code,officeitem.price,officeitem.surtax,

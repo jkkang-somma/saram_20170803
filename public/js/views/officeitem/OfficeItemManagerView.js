@@ -542,6 +542,7 @@ define([
 
             selectCommute: function() {
                 var data = {
+                    category_type : $(this.el).find("#officeCodeComboType").val(),
                     category_code : $(this.el).find("#officeCodeCombo").val()
                  };     
                  

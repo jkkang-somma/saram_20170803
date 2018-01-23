@@ -18,14 +18,18 @@ var OfficeItem = function (data) {
        
         if(!_.isUndefined(data.category_code) && data.category_code != ""){           
             return OfficeItemDao.selectOfficeItemCategoryCodeList(data.category_code);
-    	}else{
+        
+        }else if(!_.isUndefined(data.category_type) && data.category_type != ""){
+            return OfficeItemDao.selectOfficeItemCategoryCodeTypeList(data.category_type);            
+        
+        }else{
             return OfficeItemDao.selectOfficeItemAllList();
     	}
     }; 
 
-    var _getOfficeItemCategoryCodeList = function(){
+    /*var _getOfficeItemCategoryCodeList = function(){
         return OfficeItemDao.selectOfficeItemCategoryCodeList(data.category_code);
-    }; 
+    };*/
 
     var _addOfficeItem=function(user){
     

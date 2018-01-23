@@ -2163,6 +2163,21 @@
 			FROM commute.office_item_tbl A
 			where A.category_code=?
         </query>
+		<query id="selectOfficeItemCategoryCodeTypeList">
+ 			SELECT serial_yes,serial_factory,vendor,model_no,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			category_code,category_type,category_index,price,surtax,price_buy,
+            date_format(buy_date, '%Y-%m-%d') AS buy_date,
+			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
+			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
+			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
+			use_dept,use_user,
+			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			location,state,memo
+			FROM commute.office_item_tbl A
+			where A.category_type=?
+        </query>
 		<query id="empty"></query>
 		<query id="insertOfficeItem">
         	insert into commute.office_item_tbl(serial_yes,serial_factory,vendor,model_no,

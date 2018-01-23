@@ -34,7 +34,9 @@ router.route('/list')
 .get(function(req, res){    
     
     var _code=req.param("category_code");
-    var officeitem = new OfficeItem({category_code:_code});
+    var _type=req.param("category_type");
+    var officeitem = new OfficeItem({category_code:_code , category_type:_type});
+  
     var result = officeitem.getOfficeItemList().then(function(result){
         debug("Complete Select OfficeItem List.");
         res.send(result);    
