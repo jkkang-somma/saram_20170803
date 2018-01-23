@@ -32,8 +32,8 @@ define([
 	Moment,
 	BaseView,
 	ContentHTML,
-	OfficeItemHistoryModel, 
-	OfficeItemHistoryCollection, 
+	OfficeItemHistoryModel,
+	OfficeItemHistoryCollection,
 	ProgressbarView,
 	Code
 ) {
@@ -118,8 +118,6 @@ define([
 
 		afterRender: function() {
 			var _this = this;
-			$(_this.el[0].parentElement.parentElement.parentElement.parentElement.parentElement).css('width', 1000);
-			$(_this.el[0].parentElement.parentElement.parentElement.parentElement.parentElement).css('height', 670);
 			this.officeItemHistoryCollection.fetch({
 				data: {"serial_yes" : _this.searchData},
 				success: function(result) {
