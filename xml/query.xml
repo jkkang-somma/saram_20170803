@@ -2329,7 +2329,7 @@
 
 		<query id="selectUsageDetailListAll">
 			SELECT
-				mem.name, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
+				mem.name, off.use_dept dept, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
 			FROM
 				members_tbl mem RIGHT JOIN office_item_tbl off ON mem.id = off.use_user
 				RIGHT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
