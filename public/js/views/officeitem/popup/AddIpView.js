@@ -12,7 +12,7 @@ define([
   'collection/common/CodeCollection',
   'collection/officeitem/IpAssignedManagerCollection',
   'models/officeitem/IpAssignedManagerModel',
-  'collection/sm/userCollection',
+  'collection/sm/UserCollection',
 ], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, UserModel, CodeCollection, IpAssignedManagerCollection, IpAssignedManagerModel, UserCollection){
 	var LOG= log.getLogger("AddIpView");
 	var availableTags = [];
@@ -20,6 +20,8 @@ define([
 	var deptCodeCollectionData = [];
 	var useCodeCollectionData = [];
 	var autocompleteId = "autocomplete";
+	var selectedTxt = "부서";
+
 	var AddIpView = BaseView.extend({
 		initialize:function(){
 			$(this.el).html('');
@@ -50,7 +52,6 @@ define([
 				availableTags[index] = deptCodeCollectionData.models[index].attributes.name + "(" + deptCodeCollectionData.models[index].attributes.code + ")";
 				console.log(availableTags[index]);
 			}
-			
 
 			$.when(approvalUserCodeCollection.fetch()).done(function(){
 			var _model=_view.model.attributes;
@@ -64,7 +65,9 @@ define([
 				}],
 				childs:[{
 					type:"input",
+					//type:"ip_input",
 					name:"ip",
+					id:"ipText",
 					label:i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.IP,
 					value:_model.IP,
 					group:"requireInfo"
@@ -76,8 +79,8 @@ define([
 					value:_model.USE_DEPT,
 					//collection:deptCodeCollection,
 					collection:[
-						{key:"selectDept",value:"부서"},
-						{key:"selectUser",value:"직원"}
+						{key:"부서",value:"부서"},
+						{key:"직원",value:"직원"}
 					    ],
 					group:"requireInfo",
 					linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
@@ -119,9 +122,9 @@ define([
 		afterRender: function(){
 			for( var index = 0; index < useCodeCollectionData.models.length; index++) {
 				availableTagsUser[index] = useCodeCollectionData.models[index].attributes.name + "(" + useCodeCollectionData.models[index].attributes.id + ")";
-				console.log(availableTags[index]);
+				console.log(availableTagsUser[index]);
 			}
-		 	$(document).ready(function() {
+			$(document).ready(function() {
 		 		$("#autocomplete").autocomplete({
 		 			source: availableTags
 		 		});
@@ -134,12 +137,14 @@ define([
 				$(".selectpicker").on('change', function(e){// 콤보박스 선택시 히든값 셋팅
 		 			var _text=$(this).find("option:selected").text();
 		 			if(_text == "직원") {
+						selectedTxt = _text;
 		 				console.log(_text);
 		 				$('#autocomplete').val("");
 		 				$('#autocomplete').autocomplete("option", { source: availableTagsUser });
 		 			}
 		 			else if (_text == "부서") {
-		 				console.log(_text);
+						console.log(_text);
+						selectedTxt = _text;
 		 				$('#autocomplete').val("");
 		 				$('#autocomplete').autocomplete("option", { source: availableTags });
 		 			}
@@ -153,32 +158,90 @@ define([
 			var view = this;
 			var dfd= new $.Deferred();
 			var _view=this,_form=this.form,_data=_form.getData();
-			_data.use_dept = "";
-			var _IpAssignedManagerModel=new IpAssignedManagerModel(_data);
-			var _validate=_IpAssignedManagerModel.validation(_data, {// 유효성 검사 필드 
-				ip:"",
-				//use_dept : "", //사용안함
-				use_user : "",
-				//memo : "", // memo에 데이터 입력안해도 등록되도록 한다.
-			});
-			if(!_.isUndefined(_validate)){
-				Dialog.warning(_validate);
+
+			// if (!view.validIPCheck(_data.ip)) {
+			// 	Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_IP);
+			// 	dfd.reject();
+			// }
+			if(!view.checkFormData(_data.use_user)) {
+				Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
 				dfd.reject();
-			} else {
-				beforEvent();
-				_IpAssignedManagerModel.save({},{
-					success:function(model, xhr, options){
-						affterEvent();
-						dfd.resolve(_.defaults(_data, _IpAssignedManagerModel.default));
-					},
-					error:function(model, xhr, options){
-						var respons=xhr.responseJSON;
-						affterEvent();
-						Dialog.error(respons.message);
+			}
+			else {
+				var _validate = "";
+				if(selectedTxt == "직원") {
+					var saveDisplaydata = _data.use_user;
+					var firstArr = (_data.use_user).split("(");
+					var strTemp = firstArr[1].split(")");
+					_data.use_user = strTemp[0];
+					_data.use_dept = "";
+
+					var _IpAssignedManagerModel=new IpAssignedManagerModel(_data);
+					var _validate=_IpAssignedManagerModel.validation(_data, {// 유효성 검사 필드 
+						ip:"",
+						//use_dept : "",
+						use_user : "",
+						//memo : "", // memo에 데이터 입력안해도 등록되도록 한다.
+					});
+					if(!_.isUndefined(_validate)){
+						Dialog.warning(_validate);
 						dfd.reject();
-					},
-					wait:false
-				});
+					} else {
+						beforEvent();
+						_IpAssignedManagerModel.save({},{
+							success:function(model, xhr, options){
+								affterEvent();
+								_data.use_user = saveDisplaydata;
+								dfd.resolve(_.defaults(_data, _IpAssignedManagerModel.default));
+							},
+							error:function(model, xhr, options){
+								var respons=xhr.responseJSON;
+								affterEvent();
+								Dialog.error(i18nCommon.IPCONFIRM.IP.REGISTER_FAIL);
+								console.log("AddIpView -> submitAdd Fail : " + respons.message);
+								//Dialog.error(respons.message);
+								dfd.reject();
+							},
+							wait:false
+						});
+					}
+				}
+				else if (selectedTxt == "부서") {
+					var saveDisplaydata = _data.use_user;
+					var firstArr = (_data.use_user).split("(");
+					var strTemp = firstArr[1].split(")");
+					_data.use_dept = strTemp[0];
+					_data.use_user = "";
+					var _IpAssignedManagerModel=new IpAssignedManagerModel(_data);
+					var _validate=_IpAssignedManagerModel.validation(_data, {// 유효성 검사 필드 
+						ip:"",
+						use_dept : "",
+						//use_user : "",
+						//memo : "", // memo에 데이터 입력안해도 등록되도록 한다.
+					});
+					if(!_.isUndefined(_validate)){
+						Dialog.warning(_validate);
+						dfd.reject();
+					} else {
+						beforEvent();
+						_IpAssignedManagerModel.save({},{
+							success:function(model, xhr, options){
+								affterEvent();
+								_data.use_user = saveDisplaydata;
+								dfd.resolve(_.defaults(_data, _IpAssignedManagerModel.default));
+							},
+							error:function(model, xhr, options){
+								var respons=xhr.responseJSON;
+								affterEvent();
+								Dialog.error(i18nCommon.IPCONFIRM.IP.REGISTER_FAIL);
+								console.log("AddIpView -> submitAdd Fail : " + respons.message);
+								//Dialog.error(respons.message);
+								dfd.reject();
+							},
+							wait:false
+						});
+					}
+				}
 			}
 			return dfd.promise();
 		},
@@ -191,7 +254,39 @@ define([
 			});
 			return indexed_array;
 		},
-		
+		checkFormData: function(data) {
+			if(selectedTxt == "직원") {
+				if(availableTagsUser.indexOf(data) == -1)
+					return false;
+			}
+			else if (selectedTxt == "부서") {
+				if(availableTags.indexOf(data) == -1)
+					return false;
+			}
+			else {
+				console.log("Undefined data : " + selectedTxt);
+			}
+			return true;
+		},
+		validIPCheck: function(ipdata) {
+			var ipPattern = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+			var ipArray = ipdata.match(ipPattern);
+			if (ipdata == "0.0.0.0" || ipdata == "255.255.255.255" ||
+				ipdata == "10.1.0.0" || ipdata == "10.1.0.255" || ipArray == null) {
+					return false;
+			} else {
+				for (i = 0; i < 4; i++) {
+					thisSegment = ipArray[i];
+					if (thisSegment > 254) {
+						return false;               
+					}
+					if ((i == 0) && (thisSegment > 254)) {
+						return false;
+					}
+				}
+			}
+    		return true;   
+		},
 	});
 	return AddIpView;
 });

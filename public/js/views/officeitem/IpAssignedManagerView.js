@@ -3,65 +3,46 @@ define([
 	'underscore',
 	'backbone',
 	'core/BaseView',
-	'cmoment',
 	'grid',
 	'lodingButton',
 	'schemas',
-	'code',
 	'i18n!nls/common',
 	'dialog',
-	'text!templates/default/head.html',
-	'text!templates/default/row.html',
-	'text!templates/default/rowcombo.html',
-	'text!templates/default/rowbuttoncontainer.html',
-	'text!templates/default/rowbutton.html',
 	'models/sm/SessionModel',
+	'text!templates/default/head.html',
 	'text!templates/default/content.html',
 	'text!templates/layout/default.html',
 	'models/officeitem/IpAssignedManagerModel',
 	'collection/officeitem/IpAssignedManagerCollection',
 	'views/officeitem/popup/AddIpView',
 	'views/officeitem/popup/EditIpView',
-	'text!templates/default/button.html',
-	], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, Code, i18nCommon, Dialog, HeadHTML, RowHTML, 
-		RowComboHTML, RowButtonContainerHTML, RowButtonHTML, SessionModel, ContentHTML, LayoutHTML, 
-		IpAssignedManagerModel, IpAssignedManagerCollection, AddIpView, EditIpView, ButtonHTML){
+	'code'
+	], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18nCommon, Dialog, SessionModel, 
+		HeadHTML, ContentHTML, LayoutHTML, IpAssignedManagerModel, IpAssignedManagerCollection, AddIpView, EditIpView, Code){
 
 		var IpAssignedManagerView = BaseView.extend({
-		//el:$(".main-container"),
 		el:".main-container",
 		initialize:function(){
 			this.IpAssignedManagerCollection = new IpAssignedManagerCollection();
-			this.gridOption = {
+			this.Option = {
 					el:"IpSearch_content",
-					//id:"IpSearchDataTable",
 					column:[
 							{ data : "ip",			"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.IP},
 							//{ data : "use_dept",	"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_DEPT },
 							{ data : "use_user",	"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_USER },
 							{ data : "memo", 		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.MEMO},
 					],
-					// rowCallback: function(row, data){
-					// 	if(data.approval_ok == '상신' || data.approval_ok == '취소요청'){ // 미결
-					// 		$(row).addClass("absentce");
-					// 	}else{
-					// 		$(row).removeClass("absentce");
-					// 	}
-					// },
 					collection:this.IpAssignedManagerCollection,
 					//dataschema:["ip", "use_dept", "use_user", "memo"],
 					dataschema:["ip", "use_user", "memo"],
 					detail: true,
 					view:this,
-					fetch: false,
+					//fetch: false,
 					order : [[1, "asc"]]
 			};
-			//this.buttonInit();
 		},
 		events: {
-			'click #ccmSearchBtn' : 'onClickSearchBtn',
-		},
-		buttonInit: function(){
+
 		},
 		render:function(){
 			var _headSchema=Schemas.getSchema('headTemp');
@@ -75,7 +56,6 @@ define([
 									})
 								)
 						);
-
 			_head.addClass("no-margin");
 			_head.addClass("relative-layout");
 
@@ -87,7 +67,7 @@ define([
 					name:"add",
 					tooltip:i18nCommon.IPTOOLTIP.IP.ADD,//"IP 등록",
 					click:function(_grid){
-						 var addIpView= new AddIpView();
+						var addIpView= new AddIpView();
 						Dialog.show({
 							title:i18nCommon.IPTOOLTIP.IP.ADD, 
 							content:addIpView, 
@@ -100,11 +80,11 @@ define([
 
 									beforEvent=function(){
 										$(_btn).data('loading-text',"<div class='spinIcon'>"+i18nCommon.DIALOG.BUTTON.ADD +"</div>");
-										$("#loginbtn").button("loading");
+										//$("#loginbtn").button("loading");
 										//$(_btn).button('loading');
 									};
 									affterEvent=function(){
-										$("#loginbtn").button("reset");
+										//$("#loginbtn").button("reset");
 										//$(_btn).button('reset');
 									};
 									LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
@@ -198,40 +178,30 @@ define([
 					name: "save",
 					tooltip: "저장하기",
 					click: function(_grid) {
-						//this.onClickSave(this.gridOption);
-						//this.onClickSave();
 						_grid.saveExcel();
 					}
 				});
 			};
 			_buttons.push("refresh");
-			this.gridOption.buttons=_buttons;
-			// this.gridOption.fetchParam = {
-			// 	success : function(){
-			// 		grid._draw();
-			// 		var filterBtn = $("#"+grid.getButton("filter"));
-			// 		while(filterBtn.text() != "근무자"){
-			// 				filterBtn.trigger("click");
-			// 		}
-			// 	}
-			// };
-			
+			this.Option.buttons=_buttons;
+			this.Option.fetchParam = {
+			 	success : function(){
+					grid._draw();
+			 	}
+			};
 			//grid 
 			var _gridSchema=Schemas.getSchema('grid');
-			this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
-			var _content=$(ContentHTML).attr("id", this.gridOption.el);
+			var grid= new Grid(_gridSchema.getDefault(this.Option));
+			var _content=$(ContentHTML).attr("id", this.Option.el);
 
 			_layOut.append(_head);
 			_layOut.append(_content);
 			$(this.el).html(_layOut);
 
-			this.grid.render();
-			this.selectIPSearch();
+			grid.render();
+			//this.selectIPSearch();
 
 			return this;
-		},
-		onClickSearchBtn: function(evt) {
-			this.selectIPSearch();
 		},
 		selectIPSearch: function() {
 			var _this = this;
@@ -258,9 +228,6 @@ define([
 				},
 			});
 		},
-		onClickSave: function(grid) {
-            grid.saveExcel();
-        }
 	});
 	return IpAssignedManagerView;
 });

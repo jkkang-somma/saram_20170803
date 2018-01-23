@@ -95,7 +95,7 @@ define([
         	        type:"custom",
         	        name:"add",
         	        tooltip:i18Common.DEPARTMENT_LIST.CREATE_DIALOG.TOOLTIP,//"부서 등록",
-        	        click:function(){
+        	        click:function(_grid){
                         var addDepartmentView= new AddDepartmentView();
                         Dialog.show({
                             title:i18Common.DIALOG.TITLE.DEPARTMENT_ADD, 
@@ -107,7 +107,7 @@ define([
                                     var _btn=this;
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                                     addDepartmentView.submitAdd().done(function(data){
-                                        grid.addRow(data);
+                                        _grid.addRow(data);
                                         dialogRef.close();
                                     });
                                 }

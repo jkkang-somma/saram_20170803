@@ -2243,7 +2243,11 @@
 
 	<group id="IpAssignedManage">
 		<query id="selectIpAll">
-			SELECT ip, use_dept, use_user, memo from ip_tbl;
+			SELECT ip, (SELECT concat(name, '(', code, ')') FROM dept_code_tbl where use_dept = code
+						UNION
+						SELECT concat(name, '(', id, ')') FROM members_tbl where use_user = id) use_user,
+						memo
+			from ip_tbl;
 		</query>
 		<query id="selectUserInfo">
 			select concat(name, '(', id, ')') from members_tbl;

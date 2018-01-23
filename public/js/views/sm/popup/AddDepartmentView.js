@@ -11,7 +11,7 @@ define([
   'models/sm/DepartmentModel',
   'collection/common/CodeCollection',
   'datatables',
-  'collection/sm/userCollection',
+  'collection/sm/UserCollection',
 ], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, DepartmentModel, CodeCollection, Datatables, UserCollection){
 	var LOG= log.getLogger("AddDepartmentView");
 	var autocompleteId = "autocomplete";
@@ -101,16 +101,24 @@ define([
 		},
     	submitAdd : function(){
     	    var view = this;
-    	    var dfd= new $.Deferred();
+			var dfd= new $.Deferred();
 			var _view=this,_form=this.form,_data=_form.getData();
+			if(!view.checkFormData(_data.leader)) {
+				Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
+				dfd.reject();
+				return;
+			}
+			var strLead = _data.leader;
 			var firstArr = (_data.leader).split("(");
 			var strTemp = firstArr[1].split(")");
 			_data.leader = strTemp[0];
 
     	    var _departmentModel=new DepartmentModel(_data);
-            
+			
+			_data.leader = strLead;
     	    _departmentModel.save({},{
     	        success:function(model, xhr, options){
+					
     	    		Code.init().then(
     	    				function(){
     	    					dfd.resolve(_.defaults(_data, _departmentModel.default));
@@ -123,11 +131,17 @@ define([
     	        },
     	        wait:false
     	    });  
-    	    
+			//_data.leader = strLead;
+
     	    dfd.resolve(_data);
     	    return dfd.promise();
     	},
-    	
+    	checkFormData: function(data) {
+			if(availableTagsUser.indexOf(data) == -1) {
+				return false;
+			}
+			return true;
+		},
     	getFormData: function(form) {
     	    var unindexed_array = form.serializeArray();
     	    var indexed_array= {};

@@ -12,11 +12,12 @@ define([
   'code',
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
-  'collection/sm/userCollection',
+  'collection/sm/UserCollection',
 ], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, DepartmentModel, Code, CodeCollection, container, UserCollection){
     var LOG= log.getLogger("EditDepartmentView");
 	var autocompleteId = "autocomplete";
 	var availableTagsUser = [];
+	var init_user;
 
 	var EditDepartmentView = BaseView.extend({
     	initialize:function(data){
@@ -33,8 +34,9 @@ define([
     	    if (!_.isUndefined(el)){
     	        this.el=el;
     	    }
-    	   
-              var _model=_view.model.attributes;
+			
+			  var _model=_view.model.attributes;
+			  init_user = _model.user_name + "(" + _model.leader + ")";
         	    var _form = new Form({
         	        el:_view.el,
         	        form:undefined,
@@ -61,7 +63,7 @@ define([
 							name:"leader",
 							id:autocompleteId,
     	        			label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.LEADER,
-							value:_model.leader
+							value:_model.leader,
 							
         	        },{
 							type:"combo",
@@ -106,11 +108,20 @@ define([
 				$(".ui-autocomplete").css("left", "100px");
 				$(".ui-autocomplete").css("z-index", "2147483647");
 				$(".ui-autocomplete").css("background", "#FFFFFF");
+
+				$('#autocomplete').val(init_user);
 			});
 		},
     	submitSave : function(e){
     	    var dfd= new $.Deferred();
-    	    var _view=this,_form=this.form,_data=_form.getData();
+			var _view=this,_form=this.form,_data=_form.getData();
+			
+			if(!_view.checkFormData(_data.leader)) {
+				Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
+				dfd.reject();
+				return;
+			}
+
 			var firstArr = (_data.leader).split("(");
 			var strTemp = firstArr[1].split(")");
 			_data.leader = strTemp[0];
@@ -135,7 +146,12 @@ define([
     	    
     	    return dfd.promise();
     	},
-
+		checkFormData: function(data) {
+			if(availableTagsUser.indexOf(data) == -1) {
+				return false;
+			}
+			return true;
+		},
     });
     return EditDepartmentView;
 });
