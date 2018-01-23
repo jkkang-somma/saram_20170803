@@ -541,8 +541,10 @@ define([
             },
 
             selectCommute: function() {
+
+                var category_type = $(this.el).find("#officeCodeComboType").val();
                 var data = {
-                    category_type : $(this.el).find("#officeCodeComboType").val(),
+                    category_type : ((category_type == "전체")?"":category_type),
                     category_code : $(this.el).find("#officeCodeCombo").val()
                  };     
                  
