@@ -960,11 +960,11 @@ define([
             // });
 
             // 방식_3
-            let prefix = 'GridDataExcel_';
+            let prefix = 'GridDataExcel';
             if(filename != undefined) {
                 prefix = filename;
             }
-            saveAs(new Blob(["\uFEFF" + gridHtml], {type: "text/csv;charset=utf-8"}), prefix + dateStr + '.xls');
+            saveAs(new Blob(["\uFEFF" + gridHtml], {type: "text/csv;charset=utf-8"}), prefix + '_' + dateStr + '.xls');
 
         }
     });
