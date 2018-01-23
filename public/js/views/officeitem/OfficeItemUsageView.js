@@ -51,8 +51,9 @@ define([
                 for (let i=0; i < wordArr.length; i++) {
                     if(i==0) {
                         bwords = wordArr[i];
+                    } else {
+                        bwords = bwords + "</br>" + wordArr[i];
                     }
-                    bwords = bwords + "</br>" + wordArr[i];
                 }
                 return bwords;
             }else{
@@ -402,8 +403,11 @@ define([
             let data=this.grid.getSelectItem();
 
             let usageDetailPopupView = new UsageDetailListPopup(data);
+            //부서에게 제품이 할당된 경우
+            let titleName = (data.name == "") ? _getDeptName(data.dept) : data.name;
+
             Dialog.show({
-                title: "상세정보 ("+data.name+")",
+                title: "상세정보 ("+titleName+")",
                 content: usageDetailPopupView,
                 size: 'size-wide',
                 buttons: [{
