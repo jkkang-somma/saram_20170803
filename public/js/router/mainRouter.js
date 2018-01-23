@@ -188,7 +188,8 @@ define([
 				animator.animate($(view.el), animator.FADE_IN);	
 				
 				// side-container
-				if($('.side-container').children().length <= 0 && $(window).width() > 768){
+				if( $('.side-container').children().length <= 0 && $(window).width() > 768
+						  && viewUrl.indexOf('dashboard') < 0){
 					$('body').css('overflow', 'hidden');
 					$('.main-container').css('height', '');
 				}else{
