@@ -162,14 +162,18 @@ define([
                 el:"ExportDetailList_content",
                 id:"ExportDetailListGrid",
                 column:[
-                    {data : "name", "title" : "이름"},
-                    {data : "category_name", "title" : "장비구분"},
-                    {data : "serial_yes", "title" : "관리번호"},
-                    {data : "model_no", "title" : "모델명"},
-                    {data : "buy_date", "title" : "구입일"},
+                    {data : "name", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.NAME},
+                    {data : "dept", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DEPARTMENT,
+                        render: function(data) {
+                            return _getDeptName(data);
+                        }},
+                    {data : "category_name", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.CATEGORY_NAME},
+                    {data : "serial_yes", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.SERIAL},
+                    {data : "model_no", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.MODEL},
+                    {data : "buy_date", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.BUYDATE},
                 ],
                 detail: true,
-                dataschema:["name", "category_name", "serial_yes", "model_no", "buy_date"],
+                dataschema:["name", "dept", "category_name", "serial_yes", "model_no", "buy_date"],
                 collection:this.excelExportCollection,
                 detail: true,
                 fetch: false,
@@ -413,7 +417,7 @@ define([
         },
 
         onClickSave: function(grid) {
-            grid.saveExcel();
+            grid.saveExcel("비품할당현황");
         }
     });
     return officeItemUsageView;
