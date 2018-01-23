@@ -104,7 +104,7 @@ define([
 		afterRender : function(){
 
 			var _this = this;
-            $(_this.el[0].parentElement.parentElement.parentElement.parentElement.parentElement).css('width', 1000);
+            //$(_this.el[0].parentElement.parentElement.parentElement.parentElement.parentElement).css('width', 1000);
 			this.officeItemDetailCollection.fetch({
                 data: {user : _this.searchData},
 				success: function(result) {
@@ -128,6 +128,7 @@ define([
             Dialog.show({
                 title: "("+data.id+") 이력",
                 content: usageHistoryPopupView,
+                size: 'size-wide',
                 buttons: [{
                     label : "닫기",
                     action : function(dialog){
