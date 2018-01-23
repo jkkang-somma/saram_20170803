@@ -1,5 +1,4 @@
-var OfficeItemUsageDao = require('../dao/OfficeItemUsageDao.js');
-var debug = require('debug')('OfficeItem');
+var OfficeItemUsageDao = require('../dao/officeItemUsageDao.js');
 
 var OfficeItemUsage = function() {
 
