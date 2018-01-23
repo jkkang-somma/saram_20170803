@@ -380,6 +380,7 @@ define([
             Dialog.show({
                 title: "("+data.id+") 이력",
                 content: usageHistoryPopupView,
+                size: 'size-wide',
                 buttons: [{
                     label : "닫기",
                     action : function(dialog){
@@ -400,6 +401,7 @@ define([
             Dialog.show({
                 title: "상세정보 ("+data.name+")",
                 content: usageDetailPopupView,
+                size: 'size-wide',
                 buttons: [{
                     label : "닫기",
                     action : function(dialog){
