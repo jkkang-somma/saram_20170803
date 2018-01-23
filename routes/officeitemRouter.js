@@ -17,13 +17,13 @@ router.route('/')
     officeitem.addOfficeItem(user).then(function(result){
         debug("Complete Add officeitem.");
         //debug(JSON.stringify(result))
-        res.send({success:true, result, msg:"Complete Add officeitem."});
+        res.send({success:true, result:result, msg:"Complete Add officeitem."});
     }).catch(function(e){
         debug("Error Add officeitem.");
         res.status(500);
         res.send({
             success:false,
-            message: e.message,
+            message:e.message,
             error:e
         });
     });
@@ -56,7 +56,7 @@ router.route('/:serial_yes')
     var user = session.user;
     var officeitem = new OfficeItem(req.body, true);
     officeitem.editOfficeItem(user).then(function(result){
-        res.send(result);
+        res.send({success:true, result:result, msg:"Complete Edit officeitem."});
     }).catch(function(e){
         res.status(500);
         res.send({

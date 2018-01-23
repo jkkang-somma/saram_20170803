@@ -701,6 +701,7 @@ define({
             VENDOR:"제조사",
             MODEL_NO:"모델명",
             CATEGORY_CODE:"기기종류",
+            CATEGORY_NAME:"기기명",
             CATEGORY_TYPE:"기기 TYPE",
             CATEGORY_INDEX:"기기 INDEX",
             PRICE:"금액",

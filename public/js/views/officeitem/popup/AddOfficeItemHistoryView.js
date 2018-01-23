@@ -96,7 +96,7 @@ define([
 							label:i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE,
 							value:_model.type,
 							//linkField:"type",
-							collection:[{key:'수리',value:"수리"},{key:'사용자 변경',value:"사용자 변경"},{key:'기타',value:"기타"}]
+							collection:[{key:'수리',value:"수리"},{key:'기타',value:"기타"}]
 					},{							
 
 							type:"input",

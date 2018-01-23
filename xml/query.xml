@@ -2113,8 +2113,8 @@
     <group id="officeitem">
 	    <query id="selectIdByOfficeItem">
         	SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_code,
-			category_type,category_index,price,surtax,price_buy,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			category_code, category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
@@ -2128,8 +2128,8 @@
         </query>
         <query id="selectOfficeItemALLList">
  			SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_code,
-			category_type,category_index,price,surtax,price_buy,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			category_code,category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
@@ -2142,8 +2142,8 @@
         </query>
 		<query id="selectOfficeItemCategoryCodeList">
  			SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_code,
-			category_type,category_index,price,surtax,price_buy,
+			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			category_code,category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,

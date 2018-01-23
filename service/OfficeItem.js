@@ -87,31 +87,55 @@ var OfficeItem = function (data) {
     var _editOfficeItem=function(user){
         return new Promise(function(resolve, reject){// promise patten
             _getOfficeItem().then(function(currentData){
+
                 var _updateData=_.defaults(data, currentData[0]);
+
+                var _currentData = currentData[0];
+                var _type = "수정"; 
+                var _memo = data.serial_yes+ " 수정 하였습니다.";               
 
                 if(data.disposal_date ==""){ data.disposal_date = null; }
 
-                OfficeItemDao.updateOfficeItem(_updateData).then(function(result){
-                    //resolve(result);
+                OfficeItemDao.updateOfficeItem(_updateData).then(function(result){        
+                    
+                    if(data.use_user !="" ){   //사용자 변경
+                        
+                        if(_currentData.use_user == ""){   // 부서 -> 사용 직원 변경
+                            _type = "사용자 수정"; 
+                            _memo = "사용 부서 -> 직원 변경  [ "+_currentData.use_dept_name+"("+_currentData.use_dept+") ->"+_updateData.use_user_name+"("+_updateData.use_user+")]";  
+                        }else if(_updateData.use_user != _currentData.use_user){ 
+                            _type = "사용자 수정"; 
+                            _memo = "사용 직원 변경 [ "+_currentData.use_user_name+"("+_currentData.use_user+") -> "+_updateData.use_user_name+"("+_updateData.use_user+")]"; 
+                        }  
+
+                    }else{    //부서 변경
+                      if(_currentData.use_dept == ""){
+                            _type = "사용자 수정"; 
+                            _memo = "사용 직원 -> 부서 변경  [ "+_currentData.use_user_name+"("+_currentData.use_user+") ->"+_updateData.use_dept_name+"("+_updateData.use_dept+")]";  
+                        }else if(_updateData.use_dept != _currentData.use_dept){  
+                            _type = "사용자 수정"; 
+                            _memo = "사용 부서 변경[ "+_currentData.use_dept_name+"("+_currentData.use_dept+") -> "+_updateData.use_dept_name+"("+_updateData.use_dept+")]"; 
+                        }
+                    }
+                          
                     data = currentData[0];
-                                              
+
                     var indata = {
                         serial_yes  : data.serial_yes, 
                         category_type : data.category_type, //category_type 세팅
-                        //history_date: "", 
-                        type	    : "수정", 
+                        type	    : _type,     //사용자 변경/수정 
                         title	    : "비품 수정", 
                         repair_price: data.price_buy,
                         use_user	: data.use_user, 
                         use_dept	: data.use_dept, 
-                        name	    : (data.use_user != "")?data.use_user_name:data.use_dept_name, 
+                        name	    : (data.use_user != null && data.use_user != "")?data.use_user_name:data.use_dept_name, 
                         change_user_id : user.name, 
-                        memo	    : data.serial_yes+ " 수정 하였습니다."
+                        memo	    : _memo
                     };
                 
                     OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {
-                            //resolve(result);
-                            resolve({dbResult : result, data : data});
+                            resolve(data);
+                           // resolve({dbResult : result, data : data});
                         }).catch(function(e){//Connection Error
                             reject(e);
                         });

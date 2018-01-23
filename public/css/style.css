@@ -70,6 +70,14 @@ body {
     background-color: #DEEEE6;
 }
 
+.ui-autocomplete{
+    position:absolute;
+    top:100px;
+    left:100px;
+    z-index:2147483647;
+    background: rgb(249, 250, 249);
+}
+
 form .detail-content input{
     display: inline-block;
     width: auto;
@@ -420,9 +428,12 @@ table.dataTable tbody tr.selected {
     color: white;
 }
 
-table.dataTable tbody tr.expiration {
-    background: rgb(243, 201, 208);
-    color: rgb(102, 100, 100);
+table.dataTable tbody tr.expiration{
+    background-color: rgba(236, 131, 131 ,0.4);  
+}
+  
+table.dataTable tbody tr.expiration.selected{
+    background-color: rgba(236, 131, 131 ,1);  
 }
 
 table.dataTable tbody tr:first-child td{

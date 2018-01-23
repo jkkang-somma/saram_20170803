@@ -101,6 +101,7 @@ define([
         el:".main-container",
         initialize:function(){
             this.officeitemCollection= new OfficeItemCollection();
+            this.officeItemCodes = Code.getCodes(Code.OFFICEITEM);
             var _id="officeItemList_"+(officeitemListCount++);
             this.option = {
                 el:_id+"_content",
@@ -109,7 +110,8 @@ define([
                     { "title" : i18Common.OFFICEITEM.CODE.SERIAL_FACTORY, data:"serial_factory"},
                     { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor",visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no",visible:false, subVisible:false},
-                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code",visible:false, subVisible:false},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_INDEX, data:"category_index", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
                     { "title" : i18Common.OFFICEITEM.CODE.PRICE, data:"price", visible:false, subVisible:false},
@@ -162,6 +164,7 @@ define([
                 'click .list-HistoryAdd-btn' : 'onClickOfficeItemHistoryAddBtn',
                 'click .list-detailComm-btn' : 'onClickOfficeItemDetailBtn',
                 'click #officeItemSearchBtn' : 'onClickSearchBtn',
+                "change #officeCodeComboType" : "setOfficeItemNameData",
             },
             over:function(event){                
             },
@@ -205,6 +208,23 @@ define([
             },
             onClickSearchBtn: function(evt) {
                 this.selectCommute();
+            },
+            setOfficeItemNameData : function(){
+                var officeItemNameList = [{key:"",value:"전체"}];
+                var type = $(this.el).find("#officeCodeComboType").val();
+                
+                if (type != "전체") {
+                    var codes = this.officeItemCodes;
+                    for(var index in codes){
+                        if(codes[index].type == type)
+                            officeItemNameList.push({key:codes[index].code, value:codes[index].name});
+                    }
+                }
+                //기기분류 Set
+                $(this.el).find("#officeCodeCombo").empty();
+                for(var index in officeItemNameList){
+                    $(this.el).find("#officeCodeCombo").append("<option value="+officeItemNameList[index].key+">" + officeItemNameList[index].value +"</option>");
+                }
             },
 
             afterRender: function() {
@@ -455,43 +475,67 @@ define([
                 //combo
                 var _row=$(RowHTML); 
                 
-                var _combo = $(_.template(RowComboHTML)({
-                        obj : { id : "officeCodeCombo", label : "기기 종류"}
+                //var _combo = $(_.template(RowComboHTML)({
+                var _combo = $(_.template(searchFormTemplate)({
+                    
+                        obj : { 
+                            typeid : "officeCodeComboType",
+                            typelabel : i18Common.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE,
+                            id : "officeCodeCombo", 
+                            label : i18Common.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
+                            btnid :"officeItemSearchBtn",
+                            btnlabel : i18Common.OFFICEITEM.LIST.SEARCH_BTN,
+                        }
                     })
                 );   
-                var _searchBtn = $(_.template(RowButtonHTML)({
+                /*var _searchBtn = $(_.template(RowButtonHTML)({
     	            obj: {
+                        
                             id: "officeItemSearchBtn",
                             label: i18Common.OFFICEITEM.LIST.SEARCH_BTN,
                         }
                     })
-                ); 
+                );*/ 
 
                 _row.append(_combo);  
-                _row.append(_searchBtn); 
+               //_row.append(_searchBtn); 
                        
                 _layOut.append(_head);   
                 _layOut.append(_row);            
                 _layOut.append(_content);
                 $(this.el).html(_layOut);
 
+               // var officecode = Code.getCollection("officeitem");
+               // var _options=officeItemCodes.models;
+               // var _option;
 
-                var officecode = Code.getCollection("officeitem");
-                var _options=officecode.models;
-                var _option;
+                //기기분류 Set
+             
+                this.categoryType = [
+                    {key:"all", value:"전체"},
+                    {key:i18Common.OFFICEITEM.CATEGORY.TYPE.OS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.OS},
+                    {key:i18Common.OFFICEITEM.CATEGORY.TYPE.CS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.CS}
+                ];
+                
+                var category = this.categoryType;
+                for(var index in category){
+                    $(this.el).find("#officeCodeComboType").append("<option>" + category[index].value +"</option>");
+                }
 
-                $(this.el).find("#officeCodeCombo").append("<option value=''>-----</option>");
+                /*$(this.el).find("#officeCodeCombo").append("<option value=''>전체</option>");
                 for (var index in _options){
                     let _option= _options[index].attributes;          
                               
                     $(this.el).find("#officeCodeCombo").append("<option value='"+_option['code']+"'>"+(_option['name'])+"</option>");
-                }
+                }*/
                               
                 //grid 
                 var _gridSchema=Schemas.getSchema('grid');
                 var grid= new Grid(_gridSchema.getDefault(this.option));
                 this.grid = grid;
                 this.grid.render();
+                //기기이름 Set
+                this.setOfficeItemNameData();
                 this.selectCommute();
                 return this
             },
@@ -499,7 +543,7 @@ define([
             selectCommute: function() {
                 var data = {
                     category_code : $(this.el).find("#officeCodeCombo").val()
-                 };                 
+                 };     
                  
                 var _this = this;
                 Dialog.loading({
@@ -520,7 +564,7 @@ define([
                         _this.grid.render();
                     },
                     errorCallBack:function(response){
-                        Dialog.error(i18nCommon.OFFICEITEM.LIST.GET_DATA_FAIL);
+                        Dialog.error(i18Common.OFFICEITEM.LIST.GET_DATA_FAIL);
                     },
                 });   
             }                   
