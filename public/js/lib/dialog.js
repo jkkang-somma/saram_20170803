@@ -106,6 +106,7 @@ define([
                         //cssClass:CssClass.DEFAULT,
                         closable: false, 
                         buttons: [],
+                        size: BootstrapDialog.SIZE_NORMAL
                         });
                     if(!_.isUndefined(resultView)){
                         if(!_.isUndefined(resultView.afterRender)){
