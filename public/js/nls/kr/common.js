@@ -846,7 +846,12 @@ define({
             MONITOR: "모니터",
             IP: "IP",
             NOTEBOOK: "노트북",
-            DETAIL: "상세"
+            DETAIL: "상세",
+            CATEGORY_NAME: "장비구분",
+            SERIAL: "관리번호",
+            MODEL: "모델명",
+            BUYDATE: "구입일자"
+
         },
         MSG :{
             NOK : "확인필요",
