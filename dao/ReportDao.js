@@ -24,6 +24,11 @@ ReportDao.prototype.selectOverTimeWorkeReport =  function (selObj) {
     return db.query(group, "selectOverTimeWorkeReport", [selObj.year, selObj.startTime, selObj.endTime]);
 };
 
+// 잔업시간(분) 현황 ( 평일 잔업시간 )	- 야근상신된 항목만 야근시간으로 계산
+ReportDao.prototype.selectPayedOverTimeWorkReport =  function (selObj) {
+    return db.query(group, "selectPayedOverTimeWorkReport", [selObj.year, selObj.startTime, selObj.endTime]);
+};
+
 // 잔업 수당 타입 현황	
 ReportDao.prototype.selectOverTimeWorkTypeReport =  function (selObj) {
     return db.query(group, "selectOverTimeWorkTypeReport", 

@@ -30,25 +30,29 @@ var CommuteYearExcelCreater = function () {
 	var COL_OVER_TIME_WORKE = 33;
 	var COL_OVER_TIME_WORKE_END = 45;
 
+	//잔업시간(분) 현황 ( 평일 결재 후 잔업시간 )
+	var COL_OVER_TIME_WORK_PAY_TIME = 46;
+	var COL_OVER_TIME_WORK_PAY_TIME_END = 58;
+
 	// 잔업 수당 타입 현황
-	var COL_OVER_TIME_WORK_TYPE = 46;
-	var COL_OVER_TIME_WORK_TYPE_END = 84;
+	var COL_OVER_TIME_WORK_TYPE = 59;
+	var COL_OVER_TIME_WORK_TYPE_END = 97;
 
 	//잔업 수당 금액 현황
-	var COL_OVER_TIME_WORK_PAY	= 85;
-	var COL_OVER_TIME_WORK_PAY_END	= 97;
+	var COL_OVER_TIME_WORK_PAY	= 98;
+	var COL_OVER_TIME_WORK_PAY_END	= 110;
 
 	//휴일 근무 시간
-	var COL_HOLIDAY_WORK_TIME =  98;
-	var COL_HOLIDAY_WORK_TIME_END =  110;
+	var COL_HOLIDAY_WORK_TIME =  111;
+	var COL_HOLIDAY_WORK_TIME_END =  123;
 
 	//휴일 근무 타입 현황
-	var COL_HOLIDAY_WORK_TYPE =  111;
-	var COL_HOLIDAY_WORK_TYPE_END =  149;
+	var COL_HOLIDAY_WORK_TYPE =  124;
+	var COL_HOLIDAY_WORK_TYPE_END =  162;
 
 	//휴일근무 수당 금액 현황
-	var COL_HOLIDAY_WORK_PAY =  150;
-	var COL_HOLIDAY_WORK_PAY_END =  162;
+	var COL_HOLIDAY_WORK_PAY =  163;
+	var COL_HOLIDAY_WORK_PAY_END =  175;
 
 	function _createExcelTitle(sheet, searchValObj) {
 
@@ -98,11 +102,19 @@ var CommuteYearExcelCreater = function () {
 
 		//잔업시간(분) 현황 (평일 잔업시간)
 		sheet.merge({col:COL_OVER_TIME_WORKE, row:2},{col:COL_OVER_TIME_WORKE_END, row:2});
-		_setTitleCell(sheet, COL_OVER_TIME_WORKE, 2, " 잔업시간(분) 현황 ( 평일 잔업시간 ) ");
+		_setTitleCell(sheet, COL_OVER_TIME_WORKE, 2, " 잔업시간(분) 현황 ( 평일 ) ");
 		for (var i = 0, len = 11; i <= len; i++) {
 			_setTitleMergeCell(sheet, COL_OVER_TIME_WORKE + i, 3, i+1);
 		}
 		_setTitleMergeCell(sheet, COL_OVER_TIME_WORKE_END, 3, ' 합계 ');
+
+		//잔업시간(분) 현황 (평일 결재 후 잔업시간)
+		sheet.merge({col:COL_OVER_TIME_WORK_PAY_TIME, row:2},{col:COL_OVER_TIME_WORK_PAY_TIME_END, row:2});
+		_setTitleCell(sheet, COL_OVER_TIME_WORK_PAY_TIME, 2, " 결재 후 잔업시간(분) 현황 ( 평일 ) ");
+		for (var i = 0, len = 11; i <= len; i++) {
+			_setTitleMergeCell(sheet, COL_OVER_TIME_WORK_PAY_TIME + i, 3, i+1);
+		}
+		_setTitleMergeCell(sheet, COL_OVER_TIME_WORK_PAY_TIME_END, 3, ' 합계 ');
 
 		//잔업 수당 타입 현황
 		sheet.merge({col:COL_OVER_TIME_WORK_TYPE, row:2},{col:COL_OVER_TIME_WORK_TYPE_END, row:2});
@@ -163,7 +175,8 @@ var CommuteYearExcelCreater = function () {
 			overTimeWorkPays = datas[5],
 			holidayWorkTimes = datas[6],
 			holidayWorkTypes = datas[7],
-			holidayWorkPays = datas[8];
+			holidayWorkPays = datas[8],
+			overTimeWorkPayTimes = datas[9];
 
 		var currentRow = 4;
 		for (var i = 0, len = users.length; i < len; i++) {
@@ -171,6 +184,7 @@ var CommuteYearExcelCreater = function () {
 				lateWorker = lateWorkers[i],
 				usedHoliday = usedHolidays[i],
 				overTimeWorke = overTimeWorkes[i],
+				overTimeWorkPayTime = overTimeWorkPayTimes[i],
 				overTimeWorkType = overTimeWorkTypes[i],
 				overTimeWorkPay = overTimeWorkPays[i],
 				holidayWorkTime = holidayWorkTimes[i],
@@ -183,12 +197,12 @@ var CommuteYearExcelCreater = function () {
 				}
 			}
 			
-//			if (user.dept_code == "0000") {	// 임원 제외 
-//				continue;
-//			}			
-//			else {
+			if (user.dept_code == "0000") {	// 임원 제외 
+				continue;
+			}			
+			else {
 				currentRow++;
-//			}
+			}
 			
 			// 부서
 			sheet.set(COL_DEPT, currentRow, _conVal(user.dept_name) ) ;
@@ -226,6 +240,10 @@ var CommuteYearExcelCreater = function () {
 	
 			if (user.id == overTimeWorke.id) {
 				_setOverTimeWorkeRow(sheet, COL_OVER_TIME_WORKE, currentRow, overTimeWorke);
+			}
+
+			if (user.id == overTimeWorkPayTime.id) {
+				_setOverTimeWorkPayTimeRow(sheet, COL_OVER_TIME_WORK_PAY_TIME, currentRow, overTimeWorkPayTime);
 			}
 	
 			if (user.id == overTimeWorkType.id) {
@@ -284,6 +302,20 @@ var CommuteYearExcelCreater = function () {
 	}
 
 	function _setOverTimeWorkeRow(sheet, startCol, startRow, datas) {
+		for (var i = 0, len = 11; i <= len; i++) {
+			sheet.set( startCol, startRow, _conVal(datas[i+1]) );
+			_setDataCellStyle(sheet, startCol, startRow);
+			
+			if (i == 0) {
+				sheet.border(startCol, startRow, {left:'medium',top:'thin',right:'thin',bottom:'thin'});
+			}
+			startCol++;
+		}
+		sheet.set( startCol, startRow, _conVal(datas.total) );
+		_setDataCellStyle(sheet, startCol, startRow);
+	}
+
+	function _setOverTimeWorkPayTimeRow(sheet, startCol, startRow, datas) {
 		for (var i = 0, len = 11; i <= len; i++) {
 			sheet.set( startCol, startRow, _conVal(datas[i+1]) );
 			_setDataCellStyle(sheet, startCol, startRow);
