@@ -913,7 +913,7 @@ define([
                 resolve(grid);
             });
      	},
-        saveExcel:function(){
+        saveExcel:function(filename){
 
             var grid = this;
             var gridAllData = grid.getAllData();
@@ -960,7 +960,11 @@ define([
             // });
 
             // 방식_3
-            saveAs(new Blob(["\uFEFF" + gridHtml], {type: "text/csv;charset=utf-8"}), 'GridDataExcel_' + dateStr + '.xls');
+            let prefix = 'GridDataExcel_';
+            if(filename != undefined) {
+                prefix = filename;
+            }
+            saveAs(new Blob(["\uFEFF" + gridHtml], {type: "text/csv;charset=utf-8"}), prefix + dateStr + '.xls');
 
         }
     });
