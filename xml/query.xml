@@ -2289,47 +2289,75 @@
 	</group>
 	<group id="usage">
 		<query id="selectUsageListbyUser">
-			SELECT B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-				B.m1 AS "leave_company", B.m2 AS "dept_code"
-			FROM ip_tbl A RIGHT JOIN (
-				SELECT
-					off.use_user r1, mem.name r2, mem.dept_code r3, mem.leave_company m1, mem.dept_code m2,
-					group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-					group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-					group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
-				FROM
-					members_tbl mem INNER JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
-				ORDER BY
-					mem.name
-				) B ON A.use_user = B.r1
-			WHERE
-				B.r1 = ? GROUP BY B.r2
+			SELECT
+				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
+				B.m1 AS "leave_company"
+			FROM
+				ip_tbl A RIGHT JOIN (
+					SELECT
+						mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
+						group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
+						group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
+						group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+					FROM
+						members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
+					ORDER BY
+						mem.name
+				) B ON B.r1 = A.use_user
+			WHERE B.r1 = ?
 		</query>
 
 		<query id="selectUsageListALL">
 			(
 				SELECT
-					"" id, "" name, A.code AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
+					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
 				FROM
-					(
+					ip_tbl A RIGHT JOIN (
 						SELECT
-							IpT.ip ip, DpT.code code, IpT.use_user user
-						FROM
-							ip_tbl IpT RIGHT JOIN dept_code_tbl DpT ON IpT.use_dept = DpT.code
-					) A LEFT JOIN (
-						SELECT
-							"" r1, "" r2, off.use_dept r3, "" m1,
+							"" r1, "" r2, D.code r3,
 							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
 							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
 							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
 						FROM
-							office_item_tbl off
-						WHERE
-							((off.use_user = '' OR off.use_user IS NULL) AND off.use_dept != '' AND off.use_dept IS NOT NULL)
-						GROUP BY off.use_dept
-					) B ON A.code = B.r3
-				GROUP BY A.code
-				HAVING B.r4 IS NOT NULL OR B.r5 IS NOT NULL OR group_concat(A.ip) IS NOT NULL OR B.r6 IS NOT NULL
+							(select * from dept_code_tbl where `use`='1') D LEFT JOIN office_item_tbl off ON D.code = off.use_dept GROUP BY D.code
+					) B ON B.r3 = A.use_dept
+				GROUP BY B.r3
+			) UNION (
+				SELECT
+					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
+				B.m1 AS "leave_company"
+				FROM
+					ip_tbl A RIGHT JOIN (
+						SELECT
+							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
+							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
+							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
+							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+						FROM
+							members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
+						ORDER BY
+							mem.name
+					) B ON B.r1 = A.use_user
+				GROUP BY B.r1
+			)
+		</query>
+
+		<query id="selectUsageList">
+			(
+				SELECT
+					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
+				FROM
+					ip_tbl A RIGHT JOIN (
+						SELECT
+							"" r1, "" r2, D.code r3,
+							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
+							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
+							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+						FROM
+							(select * from dept_code_tbl where `use`='1') D LEFT JOIN office_item_tbl off ON D.code = off.use_dept GROUP BY D.code
+					) B ON B.r3 = A.use_dept
+				WHERE B.r3 = ?
+				GROUP BY B.r3
 			) UNION (
 				SELECT
 					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
@@ -2337,53 +2365,17 @@
 				FROM
 					ip_tbl A RIGHT JOIN (
 						SELECT
-							off.use_user r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
+							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
 							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
 							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
 							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
 						FROM
-							members_tbl mem INNER JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
+							members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 						ORDER BY
 							mem.name
-					) B ON A.use_user = B.r1
-				GROUP BY B.r2
-			)
-		</query>
-
-		<query id="selectUsageList">
-			(
-				SELECT
-					"" id, "" name, A.use_dept AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
-				FROM
-					ip_tbl A RIGHT JOIN (
-						SELECT
-							"" r1, "" r2, off.use_dept r3, "" m1,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
-						FROM
-							office_item_tbl off
-						WHERE
-							off.use_dept = ?
-					) B ON A.use_dept = B.r3
-				GROUP BY B.r3
-			) UNION (
-				SELECT B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-					B.m1 AS "leave_company"
-				FROM ip_tbl A RIGHT JOIN (
-						SELECT
-							off.use_user r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
-						FROM
-							members_tbl mem INNER JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
-						ORDER BY
-							mem.name
-					) B ON A.use_user = B.r1
-				WHERE
-				B.r3 = ?
-				GROUP BY B.r2
+					) B ON B.r1 = A.use_user
+				WHERE B.r3 = ?
+				GROUP BY B.r1
 			)
 		</query>
 
@@ -2392,9 +2384,9 @@
 				mem.name, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
 			FROM
 				members_tbl mem RIGHT JOIN office_item_tbl off ON mem.id = off.use_user
-				RIGHT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
+				LEFT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
 			WHERE
-				off.use_user = ?
+				mem.id = ?
 			ORDER BY off.serial_yes
 		</query>
 
@@ -2402,7 +2394,7 @@
 			SELECT
 				"" name, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
 			FROM
-				office_item_tbl off RIGHT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
+				office_item_tbl off LEFT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
 			WHERE
 				off.use_dept = ?
 			ORDER BY off.serial_yes
@@ -2412,7 +2404,7 @@
 			SELECT
 				mem.name, off.use_dept dept, cat.category_name, off.serial_yes, off.model_no, date_format(off.buy_date, '%Y-%m-%d') AS buy_date
 			FROM
-				members_tbl mem RIGHT JOIN office_item_tbl off ON mem.id = off.use_user
+				members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user
 				LEFT JOIN office_item_category_tbl cat ON off.category_code = cat.category_code
 			ORDER BY mem.name
 		</query>
