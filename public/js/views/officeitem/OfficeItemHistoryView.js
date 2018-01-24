@@ -138,7 +138,7 @@ define([
             this.selectOfficeItemHistoryData();
         },
         onClickSave: function(grid) {
-            grid.saveExcel();
+            grid.saveExcel(i18Common.OFFICEITEM.FILE_DOWNLOAD.HISTORY_INFO);
         },
         getSearchForm: function() {	// 검색 조건
             var startDate = Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().toDate());

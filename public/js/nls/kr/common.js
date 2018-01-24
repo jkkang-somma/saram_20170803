@@ -807,6 +807,9 @@ define({
                 REMOVE_CODE_COMPLETE : "비품코드가 삭제되었습니다.",
                 REMOVE_CODE_FAIL : "비품코드 삭제 실패!"
             }
+        },
+        FILE_DOWNLOAD : {
+            HISTORY_INFO:"비품이력정보"
         }
     },
     IPASSIGNED_MANAGER_LIST : {
