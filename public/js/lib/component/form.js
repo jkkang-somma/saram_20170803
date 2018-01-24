@@ -2,7 +2,7 @@
 // Create Date: 2014.12.18
 define([
   'jquery',
-  'jquery.ui',
+  'jquery.autocomplete',
   'underscore',
   'backbone',
   'log',
