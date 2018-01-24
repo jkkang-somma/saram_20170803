@@ -69,4 +69,8 @@ CommuteDao.prototype.selectCommuteToday = function(date) {
     return db.query(group, "selectCommuteToday", [date.startDate,date.startDate,date.startDate,date.startDate]);
 };
 
+CommuteDao.prototype.getCommuteMailData =  function (data) {
+    return db.query(group, "getCommuteMailData", [data.in_time, data.id, data.work_type]);
+};
+
 module.exports = new CommuteDao();

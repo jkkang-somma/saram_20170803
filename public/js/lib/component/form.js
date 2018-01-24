@@ -19,9 +19,10 @@ define([
   'text!templates/default/combo.html',
   'text!templates/default/hidden.html',
   'text!templates/default/group.html',
-  'text!templates/default/checkBox.html'
+  'text!templates/default/checkBox.html',
+  'text!templates/default/ip_input.html'
   ], function($, jui, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, PriceHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
-		  CheckBoxHTML){
+		  CheckBoxHTML, Ip_InputHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
@@ -215,6 +216,12 @@ define([
                 return empty;
             }
         },
+        empty_data:{
+            getElement:function(data){
+                var empty = $('<input type="hidden" class="form-control" name=' + data.name + ' />');
+                return empty;
+            }
+        },
         hidden:{
             getElement:function(data){
                 var _hiddenTemp=_.template(HiddenHTML);
@@ -282,6 +289,24 @@ define([
                 return $(_input);
             }
         },
+        ip_input:{
+            getElement:function(data){
+               // for( var index = 0; index < data.input_data.models.length; index++) {
+               //      availableTags[index] = data.input_data.models[index].attributes.name + "(" + data.input_data.models[index].attributes.code + ")";
+               //      console.log(availableTags[index]);
+               // }
+               
+               // for( var index = 0; index < data.user_data.models.length; index++) {
+               //     availableTags[index] = data.user_data.models[index].attributes.name + "(" + data.user_data.models[index].attributes.code + ")";
+               //     console.log(availableTags[index]);
+               // }
+               //availableTags = data.input_data;
+               var _InputTemp=_.template(Ip_InputHTML);
+               var _input=_.noop();
+               _input=_InputTemp(data);
+               return $(_input);
+           }
+       },
     };
     var Form = Backbone.View.extend({
         initialize:function(options){

@@ -634,6 +634,26 @@
 					apt.state = "상신"
 				)
         </query>
+    	<query id="getCommuteMailData">
+        	SELECT
+        		? as in_time,
+        		mem.name,
+        		mem.email,
+        		mem.leave_company,
+        		dept.area as dept_area,
+        		work.name as work_type,
+        		dept.leader as leader_id,
+        		(SELECT name  FROM members_tbl WHERE id = leader_id) as leader_name,
+        		(SELECT email FROM members_tbl WHERE id = leader_id) as leader_email 
+        	FROM
+        		work_type_code_tbl work,
+        		members_tbl mem 
+         		left join dept_code_tbl dept on mem.dept_code = dept.code
+        	WHERE
+        		mem.id = ? 
+        	AND 
+        		work.code = ?
+    	</query>
     </group>
     <group id="changeHistory">
     	<query id="selectChangeHistory">

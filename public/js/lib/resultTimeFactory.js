@@ -419,7 +419,7 @@ define([
                     var model = todayOutOffice[i];
                     var code = model.get("office_code");
                     var VACATION_CODES = ["V01", "V02", "V03", "V04", "V05", "V06", "V07", "V08"];
-                    var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04", "W01W04"];
+                    var OUTOFFICE_CODES = ["W01", "W02", "W03", "W04", "W01W04", "E01"];
                     var VACATIONS_CODE = ["V02V03", "V02V05", "V03V05", "V02V08", "V03V07", "V06V07", "V06V08"];
 
                     if (_.indexOf(VACATION_CODES, code) >= 0) {
@@ -495,87 +495,6 @@ define([
                         break;
                 }
 
-                /**
-                 * 외근, 출장, 장기외근, 파견 특이사항 수정
-                 * 외근 
-                 *  본사 : standardInTime 이전시간부터 외근 설정되어 있을때 지각 체크 하지 않음
-                 *         standardOutTime 이후 시간까지 외근 설정되어 있을때 조퇴 체크 하지 않음
-                 * 출장
-                 *  inTimeType, outTimeType 을 정상으로 수정
-                 * 장기외근
-                 *  본사 : 지각, 조퇴 체크 하지 않음
-                 * 파견
-                 *  변경 없음
-                 **/
-
-                switch (this.outOfficeCode) {
-                    case "W01": // 외근
-                    case "W01W04" : // 파견,외근
-                        var stdInTime = 8;
-                        if (this.isSuwon) {
-                            stdInTime = 7;
-                        }
-
-                        for (var i = 0; i < todayOutOffice.length; i++) {
-                            model = todayOutOffice[i];
-                            code = model.get("office_code");
-                            if (code == "W01") {
-                                var startTime = Moment(model.get("start_time"), "HH:mm");
-                                var endTime = Moment(model.get("end_time"), "HH:mm");
-                                /**
-                                 * 외근 시작시간
-                                 * 8시 이전       : 8:00, checkLate = false, standardintime : 08:00, standardouttime : 17:00,
-                                 * 8시 ~ 10시 00분 : 출근시간, checkLate = false, standardintime = 출근시간, standardouttime : 출근시간 + 9시간
-                                 * 10시 이후      : 10:00, checkLate = true, standardintime : 10:00, standardouttime : 19:00,
-                                 * 
-                                 * 2017.12.15. 김성식 부장 : 수원 외근 발생시 서울과 동일하게 처리 함.
-                                 *  - 수원의 경우 7시 기준으로 계산함. 
-                                 * 
-                                 * 외근 종료시간
-                                 * standardouttime 이전 : checkEarly = true
-                                 * standardouttime 이후 : checkEarly = false
-                                 **/
-                                if(startTime.hour() < stdInTime){
-                                    this.standardInTime.hour(stdInTime).minute(0).second(0);
-                                    this.standardOutTime.hour(stdInTime+9).minute(0).second(0);
-                                    this.checkLate = false;
-                                }else if(startTime.hour() < 10 || (startTime.hour() == 10 && startTime.minute() == 0)){
-                                    if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm"))){
-                                        this.standardInTime.hour(startTime.hour()).minute(startTime.minute()).second(0);
-                                        this.standardOutTime = Moment(this.standardInTime);
-                                        this.standardOutTime.add(9,'hours');
-                                    }
-                                    this.checkLate = false;    
-                                }else{
-                                    this.checkLate = true;
-                                }
-                                
-                                if (endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
-                                    this.checkEarly = false;
-                                
-                                break;
-                            }
-                        }
-                        
-                        break;
-                    case "W02": // 출장
-                        this.inTimeType = 1;
-                        this.outTimeType = 1;
-                        this.checkLate = false;
-                        this.checkEarly = false;
-                        break;
-                    case "W03": // 장기외근
-                        if (!this.isSuwon) {
-                            this.checkLate = false;
-                            this.checkEarly = false;
-                        }
-                        break;
-                    case "W04": // 파견
-
-                        break;
-                }
-
-                // 휴가에 따른 Standard In/Out Time 조정
                 switch (this.vacationCode) {
                     case "V02": // 오전반차
                     case "V07": // 오전반차(공적)
@@ -622,12 +541,89 @@ define([
                         }else{
                             this.standardOutTime = Moment(this.standardInTime).add(9, "hours");
                         }
-
                         break;
                 }
 
-                
+                /**
+                 * 외근, 출장, 장기외근, 파견 특이사항 수정
+                 * 외근 
+                 *  본사 : standardInTime 이전시간부터 외근 설정되어 있을때 지각 체크 하지 않음
+                 *         standardOutTime 이후 시간까지 외근 설정되어 있을때 조퇴 체크 하지 않음
+                 * 출장
+                 *  inTimeType, outTimeType 을 정상으로 수정
+                 * 장기외근
+                 *  본사 : 지각, 조퇴 체크 하지 않음
+                 * 파견
+                 *  변경 없음
+                 **/
 
+                switch (this.outOfficeCode) {
+                    case "W01": // 외근
+                    case "E01": // 교육
+                    case "W01W04" : // 파견,외근
+                        var stdInTime = 8;
+                        if (this.isSuwon) {
+                            stdInTime = 7;
+                        }
+
+                        for (var i = 0; i < todayOutOffice.length; i++) {
+                            model = todayOutOffice[i];
+                            code = model.get("office_code");
+                            if (code == "W01" || code == "E01") {
+                                var startTime = Moment(model.get("start_time"), "HH:mm");
+                                var endTime = Moment(model.get("end_time"), "HH:mm");
+                                /**
+                                 * 외근 시작시간
+                                 * 8시 이전       : 8:00, checkLate = false, standardintime : 08:00, standardouttime : 17:00,
+                                 * 8시 ~ 10시 00분 : 출근시간, checkLate = false, standardintime = 출근시간, standardouttime : 출근시간 + 9시간
+                                 * 10시 이후      : 10:00, checkLate = true, standardintime : 10:00, standardouttime : 19:00,
+                                 * 
+                                 * 2017.12.15. 김성식 부장 : 수원 외근 발생시 서울과 동일하게 처리 함.
+                                 *  - 수원의 경우 7시 기준으로 계산함. 
+                                 * 
+                                 * 외근 종료시간
+                                 * standardouttime 이전 : checkEarly = true
+                                 * standardouttime 이후 : checkEarly = false
+                                 **/
+                                // if(startTime.hour() < stdInTime){
+                                //     this.standardInTime.hour(stdInTime).minute(0).second(0);
+                                //     this.standardOutTime.hour(stdInTime+9).minute(0).second(0);
+                                //     this.checkLate = false;
+                                // }else if(startTime.hour() < 10 || (startTime.hour() == 10 && startTime.minute() == 0)){
+                                //     if(startTime.isBefore(Moment(this.standardInTime.format("HH:mm"), "HH:mm"))){
+                                //         this.standardInTime.hour(startTime.hour()).minute(startTime.minute()).second(0);
+                                //         this.standardOutTime = Moment(this.standardInTime);
+                                //         this.standardOutTime.add(9,'hours');
+                                //     }
+                                    this.checkLate = false;    
+                                // }else{
+                                    // this.checkLate = true;
+                                // }
+                                
+                                // if (endTime.isAfter(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")) || endTime.isSame(Moment(this.standardOutTime.format("HH:mm"), "HH:mm")))
+                                    this.checkEarly = false;
+                                
+                                break;
+                            }
+                        }
+                        
+                        break;
+                    case "W02": // 출장
+                        this.inTimeType = 1;
+                        this.outTimeType = 1;
+                        this.checkLate = false;
+                        this.checkEarly = false;
+                        break;
+                    case "W03": // 장기외근
+                        if (!this.isSuwon) {
+                            this.checkLate = false;
+                            this.checkEarly = false;
+                        }
+                        break;
+                    case "W04": // 파견
+
+                        break;
+                }
                 /**
                  * 휴일에 출퇴근 기록 없는 경우
                  * 휴가, 외근을 설정하지 않음
@@ -650,6 +646,8 @@ define([
              * 휴일, 휴가가 아닌경우
              **/
             if (!(this.workType == WORKTYPE.VACATION || this.isHoliday())) {
+                var diffTime = this.lateTime;
+
                 /**
                  * 정상 : 출퇴근 시간 정상인 경우
                  *        출장인 경우
@@ -687,11 +685,13 @@ define([
                     this.workType = WORKTYPE.NORMAL;
 
                     var tmpTime = 0;
+                    
                     /**
                      * 지각, 조퇴 시간 계산
                      **/
                     if (this.checkLate) {
-                        this.lateTime = this.inTime.diff(this.standardInTime, "minute");
+                        diffTime = this.inTime.diff(this.standardInTime, "minute");
+                        this.lateTime = diffTime;
                         if (this.lateTime > 0) {
                             this.workType = WORKTYPE.LATE;
                         }
@@ -729,9 +729,9 @@ define([
                      *  4시간 : B형
                      *  6시간 : C형
                      **/
-                    if (!_.isNull(this.inTime) && !(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))) {
-                        
-                        this.lateOverTime = (Math.ceil(this.lateTime / 10)) * 10; // 지각으로 인해 추가 근무 해야하는시간
+                    if (!(_.isNull(this.inTime)) && !(_.isNull(this.outTime)) && !(_.isNull(this.standardOutTime))) {
+                        // this.lateOverTime = (Math.ceil(this.lateTime / 10)) * 10; // 지각으로 인해 추가 근무 해야하는시간
+                        this.lateOverTime = (Math.ceil(diffTime / 10)) * 10; // 지각으로 인해 추가 근무 해야하는시간
 
                         if (tmpTime >= 0) {
                             this.overTime = this.outTime.diff(this.standardOutTime, "minute") - this.lateOverTime;
@@ -763,6 +763,9 @@ define([
                                 this.overTime = 0; // 초과근무시간이 마이너스인 경우 0으로 수정함
                                 this.notPayOverTime = this.overTime;
                             }
+                        }else{
+                            this.overTime = 0; 
+                            this.notPayOverTime = this.overTime;
                         }
                     }
 
@@ -970,7 +973,7 @@ define([
                  * 변경된 사항들은 반영하여 결과값을 산출한다.
                  */
                 var currentResult = that.getResult();
-                
+
                 /**
                  * 초과근무를 관리자가 수정한 적이 있을경우는
                  * 계산으로 인해 추가근무가 변경되더라도 적용하지 않는다. 
