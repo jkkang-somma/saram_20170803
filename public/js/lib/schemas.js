@@ -110,8 +110,15 @@ define([
             disabled:false,
             group:undefined
         },
-
         auto_input:{
+            type:"input",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            disabled:false,
+            group:undefined
+        },
+        ip_input:{
             type:"input",
             name:undefined,
             label:undefined,
@@ -184,6 +191,13 @@ define([
         },
         empty:{
             type:"empty",
+            name:undefined,
+            value:undefined,
+            textKey:"name",
+            group:undefined,
+        },
+        empty_data:{
+            type:"empty_data",
             name:undefined,
             value:undefined,
             textKey:"name",

@@ -71,6 +71,11 @@ define([
 							label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.USE,
 							value:_model.area,
 							collection:[{key:1,value:i18nCommon.DEPARTMENT_LIST.UPDATE_DIALOG.USE_VALUE.USE},{key:0,value:i18nCommon.DEPARTMENT_LIST.UPDATE_DIALOG.USE_VALUE.NOT_USE}]
+					},{
+						type:"empty_data",
+						name:"user_name",
+						label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.LEADER,
+						value:_model.leader,
 					}]
         	    });
         	    
@@ -125,7 +130,8 @@ define([
 			var firstArr = (_data.leader).split("(");
 			var strTemp = firstArr[1].split(")");
 			_data.leader = strTemp[0];
-
+			_data.user_name = firstArr[0];
+			
 			var _departmentModel= new DepartmentModel(_data);
 			_departmentModel.attributes._code="-2";
 			

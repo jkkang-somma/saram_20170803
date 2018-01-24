@@ -101,7 +101,6 @@ define([
 				},{
 					type:"text",
 					name:"memo",
-				
 					label:i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.MEMO,
 					value:_model.MEMO,
 					group:"requireInfo"

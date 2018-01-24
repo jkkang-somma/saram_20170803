@@ -58,7 +58,12 @@ define([
 							id:autocompleteId,
     	        			label:i18nCommon.PART_LIST.GRID_COL_NAME.LEADER,
     	        			value:_model.leader,
-        	        }]
+        	        },{
+						type:"empty_data",
+						name:"user_name",
+						label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.LEADER,
+						value:_model.leader,
+					}]
         	    });
         	    
         	    _form.render().done(function(){
@@ -112,7 +117,8 @@ define([
 			var firstArr = (_data.leader).split("(");
 			var strTemp = firstArr[1].split(")");
 			_data.leader = strTemp[0];
-
+			_data.user_name = firstArr[0];
+			
     	    var _partModel= new PartModel(_data);
     	    _partModel.attributes._code="-2";
     	    _partModel.save({},{

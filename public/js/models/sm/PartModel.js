@@ -38,6 +38,7 @@ define([
             code: '',
             name: '',                   
             leader: '',
+            user_name: ''
         },
         
     });
