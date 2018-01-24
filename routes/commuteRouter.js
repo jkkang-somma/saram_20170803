@@ -33,9 +33,25 @@ router.route('/')
 router.route('/bulk')
 .post(function(req, res){
 	var data = req.body.data;
+
+	var filterData = _.filter(data, function(d){
+		var workType = d.work_type;
+		if(workType.match("^1")){
+			return workType;
+		}
+	});
+
 	var session = sessionManager.get(req.cookies.saram);
 	if (session.user.admin == Schemas().ADMIN) {	// admin 일 경우만 생성
 	    Commute.insertCommute(data).then(function(result){
+			debug("Send Email : " + filterData.length);
+			if(!_.isUndefined(filterData)&&filterData.length > 0){
+				Commute.sendLateForWorkEmail(filterData).then(function(){
+					debug("Send Email");
+				}).catch(function(e){
+					debug("Fail to Send Email");
+				});
+			}
 	    	res.send({
 	            success:true,
 	            message: "Add CommuteResult Success! ("+ result +")"
