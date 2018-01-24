@@ -15,9 +15,6 @@ define([
 	  var LOG= log.getLogger("EditOfficeItemView");
 	  var availableTags = [];
 	  var availableTagsUser = [];
-	  //var deptCodeCollectionData = [];
-	  //var useCodeCollectionData = [];
-	  //var autocompleteId = "autocomplete";
   
 	  var EditOfficeItemView = BaseView.extend({
 		  initialize:function(date){
@@ -33,33 +30,33 @@ define([
 			  if (!_.isUndefined(el)){
 				  this.el=el;
 			  }
-		  
-		  /*var userCollection= new UserCollection();
-		  userCollection.fetch({
-			  success : function(result){
-				  useCodeCollectionData = result;
-			  }
-		  })*/
   
 		  var deptCodeCollection=Code.getCollection(Code.DEPARTMENT);
 		  var userCodeCollection= Code.getCollection("user");
-		  //var positionCodeCollection= Code.getCollection(Code.POSITION);
 		  var officeItemCodeCollection = Code.getCollection("officeitem");
-  
-		  //deptCodeCollectionData = deptCodeCollection;
   
 		  for( var index = 0; index < deptCodeCollection.models.length; index++) {
 			  availableTags[index] = deptCodeCollection.models[index].attributes.name+"("+deptCodeCollection.models[index].attributes.code+")";
-			  console.log(availableTags[index]);
 		  }
   
 		  for( var index = 0; index < userCodeCollection.models.length; index++) {
 			  availableTagsUser[index] = userCodeCollection.models[index].attributes.name+"("+userCodeCollection.models[index].attributes.code+")";
-			  console.log(availableTagsUser[index]);
 		  }
-  
+
 		  $.when(officeItemCodeCollection.fetch()).done(function(){
 				  var _model=_view.model.attributes;
+
+				  var use_flag_info =  "";
+				  var _input_data = availableTags;
+
+				  if(_model.use_user !=null && _model.use_user != ""){
+						use_flag_info = _model.use_user_name+"("+_model.use_user+")" ;
+						_input_data = availableTagsUser;
+
+				  }else if(_model.use_dept !=null && _model.use_dept != ""){
+						use_flag_info=_model.use_dept_name+"("+_model.use_dept+")" ;
+				  }
+
 				  var _form = new Form({
 					  el:_view.el,
 					  form:undefined,
@@ -69,21 +66,11 @@ define([
 							  label:i18nCommon.OFFICEITEM.CODE.SERIAL_YES,
 							  value:_model.serial_yes,
 							  disabled:"readonly",
-						  /*},{
-							  type:"combo",
-							  name:"_category_code",
-							  label:i18nCommon.OFFICEITEM.CODE.CATEGORY_CODE,
-							  collection:officeItemCodeCollection,
-							  value:_model.category_code,
-							  firstBlank:false,
-							  linkFieldValue:"category_code"
-						  */
 						  },{
 							  type:"hidden",
 							  name:"category_code",
 							  value:_model.category_code,
 							  collection:officeItemCodeCollection,
-							  //linkFieldValue:"true"*/
 						  },{
 							  type:"input",
 							  name:"category_name",
@@ -124,9 +111,8 @@ define([
 							  name:"use_flag_info",
 							  id:"autocomplete",
 							  label:i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_USER,
-							  value:((_model.use_user != "")?_model.use_user_name+"("+_model.use_user+")"
-															:_model.use_dept_name+"("+_model.use_dept+")"),
-							  input_data: availableTags
+							  value:use_flag_info,
+							  input_data: _input_data
 						  },{
 							  type:"hidden",
 							  name:"use_dept",
@@ -138,35 +124,11 @@ define([
 							  value:_model.use_user,							
 							  isValueInput:true
 						  },{
-						  /*	type:"combo",
-							  name:"part_code",
-							  label:i18nCommon.USER.DEPT,
-							  value:_model.part_code,
-							  collection:deptCodeCollection,
-							  firstBlank:true,
-							  linkFieldValue:"use_dept"// text 값을 셋팅 해줌 type은 hidden
-						  },{
-							  type:"hidden",
-							  name:"use_dept",
-							  value:_model.use_dept,
-							  collection:deptCodeCollection,
-							  firstBlank:true,
-							  //linkFieldValue:"true"
-						  },{*/
 							  type:"hidden",
 							  name:"use_dept_name",
 							  value:_model.use_dept_name,
 							  collection:deptCodeCollection,
 							  firstBlank:true,
-						  /*},{
-							  type:"combo",
-							  name:"use_user_code",
-							  label:i18nCommon.USER.NAME,
-							  value:_model.use_user,
-							  collection:userCodeCollection,
-							  firstBlank:true,
-							  linkFieldValue:"use_user"
-						  */
 						  },{
 							  type:"hidden",
 							  name:"use_user",
@@ -294,9 +256,9 @@ define([
 		   afterRender: function(){
 			  var _view=this, _form=this.form;
 			   $(document).ready(function() {
-				   $("#autocomplete").autocomplete({
+				  /* $("#autocomplete").autocomplete({
 					   source: availableTags
-				   });
+				   });*/
   
 				   _form.getElement("use_flag").find("select").on("change",function(){
 					  var val = $(this).val();
@@ -306,7 +268,7 @@ define([
 					   }
 					   else{		
 						  $('#autocomplete').val("");
-						   $('#autocomplete').autocomplete("option", { source: availableTags });
+						  $('#autocomplete').autocomplete("option", { source: availableTags });
 					   }
 				   });
 			   });

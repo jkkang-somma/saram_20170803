@@ -16,9 +16,6 @@ define([
 	  var LOG= log.getLogger("AddOfficeItemView");
 	  var availableTags = [];
 	  var availableTagsUser = [];
-	  //var deptCodeCollectionData = [];
-	  //var useCodeCollectionData = [];
-	  //var autocompleteId = "autocomplete";
   
 	  var AddOfficeItemView = BaseView.extend({
 		  initialize:function(){
@@ -34,29 +31,19 @@ define([
 			  if (!_.isUndefined(el)){
 				  this.el=el;
 			  }
-		  
-		  /*var userCollection= new UserCollection();
-		  userCollection.fetch({
-			  success : function(result){
-				  useCodeCollectionData = result;
-			  }
-		  })*/
   
 		  var deptCodeCollection=Code.getCollection(Code.DEPARTMENT);	
 		  var userCodeCollection= Code.getCollection("user");
-		  //var positionCodeCollection= Code.getCollection(Code.POSITION);
 		  var officeItemCodeCollection = Code.getCollection("officeitem");
-  
-		  //deptCodeCollectionData = deptCodeCollection;
   
 		  for( var index = 0; index < deptCodeCollection.models.length; index++) {
 			  availableTags[index] = deptCodeCollection.models[index].attributes.name + "(" + deptCodeCollection.models[index].attributes.code + ")";
-			  console.log(availableTags[index]);
+			  //console.log(availableTags[index]);
 		  }
   
 		  for( var index = 0; index < userCodeCollection.models.length; index++) {
 			  availableTagsUser[index] = userCodeCollection.models[index].attributes.name + "(" + userCodeCollection.models[index].attributes.code + ")";
-			  console.log(availableTagsUser[index]);
+			  //console.log(availableTagsUser[index]);
 		  }
   
 		  $.when(officeItemCodeCollection.fetch()).done(function(){
@@ -91,7 +78,6 @@ define([
 							  collection:[
 								  {key:"selectDept",value:"부서"},
 								  {key:"selectUser",value:"직원"}],
-							  //linkField:"dept_name"// text 값을 셋팅 해줌 type은 hidden
 					  },{
 							  type:"auto_input",
 							  name:"use_flag_info",
@@ -104,29 +90,11 @@ define([
 							  name:"use_dept",
 							  value:_model.part_code,
 							  isValueInput:true
-							  /*collection:deptCodeCollection,
-							  firstBlank:true,
-							  linkFieldValue:"true"*/
-					  /*},{
-							  type:"hidden",
-							  name:"use_dept_name",
-							  value:_model.use_dept_name,
-							  collection:deptCodeCollection,
-							  firstBlank:true,*/
 					  },{
 							  type:"hidden",
 							  name:"use_user",
 							  value:_model.use_user,							
 							  isValueInput:true
-							  //linkFieldValue:"true"
-							  //firstBlank:true,
-							  //collection:userCodeCollection,
-					  /*},{
-							  type:"hidden",
-							  name:"use_user_name",
-							  value:_model.use_user_name,
-							  collection:userCodeCollection,
-							  firstBlank:true,*/
 					  },{
 					  
 							  type:"input",

@@ -99,7 +99,7 @@ define([
 							collection:[{key:'수리',value:"수리"},{key:'기타',value:"기타"}]
 					},{							
 
-							type:"input",
+							type:"price",
 							name:"repair_price",
 							label:i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE,
 							value:_model.repair_price,

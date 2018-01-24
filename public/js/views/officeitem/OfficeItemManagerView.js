@@ -68,6 +68,7 @@ define([
             Dialog.show({
                 title:i18Common.OFFICEITEM.HISTORY.TITLE.ADD, 
                 content:addOfficeItemHistoryView, 
+                //size: 'size-wide',
                 buttons:[{
                     label: i18Common.OFFICEITEM.HISTORY.TITLE.ADD,
                     cssClass: Dialog.CssClass.SUCCESS,
@@ -127,7 +128,7 @@ define([
                     { "title" : i18Common.OFFICEITEM.CODE.USE_USER_NAME, data:"use_user_name"},
                     { "title" : i18Common.OFFICEITEM.CODE.LOCATION, data:"location"},
                     { "title" : i18Common.OFFICEITEM.CODE.STATE, data:"state"},
-                    { "title" : i18Common.OFFICEITEM.CODE.memo, data:"memo", visible:false, subVisible:false},
+                    { "title" : i18Common.OFFICEITEM.CODE.MEMO, data:"memo", visible:false, subVisible:false},
                     { "title" : "이력", data : "history", "render": function(data, type, row){
                         var btnState = ((row.state == "폐기")?'':'btn-default');
                         var dataVal = "<div style='text-align: center;'>";
@@ -158,6 +159,42 @@ define([
                     }                   
                 }
               };
+              this.gridExcel = {
+                el:"ExportDetailList_content",
+                id:"ExportDetailListGrid",
+                column:[
+                    { "title" : i18Common.OFFICEITEM.CODE.SERIAL_YES, data:"serial_yes"},
+                    { "title" : i18Common.OFFICEITEM.CODE.SERIAL_FACTORY, data:"serial_factory"},
+                    { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor"},
+                    { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_INDEX, data:"category_index"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
+                    { "title" : i18Common.OFFICEITEM.CODE.PRICE, data:"price"},
+                    { "title" : i18Common.OFFICEITEM.CODE.SURTAX, data:"surtax"},
+                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy"},
+                    { "title" : i18Common.OFFICEITEM.CODE.BUY_DATE, data:"buy_date"},
+                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},
+                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account"},
+                    { "title" : i18Common.OFFICEITEM.CODE.EXPIRATION_DATE, data:"expiration_date"},    
+                    { "title" : i18Common.OFFICEITEM.CODE.USE_DEPT, data:"use_dept"},
+                    { "title" : i18Common.OFFICEITEM.CODE.USE_USER, data:"use_user"},
+                    { "title" : i18Common.OFFICEITEM.CODE.USE_DEPT_NAME, data:"use_dept_name"},
+                    { "title" : i18Common.OFFICEITEM.CODE.USE_USER_NAME, data:"use_user_name"},
+                    { "title" : i18Common.OFFICEITEM.CODE.LOCATION, data:"location"},
+                    { "title" : i18Common.OFFICEITEM.CODE.STATE, data:"state"},
+                    { "title" : i18Common.OFFICEITEM.CODE.MEMO, data:"memo"},
+                  ],
+                detail: true,
+                dataschema:["serial_yes","serial_factory","vendor","model_no","category_code","category_index","price","surtax","price_buy","buy_date",
+                  "disposal_date","disposal_account","expiration_date","use_dept","use_user","location","state","memo"],
+                collection:this.officeitemCollection,
+                detail: true,
+                fetch: false,
+                order: [[1, "asc"]]
+            };
+
             },
             events : {
                 'click .list-historyList-btn' : 'onClickOfficeItemHistoryBtn',
@@ -169,6 +206,9 @@ define([
             over:function(event){                
             },
             leave:function(){
+            },
+            onClickSave: function(grid) {
+                grid.saveExcel(i18Common.OFFICEITEM.SUB_TITLE.OFFICEITEM_LIST);
             },
             onClickOfficeItemDetailBtn : function(evt){            
                 evt.stopPropagation();
@@ -187,6 +227,7 @@ define([
                 Dialog.show({
                     title: "("+selectData.serial_yes+") 이력",
                     content: usageHistoryPopupView,
+                    size: 'size-wide',
                     buttons: [{
                         label : "닫기",
                         action : function(dialog){
@@ -231,6 +272,7 @@ define([
                 var _this = this;                
             },
             render:function(){
+                var _this = this; 
                 var _headSchema=Schemas.getSchema('headTemp');
                 var _headTemp=_.template(HeadHTML);
                 var _layOut=$(LayoutHTML);
@@ -254,14 +296,14 @@ define([
                                 return true;
                             },
                             function(data){
-                                var _useDept=data[15];
-                                var _useUser=data[16];                               
+                                var _useDept=data[16];
+                                var _useUser=data[17];                               
                                 return (_useDept == "" && _useUser == "" )?false:true;                               
                     
                             },
                             function(data){
-                                var _useDept=data[15];
-                                var _useUser=data[16];
+                                var _useDept=data[16];
+                                var _useUser=data[17];
                                 return (_useDept == "" && _useUser == "" )?true:false;
                             },    
                     ];
@@ -296,19 +338,19 @@ define([
                                 return true;
                             },
                             function(data){
-                                var _levDate=data[20];
+                                var _levDate=data[21];
                                 return (_levDate==i18Common.OFFICEITEM.STATE.NORMAL)
                             },
                             function(data){
-                                var _levDate=data[20];                                
+                                var _levDate=data[21];                                
                                 return (_levDate==i18Common.OFFICEITEM.STATE.BREAK)
                             },                            
                             function(data){
-                                var _levDate=data[20];
+                                var _levDate=data[21];
                                 return (_levDate==i18Common.OFFICEITEM.STATE.DISUSE)
                             },
                             function(data){
-                                var _levDate=data[20];
+                                var _levDate=data[21];
                                 return (_levDate==i18Common.OFFICEITEM.STATE.STANDBY)
                             }
                        ];
@@ -446,17 +488,8 @@ define([
                         name: "save",
                         tooltip: "저장하기",
                         click: function(_grid) {
-                            var columns =[{ "title" : ""}]
-                            var column =  _grid.options.column;
-
-                            for ( var i=0 ; i < column.length-1 ; i++ ) {
-
-                                if(_.isUndefined(column[i].visible) || column[i].visible =='true')
-                                columns.push({"title" :column[i].title});                    
-                            }
-
-                            _grid.columns = columns;                          
-                            _grid.saveExcel();
+                             var ___grid = _grid;
+                            _this.onClickSave(_this.gridExcel);                            
                         }
                     });
                 }
@@ -475,9 +508,7 @@ define([
                 //combo
                 var _row=$(RowHTML); 
                 
-                //var _combo = $(_.template(RowComboHTML)({
-                var _combo = $(_.template(searchFormTemplate)({
-                    
+                var _combo = $(_.template(searchFormTemplate)({                    
                         obj : { 
                             typeid : "officeCodeComboType",
                             typelabel : i18Common.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE,
@@ -488,29 +519,16 @@ define([
                         }
                     })
                 );   
-                /*var _searchBtn = $(_.template(RowButtonHTML)({
-    	            obj: {
-                        
-                            id: "officeItemSearchBtn",
-                            label: i18Common.OFFICEITEM.LIST.SEARCH_BTN,
-                        }
-                    })
-                );*/ 
 
                 _row.append(_combo);  
-               //_row.append(_searchBtn); 
                        
                 _layOut.append(_head);   
                 _layOut.append(_row);            
                 _layOut.append(_content);
                 $(this.el).html(_layOut);
 
-               // var officecode = Code.getCollection("officeitem");
-               // var _options=officeItemCodes.models;
-               // var _option;
 
-                //기기분류 Set
-             
+                //기기분류 Set             
                 this.categoryType = [
                     {key:"all", value:"전체"},
                     {key:i18Common.OFFICEITEM.CATEGORY.TYPE.OS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.OS},
@@ -521,19 +539,18 @@ define([
                 for(var index in category){
                     $(this.el).find("#officeCodeComboType").append("<option>" + category[index].value +"</option>");
                 }
-
-                /*$(this.el).find("#officeCodeCombo").append("<option value=''>전체</option>");
-                for (var index in _options){
-                    let _option= _options[index].attributes;          
-                              
-                    $(this.el).find("#officeCodeCombo").append("<option value='"+_option['code']+"'>"+(_option['name'])+"</option>");
-                }*/
-                              
+    
                 //grid 
                 var _gridSchema=Schemas.getSchema('grid');
                 var grid= new Grid(_gridSchema.getDefault(this.option));
                 this.grid = grid;
                 this.grid.render();
+
+                //Excel 출력
+                var _gridSchemaExcel=Schemas.getSchema('grid');
+                this.gridExcel = new Grid(_gridSchemaExcel.getDefault(this.gridExcel));
+                this.gridExcel.render();
+                
                 //기기이름 Set
                 this.setOfficeItemNameData();
                 this.selectCommute();
@@ -565,6 +582,7 @@ define([
                     
                     actionCallBack:function(res){//response schema
                         _this.grid.render();
+                        _this.gridExcel.render();
                     },
                     errorCallBack:function(response){
                         Dialog.error(i18Common.OFFICEITEM.LIST.GET_DATA_FAIL);

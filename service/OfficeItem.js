@@ -96,6 +96,7 @@ var OfficeItem = function (data) {
 
                 var _currentData = currentData[0];
                 var _type = "수정"; 
+                var _title = "비품 수정";
                 var _memo = data.serial_yes+ " 수정 하였습니다.";               
 
                 if(data.disposal_date ==""){ data.disposal_date = null; }
@@ -106,29 +107,34 @@ var OfficeItem = function (data) {
                         
                         if(_currentData.use_user == ""){   // 부서 -> 사용 직원 변경
                             _type = "사용자 수정"; 
-                            _memo = "사용 부서 -> 직원 변경  [ "+_currentData.use_dept_name+"("+_currentData.use_dept+") ->"+_updateData.use_user_name+"("+_updateData.use_user+")]";  
+                            _title = "사용 부서 -> 직원 변경"
+                            _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") ->"+_updateData.use_user_name+"("+_updateData.use_user+")";  
                         }else if(_updateData.use_user != _currentData.use_user){ 
                             _type = "사용자 수정"; 
-                            _memo = "사용 직원 변경 [ "+_currentData.use_user_name+"("+_currentData.use_user+") -> "+_updateData.use_user_name+"("+_updateData.use_user+")]"; 
+                            _title = "사용 직원 변경"
+                            _memo = _currentData.use_user_name+"("+_currentData.use_user+") -> "+_updateData.use_user_name+"("+_updateData.use_user+")"; 
                         }  
 
                     }else{    //부서 변경
                       if(_currentData.use_dept == ""){
                             _type = "사용자 수정"; 
-                            _memo = "사용 직원 -> 부서 변경  [ "+_currentData.use_user_name+"("+_currentData.use_user+") ->"+_updateData.use_dept_name+"("+_updateData.use_dept+")]";  
+                            _title = "사용 직원 -> 부서 변경"
+                            _memo = _currentData.use_user_name+"("+_currentData.use_user+") ->"+_updateData.use_dept_name+"("+_updateData.use_dept+")";  
                         }else if(_updateData.use_dept != _currentData.use_dept){  
                             _type = "사용자 수정"; 
-                            _memo = "사용 부서 변경[ "+_currentData.use_dept_name+"("+_currentData.use_dept+") -> "+_updateData.use_dept_name+"("+_updateData.use_dept+")]"; 
+                            _title = "사용 부서 변경"
+                            _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") -> "+_updateData.use_dept_name+"("+_updateData.use_dept+")"; 
                         }
                     }
                           
-                    data = currentData[0];
+                    //data = currentData[0];
+                    data = _updateData;
 
                     var indata = {
                         serial_yes  : data.serial_yes, 
                         category_type : data.category_type, //category_type 세팅
                         type	    : _type,     //사용자 변경/수정 
-                        title	    : "비품 수정", 
+                        title	    : _title, 
                         repair_price: data.price_buy,
                         use_user	: data.use_user, 
                         use_dept	: data.use_dept, 

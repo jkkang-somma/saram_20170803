@@ -76,6 +76,9 @@ body {
     left:100px;
     z-index:2147483647;
     background: rgb(249, 250, 249);
+
+    border: 1px solid rgb(196, 197, 197);
+    border-radius: 5px 5px 5px 5px;
 }
 
 form .detail-content input{
