@@ -38,6 +38,7 @@ define([
 					detail: true,
 					view:this,
 					//fetch: false,
+					//order : [[1, "INET_ATON"]]
 					order : [[1, "asc"]]
 			};
 		},

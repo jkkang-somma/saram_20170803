@@ -826,6 +826,7 @@ define({
             REMOVE_COMPLETE:"IP를 삭제 하였습니다.",
             SUCCESS_COMPLETE:"IP를 등록 하였습니다.",
             UPDATE_COMPLETE:"정보를 수정 하였습니다.",
+            EMPTY_USER:"사용자를 입력하지 않고 등록하시겠습니까?",
             INVALID_USER:"사용자를 잘못입력하였습니다.",
             INVALID_IP:"IP정보를 잘못입력하였습니다.",
             REGISTER_FAIL:"IP 등록에 실패하였습니다,"
