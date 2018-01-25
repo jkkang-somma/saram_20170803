@@ -13,6 +13,7 @@ define([
     'text!templates/default/head.html',
     'text!templates/default/content.html',
     'text!templates/layout/default.html',
+    'text!templates/default/row.html',
     'text!templates/officeitem/HistorySearchFormTemplate.html',
     'models/officeitem/OfficeItemHistoryModel',
     'collection/officeitem/OfficeItemHistoryCollection',
@@ -21,7 +22,7 @@ define([
     'code'
   ], function(
     $, _, Backbone, Util, BaseView, Grid, LodingButton, Schemas, i18nCommon, Dialog, SessionModel, 
-    HeadHTML, ContentHTML, LayoutHTML, 
+    HeadHTML, ContentHTML, LayoutHTML, RowHTML,
     SearchFormHTML,
     OfficeItemHistoryModel, OfficeItemHistoryCollection, 
     UsageOfficeItemHistoryPopupView,
@@ -42,8 +43,8 @@ define([
                 el:"officeitemhistory_content",
                 id:"officeItemHistoryTable",
                 column:[
-                    { data : "serial_yes",     title : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
-                    { title : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
+                    { data : "serial_yes",     "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
                         "render": function(data, type, row){
                             var serial = row.serial_yes;
                             var codeList = _view.officeItemCodes;
@@ -59,15 +60,15 @@ define([
                             return name;
                         }
                     },
-                    { data : "history_date",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE,
+                    { data : "history_date",   "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE,
                         "render": function(data, type, row){
                             var data = Moment(row.history_date).format("YYYY-MM-DD");
                             return data;
                         }
                     },
-                    { data : "title",          title : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
-                    { data : "repair_price",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
-                    { data : "name",           title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },
+                    { data : "title",          "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
+                    { data : "repair_price",   "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
+                    { data : "name",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },
                     { data : "memo",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO }
                 ],
                 dataschema:["seq", "serial_yes", "category_type", "history_date", "type", "title", "repair_price", "use_user", "use_dept", "name", "change_user_id", "memo"],
@@ -75,15 +76,16 @@ define([
                 detail:true,
                 view:this,
                 fetch: false,
-                order:[1, "asc"]
+                order : [[1, "asc"],[2, "asc"],[3, "asc"]]
+                //order:[1, "asc"]
                 //order:[[5, "desc"], [1, "asc"]]
             };
             this.gridExcel = {
                 el:"ExportHistory_content",
                 id:"ExportHistoryGrid",
                 column:[
-                    { data : "serial_yes",     title : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
-                    { data : "category_type",  title : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE },
+                    { data : "serial_yes",     "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
+                    { data : "category_type",  "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE },
                     { title : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
                         "render": function(data, type, row){
                             var serial = row.serial_yes;
@@ -100,18 +102,18 @@ define([
                             return name;
                         }
                     },
-                    { data : "history_date",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE,
+                    { data : "history_date",   "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE,
                         "render": function(data, type, row){
                             var data = Moment(row.history_date).format("YYYY-MM-DD");
                             return data;
                         }
                     },
-                    { data : "type",           title : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE },
-                    { data : "title",          title : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
-                    { data : "repair_price",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
+                    { data : "type",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE },
+                    { data : "title",          "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
+                    { data : "repair_price",   "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
                     //{ data : "use_user",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID },
                     //{ data : "use_dept",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USE_DEPT },
-                    { title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER,
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER,
                         "render": function(data, type, row){
                             console.log(row);
                             var user = row.use_user;
@@ -136,13 +138,14 @@ define([
         },
         onClickSearchBtn: function(evt) {
             this.selectOfficeItemHistoryData();
+            this.grid.render();
         },
         onClickSave: function(grid) {
             grid.saveExcel(i18Common.OFFICEITEM.FILE_DOWNLOAD.HISTORY_INFO);
         },
         getSearchForm: function() {	// 검색 조건
-            var startDate = Moment($(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().toDate());
-            var endDate = Moment($(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().toDate());
+            var startDate = Moment($(this.el).find("#officeFromDatePicker").data("DateTimePicker").getDate().toDate());
+            var endDate = Moment($(this.el).find("#officeToDatePicker").data("DateTimePicker").getDate().toDate());
 
             if(startDate.isAfter(endDate)){
                 Dialog.warning("시작일자가 종료일자보다 큽니다.");
@@ -234,11 +237,14 @@ define([
             _head.addClass("no-margin");
             _head.addClass("relative-layout");
 
+            var _row=$(RowHTML);
+
             // 검색 조건 Row
-            var _row=$(_.template(SearchFormHTML)({
+            var _searchRange=$(_.template(SearchFormHTML)({
+            //var _row=$(_.template(SearchFormHTML)({
                     obj : {
-                        fromId : "ccmFromDatePicker",
-                        toId : "ccmToDatePicker",
+                        fromId : "officeFromDatePicker",
+                        toId : "officeToDatePicker",
                         typeLabel : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE,
                         typeId : "ccmCombo",
                         nameLabel : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
@@ -248,6 +254,8 @@ define([
                     }
                 })
             );
+
+            _row.append(_searchRange);
 
     	    //grid button add;
             var _buttons=["search"];
@@ -276,14 +284,14 @@ define([
             var today = new Date();
             var firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
             firstDay.setMonth(firstDay.getMonth()-1);
-            $(this.el).find("#ccmFromDatePicker").datetimepicker({
-                picTime: false,
+            $(this.el).find("#officeFromDatePicker").datetimepicker({
+                pickTime: false,
                 language: "ko",
                 todayHighlight: true,
                 format: "YYYY-MM-DD",
                 defaultDate: Moment(firstDay).format("YYYY-MM-DD")
             });
-            $(this.el).find("#ccmToDatePicker").datetimepicker({
+            $(this.el).find("#officeToDatePicker").datetimepicker({
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
@@ -300,7 +308,7 @@ define([
             //grid
             var _gridSchema = Schemas.getSchema('grid');
             this.grid = new Grid(_gridSchema.getDefault(this.option));
-            //this.grid.render();
+            this.grid.render();
 
             //Excel 출력
             var _gridExcelSchema = Schemas.getSchema('grid');
