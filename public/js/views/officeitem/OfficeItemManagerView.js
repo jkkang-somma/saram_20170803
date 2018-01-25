@@ -46,7 +46,7 @@ define([
             
             var detailOfficeItemView= new DetailOfficeItemView(selectItem);
             Dialog.show({
-                title:i18Common.OFFICEITEM.SUB_TITLE.DETAIL_INFO, 
+                title:i18Common.OFFICEITEM.SUB_TITLE.DETAIL_INFO +" ["+selectItem.serial_yes+"]",  
                 content:detailOfficeItemView, 
                 buttons:[{
                     label: i18Common.DIALOG.BUTTON.CLOSE,
@@ -426,7 +426,7 @@ define([
                             } else {
                                 var editOfficeItemView= new EditOfficeItemView(selectItem);
                                 Dialog.show({
-                                    title:i18Common.OFFICEITEM.TITLE.EDIT, 
+                                    title:i18Common.OFFICEITEM.TITLE.EDIT+" ["+selectItem.serial_yes+"]", 
                                     content:editOfficeItemView, 
                                     buttons:[{
                                         label: i18Common.DIALOG.BUTTON.SAVE,
