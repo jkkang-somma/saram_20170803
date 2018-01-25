@@ -60,6 +60,14 @@ define([
                 _input=_InputTemp(data);
                 var result=$(_input);
                 result.find("input").number(true);
+
+                result.find("input").keyup(function(e) {//한글 입력 방지
+                    if (!(e.keyCode >=37 && e.keyCode<=40)) {
+                        var v = $(this).val();
+                        $(this).val(v.replace(/[^a-z0-9]/gi,''));
+                    }
+                });
+
                 if(!_.isUndefined(data.full)&&data.full){
                     result.removeClass('form-group-harf');
                 }
