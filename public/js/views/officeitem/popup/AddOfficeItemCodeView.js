@@ -1,6 +1,5 @@
 define([
 	'jquery',
-	'jquery.ui',
 	'underscore',
 	'backbone',
 	'core/BaseView',
@@ -11,7 +10,7 @@ define([
 	'text!templates/default/row.html',
 	'models/officeitem/OfficeItemCodeModel'
 ], function(
-	$, jui, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, 
+	$, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, 
 	RowHTML, 
 	OfficeItemCodeModel
 ){
