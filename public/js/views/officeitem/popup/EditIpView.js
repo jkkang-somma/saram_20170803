@@ -64,11 +64,6 @@ define([
 
 			$.when(approvalUserCodeCollection.fetch()).done(function(){
 				var _model=_view.model.attributes;
-				// var user_id = _model.use_user;
-				// var startId = user_id.indexOf("(") + 1;
-				// var endId = user_id.indexOf(")");
-
-				// _model.use_user = user_id.slice(startId, endId);
 
 				var _form = new Form({
 					el:_view.el,

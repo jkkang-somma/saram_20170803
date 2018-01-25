@@ -815,33 +815,33 @@ define({
     },
     IPASSIGNED_MANAGER_LIST : {
         TITLE : "비품 관리",
-        SUB_TITLE : "IP 관리",
+        SUB_TITLE : "IP주소관리",
         SEARCH_BTN : "조회",
         GRID_COL_NAME : {
-            IP : "IP",
-            USE_DEPT: "사용부서",
+            IP : "IP주소",
+            USE_DEPT: "구분",
             USE_USER: "사용자",
             MEMO: "비고"
         },
     },
     IPCONFIRM:{
         IP:{
-            REMOVE:"IP를 삭제 하시겠습니까?",
-            REMOVE_COMPLETE:"IP를 삭제 하였습니다.",
-            SUCCESS_COMPLETE:"IP를 등록 하였습니다.",
-            UPDATE_COMPLETE:"정보를 수정 하였습니다.",
+            REMOVE:"IP주소를 삭제 하시겠습니까?",
+            REMOVE_COMPLETE:"IP주소를 삭제 하였습니다.",
+            SUCCESS_COMPLETE:"IP주소를 등록 하였습니다.",
+            UPDATE_COMPLETE:"IP 주소정보를 수정 하였습니다.",
             EMPTY_USER:"사용자를 입력하지 않고 등록하시겠습니까?",
             INVALID_USER:"사용자를 잘못입력하였습니다.",
-            INVALID_IP:"IP정보를 잘못입력하였습니다.",
-            REGISTER_FAIL:"IP 등록에 실패하였습니다,"
+            INVALID_IP:"IP주소정보를 잘못입력하였습니다.",
+            REGISTER_FAIL:"IP주소 등록에 실패하였습니다,"
         }
     },
     IPTOOLTIP: {
         IP:{
-            TYPE:"IP 유형",
-            ADD:"IP 등록",
-            EDIT:"IP 수정",
-            REMOVE:"IP 삭제"
+            TYPE:"IP주소 유형",
+            ADD:"IP주소 등록",
+            EDIT:"IP주소 수정",
+            REMOVE:"IP주소 삭제"
         }
     },
     USAGE_LIST : {//비품 현황
