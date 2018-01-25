@@ -129,13 +129,13 @@ define([
                         render: function(data) {
                             return _getTemplate(data);
                         }},
-                    { data : "ip", 		    "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.IP,
-                        render: function(data) {
-                            return _changeWordBreak(data);
-                        }},
                     { data : "notebook", 	"title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.NOTEBOOK,
                         render: function(data) {
                             return _getTemplate(data);
+                        }},
+                    { data : "ip", 		    "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.IP,
+                        render: function(data) {
+                            return _changeWordBreak(data);
                         }},
                     { data : "leave_company", "title" : i18nCommon.USER.LEAVE_COMPANY, visible: false, subVisible: false},
                     { data : "id", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DETAIL, "render": function(data, type, row){
