@@ -42,6 +42,14 @@ var OfficeItem = function (data) {
             data.serial_yes = data.category_code+'_'+maxCategory_index;   
             
             if(data.disposal_date ==""){ data.disposal_date = null; }
+            if(data.price_buy ==""){ data.price_buy = null; }
+            if(data.price==""){ data.price = null; }
+            if(data.surtax==""){ data.surtax = null; }            
+            if(data.buy_date==""){ data.buy_date = null; }
+            if(data.disposal_date==""){ data.disposal_date = null; }
+            if(data.expiration_date==""){ data.expiration_date = null; }
+            if(data.disposal_account==""){ data.disposal_account = null; }
+
 
             OfficeItemDao.insertOfficeItem(data).then(function(result) {
 
@@ -69,6 +77,8 @@ var OfficeItem = function (data) {
                             //resolve(result);
                             resolve(data);
                         }).catch(function(e){//Connection Error
+
+                            debug("_editOfficeItem ERROR 1111 :"+e);
                             reject(e);
                         });
 
@@ -79,10 +89,14 @@ var OfficeItem = function (data) {
                
                 //resolve({dbResult : result, data : data});
                 }).catch(function(e){//Connection Error
+
+                    debug("_editOfficeItem ERROR 2222 :"+e);
                     reject(e);
                 });
 
             }).catch(function(e){//Connection Error
+
+                debug("_editOfficeItem ERROR 333 :"+e);
                 reject(e);
             });
         });
@@ -100,6 +114,13 @@ var OfficeItem = function (data) {
                 var _memo = data.serial_yes+ " 수정 하였습니다.";               
 
                 if(data.disposal_date ==""){ data.disposal_date = null; }
+                if(data.price_buy ==""){ data.price_buy = null; }
+                if(data.price==""){ data.price = null; }
+                if(data.surtax==""){ data.surtax = null; }            
+                if(data.buy_date==""){ data.buy_date = null; }
+                if(data.disposal_date==""){ data.disposal_date = null; }
+                if(data.expiration_date==""){ data.expiration_date = null; }
+                if(data.disposal_account==""){ data.disposal_account = null; }
 
                 OfficeItemDao.updateOfficeItem(_updateData).then(function(result){        
                     
@@ -107,22 +128,22 @@ var OfficeItem = function (data) {
                         
                         if(_currentData.use_user == ""){   // 부서 -> 사용 직원 변경
                             _type = "사용자 변경"; 
-                            _title = "사용 부서 -> 직원 변경"
+                            _title = "부서 -> 사용자 변경"
                             _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") ->"+_updateData.use_user_name+"("+_updateData.use_user+")";  
                         }else if(_updateData.use_user != _currentData.use_user){ 
                             _type = "사용자 변경"; 
-                            _title = "사용 직원 변경"
+                            _title = "사용자 변경"
                             _memo = _currentData.use_user_name+"("+_currentData.use_user+") -> "+_updateData.use_user_name+"("+_updateData.use_user+")"; 
                         }  
 
                     }else{    //부서 변경
                       if(_currentData.use_dept == ""){
                             _type = "사용자 변경"; 
-                            _title = "사용 직원 -> 부서 변경"
+                            _title = "사용 사용자 -> 부서 변경"
                             _memo = _currentData.use_user_name+"("+_currentData.use_user+") ->"+_updateData.use_dept_name+"("+_updateData.use_dept+")";  
                         }else if(_updateData.use_dept != _currentData.use_dept){  
                             _type = "사용자 변경"; 
-                            _title = "사용 부서 변경"
+                            _title = "부서 변경"
                             _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") -> "+_updateData.use_dept_name+"("+_updateData.use_dept+")"; 
                         }
                     }

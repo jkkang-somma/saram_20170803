@@ -19,10 +19,12 @@ officeItemHistoryDao.prototype.selectOfficeItemHistoryListV2 = function (data) {
 };
 
 officeItemHistoryDao.prototype.insertOfficeItemHistory = function(officeitem){
-    return new Promise(function(resolve) {
-        resolve(db.query(group, "insertOfficeItemHistory",
-        [officeitem.serial_yes,officeitem.category_type,officeitem.type,officeitem.title,officeitem.repair_price,officeitem.use_user,officeitem.use_dept,officeitem.name,officeitem.change_user_id,officeitem.memo]));
-    });
+    // return new Promise(function(resolve) {
+    //     resolve(db.query(group, "insertOfficeItemHistory",
+    //     [officeitem.serial_yes,officeitem.category_type,officeitem.type,officeitem.title,officeitem.repair_price,officeitem.use_user,officeitem.use_dept,officeitem.name,officeitem.change_user_id,officeitem.memo]));
+    // });
+    return db.query(group, "insertOfficeItemHistory",
+        [officeitem.serial_yes,officeitem.category_type,officeitem.type,officeitem.title,officeitem.repair_price,officeitem.use_user,officeitem.use_dept,officeitem.name,officeitem.change_user_id,officeitem.memo]);
 };
 
 officeItemHistoryDao.prototype.deleteOfficeItemHistory = function(id){
