@@ -7,10 +7,14 @@ define([
     'backbone',
     'code',
     'cmoment',
+    'models/sm/SessionModel',
     'collection/dashboard/AttendanceCollection',
     'collection/dashboard/CommuteSummaryCollection',
+    'collection/common/HolidayCollection',
+    'collection/vacation/InOfficeCollection',
+    'collection/vacation/OutOfficeCollection',
     'text!templates/calendarTemplateBase.html'
-], function ($, _, Backbone, Code, Moment, AttendanceCollection, CommuteSummaryCollection, calendarHTML) {
+], function ($, _, Backbone, Code, Moment, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection, InOfficeCollection, OutOfficeCollection, calendarHTML) {
 
     var CalendarView = Backbone.View.extend({
 
@@ -18,24 +22,74 @@ define([
             this.$el = $(opt.el);
             this.commuteSummaryCollection = new CommuteSummaryCollection();
             this.attendanceCollection = new AttendanceCollection();
+            this.holidayCollection = new HolidayCollection();
             this._today = new Moment().format("YYYY-M-D");
         },
         _draw: function (params) {
             var _view = this;
-            _view.getAttendance(params).done(function (result) {
-                _view.attendance = result;
-
-                _view.getCommuteSummary(params).done(function (result) {
-                    _view.commuteSummary = result;
-                    _view.drawCalendar(params);
-                }).fail(function () {
-
+            var yearData = new Moment(params.start);
+            _view.getHolidaySummary({  year : yearData.year() } ).done(function (result) { // 휴일 조회
+                _view.holiday = result;
+                _view.getInOutofficeSummary(params).done(function(result){
+                    _view.inOutData = result;
+                    _view.getAttendance(params).done(function (result) {  // 출입 기록 조회
+                        _view.attendance = result;
+                        _view.getCommuteSummary(params).done(function (result) {   
+                            _view.commuteSummary = result;
+                            _view.drawCalendar(params);
+                        }).fail(function () {
+    
+                        });
+                    }).fail(function () {
+    
+                    });
                 });
             }).fail(function () {
 
             });
 
         },
+
+        getHolidaySummary: function (params) {
+            var _view = this;
+            var dfd = new $.Deferred();
+            this.holidayCollection.fetch({
+                data: params,
+                success: function (collection, result) {
+                    dfd.resolve(result);
+                },
+                error: function () {
+                    dfd.reject();
+                }
+            });
+            return dfd.promise();
+        },
+
+        getInOutofficeSummary: function (params) {
+            var _view = this;
+            var dfd = new $.Deferred();
+           
+            var inOfficeCollection = new InOfficeCollection();
+            var outOfficeCollection = new OutOfficeCollection();
+
+            $.when(
+                outOfficeCollection.fetch({
+                    data: params
+                }),
+                inOfficeCollection.fetch({
+                    data: params
+                })
+            ).done(function() {
+                var id = SessionModel.getUserInfo().id;
+                var data = {outoffice : outOfficeCollection.filterID(id),
+                            inoffice : inOfficeCollection.filterID(id)};
+                console.log(data);
+                dfd.resolve(data);
+            });
+
+            return dfd.promise();
+        },
+
         getCommuteSummary: function (params) {
             var _view = this;
             var dfd = new $.Deferred();
@@ -64,6 +118,26 @@ define([
             });
             return dfd.promise();
         },
+
+        drawHoliday : function(selDate){
+            var _view = this;
+            var thisMonth = new Moment(selDate);
+            thisMonth = thisMonth.month();
+            _.each(_view.holiday, function(dd){
+                var holDate = new Moment(dd.date);
+                var holMonth = holDate.month();
+                if(thisMonth == holMonth){
+                    console.log(dd);
+                    var holId = holDate.format("YYYY-M-D");
+                    var holCon = $(_view.el).find('#' + holId);
+                    holCon.addClass('holiday');
+                    // cc-header
+                    holCon.find('.cc-header').append('<span>'+dd.memo+'</span>')
+                }
+
+            });
+        },
+
         drawCalendar: function (params) {
             var _view = this;
             var year = params.start.split("-")[0];
@@ -87,6 +161,7 @@ define([
             var openTag;
             var closeTag = "</div>";
             var exist = true;
+            var inoutData = _view.inOutData;
 
             for (var i = 0; i < lastDay; i++) {
                 tmpDay = i + 1;
@@ -99,6 +174,9 @@ define([
 
                 commuteData = _view.getCommuteByDay(year, month, i);
 
+                var dateStr = year + "-";
+                    dateStr += (month < 9) ? "0" + (month + 1) + "-" : (month + 1) + "-";
+                    dateStr += (i < 9) ? "0" + (i + 1) : (i + 1);
                 if (commuteData.length == 0) {
                     attenData = _view.checkAtten(year, month, i);
                     if (_.isUndefined(attenData)) {
@@ -151,24 +229,33 @@ define([
                         }
                         overTime = openTag + overTime.split("_")[1] + closeTag;
                     }
-                    if (commuteData[0].out_office_code != null) {
-                        outOffice = Code.getCodeName(Code.OFFICE, commuteData[0].out_office_code);
-                        openTag = "<div class='outOffice'>";
-                        outOffice = openTag + outOffice + closeTag;
-                    }
-                    if (commuteData[0].vacation_code != null) {
-                        vacation = Code.getCodeName(Code.OFFICE, commuteData[0].vacation_code);
-                        openTag = "<div class='vacation'>";
-                        if (vacation.indexOf(",")>=0 && vacation.indexOf("(")>=0) {
-                            vacation = vacation.replace(/반차/g, "").replace(/휴가/g, "").replace(/ /g, "").replace("(오전)", "").replace("(오후)", "");
-                        } else if (vacation.indexOf(",")>=0) {
-                            vacation = vacation.replace(/ /g, "").replace(/반차/g, "").replace(/휴가/g, "");
-                        } else if (vacation.indexOf("(")>=0) {
-                            vacation = vacation.replace("휴가", "").replace("(", "").replace(")", "");
-                        }
-                        vacation = openTag + vacation + closeTag;
-                    }
+                         
                 }
+
+                // outoffice 
+                var outOfficeInfo = _.find(inoutData.outoffice, function(d){
+                    var data = d.attributes;
+                    return data.date == dateStr;
+                });
+                // if (commuteData[0].out_office_code != null) {
+                if (!_.isUndefined(outOfficeInfo)) {
+                    var outCode = outOfficeInfo.attributes.office_code;
+                    outOffice = Code.getCodeName(Code.OFFICE, outCode);
+                    if(outOffice.indexOf('휴가') > -1 ||  outOffice.indexOf('반차') > -1){
+                        openTag = "<div class='vacation'>";
+                        if (outOffice.indexOf(",")>=0 && outOffice.indexOf("(")>=0) {
+                            outOffice = outOffice.replace(/반차/g, "").replace(/휴가/g, "").replace(/ /g, "").replace("(오전)", "").replace("(오후)", "");
+                        } else if (outOffice.indexOf(",")>=0) {
+                            outOffice = outOffice.replace(/ /g, "").replace(/반차/g, "").replace(/휴가/g, "");
+                        } else if (outOffice.indexOf("(")>=0) {
+                            outOffice = vacoutOfficeation.replace("휴가", "").replace("(", "").replace(")", "");
+                        }
+                    }else{
+                        openTag = "<div class='outOffice'>";
+                    }
+                    outOffice = openTag + outOffice + closeTag;
+                }
+
                 var pushData = {
                     "days": tmpDay,
                     "workType": workType,
@@ -204,6 +291,9 @@ define([
                     target.css("color", textColor);
                 }
             }
+
+
+            _view.drawHoliday(params.start);
         },
 
         makeOneWeekHtml: function(row, startDayOfWeek, lastDay, year, month, data) {
@@ -222,24 +312,23 @@ define([
                 for ( var j=1 ; j<=7 ; j++ ) {
                     if ( i == 1 && j <= startDayOfWeek ) {
                         // 1일 시작 전
-                        if ( data[0].exist ) {
+                        // if ( data[0].exist ) {
                             resultHtml += tdTemplate;
-                        }else{
-                            resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
-                        }
+                        // }else{
+                        //     resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
+                        // }
                         resultHtml = resultHtml.replace('id=""', '');
                         continue;
                     }else if ( _.isUndefined(data[day]) ) {
                         // 말일 종료 후
-                        if ( data[lastDay-1].exist ) {
+                        // if ( data[lastDay-1].exist ) {
                             resultHtml += tdTemplate;
-                        }else{
-                            resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
-                        }
+                        // }else{
+                        //     resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
+                        // }
                         resultHtml = resultHtml.replace('id=""', '');
                     }else{
-                        // 1일 ~ 말일까지
-                        if ( data[day].exist ) {
+                        // 1일 ~ 말일까지                        
                             if ( j == 7 ) {
                                 // 토요일
                                 resultHtml += tdTemplate.replace('class=""', 'class="saturday"');
@@ -247,11 +336,13 @@ define([
                                 // 쉬는 날
                                 resultHtml += tdTemplate.replace('class=""', 'class="holiday"');
                             }else{
-                                resultHtml += tdTemplate;
+                                if ( data[day].exist ) {
+                                    resultHtml += tdTemplate;
+                                }else{
+                                    resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
+                                }
                             }
-                        }else{
-                            resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
-                        }
+                        
                         resultHtml = resultHtml.replace('id=""', 'id="'+year+'-'+(month+1)+'-'+data[day].days+'"');
 
                         resultHtml += calendar_content;

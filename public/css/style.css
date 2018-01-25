@@ -76,9 +76,6 @@ body {
     left:100px;
     z-index:2147483647;
     background: rgb(249, 250, 249);
-
-    border: 1px solid rgb(196, 197, 197);
-    border-radius: 5px 5px 5px 5px;
 }
 
 form .detail-content input{
@@ -1182,7 +1179,7 @@ border: 2px dotted #2ABB9B !important;
 #giscontainer .gis_person span {
   font-size: 13px;
   font-weight: bold;
-  font-family: 'ÎßëÏùÄ Í≥†Îîï', 'monospace';
+  font-family: '∏º¿∫ ∞ÌµÒ', 'monospace';
 }
 
 #giscontainer .gis_person img {
@@ -1306,6 +1303,14 @@ border: 2px dotted #2ABB9B !important;
 /*    color: #4747f7;*/
 }
 
+#dashboard_main .calendar-body tr td .cc-header span {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 12px;
+    margin-top: 3px;
+    vertical-align: top;
+}
+
 #dashboard_main .calendar-body .text span {
     display: inline-block;
     margin-top: 2px;
@@ -1422,19 +1427,17 @@ border: 2px dotted #2ABB9B !important;
   background:white;
 }
 
-#dashboard_main table tbody tr td.disabled {
-  background:lightgray;
-}
-
-#dashboard_main table tbody tr td.holiday {
-  color: rgb(206, 89, 88);
-  background: rgb(255,240,243);
-}
-
 #dashboard_main table tbody tr td.saturday {
   color:rgb(97,113,245);
   background: rgb(229,248,255);
 }
+#dashboard_main table tbody tr td.holiday {
+    color: rgb(206, 89, 88);
+    background: rgb(255,240,243);
+}
+#dashboard_main table tbody tr td.disabled {
+    background:lightgray;
+  }
 
 .dataTables_paginate {margin-left: 5px;}
 
@@ -1492,6 +1495,11 @@ border: 2px dotted #2ABB9B !important;
     .bootstrap-dialog-body .dataTables_wrapper .bottom {
         bottom: 110px;
         right: 45px;
+    }
+}
+@media screen and (max-width: 610px) {
+    #dashboard_main .calendar-body tr td .cc-header span{
+        display: none;
     }
 }
 @media (max-height: 408px) {
