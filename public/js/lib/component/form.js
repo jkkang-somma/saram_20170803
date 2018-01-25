@@ -285,24 +285,24 @@ define([
                 return _input;
             }
         },
-        ip_input:{
-            getElement:function(data){
-               // for( var index = 0; index < data.input_data.models.length; index++) {
-               //      availableTags[index] = data.input_data.models[index].attributes.name + "(" + data.input_data.models[index].attributes.code + ")";
-               //      console.log(availableTags[index]);
-               // }
+    //     ip_input:{
+    //         getElement:function(data){
+    //            // for( var index = 0; index < data.input_data.models.length; index++) {
+    //            //      availableTags[index] = data.input_data.models[index].attributes.name + "(" + data.input_data.models[index].attributes.code + ")";
+    //            //      console.log(availableTags[index]);
+    //            // }
                
-               // for( var index = 0; index < data.user_data.models.length; index++) {
-               //     availableTags[index] = data.user_data.models[index].attributes.name + "(" + data.user_data.models[index].attributes.code + ")";
-               //     console.log(availableTags[index]);
-               // }
-               //availableTags = data.input_data;
-               var _InputTemp=_.template(Ip_InputHTML);
-               var _input=_.noop();
-               _input=_InputTemp(data);
-               return $(_input);
-           }
-       },
+    //            // for( var index = 0; index < data.user_data.models.length; index++) {
+    //            //     availableTags[index] = data.user_data.models[index].attributes.name + "(" + data.user_data.models[index].attributes.code + ")";
+    //            //     console.log(availableTags[index]);
+    //            // }
+    //            //availableTags = data.input_data;
+    //            var _InputTemp=_.template(Ip_InputHTML);
+    //            var _input=_.noop();
+    //            _input=_InputTemp(data);
+    //            return $(_input);
+    //        }
+    //    },
     };
     var Form = Backbone.View.extend({
         initialize:function(options){

@@ -118,14 +118,14 @@ define([
             disabled:false,
             group:undefined
         },
-        ip_input:{
-            type:"input",
-            name:undefined,
-            label:undefined,
-            value:undefined,
-            disabled:false,
-            group:undefined
-        },
+        // ip_input:{
+        //     type:"input",
+        //     name:undefined,
+        //     label:undefined,
+        //     value:undefined,
+        //     disabled:false,
+        //     group:undefined
+        // },
         checkbox:{
             type:"checkbox",
             name:undefined,
