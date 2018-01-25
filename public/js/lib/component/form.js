@@ -3,6 +3,7 @@
 define([
   'jquery',
   'jquery.autocomplete',
+  'jquery.number',
   'underscore',
   'backbone',
   'log',
@@ -21,7 +22,7 @@ define([
   'text!templates/default/group.html',
   'text!templates/default/checkBox.html',
   'text!templates/default/ip_input.html'
-  ], function($, jui, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, PriceHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
+  ], function($, jui, jnum, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, PriceHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
 		  CheckBoxHTML, Ip_InputHTML){
     var LOG=log.getLogger('Form');
     var _formId=0;
@@ -58,6 +59,15 @@ define([
                 var _input=_.noop();
                 _input=_InputTemp(data);
                 var result=$(_input);
+                result.find("input").number(true);
+
+                result.find("input").keyup(function(e) {//한글 입력 방지
+                    if (!(e.keyCode >=37 && e.keyCode<=40)) {
+                        var v = $(this).val();
+                        $(this).val(v.replace(/[^a-z0-9]/gi,''));
+                    }
+                });
+
                 if(!_.isUndefined(data.full)&&data.full){
                     result.removeClass('form-group-harf');
                 }
