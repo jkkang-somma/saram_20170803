@@ -73,7 +73,7 @@ define([
                             if ( price == null || price == 0 ){
                                 return "";
                             }
-                            return price;
+                            return Util.numberWithComma(price);
                         }
                     },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER, data : "name" },

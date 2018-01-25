@@ -55,7 +55,7 @@ define([
         + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
 	}
 
-    var getMonday = function(date) { //월요일 ~ 일요일 구하기 201-01-01
+   var getMonday = function(date) { //월요일 ~ 일요일 구하기 201-01-01
     	var intDayCnt1 = 0;
     	var intDayCnt2 = 0;
 
@@ -135,6 +135,10 @@ define([
 	    };
     }
 	
+	var numberWithComma = function(data){
+		return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	
     return {
         isNull:isNull,
         isNotNull:isNotNull,
@@ -145,6 +149,7 @@ define([
         dateToString : dateToString,
         timeToString : timeToString,
         getMonday: getMonday,
-        getClientIp : getClientIp
+        getClientIp : getClientIp,
+        numberWithComma : numberWithComma
     };
 });
