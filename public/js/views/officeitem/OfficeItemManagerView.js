@@ -304,7 +304,8 @@ define([
                             function(data){
                                 var _useDept=data[16];
                                 var _useUser=data[17];
-                                return (_useDept == "" && _useUser == "" )?true:false;
+                                var _levDate=data[21];
+                                return (_useDept == "" && _useUser == "" && _levDate != i18Common.OFFICEITEM.STATE.DISUSE )?true:false;
                             },    
                     ];
                     

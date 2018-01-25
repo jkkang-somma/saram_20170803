@@ -1,6 +1,7 @@
 // Author: sanghee park <novles@naver.com>
 // Create Date: 2014.12.18
 // 사용자 Service
+var Promise = require('bluebird');
 var db = require('../lib/dbmanager.js');
 var group = 'officeitem';
 

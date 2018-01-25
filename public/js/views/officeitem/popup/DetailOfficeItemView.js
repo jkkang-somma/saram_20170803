@@ -59,7 +59,7 @@ define([
 					},{
 							type:"input",
 							name:"use_user",
-							label:i18nCommon.USER.NAME,
+							label:i18nCommon.OFFICEITEM.CODE.USE_USER_NAME,
 							value:_model.use_user_name,
 							disabled:"readonly",
 					},{

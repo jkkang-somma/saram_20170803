@@ -40,6 +40,7 @@ define([
                 var result=$(_input);
                 if(!_.isUndefined(data.full)&&data.full){
                     result.removeClass('form-group-harf');
+                    result.addClass('form-text-harf');
                 }
 
                 if(!_.isUndefined(data.disabled)&&data.disabled){

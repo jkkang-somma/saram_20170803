@@ -96,7 +96,7 @@ define([
 							label:i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE,
 							value:_model.type,
 							//linkField:"type",
-							collection:[{key:'수리',value:"수리"},{key:'기타',value:"기타"}]
+							collection:[{key:'A/S',value:"A/S"},{key:'기타',value:"기타"}]
 					},{							
 
 							type:"price",
@@ -104,9 +104,10 @@ define([
 							label:i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE,
 							value:_model.repair_price,
 					},{   
-							type:"text",
+							type:"input",
 							name:"title",
 							label:i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE,
+							full:"full",
 							value:_model.title,
 					},{     	       
         	                type:"text",
@@ -141,14 +142,14 @@ define([
 			var dfd= new $.Deferred();
 			var _view=this,_form=this.form;
 
-			var repair_price_value = _form.getElement("repair_price").find("input").val();
-			if(repair_price_value == ""){_form.getElement("repair_price").find("input").val(0)}		
+			//var repair_price_value = _form.getElement("repair_price").find("input").val();
+			//if(repair_price_value == ""){_form.getElement("repair_price").find("input").val(0)}		
 			
 			var _data=_form.getData();	    
 			var _officeitemhistoryModel=new OfficeItemHistoryModel(_data);
 			
             var _validate=_officeitemhistoryModel.validation(_data, {// 유효성 검사 필드 
-                serial_yes:""});
+                serial_yes:"", repair_price_value:""});
             
             if(!_.isUndefined(_validate)){
                 Dialog.warning(_validate);

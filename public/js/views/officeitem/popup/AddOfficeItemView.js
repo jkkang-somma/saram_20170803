@@ -54,7 +54,7 @@ define([
 			  childs:[{
 							  type:"combo",
 							  name:"_category_code",
-							  label:i18nCommon.OFFICEITEM.CODE.CATEGORY_CODE,
+							  label:i18nCommon.OFFICEITEM.CODE.CATEGORY_NAME,
 							  collection:officeItemCodeCollection,
 							  value:_model.category_code,
 							  firstBlank:false,
@@ -73,7 +73,7 @@ define([
 					  },{
 							  type:"combo",
 							  name:"use_flag",
-							  label:i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_DEPT,
+							  label:i18nCommon.OFFICEITEM.CODE.USE_FLAG,
 							  value:_model.USE_DEPT,
 							  collection:[
 								  {key:"selectDept",value:"부서"},
@@ -82,7 +82,7 @@ define([
 							  type:"auto_input",
 							  name:"use_flag_info",
 							  id:"autocomplete",
-							  label:i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_USER,
+							  label:i18nCommon.OFFICEITEM.CODE.USE_USER_NAME,
 							  value:_model.use_user,
 							  input_data: availableTags
 					  },{
@@ -236,37 +236,39 @@ define([
 			   });
 		  }, 
 		  submitAdd : function(beforEvent, affterEvent){
-			  var view = this;
-			  var dfd= new $.Deferred();
-			  var _view=this, _form=this.form;
+			var view = this;
+			var dfd= new $.Deferred();
+			var _view=this, _form=this.form;
   
-			  var use_flag_info = $('#autocomplete').val();
-			  var use_flag = _form.getElement("use_flag").find("select").val();
+			var use_flag_info = $('#autocomplete').val();
+			var use_flag = _form.getElement("use_flag").find("select").val();
 			  
-			  if(_.indexOf(use_flag_info, "(") > -1){
-  
-				  use_flag_info=use_flag_info.replace(")", '');
-  
-				  var use_flag_info_arr = use_flag_info.split("(");
-				  var use_name = use_flag_info_arr[0];
-				  var use_code =(use_flag_info_arr[1]);
-  
-				  if(use_flag == "selectUser") {  //직원
-					  _form.getElement("use_user").val(use_code);
-					  _form.getElement("use_dept").val("");
-					  
-				  }else{//부서
-					  _form.getElement("use_user").val("");
-					  _form.getElement("use_dept").val(use_code);
-				  }
-				  
-			  }else{				
-				  Dialog.warning("사용자 정보를 다시 입력해 주세요! ");
-				  $('#autocomplete').val("");
-				  dfd.reject();	
-				  return dfd.promise();			
-			  }
-						  
+			if(use_flag_info != "")
+			 {
+				if(_.indexOf(use_flag_info, "(") > -1){
+	
+					use_flag_info=use_flag_info.replace(")", '');
+	
+					var use_flag_info_arr = use_flag_info.split("(");
+					var use_name = use_flag_info_arr[0];
+					var use_code =(use_flag_info_arr[1]);
+	
+					if(use_flag == "selectUser") {  //직원
+						_form.getElement("use_user").val(use_code);
+						_form.getElement("use_dept").val("");
+						
+					}else{//부서
+						_form.getElement("use_user").val("");
+						_form.getElement("use_dept").val(use_code);
+					}
+					
+				}else{				
+					Dialog.warning("사용자 정보를 다시 입력해 주세요! ");
+					$('#autocomplete').val("");
+					dfd.reject();	
+					return dfd.promise();			
+				}
+			}		  
 			  var _data=_form.getData();	    
 			  var _officeitemModel=new OfficeItemModel(_data);
 						  
