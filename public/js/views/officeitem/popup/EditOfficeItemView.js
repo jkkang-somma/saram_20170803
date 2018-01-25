@@ -217,31 +217,43 @@ define([
 				  });
 				  
 				  _form.render().done(function(){
-					  _view.form=_form;
-					  var price_buy_input = _form.getElement("price_buy");
-					  price_buy_input.find("input")
-						  .focusout(function(){
-							  var val = $(this).val();
-							  var price = Math.floor(val/1.1)
-							  _form.getElement("price").find("input").val(price); // 금액
-							  _form.getElement("surtax").find("input").val(Math.floor(val-price)); // 부가세
-						  });
-					  var buy_date_value = _form.getElement("buy_date");
-					  buy_date_value.datetimepicker()
-						  .on("change",function(){
-  
-							  var val = buy_date_value.find("input").val()
-  
-							  var e_date = new Date(val);
-							  e_date = e_date.setFullYear(e_date.getFullYear()+6)
-							  e_date = new Date(e_date).toISOString().slice(0,10);
-							  _form.getElement("expiration_date").find("input").val(e_date); // 사용 만료일
-  
-							  var d_date = new Date(val);
-							  d_date = d_date.setFullYear(d_date.getFullYear()+5)
-							  d_date = new Date(d_date).toISOString().slice(0,10);
-							  _form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
-						  });			
+					  	_view.form=_form;
+					  	var price_buy_input = _form.getElement("price_buy");
+						price_buy_input.find("input").focusout(function(){
+
+							var val = $(this).val();
+							if(val != "")
+							{						
+								var price = Math.floor(val/1.1)
+								_form.getElement("price").find("input").val(price); // 금액
+								_form.getElement("surtax").find("input").val(Math.floor(val-price)); // 부가세
+							}else{
+								_form.getElement("price").find("input").val(""); // 금액
+								_form.getElement("surtax").find("input").val(""); // 부가세
+							}
+						});
+
+					  	var buy_date_value = _form.getElement("buy_date");
+					  	var _buy_date_value = buy_date_value.find("input").val()
+
+						if(_buy_date_value != "")
+						{
+							buy_date_value.datetimepicker()
+								.on("change",function(){
+		
+									var val = buy_date_value.find("input").val()
+		
+									var e_date = new Date(val);
+									e_date = e_date.setFullYear(e_date.getFullYear()+6)
+									e_date = new Date(e_date).toISOString().slice(0,10);
+									_form.getElement("expiration_date").find("input").val(e_date); // 사용 만료일
+		
+									var d_date = new Date(val);
+									d_date = d_date.setFullYear(d_date.getFullYear()+5)
+									d_date = new Date(d_date).toISOString().slice(0,10);
+									_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
+								});	
+						}		
 					  dfd.resolve(_view);
 				  }).fail(function(){
 					  dfd.reject();
@@ -314,7 +326,8 @@ define([
 			  var _officeitemModel= new OfficeItemModel(_data);
 			  _officeitemModel.attributes._id="-2";
 			  var _validate=_officeitemModel.validation(_data, {
-				  serial_yes:""},{disposal_date:""});
+				serial_yes:""},{disposal_date:""},{price_buy:""},{price:""},{surtax:""}, 
+				{buy_date:""},{disposal_date:""},{expiration_date:""},{disposal_account:""});
   
 			  var _validate=_officeitemModel.validation(_data);
 			  _officeitemModel.save({},{

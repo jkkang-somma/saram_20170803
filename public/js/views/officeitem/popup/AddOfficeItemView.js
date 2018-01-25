@@ -110,18 +110,18 @@ define([
 							  type:"price",
 							  name:"price_buy",
 							  label:i18nCommon.OFFICEITEM.CODE.PRICE_BUY,
-							  value:"0",
+							  value:"",
 					  },{
 							  type:"input",
 							  name:"price",
 							  label:i18nCommon.OFFICEITEM.CODE.PRICE,
-							  value:"0",
+							  value:"",
 							  disabled:"readonly",
 					  },{
 							  type:"input",
 							  name:"surtax",
 							  label:i18nCommon.OFFICEITEM.CODE.SURTAX,
-							  value:"0",  
+							  value:"",  
 							  disabled:"readonly",
 					  },{
 							  type:"input",
@@ -172,18 +172,29 @@ define([
 					  }]
 				  });
 				  
-				  _form.render().done(function(){
-					  _view.form=_form;
-					  var price_buy_input = _form.getElement("price_buy");
-					  price_buy_input.find("input")
-						  .focusout(function(){
-							  var val = $(this).val();
-							  var price = Math.floor(val/1.1)
-							  _form.getElement("price").find("input").val(price); // 금액
-							  _form.getElement("surtax").find("input").val(Math.floor(val-price)); // 부가세
-						  });
-					  
-					  var buy_date_value = _form.getElement("buy_date");
+				_form.render().done(function(){
+					_view.form=_form;
+					var price_buy_input = _form.getElement("price_buy");
+					
+					price_buy_input.find("input").focusout(function(){
+
+						var val = $(this).val();
+						if(val != "")
+						{						
+							var price = Math.floor(val/1.1)
+							_form.getElement("price").find("input").val(price); // 금액
+							_form.getElement("surtax").find("input").val(Math.floor(val-price)); // 부가세
+						}else{
+							_form.getElement("price").find("input").val(""); // 금액
+							_form.getElement("surtax").find("input").val(""); // 부가세
+						}
+					});
+					
+					var buy_date_value = _form.getElement("buy_date");
+					var _buy_date_value = buy_date_value.find("input").val()
+
+					if(_buy_date_value != "")
+					{
 					  //$(".datetimepicker").on('change', function(e){
 					  buy_date_value.datetimepicker({
 						  pickTime: false,
@@ -202,7 +213,8 @@ define([
 							  d_date = new Date(d_date).toISOString().slice(0,10);
 							  _form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
   
-						  });						
+						  });	
+						}					
 					  dfd.resolve(_view);
 				  }).fail(function(){
 					  dfd.reject();
@@ -218,9 +230,9 @@ define([
 			  var _view=this, _form=this.form;
   
 			   $(document).ready(function() {
-				   $("#autocomplete").autocomplete({
+				  /*$("#autocomplete").autocomplete({
 					   source: availableTags
-				   });
+				   });*/
 				   
 				   _form.getElement("use_flag").find("select").on("change",function(){
 					  var val = $(this).val();
@@ -273,7 +285,8 @@ define([
 			  var _officeitemModel=new OfficeItemModel(_data);
 						  
 			  var _validate=_officeitemModel.validation(_data, {
-				  serial_yes:""},{disposal_date:""});
+				  serial_yes:""},{disposal_date:""},{price_buy:""},{price:""},{surtax:""}, 
+				  {buy_date:""},{disposal_date:""},{expiration_date:""},{disposal_account:""});
 			  
 			  if(!_.isUndefined(_validate)){
 				  Dialog.warning(_validate);
