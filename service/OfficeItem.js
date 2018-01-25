@@ -14,6 +14,16 @@ var OfficeItem = function (data) {
         return OfficeItemDao.selectIdByOfficeItem(data.serial_yes);
     };
 
+    var use_makeFormat= function (use_name, use_id){
+
+        var use_value = "";
+        if(use_name != null && use_name != ""){
+            use_value = use_name +"("+use_id+")";
+        }
+
+        return use_value
+    }
+
     var _getOfficeItemList = function(date){
        
         if(!_.isUndefined(data.category_code) && data.category_code != ""){           
@@ -124,27 +134,34 @@ var OfficeItem = function (data) {
 
                 OfficeItemDao.updateOfficeItem(_updateData).then(function(result){        
                     
-                    if(data.use_user !="" ){   //사용자 변경
-                        
+                    if(data.use_user !="" ){   //사용자 변경                        
+                        _type = "사용자 변경"; 
                         if(_currentData.use_user == ""){   // 부서 -> 사용 직원 변경
-                            _type = "사용자 변경"; 
                             _title = "부서 -> 사용자 변경"
-                            _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") ->"+_updateData.use_user_name+"("+_updateData.use_user+")";  
+                            _memo = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
+                                    + " -> "+
+                                    use_makeFormat(_updateData.use_user_name,_updateData.use_user);     
                         }else if(_updateData.use_user != _currentData.use_user){ 
-                            _type = "사용자 변경"; 
                             _title = "사용자 변경"
-                            _memo = _currentData.use_user_name+"("+_currentData.use_user+") -> "+_updateData.use_user_name+"("+_updateData.use_user+")"; 
-                        }  
+                            _memo = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
+                                    + " -> "+
+                                    use_makeFormat(_updateData.use_user_name,_updateData.use_user);   
+                        }
 
-                    }else{    //부서 변경
+                    }else if(data.use_dept !="" ){    //부서 변경
+                        _type = "사용자 변경"; 
                       if(_currentData.use_dept == ""){
-                            _type = "사용자 변경"; 
                             _title = "사용 사용자 -> 부서 변경"
-                            _memo = _currentData.use_user_name+"("+_currentData.use_user+") ->"+_updateData.use_dept_name+"("+_updateData.use_dept+")";  
+                            _memo = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
+                                    + " -> "+
+                                    use_makeFormat(_updateData.use_dept_name,_updateData.use_dept);
+
                         }else if(_updateData.use_dept != _currentData.use_dept){  
-                            _type = "사용자 변경"; 
                             _title = "부서 변경"
-                            _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") -> "+_updateData.use_dept_name+"("+_updateData.use_dept+")"; 
+                            _memo = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
+                                    + " -> "+
+                                    use_makeFormat(_updateData.use_dept_name,_updateData.use_dept);
+
                         }
                     }
                           
