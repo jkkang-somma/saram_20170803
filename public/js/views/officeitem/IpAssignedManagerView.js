@@ -66,13 +66,13 @@ define([
 									return x;
 								}
 							},
-							{ data : "ip",		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.ip, visible: false, subVisible:false, 
+							{ data : "use_user",	"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_USER },
+							{ data : "memo", 		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.MEMO},
+							{ data : "ip",			"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.ip, visible: false, subVisible:false, 
 								render: function(data, type, row){
 									return row.ip;
 								}
 							},
-							{ data : "use_user",	"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_USER },
-							{ data : "memo", 		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.MEMO},
 					],
 					collection:this.IpAssignedManagerCollection,
 					//dataschema:["ip", "use_dept", "use_user", "memo"],
@@ -220,7 +220,13 @@ define([
 					name: "save",
 					tooltip: "저장하기",
 					click: function(_grid) {
-						_grid.saveExcel("IP주소");
+						var saveGrid = _grid;
+						saveGrid.columns = [{"title" : ""},
+										{"title" : "IP주소"},
+										{"title" : "사용자"},
+										{"title" : "비고"},
+										];
+						saveGrid.saveExcel("IP주소");
 					}
 				});
 			};
