@@ -106,22 +106,22 @@ var OfficeItem = function (data) {
                     if(data.use_user !="" ){   //사용자 변경
                         
                         if(_currentData.use_user == ""){   // 부서 -> 사용 직원 변경
-                            _type = "사용자 수정"; 
+                            _type = "사용자 변경"; 
                             _title = "사용 부서 -> 직원 변경"
                             _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") ->"+_updateData.use_user_name+"("+_updateData.use_user+")";  
                         }else if(_updateData.use_user != _currentData.use_user){ 
-                            _type = "사용자 수정"; 
+                            _type = "사용자 변경"; 
                             _title = "사용 직원 변경"
                             _memo = _currentData.use_user_name+"("+_currentData.use_user+") -> "+_updateData.use_user_name+"("+_updateData.use_user+")"; 
                         }  
 
                     }else{    //부서 변경
                       if(_currentData.use_dept == ""){
-                            _type = "사용자 수정"; 
+                            _type = "사용자 변경"; 
                             _title = "사용 직원 -> 부서 변경"
                             _memo = _currentData.use_user_name+"("+_currentData.use_user+") ->"+_updateData.use_dept_name+"("+_updateData.use_dept+")";  
                         }else if(_updateData.use_dept != _currentData.use_dept){  
-                            _type = "사용자 수정"; 
+                            _type = "사용자 변경"; 
                             _title = "사용 부서 변경"
                             _memo = _currentData.use_dept_name+"("+_currentData.use_dept+") -> "+_updateData.use_dept_name+"("+_updateData.use_dept+")"; 
                         }
