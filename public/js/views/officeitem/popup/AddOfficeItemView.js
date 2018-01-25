@@ -52,123 +52,122 @@ define([
 					  el:_view.el,
 					  form:undefined,
 			  childs:[{
-							  type:"combo",
-							  name:"_category_code",
-							  label:i18nCommon.OFFICEITEM.CODE.CATEGORY_NAME,
-							  collection:officeItemCodeCollection,
-							  value:_model.category_code,
-							  firstBlank:false,
-							  linkFieldValue:"category_code"
-					  },{
-							  type:"hidden",
-							  name:"category_code",
-							  value:_model.category_code,
-							  collection:officeItemCodeCollection,
-							  linkFieldValue:"true"
-					  },{
-							  type:"input",
-							  name:"serial_factory",
-							  label:i18nCommon.OFFICEITEM.CODE.SERIAL_FACTORY,
-							  value:_model.serial_factory,  
-					  },{
-							  type:"combo",
-							  name:"use_flag",
-							  label:i18nCommon.OFFICEITEM.CODE.USE_FLAG,
-							  value:_model.USE_DEPT,
-							  collection:[
-								  {key:"selectDept",value:"부서"},
-								  {key:"selectUser",value:"직원"}],
-					  },{
-							  type:"auto_input",
-							  name:"use_flag_info",
-							  id:"autocomplete",
-							  label:i18nCommon.OFFICEITEM.CODE.USE_USER_NAME,
-							  value:_model.use_user,
-							  input_data: availableTags
-					  },{
-							   type:"hidden",
-							  name:"use_dept",
-							  value:_model.part_code,
-							  isValueInput:true
-					  },{
-							  type:"hidden",
-							  name:"use_user",
-							  value:_model.use_user,							
-							  isValueInput:true
-					  },{
-					  
-							  type:"input",
-							  name:"vendor",
-							  label:i18nCommon.OFFICEITEM.CODE.VENDOR,
-							  value:_model.vendor,
-					  },{
-							  type:"input",
-							  name:"model_no",
-							  label:i18nCommon.OFFICEITEM.CODE.MODEL_NO,
-							  value:_model.model_no,
-					  },{
-							  type:"price",
-							  name:"price_buy",
-							  label:i18nCommon.OFFICEITEM.CODE.PRICE_BUY,
-							  value:"",
-					  },{
-							  type:"input",
-							  name:"price",
-							  label:i18nCommon.OFFICEITEM.CODE.PRICE,
-							  value:"",
-							  disabled:"readonly",
-					  },{
-							  type:"input",
-							  name:"surtax",
-							  label:i18nCommon.OFFICEITEM.CODE.SURTAX,
-							  value:"",  
-							  disabled:"readonly",
-					  },{
-							  type:"input",
-							  name:"location",
-							  label:i18nCommon.OFFICEITEM.CODE.LOCATION,
-							  value:_model.location,
-					  },{
-							  type:"combo",
-							  name:"state",
-							  label:i18nCommon.OFFICEITEM.CODE.STATE,
-							  value:_model.state,
-							  collection:[{key:i18nCommon.OFFICEITEM.STATE.NORMAL,value:i18nCommon.OFFICEITEM.STATE.NORMAL}
-										  ,{key:i18nCommon.OFFICEITEM.STATE.BREAK,value:i18nCommon.OFFICEITEM.STATE.BREAK}
-										  ,{key:i18nCommon.OFFICEITEM.STATE.DISUSE,value:i18nCommon.OFFICEITEM.STATE.DISUSE}
-										  ,{key:i18nCommon.OFFICEITEM.STATE.STANDBY,value:i18nCommon.OFFICEITEM.STATE.STANDBY}]
-		  
-					  },{
-							  type:"date",
-							  name:"buy_date",
-							  label:i18nCommon.OFFICEITEM.CODE.BUY_DATE,
-							  value:_model.buy_date,
-							  format:"YYYY-MM-DD",
-					  },{
-							  type:"date",
-							  name:"disposal_date",
-							  label:i18nCommon.OFFICEITEM.CODE.DISPOSAL_DATE,
-							  value:_model.disposal_date,
-							  format:"YYYY-MM-DD",
-					  },{
-							  type:"date",
-							  name:"expiration_date",
-							  label:i18nCommon.OFFICEITEM.CODE.EXPIRATION_DATE,
-							  value:_model.expiration_date,
-							  format:"YYYY-MM-DD",
-							  
-					  },{
-							  type:"input",
-							  name:"disposal_account",
-							  label:i18nCommon.OFFICEITEM.CODE.DISPOSAL_ACCOUNT,
-							  value:_model.disposal_account,
-							  format:"YYYY-MM-DD",
-							  disabled:"readonly",
-					  },{
-							  type:"text",
-							  name:"memo",
-							  label:i18nCommon.OFFICEITEM.CODE.MEMO,
-							  value:_model.memo,
+							type:"combo",
+							name:"_category_code",
+							label:i18nCommon.OFFICEITEM.CODE.CATEGORY_NAME,
+							collection:officeItemCodeCollection,
+							value:_model.category_code,
+							firstBlank:false,
+							linkFieldValue:"category_code"
+					  	},{
+							type:"hidden",
+							name:"category_code",
+							value:_model.category_code,
+							collection:officeItemCodeCollection,
+							linkFieldValue:"true"
+					  	},{
+							type:"combo",
+							name:"use_flag",
+							label:i18nCommon.OFFICEITEM.CODE.USE_FLAG,
+							value:_model.USE_DEPT,
+							collection:[
+								{key:"selectDept",value:"부서"},
+								{key:"selectUser",value:"직원"}],
+					 	 },{
+										  
+					   		type:"input",
+							name:"vendor",
+							label:i18nCommon.OFFICEITEM.CODE.VENDOR,
+							value:_model.vendor,
+					  	},{
+							type:"auto_input",
+							name:"use_flag_info",
+							id:"autocomplete",
+							label:i18nCommon.OFFICEITEM.CODE.USE_USER_NAME,
+							value:_model.use_user,
+							input_data: availableTags
+					  	},{
+							type:"hidden",
+							name:"use_dept",
+							value:_model.part_code,
+							isValueInput:true
+					  	},{
+							type:"hidden",
+							name:"use_user",
+							value:_model.use_user,							
+							isValueInput:true
+					  	},{
+							type:"input",
+							name:"model_no",
+							label:i18nCommon.OFFICEITEM.CODE.MODEL_NO,
+							value:_model.model_no,
+						},{
+							type:"input",
+							name:"location",
+							label:i18nCommon.OFFICEITEM.CODE.LOCATION,
+							value:_model.location,
+						},{
+							type:"input",
+							name:"serial_factory",
+							label:i18nCommon.OFFICEITEM.CODE.SERIAL_FACTORY,
+							value:_model.serial_factory, 
+						},{
+							type:"date",
+							name:"buy_date",
+							label:i18nCommon.OFFICEITEM.CODE.BUY_DATE,
+							value:_model.buy_date,
+							format:"YYYY-MM-DD",
+						},{
+							type:"price",
+							name:"price",
+							label:i18nCommon.OFFICEITEM.CODE.PRICE,
+							value:_model.price,
+							disabled:"readonly",
+						},{
+							type:"input",
+							name:"disposal_account",
+							label:i18nCommon.OFFICEITEM.CODE.DISPOSAL_ACCOUNT,
+							value:_model.disposal_account,
+							format:"YYYY-MM-DD",
+							disabled:"readonly",
+					  	},{
+							type:"price",
+							name:"surtax",
+							label:i18nCommon.OFFICEITEM.CODE.SURTAX,
+							value:_model.surtax,  
+							disabled:"readonly",
+						},{
+							type:"date",
+							name:"expiration_date",
+							label:i18nCommon.OFFICEITEM.CODE.EXPIRATION_DATE,
+							value:_model.expiration_date,
+							format:"YYYY-MM-DD",
+						},{
+							type:"price",
+							name:"price_buy",
+							label:i18nCommon.OFFICEITEM.CODE.PRICE_BUY,
+							value:_model.price_buy,
+						},{
+							type:"date",
+							name:"disposal_date",
+							label:i18nCommon.OFFICEITEM.CODE.DISPOSAL_DATE,
+							value:_model.disposal_date,
+							format:"YYYY-MM-DD",
+					  	},{
+
+							type:"combo",
+							name:"state",
+							label:i18nCommon.OFFICEITEM.CODE.STATE,
+							value:_model.state,
+							collection:[{key:i18nCommon.OFFICEITEM.STATE.NORMAL,value:i18nCommon.OFFICEITEM.STATE.NORMAL}
+									  ,{key:i18nCommon.OFFICEITEM.STATE.BREAK,value:i18nCommon.OFFICEITEM.STATE.BREAK}
+									  ,{key:i18nCommon.OFFICEITEM.STATE.DISUSE,value:i18nCommon.OFFICEITEM.STATE.DISUSE}
+									  ,{key:i18nCommon.OFFICEITEM.STATE.STANDBY,value:i18nCommon.OFFICEITEM.STATE.STANDBY}]
+					  	},{
+							type:"text",
+							name:"memo",
+							label:i18nCommon.OFFICEITEM.CODE.MEMO,
+							value:_model.memo,
 					  }]
 				  });
 				  
@@ -252,8 +251,8 @@ define([
 			var dfd= new $.Deferred();
 			var _view=this, _form=this.form;
   
-			var use_flag_info = $('#autocomplete').val();
-			var use_flag = _form.getElement("use_flag").find("select").val();
+			let use_flag_info = $('#autocomplete').val();
+			let use_flag = _form.getElement("use_flag").find("select").val();
 			  
 			if(use_flag_info != "")
 			 {
@@ -280,21 +279,24 @@ define([
 					dfd.reject();	
 					return dfd.promise();			
 				}
-			}		  
-			  var _data=_form.getData();	    
-			  var _officeitemModel=new OfficeItemModel(_data);
+			}		
+
+
+
+			var _data=_form.getData();	    
+			var _officeitemModel=new OfficeItemModel(_data);
 						  
-			  var _validate=_officeitemModel.validation(_data, {
+			var _validate=_officeitemModel.validation(_data, {
 				  serial_yes:""},{disposal_date:""},{price_buy:""},{price:""},{surtax:""}, 
 				  {buy_date:""},{disposal_date:""},{expiration_date:""},{disposal_account:""});
 			  
-			  if(!_.isUndefined(_validate)){
+			if(!_.isUndefined(_validate)){
 				  Dialog.warning(_validate);
 				  dfd.reject();
-			  } else {
+			} else {
 				  
 				  beforEvent();
-			  _officeitemModel.save({},{
+			_officeitemModel.save({},{
 					  success:function(model, xhr, options){
   
 						  var respons=xhr.responseJSON;

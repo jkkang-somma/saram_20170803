@@ -27,8 +27,50 @@ define([
 			this.Option = {
 					el:"IpSearch_content",
 					column:[
-							{ data : "ip",			"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.IP},
-							//{ data : "use_dept",	"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_DEPT },
+							{ data : "ip_hidden",		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.IP, 
+								render: function(data, type, row){
+									var ipaddressData = row.ip;
+									var i, item;
+									var m = ipaddressData.split("."), x = "";
+									// IPV4
+									for(i = 0; i < m.length; i++) {
+										item = m[i];
+										if(item.length == 1) {
+											if(i != 0) {
+												x += ".  " + item;
+											}
+											else {
+												x += item;
+											}
+										}
+										else if(item.length == 2) {
+											if(i != 0) {
+												x += ". " + item;
+											}
+											else {
+												x += item;
+											}
+										}
+										else if(item.length == 3) {
+											if(i != 0) {
+												x += "." + item;
+											}
+											else {
+												x += item;
+											}
+										}
+										else {
+											x += item;
+										}
+									}
+									return x;
+								}
+							},
+							{ data : "ip",		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.ip, visible: false, subVisible:false, 
+								render: function(data, type, row){
+									return row.ip;
+								}
+							},
 							{ data : "use_user",	"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.USE_USER },
 							{ data : "memo", 		"title" : i18nCommon.IPASSIGNED_MANAGER_LIST.GRID_COL_NAME.MEMO},
 					],
@@ -38,7 +80,6 @@ define([
 					detail: true,
 					view:this,
 					//fetch: false,
-					//order : [[1, "INET_ATON"]]
 					order : [[1, "asc"]]
 			};
 		},
@@ -179,7 +220,7 @@ define([
 					name: "save",
 					tooltip: "저장하기",
 					click: function(_grid) {
-						_grid.saveExcel();
+						_grid.saveExcel("IP주소");
 					}
 				});
 			};
@@ -201,7 +242,6 @@ define([
 
 			grid.render();
 			//this.selectIPSearch();
-
 			return this;
 		},
 		selectIPSearch: function() {

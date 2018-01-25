@@ -1,6 +1,6 @@
 define([
         'jquery',
-        'jquery.ui',
+        'jquery.draggable',
         'underscore',
         'backbone',
         'core/BaseView',
