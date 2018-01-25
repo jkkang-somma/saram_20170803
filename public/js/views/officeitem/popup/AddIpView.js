@@ -119,9 +119,16 @@ define([
 			return dfd.promise();
 		},
 		afterRender: function(){
-			for( var index = 0; index < useCodeCollectionData.models.length; index++) {
-				availableTagsUser[index] = useCodeCollectionData.models[index].attributes.name + "(" + useCodeCollectionData.models[index].attributes.id + ")";
-				console.log(availableTagsUser[index]);
+			var userCnt = 0;
+			for(var index = 0; index < useCodeCollectionData.models.length; index++) {
+				if (_.isEmpty(useCodeCollectionData.models[index].attributes.leave_company) || useCodeCollectionData.models[index].attributes.leave_company == null) {
+					availableTagsUser[userCnt] = useCodeCollectionData.models[index].attributes.name + "(" + useCodeCollectionData.models[index].attributes.id + ")";
+					console.log(availableTagsUser[userCnt]);
+					userCnt++;
+				}
+				else {
+					console.log("Leave_company[" + useCodeCollectionData.models[index].attributes.name + "][" + useCodeCollectionData.models[index].attributes.leave_company + "]");
+				}
 			}
 			$(document).ready(function() {
 		 		$("#autocomplete").autocomplete({
@@ -170,16 +177,21 @@ define([
 				var _validate = "";
 				if(selectedTxt == "직원") {
 					var saveDisplaydata = _data.use_user;
-					var firstArr = (_data.use_user).split("(");
-					var strTemp = firstArr[1].split(")");
-					_data.use_user = strTemp[0];
+					if(!_.isEmpty(_data.use_user)) {
+						var firstArr = (_data.use_user).split("(");
+						var strTemp = firstArr[1].split(")");
+						_data.use_user = strTemp[0];
+					}
+					else {
+						_data.use_user = "";
+					}
 					_data.use_dept = "";
 
 					var _IpAssignedManagerModel=new IpAssignedManagerModel(_data);
 					var _validate=_IpAssignedManagerModel.validation(_data, {// 유효성 검사 필드 
 						ip:"",
 						//use_dept : "",
-						use_user : "",
+						//use_user : "",
 						//memo : "", // memo에 데이터 입력안해도 등록되도록 한다.
 					});
 					if(!_.isUndefined(_validate)){
@@ -190,7 +202,9 @@ define([
 						_IpAssignedManagerModel.save({},{
 							success:function(model, xhr, options){
 								affterEvent();
-								_data.use_user = saveDisplaydata;
+								//if(!_.isEmpty(_data.use_user)) {
+									_data.use_user = saveDisplaydata;
+								//}
 								dfd.resolve(_.defaults(_data, _IpAssignedManagerModel.default));
 							},
 							error:function(model, xhr, options){
@@ -207,14 +221,19 @@ define([
 				}
 				else if (selectedTxt == "부서") {
 					var saveDisplaydata = _data.use_user;
-					var firstArr = (_data.use_user).split("(");
-					var strTemp = firstArr[1].split(")");
-					_data.use_dept = strTemp[0];
+					if(!_.isEmpty(_data.use_user)) {
+						var firstArr = (_data.use_user).split("(");
+						var strTemp = firstArr[1].split(")");
+						_data.use_dept = strTemp[0];
+					}
+					else {
+						_data.use_dept = "";
+					}
 					_data.use_user = "";
 					var _IpAssignedManagerModel=new IpAssignedManagerModel(_data);
 					var _validate=_IpAssignedManagerModel.validation(_data, {// 유효성 검사 필드 
 						ip:"",
-						use_dept : "",
+						//use_dept : "",
 						//use_user : "",
 						//memo : "", // memo에 데이터 입력안해도 등록되도록 한다.
 					});
@@ -226,7 +245,9 @@ define([
 						_IpAssignedManagerModel.save({},{
 							success:function(model, xhr, options){
 								affterEvent();
-								_data.use_user = saveDisplaydata;
+								//if(!_.isEmpty(_data.use_user)) {
+									_data.use_user = saveDisplaydata;
+								//}
 								dfd.resolve(_.defaults(_data, _IpAssignedManagerModel.default));
 							},
 							error:function(model, xhr, options){
@@ -254,16 +275,21 @@ define([
 			return indexed_array;
 		},
 		checkFormData: function(data) {
-			if(selectedTxt == "직원") {
-				if(availableTagsUser.indexOf(data) == -1)
-					return false;
-			}
-			else if (selectedTxt == "부서") {
-				if(availableTags.indexOf(data) == -1)
-					return false;
+			if(_.isEmpty(data)) {
+				return true;
 			}
 			else {
-				console.log("Undefined data : " + selectedTxt);
+				if(selectedTxt == "직원") {
+					if(availableTagsUser.indexOf(data) == -1)
+						return false;
+				}
+				else if (selectedTxt == "부서") {
+					if(availableTags.indexOf(data) == -1)
+						return false;
+				}
+				else {
+					console.log("Undefined data : " + selectedTxt);
+				}
 			}
 			return true;
 		},

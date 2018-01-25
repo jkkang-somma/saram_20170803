@@ -84,10 +84,21 @@ define([
 				userCollection.fetch({
 					success : function(result){
 						if (result.length > 1) {
-							for( var index = 0; index < result.models.length; index++) {
-								availableTagsUser[index] = result.models[index].attributes.name + "(" + result.models[index].attributes.id + ")";
-								console.log(availableTagsUser[index]);
+							var userCnt = 0;
+							for(var index = 0; index < result.models.length; index++) {
+								if (_.isEmpty(result.models[index].attributes.leave_company) || result.models[index].attributes.leave_company == null) {
+									availableTagsUser[userCnt] = result.models[index].attributes.name + "(" + result.models[index].attributes.id + ")";
+									console.log(availableTagsUser[userCnt]);
+									userCnt++;
+								}
+								else {
+									console.log("Leave_company[" + result.models[index].attributes.name + "][" + result.models[index].attributes.leave_company + "]");
+								}
 							}
+							// for( var index = 0; index < result.models.length; index++) {
+							// 	availableTagsUser[index] = result.models[index].attributes.name + "(" + result.models[index].attributes.id + ")";
+							// 	console.log(availableTagsUser[index]);
+							// }
 						}
 						else {
 							console.log("userCollection data is null!!!");
