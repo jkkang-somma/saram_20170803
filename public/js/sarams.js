@@ -33,7 +33,8 @@ require.config({
    paths: {
    //    jquery: 'tool/jquery.min',
       'jquery.ui': 'tool/jqueryui/jquery-ui',
-       'jquery.autocomplete': 'tool/jqueryui/jquery-Autocomplete',
+      'jquery.number': 'tool/jqueryui/jquery.number',
+      'jquery.autocomplete': 'tool/jqueryui/jquery-Autocomplete',
       backbone: 'tool/backbone/backbone',
       underscore: 'tool/underscore/underscore-min',
       'underscore.string': 'tool/underscore/underscore.string.min',
