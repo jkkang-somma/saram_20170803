@@ -2239,7 +2239,7 @@
 			FROM
 				office_item_history_tbl
 			WHERE
-				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and str_to_date(?,"%Y-%m-%d")
 			AND
 				category_type=?
 			AND
@@ -2259,7 +2259,8 @@
 			FROM
 				office_item_history_tbl
 			WHERE
-				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and str_to_date(?,"%Y-%m-%d")
+			ORDER BY history_date
 		</query>
 		<query id="selectOfficeItemHistoryListAllV2">
 			SELECT
@@ -2267,9 +2268,10 @@
 			FROM
 				office_item_history_tbl
 			WHERE
-				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1)
+				str_to_date(history_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and str_to_date(?,"%Y-%m-%d")
 			AND
 				category_type=?
+			ORDER BY history_date
 		</query>
 		<query id="insertOfficeItemHistory">
 			INSERT INTO
