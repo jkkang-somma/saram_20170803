@@ -964,7 +964,28 @@ define([
             if(filename != undefined) {
                 prefix = filename;
             }
-            saveAs(new Blob(["\uFEFF" + gridHtml], {type: "text/csv;charset=utf-8"}), prefix + '_' + dateStr + '.xls');
+
+            Dialog.loading({
+                action:function(){
+                    let dfd = new $.Deferred();
+                    let filesaver = saveAs(new Blob(["\uFEFF" + gridHtml],
+                        {type: "text/csv;charset=utf-8"}), prefix + '_' + dateStr + '.xls');
+                    if(filesaver.DONE === 2 && filesaver.WRITING ===1) {
+                        dfd.resolve();
+                    } else {
+                        dfd.reject();
+                    }
+                    return dfd.promise();
+                },
+
+                actionCallBack:function(res){
+
+                },
+                errorCallBack:function(response){
+                    Dialog.error("파일 다운로드 실패!");
+                },
+            });
+
 
         }
     });
