@@ -9,11 +9,13 @@ define([
 	'cmoment',
 	'models/dashboard/WorkingSummaryModel',
 	'models/sm/SessionModel',
+	'collection/rm/ApprovalCollection',
 	'views/dashboard/CalendarView',
+	'views/statistics/DeptSummaryView',
 	'text!templates/layout/default.html',
 	'text!templates/dashboardTemplate.html',
 	'text!templates/default/head.html'
-], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, CalendarView, LayoutHTML, DashboardHTML, HeadHTML) {
+], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, ApprovalCollection, CalendarView, DeptSummaryView, LayoutHTML, DashboardHTML, HeadHTML) {
 	var LOG = log.getLogger('DashBoardView');
 	function getMinTimeString(data) {
 		var hour = Math.floor(data / 60);
@@ -42,6 +44,7 @@ define([
 		initialize: function () {
 			var view = this;
 			this.model = new WorkingSummaryModel({ _id: "-1" });
+			this.approvalCollection = new ApprovalCollection();
 
 			//초기 검색 조건 설정 이번달. 1일 부터 말일까지.
 
@@ -82,7 +85,8 @@ define([
 			this.getWorkingSummary(_view.searchParams).done(function (workingSummary) {
 				var code = SessionModel.getUserInfo().dept_code;
 				if (workingSummary.length == 0) {// 조회내역이 없을때
-					if (_firstInitialize && code != '0000') {
+					// if (_firstInitialize && code != '0000') {
+					if (_firstInitialize) {
 						var _startDate = Moment().add(-1, 'month').startOf('month').format("YYYY-MM-DD");
 						var _endDate = Moment().add(-1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 						var _searchParams = {
@@ -93,19 +97,21 @@ define([
 
 						_firstInitialize = false;
 						_view.render();
-					} else {
+					}else {
 						_view.workingSummary = _defaultData;
-						_view.draw();
+						_view.draw(code);
 					}
 				} else {
 					_view.workingSummary = workingSummary[0];
-					_view.draw();
+					_view.draw(code);
 				}
+
+				
 			}).fail(function () {
 
 			});
 		},
-		draw: function () {
+		draw: function (code) {
 			var _view = this;
 			if (_firstInitialize) {//첫 수행
 				_firstInitialize = false;
@@ -132,14 +138,21 @@ define([
 			layout.append(head);
 
 			//button
-			layout.append('<div class="pull-right"><div class="btn-group" style="top:-15px;"></div></div>');
+			layout.append('<div class="pull-right"><div class="btn-group" id="privilege-btn" style="top:-15px; margin-right:10px;"></div><div class="btn-group" id="monthpickerCon" style="top:-15px;"></div></div>');
 
 			// 아래 list
 			var dashboard = $(_dashboardTemp(defaultData));
 			var _defaultRowHTML = '<li class="list-group-item animated  <%= action%>"><span class="badge"><%= value%></span><%= lavel%></li>';
 
-			var calendarView = new CalendarView({ el: dashboard.find('#calendar')[0] });
-			calendarView._draw(_params);
+			
+			if(code != '0000'){
+				var calendarView = new CalendarView({ el: dashboard.find('#calendar')[0] });
+				calendarView._draw(_params);
+			}else{
+				var view = new DeptSummaryView({ el: dashboard.find('#calendar')[0] });
+				view.render('dashboard', _view.searchParams) ;
+				dashboard.find('#calendar').css('width', '100%')
+			}
 
 			layout.append(dashboard);
 
@@ -171,35 +184,37 @@ define([
 			};
 
 			// var _validField = ["NIGHT_WORKING_A", "NIGHT_WORKING_B", "NIGHT_WORKING_C", "HOLIDAY_WORKING_A", "HOLIDAY_WORKING_B", "HOLIDAY_WORKING_C"];
-			var _disableField = ["id", "name","total_working_day", "total_over_time", "total_holiday_over_time", "over_over_time", "over_holiday_over_time", "total_early_time"];
-			var timeout = function (data, name) {
-
-				_delay = _delay + 200;
-
-				setTimeout(function () {
-					_action = !_action;
-					var rowTmp = _.template(_defaultRowHTML);
-					var row = rowTmp(
-						{
-							value: data + getUnit(name.toUpperCase()),
-							lavel: i18Common.DASHBOARD.WORKING_SUMMARY[name.toUpperCase()],
-							action: _action ? "fadeInLeftBig" : "fadeInUp"
-						}
-					);
-
-					dashboard.find("#list-group").append(row);
-				}, _delay);
-			};
-
-			for (var name in _data) {
-				// if ((_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name] == 0) || _.indexOf(_disableField, name) > -1) {
-				if ( _data[name] == 0 || _.indexOf(_disableField, name) > -1){
-					continue;
+			if(code != '0000'){
+				var _disableField = ["id", "name","total_working_day", "total_over_time", "total_holiday_over_time", "over_over_time", "over_holiday_over_time", "total_early_time"];
+				var timeout = function (data, name) {
+	
+					_delay = _delay + 200;
+	
+					setTimeout(function () {
+						_action = !_action;
+						var rowTmp = _.template(_defaultRowHTML);
+						var row = rowTmp(
+							{
+								value: data + getUnit(name.toUpperCase()),
+								lavel: i18Common.DASHBOARD.WORKING_SUMMARY[name.toUpperCase()],
+								action: _action ? "fadeInLeftBig" : "fadeInUp"
+							}
+						);
+	
+						dashboard.find("#list-group").append(row);
+					}, _delay);
+				};
+	
+				for (var name in _data) {
+					// if ((_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name] == 0) || _.indexOf(_disableField, name) > -1) {
+					if ( _data[name] == 0 || _.indexOf(_disableField, name) > -1){
+						continue;
+					}
+					
+	
+					timeout(_data[name], name);
+	
 				}
-				
-
-				timeout(_data[name], name);
-
 			}
 
 			// timeout(getMinTimeString(_data.total_over_time)+"("+_data.over_over_time+")", "total_over_time");
@@ -208,9 +223,50 @@ define([
 
 			// timeout(getMinTimeString(_data.total_early_time), "total_early_time");
 
+			if(SessionModel.getUserInfo().privilege == '1'){
+				// <div class="btn btn-success">미결 : <span style="font-weight: bold; margin-left: 10px;"> 0 </span> 건</div>
+				if($('.btn-group#privilege-btn').children().length == 0){
+					var appendDiv = $('<div>').attr('class', 'btn btn-success');
+					appendDiv.append('미결 : ');
+					var spanCon = $('<span>' ).attr('style', 'font-weight: bold; margin-left: 10px;');
+					spanCon.append(0);
+					appendDiv.append(spanCon);
+					appendDiv.append(" 건");
+					$('.btn-group#privilege-btn').append(appendDiv).after(function(){
+						$(this).click(function(){
+							var $this = $(this);
+							var num = $this.find('span').html();
+							if(parseInt(num) > 0){
+								var reportParam = $this.data('data');
+								var endDate = reportParam.endDate.split(" ");
+								window.location.href = "#reportmanager/" +  reportParam.startDate + "/" + endDate[0] ;
+							}
+						});
+					});
+				}
+
+				var reportParam = {
+					managerId : SessionModel.getUserInfo().id,
+					startDate : _view.searchParams.start,
+					endDate : _view.searchParams.end,
+				};
+									
+				_view.approvalCollection.fetch({ 
+					data: reportParam,
+					success: function(result) {
+						$('.btn-group#privilege-btn').find('span').html(result.length);
+						$('.btn-group#privilege-btn').data('data', reportParam);										
+					},
+					error : function(result) {
+						
+					}
+				}); 
+
+			}
+
 			//button monthpicker 
 			new Monthpicker({
-				el: ".btn-group",
+				el: ".btn-group#monthpickerCon",
 				callBack: function (value) {
 					var _startDate = Moment(value, "YYYY-MM").startOf('month').format("YYYY-MM-DD");
 					var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").endOf('month').format("YYYY-MM-DD HH:mm:ss");

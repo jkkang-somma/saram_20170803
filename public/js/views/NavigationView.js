@@ -16,11 +16,12 @@ define([
   'views/sm/ConfigUserView',
   'views/AdminSettingView',
   'views/DocumentView',
-  'views/BookView'
+  'views/BookView',
+  'views/rm/AddNewReportView',
 ], function($, _, Backbone, animator,Dialog, Util, Schemas, i18Common, 
 		BaseView, navigation, Menu, Code,
 		SessionModel, RawDataModel,
-		ConfigUserView, AdminSettingView, DocumentView, BookView
+		ConfigUserView, AdminSettingView, DocumentView, BookView, AddNewReportView
 ){
   
   var NavigationView = BaseView.extend({
@@ -95,6 +96,7 @@ define([
         $("#userConifg").html('<span class="glyphicon glyphicon-user"></span> ' + SessionModel.getUserInfo().name);
         animator.animate(this.el, animator.FADE_IN_DOWN);
         
+        $("#apprAppend").html('<span class="glyphicon glyphicon-file"></span>  상신');
         $("#document").html('<span class="glyphicon glyphicon-file"></span>  양식');
         $("#book").html('<span class="glyphicon glyphicon-file"></span>  도서');
     },
@@ -104,7 +106,8 @@ define([
 		'click #accessIn' : 'accessIn',
 		'click #accessOut' : 'accessOut',
 		'click #setting' : 'setting',
-		'click #document' : 'document',
+        'click #apprAppend' : 'apprAppend',
+        'click #userConifg' :'userConifg',
 		'click #book' : 'book'
     },
     show:function(){
@@ -278,7 +281,31 @@ define([
                 }
 	        }]
 	    });
-	},
+    },
+    
+    apprAppend: function(){
+        var _addNewReportView = new AddNewReportView();
+        
+        Dialog.show({
+            title: "결재 상신",
+            content: _addNewReportView,
+            buttons: [{
+                label: "상신",
+                cssClass: Dialog.CssClass.SUCCESS,
+                action: function(dialogRef) { // 버튼 클릭 이벤트
+                    _addNewReportView.onClickBtnSend(dialogRef).done(function(model) {
+                        window.location.href = "#reportmanager";
+                        dialogRef.close();
+                    });
+                }
+            }, {
+                label: '닫기',
+                action: function(dialogRef) {
+                    dialogRef.close();
+                }
+            }]
+        });
+    },
 	book:function(){
 	    var bookView=new BookView();
 	    Dialog.show({

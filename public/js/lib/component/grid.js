@@ -48,8 +48,9 @@ define([
     	        // if($(window).width()!=lastWidth){
     	            // LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
-                    // grid.updateCSS(grid);
-                    grid.updateCSS(true);
+                    // grid.updateCSS(true);
+                    grid.render();
+                   
                 // }
     	    });
 
@@ -61,6 +62,10 @@ define([
             this.filters={};
 
             this.options.scrollFix = (options.scrollFix == undefined)? true: options.scrollFix;
+            if(this.options.scrollFix){
+                this.options.scrollY = '500px';
+                this.options.scrollCollapse = true;
+            }
 
             var _btns=this.options.buttons;
             if (_.isUndefined(_btns) || _.isNull(_btns) || _btns.length <= 0){
@@ -87,45 +92,6 @@ define([
     	setBtnText:function(btn, text){
     	    btn.html($(_defaultBtnText).html(text));
     	},
-        setTheadCss: function(isFilter){
-            var width=$(window).width();
-            var gridCon = $('#' + this.options.id);
-            
-            if(!this.options.scrollFix){
-                return;
-            }
-
-            if(gridCon.find("tbody td").length > 1){
-                if( (gridCon.find("thead").outerWidth() > gridCon.find("thead tr").outerWidth() 
-                        && gridCon.find("thead").outerWidth() - 17 > gridCon.find("thead tr").outerWidth()
-                        && gridCon.find("thead tr").outerWidth() >= gridCon.find("tbody tr").outerWidth())
-                    || (isFilter && gridCon.find("thead").outerWidth() - 17 <= gridCon.find("tbody tr").outerWidth()) ){
-                }else{
-                    var theadTds = gridCon.find("colgroup col");
-                    _.each(theadTds, function(tdCon, i){
-                        var tdWidth = $(gridCon.find('thead th')[i]).outerWidth();
-    
-                        $(tdCon).css('width', tdWidth);
-                    });
-                }
-                var theadThs = gridCon.find("thead th");
-                _.each(theadThs, function(thCon, i){
-                    var tdWidth = $(gridCon.find('tbody tr:first > td')[i]).outerWidth() - 36;
-
-                    $(thCon).css('width', tdWidth);
-                });
-            }
-            if (width > 768) {
-                gridCon.find("thead").css('position', 'fixed');
-                gridCon.find("thead").css('margin-top', -(gridCon.find("thead").outerHeight()) + "px");
-                gridCon.parent().css('margin-top', (gridCon.find("thead").outerHeight() + 10) + "px");
-                
-            } else if ( width  < 767) {
-                gridCon.find("thead").css('position', 'relative');
-                gridCon.find("thead").css('margin-top', "0px");
-                gridCon.parent().css('margin-top', "10px");
-            }
-        },
     	updateCSS:function(resize){
     	    var width=$(window).width();
     	    var _padding=38;
@@ -167,7 +133,6 @@ define([
                     }
                 }
             }
-            this.setTheadCss(resize);
     	},
     	format : function (rowData) {
     	    var _result=$('<div></div>');
@@ -541,7 +506,6 @@ define([
                 _grid.condition.MyRecord_Text=index;//Search 필터 값 저장 기능:  변경된 필터 값 메모리에 저장
                 _grid.filters.myRecord=filter[index];
                 _grid._filtering();
-                _grid.setTheadCss(true);
             })
     	},
         _createMyDeptRecordButton:function(obj){
@@ -823,40 +787,57 @@ define([
     	    this.columns= _columns;
     	    this.options.collection.toJSON();
     	    //dataTable reander
-    	    var _dataTable=$(GridHTML);
+            $("#"+this.options.el).find('.dataTables_wrapper').remove();
+            var _dataTable=$(GridHTML);
             $("#"+this.options.el).append(_dataTable);
-    	    _dataTable.attr("id", this.options.id);
-            _dataTable.dataTable({
+            _dataTable.attr("id", this.options.id);
+
+            var dtOp = {
                 "lengthChange": false,
                 "sDom": '<"top">rt<"bottom"ip>',// _dataTable display controll
      	        "data" : this.options.collection.toJSON(),
-     	        "columns" : _columns,
+                "columns" : _columns,
      	        "rowCallback" : _.isUndefined(this.options.rowCallback) ? null : this.options.rowCallback,
-                 "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order,
-                 "initComplete": function(){// 모두 그려진 후 
-                     _grid.setTheadCss();
-                 }
-             });
-             
+                "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order,
+                "initComplete" : function(){
+                    if(dtOp.scrollY != undefined){
+                        console.log(dtOp.scrollY);
 
-            if($("#"+this.options.el).find("table colgroup").length == 0){
-                var colgroupCon = $('<colgroup>');
-                $("#"+this.options.el).find("table thead th").each(function(){
-                   var thWidth = $(this).width();
-                   colgroupCon.append($('<col>').css('width', thWidth));
-               });
-               $("#"+this.options.el).find("table").prepend(colgroupCon);
-            }
+                        this.parents('.dataTables_scroll').css('height', dtOp.scrollY);
+                    }
+                }
+             }
 
-            var rowsHeight = 0;
-            $('.main-container > div > .row').each(function(){
-                rowsHeight += $(this).height();
-            });
+             if(this.options.scrollY != undefined){
+                var height = _dataTable.find("thead").height() + $("#"+this.options.el).outerHeight() - 110;
+                dtOp.scrollY = height;
+                dtOp.scrollCollapse = this.options.scrollCollapse;
+             }
+
+            _dataTable.dataTable(dtOp);
+            
+
+            // if($("#"+this.options.el).find("table colgroup").length == 0){
+            //     var colgroupCon = $('<colgroup>');
+            //     $("#"+this.options.el).find("table thead th").each(function(){
+            //        var thWidth = $(this).width();
+            //        colgroupCon.append($('<col>').css('width', thWidth));
+            //    });
+            //    $("#"+this.options.el).find("table").prepend(colgroupCon);
+            // }
+
+            // var rowsHeight = 0;
+            // $('.main-container > div > .row').each(function(){
+            //     rowsHeight += $(this).height();
+            // });
 
             //  var height = _dataTable.find("thead").height() + rowsHeight +  15;
-            var gap = (_dataTable.parents('.modal-dialog').length > 0)? 30 : 65;
-            var height = rowsHeight +  gap + _dataTable.find("thead").height();
-             $("#"+this.options.el).find(".dataTables_wrapper").css('height', 'calc(100% - '+ height +'px)')
+            // var gap = (_dataTable.parents('.modal-dialog').length > 0)? 30 : 65;
+            // var height = rowsHeight +  gap + _dataTable.find("thead").height();
+            // if(this.options.scrollFix){
+
+            //     $("#"+this.options.el).find(".dataTables_wrapper").css('height', 'calc(100% - '+ height +'px)')
+            // }
             
      	    //ROW click
      	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {

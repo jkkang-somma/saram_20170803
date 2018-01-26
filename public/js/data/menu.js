@@ -116,6 +116,7 @@ define([
 			title: i18Common.MENU.SUB.AM.REPORT_MANAGER, //"근태 상신(list)",
 			hashTag: "#reportmanager",
 			auth: SCHEMAS.USER,
+			subTag: ["/?/?"],
 			actionAuth: {
 				save: SCHEMAS.ADMIN
 			}
