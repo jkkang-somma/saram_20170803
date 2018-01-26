@@ -149,7 +149,7 @@ define([
 			var _officeitemhistoryModel=new OfficeItemHistoryModel(_data);
 			
             var _validate=_officeitemhistoryModel.validation(_data, {// 유효성 검사 필드 
-                serial_yes:"", repair_price_value:""});
+                serial_yes:""});
             
             if(!_.isUndefined(_validate)){
                 Dialog.warning(_validate);

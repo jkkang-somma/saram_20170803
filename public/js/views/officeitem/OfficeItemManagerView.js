@@ -112,12 +112,19 @@ define([
                     { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor",visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no",visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code",visible:false, subVisible:false},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_INDEX, data:"category_index", visible:false, subVisible:false},
-                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
                     { "title" : i18Common.OFFICEITEM.CODE.PRICE, data:"price", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.SURTAX, data:"surtax", visible:false, subVisible:false},
-                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy"},
+                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy", class:"dt-body-right" ,"render":function(data, type, row)
+                    {
+                        if(row.price_buy != null && row.price_buy != ""){
+                            var _price = row.price_buy;
+                            return Util.numberWithComma(_price);
+                        }
+                        return "";
+                    }},
                     { "title" : i18Common.OFFICEITEM.CODE.BUY_DATE, data:"buy_date"},
                     { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},
                     { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account", visible:false},
@@ -168,12 +175,33 @@ define([
                     { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor"},
                     { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_INDEX, data:"category_index"},
-                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
-                    { "title" : i18Common.OFFICEITEM.CODE.PRICE, data:"price"},
-                    { "title" : i18Common.OFFICEITEM.CODE.SURTAX, data:"surtax"},
-                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy"},
+                    { "title" : i18Common.OFFICEITEM.CODE.PRICE, data:"price", class:"dt-body-right" ,"render":function(data, type, row)
+                    {
+                        if(row.price != null && row.price != ""){
+                            var _price = row.price;
+                            return Util.numberWithComma(_price);
+                        }
+                        return "";
+                    }},
+                    { "title" : i18Common.OFFICEITEM.CODE.SURTAX, data:"surtax", class:"dt-body-right" ,"render":function(data, type, row)
+                    {
+                        if(row.surtax != null && row.surtax != ""){
+                            var _price = row.surtax;
+                            return Util.numberWithComma(_price);
+                        }
+                        return "";
+                    }},
+                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy", class:"dt-body-right" ,"render":function(data, type, row)
+                    {
+                        if(row.price_buy != null && row.price_buy != ""){
+                            var _price = row.price_buy;
+                            return Util.numberWithComma(_price);
+                        }
+                        return "";
+                    }},
                     { "title" : i18Common.OFFICEITEM.CODE.BUY_DATE, data:"buy_date"},
                     { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},
                     { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account"},
@@ -396,6 +424,7 @@ define([
                                        // $(_btn).button('reset');
                                     };
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
+                            
                                     addOfficeItemView.submitAdd(beforEvent, affterEvent).done(function(data){
                                         grid.addRow(data);
                                         dialogRef.close();
@@ -496,7 +525,7 @@ define([
                 }
                 //
                 //Refresh
-                _buttons.push("refresh");
+                //_buttons.push("refresh");
                 this.option.buttons=_buttons;
                 this.option.fetchParam = {
                     success : function(){

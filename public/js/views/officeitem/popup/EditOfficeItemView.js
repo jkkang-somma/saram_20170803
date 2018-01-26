@@ -1,6 +1,7 @@
 define([
 	'jquery',
 	'underscore',
+	'util',
 	'backbone',
 	'core/BaseView',
 	'log',
@@ -11,7 +12,7 @@ define([
 	'models/officeitem/OfficeItemModel',
 	'collection/common/CodeCollection',
 	'collection/sm/UserCollection',
-  ], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, OfficeItemModel, CodeCollection,UserCollection){
+  ], function($, _,Util,  Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, OfficeItemModel, CodeCollection,UserCollection){
 	  var LOG= log.getLogger("EditOfficeItemView");
 	  var availableTags = [];
 	  var availableTagsUser = [];
@@ -234,8 +235,7 @@ define([
 						if(_buy_date_value != "")
 						{
 							buy_date_value.datetimepicker()
-								.on("change",function(){
-		
+								.on("change",function(){		
 									var val = buy_date_value.find("input").val()
 		
 									var e_date = new Date(val);
@@ -248,7 +248,26 @@ define([
 									d_date = new Date(d_date).toISOString().slice(0,10);
 									_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
 								});	
-						}		
+						}
+						
+						var _disposal_date = _form.getElement("disposal_date");
+
+						_disposal_date.datetimepicker({
+							pickTime: false,
+							format: "YYYY-MM-DD"
+							}).on("change",function(){
+						
+							_form.getElement("state").find("option:eq(2)").prop("selected",true);
+							_form.getElement("state").find('select').trigger('change');
+						});
+
+						_form.getElement("state").find("select").on("change",function(){
+							var val = $(this).val();
+							if(val != "폐기") {	
+								_disposal_date.find("input").val("");
+							}
+						 });
+
 					  dfd.resolve(_view);
 				  }).fail(function(){
 					  dfd.reject();
@@ -263,9 +282,6 @@ define([
 		   afterRender: function(){
 			  var _view=this, _form=this.form;
 			   $(document).ready(function() {
-				  /* $("#autocomplete").autocomplete({
-					   source: availableTags
-				   });*/
   
 				   _form.getElement("use_flag").find("select").on("change",function(){
 					  var val = $(this).val();
@@ -286,9 +302,19 @@ define([
   
 			  var use_flag_info = $('#autocomplete').val();
 			  var use_flag = _form.getElement("use_flag").find("select").val();
+			  
+			  let _state = _form.getElement("state").find("select").val();
+			  var _disposal_date = _form.getElement("disposal_date").find("input").val();
+			  
+			  if( _state == i18nCommon.OFFICEITEM.STATE.DISUSE
+				  && Util.isNull(_disposal_date)){
+				  Dialog.warning("폐기 상태가 선택 되었습니다. 폐기일을 입력해 주세요! ");
+				  dfd.reject();	
+				  return dfd.promise();		
+			  }
+
 			  if(use_flag_info != "")
 			  {
-
 				if(_.indexOf(use_flag_info, "(") > -1){
 	
 					use_flag_info=use_flag_info.replace(")", '');
@@ -316,6 +342,11 @@ define([
 					dfd.reject();	
 					return dfd.promise();			
 				}
+			}else{
+				_form.getElement("use_user").val("");
+				_form.getElement("use_user_name").val("");
+				_form.getElement("use_dept").val("");
+				_form.getElement("use_dept_name").val("");
 			}
 			  var _data=_form.getData();
 			  var _officeitemModel= new OfficeItemModel(_data);
@@ -327,7 +358,10 @@ define([
 			  var _validate=_officeitemModel.validation(_data);
 			  _officeitemModel.save({},{
 				  success:function(model, xhr, options){
-					  dfd.resolve(_data);
+					    
+					var respons=xhr.responseJSON;
+					_data = xhr.result;
+					dfd.resolve(_data);
 				  },
 				  error:function(model, xhr, options){
 					  var respons=xhr.responseJSON;

@@ -16,12 +16,21 @@ var OfficeItem = function (data) {
 
     var use_makeFormat= function (use_name, use_id){
 
-        var use_value = "";
+        var use_value = "유휴";
         if(use_name != null && use_name != ""){
             use_value = use_name +"("+use_id+")";
         }
 
         return use_value
+    }
+
+    var getDefaultLocation= function (_value){
+
+        if(_value == null || _value == ""){
+            return "미지정";
+        }
+
+        return _value
     }
 
     var _getOfficeItemList = function(date){
@@ -51,7 +60,6 @@ var OfficeItem = function (data) {
             data.category_index = maxCategory_index;
             data.serial_yes = data.category_code+'_'+maxCategory_index;   
             
-            if(data.disposal_date ==""){ data.disposal_date = null; }
             if(data.price_buy ==""){ data.price_buy = null; }
             if(data.price==""){ data.price = null; }
             if(data.surtax==""){ data.surtax = null; }            
@@ -59,7 +67,6 @@ var OfficeItem = function (data) {
             if(data.disposal_date==""){ data.disposal_date = null; }
             if(data.expiration_date==""){ data.expiration_date = null; }
             if(data.disposal_account==""){ data.disposal_account = null; }
-
 
             OfficeItemDao.insertOfficeItem(data).then(function(result) {
 
@@ -80,8 +87,14 @@ var OfficeItem = function (data) {
                         use_dept	: data.use_dept, 
                         name	    : (data.use_user != "")?data.use_user_name:data.use_dept_name, 
                         change_user_id : user.name, 
-                        memo	    : data.serial_yes+ " 등록 하였습니다."
+                        memo	    : ""
                     };
+
+                    if(data.state =="폐기"){
+                        indata.type = "폐기"; 
+                        indata.title = "폐기일 : "+data.disposal_date+"" ;  
+                        memo	    : "";
+                    }
                 
                     OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {
                             //resolve(result);
@@ -117,51 +130,71 @@ var OfficeItem = function (data) {
             _getOfficeItem().then(function(currentData){
 
                 var _updateData=_.defaults(data, currentData[0]);
-
                 var _currentData = currentData[0];
-                var _type = "수정"; 
-                var _title = "비품 수정";
-                var _memo = data.serial_yes+ " 수정 하였습니다.";               
 
-                if(data.disposal_date ==""){ data.disposal_date = null; }
-                if(data.price_buy ==""){ data.price_buy = null; }
-                if(data.price==""){ data.price = null; }
-                if(data.surtax==""){ data.surtax = null; }            
-                if(data.buy_date==""){ data.buy_date = null; }
-                if(data.disposal_date==""){ data.disposal_date = null; }
-                if(data.expiration_date==""){ data.expiration_date = null; }
-                if(data.disposal_account==""){ data.disposal_account = null; }
+                let _type = "수정"; 
+                let _title = "";
+                let _memo  = "";     
+                
+                let _use_type = "사용자 변경";
 
+                if(data.price_buy ==""){ _updateData.price_buy = null; }
+                if(data.price==""){ _updateData.price = null; }
+                if(data.surtax==""){ _updateData.surtax = null; }            
+                if(data.buy_date==""){ _updateData.buy_date = null; }               
+                if(data.expiration_date==""){ _updateData.expiration_date = null; }
+                if(data.disposal_account==""){ _updateData.disposal_account = null; }
+                if(data.disposal_date==""){ _updateData.disposal_date = null; }
+  
                 OfficeItemDao.updateOfficeItem(_updateData).then(function(result){        
                     
                     if(data.use_user !="" ){   //사용자 변경                        
-                        _type = "사용자 변경"; 
+                       
                         if(_currentData.use_user == ""){   // 부서 -> 사용 직원 변경
-                            _title = "부서 -> 사용자 변경"
-                            _memo = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
+                            //_title = "부서 -> 사용자 변경"
+                            _type = _use_type; 
+                            _title = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
                                     + " -> "+
                                     use_makeFormat(_updateData.use_user_name,_updateData.use_user);     
                         }else if(_updateData.use_user != _currentData.use_user){ 
-                            _title = "사용자 변경"
-                            _memo = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
+                            //_title = "사용자 변경"
+                            _type = _use_type; 
+                            _title = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
                                     + " -> "+
                                     use_makeFormat(_updateData.use_user_name,_updateData.use_user);   
                         }
 
                     }else if(data.use_dept !="" ){    //부서 변경
-                        _type = "사용자 변경"; 
-                      if(_currentData.use_dept == ""){
-                            _title = "사용 사용자 -> 부서 변경"
-                            _memo = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
+                        
+                       if(_currentData.use_dept == ""){
+                           // _title = "사용 사용자 -> 부서 변경"
+                           _type = _use_type; 
+                           _title = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
                                     + " -> "+
                                     use_makeFormat(_updateData.use_dept_name,_updateData.use_dept);
 
                         }else if(_updateData.use_dept != _currentData.use_dept){  
-                            _title = "부서 변경"
-                            _memo = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
+                            //_title = "부서 변경"
+                            _type = _use_type; 
+                            _title = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
                                     + " -> "+
                                     use_makeFormat(_updateData.use_dept_name,_updateData.use_dept);
 
+                        }
+                    }else if(data.use_user =="" && data.use_dept ==""){
+                        if(_currentData.use_user != ""){ 
+                            _type = _use_type; 
+                            //_title = "사용자 삭제"
+                            _title = use_makeFormat(_currentData.use_user_name,_currentData.use_user) 
+                                    + " -> " 
+                                    +use_makeFormat("","");
+                        }
+                        else if(_currentData.use_dept != ""){ 
+                            //_title = "부서 삭제"
+                            _type = _use_type; 
+                            _title = use_makeFormat(_currentData.use_dept_name,_currentData.use_dept) 
+                                    + " -> " 
+                                    +use_makeFormat("","");
                         }
                     }
                           
@@ -180,13 +213,43 @@ var OfficeItem = function (data) {
                         change_user_id : user.name, 
                         memo	    : _memo
                     };
-                
-                    OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {
-                            resolve(data);
-                           // resolve({dbResult : result, data : data});
+
+                    if(_type == _use_type){
+                        OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {                       
                         }).catch(function(e){//Connection Error
                             reject(e);
                         });
+                    }
+
+                    if(data.location != _currentData.location){
+
+                        indata.title = "[장소] "+getDefaultLocation(_currentData.location)
+                                       + "-> "
+                                       +getDefaultLocation(data.location) ;     
+
+                        OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {                       
+                        }).catch(function(e){//Connection Error
+                            reject(e);
+                        });
+                    }
+
+                    if(data.state != _currentData.state){
+
+                        indata.type = data.state; 
+                       
+                        if(data.state == "폐기"){
+                            indata.title = _currentData.state+ " -> "+data.state+" ("+data.disposal_date+")" ; 
+                        }else{
+                            indata.title = _currentData.state+ " -> "+data.state ;
+                        }
+
+                        OfficeItemHistoryDao.insertOfficeItemHistory(indata).then(function(result) {                       
+                        }).catch(function(e){//Connection Error
+                            reject(e);
+                        });
+                    }
+
+                    resolve(data);
 
                 }).catch(function(e){
                     debug("_editOfficeItem ERROR:"+e.message);

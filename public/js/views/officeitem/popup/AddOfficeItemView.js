@@ -1,6 +1,7 @@
 define([
 	'jquery',
 	'underscore',
+	'util',
 	'backbone',
 	'core/BaseView',
 	'log',
@@ -11,7 +12,7 @@ define([
 	'models/officeitem/OfficeItemModel',
 	'collection/common/CodeCollection',
 	'collection/sm/UserCollection',
-  ], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, 
+  ], function($, _,Util, Backbone, BaseView, log, Dialog, i18nCommon, Form, Code, 
 			  OfficeItemModel, CodeCollection,UserCollection){
 	  var LOG= log.getLogger("AddOfficeItemView");
 	  var availableTags = [];
@@ -213,7 +214,29 @@ define([
 							  _form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
   
 						  });	
-						}					
+						}
+						
+					var _disposal_date = _form.getElement("disposal_date");
+
+					_disposal_date.datetimepicker({
+							pickTime: false,
+							format: "YYYY-MM-DD"
+						}).on("change",function(){
+						var val = $(this).val();
+
+						_form.getElement("state").find("option:eq(2)").prop("selected",true);
+						_form.getElement("state").find('select').trigger('change');
+					
+
+					});
+
+					_form.getElement("state").find("select").on("change",function(){
+						var val = $(this).val();
+						if(val != "폐기") {	
+							_disposal_date.find("input").val("");
+						}
+					 });
+
 					  dfd.resolve(_view);
 				  }).fail(function(){
 					  dfd.reject();
@@ -229,9 +252,6 @@ define([
 			  var _view=this, _form=this.form;
   
 			   $(document).ready(function() {
-				  /*$("#autocomplete").autocomplete({
-					   source: availableTags
-				   });*/
 				   
 				   _form.getElement("use_flag").find("select").on("change",function(){
 					  var val = $(this).val();
@@ -246,13 +266,25 @@ define([
 				   });
 			   });
 		  }, 
+
 		  submitAdd : function(beforEvent, affterEvent){
+
 			var view = this;
 			var dfd= new $.Deferred();
 			var _view=this, _form=this.form;
   
 			let use_flag_info = $('#autocomplete').val();
 			let use_flag = _form.getElement("use_flag").find("select").val();
+
+			let _state = _form.getElement("state").find("select").val();
+			var _disposal_date = _form.getElement("disposal_date").find("input").val();
+			
+			if( _state == i18nCommon.OFFICEITEM.STATE.DISUSE
+				&& Util.isNull(_disposal_date)){
+				Dialog.warning("폐기 상태가 선택 되었습니다. 폐기일을 입력해 주세요! ");
+				dfd.reject();	
+				return dfd.promise();		
+			}
 			  
 			if(use_flag_info != "")
 			 {
@@ -279,9 +311,7 @@ define([
 					dfd.reject();	
 					return dfd.promise();			
 				}
-			}		
-
-
+			}	
 
 			var _data=_form.getData();	    
 			var _officeitemModel=new OfficeItemModel(_data);
@@ -296,6 +326,7 @@ define([
 			} else {
 				  
 				  beforEvent();
+
 			_officeitemModel.save({},{
 					  success:function(model, xhr, options){
   

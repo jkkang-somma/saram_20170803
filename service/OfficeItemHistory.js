@@ -29,6 +29,8 @@ var OfficeItemHistory = function () {
     };
 
     var _addOfficeItemHistory=function(data){
+        
+        if(data.repair_price ==""){ data.repair_price = null; }
         return OfficeItemHistoryDao.insertOfficeItemHistory(data); 
     };
     
