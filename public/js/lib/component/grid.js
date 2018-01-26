@@ -60,6 +60,8 @@ define([
             };
             this.filters={};
 
+            this.options.scrollFix = (options.scrollFix == undefined)? true: options.scrollFix;
+
             var _btns=this.options.buttons;
             if (_.isUndefined(_btns) || _.isNull(_btns) || _btns.length <= 0){
                 _btns=["search"];
@@ -89,6 +91,10 @@ define([
             var width=$(window).width();
             var gridCon = $('#' + this.options.id);
             
+            if(!this.options.scrollFix){
+                return;
+            }
+
             if(gridCon.find("tbody td").length > 1){
                 if( (gridCon.find("thead").outerWidth() > gridCon.find("thead tr").outerWidth() 
                         && gridCon.find("thead").outerWidth() - 17 > gridCon.find("thead tr").outerWidth()
@@ -826,8 +832,12 @@ define([
      	        "data" : this.options.collection.toJSON(),
      	        "columns" : _columns,
      	        "rowCallback" : _.isUndefined(this.options.rowCallback) ? null : this.options.rowCallback,
-     	        "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order
-     	    });
+                 "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order,
+                 "initComplete": function(){// 모두 그려진 후 
+                     _grid.setTheadCss();
+                 }
+             });
+             
 
             if($("#"+this.options.el).find("table colgroup").length == 0){
                 var colgroupCon = $('<colgroup>');
