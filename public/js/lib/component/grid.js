@@ -978,13 +978,10 @@ define([
             Dialog.loading({
                 action:function(){
                     let dfd = new $.Deferred();
-                    let filesaver = saveAs(new Blob(["\uFEFF" + gridHtml],
-                        {type: "text/csv;charset=utf-8"}), prefix + '_' + dateStr + '.xls');
-                    if(filesaver.DONE === 2 && filesaver.WRITING ===1) {
+                    saveAs(new Blob(["\uFEFF" + gridHtml],
+                        {type: "text/csv;charset=utf-8"}), prefix + '_' + dateStr + '.xls').then(function(result){
                         dfd.resolve();
-                    } else {
-                        dfd.reject();
-                    }
+                    });
                     return dfd.promise();
                 },
 
