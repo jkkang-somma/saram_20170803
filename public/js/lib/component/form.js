@@ -119,10 +119,19 @@ define([
                    pickTime: false,
                    format: data.format
                 });
-                
+
+                _datePicker.find("#"+data.id).on('dp.change', function(e){
+                    var formatedValue = e.date.format(e.date._f);
+                    if (formatedValue.length > 0) {
+                        $(_datePicker).find("input").addClass("inserted");
+                    } else {
+                        $(_datePicker).find("input").removeClass("inserted");
+                    }
+                });
+
                 if(!_.isUndefined(data.disabled)&&data.disabled){
                     $(_datePicker).find("input").attr("disabled", "true");
-                }
+                };
                 
                  
                 return _datePicker; 
