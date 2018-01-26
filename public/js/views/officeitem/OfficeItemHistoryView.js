@@ -67,7 +67,7 @@ define([
                         }
                     },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", 
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", className : "dt-body-right",
                         "render": function(data, type, row){
                             var price = row.repair_price;
                             if ( price == null || price == 0 ){
@@ -116,7 +116,7 @@ define([
                     },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", 
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", className : "dt-body-right",
                         "render": function(data,type, row){
                             var price = row.repair_price;
                             if ( price == null || price == 0 ){
@@ -309,7 +309,7 @@ define([
 		        language: "ko",
 		        todayHighlight: true,
 		        format: "YYYY-MM-DD",
-		        defaultDate: Moment(today).format("YYYY-MM-DD")
+                defaultDate: Moment(today).format("YYYY-MM-DD")
             });
 
             //기기분류 Set
