@@ -267,6 +267,14 @@ define([
 			var url = 'views/rm/ReportListView';
 			this.changeView(url, "#reportmanager");
 		},
+
+		showReportManagerParam: function(sdate, edate){
+			var url = 'views/rm/ReportListView';
+			var callback = function(view){
+				view.settingParam = {start : sdate, end : edate};
+			}
+			this.changeView(url, "#reportmanager", callback);
+		},
 		showUserPic : function(){
 			var url = 'views/sm/UserPicView';
 			this.changeView(url);
