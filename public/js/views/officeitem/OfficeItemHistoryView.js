@@ -67,7 +67,7 @@ define([
                         }
                     },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
-                    { data : "repair_price",   "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE,
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", 
                         "render": function(data, type, row){
                             var price = row.repair_price;
                             if ( price == null || price == 0 ){
@@ -116,13 +116,13 @@ define([
                     },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
-                    { data : "repair_price",   "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE,
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", 
                         "render": function(data,type, row){
                             var price = row.repair_price;
-                            if ( price == 0 ){
+                            if ( price == null || price == 0 ){
                                 return "";
                             }
-                            return price;
+                            return Util.numberWithComma(price);
                         }
                     },
                     //{ title : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID, data : "use_user" },

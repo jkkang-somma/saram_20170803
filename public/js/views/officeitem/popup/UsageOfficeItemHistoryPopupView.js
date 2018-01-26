@@ -68,20 +68,28 @@ define([
                             return name;
                         }
                     },*/
-                    { data : "history_date",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE,
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE, data : "history_date", 
                         "render": function(data, type, row){
                             var data = Moment(row.history_date).format("YYYY-MM-DD");
                             return data;
                         }
                     },
-                    { data : "type",           title : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE },
-                    { data : "title",          title : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
-                    { data : "repair_price",   title : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", 
+                        "render": function(data, type, row){
+                            var price = row.repair_price;
+                            if ( price == null || price == 0 ){
+                                return "";
+                            }
+                            return Util.numberWithComma(price);
+                        }
+                    },
                     //{ data : "use_user",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID, visible:false, subVisible:false },
                     //{ data : "use_dept",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USE_DEPT, visible:false, subVisible:false },
-                    { data : "name",           title : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER, data : "name" },
                     //{ data : "change_user_id", "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CHANGE_USER_ID, visible:false, subVisible:false },
-                    { data : "memo",           "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO }
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO, data : "memo" }
 				],
 				dataschema:["seq", "serial_yes", "category_type", "history_date", "type", "title", "repair_price", "use_user", "use_dept", "name", "change_user_id", "memo"],
 				collection: this.officeItemHistoryCollection,
