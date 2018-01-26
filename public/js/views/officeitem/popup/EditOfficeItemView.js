@@ -230,28 +230,24 @@ define([
 						});
 
 					  	var buy_date_value = _form.getElement("buy_date");
-					  	var _buy_date_value = buy_date_value.find("input").val()
-
-						if(_buy_date_value != "")
-						{
-							buy_date_value.datetimepicker()
-								.on("change",function(){		
-									var val = buy_date_value.find("input").val()
+						buy_date_value.datetimepicker({
+							pickTime: false,
+							format: "YYYY-MM-DD"
+							}).on("change",function(){		
+								var val = buy_date_value.find("input").val()
 		
-									var e_date = new Date(val);
-									e_date = e_date.setFullYear(e_date.getFullYear()+6)
-									e_date = new Date(e_date).toISOString().slice(0,10);
-									_form.getElement("expiration_date").find("input").val(e_date); // 사용 만료일
+								var e_date = new Date(val);
+								e_date = e_date.setFullYear(e_date.getFullYear()+6)
+								e_date = new Date(e_date).toISOString().slice(0,10);
+								_form.getElement("expiration_date").find("input").val(e_date); // 사용 만료일
 		
-									var d_date = new Date(val);
-									d_date = d_date.setFullYear(d_date.getFullYear()+5)
-									d_date = new Date(d_date).toISOString().slice(0,10);
-									_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
-								});	
-						}
+								var d_date = new Date(val);
+								d_date = d_date.setFullYear(d_date.getFullYear()+5)
+								d_date = new Date(d_date).toISOString().slice(0,10);
+								_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
+						});		
 						
 						var _disposal_date = _form.getElement("disposal_date");
-
 						_disposal_date.datetimepicker({
 							pickTime: false,
 							format: "YYYY-MM-DD"

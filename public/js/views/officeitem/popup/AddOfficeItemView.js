@@ -114,7 +114,7 @@ define([
 							value:_model.serial_factory, 
 						},{
 							type:"date",
-							name:"buy_date",
+							name:"buy_date",	
 							label:i18nCommon.OFFICEITEM.CODE.BUY_DATE,
 							value:_model.buy_date,
 							format:"YYYY-MM-DD",
@@ -190,17 +190,12 @@ define([
 						}
 					});
 					
-					var buy_date_value = _form.getElement("buy_date");
-					var _buy_date_value = buy_date_value.find("input").val()
+					var buy_date_value = _form.getElement("buy_date");										
+					buy_date_value.datetimepicker({
+						   pickTime: false,
+						   format: "YYYY-MM-DD"
+						    }).on("change",function(){  
 
-					if(_buy_date_value != "")
-					{
-					  //$(".datetimepicker").on('change', function(e){
-					  buy_date_value.datetimepicker({
-						  pickTime: false,
-						  format: "YYYY-MM-DD"
-						   }).on("change",function(){
-  
 							  var val = buy_date_value.find("input").val()
   
 							  var e_date = new Date(val);
@@ -212,21 +207,18 @@ define([
 							  d_date = d_date.setFullYear(d_date.getFullYear()+5)
 							  d_date = new Date(d_date).toISOString().slice(0,10);
 							  _form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
-  
-						  });	
-						}
-						
+					});	
+								
 					var _disposal_date = _form.getElement("disposal_date");
 
 					_disposal_date.datetimepicker({
 							pickTime: false,
 							format: "YYYY-MM-DD"
 						}).on("change",function(){
-						var val = $(this).val();
-
-						_form.getElement("state").find("option:eq(2)").prop("selected",true);
-						_form.getElement("state").find('select').trigger('change');
-					
+							var val = $(this).val();
+							_form.getElement("state").find("option:eq(2)").prop("selected",true);
+							_form.getElement("state").find('select').trigger('change');
+						
 
 					});
 
