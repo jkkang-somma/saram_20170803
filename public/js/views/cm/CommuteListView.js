@@ -520,7 +520,7 @@ define([
 									var overTimeResult = resultTimeFacctory.getResult();
 									console.log(overTimeResult);
 									
-									that.sendApprovalOvertime(dialog, selectItem, inputData, "상신대기");
+									that.sendApprovalOvertime(dialog, overTimeResult, inputData, "상신대기");
 								}else{
 									Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function() {
 										dialog.close();
