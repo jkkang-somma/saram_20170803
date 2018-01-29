@@ -245,6 +245,13 @@ define([
 							d_date = new Date(d_date).toISOString().slice(0,10);
 							_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
 						});	
+
+						_buy_date_value.find("#buy_date").find(".close-icon").click(function(e) {//reset button click
+							_form.getElement("expiration_date").find("input").removeClass("inserted");
+							_form.getElement("expiration_date").find("input").val("");
+							_form.getElement("disposal_account").find("input").val(""); 
+							
+						});
 						/*buy_date_value.datetimepicker({
 							pickTime: false,
 							format: "YYYY-MM-DD"

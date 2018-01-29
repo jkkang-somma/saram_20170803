@@ -120,8 +120,9 @@ define([
                    format: data.format
                 });
 
-                _datePicker.find("#"+data.id).find("button").click(function(e) {//reset button click
+                _datePicker.find("#"+data.id).find(".close-icon").click(function(e) {//reset button click
                     $(_datePicker).find("input").removeClass("inserted");
+                    $(_datePicker).find("input").val("");
                 });
 
                 _datePicker.find("#"+data.id).on('dp.change', function(e){
