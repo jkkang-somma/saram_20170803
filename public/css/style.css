@@ -1427,6 +1427,10 @@ border: 2px dotted #2ABB9B !important;
   background:white;
 }
 
+#dashboard_main table tbody tr.selected td{
+    background: none;
+  }
+
 #dashboard_main table tbody tr td.saturday {
   color:rgb(97,113,245);
   background: rgb(229,248,255);
