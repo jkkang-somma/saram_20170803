@@ -298,11 +298,20 @@ define([
 			let use_flag = _form.getElement("use_flag").find("select").val();
 
 			let _state = _form.getElement("state").find("select").val();
-			var _disposal_date = _form.getElement("disposal_date").find("input").val();
+			let _disposal_date = _form.getElement("disposal_date").find("input").val();			
 			
 			if( _state == i18nCommon.OFFICEITEM.STATE.DISUSE
 				&& Util.isNull(_disposal_date)){
 				Dialog.warning("폐기 상태가 선택 되었습니다. 폐기일을 입력해 주세요! ");
+				dfd.reject();	
+				return dfd.promise();		
+			}
+
+			let _location = _form.getElement("location").find("input").val();
+			_location = _location.replace(/(\s*)/g,"");
+	
+			if( _location == "창고" && !Util.isNull(use_flag_info)){
+				Dialog.warning("장소 정보에 '창고'가 등록 되었습니다. 사용자를 등록 할 수 없습니다.");
 				dfd.reject();	
 				return dfd.promise();		
 			}

@@ -48,7 +48,7 @@ define([
 							type:"input",
         	                name:"category_code",
         	                label:i18nCommon.OFFICEITEM.CODE.CATEGORY_NAME,
-        	                value:_model.category_code,
+        	                value:_model.category_name,
 							disabled:"readonly",						
 						},{
 							type:"input",

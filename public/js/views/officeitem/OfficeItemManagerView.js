@@ -108,26 +108,27 @@ define([
                 el:_id+"_content",
                 column:[
                     { "title" : i18Common.OFFICEITEM.CODE.SERIAL_YES, data:"serial_yes"},
+                    { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no"},
                     { "title" : i18Common.OFFICEITEM.CODE.SERIAL_FACTORY, data:"serial_factory"},
-                    { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor",visible:false, subVisible:false},
-                    { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no",visible:false, subVisible:false},
+                    { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor",visible:false, subVisible:false},   
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code",visible:false, subVisible:false},
-                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
-                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name"},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type",visible:false, subVisible:false},
+                    { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name",visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_INDEX, data:"category_index", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.PRICE, data:"price", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.SURTAX, data:"surtax", visible:false, subVisible:false},
-                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy", class:"dt-body-right" ,"render":function(data, type, row)
+                    { "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy", visible:false, subVisible:false},
+                    /*{ "title" : i18Common.OFFICEITEM.CODE.PRICE_BUY, data:"price_buy", class:"dt-body-right" ,"render":function(data, type, row)
                     {
                         if(row.price_buy != null && row.price_buy != ""){
                             var _price = row.price_buy;
                             return Util.numberWithComma(_price);
                         }
                         return "";
-                    }},
+                    }},*/
                     { "title" : i18Common.OFFICEITEM.CODE.BUY_DATE, data:"buy_date"},
-                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},
-                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account", visible:false},
+                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account"},
+                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},   
                     { "title" : i18Common.OFFICEITEM.CODE.EXPIRATION_DATE, data:"expiration_date", visible:false, subVisible:false},    
                     { "title" : i18Common.OFFICEITEM.CODE.USE_DEPT, data:"use_dept", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.USE_USER, data:"use_user", visible:false, subVisible:false},
@@ -171,9 +172,9 @@ define([
                 id:"ExportDetailListGrid",
                 column:[
                     { "title" : i18Common.OFFICEITEM.CODE.SERIAL_YES, data:"serial_yes"},
+                    { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no"},
                     { "title" : i18Common.OFFICEITEM.CODE.SERIAL_FACTORY, data:"serial_factory"},
                     { "title" : i18Common.OFFICEITEM.CODE.VENDOR, data:"vendor"},
-                    { "title" : i18Common.OFFICEITEM.CODE.MODEL_NO, data:"model_no"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_CODE, data:"category_code"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_TYPE, data:"category_type"},
                     { "title" : i18Common.OFFICEITEM.CODE.CATEGORY_NAME, data:"category_name"},
@@ -203,8 +204,8 @@ define([
                         return "";
                     }},
                     { "title" : i18Common.OFFICEITEM.CODE.BUY_DATE, data:"buy_date"},
-                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},
                     { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account"},
+                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},
                     { "title" : i18Common.OFFICEITEM.CODE.EXPIRATION_DATE, data:"expiration_date"},    
                     { "title" : i18Common.OFFICEITEM.CODE.USE_DEPT, data:"use_dept"},
                     { "title" : i18Common.OFFICEITEM.CODE.USE_USER, data:"use_user"},
@@ -316,7 +317,9 @@ define([
                 _buttons.push({
                     type:"custom",
                     name:"filter",
-                    tooltip:i18Common.OFFICEITEM.USE_STATE.USE,
+                    tooltip:i18Common.CODE.ALL
+                            +"/"+i18Common.OFFICEITEM.USE_STATE.USE
+                            +"/"+i18Common.OFFICEITEM.USE_STATE.NOT_USER,
                     filterBtnText:_usefilterText,
                     click:function(_grid, _button){
                     var filters=[
@@ -351,7 +354,7 @@ define([
                     }, "useStateType");
                     }
                 });            
-                var _filterText=[i18Common.CODE.ALL
+                /*var _filterText=[i18Common.CODE.ALL
                                 ,i18Common.OFFICEITEM.STATE.NORMAL
                                 ,i18Common.OFFICEITEM.STATE.BREAK
                                 ,i18Common.OFFICEITEM.STATE.DISUSE
@@ -397,7 +400,7 @@ define([
                            return fn(data);
                        }, "stateType");
                     }
-                });
+                });*/
                 
                 if (this.actionAuth.add){
                     _buttons.push({//User Add

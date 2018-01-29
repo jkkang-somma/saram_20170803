@@ -24,6 +24,11 @@ var OfficeItem = function (data) {
         return use_value
     }
 
+    var serial_makeFormat = function (n, width){ 
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+      }
+
     var getDefaultLocation= function (_value){
 
         if(_value == null || _value == ""){
@@ -58,7 +63,7 @@ var OfficeItem = function (data) {
             var maxCategory_index = result[0].category_index;
            
             data.category_index = maxCategory_index;
-            data.serial_yes = data.category_code+'_'+maxCategory_index;   
+            data.serial_yes = data.category_code+'-'+serial_makeFormat(maxCategory_index,3);   
             
             if(data.price_buy ==""){ data.price_buy = null; }
             if(data.price==""){ data.price = null; }

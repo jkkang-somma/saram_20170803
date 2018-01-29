@@ -336,6 +336,15 @@ define([
 				  return dfd.promise();		
 			  }
 
+			  let _location = _form.getElement("location").find("input").val();
+			  _location = _location.replace(/(\s*)/g,"");
+	  
+			  if( _location == "창고" && !Util.isNull(use_flag_info)){
+				  Dialog.warning("장소 정보에 '창고'가 등록 되었습니다. 사용자를 등록 할 수 없습니다.");
+				  dfd.reject();	
+				  return dfd.promise();		
+			  }
+
 			  if(use_flag_info != "")
 			  {
 				if(_.indexOf(use_flag_info, "(") > -1){
