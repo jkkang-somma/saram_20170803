@@ -871,7 +871,8 @@ define([
             this.DataTableAPI=_tableAPI;//API 셋팅
     	    _grid.DataTableAPI.page.len( _grid.currentLength ); //page length 설정
     	    $("#"+this.options.el).find('[data-toggle="tooltip"]').tooltip({
-                placement : 'top'
+                placement : 'top',
+                container: 'body'
             });
 
             if (_grid.condition.Search_Text !="" && _grid.condition.Search_Text != undefined) {//Search 필터 값 저장 기능: Search 창에 입력되어 있는 글자대로 필터

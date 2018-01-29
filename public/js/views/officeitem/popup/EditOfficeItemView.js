@@ -156,6 +156,7 @@ define([
 							},{
 								type:"date",
 								name:"buy_date",
+								id:"buy_date",
 								label:i18nCommon.OFFICEITEM.CODE.BUY_DATE,
 								value:_model.buy_date,
 								format:"YYYY-MM-DD",
@@ -192,6 +193,7 @@ define([
 							},{
 								type:"date",
 								name:"disposal_date",
+								id:"disposal_date",
 								label:i18nCommon.OFFICEITEM.CODE.DISPOSAL_DATE,
 								value:_model.disposal_date,
 								format:"YYYY-MM-DD",
@@ -229,8 +231,21 @@ define([
 							}
 						});
 
-					  	var buy_date_value = _form.getElement("buy_date");
-						buy_date_value.datetimepicker({
+						var _buy_date_value = _form.getElement("buy_date");	
+						_buy_date_value.find("#buy_date").on('dp.change', function(e){
+							var val = _buy_date_value.find("input").val()
+	  
+							var e_date = new Date(val);
+							e_date = e_date.setFullYear(e_date.getFullYear()+6)
+							e_date = new Date(e_date).toISOString().slice(0,10);
+							_form.getElement("expiration_date").find("input").val(e_date); // 사용 만료일
+	
+							var d_date = new Date(val);
+							d_date = d_date.setFullYear(d_date.getFullYear()+5)
+							d_date = new Date(d_date).toISOString().slice(0,10);
+							_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
+						});	
+						/*buy_date_value.datetimepicker({
 							pickTime: false,
 							format: "YYYY-MM-DD"
 							}).on("change",function(){		
@@ -245,17 +260,22 @@ define([
 								d_date = d_date.setFullYear(d_date.getFullYear()+5)
 								d_date = new Date(d_date).toISOString().slice(0,10);
 								_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
-						});		
+						});	*/	
 						
 						var _disposal_date = _form.getElement("disposal_date");
-						_disposal_date.datetimepicker({
+						_disposal_date.find("#disposal_date").on('dp.change', function(e){
+							var val = $(this).val();
+							_form.getElement("state").find("option:eq(2)").prop("selected",true);
+							_form.getElement("state").find('select').trigger('change');
+						});
+						/*_disposal_date.datetimepicker({
 							pickTime: false,
 							format: "YYYY-MM-DD"
 							}).on("change",function(){
 						
 							_form.getElement("state").find("option:eq(2)").prop("selected",true);
 							_form.getElement("state").find('select').trigger('change');
-						});
+						});*/
 
 						_form.getElement("state").find("select").on("change",function(){
 							var val = $(this).val();
