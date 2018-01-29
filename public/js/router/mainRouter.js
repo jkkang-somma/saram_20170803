@@ -190,10 +190,10 @@ define([
 				// side-container
 				if( $('.side-container').children().length <= 0 && $(window).width() > 768
 						  && viewUrl.indexOf('dashboard') < 0){
-					$('body').css('overflow', 'hidden');
+//					$('body').css('overflow', 'hidden');
 					$('.main-container').css('height', '');
 				}else{
-					$('body').css('overflow', 'auto');
+//					$('body').css('overflow', 'auto');
 					$('.main-container').css('height', 'auto');
 				}
 			});

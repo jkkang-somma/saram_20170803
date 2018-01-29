@@ -175,7 +175,7 @@ var OfficeItem = function (data) {
     };
     var _insertUseOfficeItemHistory=function(data, currentData, indata) {
 
-        let _use_type = "사용자 변경";
+        var _use_type = "사용자 변경";
 
         if(data.use_user !="" ){   //사용자 변경                        
                        

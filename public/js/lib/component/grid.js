@@ -48,8 +48,8 @@ define([
     	        // if($(window).width()!=lastWidth){
     	            // LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
-                    // grid.updateCSS(true);
-                    grid.render();
+                    grid.updateCSS(true);
+                    // grid.render();
                    
                 // }
     	    });
@@ -801,15 +801,17 @@ define([
                 "order" : _.isUndefined(this.options.order) ? [[1, "desc"]] : this.options.order,
                 "initComplete" : function(){
                     if(dtOp.scrollY != undefined){
-                        console.log(dtOp.scrollY);
-
-                        this.parents('.dataTables_scroll').css('height', dtOp.scrollY);
+                        var parentCon =  this.parents('.dataTables_scroll');
+                        var headerH = parentCon.find('.dataTables_scrollHead');
+                        headerH = (headerH.length > 0)? headerH.outerHeight() : 46;
+                        var height = dtOp.scrollY + headerH + 1;
+                        this.parents('.dataTables_scroll').css('height', height);
                     }
                 }
              }
 
              if(this.options.scrollY != undefined){
-                var height = _dataTable.find("thead").height() + $("#"+this.options.el).outerHeight() - 110;
+                var height = $("#"+this.options.el).outerHeight() - 135;
                 dtOp.scrollY = height;
                 dtOp.scrollCollapse = this.options.scrollCollapse;
              }
