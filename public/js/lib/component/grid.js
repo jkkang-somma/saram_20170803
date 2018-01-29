@@ -48,8 +48,8 @@ define([
     	        // if($(window).width()!=lastWidth){
     	            // LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
-                    grid.updateCSS(true);
-                    // grid.render();
+                    grid.updateCSS();
+                    grid.updateHeader();
                    
                 // }
     	    });
@@ -91,8 +91,22 @@ define([
     	},
     	setBtnText:function(btn, text){
     	    btn.html($(_defaultBtnText).html(text));
-    	},
-    	updateCSS:function(resize){
+        },
+        updateHeader: function(){
+            
+            if(this.options.scrollY != undefined){
+                var parentCon =  $('#'+this.options.el).find('.dataTables_scroll');
+                var headerH = parentCon.find('.dataTables_scrollHead');
+                headerH = (headerH.length > 0)? headerH.outerHeight() : 46;
+                var height = $("#"+this.options.el).outerHeight() - headerH - 80;
+                this.DataTableAPI.context[0].oScroll.sY = this.options.scrollY = height;
+                $('#'+this.options.el).find('.dataTables_scroll .dataTables_scrollBody').css('height', height);
+                var dheight = this.options.scrollY + headerH + 1;
+                $('#'+this.options.el).find('.dataTables_scroll').css('height', dheight);
+            }
+            this.DataTableAPI.draw();
+        },
+    	updateCSS:function(){
     	    var width=$(window).width();
     	    var _padding=38;
     	    var API=this.DataTableAPI;
@@ -302,7 +316,8 @@ define([
                 );
 
 
-            this.DataTableAPI.draw();
+            // this.DataTableAPI.draw();
+            this.updateHeader();
     	},
     	_crteateDefaultButton:function(id, name, clickEvent){
     	    var _buttonIcon=$(ButtonHTML);
@@ -812,7 +827,7 @@ define([
 
              if(this.options.scrollY != undefined){
                 var height = $("#"+this.options.el).outerHeight() - 135;
-                dtOp.scrollY = height;
+                this.options.scrollY = dtOp.scrollY = height;
                 dtOp.scrollCollapse = this.options.scrollCollapse;
              }
 
@@ -871,7 +886,8 @@ define([
             this.DataTableAPI=_tableAPI;//API 셋팅
     	    _grid.DataTableAPI.page.len( _grid.currentLength ); //page length 설정
     	    $("#"+this.options.el).find('[data-toggle="tooltip"]').tooltip({
-                placement : 'top'
+                placement : 'top',
+                container: 'body'
             });
 
             if (_grid.condition.Search_Text !="" && _grid.condition.Search_Text != undefined) {//Search 필터 값 저장 기능: Search 창에 입력되어 있는 글자대로 필터
