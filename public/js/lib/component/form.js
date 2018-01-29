@@ -114,18 +114,20 @@ define([
                 var _dateTemp=_.template(DatePickerHTML);
                 var _datePicker=_.noop();
                 _datePicker=$(_dateTemp(data));
-                
+
                 _datePicker.find("#"+data.id).datetimepicker({
                    pickTime: false,
                    format: data.format
+                });
+
+                _datePicker.find("#"+data.id).find("button").click(function(e) {//reset button click
+                    $(_datePicker).find("input").removeClass("inserted");
                 });
 
                 _datePicker.find("#"+data.id).on('dp.change', function(e){
                     var formatedValue = e.date.format(e.date._f);
                     if (formatedValue.length > 0) {
                         $(_datePicker).find("input").addClass("inserted");
-                    } else {
-                        $(_datePicker).find("input").removeClass("inserted");
                     }
                 });
 
