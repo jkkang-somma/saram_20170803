@@ -257,7 +257,16 @@ define([
 					data: reportParam,
 					success: function(result) {
 						$('.btn-group#privilege-btn').find('span').html(result.length);
-						$('.btn-group#privilege-btn').data('data', reportParam);										
+						$('.btn-group#privilege-btn').data('data', reportParam);		
+
+						var btnCon = $('.btn-group#privilege-btn').find('.btn');
+						btnCon.removeClass('btn-success');
+						btnCon.removeClass('btn-danger');
+						if(result.length > 0){
+							btnCon.addClass('btn-danger');
+						}else{
+							btnCon.addClass('btn-success');
+						}
 					},
 					error : function(result) {
 						
