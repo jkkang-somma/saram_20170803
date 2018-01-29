@@ -224,13 +224,17 @@ define([
     	},
     	commitPassword : function(){
     	    var _view=this;
+    	    var minLen = 4;
             var data = this.getFormData(this.passwordSection.find('form'));
-            if ((_.isUndefined(data.repassword)||_.isEmpty(data.repassword)) || (_.isUndefined(data.password)||_.isEmpty(data.password)) || (data.repassword!=data.password)){//validation
+            if ((_.isUndefined(data.repassword)||_.isEmpty(data.repassword)) || (_.isUndefined(data.password)||_.isEmpty(data.password)) || (data.repassword!=data.password)
+                || data.password.length < minLen){//validation
                 if ((data.repassword!=data.password)){//초기화 암호 입력된 값이 맞지 않을 때
                     Dialog.warning("입력하신 비밀번호를 확인해주세요.");   
-                } else {//초기화 암호 입력 안한경우
+                }else if(data.password.length < minLen){
+                    Dialog.warning(i18nCommon.WARNING.LOGIN.MIN_LENGTH_PASSWORD);
+                }  else {//초기화 암호 입력 안한경우
                     Dialog.warning(i18nCommon.WARNING.LOGIN.INIT_PASSWORD_PUT);   
-                }      
+                }        
             } else {
                 //암호화
                 var _inputPasswordValue=data.password;

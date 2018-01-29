@@ -186,13 +186,13 @@ define([
                 title: "구분",
                 "data": "office_code_name",
             }, {
-                title: "근태일수",
+                title: "신청일수",
                 render: function(data, type, row) {
                     var dataVal = (row.day_count != null && row.day_count != 0) ? "<span class='float_right'>" + row.day_count + "일</span>" : "<span style='float: right;'>-</span>";
                     return dataVal;
                 }
             }, {
-                title: "근태기간",
+                title: "신청기간",
                 render: function(data, type, row) {
                     var dataVal = "";
 
