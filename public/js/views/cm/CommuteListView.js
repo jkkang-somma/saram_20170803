@@ -518,9 +518,9 @@ define([
 									// 2. 해당 model로 
 									resultTimeFacctory.initByModel(commM);
 									var overTimeResult = resultTimeFacctory.getResult();
-									console.log(overTimeResult);
+									//console.log(overTimeResult);
 									
-									that.sendApprovalOvertime(dialog, overTimeResult, inputData, "상신대기");
+									that.sendApprovalOvertime(dialog, _.extend(selectItem, overTimeResult), inputData, "상신대기");
 								}else{
 									Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function() {
 										dialog.close();

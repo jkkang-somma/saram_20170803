@@ -406,7 +406,7 @@ define([
         delInOfficeData: function(_approvalCollection, docNum) {
             var dfd = new $.Deferred();
             var userId = this.options["submit_id"];
-            var arrInsertDate = [$(this.el).find('#start_date input').val()];
+            var arrInsertDate = [$(this.el).find('#start_date').html()];
             var resultData = {};
             resultData.approval = _approvalCollection.toJSON();
 
@@ -541,7 +541,7 @@ define([
 
 
             // 날짜 개수 이용하여 날짜 구하기
-            var sStart = $(this.el).find('#start_date input').val();
+            var sStart = $(this.el).find('#start_date').html();
             var arrInsertDate = [];
             arrInsertDate.push(sStart);
 
