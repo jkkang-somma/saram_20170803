@@ -178,10 +178,18 @@ var Approval = function (data) {
 					var temp=_.template(html);
 					var sendHTML=temp(data);
 
+					var owner = [];
+					var mannagerGroup = [];
+					
+					/* 임원급 메일 가져오기 추가 */
+					ApprovalDao.getApprovalMailingList("0000").then(function(result){
+						mannagerGroup = result;
+					});
+
 					ApprovalDao.getApprovalMailingList(data.dept_code).then(function(result){
 						var cc = [];
 
-						/* 유강재 이사님 결재선일 경우(팀장) 사장님, 부사장님 추가 */
+						/* 유강재 이사님 결재선일 경우(팀장) 사장님, 부사장님 추가 /
 						if(data.manager_id == "160301"){
 							cc.push({name : "김특훈", address : "thkim@yescnc.co.kr", id:"050601"});
 						}
@@ -190,7 +198,23 @@ var Approval = function (data) {
 						cc.push({ name :"이남노", address: "nnlee@yescnc.co.kr", id:"170701"});
 						cc.push({ name :"전영호", address: "yh.jeon@yescnc.co.kr", id:"150201"});
 						cc.push({ name :"유강재", address: "youkj@yescnc.co.kr", id:"160301"});
-						cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});
+						cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});*/
+
+						if (mannagerGroup.length > 0){
+							// 임원급 메일에서 사장님 분리.
+							for(var idx in mannagerGroup){
+								if(mannagerGroup[idx].id == "050601"){
+									owner.push({name: mannagerGroup[idx].name,  address: mannagerGroup[idx].email, id: mannagerGroup[idx].id});
+									//mannagerGroup.splice(idx, 1);
+								} else if(mannagerGroup[idx].id != "180101"){ // 공주연 기술영업이사 제외???
+									cc.push({ name : mannagerGroup[idx].name, address : mannagerGroup[idx].email, id : mannagerGroup[idx].id});
+								}
+							}
+
+							if (owner.length > 0 && data.manager_id == "160301"){
+								cc.push({name: owne[0].name, address: owner[0].email, id: owner[0].id });
+							}
+						}
 						
 						/* 근태 메일 품질검증팀 제외 */
 						if(data.dept_area != "수원"){

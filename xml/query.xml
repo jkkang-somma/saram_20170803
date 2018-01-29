@@ -342,6 +342,7 @@
 
     	<query id="getApprovalMailingList">
     		SELECT
+				id,
 				name,
 				email,
 				leave_company
@@ -349,6 +350,8 @@
 				members_tbl
 			WHERE
 				dept_code = ?
+				AND 
+				leave_company = ""
     	</query>
 
     	<query id="getManagerId">
