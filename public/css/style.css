@@ -1179,7 +1179,7 @@ border: 2px dotted #2ABB9B !important;
 #giscontainer .gis_person span {
   font-size: 13px;
   font-weight: bold;
-  font-family: '���� ���', 'monospace';
+  font-family: '맑은 고딕', 'monospace';
 }
 
 #giscontainer .gis_person img {
@@ -1441,14 +1441,25 @@ border: 2px dotted #2ABB9B !important;
 
 .dataTables_paginate {margin-left: 5px;}
 
+.main-container{
+    height: calc(100% - 110px);
+    min-height: 450px;
+}
+.main-container > div.container-fluid > div.content{height: calc(100% - 100px);}
+.main-container.container-fluid div.content{height: calc(100% - 30px);}
+
+.dataTables_wrapper{margin-top: 10px;}
+.dataTables_wrapper .dataTables_scroll { border-bottom: 1px solid #2ABB9B;}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {height: calc(100% - 46px) !important; border: none !important;}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody table thead th{background: none !important; border: none !important;}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody table tbody tr:last-child td{
+    border-bottom : 1px solid #ddd;
+  }
 @media ( min-width: 786px ) {
-    body{
-        overflow: hidden;
-    }
-    .main-container{
-        height: calc(100% - 110px);
-    }
-    .main-container > div{
+    
+    
+    .main-container > div,
+    .main-container > div#picdiv:not{
         height: 100%;
     }
     
@@ -1457,45 +1468,12 @@ border: 2px dotted #2ABB9B !important;
         height: auto;
     }
     
-    .main-container > div.container-fluid > div.content {
-        height: calc(100% - 60px);
-    }
     
     .modal-dialog div.content {
         height: 450px;
     }
 
-    .dataTables_wrapper {
-        height: calc(100% - 60px);
-        min-height: 70px;
-        margin-top: 10px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border-bottom: 1px solid #2ABB9B;
-    }
     
-    table.dataTable thead {
-        z-index: 99;
-        right: 20px;
-        left: 20px;
-    }
-
-    .bootstrap-dialog-body table.dataTable thead {
-        left: 46px;
-    }
-    
-    table.dataTable.no-footer{
-        border-bottom: 1px solid #ddd;
-    }
-    .dataTables_wrapper .bottom{
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-    }
-    .bootstrap-dialog-body .dataTables_wrapper .bottom {
-        bottom: 110px;
-        right: 45px;
-    }
 }
 @media screen and (max-width: 610px) {
     #dashboard_main .calendar-body tr td .cc-header span{
@@ -1508,41 +1486,3 @@ border: 2px dotted #2ABB9B !important;
     }
     
 }
-
-.search-wrapper {
-    height: 34px
-}
-.close-icon {
-    border:1px solid transparent;
-    background-color: transparent;
-    display: inline-block;
-    vertical-align: middle;
-    outline: 0;
-    cursor: pointer;
-}
-.close-icon:after {
-    content: "X";
-    display: block;
-    width: 15px;
-    height: 15px;
-    position: absolute;
-    background-color: #FA9595;
-    z-index:1;
-    right: 46px;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    padding: 2px;
-    border-radius: 50%;
-    text-align: center;
-    color: white;
-    font-weight: normal;
-    font-size: 10px;
-    box-shadow: 0 0 2px #E50F0F;
-    cursor: pointer;
-}
-
-.yes-date-picker:not(.inserted) ~ .close-icon {
-    display: none;
-}
-

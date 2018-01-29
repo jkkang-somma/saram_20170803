@@ -100,11 +100,16 @@ define([
 
             return this;
         },
-
+        
         setDatePickerPop: function() {
             var today = new Date();
             var firstDay = new Date(today.getFullYear(), today.getMonth() - 1, 1);
             var lastDay = new Date(today.getFullYear() + 1, today.getMonth() - 1, 1);
+          
+            if(this.settingParam != undefined){
+                firstDay = new Date(this.settingParam.start);
+                lastDay = new Date(this.settingParam.end);
+            }
 
             var beforeDate = $(this.el).find("#beforeDate");
             this.beforeDate = beforeDate.datetimepicker({
@@ -124,6 +129,10 @@ define([
                 format: "YYYY-MM-DD",
                 defaultDate: Moment(new Date(lastDay - 1)).format("YYYY-MM-DD")
             });
+        },
+
+        setSearchParam : function(data){
+            console.log(data)
         },
 
         setReportTable: function(val, managerMode) {
@@ -454,7 +463,8 @@ define([
 
                 // privilege &lt;= 2
                 var sessionInfo = SessionModel.getUserInfo();
-                if (managerMode && sessionInfo.privilege <= 2) {
+                if ((managerMode && sessionInfo.privilege <= 2)
+                    || this.settingParam != undefined) {
                     // 결재 가능 id
                     data["managerId"] = sessionInfo.id;
                 }

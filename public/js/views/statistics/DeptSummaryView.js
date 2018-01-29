@@ -73,8 +73,8 @@ define([
         		    detail: true,
                     buttons:["search"],
         		    fetch: false,
-        		    order : [[2, "asc"],[3, "desc"]]
-        	};
+                    order : [[2, "asc"],[3, "desc"]]
+                };
         },
         
     	events: {
@@ -82,11 +82,14 @@ define([
             'click #deptSummaryTable .td-dept-summary' : 'onClickDetailPopup',
         },
         
-    	render:function(){
-    	    //var _view=this;
+    	render:function(viewType, searchParams){
+            //var _view=this;
+            this.viewType=(viewType != undefined)? viewType : 'default';
+            this.searchParams = searchParams;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
-    	    var _layOut=$(LayoutHTML);
+            var _layOut=$(LayoutHTML);
+            
     	    var _head=$(_headTemp(_headSchema.getDefault(
     	    	{
     	    		title:"근태관리",
@@ -124,9 +127,11 @@ define([
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
     	    var _content=$(ContentHTML).attr("id", this.gridOption.el);
-    	    
-    	    _layOut.append(_head);
-    	    _layOut.append(_row);
+            
+            if(this.viewType != "dashboard"){
+                _layOut.append(_head);
+                _layOut.append(_row);
+            }
     	    _layOut.append(_content);
     	    
     	    $(this.el).html(_layOut);
@@ -170,7 +175,7 @@ define([
          
         selectDeptSummary: function() {
             var _this = this;
-            var startDate = Moment($(_this.el).find("#FromDatePicker").data("DateTimePicker").getDate());
+            var startDate = (this.viewType != 'dashboard')?Moment($(_this.el).find("#FromDatePicker").data("DateTimePicker").getDate()) : (this.searchParams == undefined)? Moment() : Moment(this.searchParams.start);
             var startDateStr = startDate.format('YYYY-MM');
             this.ajaxCall(startDateStr).then(function(result){
                 
@@ -204,6 +209,10 @@ define([
                         return result["DeptSummary"];
                     }
                 };
+
+                if(_this.viewType == 'dashboard'){
+                    _this.gridOption.scrollFix = false;
+                }
 
                 var _gridSchema = Schemas.getSchema('grid');
                 _this.grid = new Grid(_gridSchema.getDefault(_this.gridOption));

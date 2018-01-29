@@ -59,10 +59,10 @@ define([
 			'rawdatalist/:id/:date' : 'showRawdataList',
 			'commutetoday' : 'showCommuteToday',
 			'reportmanager' : 'showReportManager',
+			'reportmanager/:sdate/:edate' : 'showReportManagerParam',
 			'accessIn' : 'accessIn',
 			'accessOut' : 'accessOut',
 			'allreport' : 'showAllReport',
-			'roomreserve' : 'showRoomReserve',
 			'roomreserve' : 'showRoomReserve',
 			'officeitemcode' : 'showOfficeItemCode',
 			'officeitemmanager' : 'showOfficeItemManager',
@@ -266,6 +266,14 @@ define([
 		showReportManager : function(){
 			var url = 'views/rm/ReportListView';
 			this.changeView(url, "#reportmanager");
+		},
+
+		showReportManagerParam: function(sdate, edate){
+			var url = 'views/rm/ReportListView';
+			var callback = function(view){
+				view.settingParam = {start : sdate, end : edate};
+			}
+			this.changeView(url, "#reportmanager", callback);
 		},
 		showUserPic : function(){
 			var url = 'views/sm/UserPicView';
