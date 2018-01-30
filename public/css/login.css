@@ -129,6 +129,7 @@ body.web-login .login-form-section{
     box-shadow: none;
     max-width: inherit;
     border: none;
+    border-radius: 0;
 }
 body.web-login .login-form-section .panel-header{
     height: 156px;
@@ -143,6 +144,8 @@ body.web-login .login-form-section .panel-body{
     width: 330px;
     padding-top: 0;
     margin-top: -20px;
+    background: #fff;
+    padding-bottom: 15px;
 }
 body.web-login .login-form-section .panel-body .form-group{
     margin-bottom: 0;
@@ -153,6 +156,9 @@ body.web-login .login-form-section .panel-body .form-group .input-group{
     border: none;
     padding: 0;
     margin: 20px 30px;
+}
+body.web-login .login-form-section .panel-body .form-group .input-group:first-child{
+    margin-top: 0;
 }
 body.web-login .login-form-section .panel-body .form-group span{
     display: none;
