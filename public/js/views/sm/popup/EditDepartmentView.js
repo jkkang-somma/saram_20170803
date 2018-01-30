@@ -105,11 +105,11 @@ define([
 							for(var index = 0; index < result.models.length; index++) {
 								if (_.isEmpty(result.models[index].attributes.leave_company) || result.models[index].attributes.leave_company == null) {
 									availableTagsUser[userCnt] = result.models[index].attributes.name + "(" + result.models[index].attributes.id + ")";
-									console.log(availableTagsUser[userCnt]);
+									//console.log(availableTagsUser[userCnt]);
 									userCnt++;
 								}
 								else {
-									console.log("Leave_company[" + result.models[index].attributes.name + "][" + result.models[index].attributes.leave_company + "]");
+									//console.log("Leave_company[" + result.models[index].attributes.name + "][" + result.models[index].attributes.leave_company + "]");
 								}
 							}
 							// for( var index = 0; index < result.models.length; index++) {

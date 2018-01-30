@@ -50,7 +50,7 @@ define([
 
 			for( var index = 0; index < deptCodeCollectionData.models.length; index++) {
 				availableTags[index] = deptCodeCollectionData.models[index].attributes.name + "(" + deptCodeCollectionData.models[index].attributes.code + ")";
-				console.log(availableTags[index]);
+				//console.log(availableTags[index]);
 			}
 
 			$.when(approvalUserCodeCollection.fetch()).done(function(){
@@ -123,11 +123,11 @@ define([
 			for(var index = 0; index < useCodeCollectionData.models.length; index++) {
 				if (_.isEmpty(useCodeCollectionData.models[index].attributes.leave_company) || useCodeCollectionData.models[index].attributes.leave_company == null) {
 					availableTagsUser[userCnt] = useCodeCollectionData.models[index].attributes.name + "(" + useCodeCollectionData.models[index].attributes.id + ")";
-					console.log(availableTagsUser[userCnt]);
+					//console.log(availableTagsUser[userCnt]);
 					userCnt++;
 				}
 				else {
-					console.log("Leave_company[" + useCodeCollectionData.models[index].attributes.name + "][" + useCodeCollectionData.models[index].attributes.leave_company + "]");
+					//console.log("Leave_company[" + useCodeCollectionData.models[index].attributes.name + "][" + useCodeCollectionData.models[index].attributes.leave_company + "]");
 				}
 			}
 			$(document).ready(function() {
@@ -144,12 +144,12 @@ define([
 		 			var _text=$(this).find("option:selected").text();
 		 			if(_text == "직원") {
 						selectedTxt = _text;
-		 				console.log(_text);
+		 				//console.log(_text);
 		 				$('#autocomplete').val("");
 		 				$('#autocomplete').autocomplete("option", { source: availableTagsUser });
 		 			}
 		 			else if (_text == "부서") {
-						console.log(_text);
+						//console.log(_text);
 						selectedTxt = _text;
 		 				$('#autocomplete').val("");
 		 				$('#autocomplete').autocomplete("option", { source: availableTags });
