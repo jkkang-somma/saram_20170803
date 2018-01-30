@@ -49,7 +49,7 @@ define([
     	            // LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
                     grid.updateCSS();
-                    grid.updateHeader();
+                    grid.updateHeader(true);
                    
                 // }
     	    });
@@ -93,7 +93,12 @@ define([
     	    btn.html($(_defaultBtnText).html(text));
         },
         updateHeader: function(){
-            
+        	 var _grid = this;
+             var page = 1;
+             if(resize){
+                 page = _grid.DataTableAPI.page();
+             }
+             _grid.DataTableAPI.draw();
             if(this.options.scrollY != undefined){
                 var parentCon =  $('#'+this.options.el).find('.dataTables_scroll');
                 var headerH = parentCon.find('.dataTables_scrollHead');
@@ -103,8 +108,13 @@ define([
                 $('#'+this.options.el).find('.dataTables_scroll .dataTables_scrollBody').css('height', height);
                 var dheight = this.options.scrollY + headerH + 1;
                 $('#'+this.options.el).find('.dataTables_scroll').css('height', dheight);
+                _grid.DataTableAPI.draw();
             }
-            this.DataTableAPI.draw();
+            
+            if(resize){
+                $('#'+this.options.el).find('.dataTables_paginate .paginate_button[data-dt-idx='+(page+1)+']').trigger('click');
+            }
+            
         },
     	updateCSS:function(){
     	    var width=$(window).width();
