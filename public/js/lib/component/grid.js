@@ -410,7 +410,6 @@ define([
 
             _defaultSearchInput.change(function(){//Search 필터 값 저장 기능 : 입력 텍스트 변경시 메모리에 저장
                 _grid.condition.Search_Text = _defaultSearchInput.val();
-                console.log("txt: " + _grid.condition.Search_Text);
             });
 
     	    var _buttonIcon=$(ButtonHTML);
@@ -880,7 +879,6 @@ define([
             
      	    //ROW click
      	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
-     	    	console.log(_dataTable.$('tr.selected'));
                 _dataTable.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             } );
