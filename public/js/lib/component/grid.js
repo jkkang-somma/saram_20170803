@@ -380,8 +380,10 @@ define([
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
             _button.click(function(){
                 if(_.isFunction(obj.click)){
-                    _grid.condition.Click_Count++
-                    if(_grid.condition.Click_Count == btnFilterSize) _grid.condition.Click_Count = 0;
+                    if (obj.name=="filter") {//필터 버튼일떄
+                        _grid.condition.Click_Count++
+                        if (_grid.condition.Click_Count == btnFilterSize) _grid.condition.Click_Count = 0;
+                    }
                       var callback=obj.click;
                     callback(_grid, _button);
                 }
