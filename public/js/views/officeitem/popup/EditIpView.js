@@ -53,7 +53,7 @@ define([
 			})
 			for( var index = 0; index < deptCodeCollectionData.models.length; index++) {
 				availableTags[index] = deptCodeCollectionData.models[index].attributes.name + "(" + deptCodeCollectionData.models[index].attributes.code + ")";
-				console.log(availableTags[index]);
+				//console.log(availableTags[index]);
 			}
 			if(availableTags.indexOf(init_data.use_user) == -1) {
 				selectedTxt = "직원";
@@ -133,11 +133,11 @@ define([
 			for(var index = 0; index < useCodeCollectionData.models.length; index++) {
 				if (_.isEmpty(useCodeCollectionData.models[index].attributes.leave_company) || useCodeCollectionData.models[index].attributes.leave_company == null) {
 					availableTagsUser[userCnt] = useCodeCollectionData.models[index].attributes.name + "(" + useCodeCollectionData.models[index].attributes.id + ")";
-					console.log(availableTagsUser[userCnt]);
+					//console.log(availableTagsUser[userCnt]);
 					userCnt++;
 				}
 				else {
-					console.log("Leave_company[" + useCodeCollectionData.models[index].attributes.name + "][" + useCodeCollectionData.models[index].attributes.leave_company + "]");
+					//console.log("Leave_company[" + useCodeCollectionData.models[index].attributes.name + "][" + useCodeCollectionData.models[index].attributes.leave_company + "]");
 				}
 			}
 
@@ -164,13 +164,13 @@ define([
 				$(".selectpicker").on('change', function(e){// 콤보박스 선택시 히든값 셋팅
 					var _text=$(this).find("option:selected").text();
 					if(_text == "직원") {
-						console.log(_text);
+						//console.log(_text);
 						selectedTxt = _text;
 						$('#autocomplete').val("");
 						$('#autocomplete').autocomplete("option", { source: availableTagsUser });
 					}
 					else if (_text == "부서") {
-						console.log(_text);
+						//console.log(_text);
 						selectedTxt = _text;
 						$('#autocomplete').val("");
 						$('#autocomplete').autocomplete("option", { source: availableTags });
@@ -293,7 +293,7 @@ define([
 						return false;
 				}
 				else {
-					console.log("Undefined data : " + selectedTxt);
+					//console.log("Undefined data : " + selectedTxt);
 				}
 			}
 			return true;
