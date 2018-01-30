@@ -207,15 +207,14 @@ define([
                     _view.app.draw();    
                 }).fail(function(e){
                     if (!_.isUndefined(e.user)){
-                        
-                        _view.loginPasswordSection.addClass("fadeOutRightBig");
-                        _view.formSection.addClass("bounceOut").one(transitionEnd, function(){
-                            // $("#loginbtn").button('reset');
-                            _view.passwordSection.find("#initIdInput").val(data.id);
-                            _view.formSection.css("display", "none");
-                            _view.passwordSection.addClass("fadeInLeftBig");
+                        //_view.loginPasswordSection.addClass("fadeOutRightBig");
+                        _view.formSection.addClass("bounceOut").one(transitionEnd, function(){});
+                        _view.passwordSection.find("#initIdInput").val(data.id);
+                        _view.formSection.css("display", "none");
+                        _view.passwordSection.addClass("fadeInLeftBig");
+                        setTimeout(function(){
                             _view.passwordSection.css("display", "block");
-                        });;
+                        }, 300);
                     } else {
                         // $("#loginbtn").button('reset');
                         _view.formSection.find("#loginPasswordTextbox").val('');
