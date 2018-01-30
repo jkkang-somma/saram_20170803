@@ -1454,7 +1454,7 @@ border: 2px dotted #2ABB9B !important;
 
 .dataTables_wrapper{margin-top: 10px;}
 .dataTables_wrapper .dataTables_scroll { border-bottom: 1px solid #2ABB9B;}
-.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {height: calc(100% - 46px) !important; border: none !important;}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {border: none !important;}
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody table thead th{background: none !important; border: none !important;}
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody table tbody tr:last-child td{
     border-bottom : 1px solid #ddd;
