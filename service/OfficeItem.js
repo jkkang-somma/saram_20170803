@@ -77,7 +77,7 @@ var OfficeItem = function (data) {
 
                 _getOfficeItem().then(function(currentData) {
 
-                    debug(JSON.stringify(currentData));
+                    //debug(JSON.stringify(currentData));
                     //console.log(currentData[0].serial_yes);
                     data = currentData[0];
                                               
