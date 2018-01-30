@@ -247,10 +247,11 @@ define([
 					});
 				}
 
+				var thisYear = parseInt(_view.searchParams.start.substring(0, 4));
 				var reportParam = {
 					managerId : SessionModel.getUserInfo().id,
-					startDate : _view.searchParams.start,
-					endDate : _view.searchParams.end,
+					startDate : (thisYear - 1) + "-01-01",
+					endDate : (thisYear + 1) + "-12-31",
 				};
 									
 				_view.approvalCollection.fetch({ 
@@ -267,6 +268,7 @@ define([
 						}else{
 							btnCon.addClass('btn-success');
 						}
+						$('.btn-group#privilege-btn').show();
 					},
 					error : function(result) {
 						
