@@ -48,10 +48,10 @@ define([
 				el: "officeItemHistoryPopupTable_content",
 				id: "officeItemHistoryPopupTable",
 				column: [
-                    //{ data : "seq",            title : i18nCommon.OFFICEITEM.HISTORY.CODE.SEQ, visible:false, subVisible:false },
-                    //{ data : "serial_yes",     title : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
-                    //{ data : "category_type",  title : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE, visible:false, subVisible:false },
-                    /*{ title : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SEQ, data : "seq", visible:false, subVisible:false },
+                    //{ "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES, data : "serial_yes" },
+                    //{ "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE, data : "category_type", visible:false, subVisible:false },
+                    /*{ "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
                         "render": function(data, type, row){
                             var serial = row.serial_yes;
                             //serial = serial.substring(0, serial.lastIndexOf("-"));
@@ -85,10 +85,10 @@ define([
                             return Util.numberWithComma(price);
                         }
                     },
-                    //{ data : "use_user",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID, visible:false, subVisible:false },
-                    //{ data : "use_dept",       title : i18nCommon.OFFICEITEM.HISTORY.CODE.USE_DEPT, visible:false, subVisible:false },
+                    //{ "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID, data : "use_user", visible:false, subVisible:false },
+                    //{ "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.USE_DEPT, data : "use_dept", visible:false, subVisible:false },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER, data : "name" },
-                    //{ data : "change_user_id", "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CHANGE_USER_ID, visible:false, subVisible:false },
+                    //{ "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CHANGE_USER_ID, data : "change_user_id", visible:false, subVisible:false },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO, data : "memo" }
 				],
 				dataschema:["seq", "serial_yes", "category_type", "history_date", "type", "title", "repair_price", "use_user", "use_dept", "name", "change_user_id", "memo"],
@@ -96,9 +96,7 @@ define([
 				detail: true,
 				buttons: ["search"],
 				fetch: false,
-				order: [
-					[1, "desc"]
-				]
+				order: [ [2, "desc"], [1, "desc"] ]
 			};
 		},/*
 		events: {

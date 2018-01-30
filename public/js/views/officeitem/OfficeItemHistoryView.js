@@ -43,6 +43,14 @@ define([
                 el:"officeitemhistory_content",
                 id:"officeItemHistoryTable",
                 column:[
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SEQ, data : "seq", visible:false, subVisible:false },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE, data : "history_date", 
+                        "render": function(data, type, row){
+                            var data = Moment(row.history_date).format("YYYY-MM-DD");
+                            return data;
+                        }
+                    },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES, data : "serial_yes" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME, 
                         "render": function(data, type, row){
@@ -58,12 +66,6 @@ define([
                                 }
                             }
                             return name;
-                        }
-                    },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE, data : "history_date", 
-                        "render": function(data, type, row){
-                            var data = Moment(row.history_date).format("YYYY-MM-DD");
-                            return data;
                         }
                     },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
@@ -84,12 +86,20 @@ define([
                 detail:true,
                 view:this,
                 fetch: false,
-                order : [[3, "desc"],[1, "asc"],[2, "asc"]]
+                order : [[2, "desc"],[1, "desc"]]
             };
             this.gridExcel = {
                 el:"ExportHistory_content",
                 id:"ExportHistoryGrid",
                 column:[
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SEQ, data : "seq", visible:false, subVisible:false },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE, data : "history_date", 
+                        "render": function(data, type, row){
+                            var data = Moment(row.history_date).format("YYYY-MM-DD");
+                            return data;
+                        }
+                    },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES, data : "serial_yes" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE, data : "category_type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
@@ -108,13 +118,6 @@ define([
                             return name;
                         }
                     },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE, data : "history_date", 
-                        "render": function(data, type, row){
-                            var data = Moment(row.history_date).format("YYYY-MM-DD");
-                            return data;
-                        }
-                    },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", className : "dt-body-right",
                         "render": function(data,type, row){
@@ -127,13 +130,7 @@ define([
                     },
                     //{ title : i18nCommon.OFFICEITEM.HISTORY.CODE.USER_ID, data : "use_user" },
                     //{ title : i18nCommon.OFFICEITEM.HISTORY.CODE.USE_DEPT, data : "use_dept" },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER,
-                        "render": function(data, type, row){
-                            var user = row.use_user;
-                            return ((user!==null&&user!=="")?row.use_user:row.use_dept);
-                        }
-                    },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.NAME, data : "name" },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER, data : "name" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CHANGE_USER_ID, data : "change_user_id" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO, data : "memo" }
                 ],
@@ -142,7 +139,7 @@ define([
                 collection:this.officeItemHistoryCollection,
                 detail: true,
                 fetch: false,
-                order : [[3, "desc"],[1, "asc"],[2, "asc"]]
+                order : [[2, "desc"],[1, "desc"]]
             };
         },
         events : {
@@ -153,8 +150,21 @@ define([
             this.selectOfficeItemHistoryData();
             this.grid.render();
         },
-        onClickSave: function(grid) {
-            grid.saveExcel(i18Common.OFFICEITEM.FILE_DOWNLOAD.HISTORY_INFO);
+        onClickSave: function(_grid) {
+            var saveGrid = _grid;
+            saveGrid.columns = [{"title" : ""},
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CHANGE_USER_ID },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.MEMO }
+                            ];
+            saveGrid.saveExcel(i18nCommon.OFFICEITEM.FILE_DOWNLOAD.HISTORY_INFO);
         },
         getSearchForm: function() {	// 검색 조건
             var startDate = Moment($(this.el).find("#officeFromDatePicker").data("DateTimePicker").getDate().toDate());
@@ -254,7 +264,6 @@ define([
 
             // 검색 조건 Row
             var _searchRange=$(_.template(SearchFormHTML)({
-            //var _row=$(_.template(SearchFormHTML)({
                     obj : {
                         fromId : "officeFromDatePicker",
                         toId : "officeToDatePicker",
