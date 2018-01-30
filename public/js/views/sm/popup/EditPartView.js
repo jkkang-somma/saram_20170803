@@ -36,7 +36,12 @@ define([
     	    }
     	   
 			  var _model=_view.model.attributes;
-			  init_user = _model.user_name + "(" + _model.leader + ")";
+			  if(_model.leader == null || _model.user_name == null) {
+				init_user = "";
+			  }
+			  else {
+				init_user = _model.user_name + "(" + _model.leader + ")";
+			  }
         	    var _form = new Form({
         	        el:_view.el,
         	        form:undefined,

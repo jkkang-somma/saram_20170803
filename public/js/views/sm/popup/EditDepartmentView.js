@@ -36,7 +36,13 @@ define([
     	    }
 			
 			  var _model=_view.model.attributes;
-			  init_user = _model.user_name + "(" + _model.leader + ")";
+			  if(_model.leader == null || _model.user_name == null) {
+				init_user = "";
+			  }
+			  else {
+				init_user = _model.user_name + "(" + _model.leader + ")";
+			  }
+			  
         	    var _form = new Form({
         	        el:_view.el,
         	        form:undefined,
@@ -69,7 +75,7 @@ define([
 							type:"combo",
 							name:"use",
 							label:i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.USE,
-							value:_model.area,
+							value:_model.use,
 							collection:[{key:1,value:i18nCommon.DEPARTMENT_LIST.UPDATE_DIALOG.USE_VALUE.USE},{key:0,value:i18nCommon.DEPARTMENT_LIST.UPDATE_DIALOG.USE_VALUE.NOT_USE}]
 					},{
 						type:"empty_data",
