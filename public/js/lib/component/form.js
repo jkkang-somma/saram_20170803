@@ -21,9 +21,9 @@ define([
   'text!templates/default/hidden.html',
   'text!templates/default/group.html',
   'text!templates/default/checkBox.html',
-  'text!templates/default/ip_input.html'
+  //'text!templates/default/ip_input.html'
   ], function($, jui, jnum, _, Backbone, log, Dialog, Schemas, i18Common, FormHTML, InputHTML, PriceHTML, Auto_InputHTML, TextHTML, PasswordHTML, DatePickerHTML, ComboHTML, HiddenHTML, GroupHTML,
-		  CheckBoxHTML, Ip_InputHTML){
+		  CheckBoxHTML){ // Ip_InputHTML
     var LOG=log.getLogger('Form');
     var _formId=0;
     var _inputId=0;
