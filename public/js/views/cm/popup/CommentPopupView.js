@@ -183,6 +183,7 @@ define([
 					_form.render().done(function() {
 						_view.form = _form;
 						var normal = _view.form.getElement("normal");
+						var overtime = _view.form.getElement("approvalOvertime");
 						var inTimeAfter = $(_view.form.getElement("inTimeAfter")).find("input");
 						var outTimeAfter = $(_view.form.getElement("outTimeAfter")).find("input");
 						$(_view.form.getElement("approval")).data("id", result[0].approval_id);
@@ -193,15 +194,17 @@ define([
 								$(inTimeAfter).val('');
 								$(outTimeAfter).attr("disabled", "true");
 								$(outTimeAfter).val('');
-							}
-							else {
+								$(overtime).find('input[type=checkbox]').prop("checked", false);
+								$(overtime).next().hide();
+								$(overtime).find('input[type=checkbox]').attr("disabled", true);
+							}else {
 								$(inTimeAfter).removeAttr("disabled");
 								$(outTimeAfter).removeAttr("disabled");
+								$(overtime).find('input[type=checkbox]').removeAttr("disabled");
 							}
 						});
 
 						// 야근 상신 여부
-						var overtime = _view.form.getElement("approvalOvertime");
 						$(overtime).next().hide();
 						$(overtime).click(function(evt) {
 							if ($(evt.currentTarget).find("input").is(":checked")) {
