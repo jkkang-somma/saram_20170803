@@ -1502,26 +1502,18 @@ border: 2px dotted #2ABB9B !important;
     outline: 0;
     cursor: pointer;
 }
+
 .close-icon:after {
-    content: "X";
+    content: url('img/icon_clear.png');
     display: block;
     width: 15px;
     height: 15px;
     position: absolute;
-    background-color: #FA9595;
     z-index:1;
     right: 46px;
     top: 0;
     bottom: 0;
     margin: auto;
-    padding: 2px;
-    border-radius: 50%;
-    text-align: center;
-    color: white;
-    font-weight: normal;
-    font-size: 10px;
-    box-shadow: 0 0 2px #E50F0F;
-    cursor: pointer;
 }
 
 .yes-date-picker:not(.inserted) ~ .close-icon {
