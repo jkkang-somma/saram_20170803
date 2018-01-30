@@ -164,7 +164,12 @@ define([
                         if (e_date <= now_date){   
                             $(row).addClass('expiration');  
                         } 
-                    }                   
+                    }  
+
+                    $(row).find('[data-toggle="tooltip"]').tooltip({
+                        placement : 'top',
+                        container: 'body',
+                    });
                 }
               };
               this.gridExcel = {
