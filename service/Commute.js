@@ -5,6 +5,7 @@ var _ = require("underscore");
 var Promise = require('bluebird');
 var CommuteDao = require('../dao/commuteDao.js');
 var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
+var ApprovalDao = require('../dao/approvalDao.js');
 var db = require('../lib/dbmanager.js');
 
 var fs = require('fs');
@@ -82,81 +83,97 @@ var Commute = function() {
 	var _sendLateForWorkEmail = function(data){
 
 		return new Promise(function(resolve, reject){
-			var lateData;
-			for(var idx in data){
-				lateData = data[idx];
-				CommuteDao.getCommuteMailData(lateData).then(function(mailData){
-					/*
-					in_time,
-					mem.name,
-					mem.email,
-					mem.leave_company,
-					dept.area as dept_area,
-					work.name as work_type,
-					dept.leader as leader_id,
-					leader.name as leader_name,
-					leader.email as leader_email
-					*/
-					if(mailData.length == 1 ){
-						mailData = mailData[0];
-						//console.log(mailData);
+			var mannagerGroup = [];
+			// 메일 포함 임원 ID LIST.
+			var includeEmailID = { "160301": true, "160401": true };
+			
+			/* 임원급 메일 가져오기 추가 */
+			ApprovalDao.getApprovalMailingList("0000").then(function(result){
+				mannagerGroup = result;
+
+				var includeEmailList = [];
+				for(var idx in mannagerGroup){
+					if(includeEmailID.hasOwnProperty(mannagerGroup[idx].id)) {
+						includeEmailList.push({ name : mannagerGroup[idx].name, address : mannagerGroup[idx].email, id : mannagerGroup[idx].id});
 					}
+				}
 
-					fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/reportForTardy.html","utf8").then(function (html) {
+				var lateData;
+				for(var idx in data){
+					lateData = data[idx];
+					CommuteDao.getCommuteMailData(lateData).then(function(mailData){
+						/*
+						in_time,
+						mem.name,
+						mem.email,
+						mem.leave_company,
+						dept.area as dept_area,
+						work.name as work_type,
+						dept.leader as leader_id,
+						leader.name as leader_name,
+						leader.email as leader_email
+						*/
+						if(mailData.length == 1 ){
+							mailData = mailData[0];
+						}
 
-						var sendData = {
-							name : mailData.name,
-							code_name : mailData.work_type,
-							date : mailData.in_time,
-							submit_comment : ""
-						};
-						var temp=_.template(html);
-						var sendHTML=temp(sendData);
+						fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/reportForTardy.html","utf8").then(function (html) {
 
-							var cc = [];
-							// 부서장 mail
-							cc.push({name : mailData.leader_name, address : mailData.leader_email, id : mailData.leader_id});
-							// 지각 당사자 mail
-							cc.push({name : mailData.name, address : mailData.email, id : mailData.id});
-
-							/* 지각 메일 임원 추가 /
-							if(mailData.dept_area != "수원"){
-								cc.push({ name :"유강재", address: "youkj@yescnc.co.kr", id:"160301"});
-								cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});
-							} else {
-								cc.push({ name :"이남노", address: "nnlee@yescnc.co.kr", id:"170701"});
-							}*/
-							_.uniq(cc, function(d) {return d.address});	// 중복 제거
-
-							
-							var mailOptions= {
-								from: 'webmaster@yescnc.co.kr', // sender address 
-								to: cc/*[
-									{ name: "김성식", address: "sskim@yescnc.co.kr"},
-									{ name :"김은영", address: "eykim@yescnc.co.kr"}
-								]*/,
-								subject:"[근태보고] " + mailData.name + "_" + mailData.work_type,
-								html:sendHTML,
-								text:"",
-								cc: cc
+							var sendData = {
+								name : mailData.name,
+								code_name : mailData.work_type,
+								date : mailData.in_time,
+								submit_comment : ""
 							};
+							var temp=_.template(html);
+							var sendHTML=temp(sendData);
 
-							transport.sendMail(mailOptions, function(error, info){
-								if(error){//메일 보내기 실패시 
-									console.log(error);
-									reject();
-								}else{
-									resolve();
+								var cc = [];
+								// 부서장(팀장) mail
+								cc.push({name : mailData.leader_name, address : mailData.leader_email, id : mailData.leader_id});
+								// 지각 당사자 mail
+								cc.push({name : mailData.name, address : mailData.email, id : mailData.id});
+
+								// 지각 메일 임원 추가 
+								if(mailData.dept_area != "수원"){
+									cc = cc.concat(includeEmailList);
+									//cc.push({ name :"유강재", address: "youkj@yescnc.co.kr", id:"160301"});
+									//cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});
+								//} else {
+									//cc.push({ name :"이남노", address: "nnlee@yescnc.co.kr", id:"170701"});
 								}
-							});
-					}).catch(SyntaxError, function (e) {
-						reject(e);
-					}).error(function (e) {
-						reject(e);
+								cc = _.uniq(cc, function(d) {return d.address});	// 중복 제거
+
+								
+								var mailOptions= {
+									from: 'webmaster@yescnc.co.kr', // sender address 
+									to: cc/*[
+										{ name: "김성식", address: "sskim@yescnc.co.kr"},
+										{ name :"김은영", address: "eykim@yescnc.co.kr"}
+									]*/,
+									subject:"[근태보고] " + mailData.name + "_" + mailData.work_type,
+									html:sendHTML,
+									text:"",
+									cc: cc
+								};
+
+								transport.sendMail(mailOptions, function(error, info){
+									if(error){//메일 보내기 실패시 
+										console.log(error);
+										reject();
+									}else{
+										resolve();
+									}
+								});
+						}).catch(SyntaxError, function (e) {
+							reject(e);
+						}).error(function (e) {
+							reject(e);
+						});
 					});
-				});
-				lateData = null;
-			}
+					lateData = null;
+				}
+			});
 		});
 	};
 	
