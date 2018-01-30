@@ -197,8 +197,7 @@ define([
 								$(overtime).find('input[type=checkbox]').prop("checked", false);
 								$(overtime).next().hide();
 								$(overtime).find('input[type=checkbox]').attr("disabled", true);
-							}
-							else {
+							}else {
 								$(inTimeAfter).removeAttr("disabled");
 								$(outTimeAfter).removeAttr("disabled");
 								$(overtime).find('input[type=checkbox]').removeAttr("disabled");
