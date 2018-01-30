@@ -135,6 +135,21 @@ define([
 	    };
     }
 	
+    var _isMobileAcc = function(){
+		var filter= "win16|win32|win64|mac";
+
+		if(navigator.platform){
+			if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+				console.log('mobile');
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;	
+	}
+	
+    
 	var numberWithComma = function(data){
 		return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
@@ -142,6 +157,7 @@ define([
     return {
         isNull:isNull,
         isNotNull:isNotNull,
+        isMobileAcc: _isMobileAcc,
         inArray:inArray,
         inObject:inObject,
         split:split,

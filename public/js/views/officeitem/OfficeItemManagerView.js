@@ -466,7 +466,7 @@ define([
                                     title:i18Common.OFFICEITEM.TITLE.EDIT+" ["+selectItem.serial_yes+"]", 
                                     content:editOfficeItemView, 
                                     buttons:[{
-                                        label: i18Common.DIALOG.BUTTON.SAVE,
+                                        label: i18Common.OFFICEITEM.TITLE.EDIT,
                                         cssClass: Dialog.CssClass.SUCCESS,
                                         action: function(dialogRef){// 버튼 클릭 이벤트
                                             editOfficeItemView.submitSave().done(function(data){

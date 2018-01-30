@@ -85,6 +85,7 @@ var OfficeItem = function (data) {
                         serial_yes  : data.serial_yes, 
                         category_type : data.category_type, //category_type 세팅
                         //history_date: "", 
+                        history_date : new Date().toISOString().slice(0,10), //현재 날짜 적용
                         type	    : "등록", 
                         title	    : "비품 등록", 
                         repair_price: data.price_buy,

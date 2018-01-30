@@ -104,3 +104,93 @@
     padding:0px;
     padding-top:15px;
 }
+
+
+body.web-login{
+    background: url('img/login/login_1920.png') no-repeat;
+    background-position: center;
+    transition: none;
+}
+body.web-login .main-container{
+    position: relative;
+    width: 1250px;
+    height: 768px;
+    background: url('img/login/login_visual.png') no-repeat;
+    margin: 0 auto;
+    /* margin-top: calc(25% - 384px); */
+}
+body.web-login .login-form-section{
+    position: absolute;
+    width: 439px;
+    height: 499px !important;
+    right: 0;
+    bottom: 0;
+    background: url('img/login/login_box.png') no-repeat;
+    box-shadow: none;
+    max-width: inherit;
+    border: none;
+}
+body.web-login .login-form-section .panel-header{
+    height: 156px;
+    background: url('img/login/login_icon.png') no-repeat;
+    background-position-x: 120px;
+    margin-top: -58px;
+}
+body.web-login .login-form-section .panel-header h2{
+    display: none;
+}
+body.web-login .login-form-section .panel-body{
+    width: 330px;
+    padding-top: 0;
+    margin-top: -20px;
+}
+body.web-login .login-form-section .panel-body .form-group{
+    margin-bottom: 0;
+}
+body.web-login .login-form-section .panel-body .form-group .input-group{
+    width: calc(100% - 60px);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 20px 30px;
+}
+body.web-login .login-form-section .panel-body .form-group span{
+    display: none;
+}
+body.web-login .login-form-section .panel-body .form-group .input-group input{
+    border : none;
+    background: #ddd;
+    box-shadow: none;
+    height: 40px;
+    color: black;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+body.web-login .login-form-section .panel-body .form-group .input-group input::-webkit-input-placeholder { color: black; font-weight: bold;}
+body.web-login .login-form-section .panel-body .form-group .input-group input:-moz-placeholder { color: black; font-weight: bold; }
+body.web-login .login-form-section .panel-body .form-group .input-group input::-moz-placeholder { color: black; font-weight: bold; }
+body.web-login .login-form-section .panel-body .form-group .input-group input:-ms-input-placeholder {  color: black; font-weight: bold; }
+body.web-login .login-form-section .panel-body .form-group .input-group input::placeholder {  color: black; font-weight: bold; text-align: center;}
+
+body.web-login .login-button{
+    margin: 5px 30px;
+    padding: 10px;
+    width: calc(100% - 60px);
+    background: rgb(68,145,251);
+    font-size: 16px;
+    font-weight: bold;
+}
+body.web-login .login-button:hover{
+    background: rgb(88,165,251);
+    color: white;
+}
+body.web-login .login-button span{
+    display: none;
+}
+
+@media (min-height: 768px) {
+    body.web-login .main-container{
+        margin-top: calc(25% - 384px);
+    }
+}
