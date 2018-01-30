@@ -78,6 +78,7 @@ define([
             LoadingView.visible(function(){
                 Code.init().then(function(){
                     $("body").removeClass("login-body");
+                    $("body").removeClass('web-login');
                     LoadingView.disable(function(){
                         _router = new MainRouter({
                             affterCallback:function(){// mainRouter create
