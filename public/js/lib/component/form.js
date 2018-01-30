@@ -122,7 +122,13 @@ define([
 
                 _datePicker.find("#"+data.id).find(".close-icon").click(function(e) {//reset button click
                     $(_datePicker).find("input").removeClass("inserted");
-                    $(_datePicker).find("input").val("");
+                    if(!_.isUndefined(data.isDefaultValue)&&data.isDefaultValue)
+                    {  
+                        $(_datePicker).find("input").val(data.value); 
+                    }else{
+                        $(_datePicker).find("input").val(""); 
+                    }
+                   
                 });
 
                 _datePicker.find("#"+data.id).on('dp.change', function(e){

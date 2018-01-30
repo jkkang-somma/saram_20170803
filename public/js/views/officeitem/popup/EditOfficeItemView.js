@@ -207,6 +207,14 @@ define([
 											,{key:i18nCommon.OFFICEITEM.STATE.DISUSE,value:i18nCommon.OFFICEITEM.STATE.DISUSE}
 											,{key:i18nCommon.OFFICEITEM.STATE.STANDBY,value:i18nCommon.OFFICEITEM.STATE.STANDBY}]
 							},{
+								type:"date",
+								name:"history_date",
+								id:"history_date",
+								label:i18nCommon.OFFICEITEM.CODE.HISTORY_DATE,
+								value:new Date().toISOString().slice(0,10),
+								isDefaultValue:true,
+								format:"YYYY-MM-DD",
+							},{
 								type:"text",
 								name:"memo",
 								label:i18nCommon.OFFICEITEM.CODE.MEMO,

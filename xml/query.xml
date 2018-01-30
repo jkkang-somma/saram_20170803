@@ -2276,7 +2276,7 @@
 		<query id="insertOfficeItemHistory">
 			INSERT INTO
 				office_item_history_tbl(serial_yes,category_type,history_date,type,title,repair_price,use_user,use_dept,name,change_user_id,memo)
-			VALUES(?,?,now(),?,?,?,?,?,?,?,?)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?)
 		</query>
 		<query id="deleteOfficeItemHistory">
 			DELETE FROM

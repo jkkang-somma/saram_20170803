@@ -719,6 +719,7 @@ define({
             STATE:"상태",
             MEMO:"메모",
             USE_FLAG:"구분",
+            HISTORY_DATE:"수정일",
         },
         CONFIRM: {
             REMOVE:"비품 정보를 삭제 하시겠습니까?"

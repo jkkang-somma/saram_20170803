@@ -152,6 +152,7 @@ var OfficeItem = function (data) {
                     var indata = {
                         serial_yes  : data.serial_yes, 
                         category_type : data.category_type, //category_type 세팅
+                        history_date : data.history_date,
                         type	    : "",     //사용자 변경/수정 
                         title	    : "", 
                         repair_price: data.price_buy,

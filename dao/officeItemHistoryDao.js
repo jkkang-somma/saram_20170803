@@ -24,7 +24,7 @@ officeItemHistoryDao.prototype.insertOfficeItemHistory = function(officeitem){
     //     [officeitem.serial_yes,officeitem.category_type,officeitem.type,officeitem.title,officeitem.repair_price,officeitem.use_user,officeitem.use_dept,officeitem.name,officeitem.change_user_id,officeitem.memo]));
     // });
     return db.query(group, "insertOfficeItemHistory",
-        [officeitem.serial_yes,officeitem.category_type,officeitem.type,officeitem.title,officeitem.repair_price,officeitem.use_user,officeitem.use_dept,officeitem.name,officeitem.change_user_id,officeitem.memo]);
+        [officeitem.serial_yes,officeitem.category_type,officeitem.history_date,officeitem.type,officeitem.title,officeitem.repair_price,officeitem.use_user,officeitem.use_dept,officeitem.name,officeitem.change_user_id,officeitem.memo]);
 };
 
 officeItemHistoryDao.prototype.deleteOfficeItemHistory = function(id){

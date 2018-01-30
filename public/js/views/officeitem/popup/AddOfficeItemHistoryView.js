@@ -37,8 +37,6 @@ define([
 		var userCodeCollection= Code.getCollection("user");
 		var deptCodeCollection= Code.getCollection(Code.DEPARTMENT);
 		var officeItemCodeCollection = Code.getCollection("officeitem");
-	   
-		var nowDate = new Date().toISOString().slice(0,10);
 
     	//var deptCodeCollection=Code.getCollection(Code.DEPARTMENT);
 	    //var partCodeCollection=Code.getCollection(Code.DEPT);
@@ -57,11 +55,13 @@ define([
 							value:_model.serial_yes,
 							disabled:"readonly",
 					},{
-							type:"input",
+							type:"date",
 							name:"history_date",
+							id:"history_date",
 							label:i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE,
-							value:nowDate,
-							disabled:"readonly",
+							value:new Date().toISOString().slice(0,10),
+							isDefaultValue:true,
+							format:"YYYY-MM-DD",
 					},{
 						    type:"hidden",
         	                name:"use_user",
