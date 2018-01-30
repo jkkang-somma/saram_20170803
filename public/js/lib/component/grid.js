@@ -92,7 +92,7 @@ define([
     	setBtnText:function(btn, text){
     	    btn.html($(_defaultBtnText).html(text));
         },
-        updateHeader: function(){
+        updateHeader: function(resize){
         	 var _grid = this;
              var page = 1;
              if(resize){
