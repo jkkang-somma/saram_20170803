@@ -99,6 +99,7 @@ define([
                  page = _grid.DataTableAPI.page();
              }
              _grid.DataTableAPI.draw();
+             
             if(this.options.scrollY != undefined){
                 var parentCon =  $('#'+this.options.el).find('.dataTables_scroll');
                 var headerH = parentCon.find('.dataTables_scrollHead');
