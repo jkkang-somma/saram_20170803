@@ -24,6 +24,15 @@
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
+        <query id="selectIdByLoginUser">
+        	SELECT 
+        		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
+        		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
+        	FROM members_tbl A
+			WHERE (leave_company is null OR leave_company = "")
+        		AND A.id=?
+        </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
         <query id="insertUser">
         insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, affiliated, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo, part_code) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
@@ -333,6 +342,7 @@
 
     	<query id="getApprovalMailingList">
     		SELECT
+				id,
 				name,
 				email,
 				leave_company
@@ -340,6 +350,8 @@
 				members_tbl
 			WHERE
 				dept_code = ?
+				AND 
+				leave_company = ""
     	</query>
 
     	<query id="getManagerId">
@@ -412,6 +424,8 @@
 							c.normal,
 							c.normal_change,
 							c.except,
+							c.standard_in_time,
+							c.standard_out_time,
 							IFNULL( o.name, '') AS overtime_type,
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,

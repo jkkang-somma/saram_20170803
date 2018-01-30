@@ -15,15 +15,16 @@ define([
         'cmoment',
         'collection/officeitem/OfficeItemDetailCollection',
         'core/BaseView',
+        'models/sm/SessionModel',
         'views/component/ProgressbarView',
     	'views/officeitem/popup/UsageOfficeItemHistoryPopupView',
     	'text!templates/officeitem/usageHistoryTemplate2.html',
-        'text!templates/default/content.html',
+        'text!templates/default/content.html'
 ], function(
 	$, _, Backbone, Util, Schemas,
 	Grid, Dialog, Datatables, Code, Moment,
     OfficeItemDetailCollection,
-	BaseView, ProgressbarView, UsageHistoryListPopup, usageHistoryTemplate2,
+	BaseView, SessionModel, ProgressbarView, UsageHistoryListPopup, usageHistoryTemplate2,
 	ContentHTML
 ) {
     // 비품 컬럼 줄바꿈 처리 및 비품 이력 팝업 처리
@@ -37,9 +38,9 @@ define([
                     wordObj.id = wordArr[i];
                     wordObj.item = wordArr[i];
                     if(i==0) {
-                        itemList = _.template(usageHistoryTemplate2)(wordObj);
+                        itemList = (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate2)(wordObj) : wordObj.item;
                     } else {
-                        itemList = itemList + "</br>" + _.template(usageHistoryTemplate2)(wordObj);
+                        itemList = itemList + "</br>" + (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate2)(wordObj) : wordObj.item;
                     }
                 }
                 wordObj = {id:"", name:""};
@@ -47,7 +48,7 @@ define([
             }else{
                 wordObj.id = items;
                 wordObj.item = items;
-                itemList = _.template(usageHistoryTemplate2)(wordObj);
+                itemList = (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate2)(wordObj) : wordObj.item;
                 wordObj = {id:"", name:""};
                 return itemList;
             }

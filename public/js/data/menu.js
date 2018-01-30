@@ -70,7 +70,7 @@ define([
 		},{
 			title:i18Common.MENU.SUB.BM.ORGANIZATION, //조직도
 			hashTag:"#organization",
-			auth:SCHEMAS.ADMIN
+			auth:SCHEMAS.DEPT_BOSS
 		},{
 	        title:"사진 등록", //사진 등록
 	        hashTag:"#userpic",

@@ -119,6 +119,7 @@ define({
             INIT_PASSWORD_PUT:"초기화 정보를 입력해 주세요.",
             DO_NOT_FOUND_USER:"유효하지 않은 사용자 입니다.",
             NOT_EQULES_PASSWORD:"유효하지 않은 비밀번호 입니다.",
+            MIN_LENGTH_PASSWORD:"새 비밀번호가 유효하지 않습니다. (4자리 이상 입력)",
             INIT_PASSWORD:"비밀번호를 설정해주세요.",
             FIND_PASSWORD_PUT:"사용자 정보를 입력해 주세요.",
             NOT_VALID_EMAIL:"유효하지 않은 이메일 입니다.",
@@ -126,7 +127,7 @@ define({
             NOT_EQULES_EMAIL:"유효하지 않은 이메일 입니다."
         },
         USER:{
-            NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지않습니다."
+            NOT_EQULES_CONFIG_PASSWORD:"새 비밀번호가 일치하지 않습니다."
         }
     },
     ERROR:{
@@ -852,7 +853,7 @@ define({
         GRID_COL_NAME : {
             DEPARTMENT: "부서",
             NAME: "이름",
-            DESCTOP: "데스크톱",
+            DESCTOP: "데스크탑",
             MONITOR: "모니터",
             IP: "IP",
             NOTEBOOK: "노트북",

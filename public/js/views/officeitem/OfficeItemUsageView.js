@@ -74,9 +74,9 @@ define([
                     wordObj.id = wordArr[i];
                     wordObj.item = wordArr[i];
                     if(i==0) {
-                        itemList = _.template(usageHistoryTemplate)(wordObj);
+                        itemList = (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate)(wordObj) : wordObj.item;
                     } else {
-                        itemList = itemList + "</br>" + _.template(usageHistoryTemplate)(wordObj);
+                        itemList = itemList + "</br>" + (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate)(wordObj) : wordObj.item;
                     }
                 }
                 wordObj = {id:"", name:""};
@@ -84,7 +84,7 @@ define([
             }else{
                 wordObj.id = items;
                 wordObj.item = items;
-                itemList = _.template(usageHistoryTemplate)(wordObj);
+                itemList = (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate)(wordObj) : wordObj.item;
                 wordObj = {id:"", name:""};
                 return itemList;
             }
@@ -117,7 +117,7 @@ define([
                 id:"usageDataTable",
                 column:[
                     { data : "name", 		"title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.NAME},
-                    { data : "dept",        "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DEPARTMENT,
+                    { data : "dept",        "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DEPARTMENT,  className: "dt-body-right",
                         render: function(data) {
                             return _getDeptName(data);
                         }},
