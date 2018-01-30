@@ -852,7 +852,7 @@ define({
         GRID_COL_NAME : {
             DEPARTMENT: "부서",
             NAME: "이름",
-            DESCTOP: "데스크톱",
+            DESCTOP: "데스크탑",
             MONITOR: "모니터",
             IP: "IP",
             NOTEBOOK: "노트북",
