@@ -32,7 +32,8 @@ define([
             "MyRecord_Text": "",
             "MyDept_Text": "",
             "MyEmploy_Text": "",
-            "Page_num" : ""
+            "Page_num" : "",
+            "Click_Count" : 0
         },
 
     	initialize:function(options){
@@ -42,6 +43,7 @@ define([
             this.condition.MyDept_Text = "";
             this.condition.MyEmploy_Text = "";
             this.condition.Page_num = "";
+            this.condition.Click_Count = 0;
 
     	    // var lastWidth = $(window).width();
     	    $(window).on("resize", function(e){
@@ -341,9 +343,16 @@ define([
     	_crteateCustomButton:function(obj){
     	    var _grid=this;
 
-    	    var _buttonIcon;
+            let btnFilterSize = 0;
+     	    var _buttonIcon;
     	    if (obj.name=="filter"){//필터 버튼일떄
-    	        _buttonIcon=$(_defaultBtnText).html(obj.filterBtnText[0]);
+                btnFilterSize = obj.filterBtnText.length;
+                var CustomText = _grid.condition.Click_Count;
+                if (CustomText !="" && CustomText != undefined) { //Search 필터 값 저장 기능:  전체 또는 나 중 선택되어 있는 상태로 글자 변경
+                    _buttonIcon = $(_defaultBtnText).html(obj.filterBtnText[CustomText]);
+                } else {
+                    _buttonIcon = $(_defaultBtnText).html(obj.filterBtnText[0]);
+                }
     	    } else {//일반 아이콘
     	        _buttonIcon=$(ButtonHTML);
                 _buttonIcon.addClass(_glyphiconSchema.value(obj.name));
@@ -360,7 +369,9 @@ define([
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
             _button.click(function(){
                 if(_.isFunction(obj.click)){
-                    var callback=obj.click;
+                    _grid.condition.Click_Count++
+                    if(_grid.condition.Click_Count == btnFilterSize) _grid.condition.Click_Count = 0;
+                      var callback=obj.click;
                     callback(_grid, _button);
                 }
             })
