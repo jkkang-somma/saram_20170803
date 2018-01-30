@@ -32,7 +32,8 @@ define([
             "MyRecord_Text": "",
             "MyDept_Text": "",
             "MyEmploy_Text": "",
-            "Page_num" : ""
+            "Page_num" : "",
+            "Click_Count" : 0
         },
 
     	initialize:function(options){
@@ -42,6 +43,7 @@ define([
             this.condition.MyDept_Text = "";
             this.condition.MyEmploy_Text = "";
             this.condition.Page_num = "";
+            this.condition.Click_Count = 0;
 
     	    // var lastWidth = $(window).width();
     	    $(window).on("resize", function(e){
@@ -49,7 +51,7 @@ define([
     	            // LOG.debug(lastWidth);
     	            LOG.debug($(window).width());
                     grid.updateCSS();
-                    grid.updateHeader();
+                    grid.updateHeader(true);
                    
                 // }
     	    });
@@ -92,8 +94,14 @@ define([
     	setBtnText:function(btn, text){
     	    btn.html($(_defaultBtnText).html(text));
         },
-        updateHeader: function(){
-            
+        updateHeader: function(resize){
+        	 var _grid = this;
+             var page = 1;
+             if(resize){
+                 page = _grid.DataTableAPI.page();
+             }
+             _grid.DataTableAPI.draw();
+             
             if(this.options.scrollY != undefined){
                 var parentCon =  $('#'+this.options.el).find('.dataTables_scroll');
                 var headerH = parentCon.find('.dataTables_scrollHead');
@@ -103,8 +111,13 @@ define([
                 $('#'+this.options.el).find('.dataTables_scroll .dataTables_scrollBody').css('height', height);
                 var dheight = this.options.scrollY + headerH + 1;
                 $('#'+this.options.el).find('.dataTables_scroll').css('height', dheight);
+                _grid.DataTableAPI.draw();
             }
-            this.DataTableAPI.draw();
+            
+            if(resize){
+                $('#'+this.options.el).find('.dataTables_paginate .paginate_button[data-dt-idx='+(page+1)+']').trigger('click');
+            }
+            
         },
     	updateCSS:function(){
     	    var width=$(window).width();
@@ -341,9 +354,16 @@ define([
     	_crteateCustomButton:function(obj){
     	    var _grid=this;
 
-    	    var _buttonIcon;
+            let btnFilterSize = 0;
+     	    var _buttonIcon;
     	    if (obj.name=="filter"){//필터 버튼일떄
-    	        _buttonIcon=$(_defaultBtnText).html(obj.filterBtnText[0]);
+                btnFilterSize = obj.filterBtnText.length;
+                var CustomText = _grid.condition.Click_Count;
+                if (CustomText !="" && CustomText != undefined) { //Search 필터 값 저장 기능:  전체 또는 나 중 선택되어 있는 상태로 글자 변경
+                    _buttonIcon = $(_defaultBtnText).html(obj.filterBtnText[CustomText]);
+                } else {
+                    _buttonIcon = $(_defaultBtnText).html(obj.filterBtnText[0]);
+                }
     	    } else {//일반 아이콘
     	        _buttonIcon=$(ButtonHTML);
                 _buttonIcon.addClass(_glyphiconSchema.value(obj.name));
@@ -360,7 +380,9 @@ define([
             this._defatulInputGroup.append($(_defaultGroupBtnTag).append(_button));
             _button.click(function(){
                 if(_.isFunction(obj.click)){
-                    var callback=obj.click;
+                    _grid.condition.Click_Count++
+                    if(_grid.condition.Click_Count == btnFilterSize) _grid.condition.Click_Count = 0;
+                      var callback=obj.click;
                     callback(_grid, _button);
                 }
             })
@@ -388,7 +410,6 @@ define([
 
             _defaultSearchInput.change(function(){//Search 필터 값 저장 기능 : 입력 텍스트 변경시 메모리에 저장
                 _grid.condition.Search_Text = _defaultSearchInput.val();
-                console.log("txt: " + _grid.condition.Search_Text);
             });
 
     	    var _buttonIcon=$(ButtonHTML);
@@ -858,7 +879,6 @@ define([
             
      	    //ROW click
      	    _dataTable.find("tbody").on( 'click', '.odd, .even', function () {
-     	    	console.log(_dataTable.$('tr.selected'));
                 _dataTable.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             } );

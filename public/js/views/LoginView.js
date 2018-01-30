@@ -3,6 +3,7 @@ define([
 'underscore',
 'backbone',
 'log',
+'util',
 'dialog',
 'spin',
 'validator',
@@ -16,7 +17,7 @@ define([
 'text!templates/login/findPasswordSectionTemplate.html',
 'i18n!nls/common',
 'css!cs/login.css',
-], function($, _,Backbone, log, Dialog, Spin, _V, CryptoJS, UserModel, SessionModel, MessageModel, LoginHTML, LoginPasswordSectionHTML 
+], function($, _,Backbone, log, Util, Dialog, Spin, _V, CryptoJS, UserModel, SessionModel, MessageModel, LoginHTML, LoginPasswordSectionHTML  
 , InitPasswordHTML, FindPasswordSectionHTML
 , i18nCommon){
     var opts = {
@@ -44,6 +45,11 @@ define([
     	initialize:function(){
             this.el=$(".main-container");
             $("body").addClass("login-body");
+            
+            if(!Util.isMobileAcc()){
+                console.log('PC');
+                $("body").addClass('web-login');
+            }
             
             _.bindAll(this, 'render');
             _.bindAll(this, 'close');
@@ -201,15 +207,14 @@ define([
                     _view.app.draw();    
                 }).fail(function(e){
                     if (!_.isUndefined(e.user)){
-                        
-                        _view.loginPasswordSection.addClass("fadeOutRightBig");
-                        _view.formSection.addClass("bounceOut").one(transitionEnd, function(){
-                            // $("#loginbtn").button('reset');
-                            _view.passwordSection.find("#initIdInput").val(data.id);
-                            _view.formSection.css("display", "none");
-                            _view.passwordSection.addClass("fadeInLeftBig");
+                        //_view.loginPasswordSection.addClass("fadeOutRightBig");
+                        _view.formSection.addClass("bounceOut").one(transitionEnd, function(){});
+                        _view.passwordSection.find("#initIdInput").val(data.id);
+                        _view.formSection.css("display", "none");
+                        _view.passwordSection.addClass("fadeInLeftBig");
+                        setTimeout(function(){
                             _view.passwordSection.css("display", "block");
-                        });;
+                        }, 300);
                     } else {
                         // $("#loginbtn").button('reset');
                         _view.formSection.find("#loginPasswordTextbox").val('');
