@@ -157,12 +157,8 @@ body.web-login .login-form-section .panel-body .form-group .input-group{
     padding: 0;
     margin: 20px 30px;
 }
-body.web-login .login-form-section .panel-body .form-group .input-group:first-child{
-    margin-top: 0;
-}
-body.web-login .login-form-section .panel-body .form-group span{
-    display: none;
-}
+body.web-login .login-form-section .panel-body .form-group .input-group:first-child{margin-top: 0;}
+body.web-login .login-form-section .panel-body .form-group span{display: none;}
 body.web-login .login-form-section .panel-body .form-group .input-group input{
     border : none;
     background: #ddd;
