@@ -248,7 +248,7 @@ define([
                         } else if (outOffice.indexOf(",")>=0) {
                             outOffice = outOffice.replace(/ /g, "").replace(/반차/g, "").replace(/휴가/g, "");
                         } else if (outOffice.indexOf("(")>=0) {
-                            outOffice = vacoutOfficeation.replace("휴가", "").replace("(", "").replace(")", "");
+                            outOffice = outOffice.replace("휴가", "").replace("(", "").replace(")", "");
                         }
                     }else{
                         openTag = "<div class='outOffice'>";
