@@ -451,7 +451,7 @@ define([
         			year : Moment().year()
         		}
         	}).done(function(){
-        		console.log(_view.holidayCollection);
+        		// console.log(_view.holidayCollection);
         		var day = Moment().hour(0).minute(0).second(0);
         		var holidays = _view.holidayCollection.pluck("date");
         		
@@ -459,7 +459,7 @@ define([
         			if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
         				
         			} else {
-        				console.log(day.format("YYYY-MM-DD"));
+        				// console.log(day.format("YYYY-MM-DD"));
         				count ++;
         				if(count == 4){
 							// if(count == 100){
@@ -592,7 +592,7 @@ define([
         	var selectItem = this.grid.getDataAt(index-1); // 0부터 시작
         	var overtimeApprovalPopupView = new OvertimeApprovalPopupView(selectItem);
         	
-        	console.log("grid data", selectItem);
+        	// console.log("grid data", selectItem);
         	var _this = this;
             var clickFlag = false;
             Dialog.show({
@@ -609,7 +609,7 @@ define([
                         clickFlag =true;
 
                 		var inputData = overtimeApprovalPopupView.getData();
-                		console.log(inputData);
+                		// console.log(inputData);
                 		
                 		var checkTime = selectItem.over_time - inputData.except;
 						if ( checkTime < 120 ) {

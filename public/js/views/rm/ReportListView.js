@@ -132,7 +132,7 @@ define([
         },
 
         setSearchParam : function(data){
-            console.log(data)
+            // console.log(data)
         },
 
         setReportTable: function(val, managerMode) {
