@@ -1511,7 +1511,7 @@ border: 2px dotted #2ABB9B !important;
     position: absolute;
     z-index:1;
     right: 46px;
-    top: 0;
+    top: 2px;
     bottom: 0;
     margin: auto;
 }
