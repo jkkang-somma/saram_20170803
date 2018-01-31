@@ -188,7 +188,7 @@ define([
             }, {
                 title: "신청일수",
                 render: function(data, type, row) {
-                    var dataVal = (row.day_count != null && row.day_count != 0) ? "<span class='float_right'>" + row.day_count + "일</span>" : "<span style='float: right;'>-</span>";
+                    var dataVal = (row.day_count != null && row.day_count != 0) ? "<span class=''>" + row.day_count + "일</span>" : "<span style=''>-</span>";
                     return dataVal;
                 }
             }, {
