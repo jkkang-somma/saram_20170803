@@ -179,12 +179,12 @@ define([
             var startDateStr = startDate.format('YYYY-MM');
             this.ajaxCall(startDateStr).then(function(result){
                 
-                for ( let i = 0 ; i < result["DeptSummary"].length ; i++ ) {
+                for ( var i = 0 ; i < result["DeptSummary"].length ; i++ ) {
 
                     var rowData = result["DeptSummary"][i];
 
                     // 부서 인원 셋팅
-                    for ( let j = 0 ; j < result["DeptPersionCount"].length ; j++ ) {
+                    for ( var j = 0 ; j < result["DeptPersionCount"].length ; j++ ) {
                         if ( rowData.department == result["DeptPersionCount"][j].department ) {
                             rowData["total_person"] = result["DeptPersionCount"][j].count;
                             break;
