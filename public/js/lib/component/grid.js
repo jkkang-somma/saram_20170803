@@ -701,7 +701,7 @@ define([
                         var configColumns=_grid.options.column;
                         var configColumnsNameArr=_.pluck(configColumns, "data");
 
-                        for (let index in filterColumns){
+                        for (var index in filterColumns){
                             var columnName=filterColumns[index];
                             var findIndex=_.indexOf(configColumnsNameArr, columnName)+1;
 
