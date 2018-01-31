@@ -354,7 +354,7 @@ define([
     	_crteateCustomButton:function(obj){
     	    var _grid=this;
 
-            let btnFilterSize = 0;
+            var btnFilterSize = 0;
      	    var _buttonIcon;
     	    if (obj.name=="filter"){//필터 버튼일떄
                 btnFilterSize = obj.filterBtnText.length;
@@ -628,18 +628,18 @@ define([
             })
         },
         _createEmployStatusButton:function(obj){//비품현황 버튼 추가
-            let _grid=this;
+            var _grid=this;
             const filterBtnText=["근무자","퇴사자","전체"];
-            let MyText = _grid.condition.MyEmploy_Text;
+            var MyText = _grid.condition.MyEmploy_Text;
 
-            let filter=[
+            var filter=[
                 function(data){
-                    let _levDate = data[7];
+                    var _levDate = data[7];
                     if(_levDate === "") return true
                     return false;
                 },
                 function(data){
-                    let _levDate = data[7];
+                    var _levDate = data[7];
                     if(_levDate !== "") return true
                     return false;
                 },
@@ -648,7 +648,7 @@ define([
                 }
              ];
 
-            let _buttonIcon;
+            var _buttonIcon;
 
             if (MyText !="" && MyText != undefined) { //Search 필터 값 저장 기능: 근무자,퇴사자,전체 중 선택되어 있는 상태로 글자 변경
                 _buttonIcon = $(_defaultBtnText).html(filterBtnText[MyText]);
@@ -656,11 +656,11 @@ define([
                 _buttonIcon=$(_defaultBtnText).html(filterBtnText[0]);
             }
 
-            let _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+            var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
             this.buttonid[obj.name] = _btnId;
 
-            let _btnTmp=_.template(_defaultBtnTag);
-            let _button=$(_btnTmp({tooltip:"검색 대상"}));
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:"검색 대상"}));
 
             _button.attr("id", _btnId);
             _button.append(_buttonIcon);
@@ -676,7 +676,7 @@ define([
             }
 
             _button.click(function(){
-                let index=_grid.filterValue.myRecord;
+                var index=_grid.filterValue.myRecord;
                 if (index==(filterBtnText.length-1)){
                     index=0;
                 } else {
@@ -691,24 +691,24 @@ define([
             })
         },
         _createOnlyMyButton:function(obj){//비품현황 버튼 추가
-            let _grid=this;
-            let filterBtnText=["나"];
-            let userName=SessionModel.getUserInfo().name;
-            let userId=SessionModel.getUserInfo().id;
-            let filter=[
+            var _grid=this;
+            var filterBtnText=["나"];
+            var userName=SessionModel.getUserInfo().name;
+            var userId=SessionModel.getUserInfo().id;
+            var filter=[
                     function(data){
-                        let filterColumns=obj.filterColumn;
-                        let configColumns=_grid.options.column;
-                        let configColumnsNameArr=_.pluck(configColumns, "data");
+                        var filterColumns=obj.filterColumn;
+                        var configColumns=_grid.options.column;
+                        var configColumnsNameArr=_.pluck(configColumns, "data");
 
                         for (let index in filterColumns){
-                            let columnName=filterColumns[index];
-                            let findIndex=_.indexOf(configColumnsNameArr, columnName)+1;
+                            var columnName=filterColumns[index];
+                            var findIndex=_.indexOf(configColumnsNameArr, columnName)+1;
 
-                            let value=data[findIndex];
+                            var value=data[findIndex];
 
-                            let nameIndex=value.indexOf(userName);
-                            let idIndex=value.indexOf(userId);
+                            var nameIndex=value.indexOf(userName);
+                            var idIndex=value.indexOf(userId);
 
                             if (nameIndex>=0 || idIndex>=0){
                                 return true;
@@ -717,12 +717,12 @@ define([
                         return false;
                     }
                 ];
-            let _buttonIcon = $(_defaultBtnText).html(filterBtnText[0]);
-            let _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
+            var _buttonIcon = $(_defaultBtnText).html(filterBtnText[0]);
+            var _btnId=this.options.id +"_custom_"+ obj.name +"_Btn";
             this.buttonid[obj.name] = _btnId;
 
-            let _btnTmp=_.template(_defaultBtnTag);
-            let _button=$(_btnTmp({tooltip:"검색 대상"}));
+            var _btnTmp=_.template(_defaultBtnTag);
+            var _button=$(_btnTmp({tooltip:"검색 대상"}));
 
             _button.attr("id", _btnId);
             _button.append(_buttonIcon);
@@ -991,14 +991,14 @@ define([
             // });
 
             // 방식_3
-            let prefix = 'GridDataExcel';
+            var prefix = 'GridDataExcel';
             if(filename != undefined) {
                 prefix = filename;
             }
 
             Dialog.loading({
                 action:function(){
-                    let dfd = new $.Deferred();
+                    var dfd = new $.Deferred();
                     saveAs(new Blob(["\uFEFF" + gridHtml],
                         {type: "text/csv;charset=utf-8"}), prefix + '_' + dateStr + '.xls').then(function(result){
                         dfd.resolve();
