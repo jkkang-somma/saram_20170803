@@ -247,6 +247,7 @@ define([
 							e_date = e_date.setFullYear(e_date.getFullYear()+6)
 							e_date = new Date(e_date).toISOString().slice(0,10);
 							_form.getElement("expiration_date").find("input").val(e_date); // 사용 만료일
+							_form.getElement("expiration_date").find("input").addClass("inserted");
 	
 							var d_date = new Date(val);
 							d_date = d_date.setFullYear(d_date.getFullYear()+5)

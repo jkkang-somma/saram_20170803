@@ -840,10 +840,10 @@ define({
     },
     IPTOOLTIP: {
         IP:{
-            TYPE:"IP주소 유형",
-            ADD:"IP주소 등록",
-            EDIT:"IP주소 수정",
-            REMOVE:"IP주소 삭제"
+            TYPE:"IP 유형",
+            ADD:"IP 등록",
+            EDIT:"IP 수정",
+            REMOVE:"IP 삭제"
         }
     },
     USAGE_LIST : {//비품 현황
