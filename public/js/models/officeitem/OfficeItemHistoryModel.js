@@ -15,7 +15,7 @@ define([
           validation:function(attrs, validArr){
     	    for(var name in attrs){
     	        var value=attrs[name];
-    	        if (_.isUndefined(validArr)?_.has(this.default, name):_.has(validArr, name)){//default에 있는 필드만 유효성 검사
+    	        if (_.isUndefined(validArr)?_.has(this.default, name):_.has(validArr, name)){//default
         	        if (_.isUndefined(value) || _.isNull(value) || _.isEmpty(value)){
         	            return name + " field is require."
         	        }    
@@ -25,7 +25,7 @@ define([
         remove:function(){
             return this.destroy(); 
         },
-        getCustomUrl: function (method) {//idAttribute값을 사용하지 않고 id로 할때
+        getCustomUrl: function (method) {//idAttribute
             switch (method) {
                 case 'read':
                     return this.urlRoot + "/" + this.attributes.serial_yes;
