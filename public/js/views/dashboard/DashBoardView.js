@@ -247,11 +247,14 @@ define([
 					});
 				}
 
-				var thisYear = parseInt(_view.searchParams.start.substring(0, 4));
+				var today = new Date();
+				var firstDay = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+				var lastDay = new Date(today.getFullYear() + 1, today.getMonth() - 1, 1);
+				
 				var reportParam = {
 					managerId : SessionModel.getUserInfo().id,
-					startDate : (thisYear - 1) + "-01-01",
-					endDate : (thisYear + 1) + "-12-31",
+					startDate : Moment(firstDay).format("YYYY-MM-DD"),
+					endDate : Moment(new Date(lastDay - 1)).format("YYYY-MM-DD"),
 				};
 									
 				_view.approvalCollection.fetch({ 
