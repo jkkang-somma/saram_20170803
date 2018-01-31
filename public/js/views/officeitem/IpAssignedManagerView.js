@@ -19,7 +19,8 @@ define([
 	'code'
 	], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18nCommon, Dialog, SessionModel, 
 		HeadHTML, ContentHTML, LayoutHTML, IpAssignedManagerModel, IpAssignedManagerCollection, AddIpView, EditIpView, Code){
-
+		
+		var _currentUseFilter=0;
 		var IpAssignedManagerView = BaseView.extend({
 		el:".main-container",
 		initialize:function(){
@@ -103,6 +104,46 @@ define([
 
 			//grid button add;
 			var _buttons=["search"];
+			var _usefilterText=[i18nCommon.CODE.ALL
+                                    ,i18nCommon.OFFICEITEM.USE_STATE.USE
+                                    ,i18nCommon.OFFICEITEM.USE_STATE.NOT_USER];
+             _buttons.push({
+                type:"custom",
+                name:"filter",
+                tooltip:i18nCommon.CODE.ALL
+                        +"/"+i18nCommon.OFFICEITEM.USE_STATE.USE
+                        +"/"+i18nCommon.OFFICEITEM.USE_STATE.NOT_USER,
+                filterBtnText:_usefilterText,
+                click:function(_grid, _button){
+                var filters=[
+                        function(){
+                            return true;
+                        },
+                        function(data){
+                            var _use_user=data[2];                                           
+                            return (_use_user == "")?false:true;                               
+                    
+                        },
+                        function(data){
+							var _use_user=data[2];                                           
+                            return (_use_user == "")?true:false;  
+                        },    
+                ];
+                    
+                if (_currentUseFilter==2){
+                    _currentUseFilter=0;
+                } else {
+                    _currentUseFilter++;
+                }
+                    
+                _button.html(_usefilterText[_currentUseFilter]);
+                _grid.setBtnText(_button, _usefilterText[_currentUseFilter]);
+                _grid.filtering(function(data){
+                    var fn=filters[_currentUseFilter];
+                    return fn(data); }, "useStateType");
+                }
+			});   
+			
 			if (this.actionAuth.add){
 				_buttons.push({//IP Add
 					type:"custom",

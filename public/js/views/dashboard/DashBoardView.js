@@ -140,7 +140,7 @@ define([
 			layout.append(head);
 
 			//button
-			layout.append('<div class="pull-right"><div class="btn-group" id="privilege-btn" style="top:-15px; margin-right:10px;"></div><div class="btn-group" id="monthpickerCon" style="top:-15px;"></div></div>');
+			layout.append('<div class="pull-right"><div class="btn-group" id="privilege-btn" style="top:-15px; margin-right:10px; display: none;"></div><div class="btn-group" id="monthpickerCon" style="top:-15px;"></div></div>');
 
 			// 아래 list
 			var dashboard = $(_dashboardTemp(defaultData));
