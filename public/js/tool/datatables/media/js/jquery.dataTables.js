@@ -5130,7 +5130,7 @@
 			.bind( 'click.DT', oData, function (e) {
 					n.blur(); // Remove focus outline for mouse users
 					fn(e);
-					$('.dataTables_wrapper').animate({
+					$('.dataTables_wrapper .dataTables_scrollBody, .dataTables_wrapper').animate({
 				        scrollTop: 0
 				    }, 200);
 				} )
