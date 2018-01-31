@@ -138,7 +138,7 @@ define([
                     { "title" : i18Common.OFFICEITEM.CODE.STATE, data:"state"},
                     { "title" : i18Common.OFFICEITEM.CODE.MEMO, data:"memo", visible:false, subVisible:false},
                     { "title" : "이력", data : "history", "render": function(data, type, row){
-                        var btnState = ((row.state == "폐기")?'':'btn-default');
+                        var btnState = ((row.state == "폐기")?'btn-defalut-ex':'btn-default');
                         var dataVal = "<div style='text-align: center;'>";
                         dataVal +=  "<button class='btn list-historyList-btn "+btnState+" btn-sm' id='btnHistoryList"+row.doc_num+"' data-toggle='tooltip' title='이력 조회' ><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button>";
                         dataVal +=  "<button class='btn list-HistoryAdd-btn "+btnState+" btn-sm' id='btnHistoryAdd"+row.doc_num+"' data-toggle='tooltip' title='이력 등록'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>";

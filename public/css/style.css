@@ -641,6 +641,13 @@ background-color: #e0e0e0;
     border-color: transparent;
     background: beige;
 }
+.btn-defalut-ex {
+    color: rgb(124, 122, 122);
+    background-image: none;
+    border-color: transparent;
+    background: rgb(235, 235, 235);
+}
+
 .btn-default, .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-danger {
     text-shadow: none;
     -webkit-box-shadow: none;
