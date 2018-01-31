@@ -257,7 +257,7 @@ define([
                 evt.stopPropagation();
 
                 var selectData=this.grid.getSelectItem();    
-                let usageHistoryPopupView = new UsageHistoryListPopup(selectData.serial_yes);
+                var usageHistoryPopupView = new UsageHistoryListPopup(selectData.serial_yes);
                 Dialog.show({
                     title: "("+selectData.serial_yes+") 이력",
                     content: usageHistoryPopupView,

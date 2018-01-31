@@ -295,11 +295,11 @@ define([
 			var dfd= new $.Deferred();
 			var _view=this, _form=this.form;
   
-			let use_flag_info = $('#autocomplete').val();
-			let use_flag = _form.getElement("use_flag").find("select").val();
+			var use_flag_info = $('#autocomplete').val();
+			var use_flag = _form.getElement("use_flag").find("select").val();
 
-			let _state = _form.getElement("state").find("select").val();
-			let _disposal_date = _form.getElement("disposal_date").find("input").val();			
+			var _state = _form.getElement("state").find("select").val();
+			var _disposal_date = _form.getElement("disposal_date").find("input").val();			
 			
 			if( _state == i18nCommon.OFFICEITEM.STATE.DISUSE
 				&& Util.isNull(_disposal_date)){
@@ -308,7 +308,7 @@ define([
 				return dfd.promise();		
 			}
 
-			let _location = _form.getElement("location").find("input").val();
+			var _location = _form.getElement("location").find("input").val();
 			_location = _location.replace(/(\s*)/g,"");
 	
 			if( _location == "창고" && !Util.isNull(use_flag_info)){
