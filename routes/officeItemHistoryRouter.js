@@ -28,7 +28,7 @@ router.route("/history")
             debug("Select OfficeItemHistory query empty.");
     }
 })
-//비품 History 등록
+//
 //router.route('/history')
 .post(function(req, res){    
     //var officeItemHistory = new OfficeItemHistory(req.body);

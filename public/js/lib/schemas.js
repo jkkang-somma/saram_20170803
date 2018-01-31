@@ -9,7 +9,7 @@ define([
     var LOG=log.getLogger('Schemas');
 
     //  관리자,  임원,         부서장,      사용자
-    const ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0;
+    var ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0;
 
     var _defaultSchema = {
         //Model
