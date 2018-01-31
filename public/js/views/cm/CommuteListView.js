@@ -694,7 +694,7 @@ define([
 						_approvalModel.save({}, {
 							success: function(model, xhr, options) {
 								Dialog.show("결재가 상신되었습니다.");
-								selectItem.work_night_falg = state;
+								selectItem.work_night_falg = (state != undefined)?state: "상신";
 								_this.grid.updateRow(selectItem);
 								dialog.close();
 							},
