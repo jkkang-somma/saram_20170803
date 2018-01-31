@@ -106,7 +106,8 @@ define([
 		'click #userConifg' :'userConifg',
 		'click #accessIn' : 'accessIn',
 		'click #accessOut' : 'accessOut',
-		'click #setting' : 'setting',
+        'click #setting' : 'setting',
+        'click #document' : 'document',
         'click #apprAppend' : 'apprAppend',
         'click #userConifg' :'userConifg',
 		'click #book' : 'book'

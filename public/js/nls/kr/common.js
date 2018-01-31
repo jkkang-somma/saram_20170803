@@ -375,8 +375,8 @@ define({
             NAME : "이름",
             TIME : "출입시간",
             TYPE : "출입기록",
-            IP : "IP 주소",
-            IP_PC : "사무실 IP 주소",
+            IP : "사무실 IP 주소",
+            IP_PC : "IP 주소",
             NEED_CONFIRM : "확인필요",
             MAC:"Mac"
         },

@@ -2155,73 +2155,73 @@
     <group id="officeitem">
 	    <query id="selectIdByOfficeItem">
         	SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			(SELECT category_name FROM office_item_category_tbl B where B.category_code = A.category_code) category_name,
 			category_code, category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
 			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
 			use_dept,use_user,
-			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
-			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			(select name from  dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  members_tbl mem  where mem.id=A.use_user) use_user_name,
 			location,state,memo
-			FROM commute.office_item_tbl A
+			FROM office_item_tbl A
         	WHERE A.serial_yes=?
         </query>
         <query id="selectOfficeItemALLList">
  			SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			(SELECT category_name FROM office_item_category_tbl B where B.category_code = A.category_code) category_name,
 			category_code,category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
 			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
 			use_dept,use_user,
-			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
-			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			(select name from  dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  members_tbl mem  where mem.id=A.use_user) use_user_name,
 			location,state,memo
-			FROM commute.office_item_tbl A
+			FROM office_item_tbl A
         </query>
 		<query id="selectOfficeItemCategoryCodeList">
  			SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			(SELECT category_name FROM office_item_category_tbl B where B.category_code = A.category_code) category_name,
 			category_code,category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
 			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
 			use_dept,use_user,
-			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
-			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			(select name from  dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  members_tbl mem  where mem.id=A.use_user) use_user_name,
 			location,state,memo
-			FROM commute.office_item_tbl A
+			FROM office_item_tbl A
 			where A.category_code=?
         </query>
 		<query id="selectOfficeItemCategoryCodeTypeList">
  			SELECT serial_yes,serial_factory,vendor,model_no,
-			(SELECT category_name FROM commute.office_item_category_tbl B where B.category_code = A.category_code) category_name,
+			(SELECT category_name FROM office_item_category_tbl B where B.category_code = A.category_code) category_name,
 			category_code,category_type,category_index,price,surtax,price_buy,
             date_format(buy_date, '%Y-%m-%d') AS buy_date,
 			date_format(disposal_date, '%Y-%m-%d') AS disposal_date,
 			date_format(disposal_account, '%Y-%m-%d') AS disposal_account,
 			date_format(expiration_date, '%Y-%m-%d') AS expiration_date,
 			use_dept,use_user,
-			(select name from  commute.dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
-			(select name from  commute.members_tbl mem  where mem.id=A.use_user) use_user_name,
+			(select name from  dept_code_tbl dept where dept.code=A.use_dept) use_dept_name,
+			(select name from  members_tbl mem  where mem.id=A.use_user) use_user_name,
 			location,state,memo
-			FROM commute.office_item_tbl A
+			FROM office_item_tbl A
 			where A.category_type=?
         </query>
 		<query id="empty"></query>
 		<query id="insertOfficeItem">
-        	insert into commute.office_item_tbl(serial_yes,serial_factory,vendor,model_no,
+        	insert into office_item_tbl(serial_yes,serial_factory,vendor,model_no,
           	category_code,category_index,category_type,price,surtax,price_buy,buy_date,disposal_date,disposal_account,expiration_date,use_dept,use_user,location,state,memo)
-        	values(?,?,?,?,?,?,(SELECT category_type FROM commute.office_item_category_tbl where category_code = ?),?,?,?,?,?,?,?,?,?,?,?,?)
+        	values(?,?,?,?,?,?,(SELECT category_type FROM office_item_category_tbl where category_code = ?),?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
-		<query id="deleteOfficeItem">delete from commute.office_item_tbl where serial_yes=?</query>
+		<query id="deleteOfficeItem">delete from office_item_tbl where serial_yes=?</query>
 		<query id="updateOfficeItem">
     		UPDATE
-        		commute.office_item_tbl
+        		office_item_tbl
         	SET
 				serial_factory=?,
 				vendor=?,
@@ -2242,7 +2242,7 @@
         	WHERE serial_yes=?
         </query>
 		<query id="getOfficeItemMaxCategoryIndex">
- 			select (ifnull(MAX(category_index),0)+1) as category_index from commute.office_item_tbl where category_code=?
+ 			select (ifnull(MAX(category_index),0)+1) as category_index from office_item_tbl where category_code=?
         </query>
 	</group>
 
