@@ -34,7 +34,7 @@ define([
 
     // 비품 컬럼 생성
     function _changeWordBreak(cellData) {
-        let text = "";
+        var text = "";
         text = _getWordBreak(cellData);
         if(_.isNull(text)){
             text = "-";
@@ -45,10 +45,10 @@ define([
     // 비품 컬럼 줄바꿈 처리
     function _getWordBreak(word) {
         if(word != undefined) {
-            let wordArr = word.split(",");
+            var wordArr = word.split(",");
             if (wordArr.length > 1) {
-                let bwords = "";
-                for (let i=0; i < wordArr.length; i++) {
+                var bwords = "";
+                for (var i=0; i < wordArr.length; i++) {
                     if(i==0) {
                         bwords = wordArr[i];
                     } else {
@@ -66,11 +66,11 @@ define([
     // 비품 컬럼 줄바꿈 처리 및 비품 이력 팝업 처리
     function _getTemplate(items) {
         if(items != undefined) {
-            let wordArr = items.split(",");
-            let itemList;
-            let wordObj = {id:"", name:""};
+            var wordArr = items.split(",");
+            var itemList;
+            var wordObj = {id:"", name:""};
             if (wordArr.length > 1) {
-                for (let i=0; i < wordArr.length; i++) {
+                for (var i=0; i < wordArr.length; i++) {
                     wordObj.id = wordArr[i];
                     wordObj.item = wordArr[i];
                     if(i==0) {
@@ -94,9 +94,9 @@ define([
     //부서코드로부터 부서이름 가져오기.
     function _getDeptName(data) {
         if(data != undefined) {
-            let deptName = "";
-            let default_dept = Code.getCodes(Code.DEPARTMENT);
-            for (let i = 0; i < default_dept.length; i++) {
+            var deptName = "";
+            var default_dept = Code.getCodes(Code.DEPARTMENT);
+            for (var i = 0; i < default_dept.length; i++) {
                 if (default_dept[i].code == data) {
                     deptName = default_dept[i].name;
                 }
@@ -139,7 +139,7 @@ define([
                         }},
                     { data : "leave_company", "title" : i18nCommon.USER.LEAVE_COMPANY, visible: false, subVisible: false},
                     { data : "id", "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DETAIL, "render": function(data, type, row){
-                            let dataVal = "<div style='text-align: center;'>";
+                            var dataVal = "<div style='text-align: center;'>";
                             dataVal +=  "<button class='btn list-detailUsage-btn btn-default btn-sm' id='btnDetail01'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button>";
                             dataVal +=  "</div>";
                             return dataVal;
@@ -188,22 +188,22 @@ define([
         },
 
         buttonInit: function(){
-            let _this = this;
-            let adminUserfilterButton = ["search",{//관리자용 사용자별 상태 확인 버튼
+            var _this = this;
+            var adminUserfilterButton = ["search",{//관리자용 사용자별 상태 확인 버튼
                 type:"EmployStatus",
                 name: "EmployStatus",
                 filterColumn:["leave_company"],
                 tooltip: ""
             }];
 
-            let normalUserfilterButton = ["search",{//일반 사용자용 버튼. "나" 만 표시함.
+            var normalUserfilterButton = ["search",{//일반 사용자용 버튼. "나" 만 표시함.
                 type:"OnlyMy",
                 name: "OnlyMy",
                 filterColumn:["name"],
                 tooltip: ""
             }];
 
-            let _buttonSetting = [];
+            var _buttonSetting = [];
             if (SessionModel.get("user").admin == 9) { //부서 선택 필터에 전체 부서가 들어감.
                 _buttonSetting = adminUserfilterButton;
             } else {
@@ -314,11 +314,11 @@ define([
         },
 
         makeExportData: function() {//Excel 출력
-            let that = this;
+            var that = this;
 
             Dialog.loading({
                 action:function(){
-                    let dfd = new $.Deferred();
+                    var dfd = new $.Deferred();
                     that.excelExportCollection.fetch({
                         data : {user : 'Excel'},
                         success: function(){
@@ -341,11 +341,11 @@ define([
 
         selectUsageList: function() {
             var _this = this;
-            let deptName = $(this.el).find("#rdCombo").val();
-            let default_dept = Code.getCodes(Code.DEPARTMENT);
-            let deptCode = "전체";
+            var deptName = $(this.el).find("#rdCombo").val();
+            var default_dept = Code.getCodes(Code.DEPARTMENT);
+            var deptCode = "전체";
             if (deptName != "전체") {
-                for (let i=0; i < default_dept.length; i++) {
+                for (var i=0; i < default_dept.length; i++) {
                     if(default_dept[i].name == deptName) {
                         deptCode = default_dept[i].code;
                     }
@@ -354,9 +354,9 @@ define([
 
             Dialog.loading({
                 action:function(){
-                    let dfd = new $.Deferred();
-                    let privilege = SessionModel.get("user").admin;
-                    let user = SessionModel.get("user").id;
+                    var dfd = new $.Deferred();
+                    var privilege = SessionModel.get("user").admin;
+                    var user = SessionModel.get("user").id;
 
                     _this.officeItemUsageCollection.fetch({
                         data: {dept : deptCode, admin : privilege, user : user},
@@ -379,9 +379,9 @@ define([
         },
         onClickUsageHistoryPopup: function(evt) {
             evt.stopPropagation();
-            let data = JSON.parse( $(evt.currentTarget).attr('data') );
+            var data = JSON.parse( $(evt.currentTarget).attr('data') );
 
-            let usageHistoryPopupView = new UsageHistoryListPopup(data.id);
+            var usageHistoryPopupView = new UsageHistoryListPopup(data.id);
             Dialog.show({
                 title: "("+data.id+") 이력",
                 content: usageHistoryPopupView,
@@ -397,14 +397,14 @@ define([
 
         onClickListDetailUsageBtn : function(evt){
             evt.stopPropagation();
-            let $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
+            var $currentTarget = $(evt.currentTarget.parentElement.parentElement.parentElement);
             $('.selected').removeClass('selected');
             $currentTarget.addClass('selected');
-            let data=this.grid.getSelectItem();
+            var data=this.grid.getSelectItem();
 
-            let usageDetailPopupView = new UsageDetailListPopup(data);
+            var usageDetailPopupView = new UsageDetailListPopup(data);
             //부서에게 제품이 할당된 경우
-            let titleName = (data.name == "") ? _getDeptName(data.dept) : data.name;
+            var titleName = (data.name == "") ? _getDeptName(data.dept) : data.name;
 
             Dialog.show({
                 title: "상세정보 ("+titleName+")",
