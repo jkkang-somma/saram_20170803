@@ -30,11 +30,11 @@ define([
     // 비품 컬럼 줄바꿈 처리 및 비품 이력 팝업 처리
     function _getTemplate(items) {
         if(items != undefined) {
-            let wordArr = items.split(",");
-            let itemList;
-            let wordObj = {id:"", name:""};
+            var wordArr = items.split(",");
+            var itemList;
+            var wordObj = {id:"", name:""};
             if (wordArr.length > 1) {
-                for (let i=0; i < wordArr.length; i++) {
+                for (var i=0; i < wordArr.length; i++) {
                     wordObj.id = wordArr[i];
                     wordObj.item = wordArr[i];
                     if(i==0) {
@@ -125,8 +125,8 @@ define([
 
         onClickHistoryOnPopupWindow: function(evt) {
             evt.stopPropagation();
-            let data = JSON.parse( $(evt.currentTarget).attr('data') );
-            let usageHistoryPopupView = new UsageHistoryListPopup(data.id);
+            var data = JSON.parse( $(evt.currentTarget).attr('data') );
+            var usageHistoryPopupView = new UsageHistoryListPopup(data.id);
 
             Dialog.show({
                 title: "("+data.id+") 이력",
