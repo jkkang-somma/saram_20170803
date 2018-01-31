@@ -76,7 +76,7 @@ define([
                     if(i==0) {
                         itemList = (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate)(wordObj) : wordObj.item;
                     } else {
-                        itemList = itemList + "</br>" + (SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate)(wordObj) : wordObj.item;
+                        itemList = itemList + "</br>" + ((SessionModel.get("user").admin == 9) ? _.template(usageHistoryTemplate)(wordObj) : wordObj.item);
                     }
                 }
                 wordObj = {id:"", name:""};
