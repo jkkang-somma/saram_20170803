@@ -467,6 +467,7 @@ define([
                     || this.settingParam != undefined) {
                     // 결재 가능 id
                     data["managerId"] = sessionInfo.id;
+                    this.settingParam = undefined;
                 }
             }
 
