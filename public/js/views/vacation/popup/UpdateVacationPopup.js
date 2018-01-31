@@ -3,10 +3,11 @@ define([
 	'underscore',
 	'backbone',
 	'util',
+	'schemas',
 	'lib/component/form',
 	'models/sm/SessionModel',
 	'models/vacation/VacationModel',
-], function($, _, Backbone, Util, Form,
+], function($, _, Backbone, Util, Schemas, Form,
 	SessionModel,VacationModel
 ) {
 	
