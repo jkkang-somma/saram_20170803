@@ -926,6 +926,7 @@ define([
     	},
     	render:function(){
             var grid = this;
+            var dfd= new $.Deferred();
 
             if(Util.isNull(this.options.fetch) || this.options.fetch === true){
                var _defaultFetchParams={
@@ -940,9 +941,9 @@ define([
             }else{
                grid._draw();
             }
-            return new Promise(function(resolve){//Search 필터 값 저장 기능: render 값 리턴 후 Comment 관리 기능에서 필터 기능 작동하도록 보완.
-                resolve(grid);
-            });
+            ///return new Promise(function(resolve){//Search 필터 값 저장 기능: render 값 리턴 후 Comment 관리 기능에서 필터 기능 작동하도록 보완.
+             return dfd.resolve(grid);
+            //});
      	},
         saveExcel:function(filename){
 
