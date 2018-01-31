@@ -629,7 +629,7 @@ define([
         },
         _createEmployStatusButton:function(obj){//비품현황 버튼 추가
             var _grid=this;
-            const filterBtnText=["근무자","퇴사자","전체"];
+            var filterBtnText=["근무자","퇴사자","전체"];
             var MyText = _grid.condition.MyEmploy_Text;
 
             var filter=[
