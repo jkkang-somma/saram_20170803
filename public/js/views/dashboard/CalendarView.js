@@ -83,7 +83,7 @@ define([
                 var id = SessionModel.getUserInfo().id;
                 var data = {outoffice : outOfficeCollection.filterID(id),
                             inoffice : inOfficeCollection.filterID(id)};
-                console.log(data);
+                // console.log(data);
                 dfd.resolve(data);
             });
 
@@ -127,7 +127,7 @@ define([
                 var holDate = new Moment(dd.date);
                 var holMonth = holDate.month();
                 if(thisMonth == holMonth){
-                    console.log(dd);
+                    // console.log(dd);
                     var holId = holDate.format("YYYY-M-D");
                     var holCon = $(_view.el).find('#' + holId);
                     holCon.addClass('holiday');
