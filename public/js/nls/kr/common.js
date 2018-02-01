@@ -254,7 +254,7 @@ define({
     
     //로그인
     LOGIN_VIEW:{
-        TITLE:"YESCNC 근태관리 시스템",
+        TITLE:"YES Office Plus",
         ID_PLACEHOLDER:"ID",
         PASSWORD_PLACEHOLDER:"Password",
         LOGIN_SATUS_BTN:"로그인중..",
