@@ -193,6 +193,6 @@ body.web-login .login-button span{
 
 @media (min-height: 768px) {
     body.web-login .main-container{
-        margin-top: calc(25% - 384px);
+        margin-top: 6%;
     }
 }
