@@ -696,11 +696,11 @@ define([
                             this.workType = WORKTYPE.LATE;
                         }
                         else {
-                            this.lateTime = 0;
+                            diffTime = this.lateTime = 0;
                         }
                     }
                     else {
-                        this.lateTime = 0;
+                        diffTime = this.lateTime = 0;
                     }
 
                     if (this.checkEarly) {
