@@ -368,7 +368,7 @@ define([
                 dateStr += (month < 9) ? "0" + (month + 1) + "-" : (month + 1) + "-";
                 dateStr += (day < 9) ? "0" + (day + 1) : (day + 1);
 
-                if (atten.char_date.split(" ")[0] == dateStr && atten.type == "출근(지문)" && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
+                if (atten.char_date.split(" ")[0] == dateStr && atten.type.indexOf("출근") > -1 && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
                     return atten.char_date;
                 }
             });
@@ -376,7 +376,7 @@ define([
                 return result[0];
             } else {
                 result = _.select(_view.attendance, function (atten) {
-                    if (atten.char_date.split(" ")[0] == dateStr && atten.type == "출입(지문)" && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
+                    if (atten.char_date.split(" ")[0] == dateStr && atten.type.indexOf("출근") > -1 && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
                         return atten.char_date;
                     }
                 });
