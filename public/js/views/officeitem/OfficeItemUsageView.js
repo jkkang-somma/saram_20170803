@@ -117,7 +117,7 @@ define([
                 id:"usageDataTable",
                 column:[
                     { data : "name", 		"title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.NAME},
-                    { data : "dept",        "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DEPARTMENT,  className: "dt-body-right",
+                    { data : "dept",        "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DEPARTMENT,
                         render: function(data) {
                             return _getDeptName(data);
                         }},
