@@ -32,11 +32,11 @@ define([
     		        { "title" : i18Common.USER.NAME, data:"name", render: function(data,type,row){
     		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px;' data-id='"+row.id+"'aria-hidden='true'></span>");
                         return temp.wrap('<p>').parent().html() + data;
-    		        }},
+                    }},
+                    { "title" : "직급코드", data:"position_code"},
                     { "title" : i18Common.USER.POSITION, render:function(data, type, row) {
                         return row.position_name;
                     }},
-                    // { "title" : i18Common.USER.POSITION, data:"position_code", visible:false, subVisible:false},
     		        { "title" : i18Common.USER.DEPT, "render": function(data, type, row){
                         return row.dept_name;
                     }},
@@ -77,7 +77,7 @@ define([
                         return result;
                     }, visible:false, subVisible:false},
                 ],
-    		    dataschema:["id", "name", "position_code", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
+    		    dataschema:["id", "name", "position_code", "position_name", "position_code", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
     		    "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege" ,"affiliated"
     		    ],
     		    collection:userCollection,
@@ -133,12 +133,12 @@ define([
     	                    return true;
     	                },
     	                function(data){
-    	                    var _joinDate=data[6];
-    	                    var _levDate=data[7];
+    	                    var _joinDate=data[7];
+    	                    var _levDate=data[8];
     	                    return (!_.isEmpty(_joinDate))&&(_.isEmpty(_levDate));
     	                },
     	                function(data){
-    	                    var _levDate=data[7];
+    	                    var _levDate=data[8];
     	                    return !_.isEmpty(_levDate);
     	                }
     	           ];
@@ -311,7 +311,14 @@ define([
                     }
 
     	        }
-    	    };
+            };
+            
+            // 관리자인 경우 직급코드 출력
+            if ( SessionModel.getUserInfo().admin != Schemas.ADMIN ) {
+                this.option.column[2].visible = false;
+                this.option.column[2].subvisible = false;
+            }
+
     	    //grid 
     	    var _gridSchema=Schemas.getSchema('grid');
     	    var grid= new Grid(_gridSchema.getDefault(this.option));
