@@ -3,6 +3,7 @@
 // 사용자 Service
 var _ = require("underscore");
 var Promise = require('bluebird');
+var debug = require('debug')('Comment');
 var CommuteDao = require('../dao/commuteDao.js');
 var ChangeHistoryDao = require('../dao/changeHistoryDao.js');
 var ApprovalDao = require('../dao/approvalDao.js');
@@ -157,8 +158,11 @@ var Commute = function() {
 									cc: cc
 								};
 
+								debug("Send Mail Option");
+								console.log(mailOptions);
 								transport.sendMail(mailOptions, function(error, info){
 									if(error){//메일 보내기 실패시 
+										debug("Fail transport.sendMail");
 										console.log(error);
 										reject();
 									}else{
@@ -166,8 +170,10 @@ var Commute = function() {
 									}
 								});
 						}).catch(SyntaxError, function (e) {
+							debug("Send Fail : catch : " + e);
 							reject(e);
 						}).error(function (e) {
+							debug("Send Fail : error : " + e);
 							reject(e);
 						});
 					});
