@@ -120,7 +120,21 @@ define([
                    format: data.format
                 });
 
-                _datePicker.find("#"+data.id).find(".close-icon").click(function(e) {//reset button click
+                _datePicker.find("#"+data.id).click(function(e){
+
+                    var targetWidth = e.target.offsetWidth;                   
+                    if(e.offsetX>(targetWidth-25)){
+                        $(_datePicker).find("input").removeClass("inserted");
+                        if(!_.isUndefined(data.isDefaultValue)&&data.isDefaultValue)
+                        {  
+                            $(_datePicker).find("input").val(data.value); 
+                        }else{
+                            $(_datePicker).find("input").val(""); 
+                        }
+                    }
+                });
+
+                /*_datePicker.find("#"+data.id).find(".close-icon").click(function(e) {//reset button click
                     $(_datePicker).find("input").removeClass("inserted");
                     if(!_.isUndefined(data.isDefaultValue)&&data.isDefaultValue)
                     {  
@@ -129,7 +143,7 @@ define([
                         $(_datePicker).find("input").val(""); 
                     }
                    
-                });
+                });*/
 
                 _datePicker.find("#"+data.id).on('dp.change', function(e){
                     var formatedValue = e.date.format(e.date._f);

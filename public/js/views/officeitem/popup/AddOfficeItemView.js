@@ -207,14 +207,15 @@ define([
 						d_date = new Date(d_date).toISOString().slice(0,10);
 						_form.getElement("disposal_account").find("input").val(d_date); // 회계상 폐기일
 					});		
-					
-					_buy_date_value.find("#buy_date").find(".close-icon").click(function(e) {//reset button click
-						_form.getElement("expiration_date").find("input").removeClass("inserted");
-						_form.getElement("expiration_date").find("input").val("");
-						_form.getElement("disposal_account").find("input").val(""); 
-						
-					});
 
+					_buy_date_value.find("#buy_date").click(function(e){            
+						var targetWidth = e.target.offsetWidth;                   
+						if(e.offsetX>(targetWidth-25)){
+							_form.getElement("expiration_date").find("input").removeClass("inserted");
+							_form.getElement("expiration_date").find("input").val("");
+							_form.getElement("disposal_account").find("input").val(""); 
+						}
+					});
 					
 					/*buy_date_value.datetimepicker({
 						   pickTime: false,
