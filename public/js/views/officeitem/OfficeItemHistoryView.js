@@ -50,7 +50,6 @@ define([
                             return data;
                         }
                     },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES, data : "serial_yes" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME, 
                         "render": function(data, type, row){
@@ -68,6 +67,7 @@ define([
                             return name;
                         }
                     },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", className : "dt-body-right",
                         "render": function(data, type, row){
@@ -99,7 +99,6 @@ define([
                             return data;
                         }
                     },
-                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES, data : "serial_yes" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE, data : "category_type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME,
@@ -118,6 +117,7 @@ define([
                             return name;
                         }
                     },
+                    { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE, data : "type" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE, data : "title" },
                     { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE, data : "repair_price", className : "dt-body-right",
                         "render": function(data,type, row){
@@ -154,10 +154,10 @@ define([
             var saveGrid = _grid;
             saveGrid.columns = [{"title" : ""},
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.HISTORY_DATE },
-                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE },
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.SERIAL_YES },
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_TYPE },
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.CATEGORY_NAME },
+                                { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TYPE },
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.TITLE },
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.REPAIR_PRICE },
                                 { "title" : i18nCommon.OFFICEITEM.HISTORY.CODE.OWNER },

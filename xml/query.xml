@@ -2329,7 +2329,13 @@
 				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
 				B.m1 AS "leave_company"
 			FROM
-				ip_tbl A RIGHT JOIN (
+				(SELECT *
+					FROM ip_tbl
+					ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
+					CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
+					CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
+					CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
+				) A RIGHT JOIN (
 					SELECT
 						mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
 						group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
@@ -2348,7 +2354,13 @@
 				SELECT
 					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
 				FROM
-					ip_tbl A RIGHT JOIN (
+					(SELECT *
+						FROM ip_tbl
+						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
+					) A RIGHT JOIN (
 						SELECT
 							"" r1, "" r2, D.code r3,
 							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
@@ -2363,7 +2375,13 @@
 					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
 				B.m1 AS "leave_company"
 				FROM
-					ip_tbl A RIGHT JOIN (
+					(SELECT *
+						FROM ip_tbl
+						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
+					) A RIGHT JOIN (
 						SELECT
 							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
 							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
@@ -2383,7 +2401,13 @@
 				SELECT
 					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
 				FROM
-					ip_tbl A RIGHT JOIN (
+					(SELECT *
+						FROM ip_tbl
+						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
+					) A RIGHT JOIN (
 						SELECT
 							"" r1, "" r2, D.code r3,
 							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
@@ -2399,7 +2423,13 @@
 					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
 					B.m1 AS "leave_company"
 				FROM
-					ip_tbl A RIGHT JOIN (
+					(SELECT *
+						FROM ip_tbl
+						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
+						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
+					) A RIGHT JOIN (
 						SELECT
 							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
 							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
