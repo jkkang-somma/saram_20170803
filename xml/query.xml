@@ -1311,10 +1311,7 @@
 									WHERE
 										year = ?
 										AND date BETWEEN ? AND ?
-										AND WORK_TYPE != '30'
-										AND WORK_TYPE != '40'
-										AND WORK_TYPE != '41'
-										AND OVER_TIME != '0'
+										AND length(OVERTIME_CODE) != 0
 									GROUP BY id, month
 							) t1
 							GROUP BY id
