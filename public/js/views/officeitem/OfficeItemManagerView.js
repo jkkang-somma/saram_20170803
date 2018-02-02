@@ -127,9 +127,9 @@ define([
                         return "";
                     }},*/
                     { "title" : i18Common.OFFICEITEM.CODE.BUY_DATE, data:"buy_date"},
-                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account"},
+                    { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_ACCOUNT, data:"disposal_account", visible:false, subVisible:false},    
                     { "title" : i18Common.OFFICEITEM.CODE.DISPOSAL_DATE, data:"disposal_date"},   
-                    { "title" : i18Common.OFFICEITEM.CODE.EXPIRATION_DATE, data:"expiration_date", visible:false, subVisible:false},    
+                    { "title" : i18Common.OFFICEITEM.CODE.EXPIRATION_DATE, data:"expiration_date"},    
                     { "title" : i18Common.OFFICEITEM.CODE.USE_DEPT, data:"use_dept", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.USE_USER, data:"use_user", visible:false, subVisible:false},
                     { "title" : i18Common.OFFICEITEM.CODE.USE_DEPT_NAME, data:"use_dept_name"},
