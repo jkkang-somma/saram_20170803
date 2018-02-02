@@ -600,7 +600,7 @@ define([
             // 날짜 개수 이용하여 날짜 구하기
             var sStart = $(this.el).find('#start_date').html();
             var sEnd = $(this.el).find('#end_date').html();
-
+            sEnd = sEnd.replace('&nbsp; ~ &nbsp;', '');
             var start = new Date(sStart.substr(0, 4), sStart.substr(5, 2) - 1, sStart.substr(8, 2));
             var end = new Date(sEnd.substr(0, 4), sEnd.substr(5, 2) - 1, sEnd.substr(8, 2));
             var day = 1000 * 60 * 60 * 24;

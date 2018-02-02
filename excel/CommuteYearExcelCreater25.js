@@ -331,10 +331,11 @@ var CommuteYearExcelCreater25 = function () {
 //	}	
 
 	function _conVal(val) {
-		if (val) {
+		if (val != undefined && val != null) {
 			return val + ' ';
 		}
-		return val
+		console.log('Report 25 : ' + val);
+		return ' ';
 	}
 	
 	var _createExcel = function(searchValObj, datas) {

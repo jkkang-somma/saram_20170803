@@ -483,11 +483,12 @@ var CommuteYearExcelCreater = function () {
 	}
 
 	function _conVal(val) {
-		if (val) {
+		if (val != undefined && val != null) {
 			return val + ' ';
 		}
-		return val
-	}	
+		console.log('Report : ' + val);
+		return ' ';
+	}
 	
 	var _createExcel = function(searchValObj, datas) {
 		return new Promise(function(resolve, reject){// promise patten
