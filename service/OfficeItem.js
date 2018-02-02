@@ -88,7 +88,7 @@ var OfficeItem = function (data) {
                         history_date : new Date().toISOString().slice(0,10), //현재 날짜 적용
                         type	    : "등록", 
                         title	    : "비품 등록", 
-                        repair_price: data.price_buy,
+                        repair_price: null,
                         use_user	: data.use_user, 
                         use_dept	: data.use_dept, 
                         name	    : (data.use_user != "")?data.use_user_name:data.use_dept_name, 
@@ -156,7 +156,7 @@ var OfficeItem = function (data) {
                         history_date : data.history_date,
                         type	    : "",     //사용자 변경/수정 
                         title	    : "", 
-                        repair_price: data.price_buy,
+                        repair_price: null,
                         use_user	: data.use_user, 
                         use_dept	: data.use_dept, 
                         name	    : (data.use_user != null && data.use_user != "")?data.use_user_name:data.use_dept_name, 
