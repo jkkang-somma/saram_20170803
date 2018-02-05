@@ -1526,3 +1526,8 @@ border: 2px dotted #2ABB9B !important;
 .yes-date-picker:not(.inserted) ~ .close-icon {
     display: none;
 }
+
+.td-dept-summary {
+    font-weight:bold;
+    color:red !important;
+}
