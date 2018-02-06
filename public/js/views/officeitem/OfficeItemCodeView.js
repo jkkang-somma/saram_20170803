@@ -32,15 +32,15 @@ define([
     		this.option = {
             el:"officeitemcode_content",
             column:[
-                { data : "category_code",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.CODE },
                 { data : "category_type",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.TYPE },
+                { data : "category_code",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.CODE },
                 { data : "category_name",            "title" : i18nCommon.OFFICEITEM.CATEGORY.COLUME.NAME }
               ],
             dataschema:["category_code", "category_type", "category_name"],
     		    collection:officeItemCodeCollection,
     		    detail:true,
     		    view:this,
-            order:[1, "asc"]
+            order:[[1, "asc"], [2, "asc"]]
             //order:[[5, "desc"], [1, "asc"]]
     		};
     	},

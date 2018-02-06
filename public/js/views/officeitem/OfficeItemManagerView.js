@@ -282,7 +282,7 @@ define([
     
             },
             onClickSearchBtn: function(evt) {
-                this.selectCommute();
+                this.selectOfficeItem();
             },
             setOfficeItemNameData : function(){
                 var officeItemNameList = [{key:"",value:"전체"}];
@@ -568,9 +568,8 @@ define([
 
                 //기기분류 Set             
                 this.categoryType = [
-                    {key:"all", value:"전체"},
-                    {key:i18Common.OFFICEITEM.CATEGORY.TYPE.OS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.OS},
-                    {key:i18Common.OFFICEITEM.CATEGORY.TYPE.CS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.CS}
+                    {key:i18Common.OFFICEITEM.CATEGORY.TYPE.CS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.CS},
+                    {key:i18Common.OFFICEITEM.CATEGORY.TYPE.OS,value:i18Common.OFFICEITEM.CATEGORY.TYPE.OS}
                 ];
                 
                 var category = this.categoryType;
@@ -591,12 +590,11 @@ define([
                 
                 //기기이름 Set
                 this.setOfficeItemNameData();
-                this.selectCommute();
-                return this
+                this.selectOfficeItem();
+                return this;
             },
 
-            selectCommute: function() {
-
+            selectOfficeItem: function() {
                 var category_type = $(this.el).find("#officeCodeComboType").val();
                 var data = {
                     category_type : ((category_type == "전체")?"":category_type),
@@ -619,14 +617,34 @@ define([
                     },
                     
                     actionCallBack:function(res){//response schema
+                        if ( category_type == i18Common.OFFICEITEM.CATEGORY.TYPE.CS ) {
+                            // 전산
+
+                            // 일련번호
+                            _this.grid.columns[3].visible = true;
+                            // 사용만료일
+                            _this.grid.columns[15].visible = true;
+                            // 비품종류
+                            _this.grid.columns[7].visible = false;
+                        }else{
+                            // 사무
+
+                            // 일련번호
+                            _this.grid.columns[3].visible = false;
+                            // 사용만료일
+                            _this.grid.columns[15].visible = false;
+                            // 비품종류
+                            _this.grid.columns[7].visible = true;
+                        }
+                        
                         _this.grid.render();
                         _this.gridExcel.render();
                     },
                     errorCallBack:function(response){
                         Dialog.error(i18Common.OFFICEITEM.LIST.GET_DATA_FAIL);
                     },
-                });   
-            }                   
+                });
+            }
       });
       return OfficeItemListView;
   });
