@@ -118,7 +118,7 @@ var Commute = function() {
 							mailData = mailData[0];
 						}
 
-						fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/reportOnLaeCommute.html","utf8").then(function (html) {
+						fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/reportOnLateCommute.html","utf8").then(function (html) {
 
 							var sendData = {
 								name : mailData.name,
