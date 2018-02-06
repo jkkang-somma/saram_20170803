@@ -618,6 +618,10 @@ define([
 							return;
 						}
 						
+						if( inputData["overtimeReason"] == "" ){
+							Dialog.warning("사유를 입력하여 주시기 바랍니다.");
+							return null;
+						}
 						_this.sendApprovalOvertime(dialog, selectItem, inputData);
                 		
                 	}
@@ -642,6 +646,8 @@ define([
 		
 		sendApprovalOvertime : function(dialog, selectItem, inputData, state){
 			var _this = this;
+			var comment = inputData.overtimeReason;
+			comment = comment.replace(/,/gi, '<comma>');
 			var data = {
 				day_count:0,
 				decide_comment:"",
@@ -651,10 +657,10 @@ define([
 				office_code:"O01",
 				start_date:selectItem.date,
 				start_time:"",
-				submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time+","+inputData.intime+","+inputData.outtime,
+				submit_comment:parseInt(inputData.except,10)+","+selectItem.over_time+","+inputData.intime+","+inputData.outtime+',' + comment,
 				submit_id:SessionModel.getUserInfo().id
 			};
-
+			
 			if(state != undefined){
 				data["state"] = state;
 			}

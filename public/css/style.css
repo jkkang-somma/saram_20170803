@@ -81,7 +81,7 @@ body {
 form .detail-content input{
     display: inline-block;
     width: auto;
-
+    padding: 0;
     background-color: #fff !important;
     border: none !important;
     box-shadow: none !important;

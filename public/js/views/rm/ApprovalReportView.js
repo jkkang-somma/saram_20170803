@@ -176,6 +176,7 @@ define([
                     var overTime = parseInt(splitArr[1],10);
                     var startTime = _.isUndefined(splitArr[2]) ? "" : splitArr[2];
                     var endTime = _.isUndefined(splitArr[3]) ? "" : splitArr[3];
+                    var comment = _.isUndefined(splitArr[4]) ? "" : splitArr[4].replace(/<comma>/gi, ',');
                     var calc = overTime-except;
                     var type = Math.floor(calc/120);
                     if(type == 1){
@@ -187,7 +188,7 @@ define([
                     }else {
                         type = "-";
                     }
-                    var msg = "출근시간 : "+ startTime + ", 퇴근시간: "+endTime+"\n초과시간 : "+timeformat(overTime)+", 제외시간 : "+timeformat(except)+"\n확정시간 : "+timeformat(calc)+", 근무타입 : " + type;
+                    var msg = "출근시간 : "+ startTime + ", 퇴근시간: "+endTime+"\n초과시간 : "+timeformat(overTime)+", 제외시간 : "+timeformat(except)+"\n확정시간 : "+timeformat(calc)+", 근무타입 : " + type + "\n사유 : " + comment;
                     _this.find('#submit_comment').val(msg);
                 }else{
                     _this.find('#submit_comment').val(param.submit_comment);

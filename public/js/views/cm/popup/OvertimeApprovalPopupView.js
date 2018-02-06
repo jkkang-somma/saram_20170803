@@ -104,6 +104,12 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 	                value:this.selectData.over_time,
 	                group:"inputGroup",
 	                disabled:true
+		        }, {
+                	type:"input",
+	                name:"overtimeReason",
+	                label:"사유",
+					group:"inputGroup",
+					full: true
 		        }]
 		    });
 		    

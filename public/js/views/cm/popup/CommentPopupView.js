@@ -156,6 +156,12 @@ define([
 							collection : overtimeCollection,
 							value: 0,
 							group:"overtimeItem"
+						}, {
+							type:"input",
+							name:"overtimeReason",
+							label:"야근 상신 사유",
+							group:"overtimeItem",
+							full: true
 						// }, {
 						// 	type:"input",
 						// 	name:"changeOverTime",
@@ -206,16 +212,20 @@ define([
 
 						// 야근 상신 여부
 						$(overtime).next().hide();
+						$(overtime).next().next().hide();
 						$(overtime).click(function(evt) {
 							if ($(evt.currentTarget).find("input").is(":checked")) {
 								$(this).next().show();
+								$(this).next().next().show();
 							}
 							else {
 								$(this).next().hide();
+								$(this).next().next().hide();
 							}
 						});
-
 						
+						_view.form.getElement("overtimeReason").find('label').css('margin-top', '10px');
+
 						_view.holidayCollection = new HolidayCollection();
 						_view.holidayCollection.fetch({
 							data :  {
@@ -304,6 +314,11 @@ define([
 				want_normal : 0
 			};
 
+			if( data["approvalOvertime"] && data["overtimeReason"] == "" ){
+				Dialog.warning("야근 상신 사유를 입력하여 주시기 바랍니다.");
+				return null;
+			}
+
 			// switch(data.comment_type){
 			// 	case "0" :
 			// 		Dialog.warning("Comment 유형을 선택해 주십시오 <br> (정상처리, 출퇴근시간 변경시 결재, 이외의 경우는 일반)");
@@ -338,6 +353,7 @@ define([
 					Dialog.warning("근태 정상처리요청, 출퇴근 수정요청중 한가지는 입력되어야 합니다.");
 					return null;
 				}
+
 				
 				// case "2" : // normal
 					if (newData.comment.length == 0) {
