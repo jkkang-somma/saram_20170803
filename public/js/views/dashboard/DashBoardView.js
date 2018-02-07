@@ -11,11 +11,11 @@ define([
 	'models/sm/SessionModel',
 	'collection/rm/ApprovalCollection',
 	'views/dashboard/CalendarView',
-	'views/statistics/DeptSummaryView',
+	'views/statistics/AbnormalSummaryView',
 	'text!templates/layout/default.html',
 	'text!templates/dashboardTemplate.html',
 	'text!templates/default/head.html'
-], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, ApprovalCollection, CalendarView, DeptSummaryView, LayoutHTML, DashboardHTML, HeadHTML) {
+], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, ApprovalCollection, CalendarView, AbnormalSummaryView, LayoutHTML, DashboardHTML, HeadHTML) {
 	var LOG = log.getLogger('DashBoardView');
 	function getMinTimeString(data) {
 		var hour = Math.floor(data / 60);
@@ -151,9 +151,9 @@ define([
 				var calendarView = new CalendarView({ el: dashboard.find('#calendar')[0] });
 				calendarView._draw(_params);
 			}else{
-				var view = new DeptSummaryView({ el: dashboard.find('#calendar')[0] });
+				var view = new AbnormalSummaryView({ el: dashboard.find('#calendar')[0] });
 				view.render('dashboard', _view.searchParams) ;
-				dashboard.find('#calendar').css('width', '100%')
+				dashboard.find('#calendar').css('width', '100%');
 			}
 
 			layout.append(dashboard);

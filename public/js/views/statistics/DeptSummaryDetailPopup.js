@@ -80,11 +80,12 @@ var DeptSummaryDetailPopup = Backbone.View.extend({
 
     ajaxCall:function() {
         var dfd = new $.Deferred();
-        var url = "/statistics/dept/detail";
+        var url = "/statistics/abnormal/detail";
         var ajaxSetting = {
             method : "GET",
             data : {
-                yearMonth   : this.searchData.yearMonth, 
+                fromDate    : this.searchData.fromDate, 
+                toDate      : this.searchData.toDate, 
                 dept        : this.searchData.dept, 
                 work_type   : this.searchData.type
             },

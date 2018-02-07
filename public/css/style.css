@@ -585,6 +585,14 @@ table.dataTable thead .sorting_desc {
     color: white;
 }
 
+table.dataTable .major-column {
+    background: #ffdddd90;
+}
+
+table.dataTable .vacation-column {
+    background: #cbe3ea90;
+}
+
 .btn-sm, .btn-xs{
     padding : 8px;
 }

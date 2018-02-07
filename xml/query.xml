@@ -215,6 +215,25 @@
         	WHERE
         		id = ? AND year = ?
         </query>
+
+		<query id="selectSimpleVacation">
+			SELECT
+				v.year,
+				v.id,
+				v.total_day,
+				IFNULL(s.used_holiday, 0) AS used_holiday
+			FROM
+				vacation_tbl v
+				LEFT JOIN (
+							SELECT year, id, sum(day_count)  used_holiday
+							FROM out_office_tbl
+							WHERE date between ? AND ?
+							GROUP BY year, id
+							) s
+				ON v.id = s.id and v.year = s.year
+			WHERE v.year = ?
+		</query>
+
     </group>
 
     <group id="approval">
@@ -2482,9 +2501,26 @@
 			FROM
 				commute_result_tbl
 			WHERE
-				date like ?
+				date between ? AND ?
 			group by
 				department
+		</query>
+
+		<query id="selectAbnormalPersonSummary">
+			SELECT
+				id, name, department,
+				count(if(work_type='10',1, null)) AS 'late',
+				count(if(work_type='01',1, null)) AS 'leave_early',
+				count(if(work_type='11',1, null)) AS 'late_leave_early',
+				count(if(work_type='21',1, null)) AS 'absent',
+				count(if(work_type='50',1, null)) AS 'data_none_1',
+				count(if(work_type='51',1, null)) AS 'data_none_2'
+			FROM
+				commute_result_tbl
+			WHERE
+				date between ? AND ?
+			group by
+				id
 		</query>
 
 		<query id="selectDeptPersonCount">
@@ -2497,6 +2533,16 @@
 			GROUP BY department
 		</query>
 
+		<query id="selectDeptPersonCountType2">
+			SELECT department, count(*) as count
+			FROM (
+				SELECT distinct department, id
+				FROM commute_result_tbl
+				WHERE date between ? AND ?
+			) R
+			GROUP BY department
+		</query>
+
 		<query id="selectDeptDetail">
 			SELECT
 				c.name as name, c.date as date, w.name as work_type
@@ -2504,7 +2550,35 @@
 				commute_result_tbl c, work_type_code_tbl w
 			WHERE
 				w.code = c.work_type AND
-				date like ? AND department = ? AND work_type = ?
+				date between ? AND ? AND department = ? AND work_type = ?
+		</query>
+
+		<query id="selectOverTimePersonal">
+			SELECT id, department, name, 
+				COUNT(if(overtime_code = "2015_AA", 1, null)) as AA,
+				COUNT(if(overtime_code = "2015_AB", 1, null)) as AB,
+				COUNT(if(overtime_code = "2015_AC", 1, null)) as AC,
+				COUNT(if(overtime_code = "2015_BA", 1, null)) as BA,
+				COUNT(if(overtime_code = "2015_BB", 1, null)) as BB,
+				COUNT(if(overtime_code = "2015_BC", 1, null)) as BC
+			FROM commute_result_tbl c
+			WHERE
+				date between ? AND ?
+			GROUP BY id
+		</query>
+
+		<query id="selectOverTimeDept">
+			SELECT department,
+				COUNT(if(overtime_code = "2015_AA", 1, null)) as AA,
+				COUNT(if(overtime_code = "2015_AB", 1, null)) as AB,
+				COUNT(if(overtime_code = "2015_AC", 1, null)) as AC,
+				COUNT(if(overtime_code = "2015_BA", 1, null)) as BA,
+				COUNT(if(overtime_code = "2015_BB", 1, null)) as BB,
+				COUNT(if(overtime_code = "2015_BC", 1, null)) as BC
+			FROM commute_result_tbl c
+			WHERE
+				date between ? AND ?
+			GROUP BY department
 		</query>
 
 	</group>

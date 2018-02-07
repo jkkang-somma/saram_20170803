@@ -120,11 +120,20 @@ define([
 			actionAuth: {
 				save: SCHEMAS.ADMIN
 			}
-		}, {
-			title: "부서별 근태현황",
-			hashTag: "#deptsummary",
+		}]
+
+		},{
+		title: "근태 통계",
+		subMenu: [{
+			title: "지각현황",
+			hashTag: "#abnormalsummary",
+			auth: SCHEMAS.DEPT_BOSS
+		},{
+			title: "휴가/초과근무 현황",
+			hashTag: "#overtimereport",
 			auth: SCHEMAS.DEPT_BOSS
 		}]
+
         },{
 		title: "비품 관리",
 		subMenu: [{

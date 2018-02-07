@@ -35,5 +35,10 @@ VacationDao.prototype.updateVacation =  function (data) {
     return db.query(group, "updateVacation", [data.total_day, data.memo, data.id, data.year]);
 };
 
+// 특정 기간내에 사용한 연차 일수 구하기
+VacationDao.prototype.selectSimpleVacation =  function (yearMonth, fromDate, toDate) {
+    return db.query(group, "selectSimpleVacation", [fromDate, toDate, yearMonth]);
+};
+
 module.exports = new VacationDao();
 

@@ -701,10 +701,10 @@ define({
             SERIAL_FACTORY:"일련번호",
             VENDOR:"제조사",
             MODEL_NO:"모델명",
-            CATEGORY_CODE:"기기 코드",
-            CATEGORY_NAME:"기기 종류",
-            CATEGORY_TYPE:"기기 분류",
-            CATEGORY_INDEX:"기기 INDEX",
+            CATEGORY_CODE:"비품 코드",
+            CATEGORY_NAME:"비품 종류",
+            CATEGORY_TYPE:"비품 분류",
+            CATEGORY_INDEX:"비품 INDEX",
             PRICE:"금액",
             SURTAX:"부가세",
             PRICE_BUY:"구입가격",
@@ -756,7 +756,7 @@ define({
             CODE:{
                 SEQ : "SEQ",
                 SERIAL_YES	:"관리번호",
-                CATEGORY_TYPE:"기기 분류",
+                CATEGORY_TYPE:"비품 분류",
                 HISTORY_DATE:"일자",
                 TYPE	    :"발생구분",
                 TITLE	    :"내용",
@@ -766,7 +766,7 @@ define({
                 NAME	    :"사용",
                 CHANGE_USER_ID	:"작업자 이름",
                 MEMO	    :"비고",
-                CATEGORY_NAME : "기기 종류",
+                CATEGORY_NAME : "비품 종류",
                 OWNER : "소유자"
             }
         }, 

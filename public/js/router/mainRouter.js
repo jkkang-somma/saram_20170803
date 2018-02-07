@@ -69,7 +69,8 @@ define([
 			'ipassignedmanager' : 'showIpAssignedManager',
 			'officeitemusage' : 'showOfficeItemUsage',
 			'officeitemhistory' : 'showOfficeItemHistory',
-			'deptsummary' : 'showDeptSummary',
+			'abnormalsummary' : 'showAbnormalSummary',
+			'overtimereport' : 'showOvertimeReport',
 			'*actions' : 'showHome',
 		},
 		initialize:function(option){
@@ -339,10 +340,14 @@ define([
             var url = 'views/officeitem/OfficeItemHistoryView';
             this.changeView(url, '#officeitemhistory');
 		},
-		showDeptSummary : function(){
-            var url = 'views/statistics/DeptSummaryView';
+		showAbnormalSummary : function(){
+            var url = 'views/statistics/AbnormalSummaryView';
             this.changeView(url);
-        }
+		},
+		showOvertimeReport : function(){
+			var url = 'views/statistics/OvertimeReportView';
+            this.changeView(url);
+		}
 	});
 	return Router;
 });

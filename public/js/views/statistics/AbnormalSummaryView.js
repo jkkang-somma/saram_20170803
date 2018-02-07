@@ -12,7 +12,7 @@ define([
     'views/statistics/DeptSummaryDetailPopup',
 	'text!templates/default/head.html',
 	'text!templates/default/row.html',
-	'text!templates/default/rowdatepicker.html',
+	'text!templates/default/rowdatepickerRange.html',
 	'text!templates/default/rowbuttoncontainer.html',
 	'text!templates/default/rowbutton.html',
 	'text!templates/default/content.html',
@@ -23,62 +23,65 @@ define([
         HeadHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, ContentHTML, LayoutHTML, 
 		ButtonHTML, DeptSummaryRowHtml){
 		
-		var deptSummaryView = BaseView.extend({
+		var AbnormalSummaryView = BaseView.extend({
         el:$(".main-container"),
     	initialize:function(){
             var _this = this;
             this.option = {
-                currentYearMonth : null
+                currentFrom : null,
+                currentTo : null
             }
     		this.gridOption = {
         		    el:"dept_summary_content",
         		    id:"deptSummaryTable",
         		    column:[
-                                { data : "department",  title : "부 서" },
-                                { data : "score",       title : "점 수" },
-                                { data : "total_person",title : "총 원"},
-                                { data : "late",  	    title : "지 각",
+                                { data : "department",  title : "부서" },
+                                { data : "name",        title : "이름" },
+                                { data : "score",       title : "점수", className : "dt-head-center dt-body-center major-column" },
+                                { data : "total_person",title : "총원", className : "dt-head-center dt-body-center" },
+                                { data : "late",  	    title : "지각", className : "dt-head-center dt-body-center",
                                     render: function(data, type, full, meta){
                                         return _this.gridColumnRender(data, full, "10");
                                     } 
                                 },
-                                { data : "leave_early",     "title" : "조 퇴",
+                                { data : "leave_early",     "title" : "조퇴", className : "dt-head-center dt-body-center",
                                     render: function(data, type, full, meta){
                                         return _this.gridColumnRender(data, full, "01");
                                     } 
                                 },
-                                { data : "late_leave_early","title" : "지각&조퇴",
+                                { data : "late_leave_early","title" : "지각&조퇴", className : "dt-head-center dt-body-center",
                                     render: function(data, type, full, meta){
                                         return _this.gridColumnRender(data, full, "11");
                                     }
                                 },
-                                { data : "absent",          "title" : "결 근",
+                                { data : "absent",          "title" : "결근", className : "dt-head-center dt-body-center",
                                     render: function(data, type, full, meta){
                                         return _this.gridColumnRender(data, full, "21");
                                     }
                                 },
-                                { data : "data_none_1",		"title" : "출근 없음",
+                                { data : "data_none_1",		"title" : "출근 없음", className : "dt-head-center dt-body-center",
                                     render: function(data, type, full, meta){
                                         return _this.gridColumnRender(data, full, "50");
                                     }
                                 },
-                                { data : "data_none_2",		"title" : "퇴근 없음",
+                                { data : "data_none_2",		"title" : "퇴근 없음", className : "dt-head-center dt-body-center",
                                     render: function(data, type, full, meta){
                                         return _this.gridColumnRender(data, full, "51");
                                     } 
                                 }
              	        ],
         		    collection:null,
-        		    dataschema:["department", "score", "total_persion", "late", "leave_early", "late_leave_early", "absent", "data_none_1", "data_none_2"],
+        		    // dataschema:["department", "score", "total_persion", "late", "leave_early", "late_leave_early", "absent", "data_none_1", "data_none_2"],
         		    detail: true,
                     buttons:["search"],
-        		    fetch: false,
-                    order : [[2, "asc"],[3, "desc"]]
+                    fetch: false,
+                    order: [[3, "desc"]]
                 };
         },
         
     	events: {
             'click #SearchBtn' : 'onClickSearchBtn',
+            'click #SearchBtnPerson' : 'onClickSearchBtnPerson',
             'click #deptSummaryTable .td-dept-summary' : 'onClickDetailPopup',
         },
         
@@ -92,8 +95,8 @@ define([
             
     	    var _head=$(_headTemp(_headSchema.getDefault(
     	    	{
-    	    		title:"근태관리",
-    	    		subTitle:"부서별 근태현황"
+    	    		title:"근태통계",
+    	    		subTitle:"지각현황"
     	    	}
    	    	)));
     	    
@@ -101,28 +104,23 @@ define([
     	    _head.addClass("relative-layout");
 
  			var _row=$(RowHTML);
-    	    var _datepickerRange=$(_.template(DatePickerHTML)(
-    	    	{ obj : 
-    	    		{
-    	    			dateId : "FromDatePicker"
-    	    		}
-    	    	})
+    	    var _datepickerRange=$(_.template(DatePickerHTML)({ 
+                obj : { fromId : "FromDatePicker", toId : "ToDatePicker" }})
     	    );
     	    var _btnContainer = $(_.template(RowButtonContainerHTML)({
-    	            obj: {
-    	                id: "ccmBtnContainer"
-    	            }
-    	        })
+    	        obj: { id: "ccmBtnContainer" }})
     	    );
     	    
-    	    var _searchBtn = $(_.template(RowButtonHTML)({
-    	            obj: {
-    	                id: "SearchBtn",
-    	                label: i18nCommon.COMMUTE_TODAY_LIST.SEARCH_BTN,
-    	            }
-    	        })
-	        );
-	        _btnContainer.append(_searchBtn);
+            var _searchBtn = $(_.template(RowButtonHTML)
+                ({obj: { id: "SearchBtn", label: "부서"}})
+            );
+            
+            var _searchBtnPerson = $(_.template(RowButtonHTML)({
+                obj: { id: "SearchBtnPerson", label: "개인" }})
+            );
+
+            _btnContainer.append(_searchBtn);
+            _btnContainer.append(_searchBtnPerson);
 	        
     	    _row.append(_datepickerRange);
     	    _row.append(_btnContainer);
@@ -143,21 +141,34 @@ define([
             	pickTime: false,
 		        language: "ko",
 		        todayHighlight: true,
-                format: "YYYY-MM",
-                minViewMode : 1,    // 년/월만 선택하도록 하는 옵션
-		        defaultDate: Moment(today).format("YYYY-MM")
+                format: "YYYY-MM-DD",
+                // minViewMode : 1,    // 년/월만 선택하도록 하는 옵션
+		        defaultDate: Moment(today).set('date',1).format("YYYY-MM-DD")
+            });
+
+            $(this.el).find("#ToDatePicker").datetimepicker({
+            	pickTime: false,
+		        language: "ko",
+		        todayHighlight: true,
+                format: "YYYY-MM-DD",
+                // minViewMode : 1,    // 년/월만 선택하도록 하는 옵션
+		        defaultDate: Moment(today).format("YYYY-MM-DD")
             });
             
     	    // var _gridSchema=Schemas.getSchema('grid');
     	    //this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             //this.grid.render();
-            this.selectDeptSummary();
+            this.selectDeptSummary(true);
 			
             return this;
         },
          
         onClickSearchBtn: function(evt) {
-            this.selectDeptSummary();
+            this.selectDeptSummary(true);
+        },
+
+        onClickSearchBtnPerson: function(evt) {
+            this.selectDeptSummary(false);
         },
 
         gridColumnRender:function(data, full, typeValue){
@@ -173,34 +184,81 @@ define([
             return tpl;
         },
          
-        selectDeptSummary: function() {
+        selectDeptSummary: function(isDept) {
             var _this = this;
-            var startDate = (this.viewType != 'dashboard')?Moment($(_this.el).find("#FromDatePicker").data("DateTimePicker").getDate()) : (this.searchParams == undefined)? Moment() : Moment(this.searchParams.start);
-            var startDateStr = startDate.format('YYYY-MM');
-            this.ajaxCall(startDateStr).then(function(result){
+            // 대시보드인 경우 해당 월의 시작/끝을 임의 생성
+            var startDateStr = "", endDateStr = "";
+
+            if ( this.viewType == 'dashboard' ) {
+                startDate = (this.searchParams == undefined)? Moment() : Moment(this.searchParams.start);
+                // 첫날 / 마지막 날 구하기
+                startDateStr = Moment(startDate).set('date',1).format("YYYY-MM-DD");
+                endDateStr = Moment(startDate).endOf('month').format("YYYY-MM-DD");
+            }else{
+                // 메뉴의 화면
+                startDate = Moment($(_this.el).find("#FromDatePicker").data("DateTimePicker").getDate());
+                endDate = Moment($(_this.el).find("#toDatePicker").data("DateTimePicker").getDate());
+                startDateStr = startDate.format('YYYY-MM-DD');
+                endDateStr = endDate.format('YYYY-MM-DD');
+            }
+            
+            var type = "DEPT";
+            if ( !isDept )  {
+                type = "PERSON";
+            }
+
+            this.ajaxCall(type, startDateStr, endDateStr).then(function(result){
                 
+                var colKey = ["name", "late", "leave_early", "late_leave_early", "absent", "data_none_1", "data_none_2"];
+
                 for ( var i = 0 ; i < result["DeptSummary"].length ; i++ ) {
-
                     var rowData = result["DeptSummary"][i];
-
                     // 부서 인원 셋팅
-                    for ( var j = 0 ; j < result["DeptPersionCount"].length ; j++ ) {
-                        if ( rowData.department == result["DeptPersionCount"][j].department ) {
-                            rowData["total_person"] = result["DeptPersionCount"][j].count;
-                            break;
+                    if ( isDept ) {
+                        for ( var j = 0 ; j < result["DeptPersionCount"].length ; j++ ) {
+                            if ( rowData.department == result["DeptPersionCount"][j].department ) {
+                                rowData["total_person"] = result["DeptPersionCount"][j].count;
+                                break;
+                            }
                         }
                     }
 
                     // 점수 계산
                     if ( _.isUndefined(rowData["total_person"]) ) {
-                        rowData["total_person"] = "";
-                        rowData["score"] = "";
-                        continue;
+                        rowData["total_person"] = "1";
+                        
                     }
-
                     rowData["score"] = ( rowData["late"] + rowData["leave_early"] + rowData["late_leave_early"]*2 + 
-                                         rowData["absent"] + rowData["data_none_1"] + rowData["data_none_2"] ) / rowData["total_person"];
+                                        rowData["absent"] + rowData["data_none_1"] + rowData["data_none_2"] ) / rowData["total_person"];
                     rowData["score"] = rowData["score"].toFixed(1);
+                
+                    for ( var colIdx = 0 ; colIdx < colKey.length ; colIdx++ ) {
+                        if ( _.isUndefined(rowData[colKey[colIdx]]) || rowData[colKey[colIdx]] == 0 ) {
+                            rowData[colKey[colIdx]] = "";
+                        }
+                    }
+                }
+
+                if ( isDept ) {
+                    _this.gridOption.column[1].visible=false;
+                    //_this.gridOption.column[2].visible=true;
+                    _this.gridOption.column[3].visible=true;
+
+                    _this.gridOption.buttons = ["search"];
+                    //_this.gridOption.order = [[3, "desc"]];
+                }else{
+                    _this.gridOption.column[1].visible=true;
+                    //_this.gridOption.column[2].visible=false;
+                    _this.gridOption.column[3].visible=false;
+
+                    _this.gridOption.buttons = ["search",{
+                        type:"myDeptRecord",
+                        name: "myDeptRecord",
+                        filterColumn:["department"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+                        tooltip: ""
+                    }];
+
+                    // _this.gridOption.order = [[3, "desc"]];
                 }
                 
                 _this.gridOption.collection = {
@@ -217,16 +275,17 @@ define([
                 var _gridSchema = Schemas.getSchema('grid');
                 _this.grid = new Grid(_gridSchema.getDefault(_this.gridOption));
 
-                _this.option.currentYearMonth = startDateStr;
+                _this.option.currentFrom = startDateStr;
+                _this.option.currentTo   = endDateStr;
             });
         },
 
-        ajaxCall:function(startDateStr) {
+        ajaxCall:function(type, from, to) {
             var dfd = new $.Deferred();
-            var url = "/statistics/dept";
+            var url = "/statistics/abnormal";
             var ajaxSetting = {
                 method : "GET",
-                data : {startDate:startDateStr},
+                data : {type:type, fromDate:from, toDate:to},
                 success : function(result){
                     dfd.resolve(result);
                 },
@@ -243,11 +302,12 @@ define([
             var _this = this;
 
             var data = JSON.parse( $(evt.currentTarget).attr('data') );
-            data["yearMonth"] = this.option.currentYearMonth;
+            data["fromDate"] = this.option.currentFrom;
+            data["toDate"] = this.option.currentTo;
             
             var deptSummaryDetailPopup = new DeptSummaryDetailPopup(data);
             Dialog.show({
-                title: "세부내역 ("+_this.option.currentYearMonth + ", " + data.dept+")", 
+                title: "세부내역 (" + data.dept + ")", 
                 content: deptSummaryDetailPopup,
                 buttons: [{
                     label : "닫기",
@@ -258,5 +318,5 @@ define([
             });
         }
 	});
-	return deptSummaryView;
+	return AbnormalSummaryView;
 });
