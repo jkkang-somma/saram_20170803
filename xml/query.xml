@@ -2323,21 +2323,16 @@
 	<group id="usage">
 		<query id="selectUsageListbyUser">
 			SELECT
-				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-				B.m1 AS "leave_company"
+				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+				group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", B.m1 AS "leave_company"
 			FROM
 				(SELECT *
 					FROM ip_tbl
-					ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-					CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-					CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-					CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 				) A RIGHT JOIN (
 					SELECT
 						mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-						group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-						group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-						group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+						group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+						group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 					FROM
 						members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 					ORDER BY
@@ -2349,41 +2344,32 @@
 		<query id="selectUsageListALL">
 			(
 				SELECT
-					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
+					"" id, "" name, B.r3 "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", "" leave_company
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							"" r1, "" r2, D.code r3,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							(select * from dept_code_tbl where `use`='1') D LEFT JOIN office_item_tbl off ON D.code = off.use_dept GROUP BY D.code
 					) B ON B.r3 = A.use_dept
 				GROUP BY B.r3
 			) UNION (
 				SELECT
-					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-				B.m1 AS "leave_company"
+					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", B.m1 AS "leave_company"
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 						ORDER BY
@@ -2396,20 +2382,16 @@
 		<query id="selectUsageList">
 			(
 				SELECT
-					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
+					"" id, "" name, B.r3 "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", "" leave_company
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							"" r1, "" r2, D.code r3,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							(select * from dept_code_tbl where `use`='1') D LEFT JOIN office_item_tbl off ON D.code = off.use_dept GROUP BY D.code
 					) B ON B.r3 = A.use_dept
@@ -2417,21 +2399,16 @@
 				GROUP BY B.r3
 			) UNION (
 				SELECT
-					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-					B.m1 AS "leave_company"
+					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", B.m1 AS "leave_company"
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 						ORDER BY
