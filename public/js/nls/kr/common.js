@@ -853,8 +853,8 @@ define({
         GRID_COL_NAME : {
             DEPARTMENT: "부서",
             NAME: "이름",
-            DESCTOP: "데스크탑",
-            MONITOR: "모니터",
+            HARDWARE: "전산비품",
+            OFFICEITEM: "사무비품",
             IP: "IP 주소",
             NOTEBOOK: "노트북",
             DETAIL: "상세",
