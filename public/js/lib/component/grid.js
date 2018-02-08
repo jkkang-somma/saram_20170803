@@ -634,12 +634,12 @@ define([
 
             var filter=[
                 function(data){
-                    var _levDate = data[7];
+                    var _levDate = data[6];
                     if(_levDate === "") return true
                     return false;
                 },
                 function(data){
-                    var _levDate = data[7];
+                    var _levDate = data[6];
                     if(_levDate !== "") return true
                     return false;
                 },
