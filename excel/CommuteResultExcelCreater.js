@@ -58,7 +58,8 @@ var CommuteYearExcelCreater = function () {
 	    	 		overtime_code_change : " 초과근무 수정 Count ",
 	    	 		early_time : " 조기 출근 ( 분 ) ",
 	    	 		not_pay_over_time : " 야간 근무 (분) ",
-	    	 		submit_comment : "휴일근무사유" 
+					submit_comment : "휴일근무사유",
+					except : "제외시간" 
 	};	
 	
 	// function _createExcelTitle(sheet, searchValObj) {

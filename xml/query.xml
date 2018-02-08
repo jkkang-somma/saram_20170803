@@ -1929,7 +1929,8 @@
 						c.overtime_code_change,
 						IF(c.early_time = 0, '', SUBSTRING( SEC_TO_TIME( c.early_time *60), 1, 5) ) as early_time,
                         IF(c.not_pay_over_time = 0, '', SUBSTRING( SEC_TO_TIME( c.not_pay_over_time *60), 1, 5) ) AS not_pay_over_time,
-						if(it.doc_num is null, null,  a.submit_comment) as submit_comment
+						if(it.doc_num is null, null,  a.submit_comment) as submit_comment,
+						c.except
 					FROM
 						 commute_result_tbl c
 						 left join office_code_tbl oc
