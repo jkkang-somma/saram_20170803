@@ -2,7 +2,7 @@ var _ = require("underscore");
 var debug = require('debug')('StatisticsService');
 var Promise = require('bluebird');
 var StatisticsDao = require('../dao/statisticsDao.js');
-var VacationDao = require('../dao/VacationDao.js');
+var VacationDao = require('../dao/vacationDao.js');
 
 var StatisticsService = function () {
     
