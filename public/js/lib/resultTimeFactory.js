@@ -1018,7 +1018,7 @@ define([
                         date: selectedDate.end
                     });
                     that.setOutOffice(tomorrowOutOffice);
-
+                    
                     /**
                      * 계산 결과를 resultCommuteCollection에 추가한다.
                      */
@@ -1042,6 +1042,63 @@ define([
             return dfd.promise();
         },
 
+        setNewModelData: function(nextDayCommute){
+            var dfd = new $.Deferred();
+            var that = this;
+            that.initByModel(nextDayCommute);
+            var selectedDate = {
+                start: nextDayCommute.get("date"),
+                end: Moment(nextDayCommute.get("date"), DATEFORMAT).add(1, "days").format(DATEFORMAT)
+            };
+
+            var inOfficeCollection = new InOfficeCollection();
+            var outOfficeCollection = new OutOfficeCollection();
+
+            $.when(
+                outOfficeCollection.fetch({
+                    data: selectedDate
+                }),
+                inOfficeCollection.fetch({
+                    data: selectedDate
+                })
+            ).done(function() {
+                /**
+                 * 조회된 in, out office 내용중 선택된 사용자에 해당하는 데이터가 있는지 확인한다.
+                 */
+                var userOutOfficeCollection = new OutOfficeCollection(); // 해당 사용자의 OutOffice Collection
+                userOutOfficeCollection.add(outOfficeCollection.where({
+                    id: that.id
+                }));
+
+                var userInOfficeCollection = new InOfficeCollection();
+                userInOfficeCollection.add(inOfficeCollection.where({
+                    id: that.id
+                }));
+
+                /**
+                 * 휴일근무 여부를 판단한다.
+                 */
+                var todayInOffice = new InOfficeCollection(userInOfficeCollection.where({
+                    date: selectedDate.start
+                }));
+                
+                that.setInOffice(todayInOffice);
+
+                /**
+                 * 휴가, 외근, 출장 여부를 판단한다.
+                 */
+                var todayOutOffice = userOutOfficeCollection.where({
+                    date: selectedDate.start
+                });
+                that.setOutOffice(todayOutOffice);
+                var tomorrowResult = that.getResult();  
+
+                dfd.resolve(tomorrowResult);
+            });
+
+            return dfd.promise();
+
+        },
         /**
          * In/Out Office 변경 사항을 적용하여 Commute Result를 수정한다. 
          * 결재로 인해 근태 내역이 변경될때 사용됨 (결재, 결재 취소)

@@ -516,11 +516,12 @@ define([
 									commM.set('in_time', inputData.intime);
 									commM.set('out_time', inputData.outtime);
 									// 2. 해당 model로 
-									resultTimeFacctory.initByModel(commM);
-									var overTimeResult = resultTimeFacctory.getResult();
+									// resultTimeFacctory.initByModel(commM);
+									resultTimeFacctory.setNewModelData(commM).done(function(overTimeResult){
+										that.sendApprovalOvertime(dialog, _.extend(selectItem, overTimeResult), inputData, "상신대기");
+									});
 									//console.log(overTimeResult);
 									
-									that.sendApprovalOvertime(dialog, _.extend(selectItem, overTimeResult), inputData, "상신대기");
 								}else{
 									Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function() {
 										dialog.close();
