@@ -38,7 +38,11 @@
      * Extend Bootstrap Modal and override some functions.
      * BootstrapDialogModal === Modified Modal.
      * ================================================ */
-    var Modal = $.fn.modal.Constructor;
+    if ( $.fn.modal == undefined ) {
+        console.log("RELOAD!!!!");
+        window.location.reload();
+    }
+     var Modal = $.fn.modal.Constructor;
     var BootstrapDialogModal = function(element, options) {
         Modal.call(this, element, options);
     };

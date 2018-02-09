@@ -162,7 +162,7 @@ define([
 			Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.NOTING_SELECTED);
 			return;
     	}
-    	
+		
         var commuteUpdatePopupView = new CommuteUpdatePopupView(selectItem);
         Dialog.show({
             title:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.TITLE, 
@@ -175,25 +175,26 @@ define([
                 	commuteUpdatePopupView.updateCommute().done(function(result){
     					// console.log(result);
     					var current = result.models[0];
-    					var yesterday = result.models[1];
+						// var yesterday = result.models[1];
+						current.attributes.comment_count = selectItem.comment_count;
     					current.set({idx : selectItem.idx});
     					that.grid.updateRow(current.attributes);
-    					if(!_.isUndefined(yesterday)){
-	    					var yesterdayRow = that.grid.getRowByFunction(
-	    						function(idx, data, node){
-	        						if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
-	        							return true;
+    					// if(!_.isUndefined(yesterday)){
+	    				// 	var yesterdayRow = that.grid.getRowByFunction(
+	    				// 		function(idx, data, node){
+	        			// 			if(data.date === yesterday.get("date") && data.id === yesterday.get("id")){
+	        			// 				return true;
 	        							
-	        						}else{
-	        							return false;
-	        						}
-	        					}
-	        				);
-	        				if(yesterdayRow.length > 0){
-	        					yesterday.set({idx : yesterdayRow.data().idx});
-		        				yesterdayRow.data(yesterday.attributes);
-	        				}
-    					}
+	        			// 			}else{
+	        			// 				return false;
+	        			// 			}
+	        			// 		}
+	        			// 	);
+	        			// 	if(yesterdayRow.length > 0){
+	        			// 		yesterday.set({idx : yesterdayRow.data().idx});
+		        		// 		yesterdayRow.data(yesterday.attributes);
+	        			// 	}
+    					// }
 						Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function() {
             				dialog.close();
             			});
@@ -259,7 +260,11 @@ define([
      	                    	render : function(data, type, full, meta){
      	                    		var result = "-";
      	                    		if (data > 0){
-     	                    			var overtime = timeformat(full.over_time);
+										var overtime = timeformat(full.over_time);
+										if ( !_.isUndefined(full.except) && !_.isNull(full.except)) {
+											overtime = timeformat(full.over_time - full.except);
+										}
+										 
                                         var isApproval = false;
                                         if ( full.work_night_falg == "상신") {
                                             overtime = overtime + "<BR>(상신중)";
