@@ -634,12 +634,12 @@ define([
 
             var filter=[
                 function(data){
-                    var _levDate = data[7];
+                    var _levDate = data[6];
                     if(_levDate === "") return true
                     return false;
                 },
                 function(data){
-                    var _levDate = data[7];
+                    var _levDate = data[6];
                     if(_levDate !== "") return true
                     return false;
                 },
@@ -737,7 +737,8 @@ define([
 
     	    //Button Group
     	    if($("#"+this.options.el).find(".input-group")){
-    	        $("#"+this.options.el).find(".input-group").remove();
+                $("#"+this.options.el).find(".input-group").remove();
+                $('.tooltip').remove();
     	    }
     	    this._defatulInputGroup=$('<div class="input-group input-group-sm"></div>');
 

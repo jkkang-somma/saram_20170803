@@ -153,6 +153,31 @@ define([
 	var numberWithComma = function(data){
 		return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	}
+
+	function timeformat(num){
+        var result = "";
+        var hour = Math.floor(num / 60);
+        var min = Math.floor(num % 60);
+		
+		if(hour < 1000){
+            result += " ";
+        }
+		if(hour < 100){
+            result += " ";
+        }
+        if(hour < 10){
+            result += " ";
+        }
+        result += hour + "시간 ";
+        
+        if(min < 10){
+            result += "0";
+        }
+        
+        result += min+"분";
+        
+        return result;
+    }
 	
     return {
         isNull:isNull,
@@ -166,6 +191,7 @@ define([
         timeToString : timeToString,
         getMonday: getMonday,
         getClientIp : getClientIp,
-        numberWithComma : numberWithComma
+		numberWithComma : numberWithComma,
+		timeformat : timeformat
     };
 });

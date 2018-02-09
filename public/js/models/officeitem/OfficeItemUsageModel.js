@@ -15,11 +15,9 @@ define([
         default:{
             id : "",
             name : "",
-            dept : "",
-            desctop : "",
-            monitor : "",
+            hardware : "",
+            officeitem : "",
             ip : "",
-            notebook : "",
             leave_company : ""
         }
     });

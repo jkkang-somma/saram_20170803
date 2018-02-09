@@ -215,6 +215,25 @@
         	WHERE
         		id = ? AND year = ?
         </query>
+
+		<query id="selectSimpleVacation">
+			SELECT
+				v.year,
+				v.id,
+				v.total_day,
+				IFNULL(s.used_holiday, 0) AS used_holiday
+			FROM
+				vacation_tbl v
+				LEFT JOIN (
+							SELECT year, id, sum(day_count)  used_holiday
+							FROM out_office_tbl
+							WHERE date between ? AND ?
+							GROUP BY year, id
+							) s
+				ON v.id = s.id and v.year = s.year
+			WHERE v.year = ?
+		</query>
+
     </group>
 
     <group id="approval">
@@ -1910,7 +1929,8 @@
 						c.overtime_code_change,
 						IF(c.early_time = 0, '', SUBSTRING( SEC_TO_TIME( c.early_time *60), 1, 5) ) as early_time,
                         IF(c.not_pay_over_time = 0, '', SUBSTRING( SEC_TO_TIME( c.not_pay_over_time *60), 1, 5) ) AS not_pay_over_time,
-						if(it.doc_num is null, null,  a.submit_comment) as submit_comment
+						if(it.doc_num is null, null,  a.submit_comment) as submit_comment,
+						c.except
 					FROM
 						 commute_result_tbl c
 						 left join office_code_tbl oc
@@ -2323,21 +2343,16 @@
 	<group id="usage">
 		<query id="selectUsageListbyUser">
 			SELECT
-				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-				B.m1 AS "leave_company"
+				B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+				group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", B.m1 AS "leave_company"
 			FROM
 				(SELECT *
 					FROM ip_tbl
-					ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-					CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-					CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-					CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 				) A RIGHT JOIN (
 					SELECT
 						mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-						group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-						group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-						group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+						group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+						group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 					FROM
 						members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 					ORDER BY
@@ -2349,41 +2364,32 @@
 		<query id="selectUsageListALL">
 			(
 				SELECT
-					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
+					"" id, "" name, B.r3 "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", "" leave_company
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							"" r1, "" r2, D.code r3,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							(select * from dept_code_tbl where `use`='1') D LEFT JOIN office_item_tbl off ON D.code = off.use_dept GROUP BY D.code
 					) B ON B.r3 = A.use_dept
 				GROUP BY B.r3
 			) UNION (
 				SELECT
-					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-				B.m1 AS "leave_company"
+					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", B.m1 AS "leave_company"
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 						ORDER BY
@@ -2396,20 +2402,16 @@
 		<query id="selectUsageList">
 			(
 				SELECT
-					"" id, "" name, B.r3 "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook", "" leave_company
+					"" id, "" name, B.r3 "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", "" leave_company
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							"" r1, "" r2, D.code r3,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							(select * from dept_code_tbl where `use`='1') D LEFT JOIN office_item_tbl off ON D.code = off.use_dept GROUP BY D.code
 					) B ON B.r3 = A.use_dept
@@ -2417,21 +2419,16 @@
 				GROUP BY B.r3
 			) UNION (
 				SELECT
-					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "desctop", B.r5 AS "monitor", group_concat(A.ip) AS "ip", B.r6 AS "notebook",
-					B.m1 AS "leave_company"
+					B.r1 AS "id", B.r2 AS "name", B.r3 AS "dept", B.r4 AS "hardware", B.r5 AS "officeitem",
+					group_concat(A.ip ORDER BY INET_ATON(A.ip)) AS "ip", B.m1 AS "leave_company"
 				FROM
 					(SELECT *
 						FROM ip_tbl
-						ORDER BY CAST(SUBSTRING_INDEX(ip, '.', 4) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 3) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 2) AS signed),
-						CAST(SUBSTRING_INDEX(ip, '.', 1) AS signed)
 					) A RIGHT JOIN (
 						SELECT
 							mem.id r1, mem.name r2, mem.dept_code r3, mem.leave_company m1,
-							group_concat(CASE WHEN off.category_code = 'YES-DT' THEN serial_yes ELSE NULL END) r4,
-							group_concat(CASE WHEN off.category_code = 'YES-MO' THEN serial_yes ELSE NULL END) r5,
-							group_concat(CASE WHEN off.category_code = 'YES-NB' THEN serial_yes ELSE NULL END) r6
+							group_concat(CASE WHEN off.category_type = '전산' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r4,
+							group_concat(CASE WHEN off.category_type = '사무' THEN serial_yes ELSE NULL END ORDER BY off.serial_yes) r5
 						FROM
 							members_tbl mem LEFT JOIN office_item_tbl off ON mem.id = off.use_user GROUP BY mem.id
 						ORDER BY
@@ -2505,9 +2502,26 @@
 			FROM
 				commute_result_tbl
 			WHERE
-				date like ?
+				date between ? AND ?
 			group by
 				department
+		</query>
+
+		<query id="selectAbnormalPersonSummary">
+			SELECT
+				id, name, department,
+				count(if(work_type='10',1, null)) AS 'late',
+				count(if(work_type='01',1, null)) AS 'leave_early',
+				count(if(work_type='11',1, null)) AS 'late_leave_early',
+				count(if(work_type='21',1, null)) AS 'absent',
+				count(if(work_type='50',1, null)) AS 'data_none_1',
+				count(if(work_type='51',1, null)) AS 'data_none_2'
+			FROM
+				commute_result_tbl
+			WHERE
+				date between ? AND ?
+			group by
+				id
 		</query>
 
 		<query id="selectDeptPersonCount">
@@ -2520,6 +2534,16 @@
 			GROUP BY department
 		</query>
 
+		<query id="selectDeptPersonCountType2">
+			SELECT department, count(*) as count
+			FROM (
+				SELECT distinct department, id
+				FROM commute_result_tbl
+				WHERE date between ? AND ?
+			) R
+			GROUP BY department
+		</query>
+
 		<query id="selectDeptDetail">
 			SELECT
 				c.name as name, c.date as date, w.name as work_type
@@ -2527,7 +2551,39 @@
 				commute_result_tbl c, work_type_code_tbl w
 			WHERE
 				w.code = c.work_type AND
-				date like ? AND department = ? AND work_type = ?
+				date between ? AND ? AND department = ? AND work_type = ?
+		</query>
+
+		<query id="selectOverTimePersonal">
+			SELECT id, department, name, 
+				SUM(if(overtime_code = "2015_AA" OR overtime_code = "2015_AB" OR overtime_code = "2015_AC", over_time-except, 0)) as TOTAL_A,
+				COUNT(if(overtime_code = "2015_AA", 1, null)) as AA,
+				COUNT(if(overtime_code = "2015_AB", 1, null)) as AB,
+				COUNT(if(overtime_code = "2015_AC", 1, null)) as AC,
+				SUM(if(overtime_code = "2015_BA" OR overtime_code = "2015_BB" OR overtime_code = "2015_BC", over_time, 0)) as TOTAL_B,
+				COUNT(if(overtime_code = "2015_BA", 1, null)) as BA,
+				COUNT(if(overtime_code = "2015_BB", 1, null)) as BB,
+				COUNT(if(overtime_code = "2015_BC", 1, null)) as BC
+			FROM commute_result_tbl c
+			WHERE
+				date between ? AND ?
+			GROUP BY id
+		</query>
+
+		<query id="selectOverTimeDept">
+			SELECT department,
+				SUM(if(overtime_code = "2015_AA" OR overtime_code = "2015_AB" OR overtime_code = "2015_AC", over_time-except, 0)) as TOTAL_A,
+				COUNT(if(overtime_code = "2015_AA", 1, null)) as AA,
+				COUNT(if(overtime_code = "2015_AB", 1, null)) as AB,
+				COUNT(if(overtime_code = "2015_AC", 1, null)) as AC,
+				SUM(if(overtime_code = "2015_BA" OR overtime_code = "2015_BB" OR overtime_code = "2015_BC", over_time, 0)) as TOTAL_B,
+				COUNT(if(overtime_code = "2015_BA", 1, null)) as BA,
+				COUNT(if(overtime_code = "2015_BB", 1, null)) as BB,
+				COUNT(if(overtime_code = "2015_BC", 1, null)) as BC
+			FROM commute_result_tbl c
+			WHERE
+				date between ? AND ?
+			GROUP BY department
 		</query>
 
 	</group>

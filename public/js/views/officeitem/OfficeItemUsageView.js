@@ -121,15 +121,11 @@ define([
                         render: function(data) {
                             return _getDeptName(data);
                         }},
-                    { data : "desctop",     "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.DESCTOP,
+                    { data : "hardware",     "title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.HARDWARE,
                         render: function(data) {
                             return _getTemplate(data);
                         }},
-                    { data : "monitor", 	"title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.MONITOR,
-                        render: function(data) {
-                            return _getTemplate(data);
-                        }},
-                    { data : "notebook", 	"title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.NOTEBOOK,
+                    { data : "officeitem", 	"title" : i18nCommon.USAGE_LIST.GRID_COL_NAME.OFFICEITEM,
                         render: function(data) {
                             return _getTemplate(data);
                         }},
@@ -149,10 +145,11 @@ define([
                 ],
 
                 collection:this.officeItemUsageCollection,
-                dataschema:["id", "name", "dept", "desctop", "monitor", "ip", "notebook", "leave_company"],
+                dataschema:["id", "name", "dept", "hardware", "officeitem", "ip", "leave_company"],
                 detail: true,
                 fetch: false,
-                order : [[1, "asc"]]
+                order : [[1, "asc"]],
+                orderFixed: [[3,'asc']]
             };
 
             this.gridOption.buttons = this.buttonInit();
@@ -310,6 +307,7 @@ define([
             return this;
         },
         onClickSearchBtn: function(evt) {
+            //$('#usageDataTable').DataTable().fixedColumns().rowIndex(2);
             this.selectUsageList();
         },
 

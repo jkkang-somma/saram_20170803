@@ -3,18 +3,36 @@ var debug = require('debug')('statisticsRouter');
 var router = express.Router();
 var Statistics = require('../service/StatisticsService.js');
 
-router.route('/dept')
+router.route('/abnormal')
 .get(function(req, res, next){
-	Statistics.selectAbnormalDeptSummary(req.query.startDate).then(function(result) {
+	Statistics.selectAbnormalDeptSummary(req.query.type, req.query.fromDate, req.query.toDate).then(function(result) {
 		return res.send(result);
 	}).catch(function(err) {
 		next(err);
     });
 });
 
-router.route('/dept/detail')
+router.route('/abnormal/detail')
 .get(function(req, res, next){
-	Statistics.selectDeptDetail(req.query.yearMonth, req.query.dept, req.query.work_type).then(function(result) {
+	Statistics.selectDeptDetail(req.query.fromDate, req.query.toDate, req.query.dept, req.query.work_type).then(function(result) {
+		return res.send(result);
+	}).catch(function(err) {
+		next(err);
+    });
+});
+
+router.route('/report1')
+.get(function(req, res, next){
+	Statistics.selectReport1(req.query.type, req.query.from, req.query.to).then(function(result) {
+		return res.send(result);
+	}).catch(function(err) {
+		next(err);
+    });
+});
+
+router.route('/report1/detail')
+.get(function(req, res, next){
+	Statistics.selectDeptDetail(req.query.from, req.query.to, req.query.user_id, req.query.overtime_code).then(function(result) {
 		return res.send(result);
 	}).catch(function(err) {
 		next(err);

@@ -73,6 +73,8 @@ define([
 			'booklibrary' : 'showBookLibrary',
 			'bookrenthistory' : 'showBookRentHistory',
 			'bookmanager' : 'showBookManager',
+			'abnormalsummary' : 'showAbnormalSummary',
+			'overtimereport' : 'showOvertimeReport',
 			'*actions' : 'showHome',
 		},
 		initialize:function(option){
@@ -342,8 +344,8 @@ define([
             var url = 'views/officeitem/OfficeItemHistoryView';
             this.changeView(url, '#officeitemhistory');
 		},
-		showDeptSummary : function(){
-            var url = 'views/statistics/DeptSummaryView';
+		showAbnormalSummary : function(){
+            var url = 'views/statistics/AbnormalSummaryView';
             this.changeView(url);
         },
         showBookLibrary : function() {
@@ -357,6 +359,10 @@ define([
 		showBookManager : function() {
 			var url = 'views/book/BookManagerView';
 			this.changeView(url, "#bookmanager");
+		},
+		showOvertimeReport : function(){
+			var url = 'views/statistics/OvertimeReportView';
+            this.changeView(url);
 		}
 	});
 	return Router;
