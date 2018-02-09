@@ -70,6 +70,9 @@ define([
 			'officeitemusage' : 'showOfficeItemUsage',
 			'officeitemhistory' : 'showOfficeItemHistory',
 			'deptsummary' : 'showDeptSummary',
+			'booklibrary' : 'showBookLibrary',
+			'bookrenthistory' : 'showBookRentHistory',
+			'bookmanager' : 'showBookManager',
 			'*actions' : 'showHome',
 		},
 		initialize:function(option){
@@ -342,7 +345,19 @@ define([
 		showDeptSummary : function(){
             var url = 'views/statistics/DeptSummaryView';
             this.changeView(url);
-        }
+        },
+        showBookLibrary : function() {
+			var url = 'views/book/BookLibraryView';
+			this.changeView(url, "#booklibrary");
+		},
+		showBookRentHistory : function() {
+			var url = 'views/book/BookRentHistoryView';
+			this.changeView(url, "#bookrenthistory");
+		},
+		showBookManager : function() {
+			var url = 'views/book/BookManagerView';
+			this.changeView(url, "#bookmanager");
+		}
 	});
 	return Router;
 });

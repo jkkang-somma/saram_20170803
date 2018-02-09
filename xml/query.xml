@@ -2531,4 +2531,102 @@
 		</query>
 
 	</group>
+	
+	<group id="bookLibrary">
+		<query id="selectBookLibrary">
+			SELECT 
+				book.book_id, 
+				book.category_1, 
+				book.category_2, 
+				book.manage_no, 
+				book.book_name, 
+				book.author, 
+				book.publisher, 
+				DATE_FORMAT(book.publishing_date, '%Y-%m-%d') as publishing_date, 
+				book.img_src, 
+				book.isbn, 
+				IF (
+					rent.rent_id is NULL, '0', '1'
+				) as state,
+				IF (
+					rent.user_id is NULL, '', (select name from members_tbl where id=rent.user_id)
+				) as rent_user,
+				COALESCE(rent.due_date,'') as due_date
+			FROM
+				book_library_tbl book
+			LEFT OUTER JOIN 
+				book_rent_tbl rent ON rent.book_id=book.book_id
+			ORDER BY field (book.category_1, 'OS', 'DL', 'DE', 'PL', 'DP', 'DM', 'TE', 'PR', 'CU'), book.manage_no;
+		</query>
+		<query id="deleteBookLibrary">
+			DELETE FROM
+				book_library_tbl
+			WHERE 
+				book_id=?
+		</query>
+		<query id="insertBookLibrary">
+			INSERT INTO
+				book_library_tbl (category_1, category_2, manage_no, book_name, author, publisher, publishing_date, img_src, isbn) 
+			VALUES
+				(?, ?, ?, ?, ?, ?, ?, ?, ?)
+		</query>
+		<query id="insertRentBook">
+			INSERT INTO 
+				book_rent_tbl (book_id, user_id, rent_date, due_date) 
+			VALUES 
+				(?, ?, CURDATE(), ?)
+		</query>
+		<query id="deleteRentBook">
+			DELETE FROM 
+				book_rent_tbl
+			WHERE 
+				book_id=? and user_id=?
+		</query>
+		<query id="insertRentHistory">
+			INSERT INTO
+				book_rent_history_tbl (user_id, book_name, author, publisher, img_src, manage_no, state, modify_date)
+			VALUES
+				(
+					?, 
+					(select book_name from book_library_tbl where book_id=?),
+					(select author from book_library_tbl where book_id=?),
+					(select publisher from book_library_tbl where book_id=?),
+					(select img_src from book_library_tbl where book_id=?),
+					(select manage_no from book_library_tbl where book_id=?),
+					?, 
+					CURDATE()
+				)
+		</query>
+		<query id="selectRentHistory">
+			SELECT 
+				history.history_id,
+				history.user_id,
+				mem.name,
+				history.book_name,
+				history.author,
+				history.publisher,
+				history.img_src,
+				history.manage_no,
+				history.state,
+				DATE_FORMAT(history.modify_date, '%Y-%m-%d') as modify_date
+			FROM 
+				book_rent_history_tbl history
+			LEFT OUTER JOIN 
+				members_tbl mem ON mem.id=history.user_id
+			WHERE 
+				DATE(history.modify_date) &gt;= DATE_FORMAT(?, '%Y-%m-%d')
+			AND
+				DATE(history.modify_date) &lt;= DATE_FORMAT(?, '%Y-%m-%d')
+		</query>
+		<query id="selectManageNo">
+			SELECT 
+				manage_no 
+			FROM 
+				book_library_tbl 
+			WHERE 
+				manage_no LIKE CONCAT('%',?,'%')
+			ORDER BY
+				manage_no ASC
+		</query>
+	</group>
 </querys>

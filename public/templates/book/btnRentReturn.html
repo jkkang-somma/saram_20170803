@@ -1,0 +1,14 @@
+<div>
+	<div style="text-align: center;">
+		<% if(!isShowReturnBtn) {%>
+		<button type="button" class="btn-rent btn btn-default btn-xs" data='{"book_id": <%=book_id%>}'>
+			<span style="display: table-row;">대출가능</span>
+		</button>
+		<% } %>
+		<% if(isShowReturnBtn) {%>
+		<button type="button" class="btn-return btn btn-default btn-xs" data='{"book_id": <%=book_id%>}'>
+			<span style="display: table-row;">대출중</span>
+		</button>
+		<% } %>
+	</div>
+</div>

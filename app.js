@@ -45,6 +45,7 @@ var officeItemUsage = require('./routes/officeItemUsageRouter');
 var officeItemCode = require('./routes/officeItemCodeRouter');
 var officeitem = require("./routes/officeitemRouter");
 var officeItemHistory = require('./routes/officeItemHistoryRouter');
+var bookLibrary = require("./routes/bookLibraryRouter");
 
 var debug = require('debug')('APP');
 var app = express();
@@ -249,6 +250,7 @@ app.use('/officeitemusage', officeItemUsage);
 app.use('/officeitemcode', officeItemCode);
 app.use('/officeitemmanager', officeitem);
 app.use('/officeitemhistory', officeItemHistory);
+app.use('/book', bookLibrary);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .

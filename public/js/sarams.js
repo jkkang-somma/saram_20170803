@@ -31,7 +31,7 @@ require.config({
       
    },
    paths: {
-   //    jquery: 'tool/jquery.min',
+      //jquery: 'tool/jquery.min',
       //'jquery.ui': 'tool/jqueryui/jquery-ui',
       'jquery.number': 'tool/jqueryui/jquery.number',
       'jquery.autocomplete': 'tool/jqueryui/jquery-Autocomplete',

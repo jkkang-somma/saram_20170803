@@ -159,7 +159,21 @@ define([
 			hashTag: "#officeitemhistory",
 			auth: SCHEMAS.ADMIN
 		}]
-
+		},{
+		title:i18Common.MENU.TOP.LM, //도서 관리
+        subMenu:[{
+			title:i18Common.MENU.SUB.LM.BOOK_LIBRARY, //"도서 목록",
+            hashTag:"#booklibrary",
+            auth:SCHEMAS.USER,
+            actionAuth: {
+            	add:SCHEMAS.ADMIN,
+            	remove:SCHEMAS.ADMIN
+            }
+        },{ 
+        	title:i18Common.MENU.SUB.LM.BOOK_RENT_HISTORY, // "대출 이력",
+        	hashTag:"#bookrenthistory",
+        	auth:SCHEMAS.USER
+        }]
 //		},{
 //		title:i18Common.MENU.TOP.RM,//회의실
 //        subMenu:[{

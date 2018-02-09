@@ -1,0 +1,64 @@
+{
+	"categories": 
+	[
+		{ "name": "운용 환경(OS)", "separator": "OS", "child": 
+			[
+				{"name": "Mobile(A)", "separator": "A","child": null},
+				{"name": "Embeded(B)", "separator": "B", "child": null},
+				{"name": "Linux/Unix/Win(C)", "separator": "C", "child": null}
+			]
+		},
+		{ "name": "개발 언어(DL)", "separator": "DL", "child": 
+			[
+				{"name": "Visual C++/C#(A)", "separator": "A","child": null},
+				{"name": "C++(B)", "separator": "B", "child": null},
+				{"name": "C(C)", "separator": "C", "child": null},
+				{"name": "Script(D)", "separator": "D", "child": null},
+				{"name": "Flash(E)", "separator": "E", "child": null},
+				{"name": "Web(F)", "separator": "F", "child": null},
+				{"name": "XML(G)", "separator": "G", "child": null},
+				{"name": "JAVA(H)", "separator": "H", "child": null}
+			]
+		},
+		{ "name": "개발 환경(DE)", "separator": "DE", "child": 
+			[
+				{"name": "IDE(A)", "separator": "A","child": null},
+				{"name": "소스 관리(B)", "separator": "B", "child": null},
+				{"name": "빌드 관리(C)", "separator": "C", "child": null}
+			]
+		},
+		{ "name": "설계(PL)", "separator": "PL", "child": 
+			[
+				{"name": "UML/디자인패턴/리펙토링(A)", "separator": "A","child": null}
+			]
+		},
+		{ "name": "데이터 처리(DP)", "separator": "DP", "child": 
+			[
+				{"name": "빅데이터(A)", "separator": "A","child": null}
+			]
+		},
+		{ "name": "데이터 관리(DM)", "separator": "DM", "child": 
+			[
+				{"name": "Database(A)", "separator": "A","child": null},
+				{"name": "보고서(B)", "separator": "B", "child": null}
+			]
+		},
+		{ "name": "시험(TE)", "separator": "TE", "child": 
+			[
+				{"name": "품질(A)", "separator": "A","child": null}
+			]
+		},
+		{ "name": "프로젝트(PR)", "separator": "PR", "child": 
+			[
+				{"name": "관리(A)", "separator": "A","child": null}
+			]
+		},
+		{ "name": "교양(CU)", "separator": "CU", "child": 
+			[
+				{"name": "기술교양(A)", "separator": "A","child": null},
+				{"name": "일반교양(B)", "separator": "B", "child": null}
+			]
+		}
+		
+	]
+}

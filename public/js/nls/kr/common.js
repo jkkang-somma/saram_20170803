@@ -52,7 +52,7 @@ define({
         MAC:"Mac",
         AFFILIATED:"소속"
     },
-    
+
     GRID:{
         MSG:{
             NOT_SELECT_ROW:"선택된 테이터가 없습니다."
@@ -60,13 +60,17 @@ define({
     },
     PAGE:{
         TITLE:{
-            USER_MANAGER:"사원 관리"
+            USER_MANAGER:"사원 관리",
+            BOOK_MANAGER:"도서 관리"
         },
         SUB_TITLE:{
-            USER_LIST:"사원 목록"
+            USER_LIST:"사원 목록",
+            BOOK_LIBRARY:"도서 목록",
+            BOOK_RENT_STATUS:"대출 현황",
+            BOOK_RENT_HISTORY:"대출 이력",
+            BOOK_MANAGER:"도서 등록"
         }
     },
-    
     CODE:{
         PRIVILEGE_1:"결재가능",
         PRIVILEGE_2:"결재불가",
@@ -157,7 +161,8 @@ define({
             SM:"사원 관리",           
             AM:"근태 관리",
             RM:"회의실",
-            IM:"비품 관리"
+            IM:"비품 관리",
+            LM:"도서 관리",
         },
         SUB:{
         	BM:{
@@ -190,6 +195,11 @@ define({
             },
             IM:{
         	    USAGE:"비품 할당 현황"
+            },
+            LM:{
+                BOOK_LIBRARY:"도서 목록",
+                BOOK_RENT_HISTORY:"대출 이력",
+                BOOK_MANAGER:"도서 등록"
             }
         }
     },
@@ -870,5 +880,54 @@ define({
             LOADING_FAIL : "데이터 조회 실패!",
             GET_DATA_FAIL : "데이터 조회 실패!"
         },
+    },
+    BOOK_LIST : {
+        NAME : "도서명",
+        MANAGE_NO : "도서번호",
+        RENT_STATE : "대출여부",
+        RENT_STATE_RENT : "대출중",
+        RENT_STATE_RETURN : "대출가능",
+        RENT_STATE_RENTED: "대출",
+        RENT_STATE_RETURNED : "반납",
+        DUE_DATE : "반납예정일",
+        RENT_USER : "대출자",
+        MODIFY_DATE: "변경일",
+        ADD_BOOK : "도서 등록",
+        DETAIL_DIALOG : {
+            TITLE : "도서",
+            SUB_TITLE : "상세",
+            BOOK_NAME : "도서명",
+            BOOK_AUTHOR : "저자",
+            BOOK_PUBLISHER : "출판사",
+            BOOK_PUBLISHING_DATE : "출간일",
+            BOOK_ISBN : "ISBN",
+            BOOK_MANAGE_NO : "관리번호",
+            BOOK_DUE_DATE : "반납 예정일",
+            BOOK_MAIN_CATEGORY : "대분류",
+            BOOK_SUB_CATEGORY: "소분류",
+            BOOK_PRICE: "가격",
+            BUTTON : {
+                ADD : "등록",
+                DEL : "삭제",
+                RENT : "대출",
+                RETURN : "반납",
+            }
+        },
+        MSG : {
+            SUCCESS_RENT : "대출 되었습니다",
+            SUCCESS_RETURN : "반납 되었습니다",
+            SUCCESS_REGIST : "등록 되었습니다",
+            SUCCESS_DELETE : "삭제 되었습니다",
+            FAIL_RENT : "대출 할 수 없습니다",
+            FAIL_RETURN : "반납 할 수 없습니다",
+            FAIL_REGIST : "등록 할 수 없습니다",
+            FAIL_REGIST_NOT_SELECT : "등록 할 도서를 선택해주세요",
+            FAIL_DELETE : {
+                FAIL : "삭제 할 수 없습니다",
+                USE_RENT : "대여 중인 책은 삭제 할 수 없습니다"
+            },
+            VALIDATE_SERACH : "검색어가 필요합니다"
+            
+        }
     }
 });
