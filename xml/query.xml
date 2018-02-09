@@ -2556,9 +2556,11 @@
 
 		<query id="selectOverTimePersonal">
 			SELECT id, department, name, 
+				SUM(if(overtime_code = "2015_AA" OR overtime_code = "2015_AB" OR overtime_code = "2015_AC", over_time-except, 0)) as TOTAL_A,
 				COUNT(if(overtime_code = "2015_AA", 1, null)) as AA,
 				COUNT(if(overtime_code = "2015_AB", 1, null)) as AB,
 				COUNT(if(overtime_code = "2015_AC", 1, null)) as AC,
+				SUM(if(overtime_code = "2015_BA" OR overtime_code = "2015_BB" OR overtime_code = "2015_BC", over_time, 0)) as TOTAL_B,
 				COUNT(if(overtime_code = "2015_BA", 1, null)) as BA,
 				COUNT(if(overtime_code = "2015_BB", 1, null)) as BB,
 				COUNT(if(overtime_code = "2015_BC", 1, null)) as BC
@@ -2570,9 +2572,11 @@
 
 		<query id="selectOverTimeDept">
 			SELECT department,
+				SUM(if(overtime_code = "2015_AA" OR overtime_code = "2015_AB" OR overtime_code = "2015_AC", over_time-except, 0)) as TOTAL_A,
 				COUNT(if(overtime_code = "2015_AA", 1, null)) as AA,
 				COUNT(if(overtime_code = "2015_AB", 1, null)) as AB,
 				COUNT(if(overtime_code = "2015_AC", 1, null)) as AC,
+				SUM(if(overtime_code = "2015_BA" OR overtime_code = "2015_BB" OR overtime_code = "2015_BC", over_time, 0)) as TOTAL_B,
 				COUNT(if(overtime_code = "2015_BA", 1, null)) as BA,
 				COUNT(if(overtime_code = "2015_BB", 1, null)) as BB,
 				COUNT(if(overtime_code = "2015_BC", 1, null)) as BC

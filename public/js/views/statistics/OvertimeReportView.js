@@ -9,6 +9,7 @@ define([
 	'schemas',
 	'i18n!nls/common',
     'dialog',
+    'util',
     'views/statistics/DeptSummaryDetailPopup',
 	'text!templates/default/head.html',
 	'text!templates/default/row.html',
@@ -19,7 +20,7 @@ define([
 	'text!templates/layout/default.html',
     'text!templates/default/button.html',
     'text!templates/statistics/deptSummaryRow.html'
-    ], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, DeptSummaryDetailPopup, 
+    ], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, Util, DeptSummaryDetailPopup, 
         HeadHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, ContentHTML, LayoutHTML, 
 		ButtonHTML, DeptSummaryRowHtml){
 		
@@ -43,13 +44,13 @@ define([
 
                                 { data : "total_person",title : "인원", className : "dt-head-center dt-body-center"},
 
-                                { data : "total_A",     title : "평일야근<BR>시간", className : "dt-head-center dt-body-center major-column"},
+                                { data : "TOTAL_A",     title : "초과근무<BR>시간", className : "dt-head-center dt-body-right major-column"},
                                 { data : "AA",          title : "야근_A"  , className : "dt-head-center dt-body-center"},
                                 { data : "AB",          title : "야근_B"  , className : "dt-head-center dt-body-center"},
                                 { data : "AC",          title : "야근_C"  , className : "dt-head-center dt-body-center"},
                                 
                                 { data : "total_B_day", title : "휴일근무<BR>일수", className : "dt-head-center dt-body-center major-column"},
-                                { data : "total_B",     title : "휴일근무<BR>시간", className : "dt-head-center dt-body-center major-column"},
+                                { data : "TOTAL_B",     title : "휴일근무<BR>시간", className : "dt-head-center dt-body-right major-column"},
                                 { data : "BA",          title : "휴일_A"  , className : "dt-head-center dt-body-center"},
                                 { data : "BB",          title : "휴일_B"  , className : "dt-head-center dt-body-center"},
                                 { data : "BC",          title : "휴일_C"  , className : "dt-head-center dt-body-center"}
@@ -79,7 +80,7 @@ define([
     	    var _head=$(_headTemp(_headSchema.getDefault(
     	    	{
     	    		title:"근태통계",
-    	    		subTitle:"연차/야근 리포트"
+    	    		subTitle:"휴가/초과근무 리포트"
     	    	}
    	    	)));
     	    
@@ -197,7 +198,7 @@ define([
                 action:function() {
                     var dfd = new $.Deferred();
                     _this.ajaxCall(type, startDateStr, endDateStr).then(function(result){
-                        var workTypeList = ["used_day", "AA", "AB", "AC", "total_A", "BA", "BB", "BC", "total_B_day", "total_B"];
+                        var workTypeList = ["used_day", "AA", "AB", "AC", "TOTAL_A", "BA", "BB", "BC", "total_B_day", "TOTAL_B"];
                         for ( var i = 0 ; i < result.OverTimeInfo.length ; i++ ) {
                             
                             var t = _.find(result.VacationInfo, function(item){
@@ -205,10 +206,18 @@ define([
                                     return item;
                             });
 
-                            // 야근 합계 계산
-                            result.OverTimeInfo[i].total_A = result.OverTimeInfo[i].AA*2 + result.OverTimeInfo[i].AB*4 + result.OverTimeInfo[i].AC*6;
                             result.OverTimeInfo[i].total_B_day = result.OverTimeInfo[i].BA + result.OverTimeInfo[i].BB + result.OverTimeInfo[i].BC;
-                            result.OverTimeInfo[i].total_B = result.OverTimeInfo[i].BA*4 + result.OverTimeInfo[i].BB*6 + result.OverTimeInfo[i].BC*8;
+                            if ( result.OverTimeInfo[i].TOTAL_A == 0 ) {
+                                result.OverTimeInfo[i].TOTAL_A = "";
+                            }else{
+                                result.OverTimeInfo[i].TOTAL_A = Util.timeformat(result.OverTimeInfo[i].TOTAL_A);
+                            }
+                            
+                            if ( result.OverTimeInfo[i].TOTAL_B == 0 ) {
+                                result.OverTimeInfo[i].TOTAL_B = "";
+                            }else{
+                                result.OverTimeInfo[i].TOTAL_B = Util.timeformat(result.OverTimeInfo[i].TOTAL_B);
+                            }
                             
                             if ( _.isUndefined(t) || t == null ) {
                                 result.OverTimeInfo[i].total_day = "";
