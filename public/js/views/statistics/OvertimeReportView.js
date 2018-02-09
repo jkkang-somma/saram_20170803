@@ -150,7 +150,7 @@ define([
     	    // this.grid= new Grid(_gridSchema.getDefault(this.gridOption));
             // this.grid.render();
 
-            this.selectReport(false);
+            this.selectReport(true);
 			
             return this;
         },
