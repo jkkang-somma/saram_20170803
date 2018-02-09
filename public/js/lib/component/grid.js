@@ -737,7 +737,8 @@ define([
 
     	    //Button Group
     	    if($("#"+this.options.el).find(".input-group")){
-    	        $("#"+this.options.el).find(".input-group").remove();
+                $("#"+this.options.el).find(".input-group").remove();
+                $('.tooltip').remove();
     	    }
     	    this._defatulInputGroup=$('<div class="input-group input-group-sm"></div>');
 
