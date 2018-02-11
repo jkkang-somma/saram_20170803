@@ -196,8 +196,13 @@ define([
                     }
                     for (var index in data.collection){
                         _option= data.collection[index];
-                        _code=_option.key;
-                        _text=_option.value;
+                        if (_option.hasOwnProperty('name') && _option.hasOwnProperty('separator')) {
+                            _code=_option.separator;
+                            _text=_option.name;
+                        } else {
+                            _code=_option.key;
+                            _text=_option.value;
+                        }
                         if (_code==data.value || (_.isEmpty(data.value)&&index==0) ){
                             _select.append("<option selected='selected' value='"+_code+"'>"+_text+"</option>");
                         } else {
