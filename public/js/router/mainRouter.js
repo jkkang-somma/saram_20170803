@@ -111,11 +111,16 @@ define([
 			
 			var _authArr=_.pluck(subMenu, "auth");
 			var _urlArr=_.pluck(subMenu, "hashTag");
+			
+			var _areaArr = _.pluck(subMenu, "area");
 		
 			var index= _.indexOf(_urlArr, _nextURL);
 			
 			if (_authArr[index] <= auth){ // 권한 있을 시
 				LOG.debug("next");
+				return next();
+			} else if (_areaArr[index] == '서울') {
+				LOG.debug("area next");
 				return next();
 			} else {//권한 없을 때
 				var isSubTag= false;

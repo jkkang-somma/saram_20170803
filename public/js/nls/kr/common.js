@@ -921,10 +921,12 @@ define({
             FAIL_RENT : "대출 할 수 없습니다",
             FAIL_RETURN : "반납 할 수 없습니다",
             FAIL_REGIST : "등록 할 수 없습니다",
+            FAIL_REGIST_AUTH : "등록 권한이 없습니다",
             FAIL_REGIST_NOT_SELECT : "등록 할 도서를 선택해주세요",
             FAIL_DELETE : {
                 FAIL : "삭제 할 수 없습니다",
-                USE_RENT : "대여 중인 책은 삭제 할 수 없습니다"
+                USE_RENT : "대여 중인 책은 삭제 할 수 없습니다",
+                AUTH : "삭제 권한이 없습니다"
             },
             VALIDATE_SERACH : "검색어가 필요합니다"
             

@@ -20,7 +20,8 @@
         	SELECT
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos,
+        		(SELECT area FROM dept_code_tbl where code = dept_code) dept_area
         	FROM members_tbl A
         	WHERE A.id=?
         </query>
@@ -28,7 +29,8 @@
         	SELECT 
         		id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         		ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
+        		position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos,
+        		(SELECT area FROM dept_code_tbl where code = dept_code) dept_area
         	FROM members_tbl A
 			WHERE (leave_company is null OR leave_company = "")
         		AND A.id=?

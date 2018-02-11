@@ -66,7 +66,7 @@ define([
                         "render": function(data, type, row) {
                             var opt = {
                                 book_id: row.book_id,
-                                isShowReturnBtn: (row.state > 0) ? true : false
+                                isShowReturnBtn: (Number(row.state) > 0) ? true : false
                             };
                             return _.template(BtnRentRerturnHTML)(opt);
                         }
@@ -190,6 +190,11 @@ define([
                                 label: i18Common.DIALOG.BUTTON.ADD,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialog) {
+
+                                    if (SessionModel.getUserInfo().id != '130702' && SessionModel.getUserInfo().id != '111102') {
+                                        Dialog.warning(i18Common.BOOK_LIST.MSG.FAIL_REGIST_AUTH);
+                                        return;
+                                    }
                                     bookRegistPopupView.registBook({
                                         success: function(model, response) {
                                             Dialog.show(i18Common.BOOK_LIST.MSG.SUCCESS_REGIST, function() {
@@ -250,7 +255,6 @@ define([
             Dialog.loading({
                 action: function() {
                     var dfd = new $.Deferred();
-                    _view.bookLibCollection
                     _view.bookLibCollection.fetch({
                         success: function() {
                             dfd.resolve();
@@ -261,15 +265,16 @@ define([
                     });
                     return dfd.promise();
                 },
-
                 actionCallBack: function(res) { //response schema
                     _view.grid.render();
-                    _view.subCategoryClick();
+                    _view.subCategoryClick(true);
                 },
                 errorCallBack: function(response) {
                     Dialog.error(i18Common.COMMUTE_RESULT_LIST.MSG.GET_DATA_FAIL);
                 },
             });
+
+
         },
         mainCategoryClick: function() { //대분류 선택시 소분류 변경
             var _view = this;
@@ -297,7 +302,7 @@ define([
             }
             this.subCategoryClick();
         },
-        subCategoryClick: function() {
+        subCategoryClick: function(first){
             var data = {
                 category_1: $(this.el).find("#categoryMainCombo option:selected").attr("val"),
                 category_2: $(this.el).find("#categorySubCombo option:selected").attr("val")
@@ -306,8 +311,10 @@ define([
             if (Util.isNull(data)) {
                 return;
             }
-
-            this.bookLibCollection.filterByCategory(data);
+            if (first == true)
+                this.bookLibCollection.filterByCategory(data, true);
+            else
+                    this.bookLibCollection.filterByCategory(data);
         },
         refresh: function() { //filter를 통한 목록 갱신
             this.grid._draw();
@@ -332,6 +339,7 @@ define([
                 label: i18Common.BOOK_LIST.DETAIL_DIALOG.BUTTON.RENT,
                 action: function(dialog) {
                     bookDetailPopupView.rentBook({
+                        wait: true,
                         success: function(model, response) {
                             Dialog.show(i18Common.BOOK_LIST.MSG.SUCCESS_RENT, function() {
                                 dialog.close();
@@ -351,6 +359,7 @@ define([
                 label: i18Common.BOOK_LIST.DETAIL_DIALOG.BUTTON.RETURN,
                 action: function(dialog) {
                     bookDetailPopupView.returnBook({
+                        wait: true,
                         success: function(model, response) {
                             Dialog.show(i18Common.BOOK_LIST.MSG.SUCCESS_RETURN, function() {
                                 dialog.close();
@@ -369,12 +378,17 @@ define([
                 cssClass: Dialog.CssClass.WARNING,
                 label: i18Common.BOOK_LIST.DETAIL_DIALOG.BUTTON.DEL,
                 action: function(dialog) {
-                    
+
                     if (_view.grid.getSelectItem().state > 0) {
                         Dialog.warning(i18Common.BOOK_LIST.MSG.FAIL_DELETE.USE_RENT);
                         return;
                     }
-                    
+
+                    if (SessionModel.getUserInfo().id != '130702' && SessionModel.getUserInfo().id != '111102') {
+                        Dialog.warning(i18Common.BOOK_LIST.MSG.FAIL_DELETE.AUTH);
+                        return;
+                    }
+
                     bookDetailPopupView.deleteBook({
                         success: function(model, response) {
                             Dialog.show(i18Common.BOOK_LIST.MSG.SUCCESS_DELETE, function() {
@@ -398,15 +412,36 @@ define([
 
             var btns;
             if (SessionModel.getUserInfo().admin > 0) {
-                btns = [deleteBtn, cancelBtn];
+
+                if (this.grid.getSelectItem().state == 0) {
+                    if (SessionModel.getUserInfo().id == '111102')
+                        btns = [deleteBtn, rentBtn, cancelBtn];
+                    else
+                        btns = [deleteBtn, cancelBtn];
+                }
+                else {
+                    if (this.grid.getSelectItem().rent_user == SessionModel.getUserInfo().name) {
+                        if (SessionModel.getUserInfo().id == '111102')
+                            btns = [deleteBtn, returnBtn, cancelBtn];
+                    }
+                    else
+                        btns = [deleteBtn, cancelBtn];
+                }
             }
             else {
                 if (this.grid.getSelectItem().state == 0) {
-                    btns = [rentBtn, cancelBtn];
+                    if (SessionModel.getUserInfo().id == '111102')
+                        btns = [deleteBtn, rentBtn, cancelBtn];
+                    else
+                        btns = [rentBtn, cancelBtn];
                 }
                 else {
-                    if (this.grid.getSelectItem().rent_user == SessionModel.getUserInfo().name)
-                        btns = [returnBtn, cancelBtn];
+                    if (this.grid.getSelectItem().rent_user == SessionModel.getUserInfo().name) {
+                        if (SessionModel.getUserInfo().id == '111102')
+                            btns = [deleteBtn, returnBtn, cancelBtn];
+                        else
+                            btns = [returnBtn, cancelBtn];
+                    }
                     else
                         btns = [cancelBtn];
                 }

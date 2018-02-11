@@ -12,12 +12,11 @@ define([
                 isFiltered: true
             }, options);
         },
-        filterByCategory: function(rule) {
+        filterByCategory: function(rule, first) {
 
-            if (this.origModels === undefined) {
+            if (first)
                 this.origModels = this.models;
-            }
-
+            
             if (rule.category_1 == 'all') {
                 this.models = this.origModels;
             }
@@ -26,7 +25,6 @@ define([
                 this.filterModels = this.where(rule);
                 this.models = this.filterModels;
             }
-
             this.reset(this.models);
         }
     });

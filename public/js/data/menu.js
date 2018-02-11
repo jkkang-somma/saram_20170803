@@ -174,6 +174,7 @@ define([
 			title:i18Common.MENU.SUB.LM.BOOK_LIBRARY, //"도서 목록",
             hashTag:"#booklibrary",
             auth:SCHEMAS.USER,
+            area:SCHEMAS.AREA,
             actionAuth: {
             	add:SCHEMAS.ADMIN,
             	remove:SCHEMAS.ADMIN
@@ -181,7 +182,8 @@ define([
         },{ 
         	title:i18Common.MENU.SUB.LM.BOOK_RENT_HISTORY, // "대출 이력",
         	hashTag:"#bookrenthistory",
-        	auth:SCHEMAS.USER
+        	auth:SCHEMAS.USER,
+        	area:SCHEMAS.AREA
         }]
 //		},{
 //		title:i18Common.MENU.TOP.RM,//회의실

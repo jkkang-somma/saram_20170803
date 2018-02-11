@@ -4,8 +4,8 @@
 var _ = require("underscore");  
 var Schemas = function (schemaName) {
 	
-	//  관리자,  임원,         부서장,      사용자
-    var ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0;
+	//  관리자,  임원,         부서장,      사용자      근무지
+    var ADMIN=9, EXECUTIVE=2, DEPT_BOSS=1, USER=0, AREA='서울';
 	
     // 기본 스키마 셋팅 이후 변환 매소드 반환
     var _data = {
@@ -48,6 +48,7 @@ var Schemas = function (schemaName) {
             part_code: null,
             part_name: null,
             gis_pos: null,
+            dept_area: null
         },
         position:{
         	code: null,
@@ -137,6 +138,18 @@ var Schemas = function (schemaName) {
             category_code : null,
             category_type : null,
             category_name : null
+        },
+        
+        book: {
+            book_id : null,
+            category_1 : null,
+            category_2 : null,
+            manage_no : null,
+            author : null,
+            publisher : null,
+            publishing_date : null,
+            img_src : null,
+            isbn : null
         }
     }
     

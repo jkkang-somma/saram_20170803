@@ -101,7 +101,6 @@ var BookLibrary = function() {
     var _getManageNo = function(data) {
         return new Promise(function(resolve, reject) {
 
-            console.log(data.manageno);
             BookLibraryDao.selectManageNo(data).then(function(result) {
 
                 var arr = [];
