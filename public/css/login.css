@@ -117,7 +117,7 @@ body.web-login .main-container{
     height: 768px;
     background: url('img/login/login_visual.png') no-repeat;
     margin: 0 auto;
-    background-position-y: -30px;
+    background-position-y: -15px;
     /* margin-top: calc(25% - 384px); */
 }
 body.web-login .login-form-section{
