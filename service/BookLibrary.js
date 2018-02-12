@@ -9,6 +9,10 @@ var digester = xml_digester.XmlDigester({});
 //검색어를 <b>로 처리하고 있어 삭제
 //제목과 별개로 부제목은 () 안에 들어감 부제목은 삭제
 var replaceAll = function(value) {
+    //값이 없을때 {}로 넘어옴.
+    if (typeof value == 'object')
+        return "";
+
     return value.replace(/<b>/gi, "").replace(/<\/b>/gi, "").replace(/\(.*\)/gi, "");
 };
 
@@ -56,7 +60,7 @@ var BookLibrary = function() {
             if (data.searchOpt == undefined || data.searchTxt == undefined)
                 reject();
 
-            var url = "https://openapi.naver.com/v1/search/book_adv.xml?" + data.searchOpt + "=" + data.searchTxt + "&display=50";
+            var url = "https://openapi.naver.com/v1/search/book_adv.xml?" + data.searchOpt + "=" + data.searchTxt + "&display=5";
             url = encodeURI(url);
 
             axios.create({
@@ -78,19 +82,34 @@ var BookLibrary = function() {
                         var items = result.rss.channel.item;
                         var newItems = [];
 
-                        _.each(items, function(item) {
+                        if (data.searchOpt == 'd_isbn') {
                             var obj = {
-                                'book_name': replaceAll(item.title),
-                                'img_src': item.image,
-                                'author': authorCut(replaceAll(item.author)),
-                                'publisher': replaceAll(item.publisher),
-                                'publishing_date': item.pubdate,
-                                'isbn': item.isbn,
-                                'price': item.price,
+                                'book_name': replaceAll(items.title),
+                                'img_src': items.image,
+                                'author': authorCut(replaceAll(items.author)),
+                                'publisher': replaceAll(items.publisher),
+                                'publishing_date': items.pubdate,
+                                'isbn': items.isbn,
+                                'price': items.price,
                                 'manage_no': ''
                             };
                             newItems.push(obj);
-                        });
+                        }
+                        else {
+                            _.each(items, function(item) {
+                                var obj = {
+                                    'book_name': replaceAll(item.title),
+                                    'img_src': item.image,
+                                    'author': authorCut(replaceAll(item.author)),
+                                    'publisher': replaceAll(item.publisher),
+                                    'publishing_date': item.pubdate,
+                                    'isbn': item.isbn,
+                                    'price': item.price,
+                                    'manage_no': ''
+                                };
+                                newItems.push(obj);
+                            });
+                        }
                         resolve(newItems);
                     }
                 })
@@ -105,16 +124,14 @@ var BookLibrary = function() {
 
                 var arr = [];
                 _.each(result, function(item) {
-                   arr.push(parseInt(item.manage_no.replace(data.manageno, '')));
+                    arr.push(parseInt(item.manage_no.replace(data.manageno, '')));
                 });
 
-                console.log(arr);
-
                 if (arr.length == 0)
-                    resolve({manage_no: 1});
+                    resolve({ manage_no: 1 });
 
                 if (arr.length == 1 && arr[0] != 1)
-                    resolve({manage_no: 2});
+                    resolve({ manage_no: 2 });
 
                 var currentNo = 0;
                 for (var i = 1; i < arr.length; i++) {
@@ -125,10 +142,10 @@ var BookLibrary = function() {
                         continue;
 
                     if (previousNo + 1 != currentNo) {
-                        resolve({manage_no: previousNo + 1});
+                        resolve({ manage_no: previousNo + 1 });
                     }
                 }
-                resolve({manage_no: currentNo + 1});
+                resolve({ manage_no: currentNo + 1 });
             });
         });
     }

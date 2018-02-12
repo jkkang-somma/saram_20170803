@@ -31,39 +31,39 @@ define([
     'collection/book/BookCategoryCollection',
     'collection/book/BookManageCollection'
 ], function(
-    $, 
-    _, 
-    Backbone, 
-    Util, 
-    i18Common, 
+    $,
+    _,
+    Backbone,
+    Util,
+    i18Common,
     Schemas,
-    Grid, 
-    Dialog, 
-    Datatables, 
-    Code, 
+    Grid,
+    Dialog,
+    Datatables,
+    Code,
     Moment,
-    BaseView, 
-    SessionModel, 
-    ProgressbarView, 
-    ContentHTML, 
-    BookRowHTML, 
-    RowTextInputHTML, 
-    RowComboHTML, 
-    RowHTML, 
+    BaseView,
+    SessionModel,
+    ProgressbarView,
+    ContentHTML,
+    BookRowHTML,
+    RowTextInputHTML,
+    RowComboHTML,
+    RowHTML,
     RowButtonContainerHTML,
-    RowButtonHTML, 
-    LayoutHTML, 
+    RowButtonHTML,
+    LayoutHTML,
     BookRegistModel,
-    BookModel, 
-    BookRegistCollection, 
-    BookCategoryCollection, 
+    BookModel,
+    BookRegistCollection,
+    BookCategoryCollection,
     BookManageCollection
 ) {
     var alignDigit = function(val, len) {
 
         if (val == undefined || val.length == 0)
             return val;
-            
+
         val = val + "";
 
         var temp = "";
@@ -83,13 +83,24 @@ define([
         el: ".main-container",
         initialize: function(data) {
             this.bookRegistCollection = new BookRegistCollection();
+            this.manageCollection = new BookManageCollection();
             this.gridOption = {
                 el: "BookRegist_content",
                 id: "BookRegistListGrid",
                 column: [{
-                    "title": i18Common.BOOK_LIST.NAME,
+                    "title": i18Common.BOOK_LIST.DETAIL_DIALOG.BOOK_NAME,
                     "render": function(data, type, row) {
                         return _.template(BookRowHTML)(row);
+                    }
+                }, {
+                    "title": i18Common.BOOK_LIST.DETAIL_DIALOG.BOOK_PUBLISHING_DATE,
+                    "render": function(data, type, row) {
+                        return Moment(row.publishing_date, 'YYYYMMDD').format('YYYY-MM-DD');
+                    }
+                }, {
+                    "title": i18Common.BOOK_LIST.DETAIL_DIALOG.BOOK_ISBN,
+                    "render": function(data, type, row) {
+                        return row.isbn;
                     }
                 }],
                 detail: true,
@@ -167,16 +178,32 @@ define([
                 }
             }));
 
+            var _manageNoInput = $(_.template(RowTextInputHTML)({
+                obj: {
+                    id: "manageNoInput",
+                    label: "관리번호"
+                }
+            }));
+
             _regiCategoryMainCombo.removeClass();
-            _regiCategoryMainCombo.addClass('col-sm-6');
+            _regiCategoryMainCombo.addClass('col-sm-4');
 
             _regiCategorySubCombo.removeClass();
-            _regiCategorySubCombo.addClass('col-sm-6');
+            _regiCategorySubCombo.addClass('col-sm-4');
+
+            _manageNoInput.removeClass();
+            _manageNoInput.addClass('col-sm-4');
+            _manageNoInput.find('#manageNoInput').attr('disabled', 'disabled');
 
             var _row2 = $(RowHTML);
             _row2.append(_regiCategoryMainCombo);
             _row2.append(_regiCategorySubCombo);
+            _row2.append(_manageNoInput);
             _layOut.append(_row2)
+
+            _regiCategorySubCombo.change(function() {
+                _view.getManageNo();
+            });
 
             _view.categoryCollection = new BookCategoryCollection();
             _view.categoryCollection.fetch({
@@ -195,6 +222,7 @@ define([
                             }
                         }
                     });
+                    _view.getManageNo();
                 },
                 error: function() {
                     alert("카테고리 불러 올수 없음");
@@ -202,7 +230,6 @@ define([
             });
 
             _regiCategoryMainCombo.change(function() {
-
                 var selectedVal = $(_view.el).find("#regiCategoryMainCombo option:selected").attr("val");
                 $(_view.el).find("#regiCategorySubCombo").empty();
 
@@ -280,38 +307,44 @@ define([
 
             var mainCate = $(this.el).find("#regiCategoryMainCombo option:selected").attr("val");
             var subCate = $(this.el).find("#regiCategorySubCombo option:selected").attr("val");
-            var cate = "YES-" + mainCate + "-" + subCate;
+            var manageNo = $(this.el).find("#manageNoInput").val();
 
-            var selectedItem = this.grid.getSelectItem();
-            this.manageCollection.fetch({
+            var param = {
+                category_1: mainCate,
+                category_2: subCate,
+                manage_no: manageNo,
+                book_name: this.grid.getSelectItem().book_name,
+                author: this.grid.getSelectItem().author,
+                publisher: this.grid.getSelectItem().publisher,
+                publishing_date: this.grid.getSelectItem().publishing_date,
+                img_src: this.grid.getSelectItem().img_src,
+                isbn: this.grid.getSelectItem().isbn
+            };
+
+            var bookModel = new BookModel();
+            bookModel.save(param, opt);
+        },
+        getManageNo: function() {
+            var _view = this;
+            var mainCate = $(_view.el).find("#regiCategoryMainCombo option:selected").attr("val");
+            var subCate = $(_view.el).find("#regiCategorySubCombo option:selected").attr("val");
+            var cate = "YES-" + mainCate + "-" + subCate;
+            var managetInput = $(_view.el).find("#manageNoInput");
+
+            managetInput.attr('disabled', 'disabled');
+            _view.manageCollection.fetch({
                 data: { manageno: cate },
                 success: function(result) {
-                    
                     var numb = result.models[0].attributes.manage_no;
                     var manage_no = cate + alignDigit(numb, 3);
-                    
-                    var param = {
-                        category_1 : mainCate,
-                        category_2 : subCate,
-                        manage_no : manage_no,
-                        book_name : selectedItem.book_name,
-                        author : selectedItem.author,
-                        publisher : selectedItem.publisher,
-                        publishing_date : selectedItem.publishing_date,
-                        img_src : selectedItem.img_src,
-                        isbn : selectedItem.isbn
-                    };
-                    
-                    var bookModel = new BookModel();
-                    bookModel.save(param, opt);
 
+                    $(_view.el).find("#manageNoInput").val(manage_no);
+                    managetInput.removeAttr('disabled');
                 },
                 error: function(result) {
                     Dialog.error("관리번호 불러 올수 없음");
-                    return null;
                 }
             });
-
         }
     });
 

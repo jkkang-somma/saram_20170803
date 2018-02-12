@@ -176,7 +176,7 @@ define([
             });
 
             //도서등록
-            if (SessionModel.getUserInfo().admin > 0 || SessionModel.getUserInfo().id == '111102') {
+            if (SessionModel.getUserInfo().admin == Schemas.ADMIN) {
                 _buttons.push({
                     type: "custom",
                     name: "add",
@@ -186,15 +186,11 @@ define([
                         Dialog.show({
                             title: i18Common.BOOK_LIST.ADD_BOOK,
                             content: bookRegistPopupView,
+                            size: 'size-wide',
                             buttons: [{
                                 label: i18Common.DIALOG.BUTTON.ADD,
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialog) {
-
-                                    if (SessionModel.getUserInfo().id != '130702' && SessionModel.getUserInfo().id != '111102') {
-                                        Dialog.warning(i18Common.BOOK_LIST.MSG.FAIL_REGIST_AUTH);
-                                        return;
-                                    }
                                     bookRegistPopupView.registBook({
                                         success: function(model, response) {
                                             Dialog.show(i18Common.BOOK_LIST.MSG.SUCCESS_REGIST, function() {
@@ -302,7 +298,7 @@ define([
             }
             this.subCategoryClick();
         },
-        subCategoryClick: function(first){
+        subCategoryClick: function(first) {
             var data = {
                 category_1: $(this.el).find("#categoryMainCombo option:selected").attr("val"),
                 category_2: $(this.el).find("#categorySubCombo option:selected").attr("val")
@@ -314,7 +310,7 @@ define([
             if (first == true)
                 this.bookLibCollection.filterByCategory(data, true);
             else
-                    this.bookLibCollection.filterByCategory(data);
+                this.bookLibCollection.filterByCategory(data);
         },
         refresh: function() { //filter를 통한 목록 갱신
             this.grid._draw();
@@ -384,7 +380,7 @@ define([
                         return;
                     }
 
-                    if (SessionModel.getUserInfo().id != '130702' && SessionModel.getUserInfo().id != '111102') {
+                    if (SessionModel.getUserInfo().admin != Schemas.ADMIN) {
                         Dialog.warning(i18Common.BOOK_LIST.MSG.FAIL_DELETE.AUTH);
                         return;
                     }
@@ -410,42 +406,24 @@ define([
                 }
             };
 
-            var btns;
-            if (SessionModel.getUserInfo().admin > 0) {
+            var btns = [];
+            //관리자는 삭제가 가능
+            if (SessionModel.getUserInfo().admin == Schemas.ADMIN) {
+                btns.push(deleteBtn);
+            }
 
-                if (this.grid.getSelectItem().state == 0) {
-                    if (SessionModel.getUserInfo().id == '111102')
-                        btns = [deleteBtn, rentBtn, cancelBtn];
-                    else
-                        btns = [deleteBtn, cancelBtn];
-                }
-                else {
-                    if (this.grid.getSelectItem().rent_user == SessionModel.getUserInfo().name) {
-                        if (SessionModel.getUserInfo().id == '111102')
-                            btns = [deleteBtn, returnBtn, cancelBtn];
-                    }
-                    else
-                        btns = [deleteBtn, cancelBtn];
-                }
+            //대출가능 상태
+            if (this.grid.getSelectItem().state == 0) {
+                btns.push(rentBtn);
             }
+            //대출중 상태
             else {
-                if (this.grid.getSelectItem().state == 0) {
-                    if (SessionModel.getUserInfo().id == '111102')
-                        btns = [deleteBtn, rentBtn, cancelBtn];
-                    else
-                        btns = [rentBtn, cancelBtn];
-                }
-                else {
-                    if (this.grid.getSelectItem().rent_user == SessionModel.getUserInfo().name) {
-                        if (SessionModel.getUserInfo().id == '111102')
-                            btns = [deleteBtn, returnBtn, cancelBtn];
-                        else
-                            btns = [returnBtn, cancelBtn];
-                    }
-                    else
-                        btns = [cancelBtn];
+                //대출자와 로그인된 유저가 같음
+                if (this.grid.getSelectItem().rent_user == SessionModel.getUserInfo().name) {
+                    btns.push(returnBtn);
                 }
             }
+            btns.push(cancelBtn);
 
             Dialog.show({
                 title: i18Common.BOOK_LIST.DETAIL_DIALOG.TITLE,
