@@ -1,0 +1,52 @@
+
+[[도서목록]]
+대출현황과 통합
+
+-대출상태인 책 검색
+검색창에 '대출중'으로 검색하거나 상단의 버튼을 클릭하면 (전체, 대출중, 대출가능) 으로 필터링됨
+
+-관리자의 경우 삭제를 할수 있음. (대출중인 책은 제외)
+-권한없는 사용자는 대출가능상태의 책을 대출할수 있
+-권한없는 사용자는 본인이 대출한 책을 반납할수 있음
+-권한없는 사용자가 타인이 대출중인 책을 대출할수 없음
+
+if (관리자) {
+    삭제, 취소
+    //대출중인 책은 삭제할수없음.
+} else {
+    if (대출중) {
+        if (대출자) {
+            반납, 취소    
+        } else {
+            취소
+        }
+        대출, 취소
+    }
+}
+
+[[대출현황]] (삭제)
+-무의미한 페이지로 판단되어 도서목록에서 한번에 확인할수 있도록 통합.
+
+[[대출이력]]
+-대출반납이력 insert시 book_id로 사용하면 책이 삭제됐을경우 join이 문제가 됨. 책 이름으로 insert.
+-대출이력 기간검색 후 토글버튼으로 대출, 반납된 책을 확인할수 있음
+
+[[도서등록]]
+도서목록에 도서 등록 추가
+
+
+삭제 테스트해야함
+
+
+
+
+
+대출 갱신안되는문제
+
+수원은 메뉴안보이게
+
+등록 삭제는 은영씨랑 나만
+
+
+
+SELECT book.book_id, book.category_1, book.category_2, book.manage_no, book.book_name, book.author, book.publisher, DATE_FORMAT(book.publishing_date, '%Y-%m-%d') as publishing_date, book.img_src, book.isbn, IF (rent.rent_id is NULL, '0', '1') as state, IF (rent.user_id is NULL, '', (select name from members_tbl where id=rent.user_id)) as rent_user, COALESCE(rent.due_date,'') as due_date FROM book_library_tbl book LEFT OUTER JOIN book_rent_tbl rent ON rent.book_id=book.book_id ORDER BY field (book.category_1, 'OS', 'DL', 'DE', 'PL', 'DP', 'DM', 'TE', 'PR', 'CU'), book.manage_no;
