@@ -127,13 +127,14 @@ define([
             var _searchOptionCombo = $(_.template(RowComboHTML)({
                 obj: {
                     id: "searchOptionCombo",
-                    label: ""
+                    label: "구분"
                 }
             }));
 
             var _searchInput = $(_.template(RowTextInputHTML)({
                 obj: {
                     id: "searchInput",
+                    label: "검색어"
                 }
             }));
 

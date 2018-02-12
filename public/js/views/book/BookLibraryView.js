@@ -90,7 +90,6 @@ define([
                         }
                     }
                 ],
-                initLength: 25,
                 dataschema: ["book_name", "manage_no", "state", "due_date"],
                 collection: this.bookLibCollection,
                 detail: true,

@@ -60,7 +60,7 @@ var BookLibrary = function() {
             if (data.searchOpt == undefined || data.searchTxt == undefined)
                 reject();
 
-            var url = "https://openapi.naver.com/v1/search/book_adv.xml?" + data.searchOpt + "=" + data.searchTxt + "&display=5";
+            var url = "https://openapi.naver.com/v1/search/book_adv.xml?" + data.searchOpt + "=" + data.searchTxt + "&display=50";
             url = encodeURI(url);
 
             axios.create({

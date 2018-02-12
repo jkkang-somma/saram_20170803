@@ -83,14 +83,13 @@ define([
                         }
                     }
                 ],
-                initLength: 25,
                 dataschema: ["book_name", "manage_no", "name", "state", 'modify_date'],
                 collection: this.bookRentHistoryCollection,
                 detail: true,
                 view: this,
                 fetch: false,
                 order: [
-                    [0, "asc"]
+                    [5, "asc"]
                 ]
             };
         },
