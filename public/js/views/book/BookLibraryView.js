@@ -6,6 +6,7 @@ define([
     'core/BaseView',
     'grid',
     'schemas',
+    'cmoment',
     'i18n!nls/common',
     'dialog',
     'text!templates/layout/default.html',
@@ -30,6 +31,7 @@ define([
     BaseView,
     Grid,
     Schemas,
+    Moment,
     i18Common,
     Dialog,
     LayoutHTML,
@@ -90,6 +92,17 @@ define([
                         }
                     }
                 ],
+                rowCallback: function(row, data) {
+                    if (data.due_date == undefined || data.due_date == '')
+                        return;
+
+                    var now = Moment(new Date()).format('YYYY-MM-DD'); 
+                    if (Moment(now).isAfter(data.due_date)) {
+                        $(row).addClass("absentce");
+                    } else {
+                        $(row).removeClass("absentce");
+                    }
+                },
                 dataschema: ["book_name", "manage_no", "state", "due_date"],
                 collection: this.bookLibCollection,
                 detail: true,
