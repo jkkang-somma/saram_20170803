@@ -2609,7 +2609,9 @@
 				IF (
 					rent.user_id is NULL, '', (select name from members_tbl where id=rent.user_id)
 				) as rent_user,
-				COALESCE(rent.due_date,'') as due_date
+				IF( 
+					rent.due_date is null, '', DATE_FORMAT(rent.due_date, '%Y-%m-%d' )
+				) as due_date
 			FROM
 				book_library_tbl book
 			LEFT OUTER JOIN 
