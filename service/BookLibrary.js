@@ -2,9 +2,9 @@ var _ = require("underscore");
 var debug = require('debug')('BookLibrary');
 var Promise = require('bluebird');
 var BookLibraryDao = require('../dao/bookLibraryDao.js');
-var axios = require("axios");
 var xml_digester = require("xml-digester");
 var digester = xml_digester.XmlDigester({});
+var https = require('https');
 
 //검색어를 <b>로 처리하고 있어 삭제
 //제목과 별개로 부제목은 () 안에 들어감 부제목은 삭제
@@ -21,6 +21,17 @@ var authorCut = function(value) {
     var authors = value.split("|");
     if (authors.length > 0)
         return authors[0];
+    else
+        return value;
+}
+
+var imgCut = function(value) {
+    if (typeof value == 'object')
+        return "";
+        
+    var imgStr = value.split("?");
+    if (imgStr.length > 0)
+        return imgStr[0];
     else
         return value;
 }
@@ -60,60 +71,78 @@ var BookLibrary = function() {
             if (data.searchOpt == undefined || data.searchTxt == undefined)
                 reject();
 
-            var url = "https://openapi.naver.com/v1/search/book_adv.xml?" + data.searchOpt + "=" + data.searchTxt + "&display=50";
+            var url = "/v1/search/book_adv.xml?" + data.searchOpt + "=" + data.searchTxt + "&display=50";
             url = encodeURI(url);
 
-            axios.create({
-                method: 'get',
-                url: url,
+            var options = {
+                hostname: 'openapi.naver.com',
+                path: url,
+                method: 'GET',
                 headers: {
-                    'User-Agent': 'curl/7.43.0',
+                    'User-Agent': 'curl/7.49.1',
+                    'Accept': '*/*',
                     'X-Naver-Client-Id': 'gzDvG8ypz8FoBa27OGHP',
                     'X-Naver-Client-Secret': 'indsAW7t2X'
                 }
-            }).get(url).then(function(response) {
+            };
 
-                digester.digest(response.data, function(err, result) {
-                    if (err) {
-                        console.log(err);
-                        reject();
-                    }
-                    else {
-                        var items = result.rss.channel.item;
-                        var newItems = [];
+            var req = https.request(options, function(res) {
+                var bd = [];
 
-                        if (data.searchOpt == 'd_isbn') {
-                            var obj = {
-                                'book_name': replaceAll(items.title),
-                                'img_src': items.image,
-                                'author': authorCut(replaceAll(items.author)),
-                                'publisher': replaceAll(items.publisher),
-                                'publishing_date': items.pubdate,
-                                'isbn': items.isbn,
-                                'price': items.price,
-                                'manage_no': ''
-                            };
-                            newItems.push(obj);
+                res.on('data', function(d) {
+                    bd.push(d);
+                });
+
+                res.on('end', function() {
+                    digester.digest(Buffer.concat(bd).toString(), function(err, result) {
+                        if (err) {
+                            console.log(err);
+                            reject();
                         }
                         else {
-                            _.each(items, function(item) {
+                            var total = result.rss.channel.total;
+                            var items = result.rss.channel.item;
+                            var newItems = [];
+
+                            if (total == 1) {
                                 var obj = {
-                                    'book_name': replaceAll(item.title),
-                                    'img_src': item.image,
-                                    'author': authorCut(replaceAll(item.author)),
-                                    'publisher': replaceAll(item.publisher),
-                                    'publishing_date': item.pubdate,
-                                    'isbn': item.isbn,
-                                    'price': item.price,
+                                    'book_name': replaceAll(items.title),
+                                    'img_src': imgCut(items.image),
+                                    'author': authorCut(replaceAll(items.author)),
+                                    'publisher': replaceAll(items.publisher),
+                                    'publishing_date': items.pubdate,
+                                    'isbn': items.isbn,
+                                    'price': items.price,
                                     'manage_no': ''
                                 };
                                 newItems.push(obj);
-                            });
+                            }
+                            else if (total > 1) {
+                                _.each(items, function(item) {
+                                    var obj = {
+                                        'book_name': replaceAll(item.title),
+                                        'img_src': imgCut(item.image),
+                                        'author': authorCut(replaceAll(item.author)),
+                                        'publisher': replaceAll(item.publisher),
+                                        'publishing_date': item.pubdate,
+                                        'isbn': item.isbn,
+                                        'price': item.price,
+                                        'manage_no': ''
+                                    };
+                                    newItems.push(obj);
+                                });
+                            }
+                            resolve(newItems);
                         }
-                        resolve(newItems);
-                    }
-                })
+                    })
+                });
             });
+
+            req.on('error', function(e) {
+                console.error(e);
+            });
+
+            req.end();
         });
     }
 
