@@ -9,11 +9,13 @@ var ReportDao= require('../dao/ReportDao.js');
 var commuteYearExcelCreater = require('../excel/CommuteYearExcelCreater.js');
 var commuteYearExcelCreater25 = require('../excel/CommuteYearExcelCreater25.js');
 var commuteResultExcelCreater = require('../excel/CommuteResultExcelCreater.js');
+var commuteYearCsvCreater = require('../excel/commuteYearCsvCreater.js');
+var commuteYearCsvCreater25 = require('../excel/commuteYearCsvCreater25.js');
 
 
 var Report = function() {	
 
-	var _getCommuteYearReport = function(selObj) {		
+	var _getCommuteYearReport = function(selObj, isCsv) {		
 	    return new Promise(function(resolve, reject){// promise patten
 
 			var queryResults = [];
@@ -31,18 +33,26 @@ var Report = function() {
 			queryResults.push( ReportDao.selectPayedOverTimeWorkReport(selObj) );	// added 2018.01.22 report payed work time
 	    	
 	    	Promise.all(queryResults).then(function(result){
-				commuteYearExcelCreater.createExcel(selObj, result).then(function(excelResult) {
-					resolve( excelResult);
-				}).catch(function(err) {
-		        	reject(err);
-		        })
+				if ( isCsv == "true" ) {
+					commuteYearCsvCreater.createCsv(selObj, result).then(function(csvResult) {
+						resolve( csvResult);
+					}).catch(function(err) {
+						reject(err);
+					})
+				}else{
+					commuteYearExcelCreater.createExcel(selObj, result).then(function(excelResult) {
+						resolve( excelResult);
+					}).catch(function(err) {
+						reject(err);
+					})
+				}
 	        }).catch(function(err) {
 	        	reject(err);
 	        })
 	    });
 	};
 	
-	var _getCommuteYearReport25 = function(selObj) {		
+	var _getCommuteYearReport25 = function(selObj, isCsv) {		
 	    return new Promise(function(resolve, reject){// promise patten
 
 			var queryResults = [];
@@ -50,16 +60,24 @@ var Report = function() {
 			// 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함 
 			queryResults.push( ReportDao.selectReportUsers() );
 			queryResults.push( ReportDao.selectOverTimeWorkeReport25(selObj) );	// 잔업 시간
-			debug("queryResults1: " + queryResults);
 			queryResults.push( ReportDao.selectOverTimeWorkTypeReport25(selObj) );	// 잔업 타입
 			queryResults.push( ReportDao.selectOverTimeWorkPayReport25(selObj) );	// 잔업 수당
 	    	
 	    	Promise.all(queryResults).then(function(result){
-				commuteYearExcelCreater25.createExcel(selObj, result).then(function(excelResult) {
-					resolve( excelResult);
-				}).catch(function(err) {
-		        	reject(err);
-		        })
+				if ( isCsv == "true" ) {
+					commuteYearCsvCreater25.createCsv(selObj, result).then(function(excelResult) {
+						resolve( excelResult);
+					}).catch(function(err) {
+						reject(err);
+					})
+				}else{
+					commuteYearExcelCreater25.createExcel(selObj, result).then(function(excelResult) {
+						resolve( excelResult);
+					}).catch(function(err) {
+						reject(err);
+					})
+				}
+
 	        }).catch(function(err) {
 	        	reject(err);
 	        })

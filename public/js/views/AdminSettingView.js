@@ -37,17 +37,27 @@ define([
 						}
 						
 						var url = "";
+						var isCsv = true;
+						
 						if (_formObj.reportType == "commuteYear") {
 							url = "/report/commuteYearReport";
+							isCsv = false;
+						}else if (_formObj.reportType == "commuteYear_csv") {
+							url = "/report/commuteYearReport";
+							isCsv = true;
 						}else if (_formObj.reportType == "commuteYear25") {
 							url = "/report/commuteYearReport25";
+							isCsv = false;
+						}else if (_formObj.reportType == "commuteYear25_csv") {
+							url = "/report/commuteYearReport25";
+							isCsv = true;
 						} else if (_formObj.reportType == "commuteResult"){
 							url = "/report/commuteResultTblReport";
 						} else {
 							new Error("Error: Invalid report type.");
 						}
 						
-						url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker;
+						url += "?startTime=" + _formObj.startTime + "&endTime="+ _formObj.endTime +"&isInLeaveWorker=" + _formObj.isInLeaveWorker + "&csv=" + isCsv;
 						
 			     		$.fileDownload(url, {
 			     		    successCallback: function (url) {
@@ -121,9 +131,11 @@ define([
 			                name:"reportType",
 			                label:"자료 선택",
 			                collection:[
-			                            {key:"commuteYear",value:"근태 보고서 - XLS"},
-			                            {key:"commuteYear25",value:"초과근무수당_25 - XLS"},
-			                            {key:"commuteResult",value:"근태 DB 자료 - CSV"}
+										{key:"commuteYear_csv",value:"CSV - 근태 보고서"},
+										{key:"commuteYear25_csv",value:"CSV - 초과근무수당_25"},
+			                            {key:"commuteYear",value:"XLS - 근태 보고서"},
+			                            {key:"commuteYear25",value:"XLS - 초과근무수당_25"},
+			                            {key:"commuteResult",value:"CSV - 근태 DB 자료"}
 			                	],
 			                group:"reportGroup"
 			        	}, {

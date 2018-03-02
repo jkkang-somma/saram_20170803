@@ -15,7 +15,7 @@ router.route('/commuteYearReport')
 			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
 	};
 			
-	Report.getCommuteYearReport(searchValObj).then(function(filePullPath) {
+	Report.getCommuteYearReport(searchValObj, req.query.csv).then(function(filePullPath) {
 		res.cookie("fileDownload", true);
 		res.download(filePullPath, function(err) {
 			if (err) {
@@ -44,7 +44,7 @@ router.route('/commuteYearReport25')
 			isInLeaveWorker : (req.query.isInLeaveWorker == "true") ? true : false
 	};
 			
-	Report.getCommuteYearReport25(searchValObj).then(function(filePullPath) {
+	Report.getCommuteYearReport25(searchValObj, req.query.csv).then(function(filePullPath) {
 		res.cookie("fileDownload", true);
 		res.download(filePullPath, function(err) {
 			if (err) {
