@@ -21,7 +21,8 @@ var CommuteYearCsvCreater = function () {
 
         holi1: "연차_1",
         holi2: "2", holi3: "3", holi4: "4", holi5: "5", holi6: "6", holi7: "7", holi8: "8", holi9: "9", holi10: "10", holi11: "11", holi12: "12", 
-        holi_total: "합계",
+        holi_total: "가용",
+        holi_remain: "사용",
 
         total_ot1: "평일 잔업시간_1", // over time
         total_ot2: "2", total_ot3: "3", total_ot4: "4", total_ot5: "5", total_ot6: "6", total_ot7: "7", total_ot8: "8", total_ot9: "9", total_ot10: "10", total_ot11: "11", total_ot12: "12", 
@@ -143,7 +144,8 @@ var CommuteYearCsvCreater = function () {
                                     for ( var pIdx = 1 ; pIdx <= 12 ; pIdx++ ) {
                                         curFR["holi"+pIdx] = curR[pIdx];
                                     }
-                                    curFR.holi_total = curR.total;
+                                    curFR.holi_total = curR.total_day;
+                                    curFR.holi_remain = curR.holiday;
                                 }
 
                                 // 평일 잔업 시간
