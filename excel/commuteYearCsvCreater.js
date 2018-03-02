@@ -172,9 +172,9 @@ var CommuteYearCsvCreater = function () {
                                 // 잔업 수당 금액
                                 if ( dataIdx == 5 ) {
                                     for ( var pIdx = 1 ; pIdx <= 12 ; pIdx++ ) {
-                                        curFR["ot_pay"+pIdx] = curR[pIdx];
+                                        curFR["ot_pay_"+pIdx] = curR[pIdx];
                                     }
-                                    curFR.total_ot_total = curR.total;
+                                    curFR.ot_pay_total = curR.total;
                                 }
 
                                 // 휴일근무 시간

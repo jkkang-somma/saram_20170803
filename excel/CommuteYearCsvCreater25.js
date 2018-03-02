@@ -19,9 +19,9 @@ var CommuteYearCsvCreater25 = function () {
         total_ot2: "2", total_ot3: "3", total_ot4: "4", total_ot5: "5", total_ot6: "6", total_ot7: "7", total_ot8: "8", total_ot9: "9", total_ot10: "10", total_ot11: "11", total_ot12: "12", 
         total_ot_total: "합계",
 
-        pay_ot1: "결재 후 평일 잔업시간_1",
-        pay_ot2: "2", pay_ot3: "3", pay_ot4: "4", pay_ot5: "5", pay_ot6: "6", pay_ot7: "7", pay_ot8: "8", pay_ot9: "9", pay_ot10: "10", pay_ot11: "11", pay_ot12: "12", 
-        pay_ot_total: "합계",
+        // pay_ot1: "결재 후 평일 잔업시간_1",
+        // pay_ot2: "2", pay_ot3: "3", pay_ot4: "4", pay_ot5: "5", pay_ot6: "6", pay_ot7: "7", pay_ot8: "8", pay_ot9: "9", pay_ot10: "10", pay_ot11: "11", pay_ot12: "12", 
+        // pay_ot_total: "합계",
 
         pt_1a : "잔업수당 타입_1A",   // pay type
                            pt_1b:"1B",        pt_1c:"1C", 
@@ -126,9 +126,9 @@ var CommuteYearCsvCreater25 = function () {
                                 // 잔업 수당 금액
                                 if ( dataIdx == 3 ) {
                                     for ( var pIdx = 1 ; pIdx <= 12 ; pIdx++ ) {
-                                        curFR["ot_pay"+pIdx] = curR[pIdx];
+                                        curFR["ot_pay_"+pIdx] = curR[pIdx];
                                     }
-                                    curFR.total_ot_total = curR.total;
+                                    curFR.ot_pay_total = curR.total;
                                 }
 
                                 break;
