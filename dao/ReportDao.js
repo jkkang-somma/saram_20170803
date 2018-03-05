@@ -142,4 +142,32 @@ ReportDao.prototype.selectOverTimeWorkPayReport25 =  function (selObj) {
     return db.query(group, "selectOverTimeWorkPayReport25", param);
 };
 
+// 결제 후 잔업시간(분) 현황 (평일)
+ReportDao.prototype.selectPayedOverTimeWorkReport25 = function(selObj) {
+    
+     var preYear = selObj.year - 1;
+    var year = selObj.year;
+    
+	var param = [];
+	
+	param.push(preYear+"-12-26");  param.push(year+"-01-25");
+    param.push(year+"-01-26");     param.push(year+"-02-25");
+    param.push(year+"-02-26");     param.push(year+"-03-25");
+    param.push(year+"-03-26");     param.push(year+"-04-25");
+    param.push(year+"-04-26");     param.push(year+"-05-25");
+    param.push(year+"-05-26");     param.push(year+"-06-25");
+    param.push(year+"-06-26");     param.push(year+"-07-25");
+    param.push(year+"-07-26");     param.push(year+"-08-25");
+    param.push(year+"-08-26");     param.push(year+"-09-25");
+    param.push(year+"-09-26");     param.push(year+"-10-25");
+    param.push(year+"-10-26");     param.push(year+"-11-25");
+    param.push(year+"-11-26");     param.push(year+"-12-25");
+    param.push(year);
+    param.push(preYear+"-12-26");  param.push(year+"-12-25");
+    
+    return db.query(group, "selectPayedOverTimeWorkReport25", param);
+    
+};
+
+
 module.exports = new ReportDao();

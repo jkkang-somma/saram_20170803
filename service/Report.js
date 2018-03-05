@@ -9,8 +9,8 @@ var ReportDao= require('../dao/ReportDao.js');
 var commuteYearExcelCreater = require('../excel/CommuteYearExcelCreater.js');
 var commuteYearExcelCreater25 = require('../excel/CommuteYearExcelCreater25.js');
 var commuteResultExcelCreater = require('../excel/CommuteResultExcelCreater.js');
-var commuteYearCsvCreater = require('../excel/commuteYearCsvCreater.js');
-var commuteYearCsvCreater25 = require('../excel/commuteYearCsvCreater25.js');
+var commuteYearCsvCreater = require('../excel/CommuteYearCsvCreater.js');
+var commuteYearCsvCreater25 = require('../excel/CommuteYearCsvCreater25.js');
 
 
 var Report = function() {	
@@ -60,6 +60,7 @@ var Report = function() {
 			// 레포트 사용자 리스트와 각 통계 리스트의 정렬 순서는 동일해야함 
 			queryResults.push( ReportDao.selectReportUsers() );
 			queryResults.push( ReportDao.selectOverTimeWorkeReport25(selObj) );	// 잔업 시간
+			queryResults.push( ReportDao.selectPayedOverTimeWorkReport25(selObj) );	// added 2018.03.05 결제 후 잔업시간(분) 현황 (평일)
 			queryResults.push( ReportDao.selectOverTimeWorkTypeReport25(selObj) );	// 잔업 타입
 			queryResults.push( ReportDao.selectOverTimeWorkPayReport25(selObj) );	// 잔업 수당
 	    	

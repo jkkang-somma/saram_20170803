@@ -18,10 +18,10 @@ var CommuteYearCsvCreater25 = function () {
         total_ot1: "평일 잔업시간_1", // over time
         total_ot2: "2", total_ot3: "3", total_ot4: "4", total_ot5: "5", total_ot6: "6", total_ot7: "7", total_ot8: "8", total_ot9: "9", total_ot10: "10", total_ot11: "11", total_ot12: "12", 
         total_ot_total: "합계",
-
-        // pay_ot1: "결재 후 평일 잔업시간_1",
-        // pay_ot2: "2", pay_ot3: "3", pay_ot4: "4", pay_ot5: "5", pay_ot6: "6", pay_ot7: "7", pay_ot8: "8", pay_ot9: "9", pay_ot10: "10", pay_ot11: "11", pay_ot12: "12", 
-        // pay_ot_total: "합계",
+        
+        pay_ot1: "결재 후 평일 잔업시간_1",
+        pay_ot2: "2", pay_ot3: "3", pay_ot4: "4", pay_ot5: "5", pay_ot6: "6", pay_ot7: "7", pay_ot8: "8", pay_ot9: "9", pay_ot10: "10", pay_ot11: "11", pay_ot12: "12", 
+        pay_ot_total: "합계",
 
         pt_1a : "잔업수당 타입_1A",   // pay type
                            pt_1b:"1B",        pt_1c:"1C", 
@@ -107,9 +107,17 @@ var CommuteYearCsvCreater25 = function () {
                                     }
                                     curFR.total_ot_total = curR.total;
                                 }
+                                
+                                // 결제 후 평일 잔업시간
+                                if (dataIdx == 2) {
+                                    curFR.pay_ot1 = curR[1]; curFR.pay_ot2 = curR[2]; curFR.pay_ot3 = curR[3]; curFR.pay_ot4 = curR[4];
+                                    curFR.pay_ot5 = curR[5]; curFR.pay_ot6 = curR[6]; curFR.pay_ot7 = curR[7]; curFR.pay_ot8 = curR[8];
+                                    curFR.pay_ot9 = curR[9]; curFR.pay_ot10 = curR[10]; curFR.pay_ot11 = curR[11]; curFR.pay_ot12 = curR[12];
+                                    curFR.pay_ot_total = curR.total;
+                                }
 
                                 // 잔업 수당 타입
-                                if ( dataIdx == 2 ) {
+                                if ( dataIdx == 3 ) {
                                     // pt_1a, pt_1b, pt_1c, pt_2a ...
                                     for ( var m = 1 ; m <=12 ; m++ ) {
                                         for ( var typeIdx = 0 ; typeIdx < 3 ; typeIdx++ ) {
@@ -124,7 +132,7 @@ var CommuteYearCsvCreater25 = function () {
                                 }
 
                                 // 잔업 수당 금액
-                                if ( dataIdx == 3 ) {
+                                if ( dataIdx == 4 ) {
                                     for ( var pIdx = 1 ; pIdx <= 12 ; pIdx++ ) {
                                         curFR["ot_pay_"+pIdx] = curR[pIdx];
                                     }
