@@ -1332,7 +1332,7 @@
 									WHERE
 										year = ?
 										AND date BETWEEN ? AND ?
-										AND length(OVERTIME_CODE) != 0
+										AND overtime_code IN ('2015_AA', '2015_AB','2015_AC')
 									GROUP BY id, month
 							) t1
 							GROUP BY id
@@ -1397,9 +1397,8 @@
 										SUM(over_time) - SUM(except) AS over_time
 									FROM commute_result_tbl
 									WHERE
-										year = ?
-										AND date BETWEEN ? AND ?
-										AND length(OVERTIME_CODE) != 0
+										date BETWEEN ? AND ?
+										AND overtime_code IN ('2015_AA', '2015_AB','2015_AC')
 									GROUP BY id, month
 							) t1
 							GROUP BY id

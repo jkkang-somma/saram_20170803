@@ -162,7 +162,6 @@ ReportDao.prototype.selectPayedOverTimeWorkReport25 = function(selObj) {
     param.push(year+"-09-26");     param.push(year+"-10-25");
     param.push(year+"-10-26");     param.push(year+"-11-25");
     param.push(year+"-11-26");     param.push(year+"-12-25");
-    param.push(year);
     param.push(preYear+"-12-26");  param.push(year+"-12-25");
     
     return db.query(group, "selectPayedOverTimeWorkReport25", param);
