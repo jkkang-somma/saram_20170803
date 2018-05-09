@@ -143,22 +143,22 @@ define([
                                                         year: resultDate.year(),
                                                         type: item[3]
                                                     }));
-                                                }else{ // 등록되지 않은 이름인경우 (사번이 없는경우)
-                                                    if(item[1].indexOf("청소용") != -1){ // 청소 아저씨 제외하고 id에 '-' 넣어서 결과 출력
-                                                        that.rawDataCollection.add(new RawDataModel({
-                                                            id : "?",
-                                                            name : item[1],
-                                                            department : item[0],
-                                                            time: resultDate.format("HH:mm:ss"),
-                                                            date: resultDate.format("YYYY-MM-DD"),
-                                                            char_date : resultDate.format("YYYY-MM-DD HH:mm:ss"),
-                                                            year: resultDate.year(),
-                                                            type: item[3]
-                                                        })); 
-                                                        errCount++;
-                                                        errList.push(item);
-                                                    }
+                                                }else if (item[1].indexOf("청소용") >= 0) {  // 청소용
+                                                    that.rawDataCollection.add(new RawDataModel({
+                                                        id : "?",
+                                                        name : item[1],
+                                                        department : "-",
+                                                        time: resultDate.format("HH:mm:ss"),
+                                                        date: resultDate.format("YYYY-MM-DD"),
+                                                        char_date : resultDate.format("YYYY-MM-DD HH:mm:ss"),
+                                                        year: resultDate.year(),
+                                                        type: item[3]
+                                                    }));
+                                                } else {    // 등록되지 않고, 청소용도 아닌경우
+                                                   errCount++;
+                                                    errList.push(item); 
                                                 }
+                                                
                                             }
                                             
                                             dialog.close();
