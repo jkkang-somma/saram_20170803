@@ -311,7 +311,8 @@ define([
 				approval_id: $(this.form.getElement("approval")).data("id"),
 				want_in_time : null,
 				want_out_time : null,
-				want_normal : 0
+				want_normal : 0,
+				appr_overtime: data["approvalOvertime"]
 			};
 
 			if( data["approvalOvertime"] && data["overtimeReason"] == "" ){
