@@ -28,7 +28,8 @@ router.route('/')
 	var session = sessionManager.get(req.cookies.saram);
 	var data = req.body;
 	data.writer_id = session.user.id;	// 코멘트 작성자 ID
-	
+	debug("INSERT COMMENT")
+	debug(JSON.stringify(data))
 	Comment.insertComment(data).then(function(result) {
 		res.send(result);
 		Comment.sendCommentEmail(data).then(function(){
