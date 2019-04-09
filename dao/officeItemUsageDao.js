@@ -15,9 +15,9 @@ OfficeItemUsageDao.prototype.selectUsageDetailList = function(data){
     }
 };
 
-OfficeItemUsageDao.prototype.selectUsageList = function(data) {
-    if(data.admin != "9") {
-        return db.query(group, 'selectUsageListbyUser', [data.user])
+OfficeItemUsageDao.prototype.selectUsageList = function(data, id) {
+    if(id !== "%") {
+        return db.query(group, 'selectUsageListbyUser', [id])
     }
 
     if(_.isUndefined(data.dept) || data.dept == "전체") {

@@ -201,13 +201,13 @@ define([
             }];
 
             var _buttonSetting = [];
-            if (SessionModel.get("user").admin == 9) { //부서 선택 필터에 전체 부서가 들어감.
+            if (SessionModel.get("user").admin >= Schemas.DEPT_BOSS) { //부서 선택 필터에 전체 부서가 들어감.
                 _buttonSetting = adminUserfilterButton;
             } else {
                 //_buttonSetting = normalUserfilterButton;
             }
             //excel 출력 버튼 추가 - 관리자에게만 제공
-            if (SessionModel.get("user").admin == 9) {
+            if (SessionModel.get("user").admin === Schemas.ADMIN) {
                 _buttonSetting.push({
                     type: "custom",
                     name: "save",
@@ -277,7 +277,7 @@ define([
             var dept = Code.getCodes(Code.DEPARTMENT);
 
             //일반 사용자에게는 부서 선택필터에 자신의 부서만 들어가도록 처리함.
-            if (SessionModel.get("user").admin == 9) { //부서 선택 필터에 전체 부서가 들어감.
+            if (SessionModel.get("user").admin >= Schemas.DEPT_BOSS) { //부서 선택 필터에 전체 부서가 들어감.
                 $(this.el).find("#rdCombo").append("<option>"+"전체"+"</option>");
                 for(var i=0; i < dept.length; i++){
                     if(dept[i].name != "임원" && dept[i].name != "무소속")
@@ -297,7 +297,7 @@ define([
             this.selectUsageList();
 
             //Excel 출력 - 관리자에게만 제공
-            if (SessionModel.get("user").admin == 9) {
+            if (SessionModel.get("user").admin === Schemas.ADMIN) {
                 var _gridSchema = Schemas.getSchema('grid');
                 this.gridExcel = new Grid(_gridSchema.getDefault(this.gridExcel));
                 this.gridExcel.render();
@@ -357,7 +357,7 @@ define([
                     var user = SessionModel.get("user").id;
 
                     _this.officeItemUsageCollection.fetch({
-                        data: {dept : deptCode, admin : privilege, user : user},
+                        data: {dept : deptCode},
                         success: function(){
                             dfd.resolve();
                         }, error: function(){

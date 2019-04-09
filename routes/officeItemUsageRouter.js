@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var Usage = require('../service/OfficeItemUsage.js');
+var sessionManager = require('../lib/sessionManager');
 
 router.route('/usage')
     .get(function(req, res){
-        Usage.getUsageList(req.query).then(function(result){
+        var adminString=sessionManager.getAdminString(req.cookies.saram);
+        Usage.getUsageList(req.query, adminString).then(function(result){
                 res.send(result);
         });
 

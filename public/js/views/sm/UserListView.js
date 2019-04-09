@@ -122,7 +122,7 @@ define([
     	    var _buttons=["search"];
     	    
     	    var _filterText=[i18Common.CODE.ALL, i18Common.CODE.WORKER, i18Common.CODE.LEAVE_USER];
-    	    _buttons.push({//User Remove
+    	    _buttons.push({
     	        type:"custom",
     	        name:"filter",
     	        tooltip:i18Common.TOOLTIP.USER.TYPE,//"사용자 유형",

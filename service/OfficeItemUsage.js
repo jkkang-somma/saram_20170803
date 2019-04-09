@@ -6,8 +6,8 @@ var OfficeItemUsage = function() {
         return OfficeItemUsageDao.selectUsageDetailList(data);
     };
 
-    var _getUsageList = function(data){
-        return OfficeItemUsageDao.selectUsageList(data);
+    var _getUsageList = function(data, id){
+        return OfficeItemUsageDao.selectUsageList(data, id);
     };
 
     return {
