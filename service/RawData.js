@@ -5,11 +5,11 @@ var Promise = require("bluebird");
 var db = require('../lib/dbmanager.js');
 
 var RawData = function (data) {
-    var _selectRawDataList = function(data){
+    var _selectRawDataList = function(data, id){
     	if(_.isUndefined(data.end)){
     		return RawDataDao.selectRawDataListV2(data);
     	}else{
-        	return RawDataDao.selectRawDataList(data);
+        	return RawDataDao.selectRawDataList(data, id);
     	}
     }
     var _insertRawData = function (data) {

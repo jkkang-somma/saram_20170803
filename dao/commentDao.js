@@ -5,8 +5,8 @@ var CommentDao = function () {
 };
 
 // comment 조회  
-CommentDao.prototype.selectComment =  function (data) {
-    return db.query(group, "selectComment", [data.startDate, data.endDate]);
+CommentDao.prototype.selectComment =  function (data, id) {
+    return db.query(group, "selectComment", [data.startDate, data.endDate, id]);
 };
 
 //comment 조회  

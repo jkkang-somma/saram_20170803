@@ -30,8 +30,8 @@ var transport = nodemailer.createTransport(smtpTransport({
 
 var Comment = function() {	
 
-	var _getComment = function(data) {
-		return CommentDao.selectComment(data);
+	var _getComment = function(data, id) {
+		return CommentDao.selectComment(data, id);
 	};
 	
 	var _getCommentById = function(data) {

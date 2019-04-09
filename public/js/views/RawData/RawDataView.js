@@ -177,7 +177,9 @@ ProgressbarView){
 	        _btnContainer.append(_searchBtn);
 	        
     	    _row.append(_datepickerRange);
-    	    _row.append(_combo);
+			if (SessionModel.getUserInfo().admin >= Schemas.DEPT_BOSS) {
+				_row.append(_combo);
+			}
     	    _row.append(_btnContainer);
             
     	    _layout.append(_head);

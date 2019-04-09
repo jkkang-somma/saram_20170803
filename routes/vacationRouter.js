@@ -7,7 +7,8 @@ var Schemas = require('../schemas');
 
 router.route('/')
 .get(function(req, res, next){
-	Vacation.getVacation(req.query).then(function(result) {
+	var adminString=sessionManager.getAdminString(req.cookies.saram);
+	Vacation.getVacation(req.query, adminString).then(function(result) {
 		return res.send(result);
 	}).catch(function(err) {
 		next(err);

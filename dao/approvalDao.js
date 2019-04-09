@@ -13,8 +13,8 @@ ApprovalDao.prototype.selectApprovalList =  function (doc_num) {
     return db.query(group, "selectApprovalList", [doc_num]);
 };
 
-ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate) {
-    return db.query(group, "selectApprovalListWhere", [startDate, endDate,startDate,endDate]);
+ApprovalDao.prototype.selectApprovalListWhere =  function (startDate, endDate, submitId) {
+    return db.query(group, "selectApprovalListWhere", [startDate, endDate,startDate,endDate, submitId]);
 };
 
 ApprovalDao.prototype.selectApprovalByManager =  function (manager_id, startDate, endDate) {

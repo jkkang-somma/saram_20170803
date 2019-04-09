@@ -28,8 +28,8 @@ var transport = nodemailer.createTransport(smtpTransport({
 }));
 
 var Commute = function() {	
-	var _getCommute = function(data) {
-		return CommuteDao.selectCommute(data);
+	var _getCommute = function(data, id) {
+		return CommuteDao.selectCommute(data, id);
 	};
 
 	var _insertCommute = function(data){

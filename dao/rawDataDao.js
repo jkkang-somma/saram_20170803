@@ -22,11 +22,11 @@ RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
     );
 };
 
-RawDataDao.prototype.selectRawDataList =  function (data) {
-    if(_.isUndefined(data.dept) || data.dept == "전체")
+RawDataDao.prototype.selectRawDataList =  function (data, id) {
+    if((_.isUndefined(data.dept) || data.dept == "전체") && id === '%')
         return db.query(group, 'selectRawDataListAll', [data.start, data.end]);
     else
-        return db.query(group, 'selectRawDataList', [data.start, data.end, data.dept]);
+        return db.query(group, 'selectRawDataList', [data.start, data.end, data.dept, id]);
 };
 
 RawDataDao.prototype.selectRawDataListV2 =  function (data) {

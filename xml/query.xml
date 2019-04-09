@@ -109,7 +109,7 @@
         	from
         		commute_base_tbl
         	where
-        		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1) AND department = ?
+        		str_to_date(char_date, "%Y-%m-%d %H:%i:%S") between str_to_date(?,"%Y-%m-%d") and adddate(str_to_date(?,"%Y-%m-%d"), 1) AND department = ? AND id like ?
         </query>
         <query id="selectRawDataListAll">
         	select
@@ -176,7 +176,8 @@
 			    ) t2
 			    ON m.id = t2.id
 			WHERE
-				leave_company is null or leave_company = ''
+				(leave_company is null or leave_company = '') AND
+				m.id like ?
 			ORDER BY
 				m.name
         </query>
@@ -275,6 +276,7 @@
 			where ((DATE(start_date) between DATE(?) AND DATE(?))
 				OR (DATE(end_date)  between DATE(?) AND DATE(?)))
 				AND state != '상신취소'
+				AND app.submit_id like ?
 			ORDER BY doc_num desc
     	</query>
     	<query id="selectApprovalListById">
@@ -458,7 +460,7 @@
 							left join work_type_code_tbl w on w.code = c.work_type
 							left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01' AND a.state = '상신'
 						WHERE
-							(date BETWEEN ? AND ?) AND department =?
+							(date BETWEEN ? AND ?) AND department =? AND c.id like ?
 						ORDER BY date
             ) t1,
             (SELECT @idx:= 0) AS idx
@@ -778,7 +780,7 @@
     			comment_tbl c
     			LEFT JOIN members_tbl m ON m.id = c.id
     		WHERE
-    			date BETWEEN ? AND ?
+    			date BETWEEN ? AND ? AND c.id like ?
 			ORDER BY date
     	</query>
 

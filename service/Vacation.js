@@ -78,8 +78,8 @@ var getHoliday = function(userId, joinDate, year) {
 
 var Vacation = function() {	
 
-	var _getVacation = function(data) {
-		return VacationDao.selectVacationsByYear(data.year);
+	var _getVacation = function(data, id) {
+		return VacationDao.selectVacationsByYear(data.year, id);
 	};
 	
 	var _getVacationById = function(data) {

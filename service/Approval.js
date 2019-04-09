@@ -54,11 +54,11 @@ var Approval = function (data) {
 	var _getApprovalList = function (doc_num) {
 		return ApprovalDao.selectApprovalList(doc_num);
 	};
-	var _getApprovalListWhere = function (startDate, endDate, managerId) {
+	var _getApprovalListWhere = function (startDate, endDate, submitId, managerId) {
 		if(managerId != undefined && managerId != ""){
 			return ApprovalDao.selectApprovalByManager(managerId, startDate, endDate);
 		}
-		return ApprovalDao.selectApprovalListWhere(startDate, endDate);
+		return ApprovalDao.selectApprovalListWhere(startDate, endDate, submitId);
 	};
 	var _getApprovalListById = function(data){
 		return ApprovalDao.selectApprovalListById(data);

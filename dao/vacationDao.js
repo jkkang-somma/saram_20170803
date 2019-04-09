@@ -5,8 +5,8 @@ var VacationDao = function () {
 };
 
 // 연차 조회 
-VacationDao.prototype.selectVacationsByYear =  function (year) {
-    return db.query(group, "selectVacationsByYear", [year]);
+VacationDao.prototype.selectVacationsByYear =  function (year, id) {
+    return db.query(group, "selectVacationsByYear", [year, id]);
 };
 
 // 연차 갯수 조회 - 해당 년도의 연차 데이터 생성 여부 체크 위해서 

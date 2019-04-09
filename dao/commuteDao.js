@@ -5,11 +5,11 @@ var CommuteDao = function () {
 };
 
 // 근태자료관리 조회 
-CommuteDao.prototype.selectCommute =  function (data) {
-    if(data.dept == "전체"){
+CommuteDao.prototype.selectCommute =  function (data, id) {
+    if(data.dept == "전체" && id === '%'){
         return db.query(group, 'selectCommuteAll', [data.startDate, data.endDate]);    
     }else{
-        return db.query(group, 'selectCommute', [data.startDate, data.endDate, data.dept]);    
+        return db.query(group, 'selectCommute', [data.startDate, data.endDate, data.dept, id]);
     }
 };
 

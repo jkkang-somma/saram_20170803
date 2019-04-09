@@ -90,7 +90,7 @@ define([
 		subMenu: [{
 			title: i18Common.MENU.SUB.AM.COMMUTE_TODAY, //"오늘의 근태 상황",
 			hashTag: "#commutetoday",
-			auth: SCHEMAS.USER
+			auth: SCHEMAS.ADMIN
 		}, {
 			title: i18Common.MENU.SUB.AM.ADD_RAW_DATA, //"출입 기록 등록",
 			hashTag: "#addrawdata",

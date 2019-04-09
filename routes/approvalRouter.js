@@ -5,6 +5,7 @@ var debug = require('debug')('approvalRouter');
 var router = express.Router();
 var _ = require("underscore"); 
 var Approval = require('../service/Approval.js');
+var sessionManager = require('../lib/sessionManager');
 
 router.route('/list')
 .get(function(req, res){
@@ -28,7 +29,8 @@ router.route('/list')
             res.send(result);
         });
     }else{
-        approval.getApprovalListWhere(req.query.startDate, req.query.endDate, req.query.managerId).then(function(result){
+        var adminString=sessionManager.getAdminString(req.cookies.saram);
+        approval.getApprovalListWhere(req.query.startDate, req.query.endDate, adminString, req.query.managerId).then(function(result){
             debug("Complete Select Approval List Where.");
             res.send(result);    
         }).catch(function(e){
