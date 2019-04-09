@@ -232,8 +232,8 @@ define([
 
 			var today = new Date();
 		    var year = today.getFullYear();
-			for(var i=-1; i < 5; i++){
-     	        $(this.el).find("#vcCombo").append("<option>"+(year + i)+"</option>");
+			for(var i=2015; i < year+2; i++){
+     	        $(this.el).find("#vcCombo").append("<option>"+i+"</option>");
      	    }
      	    $(this.el).find("#vcCombo").val(year);
      	    
