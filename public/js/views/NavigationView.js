@@ -171,7 +171,7 @@ define([
             Util.getClientIp().always(function(result){
                 obj.mac='';
                 obj.ip_pc=result;
-                obj.type='출근(수원)';
+                obj.type='출근(온라인)';
                 var model = new RawDataModel();
                 model.companyAccessUrl().save(obj,{
                     success: function(model, response) {
@@ -227,7 +227,7 @@ define([
             
             clearInterval(myVar);
             Util.getClientIp().always(function(result){
-                obj.type='퇴근(수원)';
+                obj.type='퇴근(온라인)';
                 obj.mac='';
                 obj.ip_pc=result;
                 
