@@ -9,6 +9,7 @@ define([
 	'schemas',
 	'i18n!nls/common',
 	'dialog',
+	'models/sm/SessionModel',
 	'text!templates/default/head.html',
 	'text!templates/default/row.html',
 	'text!templates/default/rowdatepicker.html',
@@ -20,7 +21,7 @@ define([
     'collection/common/HolidayCollection',
 	'collection/cm/CommuteTodayCollection',
 	'text!templates/default/button.html',
-	], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, HeadHTML, RowHTML, 
+	], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, SessionModel, HeadHTML, RowHTML, 
 		DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, ContentHTML, LayoutHTML, 
 		CommuteTodayModel, HolidayCollection, CommuteTodayCollection, ButtonHTML){
 		
@@ -70,15 +71,9 @@ define([
         		    collection:this.commuteTodayCollection,
         		    dataschema:["id", "date", "name", "dept_name", "out_office_name", "start_time", "end_time", "memo"],
         		    detail: true,
-                    buttons:["search",{
-                        type:"myDeptRecord",
-                        name: "myDeptRecord",
-                        filterColumn:["dept_name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
-                        tooltip: "",
-                    }],
         		    fetch: false,
         		    order : [[1, "asc"],[2, "asc"],[3, "asc"]]
-        	};    		
+			};
     		this.buttonInit();
     	},
     	events: {
@@ -92,7 +87,7 @@ define([
     	    // }
     	},
     	render:function(){
-    	    //var _view=this;
+			//var _view=this;
     	    var _headSchema=Schemas.getSchema('headTemp');
     	    var _headTemp=_.template(HeadHTML);
     	    var _layOut=$(LayoutHTML);
@@ -104,7 +99,20 @@ define([
    	    	)));
     	    
     	    _head.addClass("no-margin");
-    	    _head.addClass("relative-layout");
+			_head.addClass("relative-layout");
+			
+			var _buttons = ["search"]
+			if ( SessionModel.getUserInfo().admin >= Schemas.DEPT_BOSS ) {
+				_buttons.push(
+					{
+						type:"myDeptRecord",
+						name: "myDeptRecord",
+						filterColumn:["dept_name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+						tooltip: ""
+					}
+				)
+			}
+			this.gridOption.buttons=_buttons;
 
  			var _row=$(RowHTML);
     	    var _datepickerRange=$(_.template(DatePickerHTML)(

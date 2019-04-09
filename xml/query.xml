@@ -669,7 +669,8 @@
 					apt.state = "결재완료" OR
 					apt.state = "취소요청" OR
 					apt.state = "상신"
-				)
+				) AND
+				mem.dept_code like ?
         </query>
     	<query id="getCommuteMailData">
         	SELECT

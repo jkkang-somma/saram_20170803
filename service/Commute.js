@@ -77,8 +77,8 @@ var Commute = function() {
 		return CommuteDao.getLastiestDate();
 	};
 	
-	var _getCommuteToday = function(date){
-		return CommuteDao.selectCommuteToday(date);
+	var _getCommuteToday = function(date, dept_code){
+		return CommuteDao.selectCommuteToday(date, dept_code);
 	};
 
 	var _sendLateForWorkEmail = function(data){

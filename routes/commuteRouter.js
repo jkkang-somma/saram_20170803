@@ -99,7 +99,8 @@ router.route('/lastiestdate')
 router.route('/today')
 .get(function(req, res){
 	if (!_.isUndefined(req.query.startDate)) {
-		Commute.getCommuteToday(req.query).then(function(result){
+		var adminString=sessionManager.getAdminString(req.cookies.saram, 'dept_code');
+		Commute.getCommuteToday(req.query, adminString).then(function(result){
 			res.send(result);
 		});
 	}else{
