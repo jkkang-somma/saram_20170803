@@ -62,6 +62,7 @@
 			this.$el.off('click').on('click', this.show);
 			this.$prev.off('click').on('click', this.prev);
 			this.$next.off('click').on('click', this.next);
+			this.$close.off('click').on('click', this.show);
 			this.$content.find('li').off('click').on('click',this.select);
 		},
 		
@@ -84,6 +85,7 @@
 						'<i class="mp-year-prev glyphicon glyphicon-circle-arrow-left"></i>',
 						' <span></span> ',
 						'<i class="mp-year-next glyphicon glyphicon-circle-arrow-right"></i>',
+						'<i class="mp-year-close glyphicon glyphicon glyphicon-remove" style="float: right; right: 12px; top: 12px;"></i>',
 					'</div>',
 					'<div class="mp-content">',
 						'<ul></ul>',
@@ -93,6 +95,7 @@
 			this.$title = this.$dialog.find('.mp-title span');
 			this.$prev = this.$dialog.find('.mp-title .mp-year-prev');
 			this.$next = this.$dialog.find('.mp-title .mp-year-next');
+			this.$close = this.$dialog.find('.mp-title .mp-year-close');
 			this.$content = this.$dialog.find('.mp-content ul');
 			this.$dialog.insertAfter(this.$el);
 			$.each(months, function(i, m) {
