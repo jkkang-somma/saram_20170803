@@ -6,9 +6,15 @@ var sessionManager = require('../lib/sessionManager');
 
 router.route('/')
 .get(function(req, res, next){
-	
+	var adminString=sessionManager.getAdminString(req.cookies.saram);
 	var query = req.query;
-	if (query["id"] != undefined && query["id"] != "") {
+	if (adminString === '%' && query.managerId !== undefined) {
+		Comment.getCommentCountToManager(query.managerId).then(function(result) {
+			return res.send(result);
+		}).catch(function(err) {
+			next(err);
+		});
+	} else if (query["id"] != undefined && query["id"] != "") {
 		Comment.getCommentById(query).then(function(result) {
 			return res.send(result);
 		}).catch(function(err) {
@@ -16,7 +22,6 @@ router.route('/')
 		});
 		
 	} else {
-		var adminString=sessionManager.getAdminString(req.cookies.saram);
 		Comment.getComment(query, adminString).then(function(result) {
 			return res.send(result);
 		}).catch(function(err) {

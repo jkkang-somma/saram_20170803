@@ -10,12 +10,14 @@ define([
 	'models/dashboard/WorkingSummaryModel',
 	'models/sm/SessionModel',
 	'collection/rm/ApprovalCollection',
+	'collection/cm/CommentCollection',
 	'views/dashboard/CalendarView',
 	'views/statistics/AbnormalSummaryView',
 	'text!templates/layout/default.html',
 	'text!templates/dashboardTemplate.html',
 	'text!templates/default/head.html'
-], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, ApprovalCollection, CalendarView, AbnormalSummaryView, LayoutHTML, DashboardHTML, HeadHTML) {
+], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, 
+			ApprovalCollection, CommentCollection, CalendarView, AbnormalSummaryView, LayoutHTML, DashboardHTML, HeadHTML) {
 	var LOG = log.getLogger('DashBoardView');
 	function getMinTimeString(data) {
 		var hour = Math.floor(data / 60);
@@ -45,6 +47,7 @@ define([
 			var view = this;
 			this.model = new WorkingSummaryModel({ _id: "-1" });
 			this.approvalCollection = new ApprovalCollection();
+			this.commentCollection = new CommentCollection();
 
 			//초기 검색 조건 설정 이번달. 1일 부터 말일까지.
 
@@ -139,10 +142,11 @@ define([
 			var head = $(_headTmp({ title: title, subTitle: "" }));
 			layout.append(head);
 
-			//button
+			// 결재 | 코멘트 | monthPicker
 			layout.append(' \
 			<div class="pull-right"> \
-				<div class="btn-group" id="privilege-btn" style="top:-15px; margin-right:10px; display: none;"></div> \
+				<div class="btn-group" id="privilege-btn-approval" style="top:-15px; margin-right:10px; display: none;"></div> \
+				<div class="btn-group" id="privilege-btn-comment" style="top:-15px; margin-right:10px; display: none;"></div> \
 				<div class="btn-group" id="monthpickerCon" style="top:-15px;"></div> \
 			</div>');
 
@@ -231,22 +235,35 @@ define([
 
 			if(SessionModel.getUserInfo().privilege == '1'){
 				// <div class="btn btn-success">미결 : <span style="font-weight: bold; margin-left: 10px;"> 0 </span> 건</div>
-				if($('.btn-group#privilege-btn').children().length == 0){
+				if($('.btn-group#privilege-btn-approval').children().length == 0){
 					var appendDiv = $('<div>').attr('class', 'btn btn-success');
-					appendDiv.append('미결 : ');
+					appendDiv.append('결재 : ');
 					var spanCon = $('<span>' ).attr('style', 'font-weight: bold; margin-left: 10px;');
 					spanCon.append(0);
 					appendDiv.append(spanCon);
 					appendDiv.append(" 건");
-					$('.btn-group#privilege-btn').append(appendDiv).after(function(){
+					$('.btn-group#privilege-btn-approval').append(appendDiv).after(function(){
 						$(this).click(function(){
 							var $this = $(this);
 							var num = $this.find('span').html();
-							if(parseInt(num) > 0){
-								var reportParam = $this.data('data');
-								var endDate = reportParam.endDate.split(" ");
-								window.location.href = "#reportmanager/" +  reportParam.startDate + "/" + endDate[0] ;
-							}
+							var reportParam = $this.data('data');
+							var endDate = reportParam.endDate.split(" ");
+							window.location.href = "#reportmanager/" +  reportParam.startDate + "/" + endDate[0] ;
+						});
+					});
+				}
+
+				if($('.btn-group#privilege-btn-comment').children().length == 0){
+					var appendDiv = $('<div>').attr('class', 'btn btn-success');
+					appendDiv.append('코멘트 : ');
+					var spanCon = $('<span>' ).attr('style', 'font-weight: bold; margin-left: 10px;');
+					spanCon.append(0);
+					appendDiv.append(spanCon);
+					appendDiv.append(" 건");
+					$('.btn-group#privilege-btn-comment').append(appendDiv).after(function(){
+						$(this).click(function(){
+							var $this = $(this);
+							window.location.href = "#commutemanager/comment/";
 						});
 					});
 				}
@@ -264,10 +281,10 @@ define([
 				_view.approvalCollection.fetch({ 
 					data: reportParam,
 					success: function(result) {
-						$('.btn-group#privilege-btn').find('span').html(result.length);
-						$('.btn-group#privilege-btn').data('data', reportParam);		
+						$('.btn-group#privilege-btn-approval').find('span').html(result.length);
+						$('.btn-group#privilege-btn-approval').data('data', reportParam);
 
-						var btnCon = $('.btn-group#privilege-btn').find('.btn');
+						var btnCon = $('.btn-group#privilege-btn-approval').find('.btn');
 						btnCon.removeClass('btn-success');
 						btnCon.removeClass('btn-danger');
 						if(result.length > 0){
@@ -275,13 +292,33 @@ define([
 						}else{
 							btnCon.addClass('btn-success');
 						}
-						$('.btn-group#privilege-btn').show();
+						$('.btn-group#privilege-btn-approval').show();
 					},
 					error : function(result) {
 						
 					}
 				}); 
 
+				_view.commentCollection.fetch({ 
+					data: reportParam,
+					success: function(result) {
+						$('.btn-group#privilege-btn-comment').find('span').html(result.length);
+						$('.btn-group#privilege-btn-comment').data('data', reportParam);
+
+						var btnCon = $('.btn-group#privilege-btn-comment').find('.btn');
+						btnCon.removeClass('btn-success');
+						btnCon.removeClass('btn-danger');
+						if(result.length > 0){
+							btnCon.addClass('btn-danger');
+						}else{
+							btnCon.addClass('btn-success');
+						}
+						$('.btn-group#privilege-btn-comment').show();
+					},
+					error : function(result) {
+						
+					}
+				}); 
 			}
 
 			//button monthpicker 

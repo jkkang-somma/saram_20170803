@@ -9,6 +9,11 @@ CommentDao.prototype.selectComment =  function (data, id) {
     return db.query(group, "selectComment", [data.startDate, data.endDate, id]);
 };
 
+// 결재를 해야할 코멘트 건수
+CommentDao.prototype.selectCommentCountToManager =  function (id) {
+    return db.query(group, "selectCommentCountToManager", [id]);
+};
+
 //comment 조회  
 CommentDao.prototype.selectCommentById =  function (data) {
     return db.query(group, "selectCommentById", [data.startDate, data.endDate, data.id]);

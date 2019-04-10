@@ -33,6 +33,11 @@ var Comment = function() {
 	var _getComment = function(data, id) {
 		return CommentDao.selectComment(data, id);
 	};
+
+	// 결재를 해야할 코멘트 건수
+	var _getCommentCountToManager = function(id) {
+		return CommentDao.selectCommentCountToManager(id);
+	};
 	
 	var _getCommentById = function(data) {
 		return CommentDao.selectCommentById(data);
@@ -176,6 +181,7 @@ var Comment = function() {
 	
 	return {
 		getComment : _getComment,
+		getCommentCountToManager : _getCommentCountToManager,
 		getCommentById : _getCommentById,
 		getCommentByPk : _getCommentByPk,
 		insertComment : _insertComment,
