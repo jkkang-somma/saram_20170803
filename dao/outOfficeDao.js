@@ -8,7 +8,10 @@ var OutOfficeDao = function () {
 };
 
 OutOfficeDao.prototype.selectOutOfficeList =  function (data) {
-    return db.query(group, "selectOutOfficeList", [data.start, data.end]);
+    if (data.id === undefined) {
+        data.id = '%'
+    }
+    return db.query(group, "selectOutOfficeList", [data.start, data.end, data.id]);
 };
 
 OutOfficeDao.prototype.insertOutOffice =  function (data) {

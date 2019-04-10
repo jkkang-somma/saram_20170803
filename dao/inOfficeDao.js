@@ -8,7 +8,10 @@ var InOfficeDao = function () {
 };
 
 InOfficeDao.prototype.selectInOfficeList =  function (data) {
-    return db.query(group, "selectInOfficeList", [data.start, data.end]);
+    if (data.id === undefined) {
+        data.id = '%'
+    }
+    return db.query(group, "selectInOfficeList", [data.start, data.end, data.id]);
 };
 
 InOfficeDao.prototype.insertInOffice =  function (data) {
