@@ -263,7 +263,7 @@ define([
 					$('.btn-group#privilege-btn-comment').append(appendDiv).after(function(){
 						$(this).click(function(){
 							var $this = $(this);
-							window.location.href = "#commutemanager/comment/";
+							window.location.href = "#commutemanager/comment";
 						});
 					});
 				}
