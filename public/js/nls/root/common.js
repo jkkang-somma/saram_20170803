@@ -216,7 +216,8 @@ define({
         PASSWORD_PLACEHOLDER:"PASSWORD",
         LOGIN_SATUS_BTN:"login..",
         LOGIN_BTN:"LOGIN",
-        FIND_PASSWORD_TEXT:"for get me password "
+        FIND_PASSWORD_TEXT:"for get me password ",
+        ATTEND_BTN:"Attend",
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"Password Cofing",

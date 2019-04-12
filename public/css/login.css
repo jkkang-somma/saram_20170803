@@ -177,9 +177,10 @@ body.web-login .login-form-section .panel-body .form-group .input-group input:-m
 body.web-login .login-form-section .panel-body .form-group .input-group input::placeholder {  color: black; font-weight: bold; text-align: center;}
 
 body.web-login .login-button{
-    margin: 5px 30px;
+    margin: 5px 0px;
+    margin-left: 30;
     padding: 10px;
-    width: calc(100% - 60px);
+    width: calc(100% - 140px);
     background: rgb(68,145,251);
     font-size: 16px;
     font-weight: bold;
@@ -190,6 +191,21 @@ body.web-login .login-button:hover{
 }
 body.web-login .login-button span{
     display: none;
+}
+
+body.web-login .attend-button{
+    margin: 5px 0px;
+    margin-left: 10;
+    margin-right: 30;
+    padding: 10px;
+    width: calc(100% - 260px);
+    background: rgb(68,145,251);
+    font-size: 16px;
+    font-weight: bold;
+}
+body.web-login .attend-button:hover{
+    background: rgb(88,165,251);
+    color: white;
 }
 
 @media (min-height: 768px) {

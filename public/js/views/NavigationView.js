@@ -83,6 +83,13 @@ define([
                 if(agent.indexOf("chrome") < 0){
                     Dialog.info("출근/퇴근 등록은 크롬이나 파이어폭스에서 해주시기 바랍니다.");
                 }
+            }else{
+                var isAttend = SessionModel.isAttend //출근 버튼 선택 후 로그인시 처리
+                if(!_.isNull(isAttend)
+                && !_.isUndefined(isAttend)
+                && isAttend) {
+                    this.accessIn(isAttend)
+                }
             }
         }else{
             $(this.el).find('#accessIn').remove();
@@ -146,7 +153,7 @@ define([
         });
 	},
 	
-	accessIn: function() {	// 출근 기록
+	accessIn: function(isAttend = false) {	// 출근 기록
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
@@ -184,7 +191,11 @@ define([
                                     dialogRef.close();
                                     //var dateTime = response.data.char_date.split(' ');
                                     //window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];  //response.data.id  response.data.char_date
-                                    window.location.href="#rawdatalist";
+                                    if (isAttend) {
+                                        window.location.href="#action" 
+                                    } else {
+                                        window.location.href="#rawdatalist";
+                                    }                                    
                                 }
                             }]
                             });

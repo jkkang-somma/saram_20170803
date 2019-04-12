@@ -58,9 +58,11 @@ define([
         },
         login : function(userinfo){// POST or PUT
             var dfd= new $.Deferred();
+            var that = this;
             this.save({initPassword:false, user:userinfo}, {
                 success:function(resultModel, result, s, sd){
                     var _login=result.isLogin;
+                    that.isAttend = userinfo.isAttend // 로그인시 출근 버튼(true) 클릭 여부
                     if ((!_.isUndefined(result.isLogin)) && _login){
                          dfd.resolve();
                     } else {
@@ -93,7 +95,7 @@ define([
         },
         getUserInfo:function(){
             return this.attributes.user;
-        },
+        },    
         wait:false
     });
     return new SessionModel();

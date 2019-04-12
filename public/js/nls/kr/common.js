@@ -269,7 +269,8 @@ define({
         PASSWORD_PLACEHOLDER:"Password",
         LOGIN_SATUS_BTN:"로그인중..",
         LOGIN_BTN:"LOGIN",
-        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  "
+        FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  ",
+        ATTEND_BTN:"출근",
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"비밀번호 설정",

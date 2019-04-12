@@ -60,6 +60,10 @@ define([
                 _view.login();
                 return false;
             });
+            this.formSection.find("#attendbtn").click(function(){
+                _view.login(true);
+                return false;
+            });
             this.passwordSection.find("#initPaswordBtn").click(function(){
                _view.commitPassword();
             });
@@ -126,7 +130,8 @@ define([
                 idPlaceholder:i18nCommon.LOGIN_VIEW.ID_PLACEHOLDER,
                 passwordPlaceholder:i18nCommon.LOGIN_VIEW.PASSWORD_PLACEHOLDER,
                 loginSatusBtn:i18nCommon.LOGIN_VIEW.LOGIN_SATUS_BTN,
-                loginBtn:i18nCommon.LOGIN_VIEW.LOGIN_BTN
+                loginBtn:i18nCommon.LOGIN_VIEW.LOGIN_BTN,
+                attendBtn:i18nCommon.LOGIN_VIEW.ATTEND_BTN
             }));
             
             this.passwordSection=$(_.template(InitPasswordHTML)({//비밀번호 설정창
@@ -189,9 +194,10 @@ define([
     	    })
      	},
     	
-    	login : function(){
+    	login : function(isAttend = false){ // isAttend : 츨근 버튼 클릭(True)
     	    var _view=this;  
        // btn.button('loading')
+
     	    var data = this.getFormData( _view.formSection.find('form'));
     	    if ((_.isUndefined(data.id)||_.isEmpty(data.id)) || (_.isUndefined(data.password)||_.isEmpty(data.password))){
     	        Dialog.warning(i18nCommon.WARNING.LOGIN.NOT_VALID_LOGIN_INFO);         
@@ -200,8 +206,8 @@ define([
     	       var _hashPassword=hash.toString();
     	        
     	        data.password =_hashPassword;
-    	        //$("#loginbtn").button("loading");
-    	        
+                //$("#loginbtn").button("loading");                
+                data.isAttend = isAttend;
     	        var _spin=new Spin(opts).spin($("#loginbtn").find(".spinIcon")[0]);
                 SessionModel.login(data).then(function(){
                     _view.app.draw();    
