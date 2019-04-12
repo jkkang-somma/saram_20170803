@@ -304,7 +304,7 @@ define([
 				_view.commentCollection.fetch({ 
 					data: reportParam,
 					success: function(result) {
-						$('.btn-group#privilege-btn-comment').find('span').html(result.length);
+						$('.btn-group#privilege-btn-comment').find('span').html(result.models[0].attributes.CommentCount);
 						$('.btn-group#privilege-btn-comment').data('data', reportParam);
 
 						var btnCon = $('.btn-group#privilege-btn-comment').find('.btn');
