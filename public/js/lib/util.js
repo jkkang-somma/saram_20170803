@@ -130,7 +130,9 @@ define([
 
 	    //listen for candidate events
 	    pc.onicecandidate = function(ice) {
-	        if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+			if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex))
+				iterateIP("");
+				
 	        ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
 	    };
     }
