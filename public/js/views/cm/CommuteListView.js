@@ -281,8 +281,7 @@ define([
  	                    				if(full.id == SessionModel.getUserInfo().id){
  	                    					if(_.isNull(full.overtime_code)){
 	     	                    				var date = full.date;
-	     	                    				var overTimeDay = _view.overTimeDay.format("YYYY-MM-DD");
-		     	                    			if(Moment(overTimeDay).isBefore(date) || Moment(overTimeDay).isSame(date))
+		     	                    			if(Moment(_view.overTimeDay).isBefore(date) || Moment(_view.overTimeDay).isSame(date))
                                                 {	
                                                     // 휴일,토,일의 경우 버튼이 생성되지 않음. / 외주
 		     	                    				
@@ -458,25 +457,7 @@ define([
         			year : Moment().year()
         		}
         	}).done(function(){
-        		// console.log(_view.holidayCollection);
-        		var day = Moment().hour(0).minute(0).second(0);
-        		var holidays = _view.holidayCollection.pluck("date");
-        		
-        		for(var count = 0 ; ; day.add(-1,"days")){
-        			if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
-        				
-        			} else {
-        				// console.log(day.format("YYYY-MM-DD"));
-        				count ++;
-        				if(count == 4){
-							// if(count == 100){
-        					break;
-        				}
-        				
-        			}
-        			
-        		}
-        		_view.overTimeDay = day;
+        		_view.overTimeDay = Util.getApprovalLimitDate(_view.holidayCollection)
         		var _gridSchema=Schemas.getSchema('grid');
 	    	    _view.grid= new Grid(_gridSchema.getDefault(_view.gridOption));
 	            _view.grid.render();

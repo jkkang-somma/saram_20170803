@@ -2,8 +2,9 @@
 // Create Date: 2014.12.18
 define([
   'jquery',
-  'underscore'
-], function($, _){
+  'underscore',
+  'cmoment'
+], function($, _, Moment){
     var isNull=function(obj){
 		if(obj===""||obj===undefined||obj==="undefined"||obj===null||obj==="null") return true;
 		return false;
@@ -179,7 +180,24 @@ define([
         result += min+"분";
         
         return result;
-    }
+	}
+	
+	var getApprovalLimitDate = function (holidayCollection) {
+		var day = Moment().hour(0).minute(0).second(0);
+		var holidays = holidayCollection.pluck("date");
+		
+		for(var count = 0 ; ; day.add(-1,"days")){
+			if(day.day() == 0 || day.day() == 6 || _.indexOf(holidays,day.format("YYYY-MM-DD")) > -1){
+				
+			} else {
+				count ++;
+				if(count == 4){
+					break;
+				}
+			}
+		}
+		return day.format("YYYY-MM-DD");
+	}
 	
     return {
         isNull:isNull,
@@ -194,6 +212,7 @@ define([
         getMonday: getMonday,
         getClientIp : getClientIp,
 		numberWithComma : numberWithComma,
-		timeformat : timeformat
+		timeformat : timeformat,
+		getApprovalLimitDate : getApprovalLimitDate
     };
 });

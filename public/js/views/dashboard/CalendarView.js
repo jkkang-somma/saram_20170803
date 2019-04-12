@@ -7,14 +7,19 @@ define([
     'backbone',
     'code',
     'cmoment',
+    'util',
+    'dialog',
+    'i18n!nls/common',
     'models/sm/SessionModel',
     'collection/dashboard/AttendanceCollection',
     'collection/dashboard/CommuteSummaryCollection',
     'collection/common/HolidayCollection',
     'collection/vacation/InOfficeCollection',
     'collection/vacation/OutOfficeCollection',
+    'views/cm/popup/OvertimeApprovalPopupView',
     'text!templates/calendarTemplateBase.html'
-], function ($, _, Backbone, Code, Moment, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection, InOfficeCollection, OutOfficeCollection, calendarHTML) {
+], function ($, _, Backbone, Code, Moment, Util, Dialog, i18nCommon, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection,
+            InOfficeCollection, OutOfficeCollection, OvertimeApprovalPopupView, calendarHTML) {
 
     var CalendarView = Backbone.View.extend({
 
@@ -24,6 +29,9 @@ define([
             this.attendanceCollection = new AttendanceCollection();
             this.holidayCollection = new HolidayCollection();
             this._today = new Moment().format("YYYY-M-D");
+        },
+        events: {
+            'click #calendarSubmit' : 'onClickOpenOvertimePopup'
         },
         _draw: function (params) {
             var _view = this;
@@ -56,6 +64,7 @@ define([
             this.holidayCollection.fetch({
                 data: params,
                 success: function (collection, result) {
+                    _view.overTimeDay = Util.getApprovalLimitDate(_view.holidayCollection)
                     dfd.resolve(result);
                 },
                 error: function () {
@@ -228,8 +237,15 @@ define([
                             openTag = "<div class='overC'>";
                         }
                         overTime = openTag + overTime.split("_")[1] + closeTag;
+                    } else {
+                        // 상신 버튼 출력
+                        if(Moment(_view.overTimeDay).isBefore(commuteData[0].date) || Moment(_view.overTimeDay).isSame(commuteData[0].date))
+                        {
+                            if (commuteData[0].over_time >= 120) {
+                                overTime = '<button id="calendarSubmit">상신</button>'
+                            }
+                        }
                     }
-                         
                 }
 
                 // outoffice 
@@ -396,6 +412,60 @@ define([
                 }
             });
             return commuteData;
+        },
+
+        onClickOpenOvertimePopup : function(evt){
+            window.location.href = "#commutemanager";
+            // var index = $(evt.currentTarget).attr('data');
+            // var selectItem = {
+            //     department : SessionModel.getUserInfo().id,
+            //     name : SessionModel.getUserInfo().name,
+            //     in_time : '',
+            //     out_time : '',
+            //     over_time : ''
+            // }
+            // var overtimeApprovalPopupView = new OvertimeApprovalPopupView(selectItem);
+           
+            // // console.log("grid data", selectItem);
+            // var _this = this;
+            // var clickFlag = false;
+            // Dialog.show({
+            //     title: "초과근무 결재", 
+            //     content: overtimeApprovalPopupView,
+            //     buttons: [{
+            //         label : "상신",
+            //         cssClass: Dialog.CssClass.SUCCESS,
+            //         action : function(dialog){
+            //             if ( clickFlag ) {
+            //                 console.log("IN skip");
+            //                 return;
+            //             }
+            //             clickFlag =true;
+
+            //             var inputData = overtimeApprovalPopupView.getData();
+            //             // console.log(inputData);
+                        
+            //             var checkTime = selectItem.over_time - inputData.except;
+            //             if ( checkTime < 120 ) {
+            //                 Dialog.error("초과근무 시간이 유효하지 않습니다.");
+            //                 clickFlag =false;
+            //                 return;
+            //             }
+                        
+            //             if( inputData["overtimeReason"] == "" ){
+            //                 Dialog.warning("사유를 입력하여 주시기 바랍니다.");
+            //                 return null;
+            //             }
+            //             _this.sendApprovalOvertime(dialog, selectItem, inputData);
+                        
+            //         }
+            //     },{
+            //         label : i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
+            //         action : function(dialog){
+            //             dialog.close();
+            //         }
+            //     }]
+            // });
         }
 
     });

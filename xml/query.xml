@@ -984,7 +984,7 @@
     	</query>
 		<query id="selectCommuteSummaryById">
 			SELECT
-				id, name, date, work_type, vacation_code, out_office_code, overtime_code
+				id, name, date, work_type, vacation_code, out_office_code, overtime_code, over_time
 			FROM
 				commute_result_tbl
 			WHERE
