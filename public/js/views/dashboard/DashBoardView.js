@@ -59,7 +59,8 @@ define([
 			var _endDate = Moment().endOf('month').format("YYYY-MM-DD HH:mm:ss");
 			var _searchParams = {
 				start: _startDate,
-				end: _endDate
+				end: _endDate,
+				id: _defaultData.id
 			};
 
 			this.searchParams = _searchParams;
@@ -95,7 +96,8 @@ define([
 							var _endDate = Moment().add(-1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 							var _searchParams = {
 									start: _startDate,
-									end: _endDate
+									end: _endDate,
+									id: _defaultData.id
 							};
 							_view.searchParams = _searchParams;
 						}
@@ -263,7 +265,7 @@ define([
 					$('.btn-group#privilege-btn-comment').append(appendDiv).after(function(){
 						$(this).click(function(){
 							var $this = $(this);
-							window.location.href = "#commutemanager/comment/";
+							window.location.href = "#commutemanager/comment";
 						});
 					});
 				}
@@ -329,7 +331,8 @@ define([
 					var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").endOf('month').format("YYYY-MM-DD HH:mm:ss");
 					var _searchParams = {
 						start: _startDate,
-						end: _endDate
+						end: _endDate,
+						id: _defaultData.id
 					};
 					_view.searchParams = _searchParams;
 					_view.render();
@@ -348,7 +351,8 @@ define([
 				var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(-1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 				var _searchParams = {
 					start: _startDate,
-					end: _endDate
+					end: _endDate,
+					id: _defaultData.id
 				};
 				_view.searchParams = _searchParams;
 				_view.render();
@@ -360,7 +364,8 @@ define([
 				var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
 				var _searchParams = {
 					start: _startDate,
-					end: _endDate
+					end: _endDate,
+					id: _defaultData.id
 				};
 				_view.searchParams = _searchParams;
 				_view.render();
