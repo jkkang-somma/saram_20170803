@@ -194,7 +194,8 @@ define([
     	    })
      	},
     	
-    	login : function(isAttend = false){ // isAttend : 츨근 버튼 클릭(True)
+        login : function(isAttend){ // isAttend : 츨근 버튼 클릭(True)
+            if (_.isUndefined(isAttend)) { isAttend = false } 
     	    var _view=this;  
        // btn.button('loading')
 

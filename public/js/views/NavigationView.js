@@ -230,7 +230,9 @@ define([
         return platformType + ", " + browserType;
     },
 
-    accessIn: function(isAttend = false) {	// 출근 기록
+    accessIn: function(isAttend) {	// 출근 기록
+        if (_.isUndefined(isAttend)) { isAttend = false } 
+
         var $this = this;
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
