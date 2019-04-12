@@ -52,10 +52,10 @@ ProgressbarView){
 					{ data: "name", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NAME },
 					{ data: "char_date", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TIME },
 					{ data: "type", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TYPE }, 
-					{ data: "ip_office", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP }, 
-					{ data: "ip_pc", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP_PC },
 					{ data: "members_ip_pc", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.MEM_IP_IC },
+					{ data: "ip_pc", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP },
 					{ data: "members_ip_office", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.MEM_IP_OFFICE },
+					{ data: "ip_office", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP_PC }, 
 					{ data: "platform_type", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.PLATFORM_TYPE },
 					{ data: "need_confirm", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NEED_CONFIRM,
 						render: function (data, type, full, meta) {

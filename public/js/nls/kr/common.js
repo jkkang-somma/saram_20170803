@@ -386,8 +386,11 @@ define({
             NAME : "이름",
             TIME : "출입시간",
             TYPE : "출입기록",
-            IP : "사무실 IP 주소",
-            IP_PC : "IP 주소",
+            IP : "로그인 IP",
+            IP_PC : "로그인 외부 IP",
+            MEM_IP_IC: "지정 IP",
+            MEM_IP_OFFICE: "지정 외부 IP",
+            PLATFORM_TYPE: "로그인 플랫폼",
             NEED_CONFIRM : "확인필요",
             MAC:"Mac"
         },
