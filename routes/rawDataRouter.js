@@ -38,7 +38,10 @@ router.route('/bulk')
 router.route("/")
 .get(function(req, res){
 	var adminString=sessionManager.getAdminString(req.cookies.saram);
-    RawData.selectRawDataList(req.query, adminString).then(function(result){
+	if (adminString !== '%' && req.query.dept === undefined) {
+		req.query.dept = sessionManager.getAdminString(req.cookies.saram, 'dept_name');
+	}
+	RawData.selectRawDataList(req.query, adminString).then(function(result){
         res.send(result);
     });
 });
