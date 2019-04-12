@@ -29,8 +29,8 @@ RawDataDao.prototype.selectRawDataList =  function (data, id) {
         return db.query(group, 'selectRawDataList', [data.start, data.end, data.dept, id]);
 };
 
-RawDataDao.prototype.selectRawDataListV2 =  function (data) {
-    return db.query(group, "selectRawDataListV2", [data.start]);
+RawDataDao.prototype.selectRawDataListV2 =  function (data, id) {
+    return db.query(group, "selectRawDataListV2", [data.start, id]);
 };
 
 module.exports = new RawDataDao();
