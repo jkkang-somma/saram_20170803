@@ -152,8 +152,86 @@ define([
             
         });
 	},
-	
-	accessIn: function(isAttend = false) {	// 출근 기록
+    
+    checkPlatformBrowser: function() {
+
+        var platformType = "Unknown device";
+        var browserType = "Unknown browser";
+
+        if (navigator.platform.indexOf("Win") != -1) {
+            if (navigator.userAgent.indexOf("NT 6.1") != -1) {
+                platformType = "Windows 7";
+            } else if (navigator.userAgent.indexOf("NT 10.0") != -1) {
+                platformType = "Windows 10";  
+            } else if (navigator.userAgent.indexOf("NT 6.0") != -1) {
+                platfromType = "Windows Vista/Server 2008";
+            } else if (navigator.userAgent.indexOf("NT 5.2") != -1) {
+                platfromType = "Windows Server 2003";
+            } else if (navigator.userAgent.indexOf("NT 5.1") != -1) {
+                platfromType = "Windows XP";
+            } else if (navigator.userAgent.indexOf("NT 5.0") != -1) {
+                platfromType = "Windows 2000";
+            } else {
+                platfromType = "Windows";
+            }
+
+            if (navigator.userAgent.indexOf("Trident") != -1) {
+                browserType = "IE";
+            } else if (navigator.userAgent.indexOf("Chrome") != -1) {
+                browserType = "Chrome";
+            } else if (navigator.userAgent.indexOf("Opera") != -1) {
+                browserType = "Opera";
+            } else if (navigator.userAgent.indexOf("Firefox") != -1) {
+                browserType = "Firefox";
+            }
+        } else if (navigator.platform.indexOf("Mac") != -1) {
+            platformType = "Mac";
+            if (navigator.userAgent.indexOf("Macintosh") != -1) {
+                if (navigator.userAgent.indexOf("Chrome") != -1) {
+                    browserType = "Chrome";
+                } else if (navigator.userAgent.indexOf("Safari") != -1) {
+                    browserType = "Safari";
+                }
+            } 
+
+        } else if (navigator.platform.toLowerCase().indexOf("iphone") != -1) {
+            platformType = "iPhone";
+            if (navigator.userAgent.indexOf("iPhone") != -1) {
+                if (navigator.userAgent.indexOf("CriOS") != -1) {
+                    browserType = "Chrome";
+                } else if (navigator.userAgent.indexOf("Safari") != -1) {
+                    browserType = "Safari";
+                }
+            }
+            
+        } else if (navigator.platform.toLowerCase().indexOf("ipad") != -1) {
+            platformType = "iPad";
+            if (navigator.userAgent.indexOf("iPad") != -1) {
+                if (navigator.userAgent.indexOf("CriOS") != -1) {
+                    browserType = "Chrome";
+                } else if (navigator.userAgent.indexOf("Safari") != -1) {
+                    browserType = "Safari";
+                }
+            }
+            
+        } else if (navigator.userAgent.indexOf("Android") != -1 && navigator.userAgent.indexOf("Mobile") != -1) {
+            platformType = "Android";
+            if (navigator.userAgent.indexOf("OPR") != -1) {
+                browserType = "Opera";
+            } else if (navigator.userAgent.indexOf("SamsungBrowser") != -1) {
+                    browserType = "Samsung";
+            } else if (navigator.userAgent.indexOf("Chrome") != -1) {
+                browserType = "Chrome";
+            }  else if (navigator.userAgent.indexOf("Firefox") != -1) {
+                browserType = "Firefox";
+            }
+        }
+
+        return platformType + ", " + browserType;
+    },
+
+    accessIn: function(isAttend = false) {	// 출근 기록
+        var $this = this;
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
@@ -179,6 +257,8 @@ define([
                 obj.mac='';
                 obj.ip_pc=result;
                 obj.type='출근(온라인)';
+                obj.platform_type = $this.checkPlatformBrowser();
+
                 var model = new RawDataModel();
                 model.companyAccessUrl().save(obj,{
                     success: function(model, response) {
@@ -215,7 +295,8 @@ define([
 // 		mac : req.body.mac,
 // 		ip_office : req.ip
 	
-	accessOut: function() { // 퇴근 기록
+    accessOut: function() { // 퇴근 기록
+        var $this = this;
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
@@ -241,6 +322,7 @@ define([
                 obj.type='퇴근(온라인)';
                 obj.mac='';
                 obj.ip_pc=result;
+                obj.platform_type = $this.checkPlatformBrowser();
                 
                 var model = new RawDataModel();
                 model.companyAccessUrl().save(obj, {

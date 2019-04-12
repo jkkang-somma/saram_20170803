@@ -98,9 +98,9 @@
         </query>
         <query id="insertRawDataCompanyAccess">
   			INSERT INTO commute_base_tbl
-  				( year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm, mac)
+  				(year, id, name, department, char_date, type, ip_pc, ip_office, need_confirm, mac, members_ip_pc, members_ip_office, platform_type)
   			VALUES
-  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?, ?)
+  				(year(?), ? , ?, ?, ?, ?, ?, ?, ?, ?, (select ip_pc from members_tbl where id=?), (select ip_office from members_tbl where id=?), ?)
         </query>
 
         <query id="selectRawDataList">

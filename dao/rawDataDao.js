@@ -18,7 +18,7 @@ RawDataDao.prototype.insertRawData =  function (data) {
 // 툴퇴근 정보 등록 
 RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
     return db.query(group, "insertRawDataCompanyAccess", 
-        [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm, data.mac]
+        [data.char_date, data.id, data.name, data.department, data.char_date, data.type, data.ip_pc, data.ip_office, data.need_confirm, data.mac, data.id, data.id, data.platform_type]
     );
 };
 

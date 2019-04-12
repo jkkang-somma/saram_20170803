@@ -1,0 +1,529 @@
+[33mcommit 1f125a4c31809c405975d87be7a917063851a701[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: JSNAM <njisung@naver.com>
+Date:   Fri Apr 12 10:31:51 2019 +0900
+
+    출근 기기종류 저장 GUI변경
+
+[33mcommit 8c526e0a2755fc45ae1ec7378e8474e3e14923e8[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 16:12:20 2019 +0900
+
+    비품 관리 기능 팀장 이상의 경우 전체 내용 조회되도록 수정
+
+[33mcommit 0f73d8f1b06669d105298fd53b2c26964e6d92e5[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 16:08:37 2019 +0900
+
+    대시 보드 "변경" 클릭 팝업에서 팝업 닫기 버튼 추가
+
+[33mcommit 494a0a8d4ab8247e7660526b1015f6d751cdccaa[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 14:49:37 2019 +0900
+
+    오늘의 근태현황 메뉴 전체 권한 변경
+    사용자의 경우 본인 소속 부서의 근태 현황만 조회 가능하도록 수정
+
+[33mcommit 52f67fad23f6f2cb82da1936ada336b874a1e70b[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 09:31:38 2019 +0900
+
+    source sync 맞춤
+
+[33mcommit b79c30ec4593c24e48bd287996fa2830255a5dd2[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 09:30:10 2019 +0900
+
+    불필요 이미지 삭제
+
+[33mcommit d843f6079b5f3667de005230861a8a9c1d7ade6d[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 09:19:29 2019 +0900
+
+    연차 관리 조회 기능에서 연도 출력 알고리즘 변경
+      - 근태 원년도부터 시작하여 현재 시점 + 1년까지 출력
+
+[33mcommit 29850487e028fe941c6f947928fd28766c5f3a4b[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 09:18:38 2019 +0900
+
+    온라인 출근 메시지 변경
+    출근(수원) -> 출근(온라인)
+
+[33mcommit 0b05fb2e45b03ef4db7c7087978a6f88957145b1[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Apr 9 09:17:26 2019 +0900
+
+    일반 직원은 본인 정보만 조회할 수 있도록 변경
+      - 출입기록, 근태자료, 결재, 코멘트, 연차, 오늘의 근태 현황
+
+[33mcommit f0b66cd0cd2a1c576e6ceaaaf1d9202b8b5f03a5[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Apr 4 13:52:13 2019 +0900
+
+    로그 보강
+
+[33mcommit 21e682f31385e1a125fb6711c114eb3776f659c0[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Apr 4 13:35:49 2019 +0900
+
+    ignore 정보 추가
+
+[33mcommit d1a9f5dc475907e43df8d7c13c0dcad73f9d38e2[m
+Author: JS NAM <njisung@naver.com>
+Date:   Wed May 16 06:09:56 2018 +0000
+
+    코멘트 야근상신여부 로그 출력
+
+[33mcommit 8225001cee875ea66ba0647d9f00f94e73c21b41[m
+Author: JS NAM <njisung@naver.com>
+Date:   Wed May 9 02:02:06 2018 +0000
+
+    출근등록, 조직도
+
+[33mcommit 39f2cf35b52aefa410e2933bcfc34bfcf10d9ca6[m
+Author: JS NAM <njisung@naver.com>
+Date:   Tue May 8 09:13:22 2018 +0000
+
+    출입등록 에러
+
+[33mcommit 79bf9b6959b6fe613851972e1e5bddb148219f8f[m
+Author: JS NAM <njisung@naver.com>
+Date:   Tue Mar 6 08:12:40 2018 +0000
+
+    초과근무 전년 12월 26일 부터 포함안되는 문제
+
+[33mcommit 948b371c5ed6a6f64b76461ce02c9b77e3b0c522[m
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Mar 5 06:48:33 2018 +0000
+
+    근태자료 결제 후 평일 잔업시간
+
+[33mcommit a105f7f80ae2a0fd1160321afd2c9159267ccc56[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Mar 2 16:22:51 2018 +0900
+
+    연차 총갯수/사용합계 수정
+
+[33mcommit 89747b36cd91c6a798dba45230c2018532bafdf4[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Mar 2 16:13:46 2018 +0900
+
+    파일명 변경
+
+[33mcommit 8bf819de07bbfaf89bd96ba9c9ad51c7db1f9a47[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Mar 2 16:11:16 2018 +0900
+
+    csv 기능 오류 보완
+
+[33mcommit 8980587c9d5402ab18b4b9caa694dda59b777b1f[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Mar 2 14:53:39 2018 +0900
+
+    CSV 리포트 형식 추가
+
+[33mcommit 12da42cd1b12f813eb3e4f54df124db1a79c0942[m
+Author: JS NAM <njisung@naver.com>
+Date:   Wed Feb 28 06:36:13 2018 +0000
+
+    도서등록을 위한 검색 axios -> https 변경
+
+[33mcommit 4b0c8fd1df330687dedfdc0af3fb944509a4e79e[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Feb 13 11:26:43 2018 +0900
+
+    DATE 타입 버그 수정 (실서버에서만 재현)
+
+[33mcommit b0df40fb751e8de90b7fb36cdf60d0c4e716a2e0[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Feb 13 10:30:01 2018 +0900
+
+    양식 셈플파일 삭제
+
+[33mcommit edb97d2473754e756d2b8d097fa6b62d85c3b3f2[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Mon Feb 12 16:48:38 2018 +0900
+
+    background 위치 조정
+
+[33mcommit 6d0d849c869edbc03f5e16606170d1176a76dd00[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Mon Feb 12 16:45:07 2018 +0900
+
+    로그인 도서 관리 이미지 추가
+
+[33mcommit 17ba1622b6cc9e58bfd1b3d97c060482630ac8f4[m
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Feb 12 05:55:32 2018 +0000
+
+    도서 default img 경로변경
+
+[33mcommit 5261f26ad447f649ee79a6722796c511061f9b56[m
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Feb 12 05:41:00 2018 +0000
+
+    도서 반납일 지난것 붉게
+
+[33mcommit 58e8e1fc5f66ca382448c95ada608eb9b0ca20b7[m
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Feb 12 04:40:57 2018 +0000
+
+    도서등록 팝업 타이틀추가, 목록조회시 기본50, 이력 기본 sorting 변경일 asc
+
+[33mcommit 28c4f937214b5815b865c0eb133451d360a1d944[m
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Feb 12 04:03:29 2018 +0000
+
+    도서3차
+
+[33mcommit 5d66c9b938b6ed54e0fe0f995cdb096216d6fa91[m
+Merge: 06fe085b e7d31a5a
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Feb 12 00:33:03 2018 +0000
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit 06fe085bdadca4a6dc3b58adc8537a75701512b4[m
+Author: JS NAM <njisung@naver.com>
+Date:   Mon Feb 12 00:29:57 2018 +0000
+
+    도서관리 수정사항, 20180209기준 SQL
+
+[33mcommit e7d31a5a6af20d88ec511efed1c8796fded5c34f[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Mon Feb 12 09:29:50 2018 +0900
+
+    axios 모듈 추가
+
+[33mcommit 1ce8ae33663c7749d8b17577bf35cf9a550e3d76[m
+Author: JS NAM <njisung@naver.com>
+Date:   Sun Feb 11 16:00:42 2018 +0000
+
+    도서2
+
+[33mcommit 3c4a96207220ca41c5b5604fc40853a337abd40e[m
+Author: JS NAM <njisung@naver.com>
+Date:   Sun Feb 11 15:57:19 2018 +0000
+
+    도서2
+
+[33mcommit 33419245d80a3c5f293095898646151ba36a944a[m
+Author: JS NAM <njisung@naver.com>
+Date:   Sun Feb 11 15:50:17 2018 +0000
+
+    도서2
+
+[33mcommit b18ba91d5d62e3f39b3307d836f05520c3b1ec66[m
+Merge: c4af8587 1fc8aa8b
+Author: JS NAM <njisung@naver.com>
+Date:   Fri Feb 9 10:04:05 2018 +0000
+
+    teteteteet
+
+[33mcommit c4af85878ad96aa766983d7845fc07f14a4feaa7[m
+Author: JS NAM <njisung@naver.com>
+Date:   Fri Feb 9 09:57:31 2018 +0000
+
+    도서 1차
+
+[33mcommit 1fc8aa8b1c7ae84f808f2d84d28debef83dbea7d[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Feb 9 13:32:30 2018 +0900
+
+    초과근무 계산시 실제 근무시간으로 산출하도록 변경
+
+[33mcommit e88b48a5e38fa6d9f152d1bf03c03bd11398e772[m
+Merge: 97d76875 26b95cf5
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Fri Feb 9 11:37:31 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit 97d7687547a1fcfdd72754ba2552499677fd2d61[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Fri Feb 9 11:37:23 2018 +0900
+
+     refresh 버튼 툴팁 사라지지 않는 현상 보완
+
+[33mcommit 26b95cf55ebb212899776aee7c4503932f58aa85[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Feb 9 09:04:46 2018 +0900
+
+    부서 조회를 default로 변경
+
+[33mcommit f881d8887feed77a10429ab0ca15ff5f646fbda3[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Feb 9 08:42:08 2018 +0900
+
+    비품할당현황 필터 오류 수정 - 이 코드는 여기에 있으면 안됩니다...
+
+[33mcommit ba13b4600bda7335f9cea4d3c673e6df0af0d317[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Feb 8 18:14:40 2018 +0900
+
+    근태DB자료 리포트에 제외시간 추가
+
+[33mcommit 5ef09bad4b903554fc6172423c96f03011a9f2e3[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Feb 8 17:25:34 2018 +0900
+
+    근태자료 조회 - 초과근무 컬럼 출력시 제외시간 제외하고 출력하도록 변경 / 근태 자료 수정 후 코멘트 0건 되는 버그 수정
+
+[33mcommit 81d2ef50afd4253d5803b91e1af3225bd9bec0f5[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Feb 8 16:27:58 2018 +0900
+
+    로딩 실패시 자동 새로고침 추가
+
+[33mcommit 5bcca67a867c10a250452fa8d3c65fd4685baebb[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Feb 8 16:27:28 2018 +0900
+
+    오타 수정
+
+[33mcommit 4910157e00c3e3957ef6aa7d2902cbf3d46cc87f[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 8 14:11:42 2018 +0900
+
+    comment 결재 상신 시 초과근무 시간 계산 오류 이슈 수정
+
+[33mcommit ba7a24dd8e9fb40e41763c80301762f61adb659e[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Wed Feb 7 18:50:01 2018 +0900
+
+    근태 리포트 2개 항목 추가 / 메뉴 구성 변경
+
+[33mcommit caf695126c6af2ee1853a18a66030550aada5cf2[m
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Wed Feb 7 15:50:00 2018 +0900
+
+    컬럼 구성 변경
+    이름_부서_전산비품_사무비품_IP_상세
+
+[33mcommit 4284a1240702952524dafb2f25c492a05245a8ca[m
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Wed Feb 7 15:49:19 2018 +0900
+
+    컬럼 구성 변경
+    이름_부서_전산비품_사무비품_IP_상세
+
+[33mcommit 1e7268a33b67155f130033c2b54e480f8869b2d2[m
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Wed Feb 7 15:49:03 2018 +0900
+
+    컬럼 구성 변경
+    이름_부서_전산비품_사무비품_IP_상세
+
+[33mcommit c543683c802d12cf77179d5e1c564b6e7898e68b[m
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Wed Feb 7 15:48:36 2018 +0900
+
+    컬럼 구성 변경 및 IP 컬럼 소팅 보완
+    이름_부서_전산비품_사무비품_IP_상세
+
+[33mcommit 88087e9d175297839c0c9fe7178ddfc79aa76869[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Feb 6 16:24:47 2018 +0900
+
+    사무용 비품 추가 관련 이슈 적용
+
+[33mcommit ab261e2d5dd188ace37b7c474de2e5b7da6145db[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Tue Feb 6 15:09:11 2018 +0900
+
+    야근 상신시에 상신 사유 추가
+
+[33mcommit 9452266c1a0a04e51b31e0ec084e5e2ac1abe3f8[m
+Author: jfko00-PC\jfko00 <jfko96@gmail.com>
+Date:   Tue Feb 6 14:08:05 2018 +0900
+
+    이름 변경..ㅠㅠ
+
+[33mcommit dc1c059fdd6f041244ef611d8b37800e187565e1[m
+Author: jfko00-PC\jfko00 <jfko96@gmail.com>
+Date:   Tue Feb 6 14:03:52 2018 +0900
+
+    파일 누락으로 변경 후 추가
+
+[33mcommit caccd0ac6d8968e06d99181b37387c9b9739641b[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Tue Feb 6 13:45:14 2018 +0900
+
+    누락 파일 복원
+
+[33mcommit 61c71e94b689dce476256f984cfe6f5ff51cabb2[m
+Merge: 1a9d69c3 a5d3f6a0
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Mon Feb 5 17:34:05 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803.git
+
+[33mcommit 1a9d69c3883db41ddb6e9f4fe19acf95287a629d[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Mon Feb 5 17:33:52 2018 +0900
+
+    부서별 근태현황 0이 아닌 숫자 빨강 bold 로 변경
+
+[33mcommit a5d3f6a065c650a5e1ed33f5f99c40314c930d28[m
+Merge: f4af1335 b1ed9c18
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Fri Feb 2 17:57:18 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit f4af1335841b46841ee3ecdf751ba5f26bec5d82[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Fri Feb 2 17:57:12 2018 +0900
+
+    세션 Timeout 시간 3시간으로 변경
+
+[33mcommit b1ed9c182510a727acecf9dad6bbe04a4fcaaaff[m
+Author: aaraya77 <aaraya77@gmail.com>
+Date:   Fri Feb 2 17:52:07 2018 +0900
+
+    비품 관리 기능 보완
+
+[33mcommit fe465eb551ec70080322e1e5c4437481e9bbccc0[m
+Merge: 30f07955 b7df54bc
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Fri Feb 2 16:20:35 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit 30f079551afc1fa26c9b9e1521175e8a98cbdf37[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Fri Feb 2 16:20:00 2018 +0900
+
+    결재 시 초과 근무 시간 잘못 나오는 현상 , 통계자료 생성시 엑셀 오류 나는 현상 수정
+
+[33mcommit b7df54bcebbe9e5add99559bd02443e76180869e[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Feb 2 11:57:44 2018 +0900
+
+    리포트에 임원 다시 추가 / 결재 후 야근 시간 오류 수정
+
+[33mcommit accbce926c8a6bbd04134f8560dd23b8b730ba64[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Fri Feb 2 11:30:47 2018 +0900
+
+    UI 표시 컬럼 변경
+
+[33mcommit eceebfdbadedd4b49fae5aa035268a3f153f915b[m
+Author: aaraya77 <aaraya77@gmail.com>
+Date:   Thu Feb 1 15:56:39 2018 +0900
+
+    IE에서 Datepicker의 x 눌리지 않는 현상 보완
+
+[33mcommit c6d1db532336b003dcf0cba35b7d41afedf07614[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Feb 1 15:32:24 2018 +0900
+
+    사원 목록에 직급코드 추가 ( 관리자인 경우 )
+
+[33mcommit 85dc864bfa9fec5148b26ebec77b341ee5be036e[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 1 15:13:22 2018 +0900
+
+    카드 출근 시 대시보드에 출근 시간이 안나오는 현상 수정
+
+[33mcommit 32a1a3216a1279a92f7a880f11ba08c1d6c69df2[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 1 14:27:49 2018 +0900
+
+    초과 근무 시간 잘못 표기 되는 현상 수정
+
+[33mcommit 9a561c0dc3c2150e104cc2067a78c0dacee1b0b1[m
+Merge: b715ee34 37448dc1
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 1 13:36:09 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit b715ee349a8d18b53151a6c59753fde1da2f2ce5[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 1 13:36:03 2018 +0900
+
+    로그인 페이지 이미지가 상단에 붙는 현상
+
+[33mcommit 37448dc1fb2613924e1756b9a2eda6f014cf2f4f[m
+Merge: a7f867b5 40e68496
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Thu Feb 1 12:15:18 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit a7f867b543ab8bcdab51dd9cf3618798bfe49701[m
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Thu Feb 1 12:14:17 2018 +0900
+
+    비품할당현황에서 IP주소 출력시 sort하여 보여지도록 보완.
+
+[33mcommit 40e68496261c0f77bbd794ae632d29816a5714a7[m
+Author: jfko00 <jfko96@gmail.com>
+Date:   Thu Feb 1 12:11:02 2018 +0900
+
+    이력정보 조회시 발생구분 컬럼을 내용 앞으로 이동
+
+[33mcommit 3e004ca4d7b319ecde2d1cbf876ea0e3536a41d0[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 1 12:02:08 2018 +0900
+
+    모바일 로그인 화면 문구 수정
+
+[33mcommit 71125039f0b2d71e47e5fc5646f2267c785bdc2a[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Thu Feb 1 11:57:58 2018 +0900
+
+    결제 -> 결재 로 변경
+
+[33mcommit 6493f503da2d0f97f572bb8d7ef3da54c3adf2d3[m
+Author: goodguy <goodguy@goodguy-PC>
+Date:   Thu Feb 1 11:57:38 2018 +0900
+
+    지각 이메일 전송기능 오류 관련 로그 추가
+
+[33mcommit 52647347cf1e229b527f52af6e11136bd2443869[m
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Thu Feb 1 11:23:14 2018 +0900
+
+    부서컬럼 우측 정렬 취소
+
+[33mcommit 6dcee0640949a2a8000994c9758f0b94a0c8abee[m
+Merge: c4fb3db6 a57e8952
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Thu Feb 1 11:20:10 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit a57e8952e00c41ed36cfe7fe8596e17e78575262[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Wed Jan 31 17:49:29 2018 +0900
+
+    미결 조회 시 기간 수정
+
+[33mcommit c4fb3db67efa9aa4e6fe646b47f6e8dce15f71f7[m
+Merge: 576aae00 eb6f064b
+Author: Scott Ryu <enlune@gmail.com>
+Date:   Wed Jan 31 17:43:36 2018 +0900
+
+    Merge branch 'master' of https://github.com/goodguy95/saram_20170803
+
+[33mcommit eb6f064bffa630bc952a0d0b6677dd30629ef0d7[m
+Author: rnh <ronanhyoung@gmail.com>
+Date:   Wed Jan 31 17:27:18 2018 +0900
+
+    페이지 넘길 시 스크롤 관련
+
+[33mcommit 85692614bc71683a15464930887e75499029f094[m
+Author: aaraya77 <aaraya77@gmail.com>
+Date:   Wed Jan 31 17:09:13 2018 +0900
+
+    Promise 선언 삭제
+
+[33mcommit 21651d3e2dfcfc520d117e0d3a677270ffd1f7d2[m
+Author: aaraya77 <aaraya77@gmail.com>
+Date:   Wed Jan 31 16:56:17 2018 +0900
+
+    const -> var 변경 작업
+
+[33mcommi

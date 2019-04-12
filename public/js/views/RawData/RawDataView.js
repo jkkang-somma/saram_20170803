@@ -48,12 +48,22 @@ ProgressbarView){
     		    el:"rawDataContent",
     		    id:"rawDataTable",
     		    column:[
-    		         	{ data : "department", 		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.DEPARTMENT },
-   	                   	{ data : "name", 			"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NAME },
- 	                   	{ data : "char_date", 		"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TIME },
- 	                   	{ data : "type", 			"title" : i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TYPE }
+					{ data: "department", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.DEPARTMENT },
+					{ data: "name", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NAME },
+					{ data: "char_date", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TIME },
+					{ data: "type", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.TYPE }, 
+					{ data: "ip_office", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP }, 
+					{ data: "ip_pc", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.IP_PC },
+					{ data: "members_ip_pc", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.MEM_IP_IC },
+					{ data: "members_ip_office", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.MEM_IP_OFFICE },
+					{ data: "platform_type", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.PLATFORM_TYPE },
+					{ data: "need_confirm", "title": i18nCommon.RAW_DATA_LIST.GRID_COL_NAME.NEED_CONFIRM,
+						render: function (data, type, full, meta) {
+							return (full.need_confirm == 1) ? i18nCommon.RAW_DATA_LIST.MSG.OK : i18nCommon.RAW_DATA_LIST.MSG.NOK;
+						}
+					}
     		    ],
-    		    dataschema:["name", "department", "char_date", "type"],
+    		    dataschema:["name", "department", "char_date", "type", "ip_office", "ip_pc", "members_ip_pc", "members_ip_office", "platform_type"],
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
@@ -67,6 +77,7 @@ ProgressbarView){
         		    
     		};
 
+			/*
             var dept_code = SessionModel.getUserInfo().dept_code;
             var admin = SessionModel.getUserInfo().admin;
             
@@ -84,7 +95,7 @@ ProgressbarView){
                		}
                	});
             }
-            
+            */
     	},
         getRawData : function(){
             var startDate = Moment($(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate());

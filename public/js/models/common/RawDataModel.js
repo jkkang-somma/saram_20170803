@@ -25,6 +25,9 @@ define([
             ip_pc: null,
             mac:null,
             ip_office: null,
+            member_ip_pc: null,
+            member_ip_office: null,
+            platform_type: null,
             need_confirm: 1 // 1: 정상 , 2: 확인 필요
         },
         
