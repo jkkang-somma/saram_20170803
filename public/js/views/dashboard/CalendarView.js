@@ -239,10 +239,12 @@ define([
                         overTime = openTag + overTime.split("_")[1] + closeTag;
                     } else {
                         // 상신 버튼 출력
-                        if(Moment(_view.overTimeDay).isBefore(commuteData[0].date) || Moment(_view.overTimeDay).isSame(commuteData[0].date))
+                        if(commuteData[0].work_night_falg === '상신') {
+                            overTime = '<div class="work-normal">상신중</div>'
+                        } else if(Moment(_view.overTimeDay).isBefore(commuteData[0].date) || Moment(_view.overTimeDay).isSame(commuteData[0].date))
                         {
                             if (commuteData[0].over_time >= 120) {
-                                overTime = '<button id="calendarSubmit">상신</button>'
+                                overTime = '<button id="calendarSubmit" class="overSubmit">상신</button>'
                             }
                         }
                     }

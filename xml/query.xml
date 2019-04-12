@@ -984,9 +984,10 @@
     	</query>
 		<query id="selectCommuteSummaryById">
 			SELECT
-				id, name, date, work_type, vacation_code, out_office_code, overtime_code, over_time
+				c.id, c.name, c.date, c.work_type, c.vacation_code, c.out_office_code, c.overtime_code, c.over_time, a.state AS work_night_falg
 			FROM
-				commute_result_tbl
+				commute_result_tbl c
+				left join approval_tbl a on a.submit_id = c.id AND a.start_date = c.date AND a.office_code = 'O01'
 			WHERE
 				id = ? AND ( date &gt;= ? AND date &lt;= ? )
 			ORDER BY date
