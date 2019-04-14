@@ -998,7 +998,7 @@
 			FROM
 				commute_base_tbl
 			WHERE
-			id = ? AND ( char_date &gt;= ? AND char_date &lt;= ? ) AND type not like "%퇴근%"
+			id = ? AND ( char_date &gt;= ? AND char_date &lt;= ? ) AND type not like "%퇴근%" AND need_confirm = 1
 		</query>
     </group>
 
