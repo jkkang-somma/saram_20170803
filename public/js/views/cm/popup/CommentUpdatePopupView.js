@@ -165,16 +165,19 @@ define([
 	                ],
 	                disabled: true,
 	                group:"managerGroup",
-				}, {
+				}]
+		    };
+			
+			if (_view.selectData.state === '상신' && _view.selectData.id === SessionModel.get("user").id) {
+				formOption.childs.push({
 					type:"text_confirm",
 	                name:"warningText",
 	                label:"주의",
 	                value:"상신취소 할 경우 해당 일의 모든 야근상신 내역이 취소됩니다!!!",
 	                group:"managerGroup",
 	                disabled: true
-	        	}]
-		    };
-		    
+	        	})
+			}
 			var _form = new Form(formOption);
 			
 		    _form.render().done(function(){
