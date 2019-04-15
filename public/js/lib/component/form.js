@@ -95,6 +95,12 @@ define([
                 return $(_text);
             }
         },
+        text_confirm:{
+            getElement:function(data){
+                var _text = '<div class="form-group"> <div style="color:red; font-weight:bold">' + data.label + " : " + data.value + "</div></div>"
+                return $(_text);
+            }
+        },
         password:{
             getElement:function(data){
                 var _PasswordTemp=_.template(PasswordHTML);

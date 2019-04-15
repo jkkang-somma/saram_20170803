@@ -21,12 +21,13 @@ define([
     'models/cm/CommentModel',
     'models/cm/CommuteModel',
     'models/cm/ChangeHistoryModel',
-    'collection/cm/CommuteCollection',
+	'collection/cm/CommuteCollection',
+	'collection/rm/ApprovalCollection',
     'collection/cm/ChangeHistoryCollection',
 	'text!templates/default/datepickerChange.html',
 ], function(
 	$, _, Backbone,	Util, Schemas, Grid, Dialog, Datatables, Moment, i18nCommon, ResultTimeFactory, BaseView, Form, Code,
-	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ChangeHistoryCollection,
+	SessionModel, CommentModel, CommuteModel, ChangeHistoryModel, CommuteCollection, ApprovalCollection, ChangeHistoryCollection,
 	DatePickerChangeHTML
 ) {
 	
@@ -164,7 +165,14 @@ define([
 	                ],
 	                disabled: true,
 	                group:"managerGroup",
-		        }]
+				}, {
+					type:"text_confirm",
+	                name:"warningText",
+	                label:"주의",
+	                value:"상신취소 할 경우 해당 일의 모든 야근상신 내역이 취소됩니다!!!",
+	                group:"managerGroup",
+	                disabled: true
+	        	}]
 		    };
 		    
 			var _form = new Form(formOption);
@@ -314,6 +322,16 @@ define([
 			console.log(newData);
 			commentModel.save(newData, {
 				success : function(result){
+					// 상신 대기인 결재를 취소로 변경 // 날짜가 같으면서 초과근무인것 
+					var data = {
+						state : '상신취소',
+						submit_id : userId,
+						start_date : newData.date,
+						end_date : newData.date
+					};
+					var _appCollection = new ApprovalCollection();
+					_appCollection.updateState(data);
+
 					dfd.resolve(result);
 				}
 			});

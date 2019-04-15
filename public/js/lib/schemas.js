@@ -141,6 +141,14 @@ define([
             disabled:false,
             group:undefined
         },
+        text_confirm:{
+            type:"text_confirm",
+            name:undefined,
+            label:undefined,
+            value:undefined,
+            disabled:false,
+            group:undefined
+        },
         password:{
             type:"input",
             name:undefined,
