@@ -994,11 +994,11 @@
 		</query>
 		<query id="selectAttendanceById">
 			SELECT
-				id, name, char_date, type
+				id, name, char_date, type, need_confirm
 			FROM
 				commute_base_tbl
 			WHERE
-			id = ? AND ( char_date &gt;= ? AND char_date &lt;= ? ) AND type not like "%퇴근%" AND need_confirm = 1
+			id = ? AND ( char_date &gt;= ? AND char_date &lt;= ? ) AND type not like "%퇴근%"
 		</query>
     </group>
 

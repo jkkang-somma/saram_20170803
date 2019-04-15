@@ -191,8 +191,14 @@ define([
                     if (_.isUndefined(attenData)) {
                         exist = false;
                     }else{
+                        // need_confirm == 2 인 경우 빨강색으로 표시
                         tmpTime = attenData.char_date.split(" ")[1].split(":");
-                        workType = "<div class='attenTime'>" + tmpTime[0] + ":" + tmpTime[1] + closeTag;
+                        if (attenData.need_confirm === 1) {
+                            workType = "<div class='attenTime'>" + tmpTime[0] + ":" + tmpTime[1] + closeTag;
+                        } else {
+                            workType = "<div class='attenTime' style='color:red'>" + tmpTime[0] + ":" + tmpTime[1] + closeTag;
+                            overTime = "<div class='attenTime' style='color:red'>확인필요</div>"
+                        }
                     }
 
                 } else if (commuteData.length !== 0) {
@@ -391,14 +397,20 @@ define([
                 }
             });
             if (result.length != 0) {
+                var confirmResult = _.filter(result, {need_confirm: 1})
+                if (confirmResult.length !== 0) {
+                    // 정상적인 첫번째 출근시간을 return
+                    return confirmResult[0]
+                }
                 return result[0];
-            } else {
-                result = _.select(_view.attendance, function (atten) {
-                    if (atten.char_date.split(" ")[0] == dateStr && atten.type.indexOf("출근") > -1 && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
-                        return atten.char_date;
-                    }
-                });
-                return result[0];
+            // 아래 로직이 왜 필요한지 모르겠음. KJK 2019.04.15
+            // } else {
+            //     result = _.select(_view.attendance, function (atten) {
+            //         if (atten.char_date.split(" ")[0] == dateStr && atten.type.indexOf("출근") > -1 && Number(atten.char_date.split(" ")[1].split(":")[0]) > 5) {
+            //             return atten.char_date;
+            //         }
+            //     });
+            //     return result[0];
             } 
         },
 
