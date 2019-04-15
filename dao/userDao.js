@@ -49,7 +49,7 @@ UserDao.prototype.insertUser = function(user){
 
 UserDao.prototype.updateUser = function(user){
     return db.query(group, "updateUser", 
-        [user.password, user.name, user.dept_code, user.approval_id, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.affiliated, user.position_code,
+        [user.password, user.name, ((user.leave_company !=='') ? '' : user.dept_code), ((user.leave_company !=='') ? user.dept_name : null), user.approval_id, user.name_commute, user.join_company, user.leave_company, user.privilege, user.admin, user.affiliated, user.position_code,
         user.ip_pc, user.mac, user.ip_office, user.email, user.phone, user.phone_office, user.emergency_phone, user.birthday, user.wedding_day, user.memo, user.part_code, user.id]
     );
 };

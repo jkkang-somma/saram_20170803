@@ -2,7 +2,7 @@
     <group id="user">
         <query id="selectUserList">
         	SELECT
-				id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
+				id, name, dept_code, ifnull(last_dept_name, (SELECT name FROM dept_code_tbl where code = dept_code)) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
 				ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
 				position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
 			FROM members_tbl A
@@ -47,6 +47,7 @@
         		password=?,
         		name=?,
         		dept_code=?,
+				last_dept_name=?,
         		approval_id=?,
         		name_commute=?,
         		join_company=?,
