@@ -6,7 +6,7 @@ var app = require('./app');
 // var batch = require('./batch/batch');
 // test
 // app.set('port', process.env.PORT);
-app.set('port', 8080);
+app.set('port', 8001);
 
 var server = app.listen(app.get('port'), function() {
 
