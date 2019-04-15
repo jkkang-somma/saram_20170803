@@ -533,6 +533,9 @@ define([
                         // data param 전달
                         _approvalReportView.options = selectData;
                         // Dialog
+
+                        // 2회 연속 클릭이 되지 못하도록 보완
+                        var clicked = false;
                         Dialog.show({
                             title: "결재",
                             content: _approvalReportView,
@@ -540,36 +543,42 @@ define([
                                 label: "확인",
                                 cssClass: Dialog.CssClass.SUCCESS,
                                 action: function(dialogRef) { // 버튼 클릭 이벤트
+                                    if (clicked) {
+                                        return
+                                    }
+                                    clicked = true
                                     var _appCollection = new ApprovalCollection();
                                     _appCollection.url = "/approval/info";
                                     var _thisData = {
                                         doc_num: selectData.doc_num
                                     };
                                     _appCollection.fetch({
-                                            reset: true,
-                                            data: _thisData,
-                                            error: function(result) {
-                                                Dialog.error("데이터 조회가 실패했습니다.");
-                                                _this.thisDfd.reject();
-                                            }
-                                        })
-                                        .done(function(result) {
-                                            if (result.length != 0) {
-                                                _approvalReportView.onClickBtnSend(dialogRef).done(function(model) {
-                                                    Dialog.show("완료되었습니다.");
-                                                    _this.grid.updateRow(model);
-                                                    dialogRef.close();
-                                                }).fail(function() {
-                                                    Dialog.error("해당 날짜에 이미 결재된 내역이 있습니다.");
-                                                });
-                                            }
-                                            else {
-                                                _this.setReportTable(true, false);
-                                                Dialog.error("상신이 취소된 항목입니다.");
+                                        reset: true,
+                                        data: _thisData,
+                                        error: function(result) {
+                                            Dialog.error("데이터 조회가 실패했습니다.");
+                                            _this.thisDfd.reject();
+                                        }
+                                    })
+                                    .done(function(result) {
+                                        if (result.length != 0) {
+                                            _approvalReportView.onClickBtnSend(dialogRef).done(function(model) {
+                                                Dialog.show("완료되었습니다.");
+                                                _this.grid.updateRow(model);
                                                 dialogRef.close();
-                                            }
-                                        });
-
+                                            }).fail(function() {
+                                                Dialog.error("해당 날짜에 이미 결재된 내역이 있습니다.");
+                                            });
+                                        }
+                                        else {
+                                            _this.setReportTable(true, false);
+                                            Dialog.error("상신이 취소된 항목입니다.");
+                                            dialogRef.close();
+                                        }
+                                    });
+                                    setTimeout(function(){
+                                        clicked = false
+                                    }, 500);
                                 }
                             }, {
                                 label: '닫기',
