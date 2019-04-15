@@ -82,6 +82,13 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 	                group:"destInfo",
 	                disabled:true
 	        	}, {
+					type: "checkBox",
+					name: "normal",
+					checkLabel: '근태 정상처리',
+					value: this.selectData.normal,
+					group: "modifyItem",
+					full: true
+				}, {
 	                type:"datetime",
 	                name:"inTime",
 	                label:i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.FORM.IN_TIME,
@@ -145,6 +152,10 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 							message = message + i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.OVER_TIME_MSG;
 							changeData.changeOvertimeCode = data.overtime_code == null ? " " : data.overtime_code;
 							break;
+						case "normal":
+							message = message + "근태 정상 처리";
+							changeData.changeNormal = data.normal;
+							break;
 					}
 					message = message + "[ " + model.get("change_before") + " > " +model.get("change_after") + "]\n";
 				});
@@ -206,7 +217,8 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
      			id : this.selectData.id,
      			in_time : data.inTime == "" ? null : data.inTime,
      			out_time : data.outTime == "" ? null : data.outTime,
-     			overtime_code : data.overtime == "" ? null : data.overtime,
+				overtime_code : data.overtime == "" ? null : data.overtime,
+				normal : data.normal === true ? 1 : 0,
      			change_memo : data.changememo
      		};
 			
@@ -215,7 +227,8 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			var inChangeModel = _getChangeHistoryModel("in_time", newData, this.selectData, userId, data.changememo);
 			var outChangeModel = _getChangeHistoryModel("out_time", newData, this.selectData, userId, data.changememo);
 			var overtimeChangeModel = _getChangeHistoryModel("overtime_code", newData, this.selectData, userId, data.changememo);
-			
+			var normal = _getChangeHistoryModel("normal", newData, this.selectData, userId, data.changememo);
+
 			newData.changeHistoryCollection = new ChangeHistoryCollection();
 			
 			if (inChangeModel) {
@@ -232,6 +245,12 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			
 			if (overtimeChangeModel) {
 				newData.changeHistoryCollection.add(overtimeChangeModel);
+			}else{
+				newData.overtime_code = null;
+			}
+
+			if (normal) {
+				newData.changeHistoryCollection.add(normal);
 			}else{
 				newData.overtime_code = null;
 			}

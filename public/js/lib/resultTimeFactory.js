@@ -517,7 +517,9 @@ define([
                             var hour = this.inTime.hour();
                             var minute = this.inTime.minute();
                             
-                            if(this.isSuwon == true){
+                            if(this.normal === 1) {
+                                this.standardInTime = this.inTime
+                            } else if(this.isSuwon == true){
                                 if(hour < 7){ 
                                     this.standardInTime.hour(7).minute(0).second(0);
                                 } else if (hour < 10){
@@ -577,6 +579,7 @@ define([
                                  * 8시 이전       : 8:00, checkLate = false, standardintime : 08:00, standardouttime : 17:00,
                                  * 8시 ~ 10시 00분 : 출근시간, checkLate = false, standardintime = 출근시간, standardouttime : 출근시간 + 9시간
                                  * 10시 이후      : 10:00, checkLate = true, standardintime : 10:00, standardouttime : 19:00,
+                                 * 예외 : 정상처리 (normal === 1) 인 경우 standardintime = 출근시간, standardouttime : 출근시간 + 9시간
                                  * 
                                  * 2017.12.15. 김성식 부장 : 수원 외근 발생시 서울과 동일하게 처리 함.
                                  *  - 수원의 경우 7시 기준으로 계산함. 
@@ -927,7 +930,7 @@ define([
                 }
                 
                 if (!_.isUndefined(inData.changeNormal)) {
-                    that.normal = 1;
+                    that.normal = inData.changeNormal;
                     that.normalChange += 1;
                 }
                 /**
