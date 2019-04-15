@@ -259,10 +259,10 @@ define([
     	        // $("#initCanceleBtn").button("loading");
     	        
                 SessionModel.initPassword({id: data.id, password:data.password}).done(function(result){
-                    _view.passwordSection.addClass("fadeOutLeftBig").one(transitionEnd, function(){
-                        data.password=_inputPasswordValue;//암호화 안된 값 로그인 정보 세팅.
-                        _view.render(_view.app, data);
-                    });
+                    _view.passwordSection.addClass("fadeOutLeftBig");
+                    data.password=_inputPasswordValue;//암호화 안된 값 로그인 정보 세팅.
+                    _view.render(_view.app, data);
+                    
                 }).fail(function(e){
                     Dialog.error("Init Password fail.");
                 });
