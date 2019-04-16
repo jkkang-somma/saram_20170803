@@ -271,6 +271,7 @@ define({
         LOGIN_BTN:"LOGIN",
         FIND_PASSWORD_TEXT:"비밀번호를 잊으셨나요?  ",
         ATTEND_BTN:"출근",
+        NOSESSION_MSG: "세션이 만료되어 재로그인 필요합니다."
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"비밀번호 설정",

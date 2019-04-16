@@ -129,7 +129,10 @@ define([
     },
 	logout:function(){
 		SessionModel.logout();
-	},
+    },
+    noSessionlogout: function () {
+        SessionModel.noSessionlogout();
+    },
 	userConifg:function(){
 		var configView=new ConfigUserView();
 		Dialog.show({

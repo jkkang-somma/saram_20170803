@@ -95,7 +95,22 @@ define([
         },
         getUserInfo:function(){
             return this.attributes.user;
-        },    
+        }, 
+        noSessionlogout: function (logoutUrl) {
+            var that = this;
+            this.destroy({
+                success: function (model, res) {
+                    model.clear();
+                    model.id = null;
+                    that.set({ user_id: null, isLogin: false });
+                    var fragment = '';
+                    if (!_.isUndefined(Backbone.history.fragment)){
+                        fragment = '#'+Backbone.history.fragment
+                    }
+                    window.location.href = '/?noSession=true'+fragment;
+                }
+            });
+        },   
         wait:false
     });
     return new SessionModel();

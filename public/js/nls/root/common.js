@@ -218,6 +218,7 @@ define({
         LOGIN_BTN:"LOGIN",
         FIND_PASSWORD_TEXT:"for get me password ",
         ATTEND_BTN:"Attend",
+        NOSESSION_MSG: "The session has expired and requires a re-login."
     },
     INIT_PASSWORD_VIEW:{
         TITLE:"Password Cofing",

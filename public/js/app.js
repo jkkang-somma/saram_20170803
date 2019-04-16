@@ -41,13 +41,14 @@ define([
             //Global Error Handle
             $(document).ajaxError(function (event, xhr) {
                 if (xhr.status == 401){// 권한 없음.
-                    Dialog.error(i18Common.ERROR.AUTH.EXPIRE_AUTH, function(){
-                        _navigationView.hide();
-                        _initFlalg=false;
-                        $(document).unbind('ajaxError');
-                        //_app.start();
-                        window.location="/";
-                    });
+                    _navigationView.noSessionlogout() 
+                    // Dialog.error(i18Common.ERROR.AUTH.EXPIRE_AUTH, function(){
+                    //     _navigationView.hide();
+                    //     _initFlalg=false;
+                    //     $(document).unbind('ajaxError');
+                    //     //_app.start();
+                    //     window.location="/";
+                    // });
                 } else if (xhr.status == 404){
                     Dialog.error(i18Common.ERROR.HTTP.NOT_FIND_PAGE);
                 } else if (xhr.status == 503 ){
