@@ -16,15 +16,44 @@ router.route("/")
 	var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g, key;
 	ip = ip.match(ipRegex);
 
+	var bodyDecode = {}
+	try {
+		var b = new Buffer(req.body.p, 'base64')
+		var s = b.toString()
+		bodyDecode = JSON.parse(s);
+	} catch (e) {
+		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 시작 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+		debug('Exception')
+		debug(e)
+		debug(req.body)
+		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 끝   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+	}
+	
+	if (bodyDecode.type === 'A') {
+		bodyDecode.type = '출근(온라인)'
+	} else if (bodyDecode.type === 'B') {
+		bodyDecode.type = '퇴근(온라인)'
+	} else {
+		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 시작 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+		debug(req.body)
+		debug(bodyDecode)
+		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 끝   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+	}
 	var inData = {
-		type : req.body.type,
-		ip_pc : _.isEmpty(req.body.ip_pc)?null:req.body.ip_pc,
-		mac : _.isEmpty(req.body.mac)?null:req.body.mac,
+		type : bodyDecode.type,
+		ip_pc : _.isEmpty(bodyDecode.ip_pc)?null:bodyDecode.ip_pc,
+		mac : _.isEmpty(bodyDecode.mac)?null:bodyDecode.mac,
 		ip_office : ip, 
-		platform_type : req.body.platform_type
+		param : bodyDecode.param
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {
+		delete result.data.param
+		delete result.data.platform_type
+		delete result.data.ip_pc
+		delete result.data.ip_office
+		delete result.data.mac
+		
 		return res.send(result);
 	}).catch(function(err) {
 		next(err);

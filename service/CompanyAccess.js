@@ -57,7 +57,7 @@ var CompanyAccess = function() {
 						need_confirm : need_confirm,
 						char_date : Moment().format("YYYY-MM-DD HH:mm:ss"),
 						mac:data.mac==null?null:data.mac.toString(), 
-						platform_type : data.platform_type
+						param : data.param // platform_type
 				};
 				
 				RawDataDao.insertRawDataCompanyAccess(insertDataObj).then(function(inResult) {

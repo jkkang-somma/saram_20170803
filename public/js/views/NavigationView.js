@@ -153,81 +153,80 @@ define([
         });
 	},
     
-    checkPlatformBrowser: function() {
-
-        var platformType = "Unknown device";
-        var browserType = "Unknown browser";
+    checkParam: function() {
+        var param1 = "203";
+        var param2 = "200";
 
         if (navigator.platform.indexOf("Win") != -1) {
             if (navigator.userAgent.indexOf("NT 6.1") != -1) {
-                platformType = "Windows 7";
+                param1 = "121";
             } else if (navigator.userAgent.indexOf("NT 10.0") != -1) {
-                platformType = "Windows 10";  
+                param1 = "132";  
             } else if (navigator.userAgent.indexOf("NT 6.0") != -1) {
-                platfromType = "Windows Vista/Server 2008";
+                param1 = "143";
             } else if (navigator.userAgent.indexOf("NT 5.2") != -1) {
-                platfromType = "Windows Server 2003";
+                param1 = "152";
             } else if (navigator.userAgent.indexOf("NT 5.1") != -1) {
-                platfromType = "Windows XP";
+                param1 = "315";
             } else if (navigator.userAgent.indexOf("NT 5.0") != -1) {
-                platfromType = "Windows 2000";
+                param1 = "502";
             } else {
-                platfromType = "Windows";
+                param1 = "508";
             }
 
             if (navigator.userAgent.indexOf("Trident") != -1) {
-                browserType = "IE";
+                param2 = "902";
             } else if (navigator.userAgent.indexOf("Chrome") != -1) {
-                browserType = "Chrome";
+                param2 = "111";
             } else if (navigator.userAgent.indexOf("Opera") != -1) {
-                browserType = "Opera";
+                param2 = "163";
             } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-                browserType = "Firefox";
+                param2 = "174";
             }
         } else if (navigator.platform.indexOf("Mac") != -1) {
-            platformType = "Mac";
+            param1 = "503";
             if (navigator.userAgent.indexOf("Macintosh") != -1) {
                 if (navigator.userAgent.indexOf("Chrome") != -1) {
-                    browserType = "Chrome";
+                    param2 = "111";
                 } else if (navigator.userAgent.indexOf("Safari") != -1) {
-                    browserType = "Safari";
+                    param2 = "190";
                 }
             } 
 
         } else if (navigator.platform.toLowerCase().indexOf("iphone") != -1) {
-            platformType = "iPhone";
+            param1 = "120";
             if (navigator.userAgent.indexOf("iPhone") != -1) {
                 if (navigator.userAgent.indexOf("CriOS") != -1) {
-                    browserType = "Chrome";
+                    param2 = "111";
                 } else if (navigator.userAgent.indexOf("Safari") != -1) {
-                    browserType = "Safari";
+                    param2 = "190";
                 }
             }
             
         } else if (navigator.platform.toLowerCase().indexOf("ipad") != -1) {
-            platformType = "iPad";
+            param1 = "192";
             if (navigator.userAgent.indexOf("iPad") != -1) {
                 if (navigator.userAgent.indexOf("CriOS") != -1) {
-                    browserType = "Chrome";
+                    param2 = "111";
                 } else if (navigator.userAgent.indexOf("Safari") != -1) {
-                    browserType = "Safari";
+                    param2 = "190";
                 }
             }
             
         } else if (navigator.userAgent.indexOf("Android") != -1 && navigator.userAgent.indexOf("Mobile") != -1) {
-            platformType = "Android";
+            param1 = "202";
             if (navigator.userAgent.indexOf("OPR") != -1) {
-                browserType = "Opera";
+                param2 = "163";
             } else if (navigator.userAgent.indexOf("SamsungBrowser") != -1) {
-                    browserType = "Samsung";
+                    param2 = "199";
             } else if (navigator.userAgent.indexOf("Chrome") != -1) {
-                browserType = "Chrome";
+                param2 = "111";
             }  else if (navigator.userAgent.indexOf("Firefox") != -1) {
-                browserType = "Firefox";
+                param2 = "174";
             }
         }
 
-        return platformType + ", " + browserType;
+        return param1 + "," + param2;
     },
 
     accessIn: function(isAttend) {	// 출근 기록
@@ -258,11 +257,12 @@ define([
             Util.getClientIp().always(function(result){
                 obj.mac='';
                 obj.ip_pc=result;
-                obj.type='출근(온라인)';
-                obj.platform_type = $this.checkPlatformBrowser();
+                obj.type='A';
+                obj.param = $this.checkParam();
+                var objA = {p: btoa(JSON.stringify(obj))}
 
                 var model = new RawDataModel();
-                model.companyAccessUrl().save(obj,{
+                model.companyAccessUrl().save(objA,{
                     success: function(model, response) {
                         Dialog.show({
                             title: "출근",
@@ -321,13 +321,14 @@ define([
             
             clearInterval(myVar);
             Util.getClientIp().always(function(result){
-                obj.type='퇴근(온라인)';
+                obj.type='B';
                 obj.mac='';
                 obj.ip_pc=result;
-                obj.platform_type = $this.checkPlatformBrowser();
+                obj.param = $this.checkParam();
+                var objA = {p: btoa(JSON.stringify(obj))}
                 
                 var model = new RawDataModel();
-                model.companyAccessUrl().save(obj, {
+                model.companyAccessUrl().save(objA, {
                     success: function(model, response) {
                         Dialog.show({
                             title: "퇴근",
