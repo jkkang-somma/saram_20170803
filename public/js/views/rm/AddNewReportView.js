@@ -149,6 +149,12 @@ define([
                             $(_this.el).find('#datePickerTitleTxt').text('from');
                             _this.afterDate.css('display', 'table');
                             _this.setTimePicker(true);
+                            // check start_date && move end_date.
+                            if ($(_this.el).find('#end_date input') !== undefined 
+                             && ( date - new Date($(_this.el).find('#end_date input').val()) ) / (1000 * 60 * 60 * 24) > 0 ) {
+                                $("#end_date input").val(startDate);
+                                $(_this.el).find("#end_date").data('DateTimePicker').setDate(new Date(startDate));
+                            }
                         }
                         
                         // if (selVal != 'W01' && selVal != 'B01' && selVal != 'V02' && selVal != 'V03') {
