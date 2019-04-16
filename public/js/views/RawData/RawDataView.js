@@ -67,16 +67,13 @@ ProgressbarView){
     		    collection:this.rawDataCollection,
     		    detail: true,
     		    fetch: false,
-    		    buttons:["search",{
-        		    	type:"myRecord",
-				        name: "myRecord",
-				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
-				        tooltip: "",
-        		    }],
-                order: [[3, "desc"]]
-        		    
+				buttons:["search"],
+				order: [[3, "desc"]]
     		};
 
+			if (SessionModel.getUserInfo().admin >= Schemas.DEPT_BOSS) {
+				this.gridOption.column.push({type:"myRecord", name: "myRecord", filterColumn:["name"], tooltip: "",})
+			}
 			/*
             var dept_code = SessionModel.getUserInfo().dept_code;
             var admin = SessionModel.getUserInfo().admin;

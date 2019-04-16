@@ -139,12 +139,7 @@ define([
              	    dataschema:["year", "dept_name", "name", "total_day", "used_holiday", "holiday", "memo"],
         		    collection:this.vacationCollection,
         		    detail: true,
-        		    buttons:["search", {
-        		    	type:"myRecord",
-				        name: "myRecord",
-				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
-				        tooltip: "",
-        		    }],
+					buttons:["search"],
         		    fetch: false,
         		    order:[[3, "asc"]]
         	};
@@ -158,7 +153,13 @@ define([
     	},
     	buttonInit: function(){
     	    var that = this;
-    	    // tool btn
+			// tool btn
+			
+			if (SessionModel.get("user").admin >= Schemas.DEPT_BOSS) {
+				//필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
+				this.gridOption.buttons.push({type:"myRecord", name: "myRecord", filterColumn:["name"], tooltip: ""})
+			}
+
     	    this.gridOption.buttons.push(_getVacationUpdateBtn(that));
     	},
     	selectVacation: function() {

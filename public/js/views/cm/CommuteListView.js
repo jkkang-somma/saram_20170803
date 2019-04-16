@@ -332,15 +332,14 @@ define([
         		    collection:this.commuteCollection,
         		    dataschema:["date", "department", "name", "work_type_name", "vacation_name", "out_office_name", "overtime_pay", "late_time", "over_time", "in_time", "out_time", "comment_count", "normal_change"],
         		    detail: true,
-        		    buttons:["search",{
-        		    	type:"myRecord",
-				        name: "myRecord",
-				        filterColumn:["name"], //필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
-				        tooltip: "",
-        		    }],
+        		    buttons:["search"],
         		    fetch: false,
         		    order : [[1, "asc"],[2, "asc"],[3, "asc"]]
-        	};    		
+			};
+			
+			if (SessionModel.getUserInfo().admin >= Schemas.DEPT_BOSS) {
+				this.gridOption.column.push({type:"myRecord", name: "myRecord", filterColumn:["name"], tooltip: ""})
+			}
     		this.buttonInit();
     	},
     	events: {
