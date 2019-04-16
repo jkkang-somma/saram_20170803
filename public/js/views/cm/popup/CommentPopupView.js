@@ -289,18 +289,10 @@ define([
 			return dfd.promise();
 		},
 		insertComment: function(opt) {
-			var inData = this.getInsertData();
-
-			if (inData == null) {
-				return;
-			}
-
-			inData["state"] = i18nCommon.COMMENT.STATE.ACCEPTING;
-			var commentModel = new CommentModel();
-			commentModel.save(inData, opt);
+			this.getInsertData(opt);
 		},
 		
-		getInsertData: function() {
+		getInsertData: function(opt) {
 			var data = this.form.getData();
 			var newData = {
 				comment: data.comment,
@@ -325,48 +317,83 @@ define([
 			// 		Dialog.warning("Comment 유형을 선택해 주십시오 <br> (정상처리, 출퇴근시간 변경시 결재, 이외의 경우는 일반)");
 			// 		break;
 			// 	case "1" : // approval
-				if (data.inTimeAfter != "") {
-					newData.want_in_time = data.inTimeAfter;
-				}
-	
-				if (data.outTimeAfter != "") {
-					newData.want_out_time = data.outTimeAfter;
-				}
-	
-				var normal = this.form.getElement("normal");
-				
-				if(!_.isUndefined(normal)){
-					if (normal.find("input").is(":checked")) {
-						newData.want_normal = 1;
-						newData.want_in_time = null;
-						newData.want_out_time = null;
-					}
-					else {
-						newData.want_normal = 0;
-					}
-				}
-				newData.before_in_time = this.selectData.in_time;
-				newData.before_out_time = this.selectData.out_time;
-				
-				if( newData["want_normal"] == 0
-					&&  _.isNull(newData["want_in_time"]) 
-					&& _.isNull(newData["want_out_time"])){
-					Dialog.warning("근태 정상처리요청, 출퇴근 수정요청중 한가지는 입력되어야 합니다.");
-					return null;
-				}
+			if (data.inTimeAfter != "") {
+				newData.want_in_time = data.inTimeAfter;
+			}
 
-				
-				// case "2" : // normal
-					if (newData.comment.length == 0) {
-						Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.EMPTY_COMMENT_ERR);
-						return null;
+			if (data.outTimeAfter != "") {
+				newData.want_out_time = data.outTimeAfter;
+			}
+
+			var normal = this.form.getElement("normal");
+			
+			if(!_.isUndefined(normal)){
+				if (normal.find("input").is(":checked")) {
+					newData.want_normal = 1;
+					newData.want_in_time = null;
+					newData.want_out_time = null;
+				}
+				else {
+					newData.want_normal = 0;
+				}
+			}
+			newData.before_in_time = this.selectData.in_time;
+			newData.before_out_time = this.selectData.out_time;
+			
+			if( newData["want_normal"] == 0
+				&&  _.isNull(newData["want_in_time"]) 
+				&& _.isNull(newData["want_out_time"])){
+				Dialog.warning("근태 정상처리요청, 출퇴근 수정요청중 한가지는 입력되어야 합니다.");
+				return null;
+			}
+
+			// case "2" : // normal
+			if (newData.comment.length == 0) {
+				Dialog.warning(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.EMPTY_COMMENT_ERR);
+				return null;
+			}
+			
+			var need_confirm = 0
+			if (newData.want_in_time !== null) {
+				// 출근시간 : 당일 06:00 ~ 18:00 이외의 시간에 경고 문구 출력
+				var limitTimeA = Moment(newData.date+' 06:00').format('YYYY-MM-DD HH:mm')
+				var limitTimeB = Moment(newData.date+' 18:00').format('YYYY-MM-DD HH:mm')
+				if (newData.want_in_time < limitTimeA || newData.want_in_time > limitTimeB) {
+					need_confirm = 1
+				}
+			}
+
+			if (newData.want_out_time !== null) {
+				// 퇴근시간 : 당일 11:00 ~ 다음날 12:00 이외의 시간에 경고 문구 출력
+				var limitTimeA = Moment(newData.date+' 11:00').format('YYYY-MM-DD HH:mm')
+				var limitTimeB = Moment(newData.date+' 12:00').add(1, 'days').format('YYYY-MM-DD HH:mm')
+				if (newData.want_out_time < limitTimeA || newData.want_out_time > limitTimeB) {
+					need_confirm = 1
+				}
+			}
+			
+			if (need_confirm === 1) {
+				Dialog.confirm({
+					msg : "근태일자와 수정요청 시간의 차이가 큽니다. 이대로 등록을 할까요?",
+					action:function(){
+						newData["state"] = i18nCommon.COMMENT.STATE.ACCEPTING;
+						var commentModel = new CommentModel();
+						return commentModel.save(newData, opt);
+					},
+					actionCallBack:function(res){//response schema
+					},
+					errorCallBack:function(){
 					}
-					return newData;
-			// }
+				});
+			} else {
+				newData["state"] = i18nCommon.COMMENT.STATE.ACCEPTING;
+				var commentModel = new CommentModel();
+				commentModel.save(newData, opt);
+			}
 		},
 		
 		getData: function(){
-			return _.extend(this.form.getData(),this.getInsertData());
+			return _.extend(this.form.getData());
 		}
 	});
 
