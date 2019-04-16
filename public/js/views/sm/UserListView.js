@@ -44,12 +44,8 @@ define([
                     { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
                     { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
                     { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
-                        var result=i18Common.CODE.ADMIN_0;
-                        if (row.admin > 0){
-                            result=i18Common.CODE.ADMIN_9;
-                        }
-                        return result;
-                    }, visible:false, subVisible:false},
+                        return i18Common.CODE[`ADMIN_${row.admin}`]
+                    }, visible:true, subVisible:false},
                     { "title" : i18Common.USER.AFFILIATED, "render": function(data, type, row){
                         var result=i18Common.CODE.AFFILIATED_0;
                         if (row.affiliated > 0){
@@ -317,6 +313,9 @@ define([
             if ( SessionModel.getUserInfo().admin != Schemas.ADMIN ) {
                 this.option.column[2].visible = false;
                 this.option.column[2].subvisible = false;
+
+                this.option.column[8].visible = false;
+                this.option.column[8].subvisible = false;
             }
 
     	    //grid 
