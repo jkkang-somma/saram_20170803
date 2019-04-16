@@ -14,8 +14,9 @@ router.route('/')
 				res.send(result);
 			});
 		}else{
-			var adminString=sessionManager.getAdminString(req.cookies.saram);
-			Commute.getCommute(req.query, adminString).then(function(result) {
+			var adminStringId=sessionManager.getAdminString(req.cookies.saram);
+			var adminStringDept=sessionManager.getAdminString(req.cookies.saram, 'dept_name');
+			Commute.getCommute(req.query, adminStringId, adminStringDept).then(function(result) {
 				try{
 					res.send(result);
 				}catch(err){
