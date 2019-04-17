@@ -59,6 +59,7 @@ define([
         login : function(userinfo){// POST or PUT
             var dfd= new $.Deferred();
             var that = this;
+            localStorage.setItem('isNoSessionLogout', false)
             this.save({initPassword:false, user:userinfo}, {
                 success:function(resultModel, result, s, sd){
                     var _login=result.isLogin;
@@ -84,6 +85,7 @@ define([
         },
         logout : function(){
             var that = this;
+            localStorage.setItem('isNoSessionLogout', false)
             this.destroy({
                 success : function(model, res){
                     model.clear();
@@ -98,16 +100,19 @@ define([
         }, 
         noSessionlogout: function (logoutUrl) {
             var that = this;
+            localStorage.setItem('isNoSessionLogout', true)
+            this.isNoSession = true
             this.destroy({
                 success: function (model, res) {
                     model.clear();
                     model.id = null;
                     that.set({ user_id: null, isLogin: false });
-                    var fragment = '';
-                    if (!_.isUndefined(Backbone.history.fragment)){
-                        fragment = '#'+Backbone.history.fragment
-                    }
-                    window.location.href = '/?noSession=true'+fragment;
+                    // var fragment = '';
+                    // if (!_.isUndefined(Backbone.history.fragment)){
+                    //     fragment = '#'+Backbone.history.fragment
+                    // }
+                    // window.location.href = '/'+fragment;
+                    window.location.href = '/';
                 }
             });
         },   

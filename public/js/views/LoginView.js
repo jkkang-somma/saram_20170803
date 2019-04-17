@@ -125,10 +125,10 @@ define([
                 this.passwordSection.find('form').submit(false);
             },
             render: function (app, data) {
-                var _href = Backbone.history.location.href
                 var noSessionMsg = ''
-                if (_href.indexOf('noSession=true') >= 0) {
-                    noSessionMsg = i18nCommon.LOGIN_VIEW.NOSESSION_MSG
+                if (!_.isUndefined(localStorage.getItem('isNoSessionLogout'))
+                    && localStorage.getItem('isNoSessionLogout') == 'true') {
+                     noSessionMsg = i18nCommon.LOGIN_VIEW.NOSESSION_MSG
                 }
 
                 this.formSection = $(_.template(LoginHTML)({//로그인 창
