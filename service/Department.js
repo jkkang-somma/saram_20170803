@@ -4,6 +4,7 @@ var debug = require('debug')('Department');
 var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var DepartmentDao= require('../dao/departmentDao.js');
+var UserDao = require('../dao/UserDao.js');
 
 
 var Department = function (data, isNoSchemas) {
@@ -65,7 +66,11 @@ var Department = function (data, isNoSchemas) {
         	_getManagerList().then(function(currentData){
                 var _updateData=_.defaults(_data, currentData[0]);
                 DepartmentDao.updateDepartment(_updateData).then(function(result){
-                    resolve(result);
+                    if (_updateData.code !== _updateData.origin_code) {
+                        UserDao.updateUserDept(_updateData.code, _updateData.origin_code).then(function() {
+                            resolve(result);
+                        });
+                    }
                 }).catch(function(e){
                     debug("_editDepartment ERROR:"+e.message);
                     reject(e);

@@ -69,6 +69,13 @@
 				part_code=?
         	WHERE id=?
         </query>
+		<query id="updateUserDept">
+    		UPDATE
+        		members_tbl
+        	SET
+        		dept_code=?
+        	WHERE dept_code=?
+        </query>
         <query id="updateUserGisPos">
     		UPDATE
         		members_tbl
@@ -2078,6 +2085,7 @@
 			UPDATE
 				dept_code_tbl
 			SET
+				code=?,
 				name=?,
 				area=?,
 				leader=?,

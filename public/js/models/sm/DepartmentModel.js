@@ -35,6 +35,7 @@ define([
             return Backbone.sync.apply(this, arguments);
         },
         default:{
+            origin_code: '',
             code: '',
             name: '',
             area: '',       

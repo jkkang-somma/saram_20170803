@@ -23,7 +23,8 @@ define([
     	initialize:function(data){
     		$(this.el).html('');
     	    $(this.el).empty();
-    	    
+					
+    	    this.origin_code = data.code;
     	    this.model=new DepartmentModel(data);
     	    _.bindAll(this, "submitSave");
     	},
@@ -50,8 +51,7 @@ define([
         	                type:"input",
         	                name:"code",
         	                label:i18nCommon.DEPARTMENT_LIST.CODE,
-        	                value:_model.code,
-        	                disabled:"readonly",
+        	                value:_model.code
         	        },{
         	                type:"input",
         	                name:"name",
@@ -148,7 +148,8 @@ define([
 			var strTemp = firstArr[1].split(")");
 			_data.leader = strTemp[0];
 			_data.user_name = firstArr[0];
-			
+			_data.origin_code = this.origin_code;
+
 			var _departmentModel= new DepartmentModel(_data);
 			_departmentModel.attributes._code="-2";
 			

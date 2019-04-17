@@ -54,6 +54,10 @@ UserDao.prototype.updateUser = function(user){
     );
 };
 
+UserDao.prototype.updateUserDept = function(newDeptCode, oldDeptCode){
+    return db.query(group, "updateUserDept", [newDeptCode, oldDeptCode]);
+};
+
 UserDao.prototype.updateUserGisPos = function(user){
     return db.query(group, "updateUserGisPos", 
         [user.gis_pos, user.id]
