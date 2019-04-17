@@ -44,7 +44,7 @@ define([
                     { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
                     { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
                     { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
-                        return i18Common.CODE[`ADMIN_${row.admin}`]
+                        return i18Common.CODE['ADMIN_' + row.admin]
                     }, visible:true, subVisible:false},
                     { "title" : i18Common.USER.AFFILIATED, "render": function(data, type, row){
                         var result=i18Common.CODE.AFFILIATED_0;
