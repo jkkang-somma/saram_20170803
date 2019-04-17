@@ -214,6 +214,7 @@ define([
 
                     }
                 })
+                localStorage.clear()
             },
 
             login: function (isAttend) { // isAttend : 츨근 버튼 클릭(True)
