@@ -106,13 +106,8 @@ define([
                 success: function (model, res) {
                     model.clear();
                     model.id = null;
-                    that.set({ user_id: null, isLogin: false });
-                    // var fragment = '';
-                    // if (!_.isUndefined(Backbone.history.fragment)){
-                    //     fragment = '#'+Backbone.history.fragment
-                    // }
-                    // window.location.href = '/'+fragment;
-                    window.location.href = '/';
+                    that.set({ user_id: null, isLogin: false });                    
+                    window.location.reload()
                 }
             });
         },   
