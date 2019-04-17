@@ -2092,7 +2092,7 @@
 				dept_code
 			FROM
 				members_tbl
-			where dept_code = ?
+			where (leave_company is null OR leave_company = "") AND dept_code = ?
 		</query>
 	</group>
 
@@ -2133,7 +2133,7 @@
 				part_code
 			FROM
 				members_tbl
-			where part_code = ?
+			where (leave_company is null OR leave_company = "") AND part_code = ?
 		</query>
 	</group>
 
