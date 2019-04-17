@@ -275,8 +275,9 @@ define([
                                 action: function(dialogRef){
                                     dialogRef.close();
                                     //var dateTime = response.data.char_date.split(' ');
-                                    //window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];  //response.data.id  response.data.char_date
-                                    if (isAttend) {
+                                    //window.location.href="#rawdatalist/"+response.data.id+"/"+dateTime[0];  //response.data.id  response.data.char_date                                    
+                                    if (_.isBoolean(isAttend) && isAttend) {
+                                        SessionModel.isAttend = false
                                         window.location.href="#action" 
                                     } else {
                                         window.location.href="#rawdatalist";
