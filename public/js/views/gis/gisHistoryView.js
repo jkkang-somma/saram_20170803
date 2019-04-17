@@ -9,11 +9,12 @@ define([
 	'i18n!nls/common',
 	'models/sm/SessionModel',
 	'dialog',
+	'util',
 	'text!templates/default/head.html',
 	'text!templates/default/content.html',
 	'text!templates/layout/default.html',
 	'text!templates/gis/gispicbtn.html',
-], function ($, jui, _, Backbone, BaseView, Grid, Schemas, i18Common, SessionModel, Dialog, HeadHTML, ContentHTML, LayoutHTML, DeleteBtnHTML) {
+], function ($, jui, _, Backbone, BaseView, Grid, Schemas, i18Common, SessionModel, Dialog, Util, HeadHTML, ContentHTML, LayoutHTML, DeleteBtnHTML) {
 		var GisHistoryView = BaseView.extend({
 			el: ".main-container",
 			initialize: function () {
@@ -137,7 +138,7 @@ define([
 			initGrid: function () {
 				var _view = this;
 				
-				this.ajaxCall().then(function(result){
+				Util.ajaxCall("/gis/GisHistory", "GET", {}).then(function(result){
 					var gridData = [];
 					_.each(result, function(pic) {
 						gridData.push({
@@ -156,24 +157,7 @@ define([
 					var _gridSchema = Schemas.getSchema('grid');
 					_view.grid = new Grid(_gridSchema.getDefault(_view.option));
 				});
-			},
-
-			ajaxCall:function() {
-				var dfd = new $.Deferred();
-				var url = "/gis/GisHistory";
-				var ajaxSetting = {
-					method : "GET",
-					success : function(result){
-						dfd.resolve(result);
-					},
-					error : function(){
-						dfd.resolve();
-					}
-				};
-				
-				$.ajax( url, ajaxSetting );
-				 return dfd.promise();
-			},
+			}
 		});
 		return GisHistoryView;
 	});

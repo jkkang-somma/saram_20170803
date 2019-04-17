@@ -198,6 +198,24 @@ define([
 		}
 		return day.format("YYYY-MM-DD");
 	}
+
+	var ajaxCall = function (url, method, data) {
+		var dfd = new $.Deferred();
+		var ajaxSetting = {
+			method : method,
+			data : data,
+			success : function(result){
+				dfd.resolve(result);
+			},
+			error : function(){
+				alert("Error : " + error.message);
+				dfd.resolve();
+			}
+		};
+		
+		$.ajax( url, ajaxSetting );
+		return dfd.promise();
+	}
 	
     return {
         isNull:isNull,
@@ -213,6 +231,7 @@ define([
         getClientIp : getClientIp,
 		numberWithComma : numberWithComma,
 		timeformat : timeformat,
-		getApprovalLimitDate : getApprovalLimitDate
+		getApprovalLimitDate : getApprovalLimitDate,
+		ajaxCall: ajaxCall
     };
 });

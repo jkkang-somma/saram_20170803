@@ -9,6 +9,7 @@ define([
 	'schemas',
 	'i18n!nls/common',
     'dialog',
+    'util',
     'views/statistics/DeptSummaryDetailPopup',
 	'text!templates/default/head.html',
 	'text!templates/default/row.html',
@@ -19,7 +20,7 @@ define([
 	'text!templates/layout/default.html',
     'text!templates/default/button.html',
     'text!templates/statistics/deptSummaryRow.html'
-    ], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, DeptSummaryDetailPopup, 
+    ], function($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, Util, DeptSummaryDetailPopup, 
         HeadHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, ContentHTML, LayoutHTML, 
 		ButtonHTML, DeptSummaryRowHtml){
 		
@@ -207,7 +208,7 @@ define([
                 type = "PERSON";
             }
 
-            this.ajaxCall(type, startDateStr, endDateStr).then(function(result){
+            Util.ajaxCall("/statistics/abnormal", "GET", {type:type, fromDate:startDateStr, toDate:endDateStr}).then(function(result){
                 
                 var colKey = ["name", "late", "leave_early", "late_leave_early", "absent", "data_none_1", "data_none_2"];
 
@@ -278,24 +279,6 @@ define([
                 _this.option.currentFrom = startDateStr;
                 _this.option.currentTo   = endDateStr;
             });
-        },
-
-        ajaxCall:function(type, from, to) {
-            var dfd = new $.Deferred();
-            var url = "/statistics/abnormal";
-            var ajaxSetting = {
-                method : "GET",
-                data : {type:type, fromDate:from, toDate:to},
-                success : function(result){
-                    dfd.resolve(result);
-                },
-                error : function(){
-                    dfd.resolve();
-                }
-            };
-            
-            $.ajax( url, ajaxSetting );
-            return dfd.promise();
         },
 
         onClickDetailPopup:function(evt){

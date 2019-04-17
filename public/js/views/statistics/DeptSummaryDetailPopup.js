@@ -65,7 +65,13 @@ var DeptSummaryDetailPopup = Backbone.View.extend({
     drawDetpDetailData : function(){
         var _this = this;
 
-        this.ajaxCall().then(function(result){
+        var data = {
+            fromDate    : this.searchData.fromDate, 
+            toDate      : this.searchData.toDate, 
+            dept        : this.searchData.dept, 
+            work_type   : this.searchData.type
+        };
+        Util.ajaxCall("/statistics/abnormal/detail", "GET", data).then(function(result){
             _this.gridOption.collection = {
                 data:result,
                 toJSON : function(){
@@ -76,30 +82,7 @@ var DeptSummaryDetailPopup = Backbone.View.extend({
             _this.grid= new Grid(_gridSchema.getDefault(_this.gridOption));
             // $("#DeptSummaryDetail_content").css("height",500); // 다이얼로그 기본 높이 사용하지 않을 경우 지정 필요
         });
-    },
-
-    ajaxCall:function() {
-        var dfd = new $.Deferred();
-        var url = "/statistics/abnormal/detail";
-        var ajaxSetting = {
-            method : "GET",
-            data : {
-                fromDate    : this.searchData.fromDate, 
-                toDate      : this.searchData.toDate, 
-                dept        : this.searchData.dept, 
-                work_type   : this.searchData.type
-            },
-            success : function(result){
-                dfd.resolve(result);
-            },
-            error : function(){
-                dfd.resolve();
-            }
-        };
-        
-        $.ajax( url, ajaxSetting );
-        return dfd.promise();
-    },
+    }
 });
 
 return DeptSummaryDetailPopup;

@@ -7,7 +7,8 @@ define([
         'schemas',
         'i18n!nls/common',
         'models/sm/SessionModel',
-        'dialog',
+		'dialog',
+		'util',
         'html2canvas',
 
         'text!templates/default/head.html',
@@ -18,7 +19,7 @@ define([
         'collection/sm/UserCollection',
         'collection/sm/DepartmentCollection'
         ], function(
-        		$, jui, _, Backbone, BaseView, Schemas, i18Common, SessionModel, Dialog, html2canvas,
+        		$, jui, _, Backbone, BaseView, Schemas, i18Common, SessionModel, Dialog, Util, html2canvas,
         		HeadHTML, ContentHTML, LayoutHTML, PersonTemplate,
         		UserCollection, DepartmentCollection
         )
@@ -82,20 +83,21 @@ define([
 							$(_this.el).find("#giscontainer .gis_position.bottom .gis_person").css("padding-top", "30px");
 							var imageData = canvas.toDataURL("image/png");
 
-							$.ajax({
-								url : "/gis/GisHistory",
-								type : "POST",
-								dataType : "json",
-								data : {data:imageData},
-								//processData : false,
-								//contentType : false,
-								success : function(data) {
-									alert("Save Success");
-								},
-								error : function(request, status, error) {
-									alert("Save Error : " + error.message);
-								}
-							});
+							Util.ajaxCall("/gis/GisHistory", "POST", {data:imageData});
+							// $.ajax({
+							// 	url : "/gis/GisHistory",
+							// 	type : "POST",
+							// 	dataType : "json",
+							// 	data : {data:imageData},
+							// 	//processData : false,
+							// 	//contentType : false,
+							// 	success : function(data) {
+							// 		alert("Save Success");
+							// 	},
+							// 	error : function(request, status, error) {
+							// 		alert("Save Error : " + error.message);
+							// 	}
+							// });
 							dfd.resolve();
 						}
 					});
@@ -200,21 +202,22 @@ define([
 		},
 
 		ajaxCall:function(userModelOne) {
-			var dfd = new $.Deferred();
-    	    var url = "/user/setGisPos/" + userModelOne.get("id");
-    	    var ajaxSetting = {
-    	        method : "PUT",
-    	        data : userModelOne.attributes,
-    	        success : function(result){
-    	            dfd.resolve();
-    	        },
-    	        error : function(){
-    	            dfd.resolve();
-    	        }
-    	    };
+			Util.ajaxCall("/user/setGisPos/" + userModelOne.get("id"), "PUT", userModelOne.attributes)
+			// var dfd = new $.Deferred();
+    	    // var url = "/user/setGisPos/" + userModelOne.get("id");
+    	    // var ajaxSetting = {
+    	    //     method : "PUT",
+    	    //     data : userModelOne.attributes,
+    	    //     success : function(result){
+    	    //         dfd.resolve();
+    	    //     },
+    	    //     error : function(){
+    	    //         dfd.resolve();
+    	    //     }
+    	    // };
     	    
-    	    $.ajax( url, ajaxSetting );
-     		return dfd.promise();
+    	    // $.ajax( url, ajaxSetting );
+     		// return dfd.promise();
         },
 
 		addDragEvent:function() {

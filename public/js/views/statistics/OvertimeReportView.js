@@ -197,7 +197,7 @@ define([
             Dialog.loading({
                 action:function() {
                     var dfd = new $.Deferred();
-                    _this.ajaxCall(type, startDateStr, endDateStr).then(function(result){
+                    Util.ajaxCall("/statistics/report1", "GET", {type:type, from:startDateStr, to:endDateStr}).then(function(result){
                         var workTypeList = ["used_day", "AA", "AB", "AC", "TOTAL_A", "BA", "BB", "BC", "total_B_day", "TOTAL_B"];
                         for ( var i = 0 ; i < result.OverTimeInfo.length ; i++ ) {
                             
@@ -300,24 +300,6 @@ define([
                     return dfd.promise();
                 }
             });
-        },
-
-        ajaxCall:function(type, startDateStr, endDateStr) {
-            var dfd = new $.Deferred();
-            var url = "/statistics/report1";
-            var ajaxSetting = {
-                method : "GET",
-                data : {type:type, from:startDateStr, to:endDateStr},
-                success : function(result){
-                    dfd.resolve(result);
-                },
-                error : function(){
-                    dfd.resolve();
-                }
-            };
-            
-            $.ajax( url, ajaxSetting );
-            return dfd.promise();
         },
 
         onClickDetailPopup:function(evt){
