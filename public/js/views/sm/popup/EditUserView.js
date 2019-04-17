@@ -56,7 +56,8 @@ define([
         	                name:"id",
         	                label:i18nCommon.USER.ID,
         	                value:_model.id,
-        	                group:"requireInfo"
+							group:"requireInfo",
+							disabled:"readonly"
         	        },{
         	                type:"input",
         	                name:"name",
