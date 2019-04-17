@@ -125,6 +125,8 @@ define([
                 this.passwordSection.find('form').submit(false);
             },
             render: function (app, data) {
+
+                // 세션 만료 여부 체크 후 경고 문구 출력 처리
                 var noSessionMsg = ''
                 if (!_.isUndefined(localStorage.getItem('isNoSessionLogout'))
                     && localStorage.getItem('isNoSessionLogout') == 'true') {
@@ -185,6 +187,19 @@ define([
                     this.formSection.find("#loginIdTextbox").val(data.id);
                     this.formSection.find("#loginPasswordTextbox").val(data.password);
                     this.login();
+                }
+
+                // 크롬, 모바일이 아닐 경우 버튼 출력
+                var agent = navigator.userAgent.toLowerCase();
+                var filter = "win16|win32|win64|mac";
+                var platform = navigator.platform.toLowerCase();
+                
+                if(agent.indexOf("chrome") < 0 && agent.indexOf("firefox") < 0 && filter.indexOf(platform) > -1){ 
+                    // 크롬, 모바일이 아닐 경우 출근 버튼 삭제
+                    this.formSection.find("#attendbtn").remove();
+                } else {
+                    this.formSection.find("#loginbtn").removeClass("login-button"); 
+                    this.formSection.find("#loginbtn").addClass("small-login-button");                      
                 }
 
                 this.formSection.find("#loginIdTextbox").focus();
