@@ -43,7 +43,7 @@ define({
         PHONE:"휴대전화번호",
         APPROVAL_NAME:"결재자",
         IP:"IP 주소",
-        OFFICE_IP:"사무실 IP 주소",
+        OFFICE_IP:"공인 IP 주소",
         PHONE_OFFICE:"사무실 전화번호",
         BIRTHDAY:"생일",
         WEDDING_DAY:"결혼기념일",
