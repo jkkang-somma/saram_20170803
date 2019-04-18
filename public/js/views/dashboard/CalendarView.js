@@ -250,7 +250,7 @@ define([
                         } else if(Moment(_view.overTimeDay).isBefore(commuteData[0].date) || Moment(_view.overTimeDay).isSame(commuteData[0].date))
                         {
                             if (commuteData[0].over_time >= 120) {
-                                overTime = '<button id="calendarSubmit" class="overSubmit">상신</button>'
+                                overTime = '<button id="calendarSubmit" class="overSubmit glyphicon glyphicon-edit">상신</button>'
                             }
                         }
                     }
