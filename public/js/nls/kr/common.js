@@ -388,9 +388,9 @@ define({
             TIME : "출입시간",
             TYPE : "출입기록",
             IP : "로그인 IP",
-            IP_PC : "로그인 외부 IP",
+            IP_PC : "로그인 공인 IP",
             MEM_IP_IC: "지정 IP",
-            MEM_IP_OFFICE: "지정 외부 IP",
+            MEM_IP_OFFICE: "지정 공인 IP",
             PLATFORM_TYPE: "로그인 플랫폼",
             NEED_CONFIRM : "확인필요",
             MAC:"Mac"
