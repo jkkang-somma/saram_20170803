@@ -47,7 +47,6 @@
         		password=?,
         		name=?,
         		dept_code=?,
-				last_dept_name=?,
         		approval_id=?,
         		name_commute=?,
         		join_company=?,
