@@ -4,7 +4,7 @@ var debug = require('debug')('Department');
 var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var DepartmentDao= require('../dao/departmentDao.js');
-var UserDao = require('../dao/UserDao.js');
+var UserDao = require('../dao/userDao.js');
 
 
 var Department = function (data, isNoSchemas) {
