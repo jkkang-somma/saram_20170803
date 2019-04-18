@@ -1300,6 +1300,10 @@ border: 2px dotted #2ABB9B !important;
     font-size: 15px;
 }
 
+#dashboard_main .calendar-body .text .overSubmit:hover {
+  background: linear-gradient(to top, #2ac16a, #0ea54e);
+}
+
 #dashboard_main .calendar-body .text:first-child {
     float: left;
 }
