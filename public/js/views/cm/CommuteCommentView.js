@@ -248,7 +248,7 @@ define([
 			};
 			
 			if (SessionModel.getUserInfo().admin >= Schemas.DEPT_BOSS) {
-				this.gridOption.buttons.push({type:"myRecord", name: "myRecord", filterColumn:["name"], tooltip: ""})
+				this.gridOption.buttons.push({type:"myRecord", name: "myRecord", filterColumn:["name", "approval_name"], tooltip: ""})
 			}
     		this.buttonInit();
 		},
