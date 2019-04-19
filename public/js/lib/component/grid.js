@@ -108,6 +108,10 @@ define([
                 headerH = (headerH.length > 0)? headerH.outerHeight() : 46;
                 var height = $("#"+this.options.el).outerHeight() - headerH - 80;
                 this.DataTableAPI.context[0].oScroll.sY = this.options.scrollY = height;
+                // firefox 에서 scrollY를 마이너스 값으로 인식하는 오류를 임시로 보완 2019.04.19 KJK
+                if (this.options.scrollY < 0) {
+                    this.DataTableAPI.context[0].oScroll.sY = this.options.scrollY = 600
+                }
                 $('#'+this.options.el).find('.dataTables_scroll .dataTables_scrollBody').css('height', height);
                 var dheight = this.options.scrollY + headerH + 1;
                 $('#'+this.options.el).find('.dataTables_scroll').css('height', dheight);
