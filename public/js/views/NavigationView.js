@@ -179,10 +179,10 @@ define([
 
             if (navigator.userAgent.indexOf("Trident") != -1) {
                 param2 = "902";
+            } else if (navigator.userAgent.indexOf("OPR") != -1) {
+                param2 = "163";
             } else if (navigator.userAgent.indexOf("Chrome") != -1) {
                 param2 = "111";
-            } else if (navigator.userAgent.indexOf("Opera") != -1) {
-                param2 = "163";
             } else if (navigator.userAgent.indexOf("Firefox") != -1) {
                 param2 = "174";
             }
