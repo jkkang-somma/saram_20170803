@@ -186,10 +186,10 @@ body.web-login .save-password-btn{
 }
 
 body.web-login .login-button{
-    margin: 5px 30px;
+    margin: 5px 20px;
     margin-left: 30;
     padding: 10px;
-    width: calc(100% - 60px);
+    width: calc(100% - 160px);
     background: rgb(68,145,251);
     font-size: 16px;
     font-weight: bold;

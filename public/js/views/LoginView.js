@@ -194,11 +194,10 @@ define([
                 var filter = "win16|win32|win64|mac";
                 var platform = navigator.platform.toLowerCase();
                 
-                if(agent.indexOf("chrome") < 0 && agent.indexOf("firefox") < 0 && filter.indexOf(platform) > -1){ 
-                    // 크롬, 모바일이 아닐 경우 출근 버튼 삭제
+                if(agent.indexOf("chrome") < 0 && agent.indexOf("firefox") < 0 && filter.indexOf(platform) > -1) {
+                    // 크롬, 모바일이 아닐 경우 출근 버튼 삭제 ( IE 인 경우 "출근" 버튼 삭제 )
                     this.formSection.find("#attendbtn").remove();
                 } else {
-                    this.formSection.find("#loginbtn").removeClass("login-button"); 
                     this.formSection.find("#loginbtn").addClass("small-login-button");                      
                 }
 
