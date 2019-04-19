@@ -242,15 +242,17 @@ CommuteModel, ChangeHistoryModel, CommuteCollection,  ChangeHistoryCollection
 			}else{
 				newData.out_time = null;
 			}
-			
-			if (overtimeChangeModel) {
-				newData.changeHistoryCollection.add(overtimeChangeModel);
-			}else{
-				newData.overtime_code = null;
-			}
 
 			if (normal) {
 				newData.changeHistoryCollection.add(normal);
+			}else{
+				if (!overtimeChangeModel) {
+					newData.overtime_code = null;
+				}
+			}
+
+			if (overtimeChangeModel) {
+				newData.changeHistoryCollection.add(overtimeChangeModel);
 			}else{
 				newData.overtime_code = null;
 			}
