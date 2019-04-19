@@ -195,6 +195,11 @@ body.web-login .login-button{
     font-weight: bold;
 }
 
+body.web-login .long-login-button{
+    margin: 5px 30px;
+    width: calc(100% - 60px);
+}
+
 body.web-login .login-button:hover{
     background: rgb(88,165,251);
     color: white;

@@ -23,12 +23,11 @@
                         placeholder="<%= passwordPlaceholder%>" name="password">
                 </div>
             </div>
-            <button class="btn btn-sm btn-success login-button login-btn" id="loginbtn"
+            <button class="btn btn-sm btn-success pull-right login-button attend-button login-btn" id="attendbtn"
+                    data-loading-text="<div class='spinIcon'><%= loginSatusBtn%></div>"><%= attendBtn%>
+            <button class="btn btn-sm btn-success pull-right login-button login-btn" id="loginbtn"
                 data-loading-text="<div class='spinIcon'><%= loginSatusBtn%></div>"><%= loginBtn%> <span
                     class="glyphicon glyphicon-chevron-right" style="top: 2px;"></span>
-                <button class="btn btn-sm btn-success attend-button login-btn" id="attendbtn"
-                    data-loading-text="<div class='spinIcon'><%= loginSatusBtn%></div>"><%= attendBtn%>
-                    </td>
         </form>
     </div>
 </div>

@@ -197,8 +197,9 @@ define([
                 if(agent.indexOf("chrome") < 0 && agent.indexOf("firefox") < 0 && filter.indexOf(platform) > -1) {
                     // 크롬, 모바일이 아닐 경우 출근 버튼 삭제 ( IE 인 경우 "출근" 버튼 삭제 )
                     this.formSection.find("#attendbtn").remove();
+                    this.formSection.find("#loginbtn").addClass("long-login-button");
                 } else {
-                    this.formSection.find("#loginbtn").addClass("small-login-button");                      
+                    this.formSection.find("#loginbtn").addClass("small-login-button");
                 }
 
                 this.formSection.find("#loginIdTextbox").focus();
