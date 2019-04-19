@@ -287,7 +287,7 @@ define([
             var _buttons = ["search"];
 
             if (SessionModel.getUserInfo().admin >= Schemas.DEPT_BOSS) {
-				_buttons.push({type:"myRecord", name: "myRecord", filterColumn:["name"], tooltip: ""})
+				_buttons.push({type:"myRecord", name: "myRecord", filterColumn:["submit_name"], tooltip: ""})
 			}
 
             _buttons.push({ // 신규상신
