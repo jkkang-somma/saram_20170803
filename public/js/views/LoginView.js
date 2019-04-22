@@ -70,6 +70,22 @@ define([
                 this.passwordSection.find("#initCanceleBtn").click(function () {
                     _view.render(_view.app);
                 });
+
+                // 로그인
+                this.formSection.find("#loginIdTextbox").bind('keydown', function (e) {
+                    if (e.keyCode == 13) {
+                        e.preventDefault();
+                        _view.login();
+                    }
+                });
+                this.formSection.find("#loginPasswordTextbox").bind('keydown', function (e) {
+                    if (e.keyCode == 13) {
+                        e.preventDefault();
+                        _view.login();
+                    }
+                });
+
+                // 패스워드 초기화
                 this.passwordSection.find("#initRePasswordInput").bind('keydown', function (e) {
                     if (e.keyCode == 13) {
                         e.preventDefault();
