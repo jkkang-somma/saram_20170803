@@ -239,29 +239,12 @@ define([
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
-            // if (isOnLoginModule){
-            //     var status=LoginModule.status;
-            //     if (status==2){
-            //             clearInterval(myVar);
-            //             var info=LoginModule.registIpInfos();
-            //             obj = JSON.parse(info);
-                        
-            //     } else {
-            //         clearInterval(myVar);
-            //         Dialog.error("로긴 정보가 올바르지 않습니다.");
-            //     }
-            // } else {
-                // clearInterval(myVar);
-                // obj.mac='';
-                // obj.ip_pc='';
-            // }
 
             clearInterval(myVar);
             Util.getClientIp().always(function(result){
-                obj.mac='';
-                obj.ip_pc=result;
-                obj.type='A';
-                obj.param = $this.checkParam();
+                obj.k = result;
+                obj.t = 'A';
+                obj.p = $this.checkParam();
                 var objA = {p: btoa(JSON.stringify(obj))}
 
                 var model = new RawDataModel();
@@ -294,41 +277,17 @@ define([
         }
 	},
 	
-	
-	
-// 		type : req.body.type,
-// 		ip_pc : req.body.ip,
-// 		mac : req.body.mac,
-// 		ip_office : req.ip
-	
     accessOut: function() { // 퇴근 기록
         var $this = this;
         var myVar = setInterval(function(){ myTimer() }, 500);
         function myTimer() {
             var obj={};
-            // if (isOnLoginModule){
-            //     var status=LoginModule.status;
-            //     if (status==2){
-            //             clearInterval(myVar);
-            //             var info=LoginModule.registIpInfos();
-            //             obj = JSON.parse(info);
-                        
-            //     } else {
-            //         clearInterval(myVar);
-            //         Dialog.error("로긴 정보가 올바르지 않습니다.");
-            //     }
-            // } else {
-                // clearInterval(myVar);
-                // obj.mac='';
-                // obj.ip_pc='';
-            // }
             
             clearInterval(myVar);
             Util.getClientIp().always(function(result){
-                obj.type='B';
-                obj.mac='';
-                obj.ip_pc=result;
-                obj.param = $this.checkParam();
+                obj.t = 'B';
+                obj.k = result;
+                obj.p = $this.checkParam();
                 var objA = {p: btoa(JSON.stringify(obj))}
                 
                 var model = new RawDataModel();

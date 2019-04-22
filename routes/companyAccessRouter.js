@@ -21,30 +21,33 @@ router.route("/")
 		var b = new Buffer(req.body.p, 'base64')
 		var s = b.toString()
 		bodyDecode = JSON.parse(s);
+		debug('companyAccessRouter in...')
+		console.info(req.body)
+		console.info(bodyDecode)
 	} catch (e) {
 		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 시작 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 		debug('Exception')
-		debug(e)
-		debug(req.body)
+		console.info(e)
+		console.info(req.body)
 		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 끝   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 	}
 	
-	if (bodyDecode.type === 'A') {
+	if (bodyDecode.t === 'A') {
 		bodyDecode.type = '출근(온라인)'
-	} else if (bodyDecode.type === 'B') {
+	} else if (bodyDecode.t === 'B') {
 		bodyDecode.type = '퇴근(온라인)'
 	} else {
 		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 시작 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-		debug(req.body)
-		debug(bodyDecode)
+		console.info(req.body)
+		console.info(bodyDecode)
 		debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 끝   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 	}
 	var inData = {
 		type : bodyDecode.type,
-		ip_pc : _.isEmpty(bodyDecode.ip_pc)?null:bodyDecode.ip_pc,
+		ip_pc : _.isEmpty(bodyDecode.k)?null:bodyDecode.k,
 		mac : _.isEmpty(bodyDecode.mac)?null:bodyDecode.mac,
 		ip_office : ip, 
-		param : bodyDecode.param
+		param : bodyDecode.p
 	};
 	
 	CompanyAccess.setAccess(inData, user).then(function(result) {
@@ -53,6 +56,8 @@ router.route("/")
 		delete result.data.ip_pc
 		delete result.data.ip_office
 		delete result.data.mac
+		delete result.data.type
+		delete result.dbResult
 		
 		return res.send(result);
 	}).catch(function(err) {
