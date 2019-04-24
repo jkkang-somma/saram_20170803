@@ -102,7 +102,12 @@ define([
 				var id = target.data("id");
 
 				var url = "http://" + window.location.host + "/gis/GisHistoryImg?file=" + id + "&timestamp=" + new Date().getTime();
-				window.open(url, id.replace(".png",""));
+				var w = window.open(url, id.replace(".png",""));
+				w.onload = function (e) {
+					// 배경색을 흰색으로. ( default 로 배경색이 검은색으로 설정됨... 이유는 모르겠음... )
+					var $body = $(e.target.body);
+					$body.css("background", "white");
+				}
 				//newWin.location.reload();
 				// var newWin = window.open("about:blank");
 				// newWin.location.href=url;
