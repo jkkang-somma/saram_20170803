@@ -2,6 +2,7 @@ var express = require('express');
 var debug = require('debug')('statisticsRouter');
 var router = express.Router();
 var Statistics = require('../service/StatisticsService.js');
+var sessionManager = require('../lib/sessionManager');
 
 router.route('/abnormal')
 .get(function(req, res, next){
@@ -23,7 +24,8 @@ router.route('/abnormal/detail')
 
 router.route('/report1')
 .get(function(req, res, next){
-	Statistics.selectReport1(req.query.type, req.query.from, req.query.to).then(function(result) {
+	var adminString=sessionManager.getAdminString(req.cookies.saram);
+	Statistics.selectReport1(req.query.type, req.query.from, req.query.to, adminString).then(function(result) {
 		return res.send(result);
 	}).catch(function(err) {
 		next(err);

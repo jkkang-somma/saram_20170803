@@ -31,7 +31,7 @@ var StatisticsService = function () {
     };
 
     // 휴가 정보 / 추가근무 정보
-    var _selectReport1 = function (type, fromDate, toDate) {
+    var _selectReport1 = function (type, fromDate, toDate, id) {
         return new Promise(function(resolve, reject){// promise patten
             var result = {};
             
@@ -46,7 +46,7 @@ var StatisticsService = function () {
             }else{
                 StatisticsDao.selectOverTimePersonal(fromDate, toDate).then(function (result2) {
                     result["OverTimeInfo"] = result2;
-                    VacationDao.selectVacationsByYear(fromDate.substring(0,4)).then(function (result3) {
+                    VacationDao.selectVacationsByYear(fromDate.substring(0,4), id).then(function (result3) {
                         result["VacationInfo"] = result3;
                         resolve(result);
                     });
