@@ -70,6 +70,8 @@ var Department = function (data, isNoSchemas) {
                         UserDao.updateUserDept(_updateData.code, _updateData.origin_code).then(function() {
                             resolve(result);
                         });
+                    } else {
+                        resolve(result);
                     }
                 }).catch(function(e){
                     debug("_editDepartment ERROR:"+e.message);
