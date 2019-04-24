@@ -138,16 +138,21 @@ define([
     	    var dfd= new $.Deferred();
 			var _view=this,_form=this.form,_data=_form.getData();
 			
-			if(!_view.checkFormData(_data.leader)) {
-				Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
-				dfd.reject();
-				return;
-			}
+			// 부서장 필수항목에서 선택항목으로 변경 - 2019.04.24 KJK
+			// if(!_view.checkFormData(_data.leader)) {
+			// 	Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
+			// 	dfd.reject();
+			// 	return;
+			// }
 
-			var firstArr = (_data.leader).split("(");
-			var strTemp = firstArr[1].split(")");
-			_data.leader = strTemp[0];
-			_data.user_name = firstArr[0];
+			if(_view.checkFormData(_data.leader)) {
+				var firstArr = (_data.leader).split("(");
+				var strTemp = firstArr[1].split(")");
+				_data.leader = strTemp[0];
+				_data.user_name = firstArr[0];
+			} else {
+				_data.leader = undefined;
+			}
 			_data.origin_code = this.origin_code;
 
 			var _departmentModel= new DepartmentModel(_data);
@@ -156,6 +161,10 @@ define([
     	    _departmentModel.save({},{
     	        success:function(model, xhr, options){
     	    		Code.init().then(function(){
+								if (_data.leader === undefined) {
+									_data.leader = "";
+									_data.user_name = null;
+								}
     	    			 dfd.resolve(_data);
     	    		});
     	            //dfd.resolve(_data);
