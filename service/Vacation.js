@@ -30,6 +30,8 @@ var db = require('../lib/dbmanager.js');
  *  
  * A : 2  이상인 경우
  *  => 15 + ( rounddwon( A-1 ) / 2 ) 
+ * 
+ * 공통 : 최대 연차일수 : 25일
  *
  */
 var getHoliday = function(userId, joinDate, year) {
@@ -51,7 +53,6 @@ var getHoliday = function(userId, joinDate, year) {
 		
 	if ( diffYear == 0) {
 		return 0;
-		
 	} else if (diffYear == 1) {
 		var a = ( joinMonth + (15 / 12 * (12-joinMonth)) ).toString();
 		var aArr = a.split(".");
@@ -68,11 +69,14 @@ var getHoliday = function(userId, joinDate, year) {
 		} else {
 			return  parseInt(aArr[0]);
 		}
-
 	} else {
 		var tNum = 15 +  parseInt( (diffYear-1) / 2);
 		
-		return parseInt(tNum);
+		var result = parseInt(tNum)
+		if (result > 25) {
+			result = 25
+		}
+		return result;
 	}
 };
 
