@@ -434,14 +434,14 @@ define([
 					newData.changeHistoryCollection.add(nomalChangeModel);
      		}
      		
-     		if(checkResult.inCheck){
+     		if(checkResult.inCheck && data.inTimeAfter !== ""){
      			newData.changeInTime = data.inTimeAfter;
      			var inChangeModel = this._getChangeHistoryModel("in_time", newData.changeInTime, this.selectData.before_in_time, userId, data.comment);
      			if (inChangeModel)
 					newData.changeHistoryCollection.add(inChangeModel);
      		}
      		
-     		if(checkResult.outCheck){
+     		if(checkResult.outCheck && data.outTimeAfter !== ""){
      			newData.changeOutTime = data.outTimeAfter;
      			var outChangeModel = this._getChangeHistoryModel("out_time", newData.changeOutTime, this.selectData.before_out_time, userId, data.comment);
      			if (outChangeModel)
