@@ -491,8 +491,8 @@ define([
 									
 								selectItem = that.grid.getDataAt(data.idx-1);
 								var inputData = commentPopupView.getData();
-								inputData.intime = (inputData.want_in_time != null)? inputData.want_in_time : inputData.before_in_time;
-								inputData.outtime = (inputData.want_out_time != null)? inputData.want_out_time : inputData.before_out_time;
+								inputData.intime = (inputData.inTimeAfter != "")? inputData.inTimeAfter : inputData.inTimeBefore;
+								inputData.outtime = (inputData.outTimeAfter != "")? inputData.outTimeAfter : inputData.outTimeBefore;
 
 								if(inputData.approvalOvertime){
 									// resultTimeFacctory. initByModel 활용하여 데이터 가져오기 
