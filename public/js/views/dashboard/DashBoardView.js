@@ -310,7 +310,7 @@ define([
 						var btnCon = $('.btn-group#privilege-btn-comment').find('.btn');
 						btnCon.removeClass('btn-success');
 						btnCon.removeClass('btn-danger');
-						if(result.length > 0){
+						if(result.models[0].attributes.CommentCount > 0){
 							btnCon.addClass('btn-danger');
 						}else{
 							btnCon.addClass('btn-success');
