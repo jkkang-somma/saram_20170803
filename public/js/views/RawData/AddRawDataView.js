@@ -143,6 +143,13 @@ define([
                                                         year: resultDate.year(),
                                                         type: item[3]
                                                     }));
+                                                }else if (item[1] === undefined) {
+                                                    Dialog.warning("이름이 없는 항목이 존재합니다. 데이터를 확인하세요.");
+                                                    
+                                                    addRawDataAddPopupView.setProgressDisabled(true);
+                                                    $("#rawDataCommitBtn").prop("disabled", false); // 버튼 enable
+
+                                                    return;
                                                 }else if (item[1].indexOf("청소용") >= 0) {  // 청소용
                                                     that.rawDataCollection.add(new RawDataModel({
                                                         id : "?",
@@ -165,7 +172,11 @@ define([
                                             that.grid.render();
                                             
                                             if(errCount > 0){ // 사번이 없는 데이터가 있을경우
-                                                Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_FAIL + "\n" +errList);
+                                                var errStr = ''
+                                                for (var i = 0 ; i < errList.length ; i++) {
+                                                    errStr += errList[i] + '\n';
+                                                }
+                                                Dialog.error(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_FAIL + "\n\n" +errStr);
                                                 that._disabledOkBtn(true);
                                             }else{
                                                 Dialog.info(i18nCommon.ADD_RAW_DATA.ADD_DIALOG.MSG.ANALYZE_COMPLETE);
