@@ -247,6 +247,9 @@
     </group>
 
     <group id="approval">
+		<query id="selectApprovalByDocNum">
+    		select * from approval_tbl where doc_num=?
+    	</query>
     	<query id="rejectApprovalConfirm">
     		update approval_tbl set
     			decide_comment = ?

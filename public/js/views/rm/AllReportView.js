@@ -236,7 +236,7 @@ define([
                                 		Dialog.show("완료되었습니다.");
                                         dialogRef.close();
                                         }).fail(function() {
-                                            Dialog.error("해당 날짜에 이미 결재된 내역이 있습니다.");
+                                            Dialog.error("해당 날짜에 이미 결재된 내역이 있습니다. 재조회 후 다시 확인하십시오.");
                                         });
                                     }
                             	}

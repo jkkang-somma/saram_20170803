@@ -111,6 +111,10 @@ ApprovalDao.prototype.getManagerId =  function (manager_id) {
     return db.query(group, "getManagerId", [manager_id]);
 };
 
+ApprovalDao.prototype.selectApprovalByDocNum =  function (docNum) {
+    return db.query(group, "selectApprovalByDocNum", [docNum]);
+};
+
 ApprovalDao.prototype.selectApprovalIndex =  function (yearmonth) {
     return db.query("approval_index", "selectMaxIndexApproval", [yearmonth]);
 };
