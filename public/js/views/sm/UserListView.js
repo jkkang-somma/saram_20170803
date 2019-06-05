@@ -262,38 +262,39 @@ define([
                     }
         	    });
     	    }    
-    	    
-    	    if (this.actionAuth.remove){
-        	    _buttons.push({//User Remove
-        	        type:"custom",
-        	        name:"remove",
-        	        tooltip:i18Common.TOOLTIP.USER.REMOVE, //"사용자 삭제",
-        	        click:function(_grid){
-                        var selectItem=_grid.getSelectItem();
-                        if (_.isUndefined(selectItem)){
-                            Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
-                        } else {
-                            selectItem._id="-1";
-                            Dialog.confirm({
-                                msg:i18Common.CONFIRM.USER.REMOVE, //"Do you want Delete User?",
-                                action:function(){
-                                   var userModel=new UserModel(selectItem);
-                                   return userModel.remove();
-                                },
-                                actionCallBack:function(res){//response schema
-                                    if (res.status){
-                                        _grid.removeRow(selectItem);
-                                        Dialog.show(i18Common.SUCCESS.USER.REMOVE);
-                                    }
-                                },
-                                errorCallBack:function(){
-                                    //dd.close();
-                                }
-                            });
-                        }
-                    }
-        	    });
-    	    }
+            
+            // 삭제 기능 제거 2019.06.05
+    	    // if (this.actionAuth.remove){
+        	//     _buttons.push({//User Remove
+        	//         type:"custom",
+        	//         name:"remove",
+        	//         tooltip:i18Common.TOOLTIP.USER.REMOVE, //"사용자 삭제",
+        	//         click:function(_grid){
+            //             var selectItem=_grid.getSelectItem();
+            //             if (_.isUndefined(selectItem)){
+            //                 Dialog.warning(i18Common.GRID.MSG.NOT_SELECT_ROW);
+            //             } else {
+            //                 selectItem._id="-1";
+            //                 Dialog.confirm({
+            //                     msg:i18Common.CONFIRM.USER.REMOVE, //"Do you want Delete User?",
+            //                     action:function(){
+            //                        var userModel=new UserModel(selectItem);
+            //                        return userModel.remove();
+            //                     },
+            //                     actionCallBack:function(res){//response schema
+            //                         if (res.status){
+            //                             _grid.removeRow(selectItem);
+            //                             Dialog.show(i18Common.SUCCESS.USER.REMOVE);
+            //                         }
+            //                     },
+            //                     errorCallBack:function(){
+            //                         //dd.close();
+            //                     }
+            //                 });
+            //             }
+            //         }
+        	//     });
+    	    // }
     	    
     	    //Refresh
     	    _buttons.push("refresh");
