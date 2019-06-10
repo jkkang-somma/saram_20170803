@@ -33,16 +33,12 @@ define([
         'views/cm/popup/CommuteUpdatePopupView',
         'views/cm/popup/CommentPopupView',
         'views/cm/popup/ChangeHistoryPopupView',
-        'views/cm/popup/OvertimeApprovalPopupView',
-        'text!templates/cm/searchFormTemplate.html',
-        'text!templates/cm/btnNoteCellTemplate.html',
-        'text!templates/cm/overTimeCellTemplate.html'
+        'views/cm/popup/OvertimeApprovalPopupView'
 ], function(
 		$, _, Backbone, Util, ResultTimeFactory, Schemas, Grid, Dialog, Datatables, Moment,BaseView, Code, i18nCommon,
 		HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,RowComboHTML,
 		SessionModel, CommuteModel, ApprovalModel, ApprovalIndexModel, ApprovalCollection, CommuteCollection, HolidayCollection, 
-		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, OvertimeApprovalPopupView,
-		searchFormTemplate, btnNoteCellTemplate, overTimeCellTemplate){
+		CommuteUpdatePopupView, CommentPopupView, ChangeHistoryPopupView, OvertimeApprovalPopupView){
 
 	
 	// 출퇴근 시간 셀 생성
@@ -97,15 +93,28 @@ define([
 	}
 		
 	function _createCommentCell(cellData) {
-		var data = {
-			comment_count: cellData.comment_count,
-			idx: cellData.idx,
-			id: cellData.id,
-			date: cellData.date,
-			isShowEditBtn: (SessionModel.get("user").admin == Schemas.ADMIN)?true: false
-		};
-		var tpl = _.template(btnNoteCellTemplate)(data);
-		return tpl;
+
+		var isShowEditBtn = (SessionModel.get("user").admin == Schemas.ADMIN)?true: false
+		var html1 = '<div><div style="text-align: center;">0 건</div>'; // 코멘트 등록 건수 및 링크
+		var html2 = ''; // 코멘트 버튼
+		var html3 = '</div?</div>'; // 관리자 기록 수정 버튼
+
+		if (cellData.comment_count > 0) {
+			html1 = '<div><div style="text-align: center;">' +
+			'<a class="td-comment" data="{idx: ' + cellData.idx + '}" href="#commutemanager/comment/'+cellData.id+'/'+cellData.date+'" ' + 
+			'target="_blank">'+cellData.comment_count+'건</a></div>';
+		}
+
+		html2 = '<div style="text-align: center;">' +
+			'<button type="button" class="btn-comment-add btn btn-default btn-xs" data=\'{"idx": '+cellData.idx+'}\'>' +
+			'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>';
+
+		if (isShowEditBtn === true) {
+			html3 = '<button type="button" class="btn-commute-edit btn btn-default btn-xs" data=\'{"idx": '+cellData.idx+'}\'>' +
+				'<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></div?</div>'
+		}
+
+		return html1 + html2 + html3;
 	}
 	
 	function _getBrString(result){
@@ -273,10 +282,7 @@ define([
 											overtime = overtime + "<BR>(상신대기)";
                                             isApproval = true;
 										}
-     	                    			result = _.template(overTimeCellTemplate)({
- 	                    					isMod : false,
- 	                    					over_time : overtime
- 	                    				});
+										result = _view.getOverTimeCellTemplate(false, overtime);
 
  	                    				if(full.id == SessionModel.getUserInfo().id){
  	                    					if(_.isNull(full.overtime_code)){
@@ -284,25 +290,18 @@ define([
 		     	                    			if(Moment(_view.overTimeDay).isBefore(date) || Moment(_view.overTimeDay).isSame(date))
                                                 {	
                                                     // 휴일,토,일의 경우 버튼이 생성되지 않음. / 외주
-		     	                    				
-		     	                    					if ( _.indexOf(_view.holidayCollection.pluck("date"), full.date ) == -1 ) {
-	    		     	                    				if ( (Moment(full.date,"YYYY-MM-DD")).weekday() != 0 && (Moment(full.date,"YYYY-MM-DD")).weekday() != 6) {
-	                                                            if ( full.over_time >= 120) {	// 최소 120분 이상이 되어야 버튼이 보이도록 한다.
-	        			     	                    				result = _.template(overTimeCellTemplate)({
-	        			     	                    					isMod : true,
-	        			     	                    					idx : full.idx,
-	        			     	                    					over_time : overtime
-	        			     	                    				});
-	                                                                if ( isApproval || SessionModel.get("user").affiliated == 1 ) {
-	                                                                    var div= $("<div/>").append(result);
-	                                                                    div.find(".btn-overtime").css("visibility", "hidden");
-	                                                                    result = div.html();
-	                                                                }
-	        			     	                    			}
-	                                                        }
-	                                                    }
-		     	                    				
-                                                    
+													if ( _.indexOf(_view.holidayCollection.pluck("date"), full.date ) == -1 ) {
+														if ( (Moment(full.date,"YYYY-MM-DD")).weekday() != 0 && (Moment(full.date,"YYYY-MM-DD")).weekday() != 6) {
+															if ( full.over_time >= 120) {	// 최소 120분 이상이 되어야 버튼이 보이도록 한다.
+																result = _view.getOverTimeCellTemplate(true, overtime, full.idx);
+																if ( isApproval || SessionModel.get("user").affiliated == 1 ) {
+																	var div= $("<div/>").append(result);
+																	div.find(".btn-overtime").css("visibility", "hidden");
+																	result = div.html();
+																}
+															}
+														}
+													}
 		    	 	                    		}	
 	     	                    			}
      	                    			}
@@ -630,7 +629,19 @@ define([
                 }
             }
             return sZero + s;
-        },
+		},
+		
+		getOverTimeCellTemplate : function (isMod, overTime, idx) {
+			if (isMod === false) {
+				return '<div> <div style="text-align: center;"> '+overTime+'</div></div>';
+			} else {
+				return '<div> <div style="text-align: center;"> ' + overTime +
+					'<button type="button" class="btn-overtime btn btn-default btn-xs" data="'+idx+'">' +
+						'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>' +
+					'</button>' +
+				'</div></div>';
+			}
+		},
 		
 		sendApprovalOvertime : function(dialog, selectItem, inputData, state){
 			var _this = this;
