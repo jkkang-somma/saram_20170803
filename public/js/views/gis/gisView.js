@@ -535,8 +535,8 @@ define([
 					if ( deptMap[user.dept_code].area != "서울" ) {
 						printFlag = false;
 
-						// 김태중 팀장, 백성준 팀장은 자리배치도에 출력되도록 수정. 2017.12.28
-						if ( user.id == "070901" || user.id == "121102") {
+						// 현명수 팀장, 백성준 팀장은 자리배치도에 출력되도록 수정. 2017.12.28
+						if ( user.id == "180502" || user.id == "121102") {
 							printFlag = true;
 						}
 					}
