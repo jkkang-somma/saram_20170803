@@ -32,7 +32,7 @@ define([
     	    $(this.el).empty();
     	    
     	    this.userCollection = new UserCollection();
-    	    this.userCollection.fetch();
+    	    this.userCollection.fetch({data: {param: 2}});
     	    
     	    this.rawDataCollection = new RawDataCollection();
     	    
@@ -128,6 +128,7 @@ define([
                                                     continue;
                                                 }
                                                 
+                                                // 퇴사자 구분 기능 추가 필요
                                                 var destUserInfo = that.userCollection.where({name_commute:item[1]});
                                                 
                                                 var resultDate = Moment(item[2], "YYYY-MM-DD HH:mm:ss");
