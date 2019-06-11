@@ -20,3 +20,4 @@ CREATE TABLE IF NOT EXISTS `room_reserve_tbl` (
 INSERT INTO room_tbl VALUES(1, "대회의실");
 INSERT INTO room_tbl VALUES(2, "중회의실");
 INSERT INTO room_tbl VALUES(3, "소회의실");
+
