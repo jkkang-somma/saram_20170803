@@ -4,6 +4,7 @@ define([
   'backbone',
   'util',
   'schemas',
+  'i18n!nls/common',
   'grid',
   'dialog',
   'datatables',
@@ -25,7 +26,7 @@ define([
   'text!templates/vacation/searchFormTemplate.html',
   'text!templates/vacation/vacationlist.html'
 ], function(
-	$, _, Backbone, Util, Schemas,
+	$, _, Backbone, Util, Schemas, i18Common,
 	Grid, Dialog, Datatables,
 	BaseView,
 	HeadHTML, ContentHTML, LayoutHTML,
@@ -39,6 +40,8 @@ define([
 	UpdateVacationPopup, UsedHolidayListPopup,
 	vacationInfoPopupTemplate, searchFormTemplate, vacationListTemplate){
 	
+	var _currentFilter=0; // 전체 / 근무자 / 퇴사자
+
 	// 휴가 편집 버튼 
 	function _getVacationUpdateBtn(that) {
 		return {
@@ -134,7 +137,8 @@ define([
                               }
                               return output_str;
                             }
-                          }
+						  },
+						  { "title" : "퇴사일", data:"leave_company", visible:false, subVisible:false}
              	        ],
              	    dataschema:["year", "dept_name", "name", "total_day", "used_holiday", "holiday", "memo"],
         		    collection:this.vacationCollection,
@@ -158,6 +162,45 @@ define([
 			if (SessionModel.get("user").admin >= Schemas.DEPT_BOSS) {
 				//필터링 할 컬럼을 배열로 정의 하면 자신의 아이디 또는 이름으로 필터링 됨. dataschema 에 존재하는 키값.
 				this.gridOption.buttons.push({type:"myRecord", name: "myRecord", filterColumn:["name"], tooltip: ""})
+
+				var _filterText=[i18Common.CODE.ALL, i18Common.CODE.WORKER, i18Common.CODE.LEAVE_USER];
+				this.gridOption.buttons.push({
+					type:"custom",
+					name:"filter",
+					tooltip:i18Common.TOOLTIP.USER.TYPE,//"사용자 유형",
+					filterBtnText:_filterText,
+					click:function(_grid, _button){
+					   var filters=[
+							function(){
+								// 전체
+								return true;
+							},
+							function(data){
+								// 근무자
+								var _levDate=data[8];
+								return _.isEmpty(_levDate);
+							},
+							function(data){
+								// 퇴사자
+								var _levDate=data[8];
+								return !_.isEmpty(_levDate);
+							}
+					   ];
+					   
+					   if (_currentFilter==2){
+							_currentFilter=0;
+					   } else {
+							_currentFilter++;
+					   }
+					   
+					   _button.html(_filterText[_currentFilter]);
+					   _grid.setBtnText(_button, _filterText[_currentFilter]);
+					   _grid.filtering(function(data){
+						   var fn=filters[_currentFilter];
+						   return fn(data);
+					   }, "userType");
+					}
+				});
 			}
 
     	    this.gridOption.buttons.push(_getVacationUpdateBtn(that));

@@ -17,7 +17,8 @@ define([
         	total_day: 0,	// 연차
         	used_holiday: 0, 		// 사용 일수  (out_office_tbl - year + id 조홥 조회   )
         	holiday: 0,			// 휴가 잔여 일수 (total_day - used_holiday)
-        	memo: ''
+          memo: '',
+          leave_company: '' // 퇴사자의 경우 퇴사일
         },initHoliday: function() {
         	var holiday = this.get("total_day") - this.get("used_holiday");
         	this.set({holiday: holiday}); 

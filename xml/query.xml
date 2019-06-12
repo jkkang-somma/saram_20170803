@@ -170,7 +170,8 @@
 				t2.total_day,
 				t2.used_holiday,
 			    (t2.total_day - t2.used_holiday) AS holiday,
-			    IFNULL(t2.memo, '') AS memo
+			    IFNULL(t2.memo, '') AS memo,
+				m.leave_company
 			FROM
 				members_tbl m
 			    INNER JOIN (
@@ -192,7 +193,6 @@
 			    ) t2
 			    ON m.id = t2.id
 			WHERE
-				(leave_company is null or leave_company = '') AND
 				m.id like ?
 			ORDER BY
 				m.name
