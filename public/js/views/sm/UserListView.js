@@ -28,32 +28,47 @@ define([
     		this.option = {
     		    el:_id+"_content",
     		    column:[
+              // 0 사번
               { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
+
+              // 1 이름
               { "title" : i18Common.USER.NAME, data:"name", 
                 render: function(data,type,row){
                   var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px;' data-id='"+row.id+"'aria-hidden='true'></span>");
                     return temp.wrap('<p>').parent().html() + data;
                 }
               },
-              { "title" : "직급코드", data:"position_code"},
+
+              // 2 직급코드
+              { "title" : "직급코드", data:"position_code", visible:false, subVisible:false},
+
+              // 3 직급
               { "title" : i18Common.USER.POSITION, 
                 render:function(data, type, row) {
                   return row.position_name;
                 }
               },
+
+              // 4 부서
               { "title" : i18Common.USER.DEPT, 
                 "render": function(data, type, row){
                   return row.dept_name;
                 }
               },
+
+              // 5 이름
               { "title" : i18Common.USER.NAME_COMMUTE, data:"name_commute", visible:false, subVisible:false},
+              // 6 입사일
               { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
+              // 7 퇴사일
               { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
-              { "title" : i18Common.USER.ADMIN, visible:true, subVisible:false,
+              // 8 관리자 등급
+              { "title" : i18Common.USER.ADMIN, visible:false, subVisible:false,
                 "render": function(data, type, row){
                   return i18Common.CODE['ADMIN_' + row.admin]
                 }
               },
+              // 9. 소속 ( 본사 / 외주 )
               { "title" : i18Common.USER.AFFILIATED, visible:false, subVisible:false,
                 "render": function(data, type, row){
                   var result=i18Common.CODE.AFFILIATED_0;
@@ -63,8 +78,11 @@ define([
                   return result;
                 }
               },
+              // 10. 전화번호
               { "title" : i18Common.USER.PHONE, data:"phone"},
+              // 11. 이메일
               { "title" : i18Common.USER.EMAIL, data:"email"},
+              // 12. 결재자
               { "title" : i18Common.USER.APPROVAL_NAME, data:"approval_name"},
               { "title" : "approval_id", data:"approval_id", visible:false, subVisible:false},
               { "title" : i18Common.USER.IP, data:"ip_pc", visible:false, subVisible:false},
@@ -323,12 +341,18 @@ define([
             };
             
             // 관리자인 경우 직급코드 출력
-            if ( SessionModel.getUserInfo().admin != Schemas.ADMIN ) {
-                this.option.column[2].visible = false;
-                this.option.column[2].subvisible = false;
+            if ( SessionModel.getUserInfo().admin == Schemas.ADMIN ) {
+              // ID
+              this.option.column[0].visible = true;
+              this.option.column[0].subvisible = true;
+              
+              // 직급 코드  
+              this.option.column[2].visible = true;
+              this.option.column[2].subvisible = true;
 
-                this.option.column[8].visible = false;
-                this.option.column[8].subvisible = false;
+              // 관리 권한
+              this.option.column[8].visible = true;
+              this.option.column[8].subvisible = true;
             }
 
     	    //grid 
