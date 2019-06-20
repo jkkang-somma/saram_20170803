@@ -28,53 +28,65 @@ define([
     		this.option = {
     		    el:_id+"_content",
     		    column:[
-    		        { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
-    		        { "title" : i18Common.USER.NAME, data:"name", render: function(data,type,row){
-    		            var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px;' data-id='"+row.id+"'aria-hidden='true'></span>");
-                        return temp.wrap('<p>').parent().html() + data;
-                    }},
-                    { "title" : "직급코드", data:"position_code"},
-                    { "title" : i18Common.USER.POSITION, render:function(data, type, row) {
-                        return row.position_name;
-                    }},
-    		        { "title" : i18Common.USER.DEPT, "render": function(data, type, row){
-                        return row.dept_name;
-                    }},
-                    { "title" : i18Common.USER.NAME_COMMUTE, data:"name_commute", visible:false, subVisible:false},
-                    { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
-                    { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
-                    { "title" : i18Common.USER.ADMIN, "render": function(data, type, row){
-                        return i18Common.CODE['ADMIN_' + row.admin]
-                    }, visible:true, subVisible:false},
-                    { "title" : i18Common.USER.AFFILIATED, "render": function(data, type, row){
-                        var result=i18Common.CODE.AFFILIATED_0;
-                        if (row.affiliated > 0){
-                            result=i18Common.CODE.AFFILIATED_1;
-                        }
-                        return result;
-                    }, visible:false, subVisible:false},
-                    { "title" : i18Common.USER.PHONE, data:"phone"},
-                    { "title" : i18Common.USER.EMAIL, data:"email"},
-                    { "title" : i18Common.USER.APPROVAL_NAME, data:"approval_name"},
-                    { "title" : "approval_id", data:"approval_id", visible:false, subVisible:false},
-                    { "title" : i18Common.USER.IP, data:"ip_pc", visible:false, subVisible:false},
-                    { "title" : i18Common.USER.OFFICE_IP, data:"ip_office", visible:false, subVisible:false},
-                    { "title" : i18Common.USER.PHONE_OFFICE, data:"phone_office", visible:false},
-                    { "title" : i18Common.USER.BIRTHDAY, data:"birthday", visible:false},
-                    { "title" : i18Common.USER.WEDDING_DAY, data:"wedding_day", visible:false}, 
-                    { "title" : i18Common.USER.EMERGENCY_PHONE, data:"emergency_phone", visible:false},
-                    { "title" : i18Common.USER.PRIVILEGE, "render": function(data, type, row){
-                        var result=i18Common.CODE.PRIVILEGE_1;
-                        if (row.privilege == 3){
-                            result=i18Common.CODE.PRIVILEGE_3;
-                        } else if (row.privilege == 2){
-                            result=i18Common.CODE.PRIVILEGE_2;
-                        }
-                        return result;
-                    }, visible:false, subVisible:false},
-                ],
+              { "title" : i18Common.USER.ID, data:"id", visible:false, subVisible:false},
+              { "title" : i18Common.USER.NAME, data:"name", 
+                render: function(data,type,row){
+                  var temp = $("<span class='userpic glyphicon glyphicon-user'style='margin:10px;' data-id='"+row.id+"'aria-hidden='true'></span>");
+                    return temp.wrap('<p>').parent().html() + data;
+                }
+              },
+              { "title" : "직급코드", data:"position_code"},
+              { "title" : i18Common.USER.POSITION, 
+                render:function(data, type, row) {
+                  return row.position_name;
+                }
+              },
+              { "title" : i18Common.USER.DEPT, 
+                "render": function(data, type, row){
+                  return row.dept_name;
+                }
+              },
+              { "title" : i18Common.USER.NAME_COMMUTE, data:"name_commute", visible:false, subVisible:false},
+              { "title" : i18Common.USER.JOIN_COMPANY, data:"join_company", visible:false, subVisible:false},
+              { "title" : i18Common.USER.LEAVE_COMPANY, data:"leave_company", visible:false, subVisible:false},
+              { "title" : i18Common.USER.ADMIN, visible:true, subVisible:false,
+                "render": function(data, type, row){
+                  return i18Common.CODE['ADMIN_' + row.admin]
+                }
+              },
+              { "title" : i18Common.USER.AFFILIATED, visible:false, subVisible:false,
+                "render": function(data, type, row){
+                  var result=i18Common.CODE.AFFILIATED_0;
+                  if (row.affiliated > 0){
+                      result=i18Common.CODE.AFFILIATED_1;
+                  }
+                  return result;
+                }
+              },
+              { "title" : i18Common.USER.PHONE, data:"phone"},
+              { "title" : i18Common.USER.EMAIL, data:"email"},
+              { "title" : i18Common.USER.APPROVAL_NAME, data:"approval_name"},
+              { "title" : "approval_id", data:"approval_id", visible:false, subVisible:false},
+              { "title" : i18Common.USER.IP, data:"ip_pc", visible:false, subVisible:false},
+              { "title" : i18Common.USER.OFFICE_IP, data:"ip_office", visible:false, subVisible:false},
+              { "title" : i18Common.USER.PHONE_OFFICE, data:"phone_office", visible:false},
+              { "title" : i18Common.USER.BIRTHDAY, data:"birthday", visible:false},
+              { "title" : i18Common.USER.WEDDING_DAY, data:"wedding_day", visible:false}, 
+              { "title" : i18Common.USER.EMERGENCY_PHONE, data:"emergency_phone", visible:false},
+              { "title" : i18Common.USER.PRIVILEGE, visible:false, subVisible:false,
+                "render": function(data, type, row){
+                  var result=i18Common.CODE.PRIVILEGE_1;
+                  if (row.privilege == 3){
+                      result=i18Common.CODE.PRIVILEGE_3;
+                  } else if (row.privilege == 2){
+                      result=i18Common.CODE.PRIVILEGE_2;
+                  }
+                  return result;
+                }
+              }
+            ],
     		    dataschema:["id", "name", "position_code", "position_name", "position_code", "dept_code",  "name_commute", "join_company", "leave_company", "admin",   "phone", "email", "approval_name", "approval_id",
-    		    "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege" ,"affiliated"
+    		      "ip_pc", "ip_office", "phone_office" , "birthday", "wedding_day", "emergency_phone", "privilege" ,"affiliated"
     		    ],
     		    collection:userCollection,
     		    detail:true,
