@@ -131,8 +131,13 @@ define([
 
 	    //listen for candidate events
 	    pc.onicecandidate = function(ice) {
-			if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex))
-				iterateIP("");
+			if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) {
+        if (ice && ice.candidate && ice.candidate.address) {
+          iterateIP(ice.candidate.address);
+        } else {
+          iterateIP("");
+        }
+      }
 			else
 		        ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
 	    };
