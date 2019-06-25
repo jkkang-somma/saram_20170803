@@ -16,8 +16,8 @@ var RestfulService = function () {
     	var response = {};
     	response["isSuccess"]=false;
     	response["reason"]="unknown";
-    	debug("ID : " + JSON.stringify(headers.user_id));
-    	var user = new User({"id":headers.user_id,"password":headers.password});
+    	debug("ID : " + JSON.stringify(headers.userid));
+    	var user = new User({"id":headers.userid,"password":headers.password});
     	return new Promise(function(resolve, reject){// promise patten
     		user.getUser().then(function(result){
 	            if (result.length == 0){
