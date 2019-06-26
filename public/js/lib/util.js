@@ -133,7 +133,11 @@ define([
 	    pc.onicecandidate = function(ice) {
 			if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) {
         if (ice && ice.candidate && ice.candidate.address) {
+          // 크롬브라우져의 경우
           iterateIP(ice.candidate.address);
+        } else if (ice && ice.candidate && ice.candidate.candidate) { 
+          // 파이어폭스 / 오페라의 경우
+          iterateIP(ice.candidate.candidate);
         } else {
           iterateIP("");
         }
