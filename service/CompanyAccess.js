@@ -11,6 +11,50 @@ var Moment = require("moment");
 
 var CompanyAccess = function() {	
 
+  var _makeData = function(req) {
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+    var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g, key;
+    ip = ip.match(ipRegex);
+
+    var bodyDecode = {}
+    try {
+      var b = new Buffer(req.body.p, 'base64')
+      var s = b.toString()
+      bodyDecode = JSON.parse(s);
+      debug('companyAccessRouter in...')
+      console.info(req.body)
+      console.info(bodyDecode)
+    } catch (e) {
+      debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 시작 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+      debug('Exception')
+      console.info(e)
+      console.info(req)
+      debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 끝   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    }
+    
+    if (bodyDecode.t === 'A') {
+      bodyDecode.type = '출근(온라인)'
+    } else if (bodyDecode.t === 'B') {
+      bodyDecode.type = '퇴근(온라인)'
+    } else {
+      debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 시작 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+      console.info(req.body)
+      console.info(bodyDecode)
+      debug('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 출/퇴근 에러 - 끝   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    }
+
+    var inData = {
+      type : bodyDecode.type,
+      ip_pc : _.isEmpty(bodyDecode.k)?null:bodyDecode.k,
+      mac : _.isEmpty(bodyDecode.mac)?null:bodyDecode.mac,
+      ip_office : ip, 
+      param : bodyDecode.p
+    };
+
+    return inData;
+  }
+
 	var _setAccess = function(data, user) {
 		return new Promise(function(resolve, reject){
 			var selDataObj = {
@@ -23,7 +67,7 @@ var CompanyAccess = function() {
 				var need_confirm = 1; // 1: 정상 , 2: 확인 필요				
 				if (result.length == 0) {	// 조회 값이 없는 경우 
 					need_confirm = 2;
-				} 
+				}
 				/*
 				else {
 					var _user=result[0];
@@ -61,16 +105,17 @@ var CompanyAccess = function() {
 				};
 				
 				RawDataDao.insertRawDataCompanyAccess(insertDataObj).then(function(inResult) {
-					resolve({dbResult : inResult, data : insertDataObj});
+				  	resolve({dbResult : inResult, data : insertDataObj});
 	    		}).catch(function(e){
-	                reject(e);
-	            });
+            reject(e);
+          });
 				
 			});
 		});
 	}
 	return {
-		setAccess : _setAccess
+    setAccess : _setAccess,
+    makeData : _makeData
 	}
 } 
 

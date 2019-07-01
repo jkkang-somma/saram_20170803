@@ -45,6 +45,7 @@ RawDataDao.prototype.insertRawDataCompanyAccess =  function (data) {
             case '174': data.platform_type = data.platform_type.concat(', ', 'Firefox'); break;
             case '190': data.platform_type = data.platform_type.concat(', ', 'Safari'); break;
             case '199': data.platform_type = data.platform_type.concat(', ', 'Samsung'); break;
+            case '203': data.platform_type = data.platform_type.concat(', ', 'APP'); break;
             case '200': data.platform_type = data.platform_type.concat(', ', 'Unknown browser'); break;
             default: data.platform_type = data.platform_type.concat(', ', 'Degenerate')
         }

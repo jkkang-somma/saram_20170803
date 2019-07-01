@@ -53,7 +53,7 @@ var filePath1 = path.normalize(__dirname + '/pic/files');
 var filePath2 = path.normalize(__dirname + '/public/doc'); 
 var filePath3 = path.normalize(__dirname + '/public/book'); 
 
-var tokenList = ["5ac5b06f-5629-fbb7-52f6-3a405a989d2f"];
+var tokenList = ["c9454ee0-9965-11e9-b475-0800200c9a66"];
 //var Statistics = require('./service/Statistics');
 //var statisticsService = new Statistics();
 
