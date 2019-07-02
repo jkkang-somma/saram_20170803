@@ -19,7 +19,7 @@ var RestfulService = function () {
     	debug("ID : " + JSON.stringify(headers.userid));
     	var user = new User({"id":headers.userid,"password":headers.password});
     	return new Promise(function(resolve, reject){// promise patten
-    		user.getUser().then(function(result){
+    		user.getLoginUser().then(function(result){
 	            if (result.length == 0){
 	                debug("find user zero.");
 	                response["reason"]="INVALID_LOGIN";
