@@ -472,7 +472,8 @@
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
 							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
-							a.state AS work_night_falg
+							a.state AS work_night_falg,
+              c.is_suwon
 						FROM
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
@@ -519,7 +520,8 @@
 							IFNULL( o.overtime_pay, 0) AS overtime_pay,
 							IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
 							IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
-							a.state AS work_night_falg
+							a.state AS work_night_falg,
+              c.is_suwon
 						FROM
 							commute_result_tbl c
 							left join overtime_code_tbl o on c.overtime_code = o.code
@@ -551,9 +553,9 @@
         		out_time, over_time, overtime_code, vacation_code, standard_in_time,
         		standard_out_time, work_type, year,
         		in_time_type, out_time_type, out_office_start_time, out_office_end_time,
-        		in_time_change, out_time_change, early_time, not_pay_over_time, normal,normal_change,except)
+        		in_time_change, out_time_change, early_time, not_pay_over_time, normal,normal_change,except, is_suwon)
         	VALUES
-        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        		(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
 
         <query id="updateCommuteResult">
@@ -647,7 +649,8 @@
 				not_pay_over_time,
 				normal,
 				normal_change,
-				except
+				except,
+        is_suwon
         	FROM
         		commute_result_tbl
         	WHERE
@@ -2197,7 +2200,17 @@
 			from
 				room_tbl;
 		</query>
-		<query id="temp">
+    <query id="insertRoomList">
+			INSERT INTO room_tbl
+				(name, `use`)
+			VALUES
+				(?, ?)
+		</query>
+    <query id="updateRoomList">
+			UPDATE room_tbl
+				set name = ?, `use` = ?
+			WHERE
+				`index` = ?
 		</query>
 	</group>
 	<group id="roomReg">

@@ -4,9 +4,20 @@ var group = "room";
 var RoomDao = function () {
 };
 
-RoomDao.prototype.selectRoomList =  function () {//select user;
+RoomDao.prototype.selectRoomList =  function () {
     return db.query(group, "selectRoomList", []);
 };
 
-module.exports = new RoomDao();
+RoomDao.prototype.addRoomList =  function (name, use) {
+  return db.query(group, "insertRoomList", [name, use]);
+};
 
+// RoomDao.prototype.removeRoomList =  function (index, name, use) {
+//   return db.query(group, "deleteRoomList", [index, name, use]);
+// };
+
+RoomDao.prototype.editRoomList =  function (index, name, use) {
+  return db.query(group, "updateRoomList", [name, use, index]);
+};
+
+module.exports = new RoomDao();

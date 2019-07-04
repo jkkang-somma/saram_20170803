@@ -61,7 +61,7 @@ define([
         overtimeCodeChange: 0,
         checkInOffice: false,
         checkOverTime : false,
-        isSuwon: false,
+        isSuwon: 0,
         checkLate: true,
         checkEarly: true,
         earlyTime: 0,
@@ -71,7 +71,7 @@ define([
         /**
          * Factory 기본값 설정
          */
-        init: function(userId, userName, userDepartment) {
+        init: function(userId, userName, userDepartment, isSuwonParam) {
             this.id = userId;
             this.name = userName;
             this.department = userDepartment;
@@ -107,17 +107,7 @@ define([
             this.notPayOverTime = 0;
             this.normal = 0;
             this.normalChange = 0;
-            if (this.department.indexOf("본사") > -1) {
-                this.isSuwon = false;
-            }else if (this.department.indexOf("품질검증") > -1) {
-                this.isSuwon = true;
-            }
-            else if (this.department === "개발품질팀(수원)") {
-                this.isSuwon = true;
-            }
-            else {
-                this.isSuwon = false;
-            }
+            this.isSuwon = isSuwonParam;
         },
 
         /**
@@ -193,16 +183,19 @@ define([
             this.notPayOverTime = model.get("not_pay_over_time");
             this.normal = model.get("normal");
             this.normalChange = model.get("normal_change");
-            if (this.department.indexOf("본사") > -1) {
-                this.isSuwon = false;
-            }else if (this.department.indexOf("품질검증") > -1) {
-                this.isSuwon = true;
-            }
-            else if (this.department === "개발품질팀(수원)") {
-                this.isSuwon = true;
-            }
-            else {
-                this.isSuwon = false;
+            this.isSuwon = model.get("is_suwon");
+            if (this.isSuwon === undefined || this.isSuwon === null) {
+              if (this.department.indexOf("본사") > -1) {
+                  this.isSuwon = 0;
+              }else if (this.department.indexOf("품질검증") > -1) {
+                  this.isSuwon = 1;
+              }
+              else if (this.department === "개발품질팀(수원)") {
+                  this.isSuwon = 1;
+              }
+              else {
+                  this.isSuwon = 0;
+              }
             }
         },
 
@@ -519,7 +512,7 @@ define([
                             
                             if(this.normal === 1) {
                                 this.standardInTime = this.inTime
-                            } else if(this.isSuwon == true){
+                            } else if(this.isSuwon === 1){
                                 if(hour < 7){ 
                                     this.standardInTime.hour(7).minute(0).second(0);
                                 } else if (hour < 10){
@@ -564,7 +557,7 @@ define([
                     case "E01": // 교육
                     case "W01W04" : // 파견,외근
                         var stdInTime = 8;
-                        if (this.isSuwon) {
+                        if (this.isSuwon === 1) {
                             stdInTime = 7;
                         }
 
@@ -618,7 +611,7 @@ define([
                         this.checkEarly = false;
                         break;
                     case "W03": // 장기외근
-                        if (!this.isSuwon) {
+                        if (!this.isSuwon === 1) {
                             this.checkLate = false;
                             this.checkEarly = false;
                         }
@@ -862,6 +855,7 @@ define([
                 early_time: this.earlyTime,
                 not_pay_over_time: this.notPayOverTime,
                 except: this.except,
+                is_suwon: this.isSuwon
             };
         },
 

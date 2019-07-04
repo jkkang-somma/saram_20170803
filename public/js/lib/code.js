@@ -65,7 +65,7 @@ define([
         isSuwonWorker : function(code) {	// 수원 근로자 여부 체크
         	var obj = _getCollection(this.DEPARTMENT).where({code: code});
         	if (obj.length > 0) {
-        		return (obj[0].get("area") == "수원")?true:false;
+        		return (obj[0].get("area") == "수원") ? 1:0;
         	} else {
         		return false;
         	}

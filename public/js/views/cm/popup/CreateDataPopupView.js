@@ -13,11 +13,12 @@ define([
 	'collection/sm/UserCollection',
 	'collection/cm/CommuteCollection',
 	'collection/vacation/OutOfficeCollection',
-	'collection/vacation/InOfficeCollection',
+  'collection/vacation/InOfficeCollection',
+  'collection/sm/DepartmentCollection',
 	'text!templates/default/datepicker.html',
 ], function(
 	$, _, Backbone, Util, Moment, ResultTimeFactory, Dialog, i18nCommon, Form,
-	HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection,
+	HolidayCollection, RawDataCollection, UserCollection, CommuteCollection, OutOfficeCollection, InOfficeCollection, DepartmentCollection,
 	DatePickerHTML
 ) {
 	var resultTimeFactory = ResultTimeFactory.Builder();
@@ -99,6 +100,7 @@ define([
                 var outOfficeCollection = new OutOfficeCollection();        // 휴가 / 외근 / 출장 목록
                 var yesterdayCommuteCollection = new CommuteCollection();   // 선택일 전날 근태 데이터 목록
                 var inOfficeCollection = new InOfficeCollection();
+                var departmentCollection = new DepartmentCollection();
                 
                 $.when(
                     rawDataCollection.fetch({data: { start : selectedDate.start, end:Moment(endDate).add(1,"days").format(ResultTimeFactory.DATEFORMAT) }}),
@@ -106,7 +108,8 @@ define([
                     holidayCollection.fetch({ data : {  year : startDate.year() } }),
                     outOfficeCollection.fetch({data : selectedDate}),
                     inOfficeCollection.fetch({data : selectedDate}),
-                    yesterdayCommuteCollection.fetchDate(yesterday.format(ResultTimeFactory.DATEFORMAT))
+                    yesterdayCommuteCollection.fetchDate(yesterday.format(ResultTimeFactory.DATEFORMAT)),
+                    departmentCollection.fetch()
                 ).done(function(){
                     var diff_days = endDate.diff(startDate, 'days');
     
@@ -114,7 +117,15 @@ define([
                         var today = Moment(startDate);
                         var userId = userModel.attributes.id;
                         var userName = userModel.attributes.name;
+                        var deptCode = userModel.attributes.dept_code;
                         var userDepartment = userModel.attributes.dept_name;
+
+                        // isSuwon 구함.
+                        var isSuwon = 0;
+                        var dept = departmentCollection.where({'code': deptCode});
+                        if (dept[0].get('area') === '수원') {
+                          isSuwon = 1;
+                        }
                         
                         var joinCompany = userModel.attributes.join_company;
                         var endDay = endDate.format(ResultTimeFactory.DATEFORMAT);
@@ -163,7 +174,7 @@ define([
                                 yesterdayAttribute.out_time = null;
                             }
                                 
-                            resultTimeFactory.init(userId, userName, userDepartment); //계산전 초기화
+                            resultTimeFactory.init(userId, userName, userDepartment, isSuwon); //계산전 초기화
                             
                             for(var i=0; i <= diff_days; i++){ //차이나는 날짜만큼 기본데이터 생성 (사원수 X 날짜)
                                 var todayStr = today.format(ResultTimeFactory.DATEFORMAT);    // 오늘 날짜(str)
