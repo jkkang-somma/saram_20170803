@@ -535,10 +535,10 @@ define([
 					if ( deptMap[user.dept_code].area != "서울" ) {
 						printFlag = false;
 
-						// 현명수 팀장, 백성준 팀장은 자리배치도에 출력되도록 수정. 2017.12.28
-						if ( user.id == "180502" || user.id == "121102") {
-							printFlag = true;
-						}
+            // 팀장의 경우 수원 부서인 경우에도 출력하도록 한다. 2019.07.09
+            if ( user.privilege == 1) {
+              printFlag = true;
+            }
 					}
 
 					if ( printFlag == false ) {
