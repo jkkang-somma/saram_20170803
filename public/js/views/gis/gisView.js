@@ -536,7 +536,7 @@ define([
 						printFlag = false;
 
             // 팀장의 경우 수원 부서인 경우에도 출력하도록 한다. 2019.07.09
-            if ( user.privilege == 1) {
+            if ( user.admin == 1) {
               printFlag = true;
             }
 					}
