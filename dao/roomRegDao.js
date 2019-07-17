@@ -10,7 +10,7 @@ RoomRegDao.prototype.selectRoomRegList = function(param){
 
 RoomRegDao.prototype.selectRoomRegBefore = function(roomReg){
     return db.query(group, "selectRoomRegBefore", 
-    	[roomReg.room_index, roomReg.date, roomReg.start_time, roomReg.end_time]);
+    	[roomReg.date, roomReg.end_time, roomReg.start_time, roomReg.room_index]);
 };
 
 RoomRegDao.prototype.selectRoomRegByDateTime = function(date, start_time){

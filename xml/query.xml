@@ -2234,9 +2234,9 @@
 			from
 				room_reserve_tbl
 			where
-				room_index = ? AND
 				date = ? AND
-				TIME(?) &lt; end_time AND TIME(?) &gt; start_time;
+				TIME(?) &gt; start_time AND TIME(?) &lt; end_time AND
+        room_index = ?
 		</query>
     <query id="selectRoomRegByDateTime">
 			select
@@ -2607,8 +2607,11 @@
     <query id="selectAvgInOutTime"> 
       SELECT name, sec_to_time(avg(time_to_sec(in_time))) as in_time_avg, sec_to_time(avg(if(time_to_sec(out_time) &lt; 54000, 86400+time_to_sec(out_time), time_to_sec(out_time)))) as out_time_avg 
       FROM commute.commute_result_tbl 
-      WHERE year = ? AND date &gt;= ? and date &lt;= ? AND work_type != 30 AND work_type != 31 AND work_type != 40 AND work_type != 41 AND ( vacation_code is NULL OR (vacation_code != 'V02' AND vacation_code != 'V03')) AND in_time is not null AND out_time is not null
-        AND id = ?
+      WHERE year = ? AND date &gt;= ? and date &lt;= ? AND 
+        work_type not in (30, 31, 40, 41) AND 
+        (vacation_code is NULL OR (vacation_code not like '%V%')) AND 
+        in_time is not null AND out_time is not null AND
+        id = ?
     </query>
 		<query id="selectPageUrlCount">
 			select
