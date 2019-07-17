@@ -1,16 +1,16 @@
 <div class="container">
     <form role='form'>
-        <div class="form-group">
+        <div class="form-group form-group-harf">
             <label for="submit_id">신청자</label>
             <input type="text" id="submit_id" name="submit_id" class="form-control" readonly="" />
         </div>
-        <div class="form-group">
+        <div class="form-group form-group-harf">
             <label for="room_code">회의실</label>
             <select id="room_code" name="room_code" class="form-control"></select>
         </div>
         <div class="form-group">
             <label for="title">제목</label>
-            <input id="title" name="title" class="form-control"></input>
+            <input id="title" name="title" class="form-control" maxlength="40"></input>
         </div>
         <div class="form-group">
             <div class="row">
@@ -65,6 +65,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group">
+          <label for="member_list">참석자</label>
+          <div class="btn btn-success glyphicon glyphicon-pencil" id="select_member_list"
+            style="height: 23px; width: 23px; padding: 0px; padding-top: 3px; display: none"></div>
+          <div id="attendance_count" class="float-right"> 0명</div>
+          <div id="member_list" disabled name="member_list" class="form-control" style="height: 140px; overflow: auto;"></div>
+        </div>
+
         <div class="form-group">
             <label for="submit_desc">메모</label>
             <textarea id="submit_desc" name="submit_desc" rows="4" class="form-control"/>

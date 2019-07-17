@@ -55,7 +55,11 @@ define([
             
             for (var subName in _subMenu){
                 var subMenu=_subMenu[subName];
-                if (subMenu.auth <= _auth){//로그인 사용자의 admin 값보다 같거나 작을 때만 보여짐
+
+                // visible: false 인 메뉴는 출력하지 않음.
+                if (subMenu.visible === false) {
+                  continue;
+                }else if (subMenu.auth <= _auth){//로그인 사용자의 admin 값보다 같거나 작을 때만 보여짐
                     var subLi=$(_subliTag);
                     var subA=$('<a href="'+subMenu.hashTag+'">'+subMenu.title+'</a>');
                     subLi.append(subA);

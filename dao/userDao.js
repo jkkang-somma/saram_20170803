@@ -36,6 +36,10 @@ UserDao.prototype.selectManagerList =  function (id) {
     return db.query(group, "selectManager", [id]);
 };
 
+UserDao.prototype.selectUserEmail =  function () {
+  return db.query(group, "selectUserEmail", []);
+};
+
 UserDao.prototype.initPassword =  function (id, password) {
     return db.query(group, "initPassword", [password, id]);
 };

@@ -69,6 +69,7 @@ require.config({
       
       resulttimefactory: 'lib/resultTimeFactory',
       spin:'tool/spin/spin',
+      simTree: 'tool/simTree/simTree',
       'cryptojs.core': "tool/crypto/core",
       'cryptojs.sha256': "tool/crypto/sha256",
       i18n:'tool/i18n-master/i18n',

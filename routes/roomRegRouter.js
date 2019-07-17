@@ -7,7 +7,7 @@ var _ = require("underscore");
 
 router.route('/')
 .get(function(req, res, next){
-	debug("================================================= selectRoomRegList : " + JSON.stringify(req.query));
+  debug("================================================= selectRoomRegList : " + JSON.stringify(req.query));
 	RoomReg.selectRoomRegList(req.query).then(function(result) {
 		return res.send(result);
 	}).catch(function(err) {

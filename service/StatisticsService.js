@@ -54,11 +54,16 @@ var StatisticsService = function () {
             }
         });
     };
+
+    var _selectAvgInOutTime = function(year, startDate, endDate, id) { 
+      return StatisticsDao.selectAvgInOutTime(year, startDate, endDate, id);
+    };
     
     return {
         selectAbnormalDeptSummary:_selectAbnormalDeptSummary,
         selectDeptDetail:_selectDeptDetail,
-        selectReport1 : _selectReport1
+        selectReport1 : _selectReport1,
+        selectAvgInOutTime: _selectAvgInOutTime
     };
 };
 

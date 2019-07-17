@@ -88,7 +88,7 @@ define([
 
 			this.getWorkingSummary(_view.searchParams).done(function (workingSummary) {
 				var code = SessionModel.getUserInfo().dept_code;
-				if (workingSummary.length == 0) {// 조회내역이 없을때
+				if (_.isUndefined(workingSummary.length) || workingSummary.length == 0) {// 조회내역이 없을때
 					// if (_firstInitialize && code != '0000') {
 					if (_firstInitialize) {
 						if(code != '0000'){							
@@ -154,7 +154,7 @@ define([
 
 			// 아래 list
 			var dashboard = $(_dashboardTemp(defaultData));
-			var _defaultRowHTML = '<li class="list-group-item animated  <%= action%>"><span class="badge"><%= value%></span><%= lavel%></li>';
+			var _defaultRowHTML = '<li class="list-group-item animated  <%= action%>" title="<%= tooltip %>"><span class="badge"><%= value%></span><%= lavel%></li>';
 
 			
 			if(code != '0000'){
@@ -198,34 +198,66 @@ define([
 			// var _validField = ["NIGHT_WORKING_A", "NIGHT_WORKING_B", "NIGHT_WORKING_C", "HOLIDAY_WORKING_A", "HOLIDAY_WORKING_B", "HOLIDAY_WORKING_C"];
 			if(code != '0000'){
 				var _disableField = ["id", "name","total_working_day", "total_over_time", "total_holiday_over_time", "over_over_time", "over_holiday_over_time", "total_early_time"];
-				var timeout = function (data, name) {
+				var timeout = function (data, name, isTop) {
 	
 					_delay = _delay + 200;
 	
 					setTimeout(function () {
 						_action = !_action;
-						var rowTmp = _.template(_defaultRowHTML);
-						var row = rowTmp(
-							{
+            var rowTmp = _.template(_defaultRowHTML);
+            var param = {}
+
+            if ( isTop ) {
+              param = {
+								value: data,
+								lavel: name,
+                action: _action ? "fadeInLeftBig dashboard-top-li" : "fadeInUp dashboard-top-li",
+                class: "dashboard-top-li",
+                tooltip: ""
+              }
+              if (name.startsWith("평균")) {
+                param.action += " tooltip-marker"
+                param.tooltip = "휴가(반차 포함)를 사용하지 않은 평일 기준 &#10;출근/퇴근 기록이 모두 있는 날만 계산";
+              }
+            } else {
+              param = {
 								value: data + getUnit(name.toUpperCase()),
 								lavel: i18Common.DASHBOARD.WORKING_SUMMARY[name.toUpperCase()],
-								action: _action ? "fadeInLeftBig" : "fadeInUp"
+                action: _action ? "fadeInLeftBig" : "fadeInUp",
+                class: "",
+                tooltip: ""
 							}
-						);
+            }
+						var row = rowTmp(param);
 	
 						dashboard.find("#list-group").append(row);
 					}, _delay);
 				};
-	
+  
+        // 올해 잔여 연차 일수
+        if (_data.vacation_year === _view.searchParams.start.substr(0,4)) {
+          timeout(_data.vacation_year_remain, "잔여 연차 " + _data.vacation_year, true);
+        }
+        delete _data.vacation_year;
+        delete _data.vacation_year_remain;
+
+        // 평균 출근 시간
+        if (_data.in_time_avg) {
+          timeout(_data.in_time_avg.substr(0, 5), "평균 출근시간", true);
+
+          // 평균 퇴근 시간
+          timeout(_data.out_time_avg.substr(0, 5), "평균 퇴근시간", true);
+        }
+        delete _data.in_time_avg;
+        delete _data.out_time_avg;
+
 				for (var name in _data) {
 					// if ((_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name] == 0) || _.indexOf(_disableField, name) > -1) {
 					if ( _data[name] == 0 || _.indexOf(_disableField, name) > -1){
 						continue;
 					}
-					
 	
 					timeout(_data[name], name);
-	
 				}
 			}
 

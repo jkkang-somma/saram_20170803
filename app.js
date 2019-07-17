@@ -10,6 +10,8 @@ var url = require("url");
 var multer = require("multer");
 var util = require("util");
 
+var schedule = require('node-schedule');
+
 //lib router config
 var sessionManager = require('./lib/sessionManager');
 var index = require('./routes/index');
@@ -56,6 +58,14 @@ var filePath3 = path.normalize(__dirname + '/public/book');
 var tokenList = ["c9454ee0-9965-11e9-b475-0800200c9a66"];
 //var Statistics = require('./service/Statistics');
 //var statisticsService = new Statistics();
+
+var RoomReg = require('./service/RoomReg.js');
+
+// 스케쥴 등록
+schedule.scheduleJob('*/10 * * * *', function() {
+  debug("RUN schedule for ROOM REG!!!");
+  RoomReg.sendEmailRoomReg();
+});
 
 var mwMulter1 = multer({ dest: filePath1 , rename:function(fieldname, filename, req,res){
 	  console.log(filename);

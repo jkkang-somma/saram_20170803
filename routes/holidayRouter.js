@@ -6,6 +6,15 @@ var router = express.Router();
 var Holiday = require('../service/Holiday.js');
 
 
+router.route('/period')
+.get(function(req, res){
+    var holiday = new Holiday();
+    
+    holiday.getHolidayListByPeriod(req.query.start, req.query.end).done(function(result){
+        res.send(result);
+    });
+});
+
 router.route('/')
 .get(function(req, res){
     var holiday = new Holiday({year:req.query.year});
@@ -49,8 +58,8 @@ router.route('/:date')
     holiday.deleteHoliday().then(function(){
         res.send({msg : "Delete Data Success", count: 1});    
     });
-    
-    
 });
+
+
 
 module.exports = router;

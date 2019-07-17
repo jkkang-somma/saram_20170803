@@ -1,7 +1,7 @@
 {
-    "host": "",
-    "user": "",
-    "password": "",
-    "port": 0,
-    "database": ""
+    "host": "200.100.1.161",
+    "user": "yop",
+    "password": "yescnc1234",
+    "port": 3306,
+    "database": "commute"
 }

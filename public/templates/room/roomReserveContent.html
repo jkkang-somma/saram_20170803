@@ -3,11 +3,20 @@
 	<span id="date_period" style="margin:10px"> XXXX-XX-XX ~ XXXX-XX-XX </span>
 	<button type="button" id="room_date_next" class="btn btn-default btn-success"><span class="glyphicon glyphicon-chevron-right"></span></button>
 	<button type="button" id="room_data_refresh" class="btn btn-default btn-success"><span class="glyphicon glyphicon-refresh"></span></button>
-	<button class="btn btn-default btn-success" id="roomRegBtn" style="float: right;">회의실 예약</button>
+  
+  <a href="#roomreservelist"><button class="btn btn-default btn-success float-right left-margin-5">리스트</button></a>
+  <a href="#roomreservemonth"><button class="btn btn-default btn-success float-right left-margin-5">월</button></a>
+  <a href="#roomreserveweek"><button class="btn btn-default btn-success float-right left-margin-5 selected-button">주</button></a>
+
+  <button class="btn btn-default btn-success" id="roomRegBtn" style="float: right;">회의실 예약</button>
 </div>
 
 <div id="room_svg_content" style="width: 100%;min-width:800px;border: 1px solid;">
 	<svg id="room_svg" style="width: 100%; height: calc(100% - 200px);">
 		
 	</svg>
+</div>
+
+<div id="room_reg_popup_menu" class="dropdown-menu" style="display: none;position: absolute;top: 0;left: 0; min-width: 100px;">
+  <span id="room_reg_item" class="dropdown-item">예약하기</span>
 </div>

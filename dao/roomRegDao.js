@@ -13,14 +13,19 @@ RoomRegDao.prototype.selectRoomRegBefore = function(roomReg){
     	[roomReg.room_index, roomReg.date, roomReg.start_time, roomReg.end_time]);
 };
 
+RoomRegDao.prototype.selectRoomRegByDateTime = function(date, start_time){
+  return db.query(group, "selectRoomRegByDateTime", 
+    [date, start_time]);
+};
+
 RoomRegDao.prototype.insertRoomReg = function(roomReg){
     return db.query(group, "insertRoomReg", 
-    	[roomReg.room_index, roomReg.member_id, roomReg.title, roomReg.date, roomReg.start_time, roomReg.end_time, roomReg.desc]);
+    	[roomReg.room_index, roomReg.member_id, roomReg.title, roomReg.date, roomReg.start_time, roomReg.end_time, roomReg.desc, roomReg.attendance_list]);
 };
 
 RoomRegDao.prototype.updateRoomReg = function(roomReg){
     return db.query(group, "updateRoomReg", 
-    	[roomReg.room_index, roomReg.title, roomReg.date, roomReg.start_time, roomReg.end_time, roomReg.desc, roomReg.index]);
+    	[roomReg.room_index, roomReg.title, roomReg.date, roomReg.start_time, roomReg.end_time, roomReg.desc, roomReg.attendance_list, roomReg.index]);
 };
 
 RoomRegDao.prototype.deleteRoomReg = function(index){

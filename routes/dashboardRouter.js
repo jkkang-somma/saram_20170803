@@ -7,6 +7,9 @@ var debug = require('debug')('dashboardRouter');
 var sessionManager = require('../lib/sessionManager');
 var router = express.Router();
 var Dashboard = require('../service/Dashboard.js');
+var moment = require('moment');
+var Vacation = require('../service/Vacation.js');
+var Statistics = require('../service/StatisticsService.js');
 
 router.route('/workingSummary')
 .get(function(req, res) {
@@ -18,12 +21,31 @@ router.route('/workingSummary')
         userId:_userId
     };
     
-    _dashboard.getWorkingSummary(params).then(function(result){
-        res.send(result);
-    }).catch(function(e){
-        
-        res.send(e);
-    });
+    _dashboard.getWorkingSummary(params).then(function (result) {
+      var targetYear = moment().format('YYYY');
+      var params2 = {year: targetYear, id: _userId};
+      Vacation.getVacationById(params2).then(function (vacationResult) {
+        if (vacationResult.length === 1) {
+          if (result.length === 0) {
+            result[0] = {};
+            result[0].total_working_day = "00";
+          }
+          result[0].vacation_year = targetYear;
+          result[0].vacation_year_remain = vacationResult[0].total_day - vacationResult[0].used_holiday;
+        }
+
+        Statistics.selectAvgInOutTime(req.query.start.substr(0,4), req.query.start, req.query.end.substr(0,10), _userId).then(function(resultAvg) {
+          console.log(resultAvg);
+          if (resultAvg[0].in_time_avg !== null) {
+            result[0].in_time_avg = resultAvg[0].in_time_avg;
+            result[0].out_time_avg = resultAvg[0].out_time_avg;
+          }
+          res.send(result);
+        });
+      });
+    }).catch(function (e) {
+      res.send(e);
+      });
 });
 
 router.route('/commuteSummary')

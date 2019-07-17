@@ -20,8 +20,8 @@ define([
   'css!tool/bootstrap-select/css/bootstrap-select.css',
 ], function($, _, Backbone, log, Bootstrap, Dialog, i18Common, Code, Fastclick, MainRouter, SessionModel, LoadingView, LoginView, NavigationView){
     var LOG=log.getLogger("APP");
-    var _loadingView;
-    var _saram;
+    // var _loadingView;
+    // var _saram;
     var _router;
     var _navigationView;
     var _initFlalg= true;
@@ -78,6 +78,10 @@ define([
             
             LoadingView.visible(function(){
                 Code.init().then(function(){
+                    // 일부 화면에서 로그인 폼이 제거되지 않아 화면 상단에 빈 공백이 생기는 오류 보완 2019.07.15
+                    if (!_.isUndefined(_loginView)){
+                      _loginView.removeFormSection();
+                    }
                     $("body").removeClass("login-body");
                     $("body").removeClass('web-login');
                     LoadingView.disable(function(){

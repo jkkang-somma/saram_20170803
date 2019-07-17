@@ -42,6 +42,9 @@ var User = function (data, isNoSchemas) {
     var _getManagerList = function(id){
         return UserDao.selectManagerList(id);
     };
+    var _getUserEmail = function() {
+      return UserDao.selectUserEmail();
+    };
     var _initPassword = function(){
         return UserDao.initPassword(_data.id, _data.password);
     };
@@ -126,7 +129,8 @@ var User = function (data, isNoSchemas) {
         editUser:_editUser,
         configUser:_configUser,
         findPassword:_findPassword,
-        updateUserGisPos:_updateUserGisPos
+        updateUserGisPos:_updateUserGisPos,
+        getUserEmail: _getUserEmail,
     };
 }
 module.exports = User;

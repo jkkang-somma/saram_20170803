@@ -11,12 +11,10 @@ var Dashboard = function () {
     };
 
     var _getCommuteSummary=function(params){
-        console.log(DashboardDao.selectCommuteSummaryById(params));
         return DashboardDao.selectCommuteSummaryById(params);
     };
 
     var _getAttendacne=function(params){
-        console.log(DashboardDao.selectAttendanceById(params));
         return DashboardDao.selectAttendanceById(params);
     };
     

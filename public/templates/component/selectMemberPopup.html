@@ -1,0 +1,35 @@
+<div class="container">
+  <form role='form'>
+    
+    <div class="form-group form-control" style="height: 300px; max-height: 300px;">
+      <div style="height: 100%; width: 50%; border-right: 1px solid; float: left;">
+        <div class="custom-control custom-checkbox" style="border-bottom: 1px solid #2ABB9B;">
+          <input type="checkbox" class="custom-control-input" id="checkAllDept" style="display: none;">
+          <label class="custom-control-label cursor-pointer" style="margin-left: 20px; margin-top: 2px;" for="checkAllDept">전체</label>
+        </div>
+
+        <div id="dept_list" style="width: 100%; height: 258px; overflow: auto;"></div>
+
+      </div>
+
+      <div style="height: 100%; width: 50%; float: right;">
+        <div class="custom-control custom-checkbox" style="border-bottom: 1px solid #2ABB9B;">
+          <input type="checkbox" class="custom-control-input" id="checkAllMember" style="display: none;">
+          <label class="custom-control-label cursor-pointer" style="margin-left: 20px; margin-top: 2px;" for="checkAllMember">전체</label>
+        </div>
+
+        <div id="dept_member_list" style="width: 100%;height: 258px; overflow: auto;"></div>
+
+      </div>
+      
+    </div>
+    
+    <div class="form-group">
+      <label>참석자</label> 
+      <label id="selected_attendance_count"> 0명</label>
+      <div id="clear_btn" class="btn btn-success float-right" style="height: 23px; line-height: 8px;">초기화</div>
+      <div id="selected_member_list" class="form-control" style="height: 140px; overflow: auto;"></div>
+    </div>
+
+  </form>
+</div>

@@ -47,7 +47,7 @@ define([
                 $("body").addClass("login-body");
 
                 if (!Util.isMobileAcc()) {
-                    console.log('PC');
+                    // console.log('PC');
                     $("body").addClass('web-login');
                 }
 
@@ -99,46 +99,46 @@ define([
                     }
                 });
 
-                this.loginPasswordSection.find("#findPasswordBtn").click(function (e) {
-                    e.preventDefault();
-                    _view.formSection.addClass("bounceOut");
-                    _view.passwordSection.addClass("fadeOutLeftBig");
-                    _view.loginPasswordSection.addClass("fadeOutRightBig");
+                // this.loginPasswordSection.find("#findPasswordBtn").click(function (e) {
+                //     e.preventDefault();
+                //     _view.formSection.addClass("bounceOut");
+                //     _view.passwordSection.addClass("fadeOutLeftBig");
+                //     _view.loginPasswordSection.addClass("fadeOutRightBig");
 
-                    setTimeout(function timeoutTimeout() {
-                        _view.formSection.css("display", "none");
-                        _view.passwordSection.css("display", "none");
-                        _view.loginPasswordSection.css("display", "none");
+                //     setTimeout(function timeoutTimeout() {
+                //         _view.formSection.css("display", "none");
+                //         _view.passwordSection.css("display", "none");
+                //         _view.loginPasswordSection.css("display", "none");
 
-                        _view.findPasswordSection.css("display", "block");
-                        _view.findPasswordSection.addClass("fadeInLeftBig");
-                    }, 300);
+                //         _view.findPasswordSection.css("display", "block");
+                //         _view.findPasswordSection.addClass("fadeInLeftBig");
+                //     }, 300);
 
-                    return false;
-                });
+                //     return false;
+                // });
 
-                this.findPasswordSection.find("#findCloseBtn").click(function () {
-                    _view.render(_view.app);
-                });
+                // this.findPasswordSection.find("#findCloseBtn").click(function () {
+                //     _view.render(_view.app);
+                // });
 
-                this.findPasswordSection.find("#findPasswordBtn").click(function () {
-                    _view.findPassword();
-                });
-                this.findPasswordSection.find("#findIdInput").bind('keydown', function (e) {
-                    if (e.keyCode == 13) {
-                        e.preventDefault();
-                        _view.findPassword();
-                    }
-                });
-                this.findPasswordSection.find("#findEmailInput").bind('keydown', function (e) {
-                    if (e.keyCode == 13) {
-                        e.preventDefault();
-                        _view.findPassword();
-                    }
-                });
+                // this.findPasswordSection.find("#findPasswordBtn").click(function () {
+                //     _view.findPassword();
+                // });
+                // this.findPasswordSection.find("#findIdInput").bind('keydown', function (e) {
+                //     if (e.keyCode == 13) {
+                //         e.preventDefault();
+                //         _view.findPassword();
+                //     }
+                // });
+                // this.findPasswordSection.find("#findEmailInput").bind('keydown', function (e) {
+                //     if (e.keyCode == 13) {
+                //         e.preventDefault();
+                //         _view.findPassword();
+                //     }
+                // });
 
-                this.findPasswordSection.find('form').submit(false);
-                this.passwordSection.find('form').submit(false);
+                // this.findPasswordSection.find('form').submit(false);
+                // this.passwordSection.find('form').submit(false);
             },
             render: function (app, data) {
 
@@ -169,27 +169,27 @@ define([
                 }));
 
 
-                this.loginPasswordSection = $(_.template(LoginPasswordSectionHTML)({//비밀번호 찾기 텍스트 창
-                    text: i18nCommon.LOGIN_VIEW.FIND_PASSWORD_TEXT
-                }));
+                // this.loginPasswordSection = $(_.template(LoginPasswordSectionHTML)({//비밀번호 찾기 텍스트 창
+                //     text: i18nCommon.LOGIN_VIEW.FIND_PASSWORD_TEXT
+                // }));
 
-                this.findPasswordSection = $(_.template(FindPasswordSectionHTML)({//비밀번호 찾기 창
-                    title: i18nCommon.FIND_PASSWORD_VIEW.TITLE,
-                    idPlaceholder: i18nCommon.LOGIN_VIEW.ID_PLACEHOLDER,
-                    emailPlaceholder: i18nCommon.FIND_PASSWORD_VIEW.EMAIL_PLACEHOLDER,
-                    findPasswordStatusBtn: i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_STATUS_BTN,
-                    findPasswordBtn: i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_BTN,
-                    closeBtn: i18nCommon.DIALOG.BUTTON.CLOSE,
-                    findTextInfo: i18nCommon.FIND_PASSWORD_VIEW.FIND_TEXT_INFO
-                }));
+                // this.findPasswordSection = $(_.template(FindPasswordSectionHTML)({//비밀번호 찾기 창
+                //     title: i18nCommon.FIND_PASSWORD_VIEW.TITLE,
+                //     idPlaceholder: i18nCommon.LOGIN_VIEW.ID_PLACEHOLDER,
+                //     emailPlaceholder: i18nCommon.FIND_PASSWORD_VIEW.EMAIL_PLACEHOLDER,
+                //     findPasswordStatusBtn: i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_STATUS_BTN,
+                //     findPasswordBtn: i18nCommon.FIND_PASSWORD_VIEW.FIND_PASSWORD_BTN,
+                //     closeBtn: i18nCommon.DIALOG.BUTTON.CLOSE,
+                //     findTextInfo: i18nCommon.FIND_PASSWORD_VIEW.FIND_TEXT_INFO
+                // }));
 
-                this.passwordSection.css("display", "none");
-                this.findPasswordSection.css("display", "none");
+                // this.passwordSection.css("display", "none");
+                // this.findPasswordSection.css("display", "none");
 
                 this.el.html(this.formSection);
-                this.el.append(this.loginPasswordSection);
+                // this.el.append(this.loginPasswordSection);
                 this.el.append(this.passwordSection);
-                this.el.append(this.findPasswordSection);
+                // this.el.append(this.findPasswordSection);
 
                 this.addClickEvent();
 
@@ -363,6 +363,10 @@ define([
                 this.passwordSection.addClass("fadeOutRightBig");
                 //his.loginPasswordSection.addClass("fadeOutRightBig");
                 // this.findPasswordSection.removeClass("fadeDownRightBig");
+            },
+            // 일부 화면에서 로그인 폼이 제거되지 않아 화면 상단에 빈 공백이 생기는 오류 보완 2019.07.15
+            removeFormSection: function() {
+              this.formSection.remove();
             },
             getFormData: function (form) {
                 // form.find(':input:disabled').removeAttr('disabled');

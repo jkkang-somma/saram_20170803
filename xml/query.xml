@@ -45,6 +45,7 @@
         		AND A.id=?
         </query>
         <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
+        <query id="selectUserEmail">select id, email from members_tbl</query>
         <query id="insertUser">
         insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, affiliated, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo, part_code) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         </query>
@@ -147,6 +148,7 @@
 
     <group id="holiday">
         <query id="selectHolidayList">select * from holiday_tbl where year=?</query>
+        <query id="selectHolidayListByPeriod">select * from holiday_tbl where date &gt;= ? and date &lt;= ?</query>
         <query id="insertHoliday">
         	INSERT INTO holiday_tbl
         		(year, date, memo)
@@ -2216,11 +2218,15 @@
 	<group id="roomReg">
 		<query id="selectRoomRegList">
 			select
-				*, (SELECT name FROM members_tbl where id = member_id) user_name
+				*, 
+        (SELECT name FROM members_tbl where id = member_id) user_name,
+        (SELECT name FROM room_tbl where `index` = room_index) AS room_name
 			from
 				room_reserve_tbl
 			where
 				date between DATE(?) AND DATE(?)
+      order by
+        date, start_time
 		</query>
 		<query id="selectRoomRegBefore">
 			select
@@ -2232,12 +2238,22 @@
 				date = ? AND
 				TIME(?) &lt; end_time AND TIME(?) &gt; start_time;
 		</query>
+    <query id="selectRoomRegByDateTime">
+			select
+				*, 
+        (SELECT name FROM room_tbl where `index` = room_index) AS room_name
+			from
+				room_reserve_tbl
+			where
+				date = ? AND
+				TIME(?) = start_time;
+		</query>
 		<query id="insertRoomReg">
-			insert into room_reserve_tbl(room_index, member_id, title, date, start_time, end_time, description)
-			values(?,?,?,?,?,?,?);
+			insert into room_reserve_tbl(room_index, member_id, title, date, start_time, end_time, description, attendance_list)
+			values(?,?,?,?,?,?,?,?);
 		</query>
 		<query id="updateRoomReg">
-			update room_reserve_tbl set room_index = ?, title =?, date = ?, start_time = ?, end_time = ?, description = ?
+			update room_reserve_tbl set room_index = ?, title =?, date = ?, start_time = ?, end_time = ?, description = ?, attendance_list = ?
 			where `index`=?;
 		</query>
 		<query id="deleteRoomReg">
@@ -2588,6 +2604,12 @@
 	</group>
 
 	<group id ="statistics">
+    <query id="selectAvgInOutTime"> 
+      SELECT name, sec_to_time(avg(time_to_sec(in_time))) as in_time_avg, sec_to_time(avg(if(time_to_sec(out_time) &lt; 54000, 86400+time_to_sec(out_time), time_to_sec(out_time)))) as out_time_avg 
+      FROM commute.commute_result_tbl 
+      WHERE year = ? AND date &gt;= ? and date &lt;= ? AND work_type != 30 AND work_type != 31 AND work_type != 40 AND work_type != 41 AND ( vacation_code is NULL OR (vacation_code != 'V02' AND vacation_code != 'V03')) AND in_time is not null AND out_time is not null
+        AND id = ?
+    </query>
 		<query id="selectPageUrlCount">
 			select
 				count

@@ -7,25 +7,25 @@ var User = require('../service/User.js');
 
 var _ = require("underscore");
 
-router.route('/userlist')
-.get(function(req, res, next){
-	debug("================================================= select user list : ");
-	RestfulService.getUserListNow(req.query).then(function(result) {
-		return res.send(result);
-	}).catch(function(err) {
-		next(err);
-	});
-});
+// router.route('/userlist')
+// .get(function(req, res, next){
+// 	debug("================================================= select user list : ");
+// 	RestfulService.getUserListNow(req.query).then(function(result) {
+// 		return res.send(result);
+// 	}).catch(function(err) {
+// 		next(err);
+// 	});
+// });
 
-router.route('/login')
-.get(function(req, res, next){
-	debug("================================================= login : ");
-	RestfulService.validateUser(req.headers).then(function(result) {
-		return res.send(result);
-	}).catch(function(err) {
-		next(err);
-	});
-});
+// router.route('/login')
+// .get(function(req, res, next){
+// 	debug("================================================= login : ");
+// 	RestfulService.validateUser(req.headers).then(function(result) {
+// 		return res.send(result);
+// 	}).catch(function(err) {
+// 		next(err);
+// 	});
+// });
 
 router.route('/companyAccess')
 .post(function(req, res, next){

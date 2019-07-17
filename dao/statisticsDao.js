@@ -41,4 +41,8 @@ StatisticsDao.prototype.selectOverTimeDept =  function (yearMonth, dept, workTyp
     return db.query(group, "selectOverTimeDept", [yearMonth, dept, workType]);
 };
 
+StatisticsDao.prototype.selectAvgInOutTime =  function (year, startDate, endDate, id) {
+  return db.query(group, "selectAvgInOutTime", [year, startDate, endDate, id]);
+};
+
 module.exports = new StatisticsDao();
