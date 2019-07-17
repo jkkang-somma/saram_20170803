@@ -13,8 +13,15 @@ var Statistics = require('../service/StatisticsService.js');
 
 router.route('/workingSummary')
 .get(function(req, res) {
+
     var _dashboard= new Dashboard();
     var _userId=sessionManager.get(req.cookies.saram).user.id;
+
+    if (sessionManager.get(req.cookies.saram).user.admin >= 1) {
+      if (req.query.id !== undefined) {
+        _userId = req.query.id;
+      }
+    }
     var params={
         start:req.query.start,
         end:req.query.end,
@@ -44,6 +51,7 @@ router.route('/workingSummary')
         });
       });
     }).catch(function (e) {
+      console.error(e);
       res.send(e);
       });
 });
@@ -52,6 +60,13 @@ router.route('/commuteSummary')
 .get(function(req, res){
     var _dashboard= new Dashboard();
     var _userId=sessionManager.get(req.cookies.saram).user.id;
+
+    if (sessionManager.get(req.cookies.saram).user.admin >= 1) {
+      if (req.query.id !== undefined) {
+        _userId = req.query.id;
+      }
+    }
+    
     var params={
         start:req.query.start,
         end:req.query.end,
@@ -71,6 +86,13 @@ router.route('/attendance')
 .get(function(req, res){
     var _dashboard= new Dashboard();
     var _userId=sessionManager.get(req.cookies.saram).user.id;
+
+    if (sessionManager.get(req.cookies.saram).user.admin >= 1) {
+      if (req.query.id !== undefined) {
+        _userId = req.query.id;
+      }
+    }
+
     var params={
         start:req.query.start,
         end:req.query.end,

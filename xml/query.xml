@@ -964,7 +964,7 @@
         <query id="selectPartList">SELECT code, name FROM part_code_tbl</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
-        <query id="selectUserList">SELECT id as code, name  FROM members_tbl where leave_company is null or leave_company = ''</query>
+        <query id="selectUserList">SELECT id as code, name, dept_code  FROM members_tbl where leave_company is null or leave_company = '' order by name</query>
         <query id="getOfficeItemCode">SELECT category_code as code, category_name as name, category_type as type	FROM office_item_category_tbl order by category_code asc</query>
     </group>
     <group id ="dashboard">

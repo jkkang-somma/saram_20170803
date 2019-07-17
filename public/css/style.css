@@ -1332,6 +1332,10 @@ border: 2px dotted #2ABB9B !important;
   background: linear-gradient(to top, #2ac16a, #0ea54e);
 }
 
+#dashboard_main .calendar-body .text .no-hover:hover {
+  background: linear-gradient( to bottom, #2ac16a, #0ea54e);
+}
+
 #dashboard_main .calendar-body .text:first-child {
     float: left;
 }
@@ -1690,5 +1694,13 @@ border: 2px dotted #2ABB9B !important;
 }
 
 .tooltip-marker {
-  background: url('img/icon_clear.png') 1px 1px no-repeat;
+  background: url('img/img_question.png') 1px 1px no-repeat;
+}
+
+.custom-width-100 > .bootstrap-select {
+  width: 100px !important;
+}
+
+.custom-width-100 > .bootstrap-select > button {
+  border-radius: 4px !important;
 }

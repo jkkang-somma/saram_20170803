@@ -89,9 +89,9 @@ define([
                     data: params
                 })
             ).done(function() {
-                var id = SessionModel.getUserInfo().id;
-                var data = {outoffice : outOfficeCollection.filterID(id),
-                            inoffice : inOfficeCollection.filterID(id)};
+                // var id = SessionModel.getUserInfo().id;
+                var data = {outoffice : outOfficeCollection.filterID(params.id),
+                            inoffice : inOfficeCollection.filterID(params.id)};
                 // console.log(data);
                 dfd.resolve(data);
             });
@@ -250,7 +250,11 @@ define([
                         } else if(Moment(_view.overTimeDay).isBefore(commuteData[0].date) || Moment(_view.overTimeDay).isSame(commuteData[0].date))
                         {
                             if (commuteData[0].over_time >= 120) {
+                              if (commuteData[0].id === SessionModel.getUserInfo().id) {
                                 overTime = '<button id="calendarSubmit" class="overSubmit glyphicon glyphicon-edit">상신</button>'
+                              } else {
+                                overTime = '<button id="calendarSubmit" disabled class="overSubmit no-hover glyphicon glyphicon-edit">상신</button>'
+                              }
                             }
                         }
                     }

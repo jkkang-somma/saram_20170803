@@ -3,10 +3,12 @@ define([
 	'underscore',
 	'core/BaseView',
 	'log',
-	'dialog',
+  'dialog',
+  'comboBox',
 	'i18n!nls/common',
 	'monthpicker',
-	'cmoment',
+  'cmoment',
+  'code',
 	'models/dashboard/WorkingSummaryModel',
 	'models/sm/SessionModel',
 	'collection/rm/ApprovalCollection',
@@ -16,20 +18,20 @@ define([
 	'text!templates/layout/default.html',
 	'text!templates/dashboardTemplate.html',
 	'text!templates/default/head.html'
-], function ($, _, BaseView, log, Dialog, i18Common, Monthpicker, Moment, WorkingSummaryModel, SessionModel, 
+], function ($, _, BaseView, log, Dialog, ComboBox, i18Common, Monthpicker, Moment, Code, WorkingSummaryModel, SessionModel, 
 			ApprovalCollection, CommentCollection, CalendarView, AbnormalSummaryView, LayoutHTML, DashboardHTML, HeadHTML) {
 	var LOG = log.getLogger('DashBoardView');
-	function getMinTimeString(data) {
-		var hour = Math.floor(data / 60);
-		var min = Math.floor(data % 60);
-		var result = "";
-		if (hour > 0) {
-			result += hour + "시간 ";
-		}
-		result += min + "분";
+	// function getMinTimeString(data) {
+	// 	var hour = Math.floor(data / 60);
+	// 	var min = Math.floor(data % 60);
+	// 	var result = "";
+	// 	if (hour > 0) {
+	// 		result += hour + "시간 ";
+	// 	}
+	// 	result += min + "분";
 
-		return result;
-	}
+	// 	return result;
+	// }
 
 	var _defaultData = {
 		id: "",
@@ -144,9 +146,11 @@ define([
 			var head = $(_headTmp({ title: title, subTitle: "" }));
 			layout.append(head);
 
-			// 결재 | 코멘트 | monthPicker
+      // 결재 | 코멘트 | monthPicker
+      // <select id="dashboard-member-combo" class="form-control"></select> \
 			layout.append(' \
-			<div class="pull-right"> \
+      <div class="pull-right"> \
+        <div class="btn-group custom-width-100" id="dashboard-member-combo-div" style="top:-15px; margin-right:10px; display: none;"><select class="btn-group" id="dashboard-member-combo" name="dashboard-member-combo"></select></div> \
 				<div class="btn-group" id="privilege-btn-approval" style="top:-15px; margin-right:10px; display: none;"></div> \
 				<div class="btn-group" id="privilege-btn-comment" style="top:-15px; margin-right:10px; display: none;"></div> \
 				<div class="btn-group" id="monthpickerCon" style="top:-15px;"></div> \
@@ -262,10 +266,43 @@ define([
 			}
 
 			// timeout(getMinTimeString(_data.total_over_time)+"("+_data.over_over_time+")", "total_over_time");
-
 			// timeout(getMinTimeString(_data.total_holiday_over_time)+"("+_data.over_holiday_over_time+")", "total_holiday_over_time");
-
 			// timeout(getMinTimeString(_data.total_early_time), "total_early_time");
+
+      // 부서장 이상인 경우 직원들의 대시보드를 볼 수 있도록 한다.
+      if(SessionModel.getUserInfo().admin >= '1'){
+        var memberCombo = $(this.el).find('#dashboard-member-combo');
+
+        var userHtml = "<option value='" + SessionModel.getUserInfo().id + "'>" + SessionModel.getUserInfo().name + "</option>";
+        memberCombo.append(userHtml);
+
+        var userCodeCollection= Code.getCollection("user");
+
+        for (var i = 0 ; i < userCodeCollection.models.length ; i++) {
+          var user = userCodeCollection.models[i];
+          if (user.get('name') === SessionModel.getUserInfo().name) {
+            continue;
+          }
+          if (SessionModel.getUserInfo().admin === 1) {
+            if (user.get('dept_code') !== SessionModel.getUserInfo().dept_code ) {
+              continue;
+            }
+          }
+
+          userHtml = "<option value='" + user.get('code') + "'>" + user.get('name') + "</option>";
+          memberCombo.append(userHtml);
+        }
+
+        ComboBox.createCombo(memberCombo);
+        memberCombo.selectpicker("val", _view.searchParams.id);
+        // todo show
+        $('.btn-group#dashboard-member-combo-div').show();
+        
+        memberCombo.change(function(value) {
+          _view.searchParams.id = memberCombo.val();
+          _view.render();
+        });
+      }
 
 			if(SessionModel.getUserInfo().privilege == '1'){
 				// <div class="btn btn-success">미결 : <span style="font-weight: bold; margin-left: 10px;"> 0 </span> 건</div>
@@ -326,7 +363,7 @@ define([
 						}else{
 							btnCon.addClass('btn-success');
 						}
-						$('.btn-group#privilege-btn-approval').show();
+            $('.btn-group#privilege-btn-approval').show();
 					},
 					error : function(result) {
 						
@@ -361,12 +398,8 @@ define([
 				callBack: function (value) {
 					var _startDate = Moment(value, "YYYY-MM").startOf('month').format("YYYY-MM-DD");
 					var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").endOf('month').format("YYYY-MM-DD HH:mm:ss");
-					var _searchParams = {
-						start: _startDate,
-						end: _endDate,
-						id: _defaultData.id
-					};
-					_view.searchParams = _searchParams;
+          _view.searchParams.start = _startDate;
+          _view.searchParams.end = _endDate;
 					_view.render();
 				}
 			});
@@ -381,25 +414,19 @@ define([
 				var value = _view.searchParams.start;
 				var _startDate = Moment(value, "YYYY-MM-DD").add(-1, 'month').startOf('month').format("YYYY-MM-DD");
 				var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(-1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
-				var _searchParams = {
-					start: _startDate,
-					end: _endDate,
-					id: _defaultData.id
-				};
-				_view.searchParams = _searchParams;
+        
+        _view.searchParams.start = _startDate;
+        _view.searchParams.end = _endDate;
 				_view.render();
 			});
 
 			this.afterBtn.on('click', function () {
 				var value = _view.searchParams.start;
 				var _startDate = Moment(value, "YYYY-MM-DD").add(1, 'month').startOf('month').format("YYYY-MM-DD");
-				var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
-				var _searchParams = {
-					start: _startDate,
-					end: _endDate,
-					id: _defaultData.id
-				};
-				_view.searchParams = _searchParams;
+        var _endDate = Moment(value, "YYYY-MM-DD HH:mm:ss").add(1, 'month').endOf('month').format("YYYY-MM-DD HH:mm:ss");
+        
+        _view.searchParams.start = _startDate;
+        _view.searchParams.end = _endDate;
 				_view.render();
 			});
 
