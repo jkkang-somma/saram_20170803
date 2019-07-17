@@ -68,7 +68,7 @@ var RoomReg = function () {
           fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/roomRegEmailFormat.html","utf8").then(function (html) {
             for (var roomReg of roomRegList) {
               debug("ready for send mail : " + roomReg.title);
-              if (roomReg.attendance_list === null || roomReg.attendance_list === undefined || roomReg.attendance_list === []) {
+              if (roomReg.attendance_list === null || roomReg.attendance_list === undefined || roomReg.attendance_list === "[]") {
                 continue;
               }
 
