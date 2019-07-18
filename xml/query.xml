@@ -1003,7 +1003,7 @@
 					STR_TO_DATE(?, '%Y-%m-%d') AS END_DATE
 				FROM DUAL
 			) D ON A.date &gt;= D.START_DATE AND A.date &lt;= D.END_DATE
-			WHERE A.id = ?
+			WHERE A.year = ? AND A.id = ?
 			GROUP BY ID
     	</query>
 		<query id="selectCommuteSummaryById">

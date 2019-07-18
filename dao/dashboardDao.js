@@ -7,7 +7,7 @@ var DashboardDao = function () {
 };
 
 DashboardDao.prototype.selectWorkingSummaryById =  function (params) {
-    return db.query('dashboard', 'selectWorkingSummaryById', [params.start, params.end, params.userId]);
+    return db.query('dashboard', 'selectWorkingSummaryById', [params.start, params.end, params.year, params.userId]);
 };
 
 DashboardDao.prototype.selectCommuteSummaryById = function (params) {

@@ -25,6 +25,7 @@ router.route('/workingSummary')
     var params={
         start:req.query.start,
         end:req.query.end,
+        year:req.query.start.substr(0,4),
         userId:_userId
     };
     
