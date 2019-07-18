@@ -269,8 +269,8 @@ define([
 			// timeout(getMinTimeString(_data.total_holiday_over_time)+"("+_data.over_holiday_over_time+")", "total_holiday_over_time");
 			// timeout(getMinTimeString(_data.total_early_time), "total_early_time");
 
-      // 부서장 이상인 경우 직원들의 대시보드를 볼 수 있도록 한다.
-      if(SessionModel.getUserInfo().admin >= '1'){
+      // 부서장 이상인 경우 직원들의 대시보드를 볼 수 있도록 한다. 임원 부서의 경우 대시보드에 달력이 나오지 않기때문에 선택하지 않음.
+      if(SessionModel.getUserInfo().admin >= 1 && SessionModel.getUserInfo().dept_code !== '0000'){
         var memberCombo = $(this.el).find('#dashboard-member-combo');
 
         var userHtml = "<option value='" + SessionModel.getUserInfo().id + "'>" + SessionModel.getUserInfo().name + "</option>";
