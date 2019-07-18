@@ -221,7 +221,7 @@ define([
               }
               if (name.startsWith("평균")) {
                 param.action += " tooltip-marker"
-                param.tooltip = "휴가(반차 포함)를 사용하지 않은 평일 기준 &#10;출근/퇴근 기록이 모두 있는 날만 계산";
+                param.tooltip = "휴가(반차 포함)를 사용하지 않은 평일 기준 &#10;외근 제외 ( 단, 장기외근은 포함 )&#10;출근/퇴근 기록이 모두 있는 날만 계산";
               }
             } else {
               param = {

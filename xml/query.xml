@@ -2609,6 +2609,7 @@
       FROM commute.commute_result_tbl 
       WHERE year = ? AND date &gt;= ? and date &lt;= ? AND 
         work_type not in (30, 31, 40, 41) AND 
+        (out_office_code is NULL OR out_office_code != 'W01') AND
         (vacation_code is NULL OR (vacation_code not like '%V%')) AND 
         in_time is not null AND out_time is not null AND
         id = ?
