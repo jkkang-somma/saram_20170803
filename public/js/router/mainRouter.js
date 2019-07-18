@@ -53,7 +53,7 @@ define([
         'holidaymanager': 'showHolidayManager',
         'commutemanager': 'showCommuteManager',
         'commutemanager/comment': 'showCommuteComment',
-        'commutemanager/comment/:id/:date': 'showCommuteCommentListCount',
+        'commutemanager/comment/:flag': 'showCommuteCommentListCount',
         'vacation': 'showVacation',
         'rawdatalist': 'showRawdata',
         'rawdatalist/:id/:date': 'showRawdataList',
@@ -256,10 +256,10 @@ define([
         this.changeView(url);
       },
 
-      showCommuteCommentListCount: function (id, date) { // url + 검색 조건을 토한 페이지 이동 
+      showCommuteCommentListCount: function (flag) { // url + 검색 조건을 토한 페이지 이동 
         var url = 'views/cm/CommuteCommentView';
         var callback = function (view) {
-          view.setSearchParam({ "id": id, "date": date });
+          view.setSearchParam();
         };
         this.changeView(url, undefined, callback);
       },

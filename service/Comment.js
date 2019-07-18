@@ -39,8 +39,8 @@ var Comment = function() {
 		return CommentDao.selectCommentCountToManager(id);
 	};
 	
-	var _getCommentById = function(data) {
-		return CommentDao.selectCommentById(data);
+	var _getCommentById = function(id) {
+		return CommentDao.selectCommentById(id);
 	};
 	
 	var _getCommentByPk = function(data) {

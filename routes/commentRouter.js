@@ -14,8 +14,9 @@ router.route('/')
 		}).catch(function(err) {
 			next(err);
 		});
-	} else if (query["id"] != undefined && query["id"] != "") {
-		Comment.getCommentById(query).then(function(result) {
+	} else if (query["onlySubmit"] != undefined && query["onlySubmit"] === "true") {
+    // request(결재자) 대상 기준으로 상신 건만 조회하여 전달 함.
+    Comment.getCommentById(sessionManager.get(req.cookies.saram).user.id).then(function(result) {
 			return res.send(result);
 		}).catch(function(err) {
 			next(err);

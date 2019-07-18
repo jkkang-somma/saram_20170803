@@ -14,9 +14,9 @@ CommentDao.prototype.selectCommentCountToManager =  function (id) {
     return db.query(group, "selectCommentCountToManager", [id]);
 };
 
-//comment 조회  
-CommentDao.prototype.selectCommentById =  function (data) {
-    return db.query(group, "selectCommentById", [data.startDate, data.endDate, data.id]);
+//comment 조회 - 요청자(결재자)를 기준으로 모든 '상신' 건을 조회함.
+CommentDao.prototype.selectCommentById =  function (id) {
+    return db.query(group, "selectCommentById", [id]);
 };
 
 //comment 조회  

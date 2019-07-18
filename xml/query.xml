@@ -846,7 +846,7 @@
     			comment_tbl c
     			LEFT JOIN members_tbl m ON m.id = c.id
     		WHERE
-    			date BETWEEN ? AND ? and c.id = ?
+    			c.approval_id = ? AND state = '상신'
 			ORDER BY date
     	</query>
 

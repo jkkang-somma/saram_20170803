@@ -25,14 +25,13 @@ define([
   'collection/rm/ApprovalCollection',
   'collection/cm/CommentCollection',
   'views/cm/popup/CommentUpdatePopupView',
-  'text!templates/cm/searchFormTemplate.html'
 ], function (
   $, _, Backbone, Util, Schemas, Grid, Dialog, Datatables, Moment,
   Form, i18Common,
   BaseView,
   HeadHTML, ContentHTML, LayoutHTML, RowHTML, DatePickerHTML, RowButtonContainerHTML, RowButtonHTML,
   SessionModel, ApprovalCollection, CommentCollection,
-  CommentUpdatePopupView, searchFormTemplate) {
+  CommentUpdatePopupView) {
 
     var _currentFilter = 0;
     function _getGridFilterBtn() {	// 검색 필터
@@ -197,9 +196,10 @@ define([
       el: $(".main-container"),
       // '상신' 건만 조회하도록 설정
       setSearchParam: function () {
-        this.searchParam.onlySubmit = true;
+        this.searchParamOnlySubmit = true;
       },
       initialize: function () {
+        this.searchParamOnlySubmit = false
         this.commentCollection = new CommentCollection();
         this.gridOption = {
           el: "commute_content",
@@ -260,6 +260,7 @@ define([
       },
       events: {
         'click #ccmSearchBtn': 'onClickSearchBtn',
+        'click #searchSubmitBtn': 'onClickSearchSubmitBtn',
         'click .list-detailComm-btn': 'onClickListDetailCommBtn'
       },
       buttonInit: function () {
@@ -304,6 +305,15 @@ define([
         );
         _btnContainer.append(_searchBtn);
 
+        var _searchSubmitBtn = $(_.template(RowButtonHTML)({
+          obj: {
+            id: "searchSubmitBtn",
+            label: "결재 조회"
+          }
+        })
+        );
+        _btnContainer.append(_searchSubmitBtn);
+
         _row.append(_datepickerRange);
         _row.append(_btnContainer);
 
@@ -337,16 +347,21 @@ define([
         this.grid = new Grid(_gridSchema.getDefault(this.gridOption));
         this.grid.render();
 
-        if (Util.isNotNull(this.searchParam)) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
-          $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
-          $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
-        }
+        // if (Util.isNotNull(this.searchParam)) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
+        //   $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+        //   $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
+        // }
 
         this.selectComments();
         return this;
       },
 
       onClickSearchBtn: function () {
+        this.selectComments();
+      },
+
+      onClickSearchSubmitBtn: function () {
+        this.searchParamOnlySubmit = true;
         this.selectComments();
       },
 
@@ -365,10 +380,6 @@ define([
           endDate: $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
         }
 
-        if (Util.isNotNull(this.searchParam)) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
-          data.id = this.searchParam.id;
-        }
-
         if (Util.isNull(data.startDate)) {
           alert("검색 시작 날짜를 선택해주세요");
           return null;
@@ -383,6 +394,10 @@ define([
         var data = this.getSearchForm();
         if (Util.isNull(data)) {
           return;
+        }
+
+        if (this.searchParamOnlySubmit === true) {
+          data.onlySubmit = true;
         }
 
         var _this = this;
@@ -410,13 +425,13 @@ define([
               }
             });
 
-            if (Util.isNotNull(_this.searchParam)) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
-              _this.searchParam = null; // url 접속 - 최초 검색 후 초기화
+            if (_this.searchParamOnlySubmit === true) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
+              _this.searchParamOnlySubmit = false; // url 접속 - 최초 검색 후 초기화
 
               // URL 접속시 필터를 전체로 변경하기 위해 강제 크릭
-              var filterBtn = $(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
-              if (filterBtn.text() == "나")
-                $(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");
+              // var filterBtn = $(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
+              // if (filterBtn.text() == "나")
+              //   $(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");
             }
           },
           errorCallBack: function (response) {
