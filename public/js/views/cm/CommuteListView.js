@@ -222,9 +222,16 @@ define([
 
     var commuteListView = BaseView.extend({
       el: $(".main-container"),
+      elements: {
+        defaultId: "",
+        defaultDate: ""
+      },
+      setSearchDate: function (date) {
+        this.elements.defaultDate = date;
+      },
       initialize: function () {
         var _view = this;
-
+        this.elements.defaultId = SessionModel.getUserInfo().id;
         this.commuteCollection = new CommuteCollection();
 
         this.gridOption = {
@@ -332,6 +339,8 @@ define([
           rowCallback: function (row, data) {
             if (data.work_type == 21 || data.work_type == 22) { // 결근 처리
               $(row).addClass("absentce");
+            } else if (_view.elements.defaultDate === data.date && _view.elements.defaultId === data.id) {
+              $(row).addClass("target");
             } else {
               $(row).removeClass("absentce");
             }
@@ -426,14 +435,26 @@ define([
 
         $(this.el).html(_layOut);
 
-        var today = new Date();
+        var startDate = "", endDate = "";
+        if (this.elements.defaultDate.length !== 0) {
+          var targetDate = new Moment(this.elements.defaultDate);
+          if (targetDate.isValid()) {
+            startDate = Moment(targetDate).add(-5, "days").format("YYYY-MM-DD");
+            endDate = Moment(targetDate).add(3, "days").format("YYYY-MM-DD");
+          }
+        }
+        if (endDate === "") {
+          var today = new Date();
+          startDate = Moment(today).add(-7, "days").format("YYYY-MM-DD");
+          endDate = Moment(today).format("YYYY-MM-DD");
+        }
 
         $(this.el).find("#ccmFromDatePicker").datetimepicker({
           pickTime: false,
           language: "ko",
           todayHighlight: true,
           format: "YYYY-MM-DD",
-          defaultDate: Moment(today).add(-7, "days").format("YYYY-MM-DD")
+          defaultDate: startDate
         });
 
         $(this.el).find("#ccmToDatePicker").datetimepicker({
@@ -441,7 +462,7 @@ define([
           language: "ko",
           todayHighlight: true,
           format: "YYYY-MM-DD",
-          defaultDate: Moment(today).format("YYYY-MM-DD")
+          defaultDate: endDate
         });
 
         var dept = Code.getCodes(Code.DEPARTMENT);

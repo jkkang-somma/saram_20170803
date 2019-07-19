@@ -33,6 +33,13 @@ define([
     }
   };
 
+  var get02dStr = function (num) {
+    if (num < 10) {
+      return "0" + num;
+    }
+    return num;
+  }
+
   // form 태그 내 name 별 값을 json 형식으로 반환  
   var getFormJSON = function ($form) {
     var arr = $form.serializeArray();
@@ -268,6 +275,7 @@ define([
     inArray: inArray,
     inObject: inObject,
     split: split,
+    get02dStr: get02dStr,
     getFormJSON: getFormJSON,
     dateToString: dateToString,
     timeToString: timeToString,

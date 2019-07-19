@@ -106,6 +106,7 @@ define([
     }, {
       title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER, //"근태 자료 관리",
       hashTag: "#commutemanager",
+      subTag: ["/?"],
       auth: SCHEMAS.USER
     }, {
       title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",

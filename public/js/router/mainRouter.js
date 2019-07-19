@@ -52,6 +52,7 @@ define([
         'createdata': 'showCreateData',
         'holidaymanager': 'showHolidayManager',
         'commutemanager': 'showCommuteManager',
+        'commutemanager/:date': 'showCommuteManagerByDate',
         'commutemanager/comment': 'showCommuteComment',
         'commutemanager/comment/:flag': 'showCommuteCommentListCount',
         'vacation': 'showVacation',
@@ -244,6 +245,14 @@ define([
       showCommuteManager: function () {
         var url = 'views/cm/CommuteListView';
         this.changeView(url);
+      },
+
+      showCommuteManagerByDate: function (date) {
+        var url = 'views/cm/CommuteListView';
+        var callback = function (view) {
+          view.setSearchDate(date);
+        };
+        this.changeView(url, undefined, callback);
       },
 
       showVacation: function () {

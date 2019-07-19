@@ -23,17 +23,22 @@ define([
 
     var CalendarView = Backbone.View.extend({
 
+      elements: {
+        targetUserId: ""
+      },
       initialize: function (opt) {
         this.$el = $(opt.el);
         this.commuteSummaryCollection = new CommuteSummaryCollection();
         this.attendanceCollection = new AttendanceCollection();
         this.holidayCollection = new HolidayCollection();
-        this._today = new Moment().format("YYYY-M-D");
+        this._today = new Moment().format("YYYY-MM-DD");
       },
       events: {
-        'click #calendarSubmit': 'onClickOpenOvertimePopup'
+        'click #calendarSubmit': 'onClickOpenOvertimePopup',
+        'click .clickable': 'onClickDay'
       },
       _draw: function (params) {
+        this.elements.targetUserId = params.id;
         var _view = this;
         var yearData = new Moment(params.start);
         _view.getHolidaySummary({ year: yearData.year() }).done(function (result) { // 휴일 조회
@@ -139,7 +144,7 @@ define([
           var holMonth = holDate.month();
           if (thisMonth == holMonth) {
             // console.log(dd);
-            var holId = holDate.format("YYYY-M-D");
+            var holId = holDate.format("YYYY-MM-DD");
             var holCon = $(_view.el).find('#' + holId);
             holCon.addClass('holiday');
             // cc-header
@@ -203,7 +208,7 @@ define([
               }
             }
 
-          } else if (commuteData.length !== 0) {
+          } else { // commuteData.length !== 0
             workType = Code.getCodeName(Code.WORKTYPE, commuteData[0].work_type);
             if (workType !== "휴일") {
               if (workType === "조퇴" || workType === "지각" || workType === "지각,조퇴") {
@@ -291,7 +296,8 @@ define([
             "overTime": overTime,
             "outOffice": outOffice,
             "vacation": vacation,
-            "exist": exist
+            "exist": exist,
+            "commuteExist": commuteData.length === 1
           };
           data.push(pushData);
         }
@@ -308,19 +314,20 @@ define([
         if (todayBox.length > 0) {
           todayBox.css('border', '2px solid #34495e');
         }
-        var holiday = $('.holiday');
-        var bgColor1 = $('.cc-header').eq(0).css("background-color");
-        var bgColor2 = $('.cc-header').eq(6).css("background-color");
-        var textColor = $('.cc-header').eq(0).css("color")
-        var target;
-        for (var k = 0, len = holiday.length; k < len; k++) {
-          target = $('.holiday').parent().parent().parent().find('.cc-header').eq(k);
-          if (bgColor1 !== target.css("background-color") && bgColor2 !== target.css("background-color")) {
-            target.css("background-color", bgColor1);
-            target.css("color", textColor);
-          }
-        }
 
+        // 2019.07.19 KJK 아래 코드 왜 있는지 모르겠음...
+        // var holiday = $('.holiday');
+        // var bgColor1 = $('.cc-header').eq(0).css("background-color");
+        // var bgColor2 = $('.cc-header').eq(6).css("background-color");
+        // var textColor = $('.cc-header').eq(0).css("color")
+        // var target;
+        // for (var k = 0, len = holiday.length; k < len; k++) {
+        //   target = $('.holiday').parent().parent().parent().find('.cc-header').eq(k);
+        //   if (bgColor1 !== target.css("background-color") && bgColor2 !== target.css("background-color")) {
+        //     target.css("background-color", bgColor1);
+        //     target.css("color", textColor);
+        //   }
+        // }
 
         _view.drawHoliday(params.start);
       },
@@ -330,7 +337,7 @@ define([
 
         var tdTemplate = '<td id="" class="">';
         var calendar_content = '<div class="calendar-content">';
-        var cc_header = '<div class="cc-header"><DAY></div>';
+        var cc_header = '<div class="cc-header <HEADER_CLASS>"><DAY></div>';
         var cc_content = '<div class="c-content"> <div class="text"><A></div><div class="text"><B></div> </div>';
 
         var day = 0;
@@ -372,11 +379,16 @@ define([
                 }
               }
 
-              resultHtml = resultHtml.replace('id=""', 'id="' + year + '-' + (month + 1) + '-' + data[day].days + '"');
+              resultHtml = resultHtml.replace('id=""', 'id="' + year + '-' + Util.get02dStr(month + 1) + '-' + Util.get02dStr(data[day].days) + '"');
 
               resultHtml += calendar_content;
               resultHtml += cc_header.replace("<DAY>", data[day].days);
 
+              if (data[day].commuteExist === true && SessionModel.getUserInfo().id === this.elements.targetUserId) {
+                resultHtml = resultHtml.replace("<HEADER_CLASS>", "clickable");
+              } else {
+                resultHtml = resultHtml.replace("<HEADER_CLASS>", "");
+              }
               resultHtml += cc_content.replace("<A>", data[day].workType).replace("<B>", data[day].overTime);
               resultHtml += cc_content.replace("<A>", data[day].outOffice).replace("<B>", data[day].vacation);
             }
@@ -434,7 +446,8 @@ define([
       },
 
       onClickOpenOvertimePopup: function (evt) {
-        window.location.href = "#commutemanager";
+        // window.location.href = "#commutemanager";
+        window.location.href = "#commutemanager/" + evt.target.parentElement.parentElement.parentElement.parentElement.id;
         // var index = $(evt.currentTarget).attr('data');
         // var selectItem = {
         //     department : SessionModel.getUserInfo().id,
@@ -485,6 +498,14 @@ define([
         //         }
         //     }]
         // });
+      },
+
+      onClickDay: function(evt) {
+        if (evt.target.parentElement.parentElement.id === "") {
+          window.location.href = "#commutemanager/" + evt.target.parentElement.parentElement.parentElement.id;
+        } else {
+          window.location.href = "#commutemanager/" + evt.target.parentElement.parentElement.id;
+        }
       }
 
     });

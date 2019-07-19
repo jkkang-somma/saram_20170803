@@ -1177,6 +1177,14 @@ border: 2px dotted #2ABB9B !important;
   background-color: rgba(236, 131, 131 ,1);  
 }
 
+#commuteDataTable tr.target{
+  background-color: rgba(189, 228, 188, 0.4);
+}
+
+#commuteDataTable tr.target.selected{
+  background: rgb(26, 188, 156);
+}
+
 .roomRegRect {
   cursor: hand;
 }
@@ -1302,6 +1310,10 @@ border: 2px dotted #2ABB9B !important;
     text-align: left;
     text-indent: 5px;
     cursor: default;
+}
+
+#dashboard_main .calendar-body .clickable {
+  cursor: pointer;
 }
 
 #dashboard_main .calendar-body td{
