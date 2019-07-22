@@ -286,22 +286,7 @@ define([
             $(_this.el).find('#usableHolidayCon').hide();
           }
         }
-
         ComboBox.createCombo(selGubun);
-
-        // 선택된 날짜를 기준으로 default 선택 내용을 선택
-        var startDate = $(this.el).find('#start_date input').val();
-        var dayOfWeek = new Moment(startDate).day();
-
-        if ( dayOfWeek === 0 || dayOfWeek === 6 || _.find(this.options.holidayInfos, {date: startDate}) !== undefined ) {
-          selGubun.selectpicker("val", "B01");
-        } else {
-          // TODO 기본 선택에 대한 내용을 정확하게 표현해야 함.
-          // selGubun.selectpicker("val", "V01");
-          // _this.afterDate.css('display', 'table');
-          // $(_this.el).find('#usableHolidayCon').show();
-          // $(_this.el).find('#reqHoliday').parent().parent().css('display', 'block');
-        }
 
       } else {
         _this.holReq = 0;
@@ -360,6 +345,17 @@ define([
           $(_this.el).find('#reqHoliday').parent().parent().css('display', 'block');
         }
       });
+
+      // 선택된 날짜를 기준으로 default 선택 내용을 선택
+      var startDate = $(this.el).find('#start_date input').val();
+      var dayOfWeek = new Moment(startDate).day();
+
+      if ( dayOfWeek === 0 || dayOfWeek === 6 || _.find(this.options.holidayInfos, {date: startDate}) !== undefined ) {
+        // 휴일근무 기본 선택되어 있음.
+      } else {
+        selGubun.selectpicker("val", "V01");
+        selGubun.change();
+      }
 
     },
 
