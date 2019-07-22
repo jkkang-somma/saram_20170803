@@ -70,6 +70,13 @@ define([
         _.bindAll(this, 'render');
         _.bindAll(this, 'close');
       },
+
+      destroy: function () {
+        if (this.calendarView) {
+          this.calendarView.destroy();
+        }
+      },
+
       getWorkingSummary: function (params) {
         var _view = this;
         var dfd = new $.Deferred();
@@ -162,8 +169,11 @@ define([
 
 
         if (code != '0000') {
-          var calendarView = new CalendarView({ el: dashboard.find('#calendar')[0] });
-          calendarView._draw(_params);
+          if (this.calendarView) {
+            this.calendarView.destroy();
+          }
+          this.calendarView = new CalendarView({ el: dashboard.find('#calendar')[0] });
+          this.calendarView._draw(_params);
         } else {
           var view = new AbnormalSummaryView({ el: dashboard.find('#calendar')[0] });
           view.render('dashboard', _view.searchParams);

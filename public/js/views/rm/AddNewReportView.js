@@ -23,6 +23,7 @@ define([
       total_day: 0,
       used_holiday: 0,
       approval_count: 0,
+      targetDate: "",
     },
     events: {},
 
@@ -34,6 +35,10 @@ define([
       this.clickFlag = false;
 
       _.bindAll(this, "onClickBtnSend");
+    },
+
+    setTargetDate: function(targetDate) {
+      this.options.targetDate = targetDate;
     },
 
     render: function (el) {
@@ -98,6 +103,14 @@ define([
       var _this = this;
       var beforeDate = $(this.el).find("#start_date");
       //beforeDate.attr('readonly', true);
+
+      var targetDate = "";
+      if (this.options.targetDate === "") {
+        targetDate = new Moment().format("YYYY-MM-DD");
+      } else {
+        targetDate = new Moment(this.options.targetDate).format("YYYY-MM-DD");
+      }
+
       this.beforeDate = beforeDate.datetimepicker({
         todayBtn: "linked",
         pickTime: false,
@@ -105,7 +118,7 @@ define([
         todayHighlight: true,
         format: "YYYY-MM-DD",
         autoclose: true,
-        defaultDate: Moment(new Date()).format("YYYY-MM-DD")
+        defaultDate: targetDate
       });
 
       var afterDate = $(this.el).find("#end_date");
@@ -117,7 +130,7 @@ define([
         todayHighlight: true,
         format: "YYYY-MM-DD",
         autoclose: true,
-        defaultDate: Moment(new Date()).format("YYYY-MM-DD")
+        defaultDate: targetDate
         // maxDate : Moment([new Date().getFullYear(), 11, 31]).format("YYYY-MM-DD")
       });
 
@@ -260,20 +273,33 @@ define([
         }
       }
 
-      // 휴일근무          
+      // 휴일근무 - 외주 소속인 경우 휴일근무 상신할 수 없음.
       if (userAffiliated != 1) {
         $(_this.el).find('#datePickerTitleTxt').text('date');
         _this.afterDate.hide();
         _this.holReq = 0;
         $(_this.el).find('#reqHoliday').val("0 일");
         $(_this.el).find('#reqHoliday').parent().parent().css('display', 'none');
-        ComboBox.createCombo(selGubun);
 
         if (arrGubunData.length > 0) {
           if (arrGubunData[0].code == 'B01' || arrGubunData[0].code == 'W01' || arrGubunData[0].code == 'W02' || arrGubunData[0].code == 'W03' || arrGubunData[0].code == 'W04') {
             $(_this.el).find('#usableHolidayCon').hide();
           }
         }
+
+        ComboBox.createCombo(selGubun);
+
+        // 선택된 날짜를 기준으로 default 선택 내용을 선택
+        var startDate = $(this.el).find('#start_date input').val();
+        var dayOfWeek = new Moment(startDate).day();
+
+        if ( dayOfWeek === 0 || dayOfWeek === 6 || _.find(this.options.holidayInfos, {date: startDate}) !== undefined ) {
+          selGubun.selectpicker("val", "B01");
+        } else {
+          selGubun.selectpicker("val", "V01");
+          _this.afterDate.css('display', 'table');
+        }
+
       } else {
         _this.holReq = 0;
         $(_this.el).find('#reqHoliday').val("1 일");
@@ -508,7 +534,7 @@ define([
     },
     onClickBtnSend: function (evt) {
       if (this.clickFlag) {
-        console.log("IN skip");
+        // console.log("IN skip");
         return;
       }
 

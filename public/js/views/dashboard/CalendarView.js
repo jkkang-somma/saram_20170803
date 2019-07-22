@@ -17,14 +17,16 @@ define([
   'collection/vacation/InOfficeCollection',
   'collection/vacation/OutOfficeCollection',
   'views/cm/popup/OvertimeApprovalPopupView',
-  'text!templates/calendarTemplateBase.html'
+  'text!templates/calendarTemplateBase.html',
+  'views/rm/AddNewReportView',
 ], function ($, _, Backbone, Code, Moment, Util, Dialog, i18nCommon, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection,
-  InOfficeCollection, OutOfficeCollection, OvertimeApprovalPopupView, calendarHTML) {
+  InOfficeCollection, OutOfficeCollection, OvertimeApprovalPopupView, calendarHTML, AddNewReportView) {
 
     var CalendarView = Backbone.View.extend({
 
       elements: {
-        targetUserId: ""
+        targetUserId: "",
+        _isShowPopup: 0, // 0: none , 1: ignore, 2: display
       },
       initialize: function (opt) {
         this.$el = $(opt.el);
@@ -32,10 +34,20 @@ define([
         this.attendanceCollection = new AttendanceCollection();
         this.holidayCollection = new HolidayCollection();
         this._today = new Moment().format("YYYY-MM-DD");
+
+        this.elements._bindEvent1 = _.bind(this.resetPopupMenu, this);
+        $(window).on("click", this.elements._bindEvent1);
       },
+
+      destroy: function () {
+        $(window).off("click", this.elements._bindEvent1);
+      },
+
       events: {
         'click #calendarSubmit': 'onClickOpenOvertimePopup',
-        'click .clickable': 'onClickDay'
+        'click .clickable': 'onClickDayLink',
+        'click td': 'onClickDaySubmit',
+        'click #submit_item' : 'onClickSubmitMenu'
       },
       _draw: function (params) {
         this.elements.targetUserId = params.id;
@@ -350,18 +362,11 @@ define([
               // 1일 시작 전
               // if ( data[0].exist ) {
               resultHtml += tdTemplate;
-              // }else{
-              //     resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
-              // }
               resultHtml = resultHtml.replace('id=""', '');
               continue;
             } else if (_.isUndefined(data[day])) {
               // 말일 종료 후
-              // if ( data[lastDay-1].exist ) {
               resultHtml += tdTemplate;
-              // }else{
-              //     resultHtml += tdTemplate.replace('class=""', 'class="disabled"');
-              // }
               resultHtml = resultHtml.replace('id=""', '');
             } else {
               // 1일 ~ 말일까지                        
@@ -500,13 +505,68 @@ define([
         // });
       },
 
-      onClickDay: function(evt) {
+      onClickDayLink: function(evt) {
         if (evt.target.parentElement.parentElement.id === "") {
           window.location.href = "#commutemanager/" + evt.target.parentElement.parentElement.parentElement.id;
         } else {
           window.location.href = "#commutemanager/" + evt.target.parentElement.parentElement.id;
         }
-      }
+      },
+
+      resetPopupMenu: function () {
+        // 0: none , 1: ignore, 2: display
+        if (this.elements._isShowPopup == 0 || this.elements._isShowPopup == 1) {
+          this.elements._isShowPopup = 2;
+          return;
+        }
+
+        $($("#submit_popup_menu")[0]).css("display", "none");
+        this.elements._isShowPopup = 0;
+      },
+
+      onClickDaySubmit: function(event) {
+        this.elements._isShowPopup = 0;
+
+        var targetDate = event.target.parentElement.parentElement.parentElement.id;
+        if (targetDate === "" || targetDate === "calendar_body") {
+          targetDate = event.target.parentElement.parentElement.id;
+          if (targetDate === "") {
+            return;
+          }
+        }
+        var now = new Moment().format("YYYY-MM-DD");
+        if (targetDate >= now) {
+          $($("#submit_popup_menu")[0]).css("display", "block").css("top", event.pageY).css("left", event.pageX);
+          $($("#submit_item")[0]).attr("date", targetDate);
+          this.elements._isShowPopup = 1;
+        }
+      },
+
+      onClickSubmitMenu: function() {
+        var addNewReportView = new AddNewReportView();
+        var targetDate = $($("#submit_item")[0]).attr("date");
+        addNewReportView.setTargetDate(targetDate);
+        
+        Dialog.show({
+            title: "결재 상신",
+            content: addNewReportView,
+            buttons: [{
+                label: "상신",
+                cssClass: Dialog.CssClass.SUCCESS,
+                action: function(dialogRef) { // 버튼 클릭 이벤트
+                    addNewReportView.onClickBtnSend(dialogRef).done(function(model) {
+                        window.location.href = "#reportmanager";
+                        dialogRef.close();
+                    });
+                }
+            }, {
+                label: '닫기',
+                action: function(dialogRef) {
+                    dialogRef.close();
+                }
+            }]
+        });
+    },
 
     });
     return CalendarView;
