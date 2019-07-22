@@ -439,8 +439,13 @@ define([
         if (this.elements.defaultDate.length !== 0) {
           var targetDate = new Moment(this.elements.defaultDate);
           if (targetDate.isValid()) {
-            startDate = Moment(targetDate).add(-5, "days").format("YYYY-MM-DD");
-            endDate = Moment(targetDate).add(3, "days").format("YYYY-MM-DD");
+            // 김은영 대리의 경우 대시보드에서 날짜 지정 클릭 시 1일만 보여줌.
+            if (SessionModel.getUserInfo().id == "130702") {
+              startDate = endDate = targetDate;
+            } else {
+              startDate = Moment(targetDate).add(-5, "days").format("YYYY-MM-DD");
+              endDate = Moment(targetDate).add(3, "days").format("YYYY-MM-DD");
+            }
           }
         }
         if (endDate === "") {
