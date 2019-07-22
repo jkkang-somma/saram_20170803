@@ -296,8 +296,11 @@ define([
         if ( dayOfWeek === 0 || dayOfWeek === 6 || _.find(this.options.holidayInfos, {date: startDate}) !== undefined ) {
           selGubun.selectpicker("val", "B01");
         } else {
-          selGubun.selectpicker("val", "V01");
-          _this.afterDate.css('display', 'table');
+          // TODO 기본 선택에 대한 내용을 정확하게 표현해야 함.
+          // selGubun.selectpicker("val", "V01");
+          // _this.afterDate.css('display', 'table');
+          // $(_this.el).find('#usableHolidayCon').show();
+          // $(_this.el).find('#reqHoliday').parent().parent().css('display', 'block');
         }
 
       } else {
