@@ -2757,6 +2757,27 @@
 				book_rent_tbl rent ON rent.book_id=book.book_id
 			ORDER BY field (book.category_1, 'OS', 'DL', 'DE', 'PL', 'DP', 'DM', 'TE', 'PR', 'CU'), book.manage_no;
 		</query>
+    <query id="selectBookLibraryOverDueDate">
+			SELECT 
+				book.book_id, 
+				book.manage_no, 
+				book.book_name, 
+				book.author, 
+				book.publisher, 
+				book.img_src, 
+				book.isbn, 
+        rent.user_id as user_id,
+				rent.rent_id as rent_id,
+        (select name from members_tbl where id=rent.user_id) as rent_user_name,
+				(select email from members_tbl where id=rent.user_id) as rent_user_email,
+				DATE_FORMAT(rent.due_date, '%Y-%m-%d' ) as due_date
+			FROM
+				book_library_tbl book
+			LEFT OUTER JOIN 
+				book_rent_tbl rent ON rent.book_id=book.book_id
+      WHERE
+        rent.rent_id is not null AND rent.due_date &lt; now()
+		</query>
 		<query id="deleteBookLibrary">
 			DELETE FROM
 				book_library_tbl

@@ -5,6 +5,9 @@ var BookLibraryDao = require('../dao/bookLibraryDao.js');
 var xml_digester = require("xml-digester");
 var digester = xml_digester.XmlDigester({});
 var https = require('https');
+var util = require('../lib/util.js');
+var fs = require('fs');
+var path = require("path");
 
 //검색어를 <b>로 처리하고 있어 삭제
 //제목과 별개로 부제목은 () 안에 들어감 부제목은 삭제
@@ -63,6 +66,41 @@ var BookLibrary = function () {
 
   var _selectRentHistory = function (data) {
     return BookLibraryDao.selectRentHistory(data);
+  }
+
+    // 도서 미반납자에게 메일 전달
+  var _sendEmailRentOverDueDate = function() {
+    debug("START Send Email Rent Over Due Date....");
+    BookLibraryDao.selectBookLibraryOverDueDate().then(function(result) {
+      var transport = util.getEmailTransport();
+
+      fs.readFileAsync(path.dirname(module.parent.parent.filename) + "/views/bookOverDueDateFormat.html","utf8").then(function (html) {
+        for (var book of result) {
+          debug("ready for send mail : " + book.manage_no + " : " + book.book_name);
+
+          // 이메일 HTML 셋팅
+          var template=_.template(html);
+          var sendHTML=template(book);
+
+          var mailOptions= {
+            from: 'webmaster@yescnc.co.kr', // sender address 
+            to: [{ name :book.rent_user_name, address: book.rent_user_email }],
+            subject:"[도서반납] " + book.book_name,
+            html:sendHTML,
+            text:"",
+            cc: [{ name :"김은영", address: "eykim@yescnc.co.kr" }]
+          };
+
+          transport.sendMail(mailOptions, function(error, info){
+            if(error){//메일 보내기 실패시 
+              console.log(error);
+            }else{
+              debug("END Send Email Rent Over Due Date....");
+            }
+          });    
+        }
+      });
+    });
   }
 
   var _getRegistSearch = function (data) {
@@ -188,7 +226,8 @@ var BookLibrary = function () {
     insertRentHistory: _insertRentHistory,
     selectRentHistory: _selectRentHistory,
     getRegistSearch: _getRegistSearch,
-    getManageNo: _getManageNo
+    getManageNo: _getManageNo,
+    sendEmailRentOverDueDate: _sendEmailRentOverDueDate
   };
 }
 module.exports = new BookLibrary();

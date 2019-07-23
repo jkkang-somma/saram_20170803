@@ -60,11 +60,17 @@ var tokenList = ["c9454ee0-9965-11e9-b475-0800200c9a66"];
 //var statisticsService = new Statistics();
 
 var RoomReg = require('./service/RoomReg.js');
+var BookLibrary = require('./service/BookLibrary.js');
 
 // 스케쥴 등록
 schedule.scheduleJob('*/10 * * * *', function() {
   debug("RUN schedule for ROOM REG!!!");
   RoomReg.sendEmailRoomReg();
+});
+
+schedule.scheduleJob('5 10 * * *', function() {
+  debug("RUN schedule for BOOK DUE DATE!!!");
+  BookLibrary.sendEmailRentOverDueDate();
 });
 
 var mwMulter1 = multer({ dest: filePath1 , rename:function(fieldname, filename, req,res){

@@ -61,4 +61,9 @@ BookLibraryDao.prototype.selectManageNo = function(data) {
     ]);
 }
 
+//미납 도서 조회
+BookLibraryDao.prototype.selectBookLibraryOverDueDate = function() {
+  return db.query(group, "selectBookLibraryOverDueDate", []);
+}
+
 module.exports = new BookLibraryDao();
