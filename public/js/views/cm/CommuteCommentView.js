@@ -383,8 +383,8 @@ define([
           endDate: $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
         }
 
-        if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
-          data.id = this.searchParam.id;
+        if (Util.isNotNull(this.searchParamId) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
+          data.id = this.searchParamId.id;
         }
 
         if (Util.isNull(data.startDate)) {
@@ -434,15 +434,17 @@ define([
 
             if (Util.isNotNull(_this.searchParamId) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
               _this.searchParamId = null; // url 접속 - 최초 검색 후 초기화
+
+              // 관리자의 경우 링크를 타고 왔을 경우 전체데이터가 출력되기때문에 선택된 건만 보기위한 작업이 필요함.
+              if (SessionModel.get("user").admin >= Schemas.DEPT_BOSS) {
+                var filterBtn = $(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
+                if (filterBtn.text() == "나")
+                  $(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");
+              }
             }
-            
+
             if (_this.searchParamOnlySubmit === true) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
               _this.searchParamOnlySubmit = false; // url 접속 - 최초 검색 후 초기화
-
-              // URL 접속시 필터를 전체로 변경하기 위해 강제 크릭
-              // var filterBtn = $(_this.el).find("#commuteDataTable_custom_myRecord_Btn");
-              // if (filterBtn.text() == "나")
-              //   $(_this.el).find("#commuteDataTable_custom_myRecord_Btn").trigger("click");
             }
           },
           errorCallBack: function (response) {

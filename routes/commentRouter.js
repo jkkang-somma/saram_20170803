@@ -21,7 +21,13 @@ router.route('/')
 		}).catch(function(err) {
 			next(err);
 		});
-		
+  
+  } else if (adminString === '%' && query.id !== undefined) {
+    Comment.getComment(query, query.id).then(function(result) {
+			return res.send(result);
+		}).catch(function(err) {
+			next(err);
+		});
 	} else {
 		Comment.getComment(query, adminString).then(function(result) {
 			return res.send(result);
