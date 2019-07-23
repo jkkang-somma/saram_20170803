@@ -55,7 +55,6 @@ define([
         'commutemanager/:date': 'showCommuteManagerByDate',
         'commentmanager': 'showCommuteComment',
         'commentmanager/:id/:date': 'showCommuteCommentListCount',
-        'commentmanager/:flag': 'showCommuteCommentListCount2',
         'vacation': 'showVacation',
         'rawdatalist': 'showRawdata',
         'rawdatalist/:id/:date': 'showRawdataList',
@@ -266,19 +265,19 @@ define([
         this.changeView(url);
       },
 
-      showCommuteCommentListCount: function (id, date) { // url + 검색 조건을 토한 페이지 이동 
+      showCommuteCommentListCount: function (param1, param2) { // url + 검색 조건을 토한 페이지 이동 
         var url = 'views/cm/CommuteCommentView';
-        var callback = function (view) {
-          view.setSearchParam({ "id": id, "date": date });
-        };
-        this.changeView(url, undefined, callback);
-      },
 
-      showCommuteCommentListCount2: function (flag) { // url + 검색 조건을 토한 페이지 이동 
-        var url = 'views/cm/CommuteCommentView';
-        var callback = function (view) {
-          view.setSearchParamOnlySubmit();
-        };
+        var callback;
+        if (param2 === "void") {
+          callback = function (view) {
+            view.setSearchParamOnlySubmit();
+          };
+        } else {
+          callback = function (view) {
+            view.setSearchParam({ "id": param1, "date": param2 });
+          };
+        }
         this.changeView(url, undefined, callback);
       },
 
