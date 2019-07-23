@@ -195,8 +195,11 @@ define([
     var CommuteCommentView = BaseView.extend({
       el: $(".main-container"),
       // '상신' 건만 조회하도록 설정
-      setSearchParam: function () {
+      setSearchParamOnlySubmit: function () {
         this.searchParamOnlySubmit = true;
+      },
+      setSearchParam: function (searchParam) {
+        this.searchParamId = searchParam; // url + 검색 조건으로 페이지 이동시 조건감들 {id: id, date: date}
       },
       initialize: function () {
         this.searchParamOnlySubmit = false
@@ -347,10 +350,10 @@ define([
         this.grid = new Grid(_gridSchema.getDefault(this.gridOption));
         this.grid.render();
 
-        // if (Util.isNotNull(this.searchParam)) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
-        //   $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
-        //   $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParam.date);
-        // }
+        if (Util.isNotNull(this.searchParamId)) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
+          $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").setDate(this.searchParamId.date);
+          $(this.el).find("#ccmToDatePicker").data("DateTimePicker").setDate(this.searchParamId.date);
+        }
 
         this.selectComments();
         return this;
@@ -378,6 +381,10 @@ define([
         var data = {
           startDate: $(this.el).find("#ccmFromDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD"),
           endDate: $(this.el).find("#ccmToDatePicker").data("DateTimePicker").getDate().format("YYYY-MM-DD")
+        }
+
+        if (Util.isNotNull(this.searchParam) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
+          data.id = this.searchParam.id;
         }
 
         if (Util.isNull(data.startDate)) {
@@ -425,6 +432,10 @@ define([
               }
             });
 
+            if (Util.isNotNull(_this.searchParamId) ) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
+              _this.searchParamId = null; // url 접속 - 최초 검색 후 초기화
+            }
+            
             if (_this.searchParamOnlySubmit === true) { // URL로 이동한 경우  셋팅된 검색 조건이 있을 경우
               _this.searchParamOnlySubmit = false; // url 접속 - 최초 검색 후 초기화
 

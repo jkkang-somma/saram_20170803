@@ -101,7 +101,7 @@ define([
 
       if (cellData.comment_count > 0) {
         html1 = '<div><div style="text-align: center;">' +
-          '<a class="td-comment" data="{idx: ' + cellData.idx + '}" href="#commutemanager/comment/' + cellData.id + '/' + cellData.date + '" ' +
+          '<a class="td-comment" data="{idx: ' + cellData.idx + '}" href="#commentmanager/' + cellData.id + '/' + cellData.date + '" ' +
           'target="_blank">' + cellData.comment_count + '건</a></div>';
       }
 

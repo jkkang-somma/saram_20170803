@@ -110,8 +110,8 @@ define([
       auth: SCHEMAS.USER
     }, {
       title: i18Common.MENU.SUB.AM.COMMUTE_MANAGER_COMMENT, //"근태 Comment 내역 관리",
-      hashTag: "#commutemanager/comment",
-      subTag: ["/?"],
+      hashTag: "#commentmanager",
+      subTag: ["/?/?"],
       auth: SCHEMAS.USER
     }, {
       title: i18Common.MENU.SUB.AM.REPORT_MANAGER, //"근태 상신(list)",

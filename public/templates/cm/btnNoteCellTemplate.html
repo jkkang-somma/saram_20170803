@@ -1,7 +1,7 @@
 <div>
 	<div style="text-align: center;">
 		<% if(comment_count > 0) { %>
-			<a class="td-comment" data="{idx: <%=idx%>}" href="#commutemanager/comment/<%=id%>/<%=date%>" target="_blank"><%=comment_count%>건</a>
+			<a class="td-comment" data="{idx: <%=idx%>}" href="#commentmanager/<%=id%>/<%=date%>" target="_blank"><%=comment_count%>건</a>
 		<%} else {%>
 			0 건
 		<%}%>
