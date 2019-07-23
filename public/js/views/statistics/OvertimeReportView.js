@@ -38,28 +38,30 @@ define([
             { data: "department", title: "부서" },
             { data: "name", title: "이름" },
 
-            { data: "total_day", title: "연차휴가", className: "dt-head-center dt-body-center vacation-column" },
-            { data: "used_day", title: "연차사용<BR>일수(년)", className: "dt-head-center dt-body-center vacation-column" },
-            { data: "remain_day", title: "연차잔여<BR>일수(년)", className: "dt-head-center dt-body-center vacation-column" },
+            { data: "TOTAL_A", title: "초과근무<BR>시간", className: "dt-head-center dt-body-right major-column" },
+            { data: "TOTAL_B", title: "휴일근무<BR>시간", className: "dt-head-center dt-body-right major-column" },
+            { data: "TOTAL_AB", title: "초과근무<BR>시간 합계", className: "dt-head-center dt-body-right major-column" },
 
             { data: "total_person", title: "인원", className: "dt-head-center dt-body-center" },
 
-            { data: "TOTAL_A", title: "초과근무<BR>시간", className: "dt-head-center dt-body-right major-column" },
             { data: "AA", title: "야근_A", className: "dt-head-center dt-body-center" },
             { data: "AB", title: "야근_B", className: "dt-head-center dt-body-center" },
             { data: "AC", title: "야근_C", className: "dt-head-center dt-body-center" },
 
             { data: "total_B_day", title: "휴일근무<BR>일수", className: "dt-head-center dt-body-center major-column" },
-            { data: "TOTAL_B", title: "휴일근무<BR>시간", className: "dt-head-center dt-body-right major-column" },
             { data: "BA", title: "휴일_A", className: "dt-head-center dt-body-center" },
             { data: "BB", title: "휴일_B", className: "dt-head-center dt-body-center" },
-            { data: "BC", title: "휴일_C", className: "dt-head-center dt-body-center" }
+            { data: "BC", title: "휴일_C", className: "dt-head-center dt-body-center" },
+
+            { data: "total_day", title: "연차휴가", className: "dt-head-center dt-body-center vacation-column" },
+            { data: "used_day", title: "연차사용<BR>일수(년)", className: "dt-head-center dt-body-center vacation-column" },
+            { data: "remain_day", title: "연차잔여<BR>일수(년)", className: "dt-head-center dt-body-center vacation-column" }
           ],
           collection: null,
           //dataschema:["department", "score", "total_persion", "late", "leave_early", "late_leave_early", "absent", "data_none_1", "data_none_2"],
           detail: true,
           fetch: false,
-          order: [[7, "desc"]]
+          order: [[5, "desc"]]
         };
       },
 
@@ -207,6 +209,8 @@ define([
                 });
 
                 result.OverTimeInfo[i].total_B_day = result.OverTimeInfo[i].BA + result.OverTimeInfo[i].BB + result.OverTimeInfo[i].BC;
+                result.OverTimeInfo[i].TOTAL_AB = result.OverTimeInfo[i].TOTAL_A + result.OverTimeInfo[i].TOTAL_B;
+
                 if (result.OverTimeInfo[i].TOTAL_A == 0) {
                   result.OverTimeInfo[i].TOTAL_A = "";
                 } else {
@@ -217,6 +221,12 @@ define([
                   result.OverTimeInfo[i].TOTAL_B = "";
                 } else {
                   result.OverTimeInfo[i].TOTAL_B = Util.timeformat(result.OverTimeInfo[i].TOTAL_B);
+                }
+
+                if (result.OverTimeInfo[i].TOTAL_AB == 0) {
+                  result.OverTimeInfo[i].TOTAL_AB = "";
+                } else {
+                  result.OverTimeInfo[i].TOTAL_AB = Util.timeformat(result.OverTimeInfo[i].TOTAL_AB);
                 }
 
                 if (_.isUndefined(t) || t == null) {
@@ -246,11 +256,11 @@ define([
               if (isDept) {
                 // 이름
                 _this.gridOption.column[1].visible = false;
-                // 연차
-                _this.gridOption.column[2].visible = false;
-                _this.gridOption.column[3].visible = false;
-                _this.gridOption.column[4].visible = false;
-                // 총원
+                // // 연차
+                _this.gridOption.column[13].visible = false;
+                _this.gridOption.column[14].visible = false;
+                _this.gridOption.column[15].visible = false;
+                // // 총원
                 _this.gridOption.column[5].visible = true;
 
                 _this.gridOption.buttons = ["search"];
@@ -266,11 +276,11 @@ define([
               } else {
                 // 이름
                 _this.gridOption.column[1].visible = true;
-                // 연차
-                _this.gridOption.column[2].visible = true;
-                _this.gridOption.column[3].visible = true;
-                _this.gridOption.column[4].visible = true;
-                // 총원
+                // // 연차
+                _this.gridOption.column[13].visible = true;
+                _this.gridOption.column[14].visible = true;
+                _this.gridOption.column[15].visible = true;
+                // // 총원
                 _this.gridOption.column[5].visible = false;
 
                 _this.gridOption.buttons = ["search", {
