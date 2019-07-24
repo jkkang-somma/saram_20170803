@@ -88,7 +88,7 @@ var BookLibrary = function () {
             subject:"[도서반납] " + book.book_name,
             html:sendHTML,
             text:"",
-            cc: [{ name :"김은영", address: "eykim@yescnc.co.kr" }]
+            cc: [] // 참조 보내지 말아달라는... { name :"김은영", address: "eykim@yescnc.co.kr" }
           };
 
           transport.sendMail(mailOptions, function(error, info){
