@@ -622,7 +622,7 @@ table.dataTable .vacation-column {
         left: 50%;
         width: 600px;
         padding-top: 30px;
-        padding-bottom: 30px
+        padding-bottom: 30px;
     }
 
     .modal-dialog.modal-lg {
@@ -637,6 +637,14 @@ table.dataTable .vacation-column {
         -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         box-shadow: 0 5px 15px rgba(0,0,0,0.5)
     }
+}
+
+.modal {
+  overflow: hidden;
+}
+
+.modal-header{      /* not necessary but imo important for user */
+  cursor: move;
 }
 
 .btn-default {

@@ -28,6 +28,26 @@ define([
   BootstrapDialog.TYPE_WARNING,
   BootstrapDialog.TYPE_DANGER];
 
+  var movableEvnet = function() {
+    $(".modal-header").on("mousedown", function(mousedownEvt) {
+      var $draggable = $(this);
+      var x = mousedownEvt.pageX - $draggable.offset().left,
+          y = mousedownEvt.pageY - $draggable.offset().top;
+      $("body").on("mousemove.draggable", function(mousemoveEvt) {
+        $draggable.closest(".modal-dialog").offset({
+            "left": mousemoveEvt.pageX - x - 10,
+            "top": mousemoveEvt.pageY - y - 30
+        });
+      });
+      $("body").one("mouseup", function() {
+          $("body").off("mousemove.draggable");
+      });
+      $draggable.closest(".modal").one("bs.modal.hide", function() {
+          $("body").off("mousemove.draggable");
+      });
+    });
+  }
+
   var error = function (msg, callback) {//ERROR
     BootstrapDialog.show({
       title: i18nCommon.DIALOG.TITLE.ERROR,
@@ -43,7 +63,8 @@ define([
             callback();
           }
         }
-      }]
+      }],
+      onshown: function() {movableEvnet();}
     });
   }
   var warning = function (msg, callback) {//WARNING
@@ -61,7 +82,8 @@ define([
             callback();
           }
         }
-      }]
+      }],
+      onshown: function() {movableEvnet();}
     });
   }
 
@@ -80,7 +102,8 @@ define([
             callback();
           }
         }
-      }]
+      }],
+      onshown: function() {movableEvnet();}
     });
   }
 
@@ -108,12 +131,15 @@ define([
             buttons: [],
             size: BootstrapDialog.SIZE_NORMAL
           });
-          if (!_.isUndefined(resultView)) {
-            if (!_.isUndefined(resultView.afterRender)) {
-              dialogOption.onshown = function () {
-                resultView.afterRender();
-              };
-            }
+          if (!_.isUndefined(resultView) && !_.isUndefined(resultView.afterRender)) {
+            dialogOption.onshown = function () {
+              movableEvnet();
+              resultView.afterRender();
+            };
+          } else {
+            dialogOption.onshown = function () {
+              movableEvnet();
+            };
           }
 
           BootstrapDialog.show(dialogOption);
@@ -127,6 +153,10 @@ define([
           closable: false,
           buttons: []
         });
+
+        dialogOption.onshown = function () {
+          movableEvnet();
+        };
 
         BootstrapDialog.show(dialogOption);
       }
@@ -198,7 +228,8 @@ define([
       message: config.msg,
       type: BootstrapDialog.TYPE_PRIMARY,
       closable: true,
-      buttons: _btns
+      buttons: _btns,
+      onshown: function() {movableEvnet();}
     });
   };
 
@@ -210,6 +241,7 @@ define([
       message: $("<div class='dialog-loding'></div>"),
 
       onshown: function (dialogRef) {
+        movableEvnet();
         Animation.animate('.dialog-loding', Animation.FADE_IN);
 
         config.action().done(function (e) {
