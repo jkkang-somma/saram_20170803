@@ -264,6 +264,8 @@ define([
           }
           delete _data.in_time_avg;
           delete _data.out_time_avg;
+          // TODO 클린데이 정보
+          delete _data.cleanDay;
 
           for (var name in _data) {
             // if ((_.indexOf(_validField, name.toUpperCase()) > -1 && _data[name] == 0) || _.indexOf(_disableField, name) > -1) {
