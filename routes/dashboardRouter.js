@@ -33,12 +33,17 @@ router.route('/workingSummary')
     _dashboard.getWorkingSummary(params).then(function (result) {
       var targetYear = moment().format('YYYY');
       var params2 = {year: targetYear, id: _userId};
+      // 근태 정보가 없는 경우 빈값을 생성해야 함. 사장님 및 임원의 경우 없음.
+      if (result.length === 0) {
+        result[0] = {};
+      }
       Vacation.getVacationById(params2).then(function (vacationResult) {
         if (vacationResult.length === 1) {
-          if (result.length === 0) {
-            result[0] = {};
-            result[0].total_working_day = "00";
-          }
+          // 2019.07.26 주석
+          // if (result.length === 0) {
+          //   result[0] = {};
+          //   result[0].total_working_day = "00"; ???
+          // }
           result[0].vacation_year = targetYear;
           result[0].vacation_year_remain = vacationResult[0].total_day - vacationResult[0].used_holiday;
         }
