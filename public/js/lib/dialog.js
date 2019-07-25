@@ -41,6 +41,16 @@ define([
       });
       $("body").one("mouseup", function() {
           $("body").off("mousemove.draggable");
+
+          // 현재 적용하지 않겠음. KJK 2019-07-25
+          // 필요한 경우 style.css 의 .modal {overflow-x: hidden;} 와 같이 적용 해야 함.
+          // var $modalDialg = $($(".modal-dialog")[0]);
+          // var topValue = $modalDialg.css("top").replace("px", "");
+          // 아래로 계속 내려가는 현상 막기
+          // if (topValue >= 900) {
+          //   $modalDialg.css("top", "899px");
+          //   return;
+          // }
       });
       $draggable.closest(".modal").one("bs.modal.hide", function() {
           $("body").off("mousemove.draggable");
