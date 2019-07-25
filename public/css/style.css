@@ -761,7 +761,8 @@ table.dataTable .vacation-column {
 }
 
 .modal {
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .modal-header {
