@@ -2074,7 +2074,7 @@
     </group>
     <group id ="message">
       <query id="getMessage">
-        select * from msg_tbl;
+        select * from msg_tbl where no = 1
     </query>
     <query id="setMessage">
       insert into msg_tbl
@@ -2082,8 +2082,20 @@
       values
         (1, ?, ?)
       ON DUPLICATE KEY UPDATE
-            text = ?,
-            visible = ?
+        text = ?,
+        visible = ?
+    </query>
+    <query id="getCleanDay">
+        select * from msg_tbl where no = 2
+    </query>
+    <query id="setCleanDay">
+      insert into msg_tbl
+        (no, text, visible)
+      values
+        (2, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        text = ?,
+        visible = ?
     </query>
   </group>
   <group id="department">

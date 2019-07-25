@@ -10,6 +10,7 @@ var Dashboard = require('../service/Dashboard.js');
 var moment = require('moment');
 var Vacation = require('../service/Vacation.js');
 var Statistics = require('../service/StatisticsService.js');
+var Message = require('../service/Message.js');
 
 router.route('/workingSummary')
 .get(function(req, res) {
@@ -47,7 +48,14 @@ router.route('/workingSummary')
             result[0].in_time_avg = resultAvg[0].in_time_avg;
             result[0].out_time_avg = resultAvg[0].out_time_avg;
           }
-          res.send(result);
+
+          // cleanday 정보 추가
+          Message.getCleanDay().then(function (resultCleanDay) {
+            if (resultCleanDay[0].visible === 1) {
+              result[0].cleanDay = resultCleanDay[0].text;
+            }
+            res.send(result);
+          });
         });
       });
     }).catch(function (e) {

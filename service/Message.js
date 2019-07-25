@@ -17,10 +17,20 @@ var Message = function (data) {
     function _setMessage(data){
         return MessageDao.setMessage(data)
     }
+
+    function _getCleanDay(){
+      return MessageDao.getCleanDay();
+    }
+  
+    function _setCleanDay(data){
+      return MessageDao.setCleanDay(data)
+    }
     
     return {
-        getMessage : _getMessage,    
-        setMessage : _setMessage
+        getMessage : _getMessage,  
+        setMessage : _setMessage,
+        getCleanDay: _getCleanDay,
+        setCleanDay: _setCleanDay,
     };
 };
 
