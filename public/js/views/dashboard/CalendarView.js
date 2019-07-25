@@ -27,6 +27,7 @@ define([
       elements: {
         targetUserId: "",
         _isShowPopup: 0, // 0: none , 1: ignore, 2: display
+        cleanDay: ""
       },
       initialize: function (opt) {
         this.$el = $(opt.el);
@@ -51,6 +52,7 @@ define([
       },
       _draw: function (params) {
         this.elements.targetUserId = params.id;
+        this.elements.cleanDay = params.cleanDay;
         var _view = this;
         var yearData = new Moment(params.start);
         _view.getHolidaySummary({ year: yearData.year() }).done(function (result) { // 휴일 조회
@@ -164,6 +166,24 @@ define([
           }
 
         });
+      },
+
+      drawCleanDay: function () {
+        var _view = this;
+        if (this.elements.cleanDay === "") {
+          return;
+        }
+
+        var toDay = new Moment().format('YYYY-MM-DD');
+        if (this.elements.cleanDay < toDay) {
+          return;
+        }
+
+        var cleanDayEl = $(_view.el).find('#' + this.elements.cleanDay);
+        if (cleanDayEl.length === 1) {
+          cleanDayEl.addClass('clean-day');
+          cleanDayEl.attr('title', '쾌적한 근무 환경 및 임직원 건강을 위해 청소하는 날입니다~');
+        }
       },
 
       drawCalendar: function (params) {
@@ -342,6 +362,7 @@ define([
         // }
 
         _view.drawHoliday(params.start);
+        _view.drawCleanDay();
       },
 
       makeOneWeekHtml: function (row, startDayOfWeek, lastDay, year, month, data) {

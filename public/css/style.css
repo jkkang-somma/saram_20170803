@@ -1466,6 +1466,10 @@ border: 2px dotted #2ABB9B !important;
     float:right;
   }
 
+  #dashboard_main .clean-day {
+    background-position: 75% 70%;
+  }
+
 @media ( max-width: 1250px ) {
    #dashboard_main .calendar-body .text {
        font-size:9px;
@@ -1502,6 +1506,10 @@ border: 2px dotted #2ABB9B !important;
     width : 100%;
     margin-top:10px;
   }
+
+  #dashboard_main .clean-day {
+    background-position: 65% 75%;
+  }
 }
 
 #dashboard_main table tbody tr td {
@@ -1521,8 +1529,13 @@ border: 2px dotted #2ABB9B !important;
     background: rgb(255,240,243);
 }
 #dashboard_main table tbody tr td.disabled {
-    background:lightgray;
+    background-color:lightgray;
   }
+
+#dashboard_main .clean-day {
+  background-image: url('img/img_clean_pc.png');
+  background-repeat: no-repeat;
+}
 
 .dataTables_paginate {margin-left: 5px;}
 

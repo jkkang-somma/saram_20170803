@@ -56,7 +56,6 @@ define([
         _defaultData.id = SessionModel.getUserInfo().id;
         _defaultData.name = SessionModel.getUserInfo().name;
 
-
         var _startDate = Moment().startOf('month').format("YYYY-MM-DD");
         var _endDate = Moment().endOf('month').format("YYYY-MM-DD HH:mm:ss");
         var _searchParams = {
@@ -169,6 +168,8 @@ define([
 
 
         if (code != '0000') {
+          _params.cleanDay = _data.cleanDay
+
           if (this.calendarView) {
             this.calendarView.destroy();
           }
