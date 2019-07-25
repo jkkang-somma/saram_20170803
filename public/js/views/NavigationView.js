@@ -328,6 +328,9 @@ define([
             label: i18Common.DIALOG.BUTTON.CLOSE,
             action: function (dialogRef) {
               dialogRef.close();
+              if ( adminSettingView.isChangeCleanDay() && window.location.hash === "" ) {
+                window.location.reload();
+              }
             }
           }]
 

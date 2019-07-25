@@ -18,6 +18,9 @@ define([
 	i18nCommon, Form,
 ) {
 	var AdminSettingView = Backbone.View.extend({
+    elements: {
+      isChangeCleanDay: false
+    },
 		initialize: function() {
 			this.messageModel = new MessageModel();
 
@@ -99,6 +102,7 @@ define([
           visible: (data.chkCleanDay === true ? 1 : 0)
         }
         Util.ajaxCall("/cleanDay", "POST", param).then(function(){
+          _this.elements.isChangeCleanDay = true;
 					Dialog.info("클린데이 설정을 변경했습니다.");
 				}, function() {
 					Dialog.error("클린데이 변경 실패!!");
@@ -260,7 +264,11 @@ define([
 				text: _data.msgTextArea,
 				visible: _data.chkMsgVisible
 			};
-		}
+    },
+    
+    isChangeCleanDay: function() {
+      return this.elements.isChangeCleanDay;
+    }
 	});
 
 	return AdminSettingView;
