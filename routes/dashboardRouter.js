@@ -43,7 +43,6 @@ router.route('/workingSummary')
         }
 
         Statistics.selectAvgInOutTime(req.query.start.substr(0,4), req.query.start, req.query.end.substr(0,10), _userId).then(function(resultAvg) {
-          console.log(resultAvg);
           if (resultAvg[0].in_time_avg !== null) {
             result[0].in_time_avg = resultAvg[0].in_time_avg;
             result[0].out_time_avg = resultAvg[0].out_time_avg;
