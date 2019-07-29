@@ -9,6 +9,7 @@ define([
   'schemas',
   'i18n!nls/common',
   'dialog',
+  'util',
   'models/sm/SessionModel',
   'text!templates/default/head.html',
   'text!templates/default/row.html',
@@ -21,7 +22,7 @@ define([
   'collection/common/HolidayCollection',
   'collection/cm/CommuteTodayCollection',
   'text!templates/default/button.html',
-], function ($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, SessionModel, HeadHTML, RowHTML,
+], function ($, _, Backbone, BaseView, Moment, Grid, LodingButton, Schemas, i18nCommon, Dialog, Util, SessionModel, HeadHTML, RowHTML,
   DatePickerHTML, RowButtonContainerHTML, RowButtonHTML, ContentHTML, LayoutHTML,
   CommuteTodayModel, HolidayCollection, CommuteTodayCollection, ButtonHTML) {
 
@@ -78,6 +79,11 @@ define([
         };
         this.buttonInit();
       },
+
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+
       events: {
         'click #ccmSearchBtn': 'onClickSearchBtn',
       },

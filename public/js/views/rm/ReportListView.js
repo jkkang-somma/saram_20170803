@@ -61,6 +61,10 @@ define([
         $(this.el).empty();
       },
 
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+
       render: function () {
         $(this.el).html(commuteListTmp);
         $(this.el).find(".content").attr({
@@ -311,13 +315,13 @@ define([
                 action: function (dialogRef) { // 버튼 클릭 이벤트
                   _addNewReportView.onClickBtnSend(dialogRef).done(function (model) {
                     _this.onClickClearBtn();
-                    dialogRef.close();
+                    Util.destoryDateTimePicker(true); dialogRef.close();
                   });
                 }
               }, {
                 label: '닫기',
                 action: function (dialogRef) {
-                  dialogRef.close();
+                  Util.destoryDateTimePicker(true); dialogRef.close();
                 }
               }]
             });
@@ -564,7 +568,7 @@ define([
                           _approvalReportView.onClickBtnSend(dialogRef).done(function (model) {
                             Dialog.show("완료되었습니다.");
                             _this.grid.updateRow(model);
-                            dialogRef.close();
+                            Util.destoryDateTimePicker(true); dialogRef.close();
                           }).fail(function () {
                             Dialog.error("해당 날짜에 이미 결재된 내역이 있습니다.  재조회 후 다시 확인하십시오.");
                           });
@@ -572,7 +576,7 @@ define([
                         else {
                           _this.setReportTable(true, false);
                           Dialog.error("상신이 취소된 항목입니다.");
-                          dialogRef.close();
+                          Util.destoryDateTimePicker(true); dialogRef.close();
                         }
                       });
                     setTimeout(function () {
@@ -582,7 +586,7 @@ define([
                 }, {
                   label: '닫기',
                   action: function (dialogRef) {
-                    dialogRef.close();
+                    Util.destoryDateTimePicker(true); dialogRef.close();
                   }
                 }]
               });
@@ -635,7 +639,7 @@ define([
                       Dialog.show("결재상신이 취소되었습니다.");
                       _this.grid.updateRow(model);
                       // _this.onClickClearBtn();
-                      dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                     });
                     // this.action.caller.arguments[0].close();
                     _dfd.resolve();
@@ -659,11 +663,11 @@ define([
                     _detailReportView.onClickBtnAppCancel('상신취소').done(function (model) {
                       Dialog.show("취소 요청이 완료되었습니다.");
                       _this.grid.updateRow(model);
-                      dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                     }).fail(function (failReason) {
                       if (failReason.div_fail) {
                         _this.setReportTable(true, false);
-                        dialogRef.close();
+                        Util.destoryDateTimePicker(true); dialogRef.close();
                       }
                     });
                     _dfd.resolve();
@@ -677,7 +681,7 @@ define([
             label: "확인",
             cssClass: Dialog.CssClass.SUCCESS,
             action: function (dialogRef) { // 버튼 클릭 이벤트
-              dialogRef.close();
+              Util.destoryDateTimePicker(true); dialogRef.close();
             }
           });
 

@@ -358,6 +358,11 @@ define([
         }
         this.buttonInit();
       },
+
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+
       events: {
         'click #ccmSearchBtn': 'onClickSearchBtn',
         'click #commuteDataTable .td-in-out-time': 'onClickOpenChangeHistoryPopup',

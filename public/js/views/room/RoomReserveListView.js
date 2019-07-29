@@ -85,7 +85,7 @@ define([
                   cssClass: Dialog.CssClass.SUCCESS,
                   action: function (dialogRef) {// 버튼 클릭 이벤트
                     editRoomRegPopupView.onClickBtnReg().done(function () {
-                      dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                       _this.getRoomRegData();
 
                       editRoomRegPopupView.closeModal();
@@ -95,7 +95,7 @@ define([
                   label: i18Common.DIALOG.BUTTON.CLOSE,
                   action: function (dialogRef) {
                     editRoomRegPopupView.closeModal();
-                    dialogRef.close();
+                    Util.destoryDateTimePicker(true); dialogRef.close();
                   }
                 }]
             });
@@ -137,7 +137,7 @@ define([
                     cssClass: Dialog.CssClass.SUCCESS,
                     action: function (dialogRef) {// 버튼 클릭 이벤트
                       editRoomRegPopupView.onClickBtnDel().done(function () {
-                        dialogRef.close();
+                        Util.destoryDateTimePicker(true); dialogRef.close();
                         _this.getRoomRegData();
                       });
                     }
@@ -146,14 +146,14 @@ define([
                     cssClass: Dialog.CssClass.SUCCESS,
                     action: function (dialogRef) {// 버튼 클릭 이벤트
                       editRoomRegPopupView.onClickBtnReg().done(function () {
-                        dialogRef.close();
+                        Util.destoryDateTimePicker(true); dialogRef.close();
                         _this.getRoomRegData();
                       });
                     }
                   }, {
                     label: i18Common.DIALOG.BUTTON.CLOSE,
                     action: function (dialogRef) {
-                      dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                     }
                   }];
               } else {
@@ -161,7 +161,7 @@ define([
                   [{
                     label: i18Common.DIALOG.BUTTON.CLOSE,
                     action: function (dialogRef) {
-                      dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                     }
                   }];
               }
@@ -176,6 +176,10 @@ define([
         });
 
         this.gridOption.buttons = _buttons
+      },
+
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
       },
 
       render: function () {

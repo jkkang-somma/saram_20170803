@@ -277,7 +277,7 @@ define([
               cssClass: Dialog.CssClass.SUCCESS,
               action: function (dialogRef) {// 버튼 클릭 이벤트
                 editRoomRegPopupView.onClickBtnReg().done(function () {
-                  dialogRef.close();
+                  Util.destoryDateTimePicker(true); dialogRef.close();
                   _this.onClickRefresh();
                   editRoomRegPopupView.closeModal();
                 });
@@ -286,7 +286,7 @@ define([
               label: i18Common.DIALOG.BUTTON.CLOSE,
               action: function (dialogRef) {
                 editRoomRegPopupView.closeModal();
-                dialogRef.close();
+                Util.destoryDateTimePicker(true); dialogRef.close();
               }
             }]
         });

@@ -577,13 +577,13 @@ define([
                 action: function(dialogRef) { // 버튼 클릭 이벤트
                     addNewReportView.onClickBtnSend(dialogRef).done(function(model) {
                         window.location.href = "#reportmanager";
-                        dialogRef.close();
+                        Util.destoryDateTimePicker(true); dialogRef.close();
                     });
                 }
             }, {
                 label: '닫기',
                 action: function(dialogRef) {
-                    dialogRef.close();
+                  Util.destoryDateTimePicker(true); dialogRef.close();
                 }
             }]
         });

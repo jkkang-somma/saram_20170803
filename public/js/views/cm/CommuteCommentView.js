@@ -261,6 +261,11 @@ define([
         }
         this.buttonInit();
       },
+
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+
       events: {
         'click #ccmSearchBtn': 'onClickSearchBtn',
         'click #searchSubmitBtn': 'onClickSearchSubmitBtn',

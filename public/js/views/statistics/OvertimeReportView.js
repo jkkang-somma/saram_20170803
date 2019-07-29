@@ -65,6 +65,10 @@ define([
         };
       },
 
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+
       events: {
         'click #SearchBtn1': 'onClickSearchPersonBtn',
         'click #SearchBtn2': 'onClickSearchDeptBtn',

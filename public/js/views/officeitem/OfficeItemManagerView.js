@@ -51,7 +51,7 @@ define([
                 buttons:[{
                     label: i18Common.DIALOG.BUTTON.CLOSE,
                     action: function(dialogRef){
-                        dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                     }
                 }]
                 
@@ -85,14 +85,14 @@ define([
                         };
                         LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                         addOfficeItemHistoryView.submitAdd(beforEvent, affterEvent).done(function(data){
-                            dialogRef.close();
+                          Util.destoryDateTimePicker(true); dialogRef.close();
                             Dialog.show(i18Common.OFFICEITEM.HISTORY.SUCCESS.ADD);
                         });//실패 따로 처리안함 add화면에서 처리.
                     }
                 }, {
                     label: i18Common.DIALOG.BUTTON.CLOSE,
                     action: function(dialogRef){
-                        dialogRef.close();
+                      Util.destoryDateTimePicker(true); dialogRef.close();
                     }
                 }]                
             });
@@ -435,14 +435,14 @@ define([
                             
                                     addOfficeItemView.submitAdd(beforEvent, affterEvent).done(function(data){
                                         grid.addRow(data);
-                                        dialogRef.close();
+                                        Util.destoryDateTimePicker(true); dialogRef.close();
                                         Dialog.show(i18Common.OFFICEITEM.SUCCESS.ADD);
                                     });//실패 따로 처리안함 add화면에서 처리.
                                 }
                             }, {
                                 label: i18Common.DIALOG.BUTTON.CLOSE,
                                 action: function(dialogRef){
-                                    dialogRef.close();
+                                  Util.destoryDateTimePicker(true); dialogRef.close();
                                 }
                             }]
                             
@@ -471,14 +471,14 @@ define([
                                         action: function(dialogRef){// 버튼 클릭 이벤트
                                             editOfficeItemView.submitSave().done(function(data){
                                                 grid.updateRow(data);
-                                                dialogRef.close();
+                                                Util.destoryDateTimePicker(true); dialogRef.close();
                                                 Dialog.show(i18Common.OFFICEITEM.SUCCESS.SAVE);
                                             });//실패 따로 처리안함 add화면에서 처리.
                                         }
                                     }, {
                                         label: i18Common.DIALOG.BUTTON.CLOSE,
                                         action: function(dialogRef){
-                                            dialogRef.close();
+                                          Util.destoryDateTimePicker(true); dialogRef.close();
                                         }
                                     }]
                                     

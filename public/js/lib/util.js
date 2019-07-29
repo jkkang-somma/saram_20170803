@@ -268,6 +268,21 @@ define([
     return tooltip;
   }
 
+  var destoryDateTimePicker = function(isDialog) {
+    var inputGroup = {}
+    if (isDialog) {
+      inputGroup = $('.modal-dialog .input-group');
+    } else {
+      inputGroup = $('.input-group');
+    }
+    for (var i = 0 ; i < inputGroup.length ; i++) {
+      var $inputData = $(inputGroup[i]).data('DateTimePicker');
+      if ($inputData) {
+        $inputData.destroy();
+      }
+    }
+  }
+
   return {
     isNull: isNull,
     isNotNull: isNotNull,
@@ -285,6 +300,7 @@ define([
     timeformat: timeformat,
     getApprovalLimitDate: getApprovalLimitDate,
     ajaxCall: ajaxCall,
-    makeRoomRegTooltip: makeRoomRegTooltip
+    makeRoomRegTooltip: makeRoomRegTooltip,
+    destoryDateTimePicker: destoryDateTimePicker
   };
 });

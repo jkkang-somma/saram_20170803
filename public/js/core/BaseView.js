@@ -24,12 +24,15 @@ define([
       var view = this;
       view.undelegateEvents();
       view.$el.removeData();
+      this.beforeDestroy(); // 2019.07.26 el 제거되기 전에 호출
       view.$el.empty();
 
       this.destroy();
     },
     destroy: function () {
       // 상속 후  개별 초기화 할 내용들 
+    },
+    beforeDestroy: function () {
     },
     setActionAuth: function (actionAuth) {
       this.actionAuth = actionAuth;

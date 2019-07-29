@@ -93,8 +93,12 @@ define([
           ]
         };
       },
-      render: function () {
 
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+      
+      render: function () {
         var _view = this;
         var _headSchema = Schemas.getSchema('headTemp');
         var _headTemp = _.template(HeadHTML);

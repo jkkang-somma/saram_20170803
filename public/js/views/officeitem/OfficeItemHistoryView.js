@@ -148,6 +148,11 @@ define([
           order: [[2, "desc"], [1, "desc"]]
         };
       },
+
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+      
       events: {
         "change #ccmCombo": "setOfficeItemNameData",
         "click #ccmSearchBtn": "onClickSearchBtn"

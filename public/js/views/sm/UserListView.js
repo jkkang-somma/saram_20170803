@@ -8,6 +8,7 @@ define([
   'schemas',
   'i18n!nls/common',
   'dialog',
+  'util',
   'models/sm/SessionModel',
   'text!templates/default/head.html',
   'text!templates/default/content.html',
@@ -17,7 +18,7 @@ define([
   'views/sm/popup/EditUserView',
   'models/sm/UserModel',
   'text!templates/default/button.html',
-], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, SessionModel, HeadHTML, ContentHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel, ButtonHTML){
+], function($, _, Backbone, BaseView, Grid, LodingButton, Schemas, i18Common, Dialog, Util, SessionModel, HeadHTML, ContentHTML, LayoutHTML,  UserCollection, AddUserView, EditUserView,  UserModel, ButtonHTML){
     var userListCount=0;
     var _currentFilter=0;
     var UserListView = BaseView.extend({
@@ -211,14 +212,14 @@ define([
                                     LodingButton.createSpin($(_btn).find(".spinIcon")[0]);
                                     addUserView.submitAdd(beforEvent, affterEvent).done(function(data){
                                         grid.addRow(data);
-                                        dialogRef.close();
+                                        Util.destoryDateTimePicker(true); dialogRef.close();
                                         Dialog.show(i18Common.SUCCESS.USER.ADD);
                                     });//실패 따로 처리안함 add화면에서 처리.
                                 }
                             }, {
                                 label: i18Common.DIALOG.BUTTON.CLOSE,
                                 action: function(dialogRef){
-                                    dialogRef.close();
+                                    Util.destoryDateTimePicker(true); dialogRef.close();
                                 }
                             }]
                             
@@ -253,7 +254,7 @@ define([
                                             },
                                             actionCallBack:function(res){
                                                 grid.updateRow(res);
-                                                dialogRef.close();
+                                                Util.destoryDateTimePicker(true); dialogRef.close();
                                                 Dialog.show(i18Common.SUCCESS.USER.SAVE);
                                             },
                                             errorCallBack:function(){
@@ -266,7 +267,7 @@ define([
                                     action: function(dialogRef){// 버튼 클릭 이벤트
                                         editUserView.initializePassword().done(function(data){
                                             grid.updateRow(data);
-                                            dialogRef.close();
+                                            Util.destoryDateTimePicker(true); dialogRef.close();
                                             Dialog.show(i18Common.SUCCESS.USER.SAVE);
                                         });//실패 따로 처리안함 add화면에서 처리.
                                     }
@@ -276,14 +277,14 @@ define([
                                     action: function(dialogRef){// 버튼 클릭 이벤트
                                         editUserView.submitSave().done(function(data){
                                             grid.updateRow(data);
-                                            dialogRef.close();
+                                            Util.destoryDateTimePicker(true); dialogRef.close();
                                             Dialog.show(i18Common.SUCCESS.USER.SAVE);
                                         });//실패 따로 처리안함 add화면에서 처리.
                                     }
                                 }, {
                                     label: i18Common.DIALOG.BUTTON.CLOSE,
                                     action: function(dialogRef){
-                                        dialogRef.close();
+                                        Util.destoryDateTimePicker(true); dialogRef.close();
                                     }
                                 }]
                                 

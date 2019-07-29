@@ -327,7 +327,7 @@ define([
           buttons: [{
             label: i18Common.DIALOG.BUTTON.CLOSE,
             action: function (dialogRef) {
-              dialogRef.close();
+              Util.destoryDateTimePicker(true); dialogRef.close();
               if ( adminSettingView.isChangeCleanDay() && window.location.hash === "" ) {
                 window.location.reload();
               }
@@ -363,13 +363,13 @@ define([
             action: function (dialogRef) { // 버튼 클릭 이벤트
               _addNewReportView.onClickBtnSend(dialogRef).done(function (model) {
                 window.location.href = "#reportmanager";
-                dialogRef.close();
+                Util.destoryDateTimePicker(true); dialogRef.close();
               });
             }
           }, {
             label: '닫기',
             action: function (dialogRef) {
-              dialogRef.close();
+              Util.destoryDateTimePicker(true); dialogRef.close();
             }
           }]
         });

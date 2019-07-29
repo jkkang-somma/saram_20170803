@@ -95,6 +95,11 @@ define([
               }
               */
       },
+
+      beforeDestroy: function() {
+        Util.destoryDateTimePicker(false);
+      },
+
       getRawData: function () {
         var startDate = Moment($(this.el).find("#rdFromDatePicker").data("DateTimePicker").getDate().toDate());
         var endDate = Moment($(this.el).find("#rdToDatePicker").data("DateTimePicker").getDate().toDate());
