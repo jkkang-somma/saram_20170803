@@ -205,7 +205,7 @@ define([
               // 	}
               // }
               Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.MSG.UPDATE_COMPLETE, function () {
-                dialog.close();
+                Util.destoryDateTimePicker(true); dialog.close();
               });
             }).fail(function () {
 
@@ -214,7 +214,7 @@ define([
         }, {
           label: i18nCommon.COMMUTE_RESULT_LIST.UPDATE_DIALOG.BUTTON.CANCEL,
           action: function (dialog) {
-            dialog.close();
+            Util.destoryDateTimePicker(true); dialog.close();
           }
         }]
       });
@@ -550,7 +550,7 @@ define([
 
                   } else {
                     Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_COMPLETE, function () {
-                      dialog.close();
+                      Util.destoryDateTimePicker(true); dialog.close();
                       // that.grid.updateRow(selectItem, selectItem.idx -1 );	// index 0부터 시작 
                     });
                   }
@@ -563,7 +563,7 @@ define([
           }, {
             label: i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.BUTTON.CANCEL,
             action: function (dialog) {
-              dialog.close();
+              Util.destoryDateTimePicker(true); dialog.close();
             }
           }]
         });
@@ -608,7 +608,7 @@ define([
           buttons: [{
             label: i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
             action: function (dialog) {
-              dialog.close();
+              Util.destoryDateTimePicker(true); dialog.close();
             }
           }]
         });
@@ -655,7 +655,7 @@ define([
           }, {
             label: i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
             action: function (dialog) {
-              dialog.close();
+              Util.destoryDateTimePicker(true); dialog.close();
             }
           }]
         });
@@ -722,7 +722,7 @@ define([
           data: docData,
           error: function (result) {
             Dialog.error("데이터 조회가 실패했습니다.");
-            dialog.close();
+            Util.destoryDateTimePicker(true); dialog.close();
             _this.clickFlag = false;
           }
         }).done(function (result) {
@@ -741,12 +741,12 @@ define([
                   Dialog.show("결재가 상신되었습니다.");
                   selectItem.work_night_falg = (state != undefined) ? state : "상신";
                   _this.grid.updateRow(selectItem);
-                  dialog.close();
+                  Util.destoryDateTimePicker(true); dialog.close();
                 },
                 error: function (model, xhr, options) {
                   var respons = xhr.responseJSON;
                   Dialog.error(respons.message);
-                  dialog.close();
+                  Util.destoryDateTimePicker(true); dialog.close();
                 },
                 wait: false
               });
@@ -754,7 +754,7 @@ define([
             error: function (model, xhr, options) {
               var respons = xhr.responseJSON;
               Dialog.error(respons.message);
-              dialog.close();
+              Util.destoryDateTimePicker(true); dialog.close();
               _this.clickFlag = false;
             },
             wait: false

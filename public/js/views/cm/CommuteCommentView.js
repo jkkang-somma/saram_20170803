@@ -115,7 +115,7 @@ define([
               commentUpdatePopupView.approvalComment().done(function (result) {
                 view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
                 Dialog.show("결재가 완료되었습니다..");
-                dialog.close();
+                Util.destoryDateTimePicker(true); dialog.close();
               }).fail(function () {
                 Dialog.show("결재가 실패했습니다.");
               });
@@ -129,7 +129,7 @@ define([
               commentUpdatePopupView.NapprovalComment().done(function (result) {
                 view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
                 Dialog.show("결재가 반려되었습니다..");
-                dialog.close();
+                Util.destoryDateTimePicker(true); dialog.close();
               }).fail(function () {
                 Dialog.show("결재가 실패했습니다.");
               });
@@ -154,7 +154,7 @@ define([
                 // ApprovalCollection
                 var _appCollection = new ApprovalCollection();
                 _appCollection.updateState(data);
-                dialog.close();
+                Util.destoryDateTimePicker(true); dialog.close();
               }).fail(function () {
                 Dialog.show("처리에 실패했습니다.");
               });
@@ -169,7 +169,7 @@ define([
               commentUpdatePopupView.NACCEPTING().done(function (result) {
                 view.grid.updateRow(result.attributes[0]);	// 업데이트 후 재조회한 데이터
                 Dialog.show("상신이 취소되었습니다..");
-                dialog.close();
+                Util.destoryDateTimePicker(true); dialog.close();
               }).fail(function () {
                 Dialog.show("처리에 실패했습니다.");
               });
@@ -181,7 +181,7 @@ define([
       buttons.push({
         label: "취소",
         action: function (dialog) {
-          dialog.close();
+          Util.destoryDateTimePicker(true); dialog.close();
         }
       });
 
