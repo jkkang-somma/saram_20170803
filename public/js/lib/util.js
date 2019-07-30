@@ -173,7 +173,7 @@ define([
     return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  function timeformat(num) {
+  function timeformat(num, isSmallVersion) {
     var result = "";
     var hour = Math.floor(num / 60);
     var min = Math.floor(num % 60);
@@ -187,13 +187,21 @@ define([
     if (hour < 10) {
       result += " ";
     }
-    result += hour + "시간 ";
+    if (isSmallVersion === true) {
+      result += hour + '<span class="smallFont">시간 </span>';
+    } else {
+      result += hour + "시간 ";
+    }
 
     if (min < 10) {
       result += "0";
     }
 
-    result += min + "분";
+    if (isSmallVersion === true) {
+      result += min + '<span class="smallFont">분</span>';
+    } else {
+      result += min + "분";
+    }
 
     return result;
   }

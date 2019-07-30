@@ -2733,6 +2733,16 @@
       GROUP BY id
     </query>
 
+    <query id="selectOverTimeById">
+      SELECT id, department, name, ? AS base_date,
+        SUM(over_time - if(except is null, 0, except)) AS sum_over_time
+      FROM commute_result_tbl c
+      WHERE
+        id = ? AND
+        date between ? AND ? AND
+        overtime_code in ( "2015_AA", "2015_AB", "2015_AC", "2015_BA", "2015_BB", "2015_BC" );
+    </query>
+
     <query id="selectOverTimeDept">
       SELECT department,
         SUM(if(overtime_code = "2015_AA" OR overtime_code = "2015_AB" OR overtime_code = "2015_AC", over_time-except, 0)) as TOTAL_A,

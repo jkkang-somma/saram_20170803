@@ -55,6 +55,19 @@ var StatisticsService = function () {
         });
     };
 
+    var _selectOverTimeByIdBulk = function(id, rangeList) {
+      return new Promise(function(resolve, reject){// promise patten
+        var promiseList = [];
+        for (var range of rangeList) {
+          var p = StatisticsDao.selectOverTimeById(id, range.startDate, range.endDate);
+          promiseList.push(p);
+        }
+        Promise.all(promiseList).then(function(resultList){
+          resolve(resultList);
+        });
+      });
+    };
+
     var _selectAvgInOutTime = function(year, startDate, endDate, id) { 
       return StatisticsDao.selectAvgInOutTime(year, startDate, endDate, id);
     };
@@ -63,7 +76,8 @@ var StatisticsService = function () {
         selectAbnormalDeptSummary:_selectAbnormalDeptSummary,
         selectDeptDetail:_selectDeptDetail,
         selectReport1 : _selectReport1,
-        selectAvgInOutTime: _selectAvgInOutTime
+        selectAvgInOutTime: _selectAvgInOutTime,
+        selectOverTimeByIdBulk: _selectOverTimeByIdBulk
     };
 };
 

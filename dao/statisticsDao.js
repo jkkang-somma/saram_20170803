@@ -25,6 +25,10 @@ StatisticsDao.prototype.selectDeptPersonCount =  function (yearMonth) {
     return db.query(group, "selectDeptPersonCount", [yearMonth]);
 };
 
+StatisticsDao.prototype.selectOverTimeById =  function (id, startDate, endDate) {
+  return db.query(group, "selectOverTimeById", [startDate, id, startDate, endDate]);
+};
+
 StatisticsDao.prototype.selectDeptPersonCountType2 =  function (from, to) {
     return db.query(group, "selectDeptPersonCountType2", [from, to]);
 };

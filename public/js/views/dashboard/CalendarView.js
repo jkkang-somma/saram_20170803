@@ -8,6 +8,7 @@ define([
   'code',
   'cmoment',
   'util',
+  'schemas',
   'dialog',
   'i18n!nls/common',
   'models/sm/SessionModel',
@@ -19,7 +20,7 @@ define([
   'views/cm/popup/OvertimeApprovalPopupView',
   'text!templates/calendarTemplateBase.html',
   'views/rm/AddNewReportView',
-], function ($, _, Backbone, Code, Moment, Util, Dialog, i18nCommon, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection,
+], function ($, _, Backbone, Code, Moment, Util, Schemas, Dialog, i18nCommon, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection,
   InOfficeCollection, OutOfficeCollection, OvertimeApprovalPopupView, calendarHTML, AddNewReportView) {
 
     var CalendarView = Backbone.View.extend({
@@ -27,7 +28,8 @@ define([
       elements: {
         targetUserId: "",
         _isShowPopup: 0, // 0: none , 1: ignore, 2: display
-        cleanDay: ""
+        cleanDay: "",
+        overTimeWeek: []
       },
       initialize: function (opt) {
         this.$el = $(opt.el);
@@ -53,6 +55,7 @@ define([
       _draw: function (params) {
         this.elements.targetUserId = params.id;
         this.elements.cleanDay = params.cleanDay;
+        this.elements.overTimeWeek = params.overTimeWeek;
         var _view = this;
         var yearData = new Moment(params.start);
         _view.getHolidaySummary({ year: yearData.year() }).done(function (result) { // 휴일 조회
@@ -183,6 +186,29 @@ define([
         if (cleanDayEl.length === 1) {
           cleanDayEl.addClass('clean-day');
           cleanDayEl.attr('title', '쾌적한 근무 환경 및 임직원 건강을 위해 청소하는 날입니다~');
+        }
+      },
+
+      drawOverTimeWeek: function () {
+        var _view = this;
+        if (SessionModel.getUserInfo().admin !== Schemas.ADMIN) {
+          return;
+        }
+        if (this.elements.overTimeWeek === []) {
+          return;
+        }
+
+        for (var overTime of this.elements.overTimeWeek) {
+          if (overTime.overTime) {
+            var baseDate = overTime.date;
+            var overTimeEl = $(_view.el).find('#' + baseDate + " .over-time");
+            if (overTimeEl.length === 1) {
+              overTimeEl.html(Util.timeformat(overTime.overTime, true));
+              if (overTime.overTime > 720) {
+                overTimeEl.addClass("red");
+              }
+            }
+          }
         }
       },
 
@@ -363,6 +389,7 @@ define([
 
         _view.drawHoliday(params.start);
         _view.drawCleanDay();
+        _view.drawOverTimeWeek();
       },
 
       makeOneWeekHtml: function (row, startDayOfWeek, lastDay, year, month, data) {
@@ -374,7 +401,8 @@ define([
         var cc_content = '<div class="c-content"> <div class="text"><A></div><div class="text"><B></div> </div>';
 
         var day = 0;
-        var text = "text";
+        var lastDate = "";
+        var lastIndex = 1;
         for (var i = 1; i <= row; i++) {
           resultHtml += "<tr>";
 
@@ -382,13 +410,22 @@ define([
             if (i == 1 && j <= startDayOfWeek) {
               // 1일 시작 전
               // if ( data[0].exist ) {
+              var prevDate = Moment(year + "-" + (month+1) + "-1").add(j - startDayOfWeek - 1, "days").format('YYYY-MM-DD');
               resultHtml += tdTemplate;
-              resultHtml = resultHtml.replace('id=""', '');
+              resultHtml = resultHtml.replace('id=""', 'id="' +prevDate + '"');
+
+              resultHtml += cc_header.replace("<HEADER_CLASS>", "opacity3").replace("<DAY>", prevDate.substr(8,2));
+              resultHtml += cc_content.replace("<A>", "").replace("<B>", "");
+              resultHtml += cc_content.replace("<A>", "").replace('<div class="text"><B>', '<div class="over-time">');
               continue;
             } else if (_.isUndefined(data[day])) {
               // 말일 종료 후
               resultHtml += tdTemplate;
-              resultHtml = resultHtml.replace('id=""', '');
+              var afterDate = Moment(lastDate).add(lastIndex++, "days").format('YYYY-MM-DD');
+              resultHtml = resultHtml.replace('id=""', 'id="' + afterDate + '"');
+              resultHtml += cc_header.replace("<HEADER_CLASS>", "opacity3").replace("<DAY>", afterDate.substr(9,1));
+              resultHtml += cc_content.replace("<A>", "").replace("<B>", "");
+              resultHtml += cc_content.replace("<A>", "").replace('<div class="text"><B>', '<div class="over-time">');
             } else {
               // 1일 ~ 말일까지                        
               if (j == 7) {
@@ -405,7 +442,8 @@ define([
                 }
               }
 
-              resultHtml = resultHtml.replace('id=""', 'id="' + year + '-' + Util.get02dStr(month + 1) + '-' + Util.get02dStr(data[day].days) + '"');
+              lastDate = year + '-' + Util.get02dStr(month + 1) + '-' + Util.get02dStr(data[day].days);
+              resultHtml = resultHtml.replace('id=""', 'id="' + lastDate + '"');
 
               resultHtml += calendar_content;
               resultHtml += cc_header.replace("<DAY>", data[day].days);
@@ -416,7 +454,10 @@ define([
                 resultHtml = resultHtml.replace("<HEADER_CLASS>", "");
               }
               resultHtml += cc_content.replace("<A>", data[day].workType).replace("<B>", data[day].overTime);
-              resultHtml += cc_content.replace("<A>", data[day].outOffice).replace("<B>", data[day].vacation);
+              // resultHtml += cc_content.replace("<A>", data[day].outOffice).replace("<B>", data[day].vacation);
+              resultHtml += cc_content.replace("<A>", data[day].outOffice).replace('<div class="text"><B>', '<div class="over-time">');
+              // 윗 코드에 관하여... 원래 설계상 네번째 칸에 vacation 정보를 출력하려 하였으나 구현오류로 인하여 vacation 정보가 세번째 칸에 outOffice에 출력되고 있음.
+              // 따라서 네번재 칸은 매주 월요일 자리에 주간 초과근무 시간을 출력하도록 추가 구현 함.
             }
             day++;
             resultHtml += "</div></td>"; // calendar-content
