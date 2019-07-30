@@ -168,14 +168,11 @@ define([
 
 
         if (code != '0000') {
-          _params.cleanDay = _data.cleanDay
-          _params.overTimeWeek = _data.overTimeWeek
-
           if (this.calendarView) {
             this.calendarView.destroy();
           }
           this.calendarView = new CalendarView({ el: dashboard.find('#calendar')[0] });
-          this.calendarView._draw(_params);
+          this.calendarView._draw(_params, _data.cleanDay, _data.overTimeWeek);
         } else {
           var view = new AbnormalSummaryView({ el: dashboard.find('#calendar')[0] });
           view.render('dashboard', _view.searchParams);

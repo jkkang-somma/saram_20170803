@@ -52,10 +52,10 @@ define([
         'click td': 'onClickDaySubmit',
         'click #submit_item' : 'onClickSubmitMenu'
       },
-      _draw: function (params) {
+      _draw: function (params, cleanDay, overTimeWeek) {
         this.elements.targetUserId = params.id;
-        this.elements.cleanDay = params.cleanDay;
-        this.elements.overTimeWeek = params.overTimeWeek;
+        this.elements.cleanDay = cleanDay;
+        this.elements.overTimeWeek = overTimeWeek;
         var _view = this;
         var yearData = new Moment(params.start);
         _view.getHolidaySummary({ year: yearData.year() }).done(function (result) { // 휴일 조회
