@@ -138,12 +138,16 @@ define([
 
         var _dashboardTemp = _.template(DashboardHTML);
         var _configEndDateArr = _params.end.split("-");
-        if (String(_data.total_working_day).length <= 1) {
-          _data.total_working_day = "0" + _data.total_working_day;
+        
+        var defaultData = {};
+        if (_data.total_working_day === undefined) {
+          defaultData = { top_date: "자료없음" };
+        } else {
+          if (String(_data.total_working_day).length <= 1) {
+            _data.total_working_day = "0" + _data.total_working_day;
+          }
+          defaultData = { top_date: "(" + _params.start + " ~ " + _configEndDateArr[0] + "-" + _configEndDateArr[1] + "-" + _data.total_working_day + ")" };
         }
-        var defaultData = {
-          top_date: _data.total_working_day == 0 ? "자료없음" : "(" + _params.start + " ~ " + _configEndDateArr[0] + "-" + _configEndDateArr[1] + "-" + _data.total_working_day + ")"
-        };
 
         //header
         var _configDateArr = _params.start.split("-");

@@ -40,11 +40,6 @@ router.route('/workingSummary')
       }
       Vacation.getVacationById(params2).then(function (vacationResult) {
         if (vacationResult.length === 1) {
-          // 2019.07.26 주석
-          // if (result.length === 0) {
-          //   result[0] = {};
-          //   result[0].total_working_day = "00"; ???
-          // }
           result[0].vacation_year = targetYear;
           result[0].vacation_year_remain = vacationResult[0].total_day - vacationResult[0].used_holiday;
         }
