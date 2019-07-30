@@ -593,7 +593,11 @@ define([
         if (targetDate === "" || targetDate === "calendar_body") {
           targetDate = event.target.parentElement.parentElement.id;
           if (targetDate === "") {
-            return;
+            // over-time class 인 경우에 날짜 찾기
+            targetDate = event.target.id;
+            if (targetDate === "") {
+              return;
+            }
           }
         }
         var now = new Moment().format("YYYY-MM-DD");
