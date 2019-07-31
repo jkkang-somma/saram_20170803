@@ -1462,6 +1462,10 @@ li.list-group-item {
   cursor: pointer;
 }
 
+#dashboard_main .calendar-body .clickable:hover {
+  background:#d2efe8;
+}
+
 #dashboard_main .calendar-body td {
   width: 14%;
   border: 1px rgb(226, 232, 234) solid;
