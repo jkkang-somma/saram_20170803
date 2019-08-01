@@ -26,6 +26,7 @@ define([
 
       this.model = new PartModel(data);
       this.origin_code = data.code;
+      this.origin_leader = data.leader;
       _.bindAll(this, "submitSave");
     },
     render: function (el) {
@@ -124,10 +125,10 @@ define([
       var dfd = new $.Deferred();
       var _view = this, _form = this.form, _data = _form.getData();
 
-      if (!_view.checkFormData(_data.leader)) {
-        Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
+      if (!_view.checkFormData(_data)) {
+        Dialog.warning("파트장을 바르게 입력하세요.");
         dfd.reject();
-        return;
+        return dfd;
       }
 
       var firstArr = (_data.leader).split("(");
@@ -157,10 +158,23 @@ define([
       return dfd.promise();
     },
     checkFormData: function (data) {
-      if (availableTagsUser.indexOf(data) == -1) {
+      // 파트장이 변경된 경우에만 정상성 체크
+      if (availableTagsUser.indexOf(data.leader) >= 0) {
+        return true
+      }
+
+      // 사번을 구함.
+      if (data.leader.indexOf("(") === -1) {
         return false;
       }
-      return true;
+      var firstArr = (data.leader).split("(");
+      var strTemp = firstArr[1].split(")");
+      var leader = strTemp[0];
+
+      if (this.origin_leader === leader) {
+        return true;
+      }
+      return false;
     },
   });
   return EditPartView;
