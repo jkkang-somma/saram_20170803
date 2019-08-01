@@ -205,6 +205,10 @@ form .form-group:last-child {
   background: linear-gradient(#4873D7, #4873D7);
 }
 
+.TopColor.dept9 {
+  background: linear-gradient(#4873D7, #4873D7);
+}
+
 .deptColor {
   position: relative;
   height: 30px;
