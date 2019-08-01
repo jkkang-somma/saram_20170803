@@ -92,6 +92,14 @@
       WHERE dept_code=?
     </query>
 
+    <query id="updateUserPart">
+      UPDATE
+        members_tbl
+      SET
+        part_code=?
+      WHERE part_code=?
+    </query>
+
     <query id="updateUserGisPos">
       UPDATE
         members_tbl
@@ -971,7 +979,7 @@
       </query>
 
         <query id="selectDeptList">SELECT code, name, area FROM dept_code_tbl where `use`="1"</query>
-        <query id="selectPartList">SELECT code, name FROM part_code_tbl</query>
+        <query id="selectPartList">SELECT code, name FROM part_code_tbl WHERE `use`="1"</query>
         <query id="selectApprovalUserList">SELECT id as code, name  FROM members_tbl WHERE privilege=1</query>
         <query id="selectPositionList">SELECT code, name FROM position_code_tbl</query>
         <query id="selectUserList">SELECT id as code, name, dept_code  FROM members_tbl where leave_company is null or leave_company = '' order by name</query>
@@ -2145,30 +2153,32 @@
   <group id="part">
     <query id="selectPart">
       select
-        code, name, leader, (SELECT name FROM members_tbl where id = leader) user_name
+        code, name, leader, (SELECT name FROM members_tbl where id = leader) user_name, `use`
       from
         part_code_tbl
       ORDER BY code
     </query>
     <query id="selectUserPartList">
       select
-         code, name, leader, (SELECT name FROM members_tbl where id = leader) user_name
+         code, name, leader, (SELECT name FROM members_tbl where id = leader) AS user_name, `use`
       from
         part_code_tbl
       ORDER BY code
     </query>
     <query id="insertPart">
       INSERT INTO part_code_tbl
-        (code, name, leader)
+        (code, name, leader, `use`)
       VALUES
-        (?, ?, ?)
+        (?, ?, ?, ?)
     </query>
     <query id="updatePart">
       UPDATE
         part_code_tbl
       SET
+        code=?,
         name=?,
-        leader=?
+        leader=?,
+        `use`=?
       WHERE code=?
     </query>
     <query id="deletePart">
@@ -2879,6 +2889,42 @@
         manage_no LIKE CONCAT('%',?,'%')
       ORDER BY
         manage_no ASC
+    </query>
+  </group>
+
+  <group id="yesCalendar"> 
+    <query id="selectYesCalendarType">
+      SELECT * FROM calendar_type_tbl WHERE member_id = ?;
+    </query>
+
+    <query id="insertYesCalendarType">
+      INSERT INTO calendar_type_tbl (member_id, calendar_type_str, color, visible)  VALUES(?, ?, ?, ?)
+    </query>
+
+    <query id="updateYesCalendarType">
+      UPDATE calendar_type_tbl SET calendar_type_str = ?, color = ?, visible = ? WHERE calendar_type_id = ?
+    </query>
+
+    <query id="deleteYesCalendarType">
+      DELETE calendar_type_tbl WHERE calendar_type_id = ?
+    </query>
+
+    <query id="selectYesCalendar">
+      SELECT * FROM calendar_tbl WHERE member_id = ? AND (start BETWEEN ? AND ?) OR ( end BETWEEN ? AND ? )
+    </query>
+
+    <query id="insertYesCalendar">
+      INSERT INTO calendar_tbl(member_id, title, all_day, start, end, alarm, calendar_type, memo, reg_time)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    </query>
+
+    <query id="updateYesCalendar">
+      UPDATE calendar_tbl SET title = ?, all_day = ?, start = ?, end = ?, alarm = ?, calendar_type = ?, memo = ?
+      WHERE calendar_id = ?
+    </query>
+
+    <query id="deleteYesCalendar">
+      DELETE calendar_tbl WHERE calendar_id = ?
     </query>
   </group>
 </querys>
