@@ -4,7 +4,7 @@ var debug = require('debug')('Part');
 var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var PartDao= require('../dao/partDao.js');
-
+var UserDao = require('../dao/userDao.js');
 
 var Part = function (data, isNoSchemas) {
     var _data=_.initial([]);
@@ -67,7 +67,14 @@ var Part = function (data, isNoSchemas) {
         	_getManagerList().then(function(currentData){
                 var _updateData=_.defaults(_data, currentData[0]);
                 PartDao.updatePart(_updateData).then(function(result){
+                  if (_updateData.code === _updateData.origin_code) {
                     resolve(result);
+                    return;
+                  }
+                  UserDao.updateUserPart(_updateData.code, _updateData.origin_code).then(function() {
+                    resolve(result);
+                  });
+
                 }).catch(function(e){
                     debug("_editPart ERROR:"+e.message);
                     reject(e);

@@ -15,15 +15,11 @@ define([
         },
         getCustomUrl: function (method) {//idAttribute값을 사용하지 않고 id로 할때
             switch (method) {
-                case 'read':
-                    return this.urlRoot + "/" + this.attributes.code;
-                    break;
                 case 'create':
                     return this.urlRoot;
                     break;
+                case 'read':
                 case 'update':
-                    return this.urlRoot + "/" + this.attributes.code;
-                    break;
                 case 'delete':
                     return this.urlRoot + "/" + this.attributes.code;
                     break;
@@ -36,9 +32,11 @@ define([
         },
         default:{
             code: '',
+            origin_code: '',
             name: '',                   
             leader: '',
-            user_name: ''
+            user_name: '',
+            use: 1
         },
         
     });

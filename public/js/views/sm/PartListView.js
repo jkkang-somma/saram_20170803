@@ -63,14 +63,18 @@ define([
                 }
                 return null;
               }
+            },
+            { data: "use", "title": "사용 여부", render: function (data, type, row) {
+              var useVal = (row.use == 0) ? '미사용' : '사용';
+              return useVal;
+              }
             }
-            //                        { data : "leader",          "title" : i18Common.PART_LIST.GRID_COL_NAME.LEADER},
           ],
           dataschema: ["code", "name", "leader"],
           collection: partCollection,
           detail: true,
           view: this,
-          order: [[1, "asc"]],
+          order: [[4,"desc"], [1, "asc"]],
         };
       },
 

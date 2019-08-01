@@ -21,13 +21,13 @@ partDao.prototype.deletePart = function(code){
 
 partDao.prototype.insertPart = function(part){
       return db.query(group, "insertPart",
-        [part.code, part.name, part.leader]
+        [part.code, part.name, part.leader, part.use]
     );
 };
 
 partDao.prototype.updatePart = function(part){
     return db.query(group, "updatePart", 
-        [part.name, part.leader, part.code]
+        [part.code, part.name, part.leader, part.use, part.origin_code]
     );
 };
 

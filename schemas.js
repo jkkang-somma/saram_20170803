@@ -61,9 +61,11 @@ var Schemas = function (schemaName) {
         	leader: null
         },
         part:{
-        	code: null,
+          code: null,
+          origin_code: null,
         	name: null,        	
-        	leader: null
+          leader: null,
+          use: 1
         },
         auth:{
         },

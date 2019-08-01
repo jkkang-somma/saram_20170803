@@ -114,9 +114,9 @@ define([
       var dfd = new $.Deferred();
       var _view = this, _form = this.form, _data = _form.getData();
       if (!view.checkFormData(_data.leader)) {
-        Dialog.warning(i18nCommon.IPCONFIRM.IP.INVALID_USER);
+        Dialog.warning("파트장을 바르게 입력하세요.");
         dfd.reject();
-        return;
+        return dfd;
       }
       var firstArr = (_data.leader).split("(");
       var strTemp = firstArr[1].split(")");
@@ -124,6 +124,7 @@ define([
       _data.user_name = firstArr[0];
 
       var _partModel = new PartModel(_data);
+      _partModel.set('use', 1)
 
       _partModel.save({}, {
         success: function (model, xhr, options) {

@@ -25,12 +25,12 @@ define([
       $(this.el).empty();
 
       this.model = new PartModel(data);
+      this.origin_code = data.code;
       _.bindAll(this, "submitSave");
     },
     render: function (el) {
       var dfd = new $.Deferred();
       var _view = this;
-      var comboItem = [{ key: "", value: " " }];
       if (!_.isUndefined(el)) {
         this.el = el;
       }
@@ -50,7 +50,6 @@ define([
           name: "code",
           label: i18nCommon.PART_LIST.CODE,
           value: _model.code,
-          disabled: "readonly",
         }, {
           type: "input",
           name: "name",
@@ -64,10 +63,11 @@ define([
           label: i18nCommon.PART_LIST.GRID_COL_NAME.LEADER,
           value: _model.leader,
         }, {
-          type: "empty_data",
-          name: "user_name",
-          label: i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.LEADER,
-          value: _model.leader,
+          type: "combo",
+          name: "use",
+          label: "사용여부",
+          value: _model.use,
+          collection: [{ key: 1, value: "사용" }, { key: 0, value: "사용 안함" }]
         }]
       });
 
@@ -104,7 +104,7 @@ define([
               // }
             }
             else {
-              console.log("userCollection data is null!!!");
+              console.error("userCollection data is null!!!");
             }
           }
         })
@@ -135,8 +135,10 @@ define([
       _data.leader = strTemp[0];
       _data.user_name = firstArr[0];
 
+      _data.origin_code = this.origin_code;
       var _partModel = new PartModel(_data);
       _partModel.attributes._code = "-2";
+
       _partModel.save({}, {
         success: function (model, xhr, options) {
           Code.init().then(function () {
