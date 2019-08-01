@@ -320,6 +320,17 @@ form .form-group:last-child {
   border-bottom: 1px solid #4873D7;
 }
 
+.deptColor.team9 {
+  border-bottom: 1px solid #4873D7;
+  background: #4873D7;
+}
+
+.deptColor.team9:before {
+  background: #4873D7;
+  border-right: 1px solid #4873D7;
+  border-bottom: 1px solid #4873D7;
+}
+
 .team-style {
   padding-left: 10px;
   float: left;
