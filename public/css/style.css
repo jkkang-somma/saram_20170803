@@ -174,39 +174,39 @@ form .form-group:last-child {
 }
 
 .TopColor.dept1 {
-  background: linear-gradient(#777FDC, #9BA0DC);
+  background: linear-gradient(#808af1, #b2b7f0);
 }
 
 .TopColor.dept2 {
-  background: linear-gradient(#37EFFF, #83F5FF)
+  background: linear-gradient(#8cc2f4, #a7d1f3);
 }
 
 .TopColor.dept3 {
-  background: linear-gradient(#26FF9E, #84FFC8);
+  background: linear-gradient(#15d881, #81fec6);
 }
 
 .TopColor.dept4 {
-  background: linear-gradient(#2FFF39, #76FF7D);
+  background: linear-gradient(#4ca7d8, #85c3df);
 }
 
 .TopColor.dept5 {
-  background: linear-gradient(#FFB23C, #FFCA7A);
+  background: linear-gradient(#ffb441, #ffc978);
 }
 
 .TopColor.dept6 {
-  background: linear-gradient(#9B4BE5, #AB6EE3);
+  background: linear-gradient(#ff3a3a, #ff7c7c);
 }
 
 .TopColor.dept7 {
-  background: linear-gradient(#FF3636, #FF7E7E);
+  background: linear-gradient(#3db535, #7de184);
 }
 
 .TopColor.dept8 {
-  background: linear-gradient(#4873D7, #4873D7);
+  background: linear-gradient(#37b4ab, #5fe1b9);
 }
 
 .TopColor.dept9 {
-  background: linear-gradient(#4873D7, #4873D7);
+  background: linear-gradient(#ffca3b, #ffdb7c);
 }
 
 .deptColor {
@@ -233,102 +233,102 @@ form .form-group:last-child {
 }
 
 .deptColor.team1 {
-  border-bottom: 1px solid #9BA0DC;
-  background: #9BA0DC;
+  border-bottom: 1px solid #b2b7f0;
+  background: #b2b7f0;
 }
 
 .deptColor.team1:before {
-  background: #9BA0DC;
-  border-right: 1px solid #9BA0DC;
-  border-bottom: 1px solid #9BA0DC;
+  background: #b2b7f0;
+  border-right: 1px solid #b2b7f0;
+  border-bottom: 1px solid #b2b7f0;
 }
 
 .deptColor.team2 {
-  border-bottom: 1px solid #83F5FF;
-  background: #83F5FF;
+  border-bottom: 1px solid #a7d1f3;
+  background: #a7d1f3;
 }
 
 .deptColor.team2:before {
-  background: #83F5FF;
-  border-right: 1px solid #83F5FF;
-  border-bottom: 1px solid #83F5FF;
+  background: #a7d1f3;
+  border-right: 1px solid #a7d1f3;
+  border-bottom: 1px solid #a7d1f3;
 }
 
 .deptColor.team3 {
-  border-bottom: 1px solid #84FFC8;
-  background: #84FFC8;
+  border-bottom: 1px solid #81fec6;
+  background: #81fec6;
 }
 
 .deptColor.team3:before {
-  background: #84FFC8;
-  border-right: 1px solid #84FFC8;
-  border-bottom: 1px solid #84FFC8;
+  background: #81fec6;
+  border-right: 1px solid #81fec6;
+  border-bottom: 1px solid #81fec6;
 }
 
 .deptColor.team4 {
-  border-bottom: 1px solid #76FF7D;
-  background: #76FF7D;
+  border-bottom: 1px solid #85c3df;
+  background: #85c3df;
 }
 
 .deptColor.team4:before {
-  background: #76FF7D;
-  border-right: 1px solid #76FF7D;
-  border-bottom: 1px solid #76FF7D;
+  background: #85c3df;
+  border-right: 1px solid #85c3df;
+  border-bottom: 1px solid #85c3df;
 }
 
 .deptColor.team5 {
-  border-bottom: 1px solid #FFCA7A;
-  background: #FFCA7A;
+  border-bottom: 1px solid #ffc978;
+  background: #ffc978;
 }
 
 .deptColor.team5:before {
-  background: #FFCA7A;
-  border-right: 1px solid #FFCA7A;
-  border-bottom: 1px solid #FFCA7A;
+  background: #ffc978;
+  border-right: 1px solid #ffc978;
+  border-bottom: 1px solid #ffc978;
 }
 
 .deptColor.team6 {
-  border-bottom: 1px solid #AB6EE3;
-  background: #AB6EE3;
+  border-bottom: 1px solid #ff7c7c;
+  background: #ff7c7c;
 }
 
 .deptColor.team6:before {
-  background: #AB6EE3;
-  border-right: 1px solid #AB6EE3;
-  border-bottom: 1px solid #AB6EE3;
+  background: #ff7c7c;
+  border-right: 1px solid #ff7c7c;
+  border-bottom: 1px solid #ff7c7c;
 }
 
 .deptColor.team7 {
-  border-bottom: 1px solid #FF7E7E;
-  background: #FF7E7E;
+  border-bottom: 1px solid #7de184;
+  background: #7de184;
 }
 
 .deptColor.team7:before {
-  background: #FF7E7E;
-  border-right: 1px solid #FF7E7E;
-  border-bottom: 1px solid #FF7E7E;
+  background: #7de184;
+  border-right: 1px solid #7de184;
+  border-bottom: 1px solid #7de184;
 }
 
 .deptColor.team8 {
-  border-bottom: 1px solid #4873D7;
-  background: #4873D7;
+  border-bottom: 1px solid #5fe1b9;
+  background: #5fe1b9;
 }
 
 .deptColor.team8:before {
-  background: #4873D7;
-  border-right: 1px solid #4873D7;
-  border-bottom: 1px solid #4873D7;
+  background: #5fe1b9;
+  border-right: 1px solid #5fe1b9;
+  border-bottom: 1px solid #5fe1b9;
 }
 
 .deptColor.team9 {
-  border-bottom: 1px solid #4873D7;
-  background: #4873D7;
+  border-bottom: 1px solid #ffdb7c;
+  background: #ffdb7c;
 }
 
 .deptColor.team9:before {
-  background: #4873D7;
-  border-right: 1px solid #4873D7;
-  border-bottom: 1px solid #4873D7;
+  background: #ffdb7c;
+  border-right: 1px solid #ffdb7c;
+  border-bottom: 1px solid #ffdb7c;
 }
 
 .team-style {
@@ -546,9 +546,9 @@ form .form-group:last-child {
 
 /*dataTable*/
 
-table.dataTable {
-  /* margin-top:10px; */
-}
+/* table.dataTable {
+  margin-top:10px;
+} */
 
 table.dataTable.no-footer {
   border-bottom: 1px solid #2ABB9B;
@@ -575,9 +575,9 @@ table.dataTable tbody tr:first-child td {
   border: none;
 }
 
-table.dataTable tbody tr.selected td:first-child {
-  /*  border-left: 4px solid rgb(22, 160, 133);*/
-}
+/* table.dataTable tbody tr.selected td:first-child {
+   border-left: 4px solid rgb(22, 160, 133);
+} */
 
 table.dataTable tbody td {
   vertical-align: middle;
@@ -1521,15 +1521,15 @@ li.list-group-item {
   float: left;
 }
 
-#dashboard_main .calendar-body tr td:first-child .cc-header {
-  /*background-color: rgba(247, 205, 212, 0.46);*/
-  /*color: #cc6969;*/
-}
+/* #dashboard_main .calendar-body tr td:first-child .cc-header {
+  background-color: rgba(247, 205, 212, 0.46);
+  color: #cc6969;
+} */
 
-#dashboard_main .calendar-body tr td:last-child .cc-header {
-  /*    background-color: rgba(135, 206, 235, 0.46);*/
-  /*    color: #4747f7;*/
-}
+/* #dashboard_main .calendar-body tr td:last-child .cc-header {
+     background-color: rgba(135, 206, 235, 0.46);
+     color: #4747f7;
+} */
 
 #dashboard_main .calendar-body tr td .cc-header span {
   display: inline-block;
