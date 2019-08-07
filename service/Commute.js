@@ -85,17 +85,22 @@ var Commute = function() {
 
 		return new Promise(function(resolve, reject){
 			var mannagerGroup = [];
-			// 메일 포함 임원 ID LIST.
-			var includeEmailID = { "160301": true, "160401": true };
+      // 메일 포함 임원 ID LIST.
+      var includeEmailID1 = { "050601": true }; // 사장님
+      var includeEmailID2 = { "160301": true, "160401": true}; // 유강재 전무, 최홍락 상무
 			
 			/* 임원급 메일 가져오기 추가 */
 			ApprovalDao.getApprovalMailingList("0000").then(function(result){
 				mannagerGroup = result;
 
-				var includeEmailList = [];
+        var includeEmailList1 = [];
+        var includeEmailList2 = [];
 				for(var idx in mannagerGroup){
-					if(includeEmailID.hasOwnProperty(mannagerGroup[idx].id)) {
-						includeEmailList.push({ name : mannagerGroup[idx].name, address : mannagerGroup[idx].email, id : mannagerGroup[idx].id});
+					if(includeEmailID1.hasOwnProperty(mannagerGroup[idx].id)) {
+						includeEmailList1.push({ name : mannagerGroup[idx].name, address : mannagerGroup[idx].email, id : mannagerGroup[idx].id});
+          }
+          if(includeEmailID2.hasOwnProperty(mannagerGroup[idx].id)) {
+						includeEmailList2.push({ name : mannagerGroup[idx].name, address : mannagerGroup[idx].email, id : mannagerGroup[idx].id});
 					}
 				}
 
@@ -129,29 +134,28 @@ var Commute = function() {
 							var temp=_.template(html);
 							var sendHTML=temp(sendData);
 
+                var to = [];
 								var cc = [];
 								// 부서장(팀장) mail
-								cc.push({name : mailData.leader_name, address : mailData.leader_email, id : mailData.leader_id});
+								to.push({name : mailData.leader_name, address : mailData.leader_email, id : mailData.leader_id});
 								// 지각 당사자 mail
 								cc.push({name : mailData.name, address : mailData.email, id : mailData.id});
 
 								// 지각 메일 임원 추가 
 								if(mailData.dept_area != "수원"){
-									cc = cc.concat(includeEmailList);
-									//cc.push({ name :"유강재", address: "youkj@yescnc.co.kr", id:"160301"});
-									//cc.push({ name :"최홍락", address: "redrock.choi@yescnc.co.kr", id:"160401"});
-								//} else {
-									//cc.push({ name :"이남노", address: "nnlee@yescnc.co.kr", id:"170701"});
+                  if (mailData.dept_code === "1000") {
+                    // 경영지원팀인 경우 사장님께 전달. 2019.08.07
+                    cc = cc.concat(includeEmailList1);
+                  } else {
+                    // 그 외 서울 부서인 경우 유강재 전무, 최홍락 상무에게 전달
+                    cc = cc.concat(includeEmailList2);
+                  }
 								}
 								cc = _.uniq(cc, function(d) {return d.address});	// 중복 제거
-
 								
 								var mailOptions= {
 									from: 'webmaster@yescnc.co.kr', // sender address 
-									to: cc/*[
-										{ name: "김성식", address: "sskim@yescnc.co.kr"},
-										{ name :"김은영", address: "eykim@yescnc.co.kr"}
-									]*/,
+									to: to,
 									subject:"[근태보고] " + mailData.name + "_" + mailData.work_type,
 									html:sendHTML,
 									text:"",
