@@ -720,6 +720,7 @@
             mem.name,
             mem.email,
             mem.leave_company,
+            mem.dept_code,
             dept.area as dept_area,
             work.name as work_type,
             dept.leader as leader_id,
@@ -2894,7 +2895,7 @@
 
   <group id="yesCalendar"> 
     <query id="selectYesCalendarType">
-      SELECT * FROM calendar_type_tbl WHERE member_id = ?;
+      SELECT * FROM calendar_type_tbl WHERE member_id = ? OR member_id = "*";
     </query>
 
     <query id="insertYesCalendarType">
@@ -2910,17 +2911,27 @@
     </query>
 
     <query id="selectYesCalendar">
-      SELECT * FROM calendar_tbl WHERE member_id = ? AND (start BETWEEN ? AND ?) OR ( end BETWEEN ? AND ? )
+      SELECT calendar_id, member_id, title, all_day, date_format(start, "%Y-%m-%d") AS start, date_format(end, "%Y-%m-%d") as end, 
+        alarm, calendar_type, memo, reg_time, datediff(end, start) as date_diff,
+        (SELECT color FROM calendar_type_tbl WHERE calendar_type = calendar_type_id) AS color
+      FROM commute.calendar_tbl
+      WHERE member_id = ? AND (start BETWEEN ? AND ?) OR ( end BETWEEN ? AND ? )
+      ORDER BY date_diff DESC
     </query>
 
     <query id="insertYesCalendar">
       INSERT INTO calendar_tbl(member_id, title, all_day, start, end, alarm, calendar_type, memo, reg_time)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, now())
     </query>
 
     <query id="updateYesCalendar">
       UPDATE calendar_tbl SET title = ?, all_day = ?, start = ?, end = ?, alarm = ?, calendar_type = ?, memo = ?
       WHERE calendar_id = ?
+    </query>
+
+    <query id="updateYesCalendarForType">
+      UPDATE calendar_tbl SET calendar_type = ?
+      WHERE calendar_type = ?
     </query>
 
     <query id="deleteYesCalendar">
