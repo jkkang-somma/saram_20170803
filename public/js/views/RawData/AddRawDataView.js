@@ -135,9 +135,9 @@ define([
 
                           if (destUserInfo.length == 1) { // 등록된 이름인 경우
                             that.rawDataCollection.add(new RawDataModel({
-                              id: destUserInfo[0].attributes.id,
+                              id: destUserInfo[0].get("id"),
                               name: item[1],
-                              department: item[0],
+                              department: destUserInfo[0].get("dept_name"), // 부서이름도 등록된 데이터에서 셋팅하도록 변경 2019.08.20
                               time: resultDate.format("HH:mm:ss"),
                               date: resultDate.format("YYYY-MM-DD"),
                               char_date: resultDate.format("YYYY-MM-DD HH:mm:ss"),
