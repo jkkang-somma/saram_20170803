@@ -17,11 +17,12 @@ define([
   'collection/common/HolidayCollection',
   'collection/vacation/InOfficeCollection',
   'collection/vacation/OutOfficeCollection',
-  'views/cm/popup/OvertimeApprovalPopupView',
+  'collection/yescalendar/YesCalendarCollection',
   'text!templates/calendarTemplateBase.html',
   'views/rm/AddNewReportView',
+  'views/yescalendar/popup/YesCalendarDialog',
 ], function ($, _, Backbone, Code, Moment, Util, Schemas, Dialog, i18nCommon, SessionModel, AttendanceCollection, CommuteSummaryCollection, HolidayCollection,
-  InOfficeCollection, OutOfficeCollection, OvertimeApprovalPopupView, calendarHTML, AddNewReportView) {
+  InOfficeCollection, OutOfficeCollection, YesCalendarCollection, calendarHTML, AddNewReportView, YesCalendarDialog) {
 
     var CalendarView = Backbone.View.extend({
 
@@ -29,13 +30,22 @@ define([
         targetUserId: "",
         _isShowPopup: 0, // 0: none , 1: ignore, 2: display
         cleanDay: "",
-        overTimeWeek: []
+        overTimeWeek: [],
+        startDate: "",
+        endDate: "",
+        yesCalendarWeekData: [{
+          startWeekDay: "", // 일주일 시작일
+          endWeekDay: "",   // 일주일 종료일
+          calData: {}       // 해당 기간에 출력해야할 스케쥴 
+        }],
+        yesCalendarDataAll: {}
       },
       initialize: function (opt) {
         this.$el = $(opt.el);
         this.commuteSummaryCollection = new CommuteSummaryCollection();
         this.attendanceCollection = new AttendanceCollection();
         this.holidayCollection = new HolidayCollection();
+        this.yesCalendarCollection = new YesCalendarCollection();
         this._today = new Moment().format("YYYY-MM-DD");
 
         this.elements._bindEvent1 = _.bind(this.resetPopupMenu, this);
@@ -48,14 +58,20 @@ define([
 
       events: {
         'click #calendarSubmit': 'onClickOpenOvertimePopup',
-        'click .clickable': 'onClickDayLink',
+        'click .cc-header.clickable': 'onClickDayLink',
         'click td': 'onClickDaySubmit',
-        'click #submit_item' : 'onClickSubmitMenu'
+        'click .yes-cal-row.empty': 'onClickDaySubmit',
+        'click #submit_item' : 'onClickSubmitMenu',
+        'click #add_yescalendar' : 'onClickAddYesCalendarMenu',
+        'click .yes-cal-row .clickable': 'onClickYesCalendarItem',
       },
       _draw: function (params, cleanDay, overTimeWeek) {
         this.elements.targetUserId = params.id;
         this.elements.cleanDay = cleanDay;
         this.elements.overTimeWeek = overTimeWeek;
+        this.elements.startDate = params.start;
+        this.elements.endDate = params.end;
+        
         var _view = this;
         var yearData = new Moment(params.start);
         _view.getHolidaySummary({ year: yearData.year() }).done(function (result) { // 휴일 조회
@@ -66,7 +82,10 @@ define([
               _view.attendance = result;
               _view.getCommuteSummary(params).done(function (result) {
                 _view.commuteSummary = result;
-                _view.drawCalendar(params);
+                _view.getYesCalendar(params).done(function (result) {
+                  _view.yesCalendarDataList = result;
+                  _view.drawCalendar(params);
+                });
               }).fail(function () {
 
               });
@@ -111,12 +130,10 @@ define([
             data: params
           })
         ).done(function () {
-          // var id = SessionModel.getUserInfo().id;
           var data = {
             outoffice: outOfficeCollection.filterID(params.id),
             inoffice: inOfficeCollection.filterID(params.id)
           };
-          // console.log(data);
           dfd.resolve(data);
         });
 
@@ -137,6 +154,23 @@ define([
         });
         return dfd.promise();
       },
+
+      getYesCalendar: function(params) {
+        var _view = this;
+        var dfd = new $.Deferred();
+        
+        this.yesCalendarCollection.fetch({
+          data: params,
+          success: function (yesCalendarCollection, result) {
+            dfd.resolve(result);
+          },
+          error: function () {
+            dfd.reject();
+          }
+        });
+        return dfd.promise();
+      },
+
       getAttendance: function (params) {
         var _view = this;
         var dfd = new $.Deferred();
@@ -210,6 +244,159 @@ define([
             }
           }
         }
+      },
+
+      refreshYesCalendarData: function() {
+        var _this = this;
+        this.getYesCalendar({start: this.elements.startDate, end: this.elements.endDate}).done(function (result) {
+          _this.yesCalendarDataList = result;
+          _this.drawYesCalendar();
+        })
+      },
+
+      drawYesCalendar: function() {
+
+        // 초기화
+        $(".yes-cal-row").remove();
+        this.elements.yesCalendarDataAll = {};
+        for (var weekData of this.elements.yesCalendarWeekData) {
+          weekData.calData = {};
+        }
+
+        // 출력 시작
+        for (var calendarItem of this.yesCalendarDataList) { // max unlimit
+          this.elements.yesCalendarDataAll[calendarItem.calendar_id] = calendarItem;
+          for (var weekData of this.elements.yesCalendarWeekData) { // max 6
+            if ( (weekData.startWeekDay <= calendarItem.start && weekData.endWeekDay >= calendarItem.start) ||
+                 (weekData.startWeekDay <= calendarItem.end && weekData.endWeekDay >= calendarItem.end) ||
+                 (weekData.startWeekDay > calendarItem.start && weekData.endWeekDay < calendarItem.end) // 주 전체를 그려야할 일정
+               ) {
+              // 몇일자인지 확인 후 일주일 단위 내에서 모든 일자의 자리 정보를 확인한다.
+              
+              // 캘린더 상에 출력 시작일 ( 일주일 이내 )
+              var calStartDate = calendarItem.start;
+              if (calStartDate < weekData.startWeekDay) {
+                calStartDate = weekData.startWeekDay;
+              }
+
+              // 캘린더 상에 출력 종료일 ( 일주일 이내 )
+              var calEndDate = calendarItem.end;
+              if (calEndDate > weekData.endWeekDay) {
+                calEndDate = weekData.endWeekDay;
+              }
+
+              // 일주일 내에서 출력 일 수
+              calEndDateMoment = Moment(calEndDate);
+              calStartDateMoment = Moment(calStartDate);
+              var weekDateDiff = calEndDateMoment.diff(calStartDateMoment, "days") + 1;
+
+              // 들어갈 자리가 있는지 확인
+              if (_.isUndefined(weekData.calData[calStartDate])) {
+                weekData.calData[calStartDate] = [];
+              }
+
+              var tmpMoment = Moment(calStartDate);
+              var findIndex = -1;
+              
+              // var isFind = false;
+              while(true) {
+                for (var dIdx = 0 ; dIdx < weekDateDiff ; dIdx++ ) {
+                  var dIdxDateStr = tmpMoment.format('YYYY-MM-DD');
+                  
+                  if (_.isUndefined(weekData.calData[dIdxDateStr])) {
+                    weekData.calData[dIdxDateStr] = [];
+                  }
+
+                  if (dIdx === 0 && findIndex == -1) {
+                    // 최초 1회만 실시
+                    var findEmptyIndex = weekData.calData[dIdxDateStr].findIndex(function(s) { return s === "empty"});
+                    if (findEmptyIndex === -1) {
+                      findIndex = weekData.calData[dIdxDateStr].length;
+                    } else {
+                      findIndex = findEmptyIndex;
+                    }
+                  } else {
+                    if (weekData.calData[dIdxDateStr][findIndex] !== undefined && weekData.calData[dIdxDateStr][findIndex] !== "empty") {
+                      // isFind = false;
+                      break;
+                    }
+                  }
+
+                  tmpMoment.add(1, "days");
+                }
+
+                if (dIdx === weekDateDiff) {
+                  // Find Index!!
+                  break;
+                }
+                findIndex++; // 자리를 찾지 못했을 경우 한칸 아래로 다시 검색
+              }
+
+              // LOG!!!!
+              // console.log(`${calStartDate} - ${calEndDate} - ${weekDateDiff} : ${calendarItem.title} - line index : ${findIndex}`);
+
+              // DOM 출력
+              var yesCalendarEl = $(this.el).find("#" + calStartDate + " .yes-calendar-rows");
+
+              if ( findIndex > yesCalendarEl.children().length ) {
+                for (var emptyIdx = 0 ; emptyIdx < findIndex ; emptyIdx++) {
+                  // 빈칸 출력
+                  yesCalendarEl.append('<div class="yes-cal-row empty">  </div>');
+                }
+              }
+
+              // var $calTemplate = '<div class="day-<DAY_COUNT>" style="background:<COLOR>"> <TITLE> </div>';
+              
+              var targetEl = yesCalendarEl.children().eq(findIndex);
+              if (targetEl.length === 1) {
+                var $calTemplate2 = $('<div>');
+                targetEl.removeClass("empty");
+                targetEl.append(
+                  $calTemplate2.addClass("yes-cal-row-item")
+                    .addClass("day-" + weekDateDiff)
+                    .addClass("clickable")
+                    .text(calendarItem.title)
+                    .attr("data", calendarItem.calendar_id)
+                    .css("color", calendarItem.fcolor)
+                    .css("background", calendarItem.color));
+              } else {
+                var $calTemplate1 = $('<div class="yes-cal-row">  </div>');
+                var $calTemplate2 = $('<div>');
+                
+                yesCalendarEl.append(
+                  $calTemplate1.append(
+                    $calTemplate2.addClass("yes-cal-row-item")
+                      .addClass("day-" + weekDateDiff)
+                      .addClass("clickable")
+                      .text(calendarItem.title)
+                      .attr("data", calendarItem.calendar_id)
+                      .css("color", calendarItem.fcolor)
+                      .css("background", calendarItem.color))
+                )
+              }
+
+              // 출력 자리 셋팅 ( 메모리 상 자리 설정 )
+              tmpMoment = Moment(calStartDate);
+              for (var dIdx = 0 ; dIdx < weekDateDiff ; dIdx++ ) {
+                var dIdxDateStr = tmpMoment.format('YYYY-MM-DD');
+                for (var emptyIdx = 0 ; emptyIdx < findIndex ; emptyIdx++) {
+                  if ( weekData.calData[dIdxDateStr][emptyIdx] === undefined ) {
+                    weekData.calData[dIdxDateStr][emptyIdx] = "empty";
+                  }
+                }
+                weekData.calData[dIdxDateStr][findIndex] = `${calStartDate} - ${calEndDate} - ${weekDateDiff} : ${calendarItem.title}`;
+                tmpMoment.add(1, "days");
+              }
+            }
+          }
+        }
+
+        // 보기 옵션에 따른 숨김 처리
+        var yesCalendarOn = localStorage.getItem('yesCalendarOn');
+        if (yesCalendarOn !== "true") {
+          $("#dashboard_main .calendar-body .text.yes-calendar-rows").addClass("display-off");
+        }
+        
       },
 
       drawCalendar: function (params) {
@@ -390,6 +577,7 @@ define([
         _view.drawHoliday(params.start);
         _view.drawCleanDay();
         _view.drawOverTimeWeek();
+        _view.drawYesCalendar();
       },
 
       makeOneWeekHtml: function (row, startDayOfWeek, lastDay, year, month, data) {
@@ -399,12 +587,33 @@ define([
         var calendar_content = '<div class="calendar-content">';
         var cc_header = '<div class="cc-header <HEADER_CLASS>"><DAY></div>';
         var cc_content = '<div class="c-content"> <div class="text"><A></div><div class="text"><B></div> </div>';
+        var cc_yesCalendar = '<div class="c-content"> <div class="text yes-calendar-rows"></div> </div>';
 
         var day = 0;
         var lastDate = "";
         var lastIndex = 1;
+        this.elements.yesCalendarWeekData = [];
+        var yesCalDateAnchorDate = Moment(year + '-' + Util.get02dStr(month + 1) + '-' + Util.get02dStr(day+1));
+
         for (var i = 1; i <= row; i++) {
           resultHtml += "<tr>";
+
+          if (i === 1) {
+            // 0:일요일, 1:월요일, 2:화요일, 3:수요일, 4:목요일, 5:금요일, 6:토요일
+            var startWeekDate = yesCalDateAnchorDate.format('YYYY-MM-DD');
+            var endWeekDate = yesCalDateAnchorDate.add(7 - startDayOfWeek - 1, "days").format('YYYY-MM-DD');
+            this.elements.yesCalendarWeekData.push({startWeekDay: startWeekDate, endWeekDay: endWeekDate, calData: {}});
+          } else {
+            var startWeekDate = yesCalDateAnchorDate.add(1, "days").format('YYYY-MM-DD');
+            var lastWeekDate = "";
+            if (lastDay < day+7) {
+              lastWeekDate = Moment(year + '-' + Util.get02dStr(month + 1) + '-' + lastDay).format('YYYY-MM-DD');
+            } else {
+              lastWeekDate = yesCalDateAnchorDate.add(6, "days").format('YYYY-MM-DD');
+            }
+
+            this.elements.yesCalendarWeekData.push({ startWeekDay: startWeekDate, endWeekDay: lastWeekDate, calData: {}});
+          }
 
           for (var j = 1; j <= 7; j++) {
             if (i == 1 && j <= startDayOfWeek) {
@@ -427,7 +636,7 @@ define([
               resultHtml += cc_content.replace("<A>", "").replace("<B>", "");
               resultHtml += cc_content.replace("<A>", "").replace('<div class="text"><B>', '<div class="over-time">');
             } else {
-              // 1일 ~ 말일까지                        
+              // 1일 ~ 말일까지
               if (j == 7) {
                 // 토요일
                 resultHtml += tdTemplate.replace('class=""', 'class="saturday"');
@@ -459,6 +668,8 @@ define([
               // 윗 코드에 관하여... 원래 설계상 네번째 칸에 vacation 정보를 출력하려 하였으나 구현오류로 인하여 vacation 정보가 세번째 칸에 outOffice에 출력되고 있음.
               // 따라서 네번재 칸은 매주 월요일 자리에 주간 초과근무 시간을 출력하도록 추가 구현 함.
             }
+            resultHtml += cc_yesCalendar;
+
             day++;
             resultHtml += "</div></td>"; // calendar-content
           }
@@ -512,59 +723,9 @@ define([
         return commuteData;
       },
 
+      // 상신 버튼 클릭시 페이지 이동
       onClickOpenOvertimePopup: function (evt) {
-        // window.location.href = "#commutemanager";
         window.location.href = "#commutemanager/" + evt.target.parentElement.parentElement.parentElement.parentElement.id;
-        // var index = $(evt.currentTarget).attr('data');
-        // var selectItem = {
-        //     department : SessionModel.getUserInfo().id,
-        //     name : SessionModel.getUserInfo().name,
-        //     in_time : '',
-        //     out_time : '',
-        //     over_time : ''
-        // }
-        // var overtimeApprovalPopupView = new OvertimeApprovalPopupView(selectItem);
-
-        // // console.log("grid data", selectItem);
-        // var _this = this;
-        // var clickFlag = false;
-        // Dialog.show({
-        //     title: "초과근무 결재", 
-        //     content: overtimeApprovalPopupView,
-        //     buttons: [{
-        //         label : "상신",
-        //         cssClass: Dialog.CssClass.SUCCESS,
-        //         action : function(dialog){
-        //             if ( clickFlag ) {
-        //                 console.log("IN skip");
-        //                 return;
-        //             }
-        //             clickFlag =true;
-
-        //             var inputData = overtimeApprovalPopupView.getData();
-        //             // console.log(inputData);
-
-        //             var checkTime = selectItem.over_time - inputData.except;
-        //             if ( checkTime < 120 ) {
-        //                 Dialog.error("초과근무 시간이 유효하지 않습니다.");
-        //                 clickFlag =false;
-        //                 return;
-        //             }
-
-        //             if( inputData["overtimeReason"] == "" ){
-        //                 Dialog.warning("사유를 입력하여 주시기 바랍니다.");
-        //                 return null;
-        //             }
-        //             _this.sendApprovalOvertime(dialog, selectItem, inputData);
-
-        //         }
-        //     },{
-        //         label : i18nCommon.COMMUTE_RESULT_LIST.CHANGE_HISTORY_DIALOG.BUTTON.CANCEL,
-        //         action : function(dialog){
-        //             dialog.close();
-        //         }
-        //     }]
-        // });
       },
 
       onClickDayLink: function(evt) {
@@ -589,23 +750,53 @@ define([
       onClickDaySubmit: function(event) {
         this.elements._isShowPopup = 0;
 
-        var targetDate = event.target.parentElement.parentElement.parentElement.id;
-        if (targetDate === "" || targetDate === "calendar_body") {
-          targetDate = event.target.parentElement.parentElement.id;
-          if (targetDate === "") {
-            // over-time class 인 경우에 날짜 찾기
-            targetDate = event.target.id;
+        var targetDate = "";
+
+        if (event.target.className.indexOf("yes-cal-row empty") >= 0) {
+          targetDate = targetDate = event.target.parentElement.parentElement.parentElement.parentElement.id;
+        } else {
+          targetDate = event.target.parentElement.parentElement.parentElement.id;
+          if (targetDate === "" || targetDate === "calendar_body") {
+            targetDate = event.target.parentElement.parentElement.id;
             if (targetDate === "") {
-              return;
+              // over-time class 인 경우에 날짜 찾기
+              targetDate = event.target.id;
+              if (targetDate === "") {
+                return;
+              }
             }
           }
         }
         var now = new Moment().format("YYYY-MM-DD");
+        
+        this.elements._isShowPopup = 1;
+
+        $($("#submit_popup_menu")[0]).css("display", "block").css("top", event.pageY).css("left", event.pageX);
         if (targetDate >= now) {
-          $($("#submit_popup_menu")[0]).css("display", "block").css("top", event.pageY).css("left", event.pageX);
           $($("#submit_item")[0]).attr("date", targetDate);
-          this.elements._isShowPopup = 1;
+          $($("#submit_item")[0]).css("display", "block");
+        } else {
+          $($("#submit_item")[0]).css("display", "none");
         }
+        $($("#add_yescalendar")[0]).attr("date", targetDate);
+
+        // 관리자인 경우에만 일정 사용 하도록 하는 코드 제거 
+        // if (SessionModel.getUserInfo().admin === Schemas.ADMIN) {
+        //   $($("#submit_popup_menu")[0]).css("display", "block").css("top", event.pageY).css("left", event.pageX);
+        //   if (targetDate >= now) {
+        //     $($("#submit_item")[0]).attr("date", targetDate);
+        //     $($("#submit_item")[0]).css("display", "block");
+        //   } else {
+        //     $($("#submit_item")[0]).css("display", "none");
+        //   }
+        //   $($("#add_yescalendar")[0]).attr("date", targetDate);
+        // } else {
+        //   if (targetDate >= now) {
+        //     $($("#submit_popup_menu")[0]).css("display", "block").css("top", event.pageY).css("left", event.pageX);
+        //     $($("#add_yescalendar")[0]).css("display", "none");
+        //   }
+        // }
+        
       },
 
       onClickSubmitMenu: function() {
@@ -634,6 +825,103 @@ define([
         });
     },
 
-    });
-    return CalendarView;
+    onClickAddYesCalendarMenu: function () {
+      var _this = this;
+      var yesCalendarDialog = new YesCalendarDialog(this);
+
+      var targetDate = $($("#add_yescalendar")[0]).attr("date");
+      yesCalendarDialog.setTargetDate(targetDate);
+
+      Dialog.show({
+        title: "일정 등록",
+        content: yesCalendarDialog,
+        buttons: [{
+          label: "등록",
+          cssClass: Dialog.CssClass.SUCCESS,
+          action: function (dialogRef) { // 버튼 클릭 이벤트
+            yesCalendarDialog.submitAdd().done(function (model) {
+              yesCalendarDialog.closeModal();
+              Util.destoryDateTimePicker(true); dialogRef.close();
+              _this.refreshYesCalendarData();
+            });
+          }
+        }, {
+          label: '취소',
+          action: function (dialogRef) {
+            yesCalendarDialog.closeModal();
+            Util.destoryDateTimePicker(true); dialogRef.close();
+          }
+        }]
+      });
+    },
+
+    onClickYesCalendarItem: function(event) {
+      var _this = this;
+      var yesCalendarDialog = new YesCalendarDialog(this);
+
+      var calendar_id = $(event.target).attr("data");
+      yesCalendarDialog.setSelectedYesCalendarModel(this.elements.yesCalendarDataAll[calendar_id]);
+
+      var buttonList = [];
+      if (this.elements.yesCalendarDataAll[calendar_id].member_id === SessionModel.getUserInfo().id) {
+        buttonList.push({
+          label: "삭제",
+          cssClass: Dialog.CssClass.WARNING + " float-left",
+          style: "float:left;",
+          action: function (dialogRef) {
+            Dialog.confirm({
+              msg : "일정을 삭제하시겠습니까?",
+              action: function () {
+                var dfd = new $.Deferred();
+                yesCalendarDialog.submitRemove().done(function (result) {
+                  yesCalendarDialog.closeModal();
+                  Util.destoryDateTimePicker(true); dialogRef.close();
+                  _this.refreshYesCalendarData();
+                  dfd.resolve();
+                }).fail(function(error) {
+                  Dialog.error("일정 삭제 실패 : " + error.responseJSON.message);
+                  dfd.resolve();
+                });
+                return dfd;
+              },
+              actionCallBack: function (res) {//response schema
+                // reload
+              },
+              // errorCallBack: function () {
+              //   Dialog.error("삭제 실패!");
+              // },
+            });
+          }
+         });
+
+         buttonList.push({
+          label: "수정",
+          cssClass: Dialog.CssClass.SUCCESS,
+          action: function (dialogRef) { // 버튼 클릭 이벤트
+            yesCalendarDialog.submitEdit().done(function (model) {
+              yesCalendarDialog.closeModal();
+              Util.destoryDateTimePicker(true); dialogRef.close();
+              _this.refreshYesCalendarData();
+            });
+          }
+        });
+      }
+
+      buttonList.push({
+        label: '닫기',
+        action: function (dialogRef) {
+          yesCalendarDialog.closeModal();
+          Util.destoryDateTimePicker(true); dialogRef.close();
+        }
+      });
+
+      Dialog.show({
+        title: "일정 조회/수정",
+        content: yesCalendarDialog,
+        buttons: buttonList
+      });
+    }
+
   });
+  return CalendarView;
+});

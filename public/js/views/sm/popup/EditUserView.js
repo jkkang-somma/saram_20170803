@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'backbone',
   'core/BaseView',
   'log',
@@ -12,7 +11,7 @@ define([
   'code',
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
-], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, Code, CodeCollection, container){
+], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, Code, CodeCollection, container){
     var LOG= log.getLogger("EditUserView");
     var EditUserView = BaseView.extend({
     	initialize:function(data){

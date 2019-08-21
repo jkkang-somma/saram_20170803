@@ -6,6 +6,7 @@ var debug = require('debug')('User');
 var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var UserDao= require('../dao/userDao.js');
+var YesCalendarTypeDao= require('../dao/YesCalendarTypeDao.js');
 
 var User = function (data, isNoSchemas) {
     var _data=_.initial([]);
@@ -59,7 +60,10 @@ var User = function (data, isNoSchemas) {
             _getUser().then(function(currentData){
                 var _updateData=_.defaults(_data, currentData[0]);
                 UserDao.updateUser(_updateData).then(function(result){
+                  // 부서 코드 변경 시 calendar_type_tbl 테이블에 변경 내역 적용
+                  YesCalendarTypeDao.updateYesCalendarTypeForDeptCode1(_updateData.dept_code, _updateData.id).then(function() {
                     resolve(result);
+                  });
                 }).catch(function(e){
                     debug("_editUser ERROR:"+e.message);
                     reject(e);

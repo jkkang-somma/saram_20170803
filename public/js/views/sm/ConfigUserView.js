@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'backbone',
   'core/BaseView',
   'log',
@@ -14,7 +13,7 @@ define([
   'models/sm/SessionModel',
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
-], function($, _, _S, Backbone, BaseView, log, Dialog, CryptoJS, i18nCommon, Form, UserModel, UserConfigModel, SessionModel, CodeCollection, container){
+], function($, _, Backbone, BaseView, log, Dialog, CryptoJS, i18nCommon, Form, UserModel, UserConfigModel, SessionModel, CodeCollection, container){
     var LOG= log.getLogger("EditUserView");
     var ConfigUserView = BaseView.extend({
     	initialize:function(data){

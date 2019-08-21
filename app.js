@@ -49,6 +49,8 @@ var officeItemCode = require('./routes/officeItemCodeRouter');
 var officeitem = require("./routes/officeitemRouter");
 var officeItemHistory = require('./routes/officeItemHistoryRouter');
 var bookLibrary = require("./routes/bookLibraryRouter");
+var yesCalendar = require("./routes/yesCalendarRouter");
+var yesCalendarType = require("./routes/yesCalendarTypeRouter");
 
 var debug = require('debug')('APP');
 var app = express();
@@ -269,6 +271,8 @@ app.use('/officeitemcode', officeItemCode);
 app.use('/officeitemmanager', officeitem);
 app.use('/officeitemhistory', officeItemHistory);
 app.use('/book', bookLibrary);
+app.use('/yescalendar', yesCalendar);
+app.use('/yescalendar-type', yesCalendarType);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {//위에 라우터에까지 안걸리면 404 처리 .

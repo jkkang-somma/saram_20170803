@@ -1497,6 +1497,38 @@ li.list-group-item {
   font-size: 15px;
 }
 
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-1{
+  width: calc((100% - 290px) * 0.141);
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-2{
+  width: calc((100% - 270px) * 0.2856);
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-3{
+  width: calc((100% - 260px) * 0.4284);
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-4{
+  width: calc((100% - 255px) * 0.5712);
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-5{
+  width: calc((100% - 252px) * 0.714);
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-6{
+  width: calc((100% - 250px) * 0.8568);
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .day-7{
+  width: calc((100% - 250px) * 0.9998);
+}
+
+.float-left{
+  float: left;
+}
+
 #dashboard_main .calendar-body .text-reserve {
   min-height: 70px;
   width: calc(100% - 1px);
@@ -1614,6 +1646,7 @@ li.list-group-item {
 #dashboard_main .calendar_left {
   width: calc(100% - 200px);
   margin-top: 10px;
+  margin-bottom: 20px;
   float: left;
 }
 
@@ -1623,7 +1656,12 @@ li.list-group-item {
 }
 
 #dashboard_main .clean-day {
-  background-position: 75% 70%;
+  background-position: 75% 30px;
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .yes-cal-row{
+  height: 26px;
+  padding: 2px 0px !important;
 }
 
 @media ( max-width: 1250px) {
@@ -1663,6 +1701,77 @@ li.list-group-item {
   #dashboard_main .over-time{
     font-size: 10px;
   }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-1{
+    width: calc((100% - 50px) * 0.141);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-2{
+    width: calc((100% - 50px) * 0.2856);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-3{
+    width: calc((100% - 50px) * 0.4284);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-4{
+    width: calc((100% - 45px) * 0.5712);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-5{
+    width: calc((100% - 45px) * 0.714);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-6{
+    width: calc((100% - 43px) * 0.8568);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .day-7{
+    width: calc((100% - 44px) * 0.9998);
+  }
+
+  #dashboard_main .calendar-body .text.yes-calendar-rows .yes-cal-row{
+    height: 18px;
+  }
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows{
+  width: 100%;
+  min-height: 0px;
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows .yes-cal-row .yes-cal-row-item{
+  position: absolute;
+  margin: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* padding: 2px 0px !important; */
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows{
+  width: 100%;
+  min-height: 0px;
+  padding: 0px;
+  height: 100%;
+}
+
+#dashboard_main .calendar-body .text.yes-calendar-rows.display-off{
+  display: none;
+}
+
+.select-color-box {
+  width: 70px;
+  height: 25;
+  text-align: center;
+  line-height: 1.8;
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 3px;
+  user-select: none;
 }
 
 #dashboard_main table tbody tr td {
@@ -1694,10 +1803,10 @@ li.list-group-item {
 
 #dashboard_main .over-time{
   font-weight: bold;
-  float: right;
-  margin-top: 5px;
-  margin-right: 5px;
   color: rgb(51, 51, 51);
+  text-align: center;
+  line-height: 2.5;
+  min-height: 25px;
 }
 
 #dashboard_main .over-time.red{

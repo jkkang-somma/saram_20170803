@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'core/BaseView',
   'log',
   'dialog',
@@ -11,7 +10,7 @@ define([
   'text!templates/component/selectMemberPopup.html',
   'text!templates/default/checkBoxDept.html',
   'text!templates/default/checkBoxMember.html',
-], function ($, _, _S, BaseView, log, Dialog, i18nCommon, UserCollection, DepartmentCollection, selectMemberPopupTmp, checkBoxDeptTempl, checkBoxMemberTempl) {
+], function ($, _, BaseView, log, Dialog, i18nCommon, UserCollection, DepartmentCollection, selectMemberPopupTmp, checkBoxDeptTempl, checkBoxMemberTempl) {
   var LOG = log.getLogger("RoomDialogView");
 
   var SelectMemberDialogView = BaseView.extend({

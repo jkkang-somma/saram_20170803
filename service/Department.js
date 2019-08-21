@@ -4,6 +4,7 @@ var debug = require('debug')('Department');
 var Promise = require('bluebird');
 var Schemas = require("../schemas.js");
 var DepartmentDao= require('../dao/departmentDao.js');
+var YesCalendarTypeDao= require('../dao/YesCalendarTypeDao.js');
 var UserDao = require('../dao/userDao.js');
 
 
@@ -68,7 +69,9 @@ var Department = function (data, isNoSchemas) {
                 DepartmentDao.updateDepartment(_updateData).then(function(result){
                     if (_updateData.code !== _updateData.origin_code) {
                         UserDao.updateUserDept(_updateData.code, _updateData.origin_code).then(function() {
+                          YesCalendarTypeDao.updateYesCalendarTypeForDeptCode2(_updateData.code, _updateData.origin_code).then(function() {
                             resolve(result);
+                          });
                         });
                     } else {
                         resolve(result);

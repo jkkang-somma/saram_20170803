@@ -38,7 +38,6 @@ require.config({
       'jquery.draggable': 'tool/jqueryui/jquery-ui-draggable',
       backbone: 'tool/backbone/backbone',
       underscore: 'tool/underscore/underscore-min',
-      'underscore.string': 'tool/underscore/underscore.string.min',
       log4javascript:'tool/log4javascript',
       bootstrap:'tool/bootstrap/js/bootstrap',
       'bootstrap-dialog':'tool/bootstrap/js/bootstrap-dialog',

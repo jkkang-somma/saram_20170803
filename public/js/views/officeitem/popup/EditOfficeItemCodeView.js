@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'backbone',
   'core/BaseView',
   'log',
@@ -14,7 +13,7 @@ define([
   'models/officeitem/OfficeItemCodeModel',
   'text!templates/default/input.html'
 ], function(
-	$, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, 
+	$, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, 
 	//UserModel, Code, CodeCollection, 
 	OfficeItemCodeModel,
 	container

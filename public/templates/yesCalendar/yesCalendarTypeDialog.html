@@ -1,0 +1,47 @@
+<div class="container">
+  <form role='form'>
+    <div class="form-group">
+      <label for="calendar-type-name">이름</label>
+      <input id="calendar-type-name" name="calendar-type-name" class="form-control" maxlength="40"></input>
+    </div>
+
+    <div class="form-group">
+      <label for="calendar-type-sample-color">캘린더 출력 셈플</label>
+      <div style="margin: 10px 0px; height: 40px;">
+        <div id="select-sample-color-box" style="width: 100%; height: 23px; border-radius: 3px; font-weight: bold; text-align: center; line-height: 1.7;">일정 출력</div>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label for="calendar-type-background-color">배경 색상</label>
+      <div id="sample-color-box" style="width: 100px; height: 25px; float: right;"></div>
+      <input id="calendar-type-background-color" name="calendar-type-background-color" class="form-control" style="display: none;" maxlength="7"></input>
+      <div id="select-background-color-panel" style="margin: 10px 0px; height: 125px;"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="calendar-type-font-color">글씨 색상</label>
+      <input id="calendar-type-font-color" name="calendar-type-font-color" class="form-control" style="display: none;" maxlength="7"></input>
+      <div class="form-group" id="select-font-color-panel" style="margin: 10px 0px;height: 25px;">
+        <div class="select-color-box" style="color: #030303;" data-color="#030303">Black</div>
+        <div class="select-color-box" style="color: #ffffff; background: #000000" data-color="#ffffff">White</div>
+        <div class="select-color-box" style="color: #d62728;" data-color="#d62728">Red</div>
+        <div class="select-color-box" style="color: #0000ff;" data-color="#0000ff">Blue</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="share-dept">부서 공유</label>
+      <select id="share-dept" name="share-dept" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+      <label for="member_list">공유 멤버</label>
+      <div class="btn btn-success glyphicon glyphicon-pencil" id="select_member_list"
+        style="height: 23px; width: 23px; padding: 0px; padding-top: 3px;"></div>
+      <div id="share_member_count" class="float-right"> 0명</div>
+      <div id="member_list" disabled name="member_list" class="form-control" style="height: 140px; overflow: auto;"></div>
+    </div>
+
+  </form>
+</div>

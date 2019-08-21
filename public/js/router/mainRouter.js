@@ -80,6 +80,8 @@ define([
         'abnormalsummary': 'showAbnormalSummary',
         'overtimereport': 'showOvertimeReport',
         '*actions': 'showHome',
+        // 'calendarmanager': 'showCalendarManager',
+        // 'calendartypemanager': 'showCalendarTypeManager',
       },
       initialize: function (option) {
         var affterCallback, beforeCallback;
@@ -400,7 +402,15 @@ define([
       showOvertimeReport: function () {
         var url = 'views/statistics/OvertimeReportView';
         this.changeView(url);
-      }
+      },
+      // showCalendarManager: function () {
+      //   var url = 'views/yescalendar/YesCalendarView';
+      //   this.changeView(url);
+      // },
+      // showCalendarTypeManager: function () {
+      //   var url = 'views/yescalendar/YesCalendarTypeView';
+      //   this.changeView(url);
+      // }
     });
     return Router;
   });

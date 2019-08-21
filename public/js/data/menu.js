@@ -213,6 +213,17 @@ define([
         remove: SCHEMAS.ADMIN
       }
     }]
+  // }, {
+  //   title: "일정 관리",
+  //   subMenu: [{
+  //     title: "일정 관리",
+  //     hashTag: "#calendarmanager",
+  //     auth: SCHEMAS.USER,
+  //   }, {
+  //     title: "캘린더 관리",
+  //     hashTag: "#calendartypemanager",
+  //     auth: SCHEMAS.USER,
+  //   }]
   }];
   return _menu;
 

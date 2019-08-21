@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'backbone',
   'core/BaseView',
   'log',
@@ -14,7 +13,7 @@ define([
   'text!templates/default/input.html',
   'models/officeitem/IpAssignedManagerModel',
   'collection/sm/UserCollection',
-], function($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, Code, CodeCollection, container, IpAssignedManagerModel, UserCollection){
+], function($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, UserModel, Code, CodeCollection, container, IpAssignedManagerModel, UserCollection){
 	var LOG= log.getLogger("EditIpView");
 	var availableTags = [];
 	var availableTagsUser = [];

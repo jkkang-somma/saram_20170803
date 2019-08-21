@@ -160,6 +160,7 @@ define([
         // <select id="dashboard-member-combo" class="form-control"></select> \
         layout.append(' \
       <div class="pull-right"> \
+        <div class="btn-group" id="dashboard-set-yes-calendar" style="top:-15px; margin-right:10px;"></div> \
         <div class="btn-group custom-width-100" id="dashboard-member-combo-div" style="top:-15px; margin-right:10px; display: none;"><select class="btn-group" id="dashboard-member-combo" name="dashboard-member-combo"></select></div> \
 				<div class="btn-group" id="privilege-btn-approval" style="top:-15px; margin-right:10px; display: none;"></div> \
 				<div class="btn-group" id="privilege-btn-comment" style="top:-15px; margin-right:10px; display: none;"></div> \
@@ -283,6 +284,45 @@ define([
         // timeout(getMinTimeString(_data.total_over_time)+"("+_data.over_over_time+")", "total_over_time");
         // timeout(getMinTimeString(_data.total_holiday_over_time)+"("+_data.over_holiday_over_time+")", "total_holiday_over_time");
         // timeout(getMinTimeString(_data.total_early_time), "total_early_time");
+
+        // 캘린더 보기 옵션
+        var yesCalendarOn = localStorage.getItem('yesCalendarOn');
+        if (yesCalendarOn === undefined || yesCalendarOn === null) {
+          localStorage.setItem('yesCalendarOn', "true");
+          yesCalendarOn = "true";
+        }
+
+        var appendDiv;
+        if (yesCalendarOn === "true") {
+          appendDiv = $('<div>일정 ON</div>').attr('class', 'btn btn-success');
+        } else {
+          appendDiv = $('<div>일정 OFF</div>').attr('class', 'btn btn-default');
+        }
+        // var appendDiv = $('<div>').attr('class', 'btn btn-success');
+        // appendDiv.append('일정 ON');
+        // console.log("일정 설정 done");
+        $('.btn-group#dashboard-set-yes-calendar').append(appendDiv).after(function () {
+          $(this).click(function (event) {
+            if (event.target.innerHTML.indexOf("ON") >= 0) {
+              // turn OFF
+              event.target.innerHTML = "일정 OFF";
+              event.target.className = "btn btn-default"
+              localStorage.setItem('yesCalendarOn', "false");
+
+              $("#dashboard_main .calendar-body .text.yes-calendar-rows").addClass("display-off");
+            } else {
+              // turn ON
+              event.target.innerHTML = "일정 ON";
+              event.target.className = "btn btn-success"
+              localStorage.setItem('yesCalendarOn', "true");
+
+              $("#dashboard_main .calendar-body .text.yes-calendar-rows").removeClass("display-off");
+            }
+            
+            console.log(event);
+          });
+        });
+
 
         // 부서장 이상인 경우 직원들의 대시보드를 볼 수 있도록 한다. 임원 부서의 경우 대시보드에 달력이 나오지 않기때문에 선택하지 않음.
         if (SessionModel.getUserInfo().admin >= 1 && SessionModel.getUserInfo().dept_code !== '0000') {

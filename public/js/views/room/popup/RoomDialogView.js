@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'backbone',
   'core/BaseView',
   'log',
@@ -9,7 +8,7 @@ define([
   'i18n!nls/common',
   'lib/component/form',
   'models/room/RoomModel'
-], function ($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, RoomModel) {
+], function ($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, RoomModel) {
   var LOG = log.getLogger("RoomDialogView");
 
   var mode = "ADD";

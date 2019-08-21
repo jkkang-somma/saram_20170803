@@ -1,0 +1,63 @@
+<div class="container">
+  <form role='form'>
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input id="title" name="title" class="form-control" maxlength="40"></input>
+    </div>
+      
+    <div class="form-group form-group">
+      <label for="yescalendar_type">캘린더</label>
+      <div class="btn btn-success glyphicon glyphicon-plus" id="add-calendar-type" style="height: 23px; width: 23px; padding: 3px 0px 0px; display: inline-block;" title="추가"></div>
+      <div class="btn btn-success glyphicon glyphicon-edit" id="update-calendar-type" style="height: 23px; width: 23px; padding: 3px 0px 0px; display: inline-block;" title="편집/삭제"></div>
+      <select id="yescalendar_type" name="yescalendar_type" class="form-control"></select>
+    </div>
+
+    <!-- <div class="form-group form-group">
+      <div class="checkbox" style="margin-top: 5px;">
+        <label style="font-weight: bold;">
+          <input id="all_day" type="checkbox"> 
+            종일
+        </label>
+      </div>
+    </div> -->
+    
+    <div class="form-group" id="start_end">
+      <div class="row">
+        <div class='col-sm-3'><label id="timePickTitle">기간</label></div>
+      </div>
+      <div class="row" style="height: 45px;">
+        <div class='col-sm-6'>
+          <div class="form-group form-group-sm">
+            <div class="input-group input-group-sm date" id="start_date">
+              <span class="input-group-addon">
+                from
+              </span>
+              <input type="text" class="form-control" data-format="YYYY-MM-DD" name="start_date" readonly />
+              <span class="input-group-addon datepickerbutton">
+                <span class="glyphicon glyphicon-time"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class='col-sm-6'>
+          <div class="form-group form-group-sm">
+            <div class="input-group input-group-sm date" id="end_date">
+              <span class="input-group-addon">
+                to
+              </span>
+              <input type="text" class="form-control" data-format="YYYY-MM-DD" name="end_date" readonly />
+              <span class="input-group-addon datepickerbutton">
+                <span class="glyphicon glyphicon-time"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="calendar_memo">메모</label>
+      <textarea id="calendar_memo" name="calendar_memo" rows="12" maxlength="2000" class="form-control" />
+    </div>
+  </form>
+</div>

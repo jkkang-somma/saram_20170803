@@ -1,7 +1,6 @@
 define([
   'jquery',
   'underscore',
-  'underscore.string',
   'backbone',
   'core/BaseView',
   'log',
@@ -13,7 +12,7 @@ define([
   'collection/common/CodeCollection',
   'text!templates/default/input.html',
   'collection/sm/UserCollection',
-], function ($, _, _S, Backbone, BaseView, log, Dialog, i18nCommon, Form, DepartmentModel, Code, CodeCollection, container, UserCollection) {
+], function ($, _, Backbone, BaseView, log, Dialog, i18nCommon, Form, DepartmentModel, Code, CodeCollection, container, UserCollection) {
   var LOG = log.getLogger("EditDepartmentView");
   var autocompleteId = "autocomplete";
   var availableTagsUser = [];

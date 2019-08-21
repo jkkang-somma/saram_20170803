@@ -2895,27 +2895,68 @@
 
   <group id="yesCalendar"> 
     <query id="selectYesCalendarType">
-      SELECT * FROM calendar_type_tbl WHERE member_id = ? OR member_id = "*";
+      SELECT *,
+        (SELECT GROUP_CONCAT(share_member_id SEPARATOR ',') FROM calendar_type_share_tbl WHERE calendar_type_id = c1.calendar_type_id) AS share_member_list
+      FROM calendar_type_tbl c1
+      WHERE member_id = ? OR member_id = "*" 
+      ORDER BY calendar_type_str;
     </query>
 
     <query id="insertYesCalendarType">
-      INSERT INTO calendar_type_tbl (member_id, calendar_type_str, color, visible)  VALUES(?, ?, ?, ?)
+      INSERT INTO calendar_type_tbl (member_id, member_dept_code, calendar_type_str, color, fcolor, visible, share_dept)  VALUES(?, ?, ?, ?, ?, ?, ?)
     </query>
 
     <query id="updateYesCalendarType">
-      UPDATE calendar_type_tbl SET calendar_type_str = ?, color = ?, visible = ? WHERE calendar_type_id = ?
+      UPDATE calendar_type_tbl SET calendar_type_str = ?, color = ?, fcolor =?, visible = ?, share_dept = ? WHERE calendar_type_id = ? AND member_id = ?
+    </query>
+
+    <query id="updateYesCalendarTypeForDeptCode1">
+      UPDATE calendar_type_tbl SET member_dept_code = ? WHERE member_id = ?
+    </query>
+
+    <query id="updateYesCalendarTypeForDeptCode2">
+      UPDATE calendar_type_tbl SET member_dept_code = ? WHERE member_dept_code = ?
     </query>
 
     <query id="deleteYesCalendarType">
-      DELETE calendar_type_tbl WHERE calendar_type_id = ?
+      DELETE FROM calendar_type_tbl WHERE calendar_type_id = ? AND member_id = ?
     </query>
 
-    <query id="selectYesCalendar">
-      SELECT calendar_id, member_id, title, all_day, date_format(start, "%Y-%m-%d") AS start, date_format(end, "%Y-%m-%d") as end, 
-        alarm, calendar_type, memo, reg_time, datediff(end, start) as date_diff,
-        (SELECT color FROM calendar_type_tbl WHERE calendar_type = calendar_type_id) AS color
-      FROM commute.calendar_tbl
-      WHERE member_id = ? AND (start BETWEEN ? AND ?) OR ( end BETWEEN ? AND ? )
+
+    <query id="selectYesCalendarTypeShare">
+      SELECT share_member_id FROM calendar_type_share_tbl WHERE member_id = ?
+    </query>
+
+    <query id="insertYesCalendarTypeShare">
+      INSERT INTO calendar_type_share_tbl (member_id, calendar_type_id, share_member_id) VALUES(?, ?, ?)
+    </query>
+
+    <query id="deleteYesCalendarTypeShare">
+      DELETE FROM calendar_type_share_tbl WHERE member_id = ? AND calendar_type_id = ?
+    </query>
+
+    <query id="selectCalendarTypeIdForMe">
+      (SELECT calendar_type_id FROM calendar_type_share_tbl WHERE share_member_id = ?)
+      UNION
+      (select calendar_type_id from calendar_type_tbl WHERE member_id = ? OR ( share_dept = 1 AND member_dept_code = ?))
+    </query>
+
+
+    <query id="selectYesCalendar1">
+      SELECT cal.calendar_id, cal.member_id, cal.title, cal.all_day, date_format(cal.start, "%Y-%m-%d") AS start, date_format(cal.end, "%Y-%m-%d") as end, 
+        cal.alarm, cal.calendar_type, cal.memo, cal.reg_time, datediff(cal.end, cal.start) as date_diff,
+        cal_type.color, cal_type.fcolor, cal_type.calendar_type_str
+      FROM commute.calendar_tbl cal LEFT JOIN calendar_type_tbl cal_type ON cal.calendar_type = cal_type.calendar_type_id
+      WHERE ((cal.start BETWEEN ? AND ?) OR ( cal.end BETWEEN ? AND ? )) AND cal.member_id = ? OR cal.calendar_type IN (?)
+      ORDER BY date_diff DESC
+    </query>
+
+    <query id="selectYesCalendar2">
+      SELECT cal.calendar_id, cal.member_id, cal.title, cal.all_day, date_format(cal.start, "%Y-%m-%d") AS start, date_format(cal.end, "%Y-%m-%d") as end, 
+        cal.alarm, cal.calendar_type, cal.memo, cal.reg_time, datediff(cal.end, cal.start) as date_diff,
+        cal_type.color, cal_type.fcolor, cal_type.calendar_type_str
+      FROM commute.calendar_tbl cal LEFT JOIN calendar_type_tbl cal_type ON cal.calendar_type = cal_type.calendar_type_id
+      WHERE cal.member_id = ? AND ((cal.start BETWEEN ? AND ?) OR ( cal.end BETWEEN ? AND ? ))
       ORDER BY date_diff DESC
     </query>
 
@@ -2931,11 +2972,11 @@
 
     <query id="updateYesCalendarForType">
       UPDATE calendar_tbl SET calendar_type = ?
-      WHERE calendar_type = ?
+      WHERE calendar_type = ? AND member_id = ?
     </query>
 
     <query id="deleteYesCalendar">
-      DELETE calendar_tbl WHERE calendar_id = ?
+      DELETE FROM calendar_tbl WHERE calendar_id = ? AND member_id = ?
     </query>
   </group>
 </querys>
