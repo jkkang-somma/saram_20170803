@@ -619,7 +619,9 @@ define([
             if (i == 1 && j <= startDayOfWeek) {
               // 1일 시작 전
               // if ( data[0].exist ) {
-              var prevDate = Moment(year + "-" + (month+1) + "-1").add(j - startDayOfWeek - 1, "days").format('YYYY-MM-DD');
+              var d = year + "-" + (month+1) + "-1";
+              var prevDate = Moment(d, 'YYYY-M-D').add(j - startDayOfWeek - 1, "days").format('YYYY-MM-DD');
+
               resultHtml += tdTemplate;
               resultHtml = resultHtml.replace('id=""', 'id="' +prevDate + '"');
 
