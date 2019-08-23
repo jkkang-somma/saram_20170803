@@ -235,6 +235,7 @@ define([
 
       // 저장 또는 수정 버튼 클릭 시 동작
       onClickBtnReg: function () {
+        var _this = this;
         var dfd = new $.Deferred();
         var formData = this.getFormData($(this.el).find('form'));
         // console.log(formData);
@@ -271,7 +272,8 @@ define([
           return dfd.reject();
         }
 
-        if (Moment(attributes.date, "YYYY-MM-DD").isBefore(Moment(new Date()).format("YYYY-MM-DD"))) {
+        // 수정은 가능하도록 함.
+        if (this.elements._regModel === null && Moment(attributes.date, "YYYY-MM-DD").isBefore(Moment(new Date()).format("YYYY-MM-DD"))) {
           Dialog.error("오늘 이전 날짜의 회의는 예약이 불가합니다.");
           return dfd.reject();
         }
@@ -318,7 +320,11 @@ define([
         roomRegModel.save({}, {
           success: function (result) {
             if (_.isUndefined(result.attributes.ERR_CODE)) {
-              Dialog.info("회의실 예약 완료");
+              if (_this.elements._regModel === null) {
+                Dialog.info("회의실 예약 완료");
+              } else {
+                Dialog.info("회의실 예약 수정 완료");
+              }
               dfd.resolve(result);
             } else {
               Dialog.error("회의실이 이미 예약되어 있습니다.");
