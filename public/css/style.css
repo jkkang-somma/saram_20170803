@@ -209,6 +209,10 @@ form .form-group:last-child {
   background: linear-gradient(#ffca3b, #ffdb7c);
 }
 
+.TopColor.dept10 {
+  background: linear-gradient(#e58cf4, #e5a7f3);
+}
+
 .deptColor {
   position: relative;
   height: 30px;
@@ -329,6 +333,17 @@ form .form-group:last-child {
   background: #ffdb7c;
   border-right: 1px solid #ffdb7c;
   border-bottom: 1px solid #ffdb7c;
+}
+
+.deptColor.team10 {
+  border-bottom: 1px solid #e58cf4;
+  background: #e58cf4;
+}
+
+.deptColor.team10:before {
+  background: #e58cf4;
+  border-right: 1px solid #e58cf4;
+  border-bottom: 1px solid #e58cf4;
 }
 
 .team-style {
