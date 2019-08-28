@@ -50,7 +50,15 @@ router.route('/')
         }).catch(function(e){
             debug("Fail to Send Email");
         });
-	}).catch(function(err) {
+	}, function(rejectData) {
+    debug("Error Insert Comment List.");
+    res.status(500);
+    res.send({
+        success:false,
+        message: "already submit",
+        error:"Insert Error"
+    });
+  }).catch(function(err) {
 		next(err);
 	});
 });

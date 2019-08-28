@@ -49,14 +49,22 @@ var Comment = function () {
 
   var _insertComment = function (inData) {
     return new Promise(function (resolve, reject) {// promise patten			
-      CommuteDao.updateCommuteCommentCount(inData).then(function (result) {
-        // comment 등록
-        CommentDao.insertComment(inData).then(function (result) {
-          resolve(result);
-        }).catch(function (e) {//Connection Error
-          reject(e);
-        });
-      }).catch(function (e) {//Connection Error
+      CommentDao.selectCommentExist(inData).then(function(resultCheck) {
+        if (resultCheck[0].count === 0) {
+          CommuteDao.updateCommuteCommentCount(inData).then(function (result) {
+            // comment 등록
+            CommentDao.insertComment(inData).then(function (result) {
+              resolve(result);
+            }).catch(function (e) {//Connection Error
+              reject(e);
+            });
+          }).catch(function (e) {//Connection Error
+            reject(e);
+          });
+        } else {
+          reject();
+        }
+      }).catch(function (e) {
         reject(e);
       });
     });

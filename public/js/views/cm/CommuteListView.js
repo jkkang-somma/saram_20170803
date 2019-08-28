@@ -556,7 +556,11 @@ define([
                   }
 
                 }, error: function (model, res) {
-                  Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_FAIL);
+                  if (res.fail().responseJSON && res.fail().responseJSON.message) {
+                    Dialog.show("이미 상신 또는 처리중인 코멘트가 있습니다.\n상신중인 경우 상신 취소 후 다시 등록하세요.");
+                  } else {
+                    Dialog.show(i18nCommon.COMMUTE_RESULT_LIST.COMMENT_DIALOG.MSG.COMMENT_ADD_FAIL);
+                  }
                 }
               });
             }

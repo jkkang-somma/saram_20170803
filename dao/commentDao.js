@@ -39,4 +39,12 @@ CommentDao.prototype.updateCommentReply =  function (data) {
     );
 };
 
+// 현재 처리중인 코멘트가 있는지 체크
+CommentDao.prototype.selectCommentExist =  function (data) {
+  return db.query(group, "selectCommentExist",
+      [data.id, data.year, data.date]
+  );
+};
+
+
 module.exports = new CommentDao();

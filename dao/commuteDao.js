@@ -10,7 +10,7 @@ CommuteDao.prototype.selectCommute =  function (data, id, dept) {
         return db.query(group, 'selectCommuteAll', [data.startDate, data.endDate]);    
     }else{
         if (data.dept === undefined || data.dept === null || data.dept === '') {
-            data.dept = dept
+          return db.query(group, 'selectCommuteMe', [data.startDate, data.endDate, id]);
         }
         return db.query(group, 'selectCommute', [data.startDate, data.endDate, data.dept, id]);
     }
