@@ -319,7 +319,7 @@ define([
               $("#dashboard_main .calendar-body .text.yes-calendar-rows").removeClass("display-off");
             }
             
-            console.log(event);
+            // console.log(event);
           });
         });
 

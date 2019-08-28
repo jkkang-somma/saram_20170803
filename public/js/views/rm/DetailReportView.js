@@ -94,7 +94,7 @@ define([
         setDataDefaultValues: function(param) {
             // console.log(param);
             var _this = $(this.el);
-            console.log(param);
+            // console.log(param);
             
             function timeformat(num){
                 var result = "";
@@ -277,7 +277,7 @@ define([
 
             var formData = this.options;
 
-            console.log(formData);
+            // console.log(formData);
             formData["_id"] = this.options["doc_num"];
             formData["state"] = stateVal;
 
