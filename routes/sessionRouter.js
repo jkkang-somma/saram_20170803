@@ -143,7 +143,7 @@ router.route('/findPassword')
                 var sendHTML=temp(data);
                 var mailOptions=_.defaults(mailDefaultOptions, {
                     to:result.email,
-                    subject:"Yescnc 근태관리 시스템(비밀번호 초기화 요청 페이지)",
+                    subject:"IVS 근태관리 시스템(비밀번호 초기화 요청 페이지)",
                     html:sendHTML,
 					text:""
                 });

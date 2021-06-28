@@ -47,7 +47,8 @@ define([
       title: i18Common.MENU.SUB.BM.BOOKDOCUMENT, //도서관리
       hashTag: "#bookdocument",
       auth: SCHEMAS.ADMIN
-    }]
+    }
+  ]
   }, {
     title: i18Common.MENU.TOP.SM, //사원 관리
     subMenu: [{
@@ -135,57 +136,57 @@ define([
       auth: SCHEMAS.DEPT_BOSS
     }]
 
-  }, {
-    title: "비품 관리",
-    subMenu: [{
-      title: "비품 코드 등록",
-      hashTag: "#officeitemcode",
-      auth: SCHEMAS.ADMIN
-    }, {
-      title: "비품 관리",
-      hashTag: "#officeitemmanager",
-      auth: SCHEMAS.ADMIN,
-      actionAuth: {
-        add: SCHEMAS.ADMIN,
-        remove: SCHEMAS.ADMIN,
-        edit: SCHEMAS.ADMIN
-      }
-    }, {
-      title: "IP 관리",
-      hashTag: "#ipassignedmanager",
-      auth: SCHEMAS.ADMIN,
-      actionAuth: {
-        add: SCHEMAS.ADMIN,
-        remove: SCHEMAS.ADMIN,
-        edit: SCHEMAS.ADMIN,
-        save: SCHEMAS.ADMIN
-      }
-    }, {
-      title: "비품 할당 현황",
-      hashTag: "#officeitemusage",
-      auth: SCHEMAS.USER
-    }, {
-      title: "비품 이력 관리",
-      hashTag: "#officeitemhistory",
-      auth: SCHEMAS.ADMIN
-    }]
-  }, {
-    title: i18Common.MENU.TOP.LM, //도서 관리
-    subMenu: [{
-      title: i18Common.MENU.SUB.LM.BOOK_LIBRARY, //"도서 목록",
-      hashTag: "#booklibrary",
-      auth: SCHEMAS.USER,
-      area: SCHEMAS.AREA,
-      actionAuth: {
-        add: SCHEMAS.ADMIN,
-        remove: SCHEMAS.ADMIN
-      }
-    }, {
-      title: i18Common.MENU.SUB.LM.BOOK_RENT_HISTORY, // "대출 이력",
-      hashTag: "#bookrenthistory",
-      auth: SCHEMAS.USER,
-      area: SCHEMAS.AREA
-    }]
+  // }, {
+  //   title: "비품 관리",
+  //   subMenu: [{
+  //     title: "비품 코드 등록",
+  //     hashTag: "#officeitemcode",
+  //     auth: SCHEMAS.ADMIN
+  //   }, {
+  //     title: "비품 관리",
+  //     hashTag: "#officeitemmanager",
+  //     auth: SCHEMAS.ADMIN,
+  //     actionAuth: {
+  //       add: SCHEMAS.ADMIN,
+  //       remove: SCHEMAS.ADMIN,
+  //       edit: SCHEMAS.ADMIN
+  //     }
+  //   }, {
+  //     title: "IP 관리",
+  //     hashTag: "#ipassignedmanager",
+  //     auth: SCHEMAS.ADMIN,
+  //     actionAuth: {
+  //       add: SCHEMAS.ADMIN,
+  //       remove: SCHEMAS.ADMIN,
+  //       edit: SCHEMAS.ADMIN,
+  //       save: SCHEMAS.ADMIN
+  //     }
+  //   }, {
+  //     title: "비품 할당 현황",
+  //     hashTag: "#officeitemusage",
+  //     auth: SCHEMAS.USER
+  //   }, {
+  //     title: "비품 이력 관리",
+  //     hashTag: "#officeitemhistory",
+  //     auth: SCHEMAS.ADMIN
+  //   }]
+  // }, {
+  //   title: i18Common.MENU.TOP.LM, //도서 관리
+  //   subMenu: [{
+  //     title: i18Common.MENU.SUB.LM.BOOK_LIBRARY, //"도서 목록",
+  //     hashTag: "#booklibrary",
+  //     auth: SCHEMAS.USER,
+  //     area: SCHEMAS.AREA,
+  //     actionAuth: {
+  //       add: SCHEMAS.ADMIN,
+  //       remove: SCHEMAS.ADMIN
+  //     }
+  //   }, {
+  //     title: i18Common.MENU.SUB.LM.BOOK_RENT_HISTORY, // "대출 이력",
+  //     hashTag: "#bookrenthistory",
+  //     auth: SCHEMAS.USER,
+  //     area: SCHEMAS.AREA
+  //   }]
   }, {
     title: i18Common.MENU.TOP.RM,//회의실
     subMenu: [{

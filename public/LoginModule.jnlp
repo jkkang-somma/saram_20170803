@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jnlp spec="1.0+" codebase="" href="">
     <information>
-        <title>Yescnc Login Module</title>
-        <vendor>yescnc</vendor>
+        <title>IVS Login Module</title>
+        <vendor>IVS</vendor>
     </information>
     <resources>
         <jar href="LoginModule.jar" main="true"/>

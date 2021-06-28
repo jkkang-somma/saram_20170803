@@ -340,8 +340,9 @@ define([
 
                                 // _view.findPasswordSection.find("#findPasswordBtn").button("reset");
                                 // _view.findPasswordSection.find("#findCloseBtn").button("reset");
-                                window.location = "http://webmail.yescnc.co.kr";
                                 //_view.findPasswordSection.find("#findCloseBtn").trigger("click");
+
+                                // window.location = "http://webmail.yescnc.co.kr";
                             });
                         }).fail(function (e) {
                             Dialog.warning(i18nCommon.WARNING.LOGIN[e.message]);

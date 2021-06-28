@@ -141,7 +141,8 @@ define([
         
         var defaultData = {};
         if (_data.total_working_day === undefined) {
-          defaultData = { top_date: "자료없음" };
+          // defaultData = { top_date: "자료없음" };
+          defaultData = { top_date: "" };
         } else {
           if (String(_data.total_working_day).length <= 1) {
             _data.total_working_day = "0" + _data.total_working_day;

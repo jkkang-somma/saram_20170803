@@ -983,11 +983,11 @@ table.dataTable .vacation-column {
 .navbar-inverse .navbar-brand {
   color: #29BB9B;
   transition: color .5s;
-  width: 120px;
-  height: 49px;
+  width: 160px;
+  height: 47px;
   margin-left: 10px;
   margin-top: 3px;
-  background: url('img/yes_logo_white.png') no-repeat center center;
+  background: url('img/logo_ivs_white.png') no-repeat center center;
 }
 
 .navbar-inverse .navbar-brand:hover {

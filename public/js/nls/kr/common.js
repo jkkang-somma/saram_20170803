@@ -264,7 +264,7 @@ define({
     
     //로그인
     LOGIN_VIEW:{
-        TITLE:"YES Office Plus",
+        TITLE:"IVS 근태관리",
         ID_PLACEHOLDER:"ID",
         PASSWORD_PLACEHOLDER:"Password",
         LOGIN_SATUS_BTN:"로그인중..",

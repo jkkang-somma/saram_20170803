@@ -20,8 +20,8 @@ var transport = nodemailer.createTransport(smtpTransport({
 	host: 'wsmtp.ecounterp.com',
 	port: 587,
 	auth: {
-		user: 'webmaster@yescnc.co.kr',
-		pass: 'yes112233'
+		// user: 'webmaster@yescnc.co.kr',
+		// pass: 'yes112233'
 	},
 	rejectUnauthorized: false,
 	connectionTimeout:10000

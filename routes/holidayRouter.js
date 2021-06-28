@@ -39,6 +39,22 @@ router.route('/')
     }
 });
 
+router.route('/:date')
+.put(function(req,res){
+    var holiday = new Holiday(req.body);
+    var result = holiday.insertHoliday();
+    
+    if(_.isArray(result)){
+        Promise.all(result).then(function(){
+            res.send({msg : "Insert Data Success", count : result.length});        
+        });
+    }else{
+        result.done(function(){
+            res.send({msg : "Insert Data Success", count : 1});    
+        })
+    }
+});
+
 router.route('/bulk')
 .post(function(req,res){
     var count = 0;

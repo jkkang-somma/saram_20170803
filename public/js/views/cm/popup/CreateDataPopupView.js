@@ -25,7 +25,7 @@ define([
 	var ChangeHistoryPopupView = Backbone.View.extend({
 		initialize : function(data) {
 		    if(_.isNull(data.date)){
-			    this.date = "2015-01-01";
+			    this.date = "2021-06-25";
 		    }else{
 		        this.date = Moment(data.date, ResultTimeFactory.DATEFORMAT).add(1,"days").format(ResultTimeFactory.DATEFORMAT);
 		    }

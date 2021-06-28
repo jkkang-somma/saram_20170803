@@ -64,32 +64,10 @@ var CompanyAccess = function() {
 			};
 
 			UserDao.selectUserByIp(selDataObj).then(function(result) {
-				var need_confirm = 1; // 1: 정상 , 2: 확인 필요				
-				if (result.length == 0) {	// 조회 값이 없는 경우 
-					need_confirm = 2;
-				}
-				/*
-				else {
-					var _user=result[0];
-					var resultMac =_user.mac;
-					var requestMac=data.mac;
-					var eqFlag=false;
-					if (!_.isNull(data.mac)){
-						for (var i=0; i < requestMac.length; i++){
-						    if (resultMac==requestMac[i]){
-						      eqFlag=true;
-						      break;
-						    }
-						}
-					}
-				  
-					if (eqFlag){
-						need_confirm=1;
-					} else {
-						need_confirm=2;
-					}
-				}
-				*/
+				var need_confirm = 1; // 1: 정상 , 2: 확인 필요	- IVS 무조건 정상
+				// if (result.length == 0) {	// 조회 값이 없는 경우 
+				// 	need_confirm = 2;
+				// }
 			
 				var insertDataObj = {
 						id : user.id,

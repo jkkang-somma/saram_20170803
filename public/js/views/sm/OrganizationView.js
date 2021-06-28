@@ -234,7 +234,7 @@ define([
 								target.append('<tr style = "background-color: white;"><td id=tdfont style = "padding-left: 15px; padding-bottom: 15px; padding-top: 15px;">' 
 									+ "<h4 id=printh4><b>" + data.position_name
 									+ '<role style="font-size: 15px;font-weight: normal;">'+roleStr+"</role>" + "</h4></b>"
-									+ "<br>" +"<b id=printname>"+ data.name + "</b>"+" (" + data.email.replace("@yescnc.co.kr","") + ")" 
+									+ "<br>" +"<b id=printname>"+ data.name + "</b>"+" (" + data.email.replace("@ivstech.co.kr","") + ")" 
 									+ "<br>" + data.phone + "(" + data.phone_office + ")" + '</td></tr>');
 							});				
 						} else {

@@ -1,7 +1,7 @@
 {
-    "host": "200.100.1.161",
-    "user": "yop",
-    "password": "yescnc1234",
-    "port": 3306,
-    "database": "commute"
+    "host": "192.168.25.28",
+    "user": "commute",
+    "password": "yesCnc123",
+    "port": "3306",
+    "database" : "commute"
 }

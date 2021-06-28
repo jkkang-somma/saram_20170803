@@ -13,8 +13,8 @@ var transport = nodemailer.createTransport(smtpTransport({
 	host: 'wsmtp.ecounterp.com',
 	port: 587,
 	auth: {
-		user: 'webmaster@yescnc.co.kr',
-		pass: 'yes112233'
+		// user: 'webmaster@yescnc.co.kr',
+		// pass: 'yes112233'
 	},
 	rejectUnauthorized: false,
 	connectionTimeout:10000
@@ -90,7 +90,7 @@ var RoomReg = function () {
               var sendHTML=template(roomReg);
 
               var mailOptions= {
-                from: 'webmaster@yescnc.co.kr', // sender address 
+                // from: 'webmaster@yescnc.co.kr', // sender address 
                 to: mailTo,
                 subject:"[회의참석] " + roomReg.title,
                 html:sendHTML,

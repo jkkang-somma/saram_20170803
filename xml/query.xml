@@ -5,7 +5,7 @@
       SELECT
         id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
-        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
+        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name
       FROM members_tbl A
       ORDER BY name
     </query>
@@ -14,7 +14,7 @@
       SELECT
         id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo,
-        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos
+        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, part_code
       FROM members_tbl A
       WHERE (leave_company is null OR leave_company = "") OR leave_company >= DATE_FORMAT(NOW(),'%Y-%m-%d')
       ORDER BY name
@@ -33,7 +33,7 @@
       SELECT
         id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos,
+        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name,
         (SELECT area FROM dept_code_tbl where code = dept_code) dept_area
       FROM members_tbl A
       WHERE A.id=?
@@ -43,7 +43,7 @@
       SELECT 
         id, name, dept_code, (SELECT name FROM dept_code_tbl where code = dept_code) dept_name, phone, email, name_commute, join_company, leave_company, privilege, admin, affiliated,
         ip_pc, mac, ip_office, phone_office, approval_id, (SELECT name FROM members_tbl B WHERE B.id = A.approval_id) AS approval_name, emergency_phone, birthday, wedding_day, memo, password,
-        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name, (SELECT name FROM part_code_tbl where code = part_code) part_name, part_code, gis_pos,
+        position_code, (SELECT name FROM position_code_tbl where code = position_code) position_name,
         (SELECT area FROM dept_code_tbl where code = dept_code) dept_area
       FROM members_tbl A
       WHERE ((leave_company is null OR leave_company = "") OR A.admin = 9) AND A.id=?
@@ -52,7 +52,7 @@
     <query id="selectManager">select approval_id, (select name from members_tbl where id = m.approval_id ) approval_name from members_tbl m where id = ?</query>
     <query id="selectUserEmail">select id, email from members_tbl</query>
     <query id="insertUser">
-      insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, affiliated, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo, part_code) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      insert into members_tbl(id, name, dept_code, approval_id, name_commute, join_company, leave_company, privilege, admin, affiliated, position_code, ip_pc, mac, ip_office, email, phone, phone_office, emergency_phone, birthday, wedding_day, memo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     </query>
     <query id="initPassword">update members_tbl set password=? where id=?</query>
     <query id="updateUser">
@@ -79,8 +79,7 @@
         emergency_phone=?,
         birthday=?,
         wedding_day=?,
-        memo=?,
-        part_code=?
+        memo=?
       WHERE id=?
     </query>
 
@@ -493,7 +492,7 @@
               IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
               IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
               a.state AS work_night_falg,
-              c.is_suwon
+              0 as is_suwon
             FROM
               commute_result_tbl c
               left join overtime_code_tbl o on c.overtime_code = o.code
@@ -543,7 +542,7 @@
               IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
               IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
               a.state AS work_night_falg,
-              c.is_suwon
+              0 as is_suwon
             FROM
               commute_result_tbl c
               left join overtime_code_tbl o on c.overtime_code = o.code
@@ -591,7 +590,7 @@
               IFNULL( (select name from office_code_tbl where code = c.vacation_code), '') AS vacation_name,
               IFNULL( (select name from office_code_tbl where code = c.out_office_code), '') AS out_office_name,
               a.state AS work_night_falg,
-              c.is_suwon
+              0 as is_suwon
             FROM
               commute_result_tbl c
               left join overtime_code_tbl o on c.overtime_code = o.code
@@ -720,7 +719,7 @@
             normal,
             normal_change,
             except,
-            is_suwon
+            0 as is_suwon
           FROM
             commute_result_tbl
           WHERE

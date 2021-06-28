@@ -75,9 +75,9 @@ router.route('/workingSummary')
             result[0].overTimeWeek = overTimeWeek;
             // cleanday 정보 추가
             Message.getCleanDay().then(function (resultCleanDay) {
-              if (resultCleanDay[0].visible === 1) {
-                result[0].cleanDay = resultCleanDay[0].text;
-              }
+              // if (resultCleanDay[0].visible === 1) {
+              //   result[0].cleanDay = resultCleanDay[0].text;
+              // }
               res.send(result);
             });
           });
