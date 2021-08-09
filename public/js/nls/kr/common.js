@@ -562,7 +562,7 @@ define({
     },
 
     ORGANIZATION :{
-    	TITLE : "(주)예스씨앤씨  조직도"
+    	TITLE : "아이브스(주)  조직도"
     },
     GIS :{
       TITLE : "자리배치도"  
