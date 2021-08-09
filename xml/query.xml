@@ -79,7 +79,8 @@
         emergency_phone=?,
         birthday=?,
         wedding_day=?,
-        memo=?
+        memo=?,
+        part_code = ?
       WHERE id=?
     </query>
 
