@@ -94,7 +94,7 @@ define([
               var yesCalendarTypeEl = $(_this.el).find('#yescalendar_type');
               for (var i = 0; i < yesCalendarTypeCol.length; i++) {
                 var model = yesCalendarTypeCol.models[i];
-                if (model.get('visible') === 1) {
+                if (model.get('visible') === "1") {
                   var html = "<option value='" + model.get('calendar_type_id') + "'>" + model.get('calendar_type_str') + "</option>";
                   yesCalendarTypeEl.append(html);
                 }
