@@ -14,6 +14,7 @@ define([
     default: {
       'calendar_id': undefined,
       'member_id': "",
+      'member_name': "",
       'title': "",
       'all_day': "",
       'start': "",

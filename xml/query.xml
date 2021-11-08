@@ -3001,10 +3001,11 @@
 
 
     <query id="selectYesCalendar1">
-      SELECT cal.calendar_id, cal.member_id, cal.title, cal.all_day, date_format(cal.start, "%Y-%m-%d") AS start, date_format(cal.end, "%Y-%m-%d") as end, 
+      SELECT cal.calendar_id, cal.member_id, mem.name as member_name, cal.title, cal.all_day, date_format(cal.start, "%Y-%m-%d") AS start, date_format(cal.end, "%Y-%m-%d") as end, 
         cal.alarm, cal.calendar_type, cal.memo, cal.reg_time, datediff(cal.end, cal.start) as date_diff,
         cal_type.color, cal_type.fcolor, cal_type.calendar_type_str
       FROM commute.calendar_tbl cal LEFT JOIN calendar_type_tbl cal_type ON cal.calendar_type = cal_type.calendar_type_id
+        LEFT JOIN members_tbl mem ON mem.id = cal.member_id
       WHERE ((cal.start BETWEEN ? AND ?) OR ( cal.end BETWEEN ? AND ? )) AND cal.member_id = ? OR cal.calendar_type IN (?)
       ORDER BY date_diff DESC
     </query>

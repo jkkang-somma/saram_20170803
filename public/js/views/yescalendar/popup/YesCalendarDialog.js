@@ -57,7 +57,8 @@ define([
         if (this.elements.selectedYesCalendarModel) {
           $(this.el).find("#title").val(this.elements.selectedYesCalendarModel.title);
           $(this.el).find("#calendar_memo").val(this.elements.selectedYesCalendarModel.memo);
-
+          $(this.el).find("#writer").val(this.elements.selectedYesCalendarModel.member_name);
+          
           if (SessionModel.getUserInfo().id === this.elements.selectedYesCalendarModel.member_id) {
             isMy = true;
           }
@@ -74,6 +75,7 @@ define([
           // 편집 이벤트 추가
           $(this.el).on('click', '#add-calendar-type', _.bind(this.onClickAddClanedarType, this));
           $(this.el).on('click', '#update-calendar-type', _.bind(this.onClickUpdateClanedarType, this));
+          $(this.el).find("#writor-form").remove(); // 내가 작성한 경우 작성자 항목을 삭제 함.
         } else {
           $(this.el).find("#title").attr("disabled", true);
           $(this.el).find("#calendar_memo").attr("disabled", true);
