@@ -184,19 +184,20 @@ define([
             this.normal = model.get("normal");
             this.normalChange = model.get("normal_change");
             this.isSuwon = model.get("is_suwon");
-            if (this.isSuwon === undefined || this.isSuwon === null) {
-              if (this.department.indexOf("본사") > -1) {
-                  this.isSuwon = 0;
-              }else if (this.department.indexOf("품질검증") > -1) {
-                  this.isSuwon = 1;
-              }
-              else if (this.department === "개발품질팀(수원)") {
-                  this.isSuwon = 1;
-              }
-              else {
-                  this.isSuwon = 0;
-              }
-            }
+            // this.isSuwon = model.get("is_suwon");
+            // if (this.isSuwon === undefined || this.isSuwon === null) {
+            //   if (this.department.indexOf("본사") > -1) {
+            //       this.isSuwon = 0;
+            //   }else if (this.department.indexOf("품질검증") > -1) {
+            //       this.isSuwon = 1;
+            //   }
+            //   else if (this.department === "개발품질팀(수원)") {
+            //       this.isSuwon = 1;
+            //   }
+            //   else {
+            //       this.isSuwon = 0;
+            //   }
+            // }
         },
 
         /**

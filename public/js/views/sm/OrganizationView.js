@@ -196,9 +196,9 @@ define([
 						}	
 					});	
 					var area = deptInfo.area;
-					if(area == "수원") {
+					if(area == "대구") {
 						suwon += count;
-					} else if(area == "서울") {
+					} else if(area == "판교") {
 						seoul += count;
 					}
 				}

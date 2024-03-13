@@ -61,7 +61,7 @@ define([
           name: "area",
           label: i18nCommon.DEPARTMENT_LIST.GRID_COL_NAME.AREA,
           value: _model.area,
-          collection: [{ key: '서울', value: i18nCommon.AREA_LIST.AREA_1 }, { key: '수원', value: i18nCommon.AREA_LIST.AREA_2 }]
+          collection: [{ key: '판교', value: i18nCommon.AREA_LIST.AREA_1 }, { key: '대구', value: i18nCommon.AREA_LIST.AREA_2 }]
         }, {
           //type:"input",
           type: "auto_input",

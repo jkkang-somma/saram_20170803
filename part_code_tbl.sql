@@ -26,6 +26,7 @@ CREATE TABLE `part_code_tbl` (
   `code` varchar(10) NOT NULL COMMENT '파트 코드',
   `name` varchar(45) NOT NULL COMMENT '파트 이름',
   `leader` varchar(20) DEFAULT NULL,
+  `use` int DEFAULT 1,
   PRIMARY KEY (`code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='파트 코드 테이블';
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -654,8 +654,8 @@ define({
 
     },
     	AREA_LIST : {
-    		AREA_1 : "서울",
-    		AREA_2 : "수원"    	
+    		AREA_1 : "판교",
+    		AREA_2 : "대구"    	
     },
     	POSITION_LIST : {
     		TITLE : "직급 관리",

@@ -23,21 +23,26 @@ router.route('/')
         res.send(result);    
     });
     
-}).post(function(req, res){
+});
+
+router.route('/:date')
+.put(function(req, res){
+
     // Insert user infomation (PUT)
     var holiday = new Holiday(req.body);
     var result = holiday.insertHoliday();
-    
+
     if(_.isArray(result)){
         Promise.all(result).then(function(){
-            res.send({msg : "Insert Data Success", count : result.length});        
+            res.send({msg : "Insert Data Success", count : result.length});
         });
     }else{
         result.done(function(){
-            res.send({msg : "Insert Data Success", count : 1});    
+            res.send({msg : "Insert Data Success", count : 1});
         })
     }
 });
+
 
 router.route('/bulk')
 .post(function(req,res){

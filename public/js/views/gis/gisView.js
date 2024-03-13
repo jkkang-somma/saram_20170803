@@ -511,7 +511,7 @@ define([
 
 				for ( var userIdx = 0 ; userIdx < userList.length ; userIdx++ ) {
 					var user = userList[userIdx];
-					if ( deptMap[user.dept_code].area != "서울" ) {
+					if ( deptMap[user.dept_code].area != "판교" ) {
 						continue;
 					}
 					if ( !_.contains(existDeptList, user.dept_code) ) {
@@ -532,7 +532,7 @@ define([
 					var printFlag = true;
 					// 수원 제외 ( 부서 기준 )
 					var user = userList[userIdx];
-					if ( deptMap[user.dept_code].area != "서울" ) {
+					if ( deptMap[user.dept_code].area != "판교" ) {
 						printFlag = false;
 
             // 팀장의 경우 수원 부서인 경우에도 출력하도록 한다. 2019.07.09

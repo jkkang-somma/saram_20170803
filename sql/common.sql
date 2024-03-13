@@ -39,7 +39,7 @@ CREATE TABLE `position_code_tbl` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='직급코드';
  
-INSERT INTO `position_code_tbl` VALUES ('A10','대표이사'),
+INSERT INTO `position_code_tbl` VALUES ('A10','대표'),
 ('B10','사장'),
 ('B20','부사장'),
 ('C10','전무'),
@@ -52,7 +52,8 @@ INSERT INTO `position_code_tbl` VALUES ('A10','대표이사'),
 ('E10','수석 연구원'),
 ('E20','책임 연구원'),
 ('E30','선임 연구원'),
-('E40','연구원');
+('E40','주임 연구원'),
+('E50','연구원');
 
 INSERT INTO `dept_code_tbl` VALUES
   ('0000','임원',        '서울'),
@@ -89,6 +90,7 @@ CREATE TABLE `members_tbl` (
   `wedding_day` varchar(15) DEFAULT NULL COMMENT '결혼기념일',
   `memo` text COMMENT '메모',
   `position_code` varchar(10) DEFAULT NULL,
+  `gis_pos` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_members_tbl_dept_code_tbl1_idx` (`dept_code`),
   KEY `fk_members_tbl_position_code_tbl1_idx_idx` (`position_code`),

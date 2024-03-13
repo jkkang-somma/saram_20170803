@@ -125,7 +125,7 @@ define([
         if (_authArr[index] <= auth) { // 권한 있을 시
           LOG.debug("next");
           return next();
-        } else if (_areaArr[index] == '서울') {
+        } else if (_areaArr[index] == '판교') {
           LOG.debug("area next");
           return next();
         } else {//권한 없을 때
